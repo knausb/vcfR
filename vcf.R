@@ -47,9 +47,6 @@ get.af <- function (x) {
   af.sp1
 }
 
-get.af(vcf.l[[1]])
-
-
 ##### ##### Remove the monomorphic SNPS ##### #####
 
 rm.mono <- function (x){
