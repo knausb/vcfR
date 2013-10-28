@@ -1,6 +1,6 @@
 # R functions to work with vcf format files.
 
-# Read in a vcf format file.
+##### ##### Read in vcf format file ##### #####
 # Gzipped files can be read in with:
 # vcf <- read.vcf(gzfile(vcfsgz[i]))
 
@@ -22,13 +22,43 @@ read.vcf<-function(x){
   }
 }
 
+##### ##### Extract genotypes from vcf data ##### #####
+
 vcf2gt <- function(x, cell = 1) {
   get.gt <- function(y) {unlist(lapply(strsplit(as.character(y), split = ":"), function(z) {z[cell]}))}
   apply(x[,10:ncol(x)], 2, get.gt)
 }
 
+##### ##### Extract gene qualities from vcf data ##### #####
+
 vcf2gq <- function(x, cell = 3) {
   get.gq <- function(y) {unlist(lapply(strsplit(as.character(y), split = ":"), function(z) {z[cell]}))}
   apply(x[,10:ncol(x)], 2, get.gq)
 }
+
+##### ##### Get Allele Frquency Spectrum ##### #####
+
+get.af <- function (x) {
+  af.sp1 <- vcf2gt(x)
+  af.sp2 <- af.sp1[,26:34]
+  af.sp1 <- af.sp1[,1:25]
+  af.sp1 <- cbind(apply(af.sp1,MARGIN=1,sum.gt), apply(af.sp2,MARGIN=1,sum.gt))
+  rownames(af.sp1) <- apply(x[,1:2], MARGIN=1, FUN=paste, collapse="_")
+  af.sp1
+}
+
+get.af(vcf.l[[1]])
+
+
+##### ##### Remove the monomorphic SNPS ##### #####
+
+rm.mono <- function (x){
+  gt <- vcf2gt(x)
+  gt <- x[apply(gt,FUN =function (x){length(unique(x))>1} ,MARGIN=1), ]
+  if (nrow(gt) >= 1){
+    return(gt)
+  }
+}
+
+
 
