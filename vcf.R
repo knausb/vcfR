@@ -26,7 +26,11 @@ read.vcf<-function(x){
 
 vcf2gt <- function(x, cell = 1) {
   get.gt <- function(y) {unlist(lapply(strsplit(as.character(y), split = ":"), function(z) {z[cell]}))}
-  apply(x[,10:ncol(x)], 2, get.gt)
+  gt <- apply(x[,10:ncol(x)], 2, get.gt)
+  if(class(gt) != "matrix"){
+    gt <- matrix(gt, ncol=length(10:ncol(x)))
+  }
+  gt
 }
 
 ##### ##### Extract gene qualities from vcf data ##### #####
@@ -49,11 +53,15 @@ get.af <- function (x) {
 
 ##### ##### Remove the monomorphic SNPS ##### #####
 
-rm.mono <- function (x){
-  gt <- vcf2gt(x)
+rm.mono <- function (x, sample.cols = 10:ncol(x)){
+  if(nrow(x) <= 0){return(NA)}
+  gt <- vcf2gt(x[,c(1:9,sample.cols)])
+  if(is.null(gt)){return(NA)}
   gt <- x[apply(gt,FUN =function (x){length(unique(x))>1} ,MARGIN=1), ]
   if (nrow(gt) >= 1){
     return(gt)
+  } else {
+    return(NA)
   }
 }
 
