@@ -43,9 +43,14 @@ vcf2gq <- function(x, cell = 3) {
 ##### ##### Get Allele Frquency Spectrum ##### #####
 
 get.af <- function (x) {
+  if (is.null(dim(x))==T){return(NA)}
   af.sp1 <- vcf2gt(x)
   af.sp2 <- af.sp1[,26:34]
   af.sp1 <- af.sp1[,1:25]
+  if(nrow(x)==1){
+    af.sp1 <- matrix(af.sp1, nrow=1)
+    af.sp2 <- matrix(af.sp2, nrow=1)
+  }
   af.sp1 <- cbind(apply(af.sp1,MARGIN=1,sum.gt), apply(af.sp2,MARGIN=1,sum.gt))
   rownames(af.sp1) <- apply(x[,1:2], MARGIN=1, FUN=paste, collapse="_")
   af.sp1
@@ -65,5 +70,8 @@ rm.mono <- function (x, sample.cols = 10:ncol(x)){
   }
 }
 
+##### ##### Sum the alleles #####
 
-
+sum.gt <- function(x){
+  sum(as.numeric(unlist(strsplit(x,"/"))))
+}
