@@ -1,3 +1,4 @@
+
 # R functions to work with vcf format files.
 
 ##### ##### Read in vcf format file ##### #####
@@ -75,3 +76,32 @@ rm.mono <- function (x, sample.cols = 10:ncol(x)){
 sum.gt <- function(x){
   sum(as.numeric(unlist(strsplit(x,"/"))))
 }
+
+
+##### ##### Find monomorphic SNPs ##### #####
+
+monop <- function(x){
+  if (is.null(dim(x))==T){return(NA)}
+  gt <- vcf2gt(x)[,26:34]
+  if(class(gt) != "matrix"){gt <- matrix(gt, nrow=1)}
+  gt.2 <- apply(gt, MARGIN=1,unique)
+  class(gt.2)
+}
+
+##### ##### Find fixed heterozygous SNPs ##### #####
+
+fixed.het <- function(x){
+  if (is.null(dim(x))==T){return(NA)}
+  gt <- vcf2gt(x)[,26:34]
+  if(class(gt) != "matrix"){gt <- matrix(gt, nrow=1)}
+  gt.2 <- apply(gt, MARGIN=1,unique)
+  if(class(gt.2) == "character"){
+    return(x[gt.2 == "0/1",])
+  } else {
+
+  }
+  gt.2
+}
+
+
+
