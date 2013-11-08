@@ -1,11 +1,77 @@
+# vcf.R.
+##### ##### ##### ##### #####
+# Class definition.
 
-# R functions to work with vcf format files.
+setClass(
+  Class="vcf",
+  representation=representation(
+    meta="data.frame",
+    fix="data.frame",
+    gt="data.frame"
+  ),
+  prototype=prototype(
+    fix = data.frame(matrix(ncol=8, nrow=0, 
+                            dimnames=list(c(),
+                                          c('chrom','pos','id','ref','alt','qual','filter','info'))),
+                       stringsAsFactors=FALSE)
+  )
+)
 
-##### ##### Read in vcf format file ##### #####
-# Gzipped files can be read in with:
-# vcf <- read.vcf(gzfile(vcfsgz[i]))
+##### ##### ##### ##### #####
+# Generic methods.
+
+setMethod(
+  f="show",
+  signature = "vcf",
+  definition=function(object){
+    cat("*** Class vcf, method Show *** \n")
+    if(length(object@meta)>0){
+      cat(head(object@meta))
+      cat("\n")
+    }
+    if(length(object@fix)>0){
+      cat(head(object@fix))
+      cat("\n")
+    }
+    cat("******* End Show (vcf) ******* \n")
+  }
+)
+
+setMethod(
+  f="print",
+  signature="vcf",
+  definition=function (x,y,...){
+    cat("***** Object of class vcf *****\n")
+    if(length(object@meta)>0){
+      cat(head(object@meta))
+      cat("\n")
+    }
+    if(length(object@fix)>0){
+      cat(head(object@fix))
+      cat("\n")
+    }
+    if(length(object@gt)>0){
+      cat(head(object@gt))
+      cat("\n")
+    }
+    cat("***** End print (vcf) ***** \n")
+  }
+)
+
+setMethod(
+  f= "plot",
+  signature= "vcf",
+  definition=function (x,y,...){
+    cat("***** Object of class 'vcf' *****\n")
+    cat("***** Plot not implemented *****\n")
+  }
+)
+
+##### ##### ##### ##### #####
+# Data loading functions.
 
 read.vcf<-function(x){
+  vcf <- new(Class="vcf")
   i <- -1 # Line counter.
   j <- 0 # Success?
   tmp <- scan(x, what="character", sep="\n", skip=0, nlines=1, quiet=T, comment.char="")
@@ -15,93 +81,25 @@ read.vcf<-function(x){
       tmp <- scan(x, what="character", sep="\n", skip=i, nlines=1, quiet=T, comment.char="")
       if(length(grep('^##',tmp)) == 0){j <- 1}
     }
-    read.table(x,header=T,sep='\t',skip=i,comment.char='')
+    vcf@meta <- scan(x, what="character", sep="\n", skip=0, nlines=i, quiet=T, comment.char="")
+    vcf@fix <- read.table(x,header=T,sep='\t',skip=i,comment.char='')
+    vcf@gt <- vcf@fix[,9:ncol(vcf@fix)]
+    vcf@fix <- vcf@fix[,1:8]
   } else if (length(grep('^#',tmp)) >0 ){
-    read.table(x,header=T,sep='\t',skip=0,comment.char='')
+    # No meta region, but a header line.
+    vcf@fix <- read.table(x,header=T,sep='\t',skip=0,comment.char='')
+    vcf@gt <- vcf@fix[,9:ncol(vcf@fix)]
+    vcf@fix <- vcf@fix[,1:8]
+    colnames(vcf@fix) <- c('chrom','pos','id','ref','alt','qual','filter','info')
   } else {
-    read.table(x,header=F,sep='\t',skip=0,comment.char='')
+    # No meta region or header line.
+    vcf@fix <- read.table(x,header=F,sep='\t',skip=0,comment.char='')
+    vcf@gt <- vcf@fix[,9:ncol(vcf@fix)]
+    vcf@fix <- vcf@fix[,1:8]
+    colnames(vcf@fix) <- c('chrom','pos','id','ref','alt','qual','filter','info')
   }
+  return(vcf)
 }
 
-##### ##### Extract genotypes from vcf data ##### #####
-
-vcf2gt <- function(x, cell = 1) {
-  get.gt <- function(y) {unlist(lapply(strsplit(as.character(y), split = ":"), function(z) {z[cell]}))}
-  gt <- apply(x[,10:ncol(x)], 2, get.gt)
-  if(class(gt) != "matrix"){
-    gt <- matrix(gt, ncol=length(10:ncol(x)))
-  }
-  gt
-}
-
-##### ##### Extract gene qualities from vcf data ##### #####
-
-vcf2gq <- function(x, cell = 3) {
-  get.gq <- function(y) {unlist(lapply(strsplit(as.character(y), split = ":"), function(z) {z[cell]}))}
-  apply(x[,10:ncol(x)], 2, get.gq)
-}
-
-##### ##### Get Allele Frquency Spectrum ##### #####
-
-get.af <- function (x) {
-  if (is.null(dim(x))==T){return(NA)}
-  af.sp1 <- vcf2gt(x)
-  af.sp2 <- af.sp1[,26:34]
-  af.sp1 <- af.sp1[,1:25]
-  if(nrow(x)==1){
-    af.sp1 <- matrix(af.sp1, nrow=1)
-    af.sp2 <- matrix(af.sp2, nrow=1)
-  }
-  af.sp1 <- cbind(apply(af.sp1,MARGIN=1,sum.gt), apply(af.sp2,MARGIN=1,sum.gt))
-  rownames(af.sp1) <- apply(x[,1:2], MARGIN=1, FUN=paste, collapse="_")
-  af.sp1
-}
-
-##### ##### Remove the monomorphic SNPS ##### #####
-
-rm.mono <- function (x, sample.cols = 10:ncol(x)){
-  if(nrow(x) <= 0){return(NA)}
-  gt <- vcf2gt(x[,c(1:9,sample.cols)])
-  if(is.null(gt)){return(NA)}
-  gt <- x[apply(gt,FUN =function (x){length(unique(x))>1} ,MARGIN=1), ]
-  if (nrow(gt) >= 1){
-    return(gt)
-  } else {
-    return(NA)
-  }
-}
-
-##### ##### Sum the alleles #####
-
-sum.gt <- function(x){
-  sum(as.numeric(unlist(strsplit(x,"/"))))
-}
-
-
-##### ##### Find monomorphic SNPs ##### #####
-
-monop <- function(x){
-  if (is.null(dim(x))==T){return(NA)}
-  gt <- vcf2gt(x)[,26:34]
-  if(class(gt) != "matrix"){gt <- matrix(gt, nrow=1)}
-  gt.2 <- apply(gt, MARGIN=1,unique)
-  class(gt.2)
-}
-
-##### ##### Find fixed heterozygous SNPs ##### #####
-
-fixed.het <- function(x){
-  if (is.null(dim(x))==T){return(NA)}
-  gt <- vcf2gt(x)[,26:34]
-  if(class(gt) != "matrix"){gt <- matrix(gt, nrow=1)}
-  gt.2 <- apply(gt, MARGIN=1,unique)
-  if(class(gt.2) == "character"){
-    return(x[gt.2 == "0/1",])
-  } else {
-
-  }
-  gt.2
-}
-
-
-
+##### ##### ##### ##### #####
+# EOF.

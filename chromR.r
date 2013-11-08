@@ -10,8 +10,9 @@ setClass(
     name = "character",
     seq = "DNAbin",
     len = "integer",
-    vcf.f = "data.frame",
-    vcf.v = "data.frame",
+    vcf.meta = "data.frame",
+    vcf.fix = "data.frame",
+    vcf.gt = "data.frame",
     vcf.info = "data.frame",
     ann = "data.frame",
     #
@@ -24,12 +25,12 @@ setClass(
     mask = "logical"
   ),
   prototype=prototype(
-    vcf.f = data.frame(matrix(ncol=8, nrow=0, 
+    vcf.fix = data.frame(matrix(ncol=8, nrow=0, 
                               dimnames=list(c(),
 c('chrom','pos','id','ref','alt','qual','filter','info'))),
                        stringsAsFactors=FALSE)
 #, dimnames=list(c(), c('chrom','pos','id','ref','alt','qual','filter','info')))
-#    vcf.f = matrix(ncol=8, nrow=0, dimnames=list(c(), c('chrom','pos','id','ref','alt','qual','filter','info')))
+#    vcf.fix = matrix(ncol=8, nrow=0, dimnames=list(c(), c('chrom','pos','id','ref','alt','qual','filter','info')))
   )
 )
 
@@ -56,11 +57,11 @@ setMethod(
     cat(paste("Name: ", x@name, "\n"))
     cat(paste("Length: ", x@len, "\n"))
     cat("\nVCF fixed data:\n")
-    print(head(x@vcf.f[,1:7], n=4))
+    print(head(x@vcf.fix[,1:7], n=4))
     cat("Last column (info) omitted.\n")
     cat("\nVCF variable data:\n")
-    cat(paste("Columns: ", ncol(x@vcf.v), "\n"))
-    cat(paste("Rows: ", nrow(x@vcf.v), "\n"))
+    cat(paste("Columns: ", ncol(x@vcf.gt), "\n"))
+    cat(paste("Rows: ", nrow(x@vcf.gt), "\n"))
     cat("(First column is format.)\n")
     cat("\nAnnotation data:\n")
     if(length(x@ann)>0){
@@ -92,9 +93,9 @@ setMethod(
     } else {
       plot(1:2,1:2, type='n')
     }
-    if(length(x@vcf.f)>0){
-      hist(x@vcf.f$qual, col=5, main="Quality (QUAL)", xlab="")
-      rug(x@vcf.f$qual)
+    if(length(x@vcf.fix)>0){
+      hist(x@vcf.fix$qual, col=5, main="Quality (QUAL)", xlab="")
+      rug(x@vcf.fix$qual)
     } else {
       plot(1:2,1:2, type='n')
     }
@@ -151,13 +152,12 @@ setReplaceMethod(
 # Data loading functions.
 
 vcf2chrom <- function(x,y,...){
-  x@vcf.f <- as.data.frame(y[,1:8])
-#  x@vcf.f <- apply(y[,1:8], MARGIN=2, as.character)
-  colnames(x@vcf.f) <- c('chrom','pos','id','ref','alt','qual','filter','info')
-  x@vcf.f[,2] <- as.numeric(x@vcf.f[,2])
-  x@vcf.f[,6] <- as.numeric(x@vcf.f[,6])
+  x@vcf.fix <- as.data.frame(y[,1:8])
+  colnames(x@vcf.fix) <- c('chrom','pos','id','ref','alt','qual','filter','info')
+  x@vcf.fix[,2] <- as.numeric(x@vcf.fix[,2])
+  x@vcf.fix[,6] <- as.numeric(x@vcf.fix[,6])
   #
-  x@vcf.v <- y[,9:ncol(y)]
+  x@vcf.gt <- y[,9:ncol(y)]
   #
   info <- matrix(ncol=2, nrow=nrow(y))
   colnames(info) <- c('dp','mq')
@@ -165,7 +165,7 @@ vcf2chrom <- function(x,y,...){
   info[,2] <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y[,8]), ";"), function(x){grep("^MQ=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
   x@vcf.info <- as.data.frame(info)
   #
-  x@mask <- rep(TRUE, times=nrow(x@vcf.f))
+  x@mask <- rep(TRUE, times=nrow(x@vcf.fix))
   # assign may be more efficient.
   return(x)
 }
@@ -199,7 +199,7 @@ create.chrom <- function(name, seq, vcf=NULL, ann=NULL){
 ##### ##### Set a mask ##### #####
 
 masker <- function(x, QUAL=999, mindp=0.25, maxdp=0.75, minmq=0.25, maxmq=0.75, ...){
-  x@mask <- as.numeric(x@vcf.f[,6]) >= QUAL
+  x@mask <- as.numeric(x@vcf.fix[,6]) >= QUAL
   #
   x@mask[x@vcf.info$dp[x@vcf.info$dp <= quantile(x@vcf.info$dp, probs=c(mindp))]] <- FALSE
   x@mask[x@vcf.info$dp[x@vcf.info$dp >= quantile(x@vcf.info$dp, probs=c(maxdp))]] <- FALSE
@@ -302,7 +302,7 @@ snp.win <- function(x){
   snp[,1] <- 1:nrow(snp)
   snp[,2] <- x@windows[,1]
   snp[,3] <- x@windows[,2]
-  vcf <- x@vcf.f[x@mask,]$pos
+  vcf <- x@vcf.fix[x@mask,]$pos
   #
   count.snps <- function(x){
     vcf2 <- vcf[vcf >= x[2] & vcf <= x[3]]
@@ -332,7 +332,7 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE, DP=TRUE, QUAL=TRUE, MQ=TRUE, SNPD
   #
   if(length(x@vcf.info)>0 & DP){brows <- brows+1} # dp
   if(length(x@vcf.info)>0 & MQ){brows <- brows+1} # mq
-  if(length(x@vcf.f)>0 & QUAL){brows <- brows+1} # qual
+  if(length(x@vcf.fix)>0 & QUAL){brows <- brows+1} # qual
   if(length(x@snpden.w)>0 & SNPDEN){brows <- brows+1}
   if(length(x@nuccomp.w)>0 & NUC){brows <- brows+1}
   #
@@ -352,24 +352,24 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE, DP=TRUE, QUAL=TRUE, MQ=TRUE, SNPD
   par(oma=c(4,4,3,1))
   #
   if(length(x@vcf.info)>0 & DP){ # dp
-    plot(x@vcf.f[x@mask,2], x@vcf.info[x@mask,1], pch=20, col="#0080ff22", axes=F, frame.plot=T, ylab="", ...)
+    plot(x@vcf.fix[x@mask,2], x@vcf.info[x@mask,1], pch=20, col="#0080ff22", axes=F, frame.plot=T, ylab="", ...)
     axis(side=2, las=2)
     title(main="Read depth (DP)", line=-1)
     boxplot(x@vcf.info[x@mask,1], axes=FALSE, frame.plot=T, col="#0080ff")
   }
   #
   if(length(x@vcf.info)>0 & MQ){ # dp
-    plot(x@vcf.f[x@mask,2], x@vcf.info[x@mask,2], pch=20, col="#3CB37122", axes=F, frame.plot=T, ylab="", ...)
+    plot(x@vcf.fix[x@mask,2], x@vcf.info[x@mask,2], pch=20, col="#3CB37122", axes=F, frame.plot=T, ylab="", ...)
     axis(side=2, las=2)
     title(main="Mapping quality (MQ)", line=-1)
     boxplot(x@vcf.info[x@mask,2], axes=FALSE, frame.plot=T, col="#3CB371")
   }
   #
-  if(length(x@vcf.f)>0 & QUAL){ # qual
-    plot(x@vcf.f[x@mask,2], x@vcf.f[x@mask,6], pch=20, col="#80008022", axes=F, frame.plot=T, ylab="", ...)
+  if(length(x@vcf.fix)>0 & QUAL){ # qual
+    plot(x@vcf.fix[x@mask,2], x@vcf.fix[x@mask,6], pch=20, col="#80008022", axes=F, frame.plot=T, ylab="", ...)
     axis(side=2, las=2)
     title(main="QUAL", line=-1)
-    boxplot(as.numeric(x@vcf.f[x@mask,6]), axes=FALSE, frame.plot=T, col="#800080")
+    boxplot(as.numeric(x@vcf.fix[x@mask,6]), axes=FALSE, frame.plot=T, col="#800080")
   }
   #
   if(length(x@snpden.w)>0 & SNPDEN){
