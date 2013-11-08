@@ -10,7 +10,7 @@ setClass(
     name = "character",
     seq = "DNAbin",
     len = "integer",
-    vcf.meta = "data.frame",
+    vcf.meta = "character",
     vcf.fix = "data.frame",
     vcf.gt = "data.frame",
     vcf.info = "data.frame",
@@ -152,17 +152,21 @@ setReplaceMethod(
 # Data loading functions.
 
 vcf2chrom <- function(x,y,...){
-  x@vcf.fix <- as.data.frame(y[,1:8])
+  x@vcf.fix <- as.data.frame(y@fix)
+#  x@vcf.fix <- as.data.frame(y[,1:8])
   colnames(x@vcf.fix) <- c('chrom','pos','id','ref','alt','qual','filter','info')
   x@vcf.fix[,2] <- as.numeric(x@vcf.fix[,2])
   x@vcf.fix[,6] <- as.numeric(x@vcf.fix[,6])
   #
-  x@vcf.gt <- y[,9:ncol(y)]
+  x@vcf.gt <- y@gt
+#  x@vcf.gt <- y[,9:ncol(y)]
   #
-  info <- matrix(ncol=2, nrow=nrow(y))
+  x@vcf.meta <- y@meta
+  #
+  info <- matrix(ncol=2, nrow=nrow(y@fix))
   colnames(info) <- c('dp','mq')
-  info[,1] <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y[,8]), ";"), function(x){grep("^DP=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
-  info[,2] <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y[,8]), ";"), function(x){grep("^MQ=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
+  info[,1] <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y@fix[,8]), ";"), function(x){grep("^DP=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
+  info[,2] <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y@fix[,8]), ";"), function(x){grep("^MQ=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
   x@vcf.info <- as.data.frame(info)
   #
   x@mask <- rep(TRUE, times=nrow(x@vcf.fix))

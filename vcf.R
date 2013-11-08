@@ -5,7 +5,7 @@
 setClass(
   Class="vcf",
   representation=representation(
-    meta="data.frame",
+    meta="character",
     fix="data.frame",
     gt="data.frame"
   ),
@@ -26,13 +26,16 @@ setMethod(
   definition=function(object){
     cat("*** Class vcf, method Show *** \n")
     if(length(object@meta)>0){
+      cat("Meta\n")
       cat(head(object@meta))
-      cat("\n")
+      cat("\n\n")
     }
     if(length(object@fix)>0){
-      cat(head(object@fix))
+      print(head(object@fix)[,1:7])
+      cat("Column 8 (info) omitted.")
       cat("\n")
     }
+    cat("\n")
     cat("******* End Show (vcf) ******* \n")
   }
 )
@@ -42,16 +45,18 @@ setMethod(
   signature="vcf",
   definition=function (x,y,...){
     cat("***** Object of class vcf *****\n")
-    if(length(object@meta)>0){
-      cat(head(object@meta))
+    if(length(x@meta)>0){
+      cat("Meta\n")
+      cat(head(x@meta))
+      cat("\n\n")
+    }
+    if(length(x@fix)>0){
+      print(head(x@fix)[,1:7])
+      cat("Column 8 (info) omitted.")
       cat("\n")
     }
-    if(length(object@fix)>0){
-      cat(head(object@fix))
-      cat("\n")
-    }
-    if(length(object@gt)>0){
-      cat(head(object@gt))
+    if(length(x@gt)>0){
+      print(head(x@gt))
       cat("\n")
     }
     cat("***** End print (vcf) ***** \n")
