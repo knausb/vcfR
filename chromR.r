@@ -370,8 +370,8 @@ vcf.fix2gt.m <- function(x){
 }
 
 gt.m2sfs <- function(x){
-  pop1 <- x@gt.m[,x@pop1]
-  pop2 <- x@gt.m[,x@pop2]
+  pop1 <- x@gt.m[x@mask, x@pop1]
+  pop2 <- x@gt.m[x@mask, x@pop2]
   sfs <- matrix(ncol=ncol(pop1)*2+1, nrow=ncol(pop2)*2+1)
   sfs1d <- cbind(rowSums(pop2)+1, rowSums(pop1)+1)
   sfs1d[,1] <- nrow(sfs) + 1 - sfs1d[,1]
@@ -386,36 +386,44 @@ gt.m2sfs <- function(x){
   return(x)
 }
 
-plot.sfs <- function(x, log10=TRUE, ...){
-  sfs <- x@sfs
-  if(log10){sfs <- log10(sfs)}
-  #
-  layout(matrix(c(1,2), nrow=1), widths=c(4,1))
-  image(t(sfs)[,nrow(sfs):1], col=rainbow(100, end=0.85),
-        axes=FALSE, frame.plot=TRUE)
-#  axis(side=1, at=seq(1,ncol(sfs), by=1)/ncol(sfs), labels=NA)
-  axis(side=1, at=seq(0, ncol(sfs)-1, by=1)/(ncol(sfs)-1), labels=NA)
-  axis(side=3, at=seq(0, ncol(sfs)-1, by=1)/(ncol(sfs)-1), labels=NA)
-  axis(side=2, at=seq(0, nrow(sfs)-1, by=1)/(nrow(sfs)-1), labels=NA)
-  axis(side=4, at=seq(0, nrow(sfs)-1, by=1)/(nrow(sfs)-1), labels=NA)
-  abline(a=0, b=1)
-  #
-  par(mar=c(5,0,4,3))
-  barplot(height=rep(1, times=100), width=1, space=0,
-          col=rainbow(100, start=0, end=0.85), border=NA, horiz=TRUE, axes=FALSE)
-  axis(side=4, at=seq(0,100, length.out=5),
-       labels=format(seq(0, max(sfs, na.rm=TRUE), length.out=5), digits=2),
-       las=1)
-  #
-  par(mar=c(5,4,4,2), mfrow=c(1,1))
-}
-
-proc.chrom <- function(x, win.size=1000, max.win=5000){
-  x <- acgt.win(x)
-  x <- n.win(x)
-  x <- windowize(x, win.size=win.size, max.win=max.win)
-  x <- gc.win(x)
-  x <- snp.win(x)
+proc.chrom <- function(x, pop1=NA, pop2=NA, win.size=1000, max.win=5000, verbose=TRUE){
+  x <- set.pop1(x, pop1)
+  x <- set.pop2(x, pop2)
+  ptime <- system.time(x <- acgt.win(x))
+  if(verbose==TRUE){
+    cat("Nucleotide regions complete.\n")
+    print(ptime)
+  }
+  ptime <- system.time(x <- n.win(x))
+  if(verbose==TRUE){
+    cat("N regions complete.\n")
+    print(ptime)
+  }
+  ptime <- system.time(x <- windowize(x, win.size=win.size, max.win=max.win))
+  if(verbose==TRUE){
+    cat("Sliding windows created.\n")
+    print(ptime)
+  }
+  ptime <- system.time(x <- gc.win(x))
+  if(verbose==TRUE){
+    cat("Sliding GC windows complete.\n")
+    print(ptime)
+  }
+  ptime <- system.time(x <- snp.win(x))
+  if(verbose==TRUE){
+    cat("Sliding SNP windows complete.\n")
+    print(ptime)
+  }
+  ptime <- system.time(x <- vcf.fix2gt.m(x))
+  if(verbose==TRUE){
+    cat("Genotype matrix complete.\n")
+    print(ptime)
+  }
+  ptime <- system.time(x <- gt.m2sfs(x))
+  if(verbose==TRUE){
+    cat("SFS complete.\n")
+    print(ptime)
+  }
   return(x)
 }
 
@@ -532,6 +540,35 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE, DP=TRUE, QUAL=TRUE, MQ=TRUE, SNPD
   par(oma=c(0,0,0,0))
 }
 
+plot.sfs <- function(x, log10=TRUE, ...){
+  sfs <- x@sfs
+  if(log10){sfs <- log10(sfs)}
+  #
+  layout(matrix(c(1,2), nrow=1), widths=c(4,1))
+  image(t(sfs)[,nrow(sfs):1], col=rainbow(100, end=0.85),
+        axes=FALSE, frame.plot=TRUE)
+#  axis(side=1, at=seq(1,ncol(sfs), by=1)/ncol(sfs), labels=NA)
+  axis(side=1, at=seq(0, ncol(sfs)-1, by=1)/(ncol(sfs)-1), labels=NA)
+  axis(side=1, at=seq(0, ncol(sfs)-1, by=5)/(ncol(sfs)-1), labels=seq(0, ncol(sfs)-1, by=5), las=1, tcl=-0.7)
+  axis(side=3, at=seq(0, ncol(sfs)-1, by=1)/(ncol(sfs)-1), labels=NA)
+  axis(side=2, at=seq(0, nrow(sfs)-1, by=1)/(nrow(sfs)-1), labels=NA)
+  axis(side=2, at=seq(0, nrow(sfs)-1, by=5)/(nrow(sfs)-1), labels=seq(0, nrow(sfs)-1, by=5), las=1, tcl=-0.7)
+  axis(side=4, at=seq(0, nrow(sfs)-1, by=1)/(nrow(sfs)-1), labels=NA)
+  abline(a=0, b=1)
+  title(main=paste("SFS for", x@name))
+  #
+  par(mar=c(5,0,4,3))
+  barplot(height=rep(1, times=100), width=1, space=0,
+          col=rainbow(100, start=0, end=0.85), border=NA, horiz=TRUE, axes=FALSE)
+  axis(side=4, at=seq(0,100, length.out=2),
+       labels=format(seq(0, 10^max(sfs, na.rm=TRUE), length.out=2), digits=3),
+       las=1)
+  axis(side=4, at=seq(1, max(sfs, na.rm=TRUE), by=1)*(100/max(sfs, na.rm=TRUE)),
+       labels=10^seq(1, max(sfs, na.rm=TRUE), by=1), las=1
+      )
+  #
+  par(mar=c(5,4,4,2), mfrow=c(1,1))
+}
 
 ##### ##### ##### ##### #####
 # EOF.
