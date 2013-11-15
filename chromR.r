@@ -16,11 +16,17 @@ setClass(
     vcf.info = "data.frame",
     ann = "data.frame",
     #
+    pop1 = "vector",
+    pop2 = "vector",
     acgt.w = "matrix",
     n.w = "matrix",
     windows = "matrix",
     nuccomp.w = "data.frame",
     snpden.w = "data.frame",
+    #
+    gt.m = "matrix",
+    vcf.stat = "data.frame",
+    sfs = "matrix",
     #
     mask = "logical"
   ),
@@ -28,6 +34,10 @@ setClass(
     vcf.fix = data.frame(matrix(ncol=8, nrow=0, 
                               dimnames=list(c(),
 c('chrom','pos','id','ref','alt','qual','filter','info'))),
+                       stringsAsFactors=FALSE),
+    vcf.stat = data.frame(matrix(ncol=8, nrow=0, 
+                              dimnames=list(c(),
+c('R_num','A_num','Ho','Ne','theta_pi','theta_w','theta_h','tajimas_d'))),
                        stringsAsFactors=FALSE)
 #, dimnames=list(c(), c('chrom','pos','id','ref','alt','qual','filter','info')))
 #    vcf.fix = matrix(ncol=8, nrow=0, dimnames=list(c(), c('chrom','pos','id','ref','alt','qual','filter','info')))
@@ -158,7 +168,11 @@ vcf2chrom <- function(x,y,...){
   x@vcf.fix[,2] <- as.numeric(x@vcf.fix[,2])
   x@vcf.fix[,6] <- as.numeric(x@vcf.fix[,6])
   #
+  for(i in 1:ncol(y@gt)){
+    y@gt[,i] <- as.character(y@gt[,i])
+  }
   x@vcf.gt <- y@gt
+#  x@vcf.gt <- as.data.frame(y@gt, stringsAsFactors = F)
 #  x@vcf.gt <- y[,9:ncol(y)]
   #
   x@vcf.meta <- y@meta
@@ -198,6 +212,17 @@ create.chrom <- function(name, seq, vcf=NULL, ann=NULL){
     x <- ann2chrom(x, ann)
   }
   return(x)
+}
+
+##### ##### Set populations ##### #####
+
+set.pop1 <- function(x, pop1){
+  x@pop1 <- pop1
+  return(x)  
+}
+set.pop2 <- function(x, pop2){
+  x@pop2 <- pop2
+  return(x)  
 }
 
 ##### ##### Set a mask ##### #####
@@ -316,6 +341,73 @@ snp.win <- function(x){
   snp[,5] <- snp[,4]/(snp[,3]-snp[,2]+1)
   x@snpden.w <- as.data.frame(snp)
   return(x)
+}
+
+vcf.fix2gt.m <- function(x){
+  snames <- names(x@vcf.gt)[-1]
+  pos <- paste(x@vcf.fix[,1], x@vcf.fix[,2], sep="_")
+#  pos <- x@vcf.fix[,2]
+  x1 <- as.matrix(x@vcf.gt)
+  nsamp <- ncol(x1) - 1
+  #
+  x1 <- cbind(unlist(lapply(strsplit(x1[,1], ":"), function(x){grep("GT", x)})),x1)
+  #
+  get.gt <- function(x){
+    cell <- as.numeric(x[1])
+    x <- lapply(strsplit(x[3:length(x)], ":"), function(x){x[cell]})
+    unlist(x)
+  }
+  x1 <- apply(x1, MARGIN=1, get.gt)
+  x1[x1=="0/0"] <- 0
+  x1[x1=="0/1"] <- 1
+  x1[x1=="1/0"] <- 1
+  x1[x1=="1/1"] <- 2
+  x1 <- as.numeric(x1)
+  x1 <- matrix(data=x1, ncol=nsamp, byrow=TRUE,
+               dimnames=list(pos, snames))
+  x@gt.m <- x1
+  return(x)
+}
+
+gt.m2sfs <- function(x){
+  pop1 <- x@gt.m[,x@pop1]
+  pop2 <- x@gt.m[,x@pop2]
+  sfs <- matrix(ncol=ncol(pop1)*2+1, nrow=ncol(pop2)*2+1)
+  sfs1d <- cbind(rowSums(pop2)+1, rowSums(pop1)+1)
+  sfs1d[,1] <- nrow(sfs) + 1 - sfs1d[,1]
+  apply(sfs1d, MARGIN=1, function(x){
+    if(is.na(sfs[x[1],x[2]])){
+      sfs[x[1],x[2]] <<- 1
+    }else{
+      sfs[x[1],x[2]] <<- sfs[x[1],x[2]] +1
+    }}
+  )
+  x@sfs <- sfs
+  return(x)
+}
+
+plot.sfs <- function(x, log10=TRUE, ...){
+  sfs <- x@sfs
+  if(log10){sfs <- log10(sfs)}
+  #
+  layout(matrix(c(1,2), nrow=1), widths=c(4,1))
+  image(t(sfs)[,nrow(sfs):1], col=rainbow(100, end=0.85),
+        axes=FALSE, frame.plot=TRUE)
+#  axis(side=1, at=seq(1,ncol(sfs), by=1)/ncol(sfs), labels=NA)
+  axis(side=1, at=seq(0, ncol(sfs)-1, by=1)/(ncol(sfs)-1), labels=NA)
+  axis(side=3, at=seq(0, ncol(sfs)-1, by=1)/(ncol(sfs)-1), labels=NA)
+  axis(side=2, at=seq(0, nrow(sfs)-1, by=1)/(nrow(sfs)-1), labels=NA)
+  axis(side=4, at=seq(0, nrow(sfs)-1, by=1)/(nrow(sfs)-1), labels=NA)
+  abline(a=0, b=1)
+  #
+  par(mar=c(5,0,4,3))
+  barplot(height=rep(1, times=100), width=1, space=0,
+          col=rainbow(100, start=0, end=0.85), border=NA, horiz=TRUE, axes=FALSE)
+  axis(side=4, at=seq(0,100, length.out=5),
+       labels=format(seq(0, max(sfs, na.rm=TRUE), length.out=5), digits=2),
+       las=1)
+  #
+  par(mar=c(5,4,4,2), mfrow=c(1,1))
 }
 
 proc.chrom <- function(x, win.size=1000, max.win=5000){
