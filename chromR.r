@@ -279,7 +279,7 @@ n.win <- function(x, max.win=1000, regex="[n]"){
   return(x)
 }
 
-windowize <- function(x, win.size=1000, max.win=5000){
+windowize <- function(x, win.size=1000, max.win=10000){
   acgt.w <- x@acgt.w
   windows <- matrix(NA, ncol=2, nrow=max.win)
   i <- 1
@@ -289,6 +289,13 @@ windowize <- function(x, win.size=1000, max.win=5000){
       windows[i,2] <- acgt.w[j,1] + win.size - 1
       acgt.w[j,1] <- acgt.w[j,1] + win.size + 0
       i <- i+1
+      if(i > max.win){
+        print(paste("max i equals", max.win))
+        print(paste("i equals", i))
+        print(paste("j equals", j))
+        cat("chrom.r error: max.win is too small.\n")
+        break
+      }
     }
     windows[i,1] <- acgt.w[j,1]
     windows[i,2] <- acgt.w[j,2]
@@ -386,7 +393,7 @@ gt.m2sfs <- function(x){
   return(x)
 }
 
-proc.chrom <- function(x, pop1=NA, pop2=NA, win.size=1000, max.win=5000, verbose=TRUE){
+proc.chrom <- function(x, pop1=NA, pop2=NA, win.size=1000, max.win=10000, verbose=TRUE){
   x <- set.pop1(x, pop1)
   x <- set.pop2(x, pop2)
   ptime <- system.time(x <- acgt.win(x))
