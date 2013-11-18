@@ -18,6 +18,7 @@ setClass(
     #
     pop1 = "vector",
     pop2 = "vector",
+    #
     acgt.w = "matrix",
     n.w = "matrix",
     windows = "matrix",
@@ -35,9 +36,10 @@ setClass(
                               dimnames=list(c(),
 c('chrom','pos','id','ref','alt','qual','filter','info'))),
                        stringsAsFactors=FALSE),
-    vcf.stat = data.frame(matrix(ncol=8, nrow=0, 
+    vcf.stat = data.frame(matrix(ncol=11, nrow=0, 
                               dimnames=list(c(),
-c('R_num','A_num','Ho','Ne','theta_pi','theta_w','theta_h','tajimas_d'))),
+  c('Allele_num','R_num','A_num','Ho','He','Ne',
+  'theta_pi','theta_w','theta_h','tajimas_d','fw_h'))),
                        stringsAsFactors=FALSE)
 #, dimnames=list(c(), c('chrom','pos','id','ref','alt','qual','filter','info')))
 #    vcf.fix = matrix(ncol=8, nrow=0, dimnames=list(c(), c('chrom','pos','id','ref','alt','qual','filter','info')))
@@ -393,7 +395,54 @@ gt.m2sfs <- function(x){
   return(x)
 }
 
-proc.chrom <- function(x, pop1=NA, pop2=NA, win.size=1000, max.win=10000, verbose=TRUE){
+gt2popsum <- function(x){
+  gt <- x@gt.m
+  mask <- x@mask
+  summ <- matrix(ncol=11, nrow=nrow(gt), 
+                     dimnames=list(c(),
+    c('Allele_num','R_num','A_num','Ho','He','Ne',
+    'theta_pi','theta_w','theta_h','tajimas_d', 'fw_h'))
+  )
+  summ[mask,2] <- unlist(apply(gt[mask,], MARGIN=1,
+                     function(x){sum(2*length(na.omit(x))-sum(x))})
+                    )
+  summ[mask,3] <- rowSums(gt[mask,])
+  summ[,1] <- summ[,2]+summ[,3]
+  summ[mask,4] <- unlist(apply(gt[mask,], MARGIN=1,
+                     function(x){sum(x==1)/length(na.omit(x))}
+#                     function(x){sum(x==1)}
+                          )
+                    )
+  summ[,5] <- 1 - ((summ[,2]/summ[,1])^2 + (summ[,3]/summ[,1])^2)
+  summ[,6] <- 1/(1-summ[,5])
+  #
+  # Thetas.
+  summ[,7:9] <- t(apply(summ[,2:3],MARGIN=1,thetas))
+  #
+  summ[,10] <- summ[,7] - summ[,8]
+  summ[,11] <- summ[,7] - summ[,9]
+  #
+#  print(head(summ))
+  x@vcf.stat <- as.data.frame(summ)
+  return(x)
+}
+
+thetas <- function(x){
+#  print(x)
+  rnum <- x[1]
+  anum <- x[2]
+  if(is.na(rnum)){return(c(NA,NA,NA))}
+  n <- rnum + anum
+  Si <- vector(mode="numeric", length=n)
+  Si[anum] <- 1
+  theta_w <- sum(1/1:(rnum+anum-1))^-1 * 1
+  theta_pi <- (2*anum*rnum)/(n*(n-1))
+  theta_h <- (2*1*anum^2)/(n*(n-1))
+  return(c(theta_pi, theta_w, theta_h))
+}
+
+#proc.chrom <- function(x, pop1=NA, pop2=NA, win.size=1000, max.win=10000, verbose=TRUE){
+proc.chrom <- function(x, pop1=NA, pop2=NA, verbose=TRUE){
   x <- set.pop1(x, pop1)
   x <- set.pop2(x, pop2)
   ptime <- system.time(x <- acgt.win(x))
@@ -406,7 +455,8 @@ proc.chrom <- function(x, pop1=NA, pop2=NA, win.size=1000, max.win=10000, verbos
     cat("N regions complete.\n")
     print(ptime)
   }
-  ptime <- system.time(x <- windowize(x, win.size=win.size, max.win=max.win))
+#  ptime <- system.time(x <- windowize(x, win.size=win.size, max.win=max.win))
+  ptime <- system.time(x <- windowize(x))
   if(verbose==TRUE){
     cat("Sliding windows created.\n")
     print(ptime)
@@ -431,19 +481,51 @@ proc.chrom <- function(x, pop1=NA, pop2=NA, win.size=1000, max.win=10000, verbos
     cat("SFS complete.\n")
     print(ptime)
   }
+  ptime <- system.time(x <- gt2popsum(x))
+  if(verbose==TRUE){
+    cat("Population summary complete.\n")
+    print(ptime)
+  }
   return(x)
 }
 
 ##### ##### ##### ##### #####
 # Graphic function.
 
-chromo <- function(x, verbose=TRUE, nsum=TRUE, DP=TRUE, QUAL=TRUE, MQ=TRUE, SNPDEN=TRUE, NUC=TRUE, ANN=TRUE, ...){
+chromoqc <- function(x, nsum=FALSE, ...){
+  chromo(x, verbose=TRUE, nsum=FALSE, DP=TRUE, QUAL=TRUE, MQ=TRUE, SNPDEN=TRUE, NUC=TRUE, ANN=TRUE, ...)
+}
+
+chromopop <- function(x, ...){
+  chromo(x, ANN=TRUE, nsum=FALSE, 
+         NE=TRUE, TPI=TRUE, TAJD=TRUE, FWH=TRUE,
+         SNPDEN=TRUE, ...)
+}
+
+chromoall <- function(x, ...){
+  chromo(x, ANN=TRUE, nsum=FALSE,
+         DP=TRUE, QUAL=TRUE, MQ=TRUE,
+         NE=TRUE, TPI=TRUE, TAJD=TRUE, FWH=TRUE,
+         SNPDEN=TRUE, NUC=TRUE, ...)
+}
+
+chromo <- function(x, verbose=TRUE, nsum=TRUE,
+                   DP=FALSE, QUAL=FALSE, MQ=FALSE,
+                   NE=FALSE, TPI=FALSE, TAJD=FALSE, FWH=FALSE,
+                   SNPDEN=FALSE, NUC=FALSE,
+                   ANN=FALSE, ...){
   brows <- 0
   srows <- 0
   #
   if(length(x@vcf.info)>0 & DP){brows <- brows+1} # dp
   if(length(x@vcf.info)>0 & MQ){brows <- brows+1} # mq
   if(length(x@vcf.fix)>0 & QUAL){brows <- brows+1} # qual
+  #
+  if(length(x@vcf.stat)>0 & NE){brows <- brows+1} # Ne
+  if(length(x@vcf.stat)>0 & TPI){brows <- brows+1} # Theta_pi
+  if(length(x@vcf.stat)>0 & TAJD){brows <- brows+1} # Tajima's D
+  if(length(x@vcf.stat)>0 & FWH){brows <- brows+1} # Fay and Wu's
+  #
   if(length(x@snpden.w)>0 & SNPDEN){brows <- brows+1}
   if(length(x@nuccomp.w)>0 & NUC){brows <- brows+1}
   #
@@ -452,8 +534,8 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE, DP=TRUE, QUAL=TRUE, MQ=TRUE, SNPD
   #
   if(verbose){
     cat('  Chromo\n')
-    cat(paste("  brows: ", brows, "\n"))
-    cat(paste("  srows: ", srows, "\n"))
+    cat(paste("  Wide rows   (brows): ", brows, "\n"))
+    cat(paste("  Narrow rows (srows): ", srows, "\n"))
   }
   #
   layout(matrix(c(1:((brows+srows)*2)), ncol=2, byrow=T),
@@ -483,6 +565,37 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE, DP=TRUE, QUAL=TRUE, MQ=TRUE, SNPD
     boxplot(as.numeric(x@vcf.fix[x@mask,6]), axes=FALSE, frame.plot=T, col="#800080")
   }
   #
+  if(length(x@vcf.stat)>0 & NE){ # Ne
+    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,6], pch=20, col="#00008B22", axes=F, frame.plot=T, ylab="", ...)
+    title(main="Ne", line=-1)
+    axis(side=2, las=2)
+    boxplot(as.numeric(x@vcf.stat[x@mask,6]), axes=FALSE, frame.plot=T, col="#00008B")
+  }
+
+  if(length(x@vcf.stat)>0 & TPI){ # Theta_pi
+    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,7], pch=20, col="#FF8C0022", axes=F, frame.plot=T, ylab="", ...)
+#    title(main=expression(paste(theta[pi], pi, "Theta_pi")), line=-1)
+    title(main="Theta_pi", line=-1)
+    axis(side=2, las=2)
+    boxplot(as.numeric(x@vcf.stat[x@mask,7]), axes=FALSE, frame.plot=T, col="#FF8C00")
+  }
+  #
+  if(length(x@vcf.stat)>0 & TAJD){ # Tajima's D
+    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,10], pch=20, col="#00640022", axes=F, frame.plot=T, ylab="", ...)
+    title(main="Tajima's D", line=-1)
+    axis(side=2, las=2)
+    boxplot(as.numeric(x@vcf.stat[x@mask,10]), axes=FALSE, frame.plot=T, col="#006400")
+  }
+  #
+  if(length(x@vcf.stat)>0 & FWH){ # Fay and Wu's H
+    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,11], pch=20, col="#8B008B22", axes=F, frame.plot=T, ylab="", ...)
+    title(main="Fay and Wu's H", line=-1)
+    axis(side=2, las=2)
+    boxplot(as.numeric(x@vcf.stat[x@mask,11]), axes=FALSE, frame.plot=T, col="#8B008B")
+  }
+
+
+
   if(length(x@snpden.w)>0 & SNPDEN){
     # SNP density.
     plot(c(0,x@len), c(0,max(x@snpden.w$density)), type='n', xlab="", ylab="", axes=F, frame.plot=T, ...)
