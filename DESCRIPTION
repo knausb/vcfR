@@ -1,0 +1,7 @@
+Package: vcfR
+Title: Tools for working with variant call format (vcf) files
+Description: 
+Version: 0.1
+Author: Brian Knaus <briank.lists@gmail.com>
+Maintainer: Brian Knaus <briank.lists@gmail.com>
+License: GPL
