@@ -28,6 +28,7 @@ setClass(
     gt.m = "matrix",
     vcf.stat = "data.frame",
     sfs = "matrix",
+    link = "matrix",
     #
     mask = "logical"
   ),
@@ -441,6 +442,23 @@ thetas <- function(x){
   return(c(theta_pi, theta_w, theta_h))
 }
 
+linkage <- function(x){
+  gt <- x@gt.m
+  mask <- x@mask
+  link.m <- matrix(ncol=8, nrow=nrow(gt)-1,
+                   dimnames=list(c(), c('pos', 'len', 'bigD', 'Delta', 'Dprime', 'delta', 'd', 'Q'))
+                  )
+  link <- function(x){
+    n1 <- length(!is.na(gt[x,]))
+    n2 <- length(!is.na(gt[x+1,]))
+#    print(x)
+  }
+  lapply(1:nrow(link.m), link)
+  print(head(gt))
+
+  return(x)
+}
+
 #proc.chrom <- function(x, pop1=NA, pop2=NA, win.size=1000, max.win=10000, verbose=TRUE){
 proc.chrom <- function(x, pop1=NA, pop2=NA, verbose=TRUE){
   x <- set.pop1(x, pop1)
@@ -484,6 +502,11 @@ proc.chrom <- function(x, pop1=NA, pop2=NA, verbose=TRUE){
   ptime <- system.time(x <- gt2popsum(x))
   if(verbose==TRUE){
     cat("Population summary complete.\n")
+    print(ptime)
+  }
+  ptime <- system.time(x <- linkage(x))
+  if(verbose==TRUE){
+    cat("Linkage calculation complete.\n")
     print(ptime)
   }
   return(x)
