@@ -1,0 +1,17 @@
+bibentry("Article",
+   title = "vcf.R: A package for visualizing and processing variant call format (VCF) files.",
+   author = person("Brian J. Knaus"),
+   organization = "USDA ARS",
+   address      = "Corvallis, OR, USA",
+   year   = version$year,
+   note   = "{ISBN} N-NNNNNN-NN-N",
+   url    = "http://brianknaus.com/",
+
+   mheader = "To cite R in publications use:",
+
+   mfooter = 
+     paste("We have invested a lot of time and effort in creating R,",
+      "please cite it when using it for data analysis.",
+      "See also", sQuote("citation(\"pkgname\")"),
+      "for citing R packages.", sep = " ")
+)
