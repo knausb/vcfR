@@ -2,6 +2,13 @@
 ##### ##### ##### ##### #####
 # Class definition.
 
+#' @title vcf class
+#'
+#' @description
+#' A class for storing vcf data.
+#'
+#' @details
+#'
 setClass(
   Class="vcf",
   representation=representation(
