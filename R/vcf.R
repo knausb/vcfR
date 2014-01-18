@@ -7,7 +7,7 @@
 #' @description
 #' A class for storing vcf data.
 #'
-#' @details
+#' @details Defines a class for variant call format data.
 #'
 setClass(
   Class="vcf",
