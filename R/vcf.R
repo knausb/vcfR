@@ -34,7 +34,8 @@ setMethod(
     cat("*** Class vcf, method Show *** \n")
     if(length(object@meta)>0){
       cat("Meta\n")
-      cat(head(object@meta))
+#      cat(head(object@meta))
+      head(object@meta)
       cat("\n\n")
     }
     if(length(object@fix)>0){
@@ -91,10 +92,10 @@ setMethod(
 #'
 #' @usage read.vcf(x)
 #'
-#' @param x vcf format file
+#' @param x variant call format (vcf) file
 #'
 #' @details
-#' Reads in a vcf file and stores it in a vcf class.
+#' Reads in a vcf file and stores it in a vcf class.  Once the number of lines the meta information contains the data is divided into three tables: meta data, fixed data and genotype data.
 #'
 #' @export
 read.vcf<-function(x){
