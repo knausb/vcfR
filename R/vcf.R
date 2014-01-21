@@ -129,5 +129,31 @@ read.vcf<-function(x){
   return(vcf)
 }
 
+#' @title write.vcf
+#'
+#' @description
+#' Takes a vcf object and writes it to file.
+#'
+#' @rdname vcf-methods
+#'
+#' @usage write.vcf(x)
+#'
+#' @param x a vcf object
+#'
+#' @details
+#' Creates a file from the meta data and then uses cbind to append the fixed and genotype data.
+#'
+#' @export
+write.vcf<-function(x, vfile = ""){
+  write.table(x@meta, file = vfile, append = FALSE, quote = FALSE, sep = "\t",
+              eol = "\n", na = "NA", dec = ".", row.names = FALSE,
+              col.names = FALSE)
+  write.table(cbind(x@fix, x@gt), file = vfile, append = TRUE, quote = FALSE, sep = "\t",
+              eol = "\n", na = "NA", dec = ".", row.names = FALSE,
+              col.names = FALSE)
+}
+
+
+
 ##### ##### ##### ##### #####
 # EOF.
