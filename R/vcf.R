@@ -33,7 +33,7 @@ setMethod(
   definition=function(object){
     cat("*** Class vcf, method Show *** \n")
     if(length(object@meta)>0){
-      cat("Meta\n")
+      cat("Meta")
 #      cat(head(object@meta))
       head(object@meta)
       cat("\n\n")
