@@ -83,7 +83,7 @@ setMethod(
 ##### ##### ##### ##### #####
 # Data loading functions.
 
-#' @title read.vcf
+#' @title vcf-methods
 #'
 #' @description
 #' Reads in a vcf file and stores it in a vcf class.
@@ -129,26 +129,28 @@ read.vcf<-function(x){
   return(vcf)
 }
 
-#' @title write.vcf
+# #' @title vcf-methods
 #'
-#' @description
-#' Takes a vcf object and writes it to file.
+# #' @description
+# #' Takes a vcf object and writes it to file.
 #'
 #' @rdname vcf-methods
 #'
-#' @usage write.vcf(x)
+#' @usage write.vcf(x.vcf, vfile)
 #'
-#' @param x a vcf object
+#' @param x.vcf a vcf object
+#' @param vfile a character string naming a file
 #'
-#' @details
-#' Creates a file from the meta data and then uses cbind to append the fixed and genotype data.
+# #' @details
+# #' Creates a file from the meta data and then uses cbind to append the fixed and genotype data.
 #'
-#' @export
-write.vcf<-function(x, vfile = ""){
-  write.table(x@meta, file = vfile, append = FALSE, quote = FALSE, sep = "\t",
+# #' @export
+#'
+write.vcf<-function(x.vcf, vfile){
+  write.table(x.vcf@meta, file = vfile, append = FALSE, quote = FALSE, sep = "\t",
               eol = "\n", na = "NA", dec = ".", row.names = FALSE,
               col.names = FALSE)
-  write.table(cbind(x@fix, x@gt), file = vfile, append = TRUE, quote = FALSE, sep = "\t",
+  write.table(cbind(x.vcf@fix, x.vcf@gt), file = vfile, append = TRUE, quote = FALSE, sep = "\t",
               eol = "\n", na = "NA", dec = ".", row.names = FALSE,
               col.names = FALSE)
 }
