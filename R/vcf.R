@@ -152,7 +152,7 @@ write.vcf<-function(xvcf, vfile){
               col.names = FALSE)
   write.table(cbind(xvcf@fix, xvcf@gt), file = vfile, append = TRUE, quote = FALSE, sep = "\t",
               eol = "\n", na = "NA", dec = ".", row.names = FALSE,
-              col.names = FALSE)
+              col.names = TRUE)
 }
 
 
