@@ -2,7 +2,9 @@
 ##### ##### ##### ##### #####
 # Class definition.
 
-#' @title vcf class
+#' @title vcfR class
+#'
+#' @rdname vcfR-class
 #'
 #' @description
 #' A class for storing vcf data.
@@ -83,19 +85,19 @@ setMethod(
 ##### ##### ##### ##### #####
 # Data loading functions.
 
-#' @title vcf-methods
+#' @title vcfR methods
 #'
-# #' @description
-# #' Reads in a vcf file and stores it in a vcf class.
+#' @description
+#' Reads in a vcf file and stores it in a vcf class.
 #'
-#' @rdname vcf-methods
+#' @rdname vcfR-methods
 #'
 # #' @usage read.vcf(x)
 #'
 #' @param x variant call format (vcf) file
 #'
-# #' @details
-# #' Reads in a vcf file and stores it in a vcf class.  Once the number of lines the meta information contains the data is divided into three tables: meta data, fixed data and genotype data.
+#' @details
+#' Reads in a vcf file and stores it in a vcf class.  Once the number of lines the meta information contains the data is divided into three tables: meta data, fixed data and genotype data.
 #'
 #' @export
 read.vcf<-function(x){
@@ -134,12 +136,12 @@ read.vcf<-function(x){
 # #' @description
 # #' Takes a vcf object and writes it to file.
 #'
-#' @rdname vcf-methods
+#' @rdname vcfR-methods
 #'
 # #' @usage write.vcf(xvcf, vfile)
 #'
-# #' @param xvcf a vcf object
-# #' @param vfile a character string naming a file
+#' @param xvcf a vcf object
+#' @param vfile a character string naming a file
 #'
 # #' @details
 # #' Creates a file from the meta data and then uses cbind to append the fixed and genotype data.
