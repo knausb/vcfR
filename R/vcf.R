@@ -82,6 +82,15 @@ setMethod(
 ##### ##### ##### ##### #####
 # Data loading functions.
 
+#' @title read.vcf
+#'
+#' @description
+#' Reads in a vcf file and stores it in a vcf class.
+#'
+#' @details
+#' Reads in a vcf file and stores it in a vcf class.
+#'
+#' @export
 read.vcf<-function(x){
   vcf <- new(Class="vcf")
   i <- -1 # Line counter.
