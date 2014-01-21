@@ -1,6 +1,7 @@
 bibentry("Article",
    title = "vcf.R: A package for visualizing and processing variant call format (VCF) files.",
    author = person("Brian J. Knaus"),
+   journal = "In prep",
    organization = "USDA ARS",
    address      = "Corvallis, OR, USA",
    year   = version$year,
