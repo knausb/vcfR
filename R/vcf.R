@@ -89,7 +89,9 @@ setMethod(
 #'
 #' @rdname vcf-methods
 #'
-#' @param vcf format file
+#' @usage read.vcf(x)
+#'
+#' @param x vcf format file
 #'
 #' @details
 #' Reads in a vcf file and stores it in a vcf class.
