@@ -87,6 +87,10 @@ setMethod(
 #' @description
 #' Reads in a vcf file and stores it in a vcf class.
 #'
+#' @rdname vcf-methods
+#'
+#' @param vcf format file
+#'
 #' @details
 #' Reads in a vcf file and stores it in a vcf class.
 #'
