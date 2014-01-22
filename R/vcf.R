@@ -12,7 +12,7 @@
 #' @details Defines a class for variant call format data.
 #'
 setClass(
-  Class="vcf",
+  Class="vcfR",
   representation=representation(
     meta="character",
     fix="data.frame",
@@ -31,7 +31,7 @@ setClass(
 
 setMethod(
   f="show",
-  signature = "vcf",
+  signature = "vcfR",
   definition=function(object){
     cat("*** Class vcf, method Show *** \n")
     if(length(object@meta)>0){
@@ -52,7 +52,7 @@ setMethod(
 
 setMethod(
   f="print",
-  signature="vcf",
+  signature="vcfR",
   definition=function (x,y,...){
     cat("***** Object of class vcf *****\n")
     if(length(x@meta)>0){
@@ -75,7 +75,7 @@ setMethod(
 
 setMethod(
   f= "plot",
-  signature= "vcf",
+  signature= "vcfR",
   definition=function (x,y,...){
     cat("***** Object of class 'vcf' *****\n")
     cat("***** Plot not implemented *****\n")
@@ -85,16 +85,16 @@ setMethod(
 ##### ##### ##### ##### #####
 # Data loading functions.
 
-#' @title vcfR methods
+#' @title read.vcf
 #'
 #' @description
 #' Reads in a vcf file and stores it in a vcf class.
 #'
 #' @rdname vcfR-methods
 #'
-# #' @usage read.vcf(x)
-#'
 #' @param x variant call format (vcf) file
+#'
+#' @usage read.vcf(x)
 #'
 #' @details
 #' Reads in a vcf file and stores it in a vcf class.  Once the number of lines the meta information contains the data is divided into three tables: meta data, fixed data and genotype data.
@@ -131,14 +131,14 @@ read.vcf<-function(x){
   return(vcf)
 }
 
-# #' @title vcf-methods
+#' @title write.vcf
 #'
 # #' @description
 # #' Takes a vcf object and writes it to file.
 #'
-#' @rdname vcfR-methods
+#' @rdname write_vcf
 #'
-# #' @usage write.vcf(xvcf, vfile)
+#' @usage write.vcf(xvcf, vfile)
 #'
 #' @param xvcf a vcf object
 #' @param vfile a character string naming a file

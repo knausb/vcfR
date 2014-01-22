@@ -1,6 +1,6 @@
 \docType{class}
-\name{vcf-class}
-\alias{vcf-class}
+\name{vcfR-class}
+\alias{vcfR-class}
 \title{vcfR class}
 \description{
 A class for storing vcf data.
