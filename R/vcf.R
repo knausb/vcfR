@@ -91,7 +91,7 @@ setMethod(
 # Data loading functions.
 
 #' @title vcfR methods
-#' @aliases write.vcf
+#' @aliases read.vcf write.vcf
 #'
 #' @description
 #' Reads in a vcf file and stores it in a vcf class.
