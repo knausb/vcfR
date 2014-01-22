@@ -10,6 +10,11 @@
 #' A class for storing vcf data.
 #'
 #' @details Defines a class for variant call format data.
+#' A vcfR object contains three slots.  The first slot
+#' is a character vector which holds the meta data.  The
+#' second slot holds an eight column data.frame to hold the 
+#' fixed data.  The third slot is a data.frame which holds
+#' the genotype data.
 #'
 setClass(
   Class="vcfR",
@@ -85,7 +90,8 @@ setMethod(
 ##### ##### ##### ##### #####
 # Data loading functions.
 
-#' @title read.vcf
+#' @title vcfR methods
+#' @aliases write.vcf
 #'
 #' @description
 #' Reads in a vcf file and stores it in a vcf class.
@@ -131,23 +137,15 @@ read.vcf<-function(x){
   return(vcf)
 }
 
-#' @title write.vcf
-#'
-# #' @description
-# #' Takes a vcf object and writes it to file.
-#'
-#' @rdname write_vcf
-#'
+#' @rdname vcfR-methods
+#' 
 #' @usage write.vcf(xvcf, vfile)
-#'
-#' @param xvcf a vcf object
-#' @param vfile a character string naming a file
-#'
-# #' @details
-# #' Creates a file from the meta data and then uses cbind to append the fixed and genotype data.
-#'
+#' 
+#' @param xvcf a vcfR object
+#' @param vfile an output filename
+#' 
 #' @export
-#'
+#' 
 write.vcf<-function(xvcf, vfile){
   write.table(xvcf@meta, file = vfile, append = FALSE, quote = FALSE, sep = "\t",
               eol = "\n", na = "NA", dec = ".", row.names = FALSE,

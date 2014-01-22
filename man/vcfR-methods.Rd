@@ -1,11 +1,18 @@
 \name{read.vcf}
 \alias{read.vcf}
-\title{read.vcf}
+\alias{write.vcf}
+\title{vcfR methods}
 \usage{
 read.vcf(x)
+
+write.vcf(xvcf, vfile)
 }
 \arguments{
   \item{x}{variant call format (vcf) file}
+
+  \item{xvcf}{a vcfR object}
+
+  \item{vfile}{an output filename}
 }
 \description{
 Reads in a vcf file and stores it in a vcf class.
