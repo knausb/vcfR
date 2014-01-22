@@ -4,6 +4,7 @@
 
 #' @title vcfR class
 #'
+#' @name vcfR-class
 #' @rdname vcfR-class
 #'
 #' @description
@@ -15,7 +16,8 @@
 #' second slot holds an eight column data.frame to hold the 
 #' fixed data.  The third slot is a data.frame which holds
 #' the genotype data.
-#'
+#' @export
+#' @import methods
 setClass(
   Class="vcfR",
   representation=representation(
@@ -100,7 +102,7 @@ setMethod(
 #'
 #' @param x variant call format (vcf) file
 #'
-#' @usage read.vcf(x)
+# @usage read.vcf(x)
 #'
 #' @details
 #' Reads in a vcf file and stores it in a vcf class.  Once the number of lines the meta information contains the data is divided into three tables: meta data, fixed data and genotype data.
@@ -139,7 +141,7 @@ read.vcf<-function(x){
 
 #' @rdname vcfR-methods
 #' 
-#' @usage write.vcf(xvcf, vfile)
+# @usage write.vcf(xvcf, vfile)
 #' 
 #' @param xvcf a vcfR object
 #' @param vfile an output filename

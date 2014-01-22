@@ -1,2 +1,4 @@
 export(read.vcf)
 export(write.vcf)
+exportClasses(vcfR)
+import(methods)
