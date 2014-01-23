@@ -3,23 +3,18 @@
 \alias{example_data}
 \alias{pinf_dna}
 \alias{pinf_gff}
-\alias{pinf_sc10}
-\alias{pinf_sc100}
-\alias{pinf_sc33}
+\alias{pinf_vcf}
 \title{Example data for vcfR.}
-\format{A data frame with 53940 rows and 10 variables}
+\format{A DNAbin object, a data.frame and a vcfR object}
 \description{
 An example dataset containing parts of the Phytophthora
 infestans genome.
 }
 \details{
-\itemize{ \item pinf_dna Super contigs 10, 33 and 100 as a
-DNAbin object (ape) \item pinf_sc10 variant information for
-supercontig 10 as a vcfR object \item pinf_sc100 variant
-information for supercontig 100 as a vcfR object \item
-pinf_sc33 variant information for supercontig 33 as a vcfR
-object \item pinf_gff annotations in a gff format as a
-data.frame
+\itemize{ \item pinf_dna mitochondion IIa (GenBank:
+AY898627.1) as a DNAbin object (ape) \item pinf_gff
+annotation data (gff-like) as a data.frame \item pinf_vcf
+variant information as a vcfR object
 
 }
 }
