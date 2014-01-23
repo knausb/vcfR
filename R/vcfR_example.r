@@ -10,10 +10,18 @@
 #'
 #' }
 #' 
+#' Note that it is encouraged to keep package contents small to facilitate easy
+#' downloading and installation.  This is why a mitochondrion was chosen as an
+#' example.  In practice I've used this package on supercontigs.  This package
+#' was designed for much larger datasets in mind than in this example.
+#' 
+#' @examples
+#' data(vcfR_example)
+#' 
 #' @docType data
 #' @keywords datasets
 #' @format A DNAbin object, a data.frame and a vcfR object
-#' @name example_data
+#' @name vcfR_example
 #' @aliases pinf_dna pinf_vcf pinf_gff
 NULL
 

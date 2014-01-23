@@ -1,9 +1,9 @@
 \docType{data}
-\name{example_data}
-\alias{example_data}
+\name{vcfR_example}
 \alias{pinf_dna}
 \alias{pinf_gff}
 \alias{pinf_vcf}
+\alias{vcfR_example}
 \title{Example data for vcfR.}
 \format{A DNAbin object, a data.frame and a vcfR object}
 \description{
@@ -17,6 +17,16 @@ annotation data (gff-like) as a data.frame \item pinf_vcf
 variant information as a vcfR object
 
 }
+
+Note that it is encouraged to keep package contents small
+to facilitate easy downloading and installation.  This is
+why a mitochondrion was chosen as an example.  In practice
+I've used this package on supercontigs.  This package was
+designed for much larger datasets in mind than in this
+example.
+}
+\examples{
+data(vcfR_example)
 }
 \keyword{datasets}
 
