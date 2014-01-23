@@ -109,7 +109,7 @@ setMethod(
 #'
 #' @export
 read.vcf<-function(x){
-  vcf <- new(Class="vcf")
+  vcf <- new(Class="vcfR")
   i <- -1 # Line counter.
   j <- 0 # Success?
   tmp <- scan(x, what="character", sep="\n", skip=0, nlines=1, quiet=T, comment.char="")
