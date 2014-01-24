@@ -104,6 +104,7 @@ data (gff-like).
 Reads in a vcf file and stores it in a Chrom class.
 }
 \examples{
+library(vcfR)
 data(vcfR_example)
 pinf_mt <- create.chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
 pinf_mt

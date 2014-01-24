@@ -4,6 +4,9 @@
 #' Variant call format files processed with vcfR.
 #'
 #' vcfR
+#' 
+#' The complete list of functions can be displayed with
+#' "library(help = vcfR)".
 #'
 #' Lubridate provides tools that make it easier to parse and 
 #' manipulate dates. These tools are grouped below by common 
@@ -12,8 +15,8 @@
 #'
 #' 
 #' @references Brian Knaus (2014). Variant call format files processed 
-#' with vcfR. Journal of Statistical Software, 40(3),
-#'   1-25. \url{http://www.jstatsoft.org/v40/i03/}.
+#' with vcfR. Journal TBA, NN(N),
+#'   N-NN. \url{http://www.jstatsoft.org/v40/i03/}.
 # @import 
 #' @docType package
 #' @name vcfR
