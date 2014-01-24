@@ -4,6 +4,25 @@
 
 setOldClass("DNAbin")
 
+#' @title Chrom class
+#'
+#' @name Chrom-class
+#' @rdname Chrom-class
+#'
+#' @description
+#' A class for representing chromosomes (or contigs).
+#'
+#' @details Defines a class for chromosomal or contig data.
+#' 
+#' for variant call format data.
+#' A vcfR object contains three slots.  The first slot
+#' is a character vector which holds the meta data.  The
+#' second slot holds an eight column data.frame to hold the 
+#' fixed data.  The third slot is a data.frame which holds
+#' the genotype data.
+#' 
+#' @export
+#' @import methods
 setClass(
   Class="Chrom",
   representation=representation(
@@ -164,6 +183,23 @@ setReplaceMethod(
 ##### ##### ##### ##### #####
 # Data loading functions.
 
+#' @title Chrom methods
+#' @rdname Chrom-methods
+#' @export
+#' @aliases vcf2chrom
+#'
+#' @description
+#' Methods to work with objects of the chrom class
+# Reads in a vcf file and stores it in a vcf class.
+#'
+#' @param x an object of class chrom
+#' @param y an object
+#' @param ... arguments
+#'
+#' @details
+#' Reads in a vcf file and stores it in a Chrom class.
+#' 
+#'
 vcf2chrom <- function(x,y,...){
   x@vcf.fix <- as.data.frame(y@fix)
 #  x@vcf.fix <- as.data.frame(y[,1:8])
@@ -191,6 +227,23 @@ vcf2chrom <- function(x,y,...){
   return(x)
 }
 
+
+# @title Chrom methods
+#' @rdname Chrom-methods
+#' @export
+#' @aliases ann2chrom
+#'
+# @description
+# Reads in an annotation file and stores it in a Chrom class.
+#'
+# @param x an object of class chrom
+# @param y an object
+# @param ... arguments
+#'
+#' @details
+#' Reads in a vcf file and stores it in a Chrom class.
+#' 
+#'
 ann2chrom <- function(x,y,...){
   x@ann <- as.data.frame(y)
   colnames(x@ann) <- c('seqid','source','type','start','end','score','strand','phase','attributes')
@@ -282,6 +335,20 @@ n.win <- function(x, max.win=1000, regex="[n]"){
   return(x)
 }
 
+#' @rdname Chrom-methods
+#' @export
+#' @aliases windowize
+#'
+# @description
+# Creates windows
+#'
+#' @param win.size window size, in base pairs
+#' @param max.win maximum window size
+#'
+#' @details
+#' Reads in a vcf file and stores it in a Chrom class.
+#' 
+#'
 windowize <- function(x, win.size=1000, max.win=10000){
   acgt.w <- x@acgt.w
   windows <- matrix(NA, ncol=2, nrow=max.win)

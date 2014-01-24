@@ -1,4 +1,8 @@
+export(ann2chrom)
 export(read.vcf)
+export(vcf2chrom)
+export(windowize)
 export(write.vcf)
+exportClasses(Chrom)
 exportClasses(vcfR)
 import(methods)
