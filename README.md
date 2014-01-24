@@ -6,4 +6,10 @@ Functions created to work with vcf files.
 
 *chromR.r* - S4 class to contain data from a sequence file (fasta), an annotation file (gff3) and a feature file (vcf).  Includes functions for loading object and display as a genome browser.
 
+While this project is in development it can be installed through github:
+
+    library(devtools)
+    install_github(repo="vcfR", username="knausb")
+    library(vcfR)
+
 # EOF. 
