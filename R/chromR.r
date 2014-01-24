@@ -186,7 +186,7 @@ setReplaceMethod(
 #' @title Chrom methods
 #' @rdname Chrom-methods
 #' @export
-#' @aliases vcf2chrom
+#' @aliases chrom-methods vcf2chrom
 #'
 #' @description
 #' Methods to work with objects of the chrom class
@@ -252,6 +252,31 @@ ann2chrom <- function(x,y,...){
   return(x)
 }
 
+# @title Chrom methods
+#' @rdname Chrom-methods
+#' @export
+#' @aliases create.chrom
+#'
+# @description
+# Creates and populates a Chrom class.
+#'
+#' @param name a name for the object
+#' @param seq a sequence as a DNAbin object
+#' @param vcf a vcfR object
+#' @param ann an annotation file (gff-like)
+#'
+#' @details
+#' Creates and names a chrom object from a name, a sequence (a DNA bin object),
+#' vcf data (a vcfR object) and annotation data (gff-like).
+#' 
+#' @examples
+#' data(vcfR_example)
+#' pinf_mt <- create.chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
+#' pinf_mt
+#' # plot(pinf_mt)
+#' # pinf_mt <- proc.chrom(pinf_mt)
+#' # chromoqc
+#' 
 create.chrom <- function(name, seq, vcf=NULL, ann=NULL){
   x <- new(Class="Chrom")
   setName(x) <- name
@@ -272,6 +297,13 @@ create.chrom <- function(name, seq, vcf=NULL, ann=NULL){
 
 ##### ##### Set populations ##### #####
 
+#' @rdname Chrom-methods
+#' @export
+#' @aliases set.pop1 set.pop2
+#' 
+#' @param pop1 a numeric vector indicating the samples in population 1
+#' @param pop2 a numeric vector indicating the samples in population 2
+#' 
 set.pop1 <- function(x, pop1){
   x@pop1 <- pop1
   return(x)  
@@ -526,6 +558,14 @@ linkage <- function(x){
   return(x)
 }
 
+
+#' @rdname Chrom-methods
+#' @export
+#' @aliases proc.chrom
+#' 
+#' @param verbose logical stating whether to produce verbose output
+#'
+#' 
 #proc.chrom <- function(x, pop1=NA, pop2=NA, win.size=1000, max.win=10000, verbose=TRUE){
 proc.chrom <- function(x, pop1=NA, pop2=NA, verbose=TRUE){
   x <- set.pop1(x, pop1)
@@ -582,6 +622,10 @@ proc.chrom <- function(x, pop1=NA, pop2=NA, verbose=TRUE){
 ##### ##### ##### ##### #####
 # Graphic function.
 
+#' @rdname Chrom-methods
+#' @export
+#' @aliases chromoqc
+#'
 chromoqc <- function(x, nsum=FALSE, ...){
   chromo(x, verbose=TRUE, nsum=FALSE, DP=TRUE, QUAL=TRUE, MQ=TRUE, SNPDEN=TRUE, NUC=TRUE, ANN=TRUE, ...)
 }
@@ -599,6 +643,22 @@ chromoall <- function(x, ...){
          SNPDEN=TRUE, NUC=TRUE, ...)
 }
 
+#' @rdname Chrom-methods
+#' @export
+#' @aliases chromo
+#' 
+#' @param nsum logical for whether nsum will be displayed
+#' @param DP logical for whether cumulative depth will be displayed
+#' @param QUAL logical for whether variant quality will be displayed
+#' @param MQ logical for whether mapping quality will be displayed
+#' @param NE logical for whether effective size will be displayed
+#' @param TPI logical for whether Theta sub pi will be displayed
+#' @param TAJD logical for whether Tajima's D will be displayed
+#' @param FWH logical for whether Fay and Wu's H will be displayed
+#' @param SNPDEN logical for whether variant density will be displayed
+#' @param NUC logical for whether nucleotide content will be displayed
+#' @param ANN logical for whether annotation will be displayed
+#' 
 chromo <- function(x, verbose=TRUE, nsum=TRUE,
                    DP=FALSE, QUAL=FALSE, MQ=FALSE,
                    NE=FALSE, TPI=FALSE, TAJD=FALSE, FWH=FALSE,

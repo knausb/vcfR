@@ -1,5 +1,12 @@
 \name{vcf2chrom}
 \alias{ann2chrom}
+\alias{chrom-methods}
+\alias{chromo}
+\alias{chromoqc}
+\alias{create.chrom}
+\alias{proc.chrom}
+\alias{set.pop1}
+\alias{set.pop2}
 \alias{vcf2chrom}
 \alias{windowize}
 \title{Chrom methods}
@@ -8,7 +15,19 @@ vcf2chrom(x, y, ...)
 
 ann2chrom(x, y, ...)
 
+create.chrom(name, seq, vcf = NULL, ann = NULL)
+
+set.pop1(x, pop1)
+
 windowize(x, win.size = 1000, max.win = 10000)
+
+proc.chrom(x, pop1 = NA, pop2 = NA, verbose = TRUE)
+
+chromoqc(x, nsum = FALSE, ...)
+
+chromo(x, verbose = TRUE, nsum = TRUE, DP = FALSE, QUAL = FALSE,
+  MQ = FALSE, NE = FALSE, TPI = FALSE, TAJD = FALSE, FWH = FALSE,
+  SNPDEN = FALSE, NUC = FALSE, ANN = FALSE, ...)
 }
 \arguments{
   \item{x}{an object of class chrom}
@@ -17,9 +36,58 @@ windowize(x, win.size = 1000, max.win = 10000)
 
   \item{...}{arguments}
 
+  \item{name}{a name for the object}
+
+  \item{seq}{a sequence as a DNAbin object}
+
+  \item{vcf}{a vcfR object}
+
+  \item{ann}{an annotation file (gff-like)}
+
+  \item{pop1}{a numeric vector indicating the samples in
+  population 1}
+
+  \item{pop2}{a numeric vector indicating the samples in
+  population 2}
+
   \item{win.size}{window size, in base pairs}
 
   \item{max.win}{maximum window size}
+
+  \item{verbose}{logical stating whether to produce verbose
+  output}
+
+  \item{nsum}{logical for whether nsum will be displayed}
+
+  \item{DP}{logical for whether cumulative depth will be
+  displayed}
+
+  \item{QUAL}{logical for whether variant quality will be
+  displayed}
+
+  \item{MQ}{logical for whether mapping quality will be
+  displayed}
+
+  \item{NE}{logical for whether effective size will be
+  displayed}
+
+  \item{TPI}{logical for whether Theta sub pi will be
+  displayed}
+
+  \item{TAJD}{logical for whether Tajima's D will be
+  displayed}
+
+  \item{FWH}{logical for whether Fay and Wu's H will be
+  displayed}
+
+  \item{SNPDEN}{logical for whether variant density will be
+  displayed}
+
+  \item{NUC}{logical for whether nucleotide content will be
+  displayed}
+
+  \item{ANN}{logical for whether annotation will be
+  displayed}
 }
 \description{
 Methods to work with objects of the chrom class
@@ -29,6 +97,18 @@ Reads in a vcf file and stores it in a Chrom class.
 
 Reads in a vcf file and stores it in a Chrom class.
 
+Creates and names a chrom object from a name, a sequence (a
+DNA bin object), vcf data (a vcfR object) and annotation
+data (gff-like).
+
 Reads in a vcf file and stores it in a Chrom class.
+}
+\examples{
+data(vcfR_example)
+pinf_mt <- create.chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
+pinf_mt
+# plot(pinf_mt)
+# pinf_mt <- proc.chrom(pinf_mt)
+# chromoqc
 }
 
