@@ -1,5 +1,26 @@
 # vcf.R.
 ##### ##### ##### ##### #####
+
+#' Variant call format files processed with vcfR.
+#'
+#' vcfR
+#'
+#' Lubridate provides tools that make it easier to parse and 
+#' manipulate dates. These tools are grouped below by common 
+#' purpose. More information about each function can be found in 
+#' its help documentation.
+#'
+#' 
+#' @references Brian Knaus (2014). Variant call format files processed 
+#' with vcfR. Journal of Statistical Software, 40(3),
+#'   1-25. \url{http://www.jstatsoft.org/v40/i03/}.
+# @import 
+#' @docType package
+#' @name vcfR
+#' @rdname vcfR
+NULL
+
+##### ##### ##### ##### #####
 # Class definition.
 
 #' @title vcfR class
@@ -81,6 +102,15 @@ setMethod(
 )
 
 setMethod(
+  f="head",
+  signature="vcfR",
+  definition=function (x,y,...){
+    cat("***** Object of class 'vcf' *****\n")
+    cat("***** Head not implemented *****\n")
+  }
+)
+
+setMethod(
   f= "plot",
   signature= "vcfR",
   definition=function (x,y,...){
@@ -93,7 +123,8 @@ setMethod(
 # Data loading functions.
 
 #' @title vcfR methods
-#' @aliases read.vcf write.vcf
+# @aliases read.vcf write.vcf
+#' @aliases read.vcf
 #'
 #' @description
 #' Reads in a vcf file and stores it in a vcf class.
@@ -140,6 +171,7 @@ read.vcf<-function(x){
 }
 
 #' @rdname vcfR-methods
+#' @aliases write.vcf
 #' 
 # @usage write.vcf(xvcf, vfile)
 #' 
