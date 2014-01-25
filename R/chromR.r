@@ -305,6 +305,7 @@ ann2chrom <- function(x,y,...){
 #' plot(pinf_mt)
 # pinf_mt <- masker(pinf_mt)
 #' pinf_mt <- proc.chrom(pinf_mt)
+#' pinf_mt <- masker(pinf_mt)
 #' chromoqc(pinf_mt)
 #' 
 create.chrom <- function(name, seq, vcf=NULL, ann=NULL){
