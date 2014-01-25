@@ -210,7 +210,7 @@ setReplaceMethod(
     } else {
       object@seq <-value      
     }
-    object@len <-length(value[[1]])
+    object@len <-length(object@seq[[1]])
     return (object)
   }
 )
@@ -887,6 +887,7 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
     plot(c(0,x@len), c(-1,1), type='n', xlab="", ylab="", las=1, axes=FALSE, frame.plot=TRUE, ...)
     lines(c(0,x@len),c(0, 0), lwd=2)
     rect(as.numeric(as.character(x@ann[,4])), -1, as.numeric(as.character(x@ann[,5])), 1, col="#b22222", border=NA)
+    title(main="Annotations", line=-1)
     #
     plot(1:10,1:10,type='n', axes=FALSE, xlab="", ylab="", ...)
     if(nsum){
@@ -904,6 +905,7 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
     rect(x@n.w[,1], -0.4, x@n.w[,2], 0.4, col="#ff6666", border=NA)
     axis(side=1)
     title(xlab="Base pairs", line=2, outer=T)
+    title(main="Green = called bases; Red = n", line=-1)
     #
     plot(1:10,1:10,type='n', axes=FALSE, xlab="", ylab="")
     if(nsum){
