@@ -20,7 +20,7 @@ gff-like data.frame
 \item pop1 vector indicating members of pop1 \item pop2
 vector indicating members of pop2
 
-\item acgt matrix of nucleotide compositions \item n.w
+\item acgt.w matrix of nucleotide compositions \item n.w
 matrix of \item windows matrix of windows \item nuccomp.w
 data.frame of nucleotide composition windows \item snpden.w
 data.frame of snp density windows

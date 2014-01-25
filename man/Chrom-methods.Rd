@@ -1,9 +1,12 @@
-\name{vcf2chrom}
+\docType{methods}
+\name{plot,Chrom-method}
 \alias{ann2chrom}
 \alias{chrom-methods}
 \alias{chromo}
 \alias{chromoqc}
 \alias{create.chrom}
+\alias{plot,Chrom-method}
+\alias{plot.chrom}
 \alias{proc.chrom}
 \alias{set.pop1}
 \alias{set.pop2}
@@ -11,6 +14,8 @@
 \alias{windowize}
 \title{Chrom methods}
 \usage{
+\S4method{plot}{Chrom}(x, y, ...)
+
 vcf2chrom(x, y, ...)
 
 ann2chrom(x, y, ...)
@@ -108,8 +113,8 @@ library(vcfR)
 data(vcfR_example)
 pinf_mt <- create.chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
 pinf_mt
-# plot(pinf_mt)
-# pinf_mt <- proc.chrom(pinf_mt)
+plot(pinf_mt)
+pinf_mt <- proc.chrom(pinf_mt)
 # chromoqc
 }
 

@@ -29,7 +29,7 @@ setOldClass("DNAbin")
 #'   \item pop1 vector indicating members of pop1
 #'   \item pop2 vector indicating members of pop2
 #'   
-#'   \item acgt matrix of nucleotide compositions
+#'   \item acgt.w matrix of nucleotide compositions
 #'   \item n.w matrix of
 #'   \item windows matrix of windows
 #'   \item nuccomp.w data.frame of nucleotide composition windows
@@ -130,6 +130,10 @@ setMethod(
   }
 )
 
+#' @rdname Chrom-methods
+#' @export
+#' @aliases plot.chrom
+#' 
 setMethod(
   f= "plot",
   signature= "Chrom",
@@ -298,8 +302,8 @@ ann2chrom <- function(x,y,...){
 #' data(vcfR_example)
 #' pinf_mt <- create.chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
 #' pinf_mt
-#' # plot(pinf_mt)
-#' # pinf_mt <- proc.chrom(pinf_mt)
+#' plot(pinf_mt)
+#' pinf_mt <- proc.chrom(pinf_mt)
 #' # chromoqc
 #' 
 create.chrom <- function(name, seq, vcf=NULL, ann=NULL){
@@ -354,12 +358,33 @@ masker <- function(x, QUAL=999, mindp=0.25, maxdp=0.75, minmq=0.25, maxmq=0.75, 
 
 ##### ##### Window functions ##### #####
 
-acgt.win <- function(x, max.win=1000, regex="[acgtwsmkrybdhv]"){
-  seq <- as.character(x@seq)[[1]]
+
+#acgt.win <- function(x, max.win=1000, regex="[acgtwsmkrybdhv]"){
+regex.win <- function(x, max.win=1000, regex="[acgtwsmkrybdhv]"){
+  # A DNAbin will store in a list when the fasta contains
+  # multiple sequences, but as a matrix when the fasta
+  # only contains one sequence.
+  if(is.matrix(as.character(x@seq))){
+    seq <- as.character(x@seq)[1:length(x@seq)]    
+  }
+  if(is.list(as.character(x@seq))){
+    seq <- as.character(x@seq)[[1]]
+  }
+  # Subset to nucleotides of interest.
   seq <- grep(regex, seq, ignore.case=T, perl=TRUE)
+  if(length(seq) == 0){
+    return(matrix(NA, ncol=2))
+    break
+  }
+  #
   bp.windows <- matrix(NA, ncol=2, nrow=max.win)
   bp.windows[1,1] <- seq[1]
   i <- 1
+  # Scroll through the sequence looking for 
+  # gaps (nucledotides not in the regex).
+  # When you find them amke a window.
+  # Sequences with no gaps will have no
+  # windows.
   for(j in 2:length(seq)){
     if(seq[j]-seq[j-1] > 1){
       bp.windows[i,2] <- seq[j-1]
@@ -368,29 +393,60 @@ acgt.win <- function(x, max.win=1000, regex="[acgtwsmkrybdhv]"){
     }
   }
   bp.windows[i,2] <- seq[j]
-  bp.windows <- bp.windows[1:i,]
-  x@acgt.w <- bp.windows
-  return(x)
+  if(i == 1){
+    # If there is one row we get an integer.
+    # We need a matrix.
+    bp.windows <- bp.windows[1:i,]
+    bp.windows <- matrix(bp.windows, ncol=2)
+  } else {
+    bp.windows <- bp.windows[1:i,]
+  }
+#  x@acgt.w <- bp.windows
+#  return(x)
+  return(bp.windows)
 }
 
-n.win <- function(x, max.win=1000, regex="[n]"){
-  seq <- as.character(x@seq)[[1]]
-  seq <- grep(regex, seq, ignore.case=T, perl=TRUE)
-  bp.windows <- matrix(NA, ncol=2, nrow=max.win)
-  bp.windows[1,1] <- seq[1]
-  i <- 1
-  for(j in 2:length(seq)){
-    if(seq[j]-seq[j-1] > 1){
-      bp.windows[i,2] <- seq[j-1]
-      i <- i+1
-      bp.windows[i,1] <- seq[j]
-    }
-  }
-  bp.windows[i,2] <- seq[j]
-  bp.windows <- bp.windows[1:i,]
-  x@n.w <- bp.windows
-  return(x)
-}
+#n.win <- function(x, max.win=1000, regex="[n]"){
+  # A DNAbin will store in a list when the fasta contains
+  # multiple sequences, but as a matrix when the fasta
+  # only contains one sequence.
+#  if(is.matrix(as.character(x@seq))){
+#    seq <- as.character(x@seq)[1:length(x@seq)]    
+#  }
+#  if(is.list(as.character(x@seq))){
+#    seq <- as.character(x@seq)[[1]]
+#  }
+  # Subset to nucleotides of interest.
+#  seq <- grep(regex, seq, ignore.case=T, perl=TRUE)
+  #
+#  bp.windows <- matrix(NA, ncol=2, nrow=max.win)
+#  bp.windows[1,1] <- seq[1]
+#  i <- 1
+  # Scroll through the sequence looking for 
+  # gaps (nucledotides not in the regex).
+  # When you find them amke a window.
+  # Sequences with no gaps will have no
+  # windows.
+#  for(j in 2:length(seq)){
+#    if(seq[j]-seq[j-1] > 1){
+#      bp.windows[i,2] <- seq[j-1]
+#      i <- i+1
+#      bp.windows[i,1] <- seq[j]
+#    }
+#  }
+#  if(i == 1){
+    # If there is one row we get an integer.
+    # We need a matrix.
+#    bp.windows <- bp.windows[1:i,]
+#    bp.windows <- matrix(bp.windows, ncol=2)
+#  } else {
+#    bp.windows <- bp.windows[1:i,]
+#  }
+#  bp.windows[i,2] <- seq[j]
+#  bp.windows <- bp.windows[1:i,]
+#  x@n.w <- bp.windows
+#  return(x)
+#}
 
 #' @rdname Chrom-methods
 #' @export
@@ -578,7 +634,7 @@ linkage <- function(x){
 #    print(x)
   }
   lapply(1:nrow(link.m), link)
-  print(head(gt))
+#  print(head(gt))
 
   return(x)
 }
@@ -595,12 +651,16 @@ linkage <- function(x){
 proc.chrom <- function(x, pop1=NA, pop2=NA, verbose=TRUE){
   x <- set.pop1(x, pop1)
   x <- set.pop2(x, pop2)
-  ptime <- system.time(x <- acgt.win(x))
+#  ptime <- system.time(x <- acgt.win(x))
+#  ptime <- system.time(x@acgt.w <- acgt.win(x))
+  ptime <- system.time(x@acgt.w <- regex.win(x))
   if(verbose==TRUE){
     cat("Nucleotide regions complete.\n")
     print(ptime)
   }
-  ptime <- system.time(x <- n.win(x))
+  ptime <- system.time(x@n.w <- regex.win(x, regex="[n]"))
+#  ptime <- system.time(x@n.w <- acgt.win(x, regex="[n]"))
+#  ptime <- system.time(x <- n.win(x))
   if(verbose==TRUE){
     cat("N regions complete.\n")
     print(ptime)

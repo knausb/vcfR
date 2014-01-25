@@ -17,7 +17,7 @@
 #' @references Brian Knaus (2014). Variant call format files processed 
 #' with vcfR. Journal TBA, NN(N),
 #'   N-NN. \url{http://www.jstatsoft.org/v40/i03/}.
-# @import 
+#' @import ape
 #' @docType package
 #' @name vcfR
 #' @rdname vcfR
@@ -113,12 +113,20 @@ setMethod(
   }
 )
 
+#' @rdname vcfR-methods
+#' @export
+#' @aliases plot.vcfR
+#' 
+#' @param ... Arguments to be passed to methods
+#' 
 setMethod(
   f= "plot",
   signature= "vcfR",
   definition=function (x,y,...){
-    cat("***** Object of class 'vcf' *****\n")
-    cat("***** Plot not implemented *****\n")
+#    cat("***** Object of class 'vcf' *****\n")
+#    cat("***** Plot not implemented *****\n")
+    hist(x@fix$QUAL, col=5, main='Histogram of qualities', xlab='QUAL')
+    rug(x@fix$QUAL)
   }
 )
 
@@ -126,22 +134,24 @@ setMethod(
 # Data loading functions.
 
 #' @title vcfR methods
+#' @rdname vcfR-methods
 # @aliases read.vcf write.vcf
 #' @aliases read.vcf
+#' @export
 #'
 #' @description
 #' Reads in a vcf file and stores it in a vcf class.
 #'
-#' @rdname vcfR-methods
-#'
 #' @param x variant call format (vcf) file
-#'
-# @usage read.vcf(x)
 #'
 #' @details
 #' Reads in a vcf file and stores it in a vcf class.  Once the number of lines the meta information contains the data is divided into three tables: meta data, fixed data and genotype data.
 #'
-#' @export
+#' @examples
+#' library(vcfR)
+#' data(vcfR_example)
+#' plot(pinf_vcf)
+#' 
 read.vcf<-function(x){
   vcf <- new(Class="vcfR")
   i <- -1 # Line counter.

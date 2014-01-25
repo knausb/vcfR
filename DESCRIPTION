@@ -8,5 +8,6 @@ Maintainer: Brian Knaus <briank.lists@gmail.com>
 Depends:
     R (>= 3.0.1)
 Imports:
-    methods
+    methods,
+    ape
 License: GPL
