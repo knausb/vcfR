@@ -303,8 +303,9 @@ ann2chrom <- function(x,y,...){
 #' pinf_mt <- create.chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
 #' pinf_mt
 #' plot(pinf_mt)
+# pinf_mt <- masker(pinf_mt)
 #' pinf_mt <- proc.chrom(pinf_mt)
-#' # chromoqc
+#' chromoqc(pinf_mt)
 #' 
 create.chrom <- function(name, seq, vcf=NULL, ann=NULL){
   x <- new(Class="Chrom")
@@ -344,6 +345,16 @@ set.pop2 <- function(x, pop2){
 
 ##### ##### Set a mask ##### #####
 
+#' @rdname Chrom-methods
+#' @export
+#' @aliases masker
+#' 
+# @param QUAL variant quality
+#' @param mindp minimum cumulative depth
+#' @param maxdp maximum cumulative depth
+#' @param minmq minimum mapping quality
+#' @param maxmq maximum mapping quality
+#' 
 masker <- function(x, QUAL=999, mindp=0.25, maxdp=0.75, minmq=0.25, maxmq=0.75, ...){
   x@mask <- as.numeric(x@vcf.fix[,6]) >= QUAL
   #

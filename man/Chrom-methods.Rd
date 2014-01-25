@@ -5,6 +5,7 @@
 \alias{chromo}
 \alias{chromoqc}
 \alias{create.chrom}
+\alias{masker}
 \alias{plot,Chrom-method}
 \alias{plot.chrom}
 \alias{proc.chrom}
@@ -23,6 +24,9 @@ ann2chrom(x, y, ...)
 create.chrom(name, seq, vcf = NULL, ann = NULL)
 
 set.pop1(x, pop1)
+
+masker(x, QUAL = 999, mindp = 0.25, maxdp = 0.75, minmq = 0.25,
+  maxmq = 0.75, ...)
 
 windowize(x, win.size = 1000, max.win = 10000)
 
@@ -54,6 +58,14 @@ chromo(x, verbose = TRUE, nsum = TRUE, DP = FALSE, QUAL = FALSE,
 
   \item{pop2}{a numeric vector indicating the samples in
   population 2}
+
+  \item{mindp}{minimum cumulative depth}
+
+  \item{maxdp}{maximum cumulative depth}
+
+  \item{minmq}{minimum mapping quality}
+
+  \item{maxmq}{maximum mapping quality}
 
   \item{win.size}{window size, in base pairs}
 
@@ -115,6 +127,6 @@ pinf_mt <- create.chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
 pinf_mt
 plot(pinf_mt)
 pinf_mt <- proc.chrom(pinf_mt)
-# chromoqc
+chromoqc(pinf_mt)
 }
 
