@@ -202,7 +202,14 @@ setReplaceMethod(
   f="seq2chrom",
   signature="Chrom",
   definition=function(object,value){
-    object@seq <-value
+    # A DNAbin will store in a list when the fasta contains
+    # multiple sequences, but as a matrix when the fasta
+    # only contains one sequence.
+    if(!is.list(class(as.character(value)))){
+      object@seq <- as.list(value)
+    } else {
+      object@seq <-value      
+    }
     object@len <-length(value[[1]])
     return (object)
   }
@@ -305,7 +312,6 @@ ann2chrom <- function(x,y,...){
 #' plot(pinf_mt)
 # pinf_mt <- masker(pinf_mt)
 #' pinf_mt <- proc.chrom(pinf_mt)
-#' pinf_mt <- masker(pinf_mt)
 #' chromoqc(pinf_mt)
 #' 
 create.chrom <- function(name, seq, vcf=NULL, ann=NULL){
@@ -572,6 +578,15 @@ vcf.fix2gt.m <- function(x){
 }
 
 gt.m2sfs <- function(x){
+#  cat(x@pop1)
+#  cat(length(x@pop1))
+#  cat('\n')
+#  if(length(x@pop1) < 1 | length(x@pop2) < 1 | is.na(x@pop1) | is.na(x@pop2)){
+#    cat("One or both populations are not defined\n")
+#    cat("Creating arbitrary populations\n")
+#    x@pop1 <- 1:floor(ncol(x@vcf.gt[,-1])/2)
+#    x@pop2 <- c(1+max(1:floor(ncol(x@vcf.gt[,-1])/2))):ncol(x@vcf.gt)
+#  }
   pop1 <- x@gt.m[x@mask, x@pop1]
   pop2 <- x@gt.m[x@mask, x@pop2]
   sfs <- matrix(ncol=ncol(pop1)*2+1, nrow=ncol(pop2)*2+1)
@@ -698,7 +713,8 @@ proc.chrom <- function(x, pop1=NA, pop2=NA, verbose=TRUE){
     cat("Genotype matrix complete.\n")
     print(ptime)
   }
-  ptime <- system.time(x <- gt.m2sfs(x))
+#  ptime <- system.time(x <- gt.m2sfs(x))
+  cat("gt.m2sfs is commented out\n")
   if(verbose==TRUE){
     cat("SFS complete.\n")
     print(ptime)
