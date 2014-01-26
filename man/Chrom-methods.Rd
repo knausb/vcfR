@@ -126,6 +126,7 @@ data(vcfR_example)
 pinf_mt <- create.chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
 pinf_mt
 plot(pinf_mt)
+pinf_mt <- masker(pinf_mt)
 pinf_mt <- proc.chrom(pinf_mt)
 chromoqc(pinf_mt)
 }

@@ -142,28 +142,32 @@ setMethod(
 #    cat("***** Plot not yet implemented *****\n")
     par(mfrow=c(2,2))
     if(length(x@vcf.info)>0){
-      hist(x@vcf.info$dp, col=3, main="Depth (DP)", xlab="")
-      rug(x@vcf.info$dp)
+      hist(x@vcf.info$DP[x@mask], col=3, main="Depth (DP)", xlab="")
+      rug(x@vcf.info$DP[x@mask])
     } else {
       plot(1:2,1:2, type='n')
+      title(main="No depth densities found")
     }
     if(length(x@vcf.info)>0){
-      hist(x@vcf.info$mq, col=4, main="Mapping quality (MQ)", xlab="")
-      rug(x@vcf.info$mq)
+      hist(x@vcf.info$MQ[x@mask], col=4, main="Mapping quality (MQ)", xlab="")
+      rug(x@vcf.info$MQ[x@mask])
     } else {
       plot(1:2,1:2, type='n')
+      title(main="No mapping qualities found")
     }
     if(length(x@vcf.fix)>0){
-      hist(x@vcf.fix$qual, col=5, main="Quality (QUAL)", xlab="")
-      rug(x@vcf.fix$qual)
+      hist(x@vcf.fix$QUAL[x@mask], col=5, main="Quality (QUAL)", xlab="")
+      rug(x@vcf.fix$QUAL[x@mask])
     } else {
       plot(1:2,1:2, type='n')
+      title(main="No qualities found")
     }
     if(length(x@snpden.w)>0){
       hist(x@snpden.w$count, col=6, main="SNP count (per window)", xlab="")
       rug(x@snpden.w$count)
     } else {
       plot(1:2,1:2, type='n')
+      title(main="No SNP densities found")
     }
     par(mfrow=c(1,1))
   }
@@ -238,7 +242,8 @@ setReplaceMethod(
 vcf2chrom <- function(x,y,...){
   x@vcf.fix <- as.data.frame(y@fix)
 #  x@vcf.fix <- as.data.frame(y[,1:8])
-  colnames(x@vcf.fix) <- c('chrom','pos','id','ref','alt','qual','filter','info')
+#  colnames(x@vcf.fix) <- c('chrom','pos','id','ref','alt','qual','filter','info')
+  colnames(x@vcf.fix) <- c('CHROM','POS','ID','REF','ALT','QUAL','FILTER','INFO')
   x@vcf.fix[,2] <- as.numeric(x@vcf.fix[,2])
   x@vcf.fix[,6] <- as.numeric(x@vcf.fix[,6])
   #
@@ -252,7 +257,8 @@ vcf2chrom <- function(x,y,...){
   x@vcf.meta <- y@meta
   #
   info <- matrix(ncol=2, nrow=nrow(y@fix))
-  colnames(info) <- c('dp','mq')
+#  colnames(info) <- c('dp','mq')
+  colnames(info) <- c('DP','MQ')
   info[,1] <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y@fix[,8]), ";"), function(x){grep("^DP=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
   info[,2] <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y@fix[,8]), ";"), function(x){grep("^MQ=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
   x@vcf.info <- as.data.frame(info)
@@ -310,7 +316,7 @@ ann2chrom <- function(x,y,...){
 #' pinf_mt <- create.chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
 #' pinf_mt
 #' plot(pinf_mt)
-# pinf_mt <- masker(pinf_mt)
+#' pinf_mt <- masker(pinf_mt)
 #' pinf_mt <- proc.chrom(pinf_mt)
 #' chromoqc(pinf_mt)
 #' 
@@ -363,13 +369,20 @@ set.pop2 <- function(x, pop2){
 #' @param maxmq maximum mapping quality
 #' 
 masker <- function(x, QUAL=999, mindp=0.25, maxdp=0.75, minmq=0.25, maxmq=0.75, ...){
-  x@mask <- as.numeric(x@vcf.fix[,6]) >= QUAL
+  x@mask <- rep(TRUE, times=nrow(x@vcf.fix))
+  x@mask[x@vcf.fix$QUAL < QUAL] <- FALSE
+  x@mask[x@vcf.info$DP < quantile(x@vcf.info$DP, probs=c(mindp))] <- FALSE
+  x@mask[x@vcf.info$DP > quantile(x@vcf.info$DP, probs=c(maxdp))] <- FALSE
+  x@mask[x@vcf.info$MQ < quantile(x@vcf.info$MQ, probs=c(minmq))] <- FALSE
+  x@mask[x@vcf.info$MQ > quantile(x@vcf.info$MQ, probs=c(maxmq))] <- FALSE
   #
-  x@mask[x@vcf.info$dp[x@vcf.info$dp <= quantile(x@vcf.info$dp, probs=c(mindp))]] <- FALSE
-  x@mask[x@vcf.info$dp[x@vcf.info$dp >= quantile(x@vcf.info$dp, probs=c(maxdp))]] <- FALSE
+#  x@mask <- as.numeric(x@vcf.fix[,6]) >= QUAL
   #
-  x@mask[x@vcf.info$mq[x@vcf.info$mq <= quantile(x@vcf.info$mq, probs=c(mindp))]] <- FALSE
-  x@mask[x@vcf.info$mq[x@vcf.info$mq >= quantile(x@vcf.info$mq, probs=c(maxdp))]] <- FALSE
+#  x@mask[x@vcf.info$dp[x@vcf.info$dp <= quantile(x@vcf.info$dp, probs=c(mindp))]] <- FALSE
+#  x@mask[x@vcf.info$dp[x@vcf.info$dp >= quantile(x@vcf.info$dp, probs=c(maxdp))]] <- FALSE
+  #
+#  x@mask[x@vcf.info$mq[x@vcf.info$mq <= quantile(x@vcf.info$mq, probs=c(mindp))]] <- FALSE
+#  x@mask[x@vcf.info$mq[x@vcf.info$mq >= quantile(x@vcf.info$mq, probs=c(maxdp))]] <- FALSE
   #
   return(x)
 }
@@ -539,7 +552,7 @@ snp.win <- function(x){
   snp[,1] <- 1:nrow(snp)
   snp[,2] <- x@windows[,1]
   snp[,3] <- x@windows[,2]
-  vcf <- x@vcf.fix[x@mask,]$pos
+  vcf <- x@vcf.fix[x@mask,]$POS
   #
   count.snps <- function(x){
     vcf2 <- vcf[vcf >= x[2] & vcf <= x[3]]
@@ -732,8 +745,7 @@ proc.chrom <- function(x, pop1=NA, pop2=NA, verbose=TRUE){
   return(x)
 }
 
-##### ##### ##### ##### #####
-# Graphic function.
+##### ##### Graphic functions
 
 #' @rdname Chrom-methods
 #' @export
@@ -856,8 +868,6 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
     axis(side=2, las=2)
     boxplot(as.numeric(x@vcf.stat[x@mask,11]), axes=FALSE, frame.plot=T, col="#8B008B")
   }
-
-
 
   if(length(x@snpden.w)>0 & SNPDEN){
     # SNP density.
