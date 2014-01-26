@@ -3,6 +3,7 @@
 \alias{ann2chrom}
 \alias{chrom-methods}
 \alias{chromo}
+\alias{chromopop}
 \alias{chromoqc}
 \alias{create.chrom}
 \alias{masker}
@@ -33,6 +34,8 @@ windowize(x, win.size = 1000, max.win = 10000)
 proc.chrom(x, pop1 = NA, pop2 = NA, verbose = TRUE)
 
 chromoqc(x, nsum = FALSE, ...)
+
+chromopop(x, ...)
 
 chromo(x, verbose = TRUE, nsum = TRUE, DP = FALSE, QUAL = FALSE,
   MQ = FALSE, NE = FALSE, TPI = FALSE, TAJD = FALSE, FWH = FALSE,
@@ -125,9 +128,10 @@ library(vcfR)
 data(vcfR_example)
 pinf_mt <- create.chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
 pinf_mt
-plot(pinf_mt)
 pinf_mt <- masker(pinf_mt)
+plot(pinf_mt)
 pinf_mt <- proc.chrom(pinf_mt)
 chromoqc(pinf_mt)
+chromopop(pinf_mt)
 }
 

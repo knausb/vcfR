@@ -1,5 +1,6 @@
 export(ann2chrom)
 export(chromo)
+export(chromopop)
 export(chromoqc)
 export(create.chrom)
 export(masker)

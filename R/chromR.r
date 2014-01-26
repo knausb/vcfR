@@ -315,10 +315,11 @@ ann2chrom <- function(x,y,...){
 #' data(vcfR_example)
 #' pinf_mt <- create.chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
 #' pinf_mt
-#' plot(pinf_mt)
 #' pinf_mt <- masker(pinf_mt)
+#' plot(pinf_mt)
 #' pinf_mt <- proc.chrom(pinf_mt)
 #' chromoqc(pinf_mt)
+#' chromopop(pinf_mt)
 #' 
 create.chrom <- function(name, seq, vcf=NULL, ann=NULL){
   x <- new(Class="Chrom")
@@ -755,6 +756,10 @@ chromoqc <- function(x, nsum=FALSE, ...){
   chromo(x, verbose=TRUE, nsum=FALSE, DP=TRUE, QUAL=TRUE, MQ=TRUE, SNPDEN=TRUE, NUC=TRUE, ANN=TRUE, ...)
 }
 
+#' @rdname Chrom-methods
+#' @export
+#' @aliases chromopop
+#'
 chromopop <- function(x, ...){
   chromo(x, ANN=TRUE, nsum=FALSE, 
          NE=TRUE, TPI=TRUE, TAJD=TRUE, FWH=TRUE,
