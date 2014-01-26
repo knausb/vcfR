@@ -173,6 +173,27 @@ setMethod(
   }
 )
 
+#' @rdname Chrom-methods
+#' @export
+#' @aliases names.chrom
+#' 
+setMethod(
+  f="names",
+  signature = "Chrom",
+  definition=function(x){
+    cat("*** Class Chrom, method Names *** \n")
+    temp <- names(x@vcf.gt)[-1]
+    for(i in 1:length(temp)){
+      cat(i, paste(temp[i], "\n"))
+    }
+#    cat(paste("Name: ", object@name, "\n"))
+#    cat(paste("Length: ", object@len, "\n"))
+#    cat("Use print(object) for more details.\n")
+    cat("******* End names (Chrom) ******* \n")
+  }
+)
+
+
 ##### ##### ##### ##### #####
 # Accessors.
 
@@ -315,6 +336,7 @@ ann2chrom <- function(x,y,...){
 #' data(vcfR_example)
 #' pinf_mt <- create.chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
 #' pinf_mt
+#' names(pinf_mt)
 #' pinf_mt <- masker(pinf_mt)
 #' plot(pinf_mt)
 #' pinf_mt <- proc.chrom(pinf_mt)
