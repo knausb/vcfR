@@ -181,15 +181,14 @@ setMethod(
   f="names",
   signature = "Chrom",
   definition=function(x){
-    cat("*** Class Chrom, method Names *** \n")
+#    cat("*** Class Chrom, method Names *** \n")
     temp <- names(x@vcf.gt)[-1]
-    for(i in 1:length(temp)){
-      cat(i, paste(temp[i], "\n"))
-    }
-#    cat(paste("Name: ", object@name, "\n"))
-#    cat(paste("Length: ", object@len, "\n"))
-#    cat("Use print(object) for more details.\n")
-    cat("******* End names (Chrom) ******* \n")
+#    for(i in 1:length(temp)){
+#      cat(i, paste(temp[i], "\n"))
+#    }
+#    invisible(cat("******* End names (Chrom) ******* \n"))
+#    invisible(x)
+    temp
   }
 )
 
