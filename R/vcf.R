@@ -199,9 +199,6 @@ read.vcf<-function(x){
 #' @export
 #' 
 write.vcf<-function(xvcf, vfile, mask=logical(0)){
-  if(class(xvcf) != "Chrom" | class(xvcf) != "vcfR"){
-    stop("Unexpected class! Expecting an object of class vcfR or chromR.")
-  }
   if(class(xvcf) == 'Chrom'){
     # Recast as a vcfR object.
     temp <- xvcf
@@ -211,6 +208,9 @@ write.vcf<-function(xvcf, vfile, mask=logical(0)){
     xvcf@gt <- temp@vcf.gt
     mask <- temp@mask
     rm(temp)
+  }
+  if(class(xvcf) != "vcfR"){
+    stop("Unexpected class! Expecting an object of class vcfR or Chrom.")
   }
   #
   if(length(mask) == 0){
