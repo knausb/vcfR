@@ -10,7 +10,7 @@
 
 read.vcf(x)
 
-write.vcf(xvcf, vfile)
+write.vcf(xvcf, vfile, mask = logical(0))
 }
 \arguments{
   \item{...}{Arguments to be passed to methods}
@@ -20,6 +20,8 @@ write.vcf(xvcf, vfile)
   \item{xvcf}{a vcfR object}
 
   \item{vfile}{an output filename}
+
+  \item{mask}{logical vector indicating rows to use}
 
   \item{y}{the y coordinates of points in the plot,
   \emph{optional} if \code{x} is an appropriate structure.}

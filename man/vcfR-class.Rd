@@ -12,4 +12,13 @@ which holds the meta data.  The second slot holds an eight
 column data.frame to hold the fixed data.  The third slot
 is a data.frame which holds the genotype data.
 }
+\section{Slots}{
+
+\describe{
+\item{\code{meta}}{character vector for the meta (header) information}
+
+\item{\code{fix}}{data.frame for the fixed information}
+
+\item{\code{gt}}{data.frame for the genotype information}
+}}
 

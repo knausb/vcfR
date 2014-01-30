@@ -33,6 +33,10 @@ NULL
 #'
 #' @description
 #' A class for storing vcf data.
+#' 
+#' @slot meta character vector for the meta (header) information
+#' @slot fix  data.frame for the fixed information
+#' @slot gt   data.frame for the genotype information
 #'
 #' @details Defines a class for variant call format data.
 #' A vcfR object contains three slots.  The first slot
@@ -190,14 +194,33 @@ read.vcf<-function(x){
 #' 
 #' @param xvcf a vcfR object
 #' @param vfile an output filename
+#' @param mask logical vector indicating rows to use
 #' 
 #' @export
 #' 
-write.vcf<-function(xvcf, vfile){
+write.vcf<-function(xvcf, vfile, mask=logical(0)){
+  if(class(xvcf) != "Chrom" | class(xvcf) != "vcfR"){
+    stop("Unexpected class! Expecting an object of class vcfR or chromR.")
+  }
+  if(class(xvcf) == 'Chrom'){
+    # Recast as a vcfR object.
+    temp <- xvcf
+    xvcf <- new(Class="vcfR")
+    xvcf@meta <- temp@vcf.meta
+    xvcf@fix <- temp@vcf.fix
+    xvcf@gt <- temp@vcf.gt
+    mask <- temp@mask
+    rm(temp)
+  }
+  #
+  if(length(mask) == 0){
+    mask <- 1:nrow(xvcf@fix)
+  }
+  #
   write.table(xvcf@meta, file = vfile, append = FALSE, quote = FALSE, sep = "\t",
               eol = "\n", na = "NA", dec = ".", row.names = FALSE,
               col.names = FALSE)
-  write.table(cbind(xvcf@fix, xvcf@gt), file = vfile, append = TRUE, quote = FALSE, sep = "\t",
+  write.table(cbind(xvcf@fix[,mask], xvcf@gt[,mask]), file = vfile, append = TRUE, quote = FALSE, sep = "\t",
               eol = "\n", na = "NA", dec = ".", row.names = FALSE,
               col.names = TRUE)
 }
