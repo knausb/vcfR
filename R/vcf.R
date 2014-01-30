@@ -220,7 +220,7 @@ write.vcf<-function(xvcf, vfile, mask=logical(0)){
   write.table(xvcf@meta, file = vfile, append = FALSE, quote = FALSE, sep = "\t",
               eol = "\n", na = "NA", dec = ".", row.names = FALSE,
               col.names = FALSE)
-  write.table(cbind(xvcf@fix[,mask], xvcf@gt[,mask]), file = vfile, append = TRUE, quote = FALSE, sep = "\t",
+  write.table(cbind(xvcf@fix[mask,], xvcf@gt[mask,]), file = vfile, append = TRUE, quote = FALSE, sep = "\t",
               eol = "\n", na = "NA", dec = ".", row.names = FALSE,
               col.names = TRUE)
 }
