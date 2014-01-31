@@ -341,6 +341,8 @@ ann2chrom <- function(x,y,...){
 #' pinf_mt <- proc.chrom(pinf_mt)
 #' chromoqc(pinf_mt)
 #' chromopop(pinf_mt)
+#' gt <- extract.gt(pinf_mt)
+#' head(gt)
 #' 
 create.chrom <- function(name, seq, vcf=NULL, ann=NULL){
   x <- new(Class="Chrom")
@@ -990,6 +992,36 @@ plot.sfs <- function(x, log10=TRUE, ...){
   #
   par(mar=c(5,4,4,2), mfrow=c(1,1))
 }
+
+##### ##### extract.gt
+
+#' @rdname Chrom-methods
+#' @export
+#' @aliases extract.gt
+#' 
+#' @param element element to extract from vcf genotype data. Common options include "DP", "GT" and "GQ"
+#' @param mask a logical vector indicating which variants (rows) to include
+#' 
+extract.gt <- function(x, element="GT", mask=logical(0)){
+  if(class(x) != "Chrom"){stop("Expected object of class Chrom")}
+  if(length(mask) == 0){
+    mask <- 1:nrow(x@vcf.gt)
+  } else {
+    mask <- x@mask
+  }
+  get.gt1 <- function(x, element="GT"){
+    FORMAT <- unlist(strsplit(as.character(x[1]), ":"))
+    x <- x[-1]
+    pos <- grep(element, FORMAT)
+    unlist(lapply(strsplit(as.character(x), ":"), function(x){x[pos]}))
+  }
+#  get.gt <- function(x, element="GT"){
+  gt <- t(apply(x@vcf.gt, MARGIN=1, get.gt1, element=element))
+  colnames(gt) <- names(x@vcf.gt)[-1]
+  gt
+}
+
+
 
 ##### ##### ##### ##### #####
 # EOF.

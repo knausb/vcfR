@@ -6,6 +6,7 @@
 \alias{chromopop}
 \alias{chromoqc}
 \alias{create.chrom}
+\alias{extract.gt}
 \alias{masker}
 \alias{names,Chrom-method}
 \alias{names.chrom}
@@ -44,6 +45,8 @@ chromopop(x, ...)
 chromo(x, verbose = TRUE, nsum = TRUE, DP = FALSE, QUAL = FALSE,
   MQ = FALSE, NE = FALSE, TPI = FALSE, TAJD = FALSE, FWH = FALSE,
   SNPDEN = FALSE, NUC = FALSE, ANN = FALSE, ...)
+
+extract.gt(x, element = "GT", mask = logical(0))
 }
 \arguments{
   \item{x}{an object of class chrom}
@@ -112,6 +115,12 @@ chromo(x, verbose = TRUE, nsum = TRUE, DP = FALSE, QUAL = FALSE,
 
   \item{ANN}{logical for whether annotation will be
   displayed}
+
+  \item{element}{element to extract from vcf genotype data.
+  Common options include "DP", "GT" and "GQ"}
+
+  \item{mask}{a logical vector indicating which variants
+  (rows) to include}
 }
 \description{
 Methods to work with objects of the chrom class
@@ -138,5 +147,7 @@ plot(pinf_mt)
 pinf_mt <- proc.chrom(pinf_mt)
 chromoqc(pinf_mt)
 chromopop(pinf_mt)
+gt <- extract.gt(pinf_mt)
+head(gt)
 }
 
