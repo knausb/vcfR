@@ -995,6 +995,7 @@ plot.sfs <- function(x, log10=TRUE, ...){
 
 ##### ##### extract.gt
 
+#
 #' @rdname Chrom-methods
 #' @export
 #' @aliases extract.gt
