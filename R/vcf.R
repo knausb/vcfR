@@ -217,12 +217,21 @@ write.vcf<-function(xvcf, vfile, mask=logical(0)){
     mask <- 1:nrow(xvcf@fix)
   }
   #
+  header <- c(names(xvcf@fix), names(xvcf@gt))
+  header[1] <- paste("#",header[1],sep='')
   write.table(xvcf@meta, file = vfile, append = FALSE, quote = FALSE, sep = "\t",
               eol = "\n", na = "NA", dec = ".", row.names = FALSE,
               col.names = FALSE)
-  write.table(cbind(xvcf@fix[mask,], xvcf@gt[mask,]), file = vfile, append = TRUE, quote = FALSE, sep = "\t",
-              eol = "\n", na = "NA", dec = ".", row.names = FALSE,
-              col.names = TRUE)
+  write(header, file = vfile,
+        ncolumns=length(header),
+        append = TRUE,
+        sep = "\t")
+  write.table(cbind(xvcf@fix[mask,], xvcf@gt[mask,]), file = vfile, append = TRUE,
+              quote = FALSE, sep = "\t",
+              eol = "\n", na = "NA", dec = ".",
+              row.names = FALSE,
+              col.names = FALSE)
+#              col.names = TRUE)
 }
 
 
