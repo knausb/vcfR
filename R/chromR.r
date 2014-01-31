@@ -1004,19 +1004,25 @@ plot.sfs <- function(x, log10=TRUE, ...){
 #' 
 extract.gt <- function(x, element="GT", mask=logical(0)){
   if(class(x) != "Chrom"){stop("Expected object of class Chrom")}
-  if(length(mask) == 0){
+  if(length(mask) == 0 & length(x@mask) == 0){
+    # Neither mask is set.
     mask <- 1:nrow(x@vcf.gt)
-  } else {
+  } else if (length(mask) > 0){
+    # Use specified mask.
+  } else if (length(x@mask) > 0){
+    # Use the mask in the Chom object.
     mask <- x@mask
+  } else {
+    stop("Unexpected mask.")
   }
+  #
   get.gt1 <- function(x, element="GT"){
     FORMAT <- unlist(strsplit(as.character(x[1]), ":"))
     x <- x[-1]
     pos <- grep(element, FORMAT)
     unlist(lapply(strsplit(as.character(x), ":"), function(x){x[pos]}))
   }
-#  get.gt <- function(x, element="GT"){
-  gt <- t(apply(x@vcf.gt, MARGIN=1, get.gt1, element=element))
+  gt <- t(apply(x@vcf.gt[mask,], MARGIN=1, get.gt1, element=element))
   colnames(gt) <- names(x@vcf.gt)[-1]
   gt
 }
