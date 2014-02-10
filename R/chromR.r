@@ -141,21 +141,24 @@ setMethod(
 #    cat("***** Object of class 'Chrom' *****\n")
 #    cat("***** Plot not yet implemented *****\n")
     par(mfrow=c(2,2))
-    if(length(x@vcf.info)>0){
+#    if(length(x@vcf.info)>0){
+    if(sum(is.na(x@vcf.info$DP)) > length(x@vcf.info$DP)){
       hist(x@vcf.info$DP[x@mask], col=3, main="Depth (DP)", xlab="")
       rug(x@vcf.info$DP[x@mask])
     } else {
       plot(1:2,1:2, type='n')
       title(main="No depth densities found")
     }
-    if(length(x@vcf.info)>0){
+#    if(length(x@vcf.info)>0){
+    if(sum(is.na(x@vcf.info$MQ)) > length(x@vcf.info$MQ)){
       hist(x@vcf.info$MQ[x@mask], col=4, main="Mapping quality (MQ)", xlab="")
       rug(x@vcf.info$MQ[x@mask])
     } else {
       plot(1:2,1:2, type='n')
       title(main="No mapping qualities found")
     }
-    if(length(x@vcf.fix)>0){
+#    if(length(x@vcf.fix)>0){
+    if(sum(is.na(x@vcf.fix$QUAL)) > length(x@vcf.fix$QUAL)){
       hist(x@vcf.fix$QUAL[x@mask], col=5, main="Quality (QUAL)", xlab="")
       rug(x@vcf.fix$QUAL[x@mask])
     } else {
@@ -279,8 +282,12 @@ vcf2chrom <- function(x,y,...){
   info <- matrix(ncol=2, nrow=nrow(y@fix))
 #  colnames(info) <- c('dp','mq')
   colnames(info) <- c('DP','MQ')
-  info[,1] <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y@fix[,8]), ";"), function(x){grep("^DP=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
-  info[,2] <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y@fix[,8]), ";"), function(x){grep("^MQ=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
+  if(length(grep("DP=", y@fix[,8])) > 0){
+    info[,1] <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y@fix[,8]), ";"), function(x){grep("^DP=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
+  }
+  if(length(grep("MQ=", y@fix[,8])) > 0){
+    info[,2] <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y@fix[,8]), ";"), function(x){grep("^MQ=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
+  }
   x@vcf.info <- as.data.frame(info)
   #
   x@mask <- rep(TRUE, times=nrow(x@vcf.fix))
@@ -394,11 +401,17 @@ set.pop2 <- function(x, pop2){
 #' 
 masker <- function(x, QUAL=999, mindp=0.25, maxdp=0.75, minmq=0.25, maxmq=0.75, ...){
   x@mask <- rep(TRUE, times=nrow(x@vcf.fix))
-  x@mask[x@vcf.fix$QUAL < QUAL] <- FALSE
-  x@mask[x@vcf.info$DP < quantile(x@vcf.info$DP, probs=c(mindp))] <- FALSE
-  x@mask[x@vcf.info$DP > quantile(x@vcf.info$DP, probs=c(maxdp))] <- FALSE
-  x@mask[x@vcf.info$MQ < quantile(x@vcf.info$MQ, probs=c(minmq))] <- FALSE
-  x@mask[x@vcf.info$MQ > quantile(x@vcf.info$MQ, probs=c(maxmq))] <- FALSE
+  if(sum(is.na(x@vcf.fix$QUAL)) < length(x@vcf.fix$QUAL)){
+    x@mask[x@vcf.fix$QUAL < QUAL] <- FALSE
+  }
+  if(sum(is.na(x@vcf.info$DP)) < length(x@vcf.info$DP)){
+    x@mask[x@vcf.info$DP < quantile(x@vcf.info$DP, probs=c(mindp))] <- FALSE
+    x@mask[x@vcf.info$DP > quantile(x@vcf.info$DP, probs=c(maxdp))] <- FALSE
+  }
+  if(sum(is.na(x@vcf.info$MQ)) < length(x@vcf.info$MQ)){
+    x@mask[x@vcf.info$MQ < quantile(x@vcf.info$MQ, probs=c(minmq))] <- FALSE
+    x@mask[x@vcf.info$MQ > quantile(x@vcf.info$MQ, probs=c(maxmq))] <- FALSE
+  }
   #
 #  x@mask <- as.numeric(x@vcf.fix[,6]) >= QUAL
   #
