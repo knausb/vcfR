@@ -108,6 +108,11 @@ setMethod(
   }
 )
 
+
+#' @rdname vcfR-methods
+#' @export
+#' @aliases head.vcfR
+#' 
 setMethod(
   f="head",
   signature="vcfR",

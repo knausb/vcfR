@@ -7,6 +7,8 @@
 \alias{chromoqc}
 \alias{create.chrom}
 \alias{extract.gt}
+\alias{head,Chrom-method}
+\alias{head.chrom}
 \alias{masker}
 \alias{names,Chrom-method}
 \alias{names.chrom}
@@ -22,6 +24,8 @@
 \S4method{plot}{Chrom}(x, y, ...)
 
 \S4method{names}{Chrom}(x)
+
+\S4method{head}{Chrom}(x)
 
 vcf2chrom(x, y, ...)
 
@@ -142,6 +146,7 @@ data(vcfR_example)
 pinf_mt <- create.chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
 pinf_mt
 names(pinf_mt)
+head(pinf_mt)
 pinf_mt <- masker(pinf_mt)
 plot(pinf_mt)
 pinf_mt <- proc.chrom(pinf_mt)

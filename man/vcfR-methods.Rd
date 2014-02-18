@@ -1,11 +1,15 @@
 \docType{methods}
-\name{plot,vcfR-method}
+\name{head,vcfR-method}
+\alias{head,vcfR-method}
+\alias{head.vcfR}
 \alias{plot,vcfR-method}
 \alias{plot.vcfR}
 \alias{read.vcf}
 \alias{write.vcf}
 \title{vcfR methods}
 \usage{
+\S4method{head}{vcfR}(x, y, ...)
+
 \S4method{plot}{vcfR}(x, y, ...)
 
 read.vcf(x)

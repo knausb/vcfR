@@ -113,7 +113,7 @@ setMethod(
     cat(paste("Name: ", x@name, "\n"))
     cat(paste("Length: ", x@len, "\n"))
     cat("\nVCF fixed data:\n")
-    print(head(x@vcf.fix[,1:7], n=4))
+#    cat(x@vcf.fix[,1:7], n=4)
     cat("Last column (info) omitted.\n")
     cat("\nVCF variable data:\n")
     cat(paste("Columns: ", ncol(x@vcf.gt), "\n"))
@@ -195,6 +195,45 @@ setMethod(
   }
 )
 
+#' @rdname Chrom-methods
+#' @export
+#' @aliases head.chrom
+#' 
+setMethod(
+  f="head",
+  signature = "Chrom",
+  definition=function(x){
+    cat("*** Class Chrom, method head *** \n")
+    cat(paste("Name: ", x@name, "\n"))
+    cat(paste("Length: ", x@len, "\n"))
+    cat("******* Sample names (Chrom) ******* \n")
+    print(names(x@vcf.gt)[-1])
+    cat("******* Vcf fixed data (Chrom) ******* \n")
+    print(x@vcf.fix[1:6,1:7])
+    cat("******* Vcf genotype data (Chrom) ******* \n")
+    if(ncol(x@vcf.gt)>=6){
+      print(x@vcf.gt[1:6,1:6])
+    } else {
+      print(x@vcf.gt[1:6,])
+    }
+    cat("******* Vcf info (Chrom) ******* \n")
+    print(x@vcf.info[1:6,])
+    cat("******* Vcf mask (Chrom) ******* \n")
+    cat("Percent unmasked: ")
+    cat(sum(x@mask)/length(x@mask))
+    cat("\n")
+    cat("******* End Show (Chrom) ******* \n")
+    
+    #    cat("*** Class Chrom, method Names *** \n")
+#    temp <- names(x@vcf.gt)[-1]
+    #    for(i in 1:length(temp)){
+    #      cat(i, paste(temp[i], "\n"))
+    #    }
+    #    invisible(cat("******* End names (Chrom) ******* \n"))
+    #    invisible(x)
+#    temp
+  }
+)
 
 ##### ##### ##### ##### #####
 # Accessors.
@@ -343,6 +382,7 @@ ann2chrom <- function(x,y,...){
 #' pinf_mt <- create.chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
 #' pinf_mt
 #' names(pinf_mt)
+#' head(pinf_mt)
 #' pinf_mt <- masker(pinf_mt)
 #' plot(pinf_mt)
 #' pinf_mt <- proc.chrom(pinf_mt)
