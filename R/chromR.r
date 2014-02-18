@@ -142,15 +142,17 @@ setMethod(
 #    cat("***** Plot not yet implemented *****\n")
     par(mfrow=c(2,2))
 #    if(length(x@vcf.info)>0){
-    if(sum(is.na(x@vcf.info$DP)) > length(x@vcf.info$DP)){
+#    if(sum(is.na(x@vcf.info$DP)) > length(x@vcf.info$DP)){
+    if(sum(!is.na(x@vcf.info$DP[x@mask])) >= 1){
       hist(x@vcf.info$DP[x@mask], col=3, main="Depth (DP)", xlab="")
       rug(x@vcf.info$DP[x@mask])
     } else {
       plot(1:2,1:2, type='n')
-      title(main="No depth densities found")
+      title(main="No depths found")
     }
 #    if(length(x@vcf.info)>0){
-    if(sum(is.na(x@vcf.info$MQ)) > length(x@vcf.info$MQ)){
+#    if(sum(is.na(x@vcf.info$MQ)) > length(x@vcf.info$MQ)){
+    if(sum(!is.na(x@vcf.info$MQ[x@mask])) >= 1){
       hist(x@vcf.info$MQ[x@mask], col=4, main="Mapping quality (MQ)", xlab="")
       rug(x@vcf.info$MQ[x@mask])
     } else {
@@ -158,7 +160,8 @@ setMethod(
       title(main="No mapping qualities found")
     }
 #    if(length(x@vcf.fix)>0){
-    if(sum(is.na(x@vcf.fix$QUAL)) > length(x@vcf.fix$QUAL)){
+#    if(sum(is.na(x@vcf.fix$QUAL)) > length(x@vcf.fix$QUAL)){
+    if(sum(!is.na(x@vcf.fix$QUAL[x@mask])) >= 1){
       hist(x@vcf.fix$QUAL[x@mask], col=5, main="Quality (QUAL)", xlab="")
       rug(x@vcf.fix$QUAL[x@mask])
     } else {
