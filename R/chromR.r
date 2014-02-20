@@ -415,6 +415,8 @@ ann2chrom <- function(x,y,...){
 #' head(gt)
 #' tab <- variant.table(pinf_mt)
 #' head(tab)
+#' hist(tab$Ho - tab$He, col=5)
+#' # Note that this example is a mitochondrion, so this is a bit silly.
 #' 
 create.chrom <- function(name, seq, vcf=NULL, ann=NULL){
   x <- new(Class="Chrom")
@@ -734,11 +736,15 @@ gt2popsum <- function(x){
                     )
   summ[mask,3] <- rowSums(gt[mask,])
   summ[,1] <- summ[,2]+summ[,3]
+  #
+  # Observed heterozygosity
   summ[mask,4] <- unlist(apply(gt[mask,], MARGIN=1,
                      function(x){sum(x==1)/length(na.omit(x))}
 #                     function(x){sum(x==1)}
                           )
                     )
+  #
+  # Expected heterozygosity
   summ[,5] <- 1 - ((summ[,2]/summ[,1])^2 + (summ[,3]/summ[,1])^2)
   summ[,6] <- 1/(1-summ[,5])
   #
@@ -1138,6 +1144,7 @@ variant.table <- function(x){
   tab <- x@var.info[x@var.info$mask,]
   tab <- cbind(rep(x@name, times=nrow(tab)), tab)
   names(tab)[1] <- "chrom"
+  tab
 }
 
 ##### ##### ##### ##### #####

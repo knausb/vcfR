@@ -162,5 +162,7 @@ gt <- extract.gt(pinf_mt)
 head(gt)
 tab <- variant.table(pinf_mt)
 head(tab)
+hist(tab$Ho - tab$He, col=5)
+# Note that this example is a mitochondrion, so this is a bit silly.
 }
 
