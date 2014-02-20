@@ -146,15 +146,16 @@ Reads in a vcf file and stores it in a Chrom class.
 library(vcfR)
 data(vcfR_example)
 pinf_mt <- create.chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
+head(pinf_mt)
 pinf_mt
 names(pinf_mt)
-head(pinf_mt)
-pinf_mt <- masker(pinf_mt)
 plot(pinf_mt)
+pinf_mt <- masker(pinf_mt)
 pinf_mt <- proc.chrom(pinf_mt)
+plot(pinf_mt)
 chromoqc(pinf_mt)
 chromopop(pinf_mt)
-gt <- extract.gt(pinf_mt, as.matrix=TRUE)
+gt <- extract.gt(pinf_mt)
 head(gt)
 }
 

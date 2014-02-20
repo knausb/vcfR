@@ -23,7 +23,7 @@ setOldClass("DNAbin")
 #'   \item vcf.meta vcf meta data
 #'   \item vcf.fix vcf fixed data
 #'   \item vcf.gt vcf genotype data
-#'   \item vcf.info data extracted from the vcf.gt
+#   \item vcf.info data extracted from the vcf.gt
 #'   \item ann annotation data in a gff-like data.frame
 #'
 #'   \item var.info a data.frame containing information on variants
@@ -32,18 +32,18 @@ setOldClass("DNAbin")
 #'   \item pop1 vector indicating members of pop1
 #'   \item pop2 vector indicating members of pop2
 #'   
-#'   \item acgt.w matrix of nucleotide compositions
-#'   \item n.w matrix of
+#'   \item acgt.w matrix indicating range of chromosome # of nucleotide compositions
+#'   \item n.w matrix indicating locations of blocks of Ns in chromosome
 #'   \item windows matrix of windows
 #'   \item nuccomp.w data.frame of nucleotide composition windows
 #'   \item snpden.w data.frame of snp density windows
 #'   
 #'   \item gt.m matrix of genotypes
-#'   \item vcf.stat data.frame of variant stats
+#   \item vcf.stat data.frame of variant stats
 #'   \item sfs matrix for the site frequency spectrum
 #'   \item link matrix for linkages
 #'   
-#'   \item mask a logical vector to indicate masked variants
+#   \item mask a logical vector to indicate masked variants
 #' }
 #' 
 #' More descriptions can be put here.
@@ -106,7 +106,7 @@ setMethod(
     cat("*** Class Chrom, method Show *** \n")
     cat(paste("Name: ", object@name, "\n"))
     cat(paste("Length: ", object@len, "\n"))
-    cat("Use print(object) for more details.\n")
+    cat("Use head(object) for more details.\n")
     cat("******* End Show (Chrom) ******* \n")
   }
 )
@@ -149,27 +149,27 @@ setMethod(
     par(mfrow=c(2,2))
 #    if(length(x@vcf.info)>0){
 #    if(sum(is.na(x@vcf.info$DP)) > length(x@vcf.info$DP)){
-    if(sum(!is.na(x@vcf.info$DP[x@mask])) >= 1){
-      hist(x@vcf.info$DP[x@mask], col=3, main="Depth (DP)", xlab="")
-      rug(x@vcf.info$DP[x@mask])
+    if(sum(!is.na(x@var.info$DP[x@var.info$mask])) >= 1){
+      hist(x@var.info$DP[x@var.info$mask], col=3, main="Depth (DP)", xlab="")
+      rug(x@var.info$DP[x@var.info$mask])
     } else {
       plot(1:2,1:2, type='n')
       title(main="No depths found")
     }
 #    if(length(x@vcf.info)>0){
 #    if(sum(is.na(x@vcf.info$MQ)) > length(x@vcf.info$MQ)){
-    if(sum(!is.na(x@vcf.info$MQ[x@mask])) >= 1){
-      hist(x@vcf.info$MQ[x@mask], col=4, main="Mapping quality (MQ)", xlab="")
-      rug(x@vcf.info$MQ[x@mask])
+    if(sum(!is.na(x@var.info$MQ[x@var.info$mask])) >= 1){
+      hist(x@var.info$MQ[x@var.info$mask], col=4, main="Mapping quality (MQ)", xlab="")
+      rug(x@var.info$MQ[x@var.info$mask])
     } else {
       plot(1:2,1:2, type='n')
       title(main="No mapping qualities found")
     }
 #    if(length(x@vcf.fix)>0){
 #    if(sum(is.na(x@vcf.fix$QUAL)) > length(x@vcf.fix$QUAL)){
-    if(sum(!is.na(x@vcf.fix$QUAL[x@mask])) >= 1){
-      hist(x@vcf.fix$QUAL[x@mask], col=5, main="Quality (QUAL)", xlab="")
-      rug(x@vcf.fix$QUAL[x@mask])
+    if(sum(!is.na(x@vcf.fix$QUAL[x@var.info$mask])) >= 1){
+      hist(x@vcf.fix$QUAL[x@var.info$mask], col=5, main="Quality (QUAL)", xlab="")
+      rug(x@vcf.fix$QUAL[x@var.info$mask])
     } else {
       plot(1:2,1:2, type='n')
       title(main="No qualities found")
@@ -221,15 +221,24 @@ setMethod(
     print(x@vcf.fix[1:6,1:7])
     cat("******* Vcf genotype data (Chrom) ******* \n")
     if(ncol(x@vcf.gt)>=6){
+      cat("***** *****  First 6 columns  ***** ***** \n")
       print(x@vcf.gt[1:6,1:6])
     } else {
       print(x@vcf.gt[1:6,])
     }
-    cat("******* Vcf info (Chrom) ******* \n")
-    print(x@vcf.info[1:6,])
+#    cat("******* Vcf info (Chrom) ******* \n")
+#    print(x@vcf.info[1:6,])
+    cat("******* Var info (Chrom) ******* \n")
+    if(ncol(x@var.info)>=6){
+      cat("***** *****  First 6 columns  ***** ***** \n")
+      print(x@var.info[1:6,1:6])
+    } else {
+      print(x@var.info[1:6,])
+    }
     cat("******* Vcf mask (Chrom) ******* \n")
     cat("Percent unmasked: ")
-    cat(sum(x@mask)/length(x@mask))
+#    cat(100*(sum(x@mask)/length(x@mask)))
+    cat(100*(sum(x@var.info$mask)/length(x@var.info$mask)))
     cat("\n")
     cat("******* End Show (Chrom) ******* \n")
     
@@ -332,13 +341,17 @@ vcf2chrom <- function(x,y,...){
   colnames(info) <- c('DP','MQ')
   if(length(grep("DP=", y@fix[,8])) > 0){
     info[,1] <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y@fix[,8]), ";"), function(x){grep("^DP=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
+#    x@var.info$DP <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y@fix[,8]), ";"), function(x){grep("^DP=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
   }
   if(length(grep("MQ=", y@fix[,8])) > 0){
     info[,2] <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y@fix[,8]), ";"), function(x){grep("^MQ=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
+#    x@var.info$MQ <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y@fix[,8]), ";"), function(x){grep("^MQ=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
   }
-  x@vcf.info <- as.data.frame(info)
+#  x@vcf.info <- as.data.frame(info)
+  x@var.info <- as.data.frame(info)
   #
-  x@mask <- rep(TRUE, times=nrow(x@vcf.fix))
+#  x@mask <- rep(TRUE, times=nrow(x@vcf.fix))
+  x@var.info$mask <- rep(TRUE, times=nrow(x@vcf.fix))
   # assign may be more efficient.
   return(x)
 }
@@ -389,15 +402,16 @@ ann2chrom <- function(x,y,...){
 #' library(vcfR)
 #' data(vcfR_example)
 #' pinf_mt <- create.chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
+#' head(pinf_mt)
 #' pinf_mt
 #' names(pinf_mt)
-#' head(pinf_mt)
-#' pinf_mt <- masker(pinf_mt)
 #' plot(pinf_mt)
+#' pinf_mt <- masker(pinf_mt)
 #' pinf_mt <- proc.chrom(pinf_mt)
+#' plot(pinf_mt)
 #' chromoqc(pinf_mt)
 #' chromopop(pinf_mt)
-#' gt <- extract.gt(pinf_mt, as.matrix=TRUE)
+#' gt <- extract.gt(pinf_mt)
 #' head(gt)
 #' 
 create.chrom <- function(name, seq, vcf=NULL, ann=NULL){
@@ -449,27 +463,30 @@ set.pop2 <- function(x, pop2){
 #' @param maxmq maximum mapping quality
 #' 
 masker <- function(x, QUAL=999, mindp=0.25, maxdp=0.75, minmq=0.25, maxmq=0.75, ...){
-  x@mask <- rep(TRUE, times=nrow(x@vcf.fix))
-  if(sum(is.na(x@vcf.fix$QUAL)) < length(x@vcf.fix$QUAL)){
-    x@mask[x@vcf.fix$QUAL < QUAL] <- FALSE
+  quals  <- x@vcf.fix$QUAL
+  info <- x@var.info[,grep("DP|MQ",names(x@var.info))]
+  mask <- rep(TRUE, times=nrow(info))
+  #
+  if(sum(is.na(quals)) < length(quals)){
+    mask[quals < QUAL] <- FALSE
   }
-  if(sum(is.na(x@vcf.info$DP)) < length(x@vcf.info$DP)){
-    x@mask[x@vcf.info$DP < quantile(x@vcf.info$DP, probs=c(mindp))] <- FALSE
-    x@mask[x@vcf.info$DP > quantile(x@vcf.info$DP, probs=c(maxdp))] <- FALSE
+#  if(sum(is.na(x@vcf.info$DP)) < length(x@vcf.info$DP)){
+#    mask[x@vcf.info$DP < quantile(x@vcf.info$DP, probs=c(mindp))] <- FALSE
+#    mask[x@vcf.info$DP > quantile(x@vcf.info$DP, probs=c(maxdp))] <- FALSE
+#  }
+#  if(sum(is.na(x@vcf.info$MQ)) < length(x@vcf.info$MQ)){
+#    mask[x@vcf.info$MQ < quantile(x@vcf.info$MQ, probs=c(minmq))] <- FALSE
+#    mask[x@vcf.info$MQ > quantile(x@vcf.info$MQ, probs=c(maxmq))] <- FALSE
+#  }
+  if(sum(is.na(info$DP)) < length(info$DP)){
+    mask[info$DP < quantile(info$DP, probs=c(mindp))] <- FALSE
+    mask[info$DP > quantile(info$DP, probs=c(maxdp))] <- FALSE
   }
-  if(sum(is.na(x@vcf.info$MQ)) < length(x@vcf.info$MQ)){
-    x@mask[x@vcf.info$MQ < quantile(x@vcf.info$MQ, probs=c(minmq))] <- FALSE
-    x@mask[x@vcf.info$MQ > quantile(x@vcf.info$MQ, probs=c(maxmq))] <- FALSE
+  if(sum(is.na(info$MQ)) < length(info$MQ)){
+    mask[info$MQ < quantile(info$MQ, probs=c(minmq))] <- FALSE
+    mask[info$MQ > quantile(info$MQ, probs=c(maxmq))] <- FALSE
   }
-  #
-#  x@mask <- as.numeric(x@vcf.fix[,6]) >= QUAL
-  #
-#  x@mask[x@vcf.info$dp[x@vcf.info$dp <= quantile(x@vcf.info$dp, probs=c(mindp))]] <- FALSE
-#  x@mask[x@vcf.info$dp[x@vcf.info$dp >= quantile(x@vcf.info$dp, probs=c(maxdp))]] <- FALSE
-  #
-#  x@mask[x@vcf.info$mq[x@vcf.info$mq <= quantile(x@vcf.info$mq, probs=c(mindp))]] <- FALSE
-#  x@mask[x@vcf.info$mq[x@vcf.info$mq >= quantile(x@vcf.info$mq, probs=c(maxdp))]] <- FALSE
-  #
+  x@var.info$mask <- mask
   return(x)
 }
 
@@ -638,7 +655,7 @@ snp.win <- function(x){
   snp[,1] <- 1:nrow(snp)
   snp[,2] <- x@windows[,1]
   snp[,3] <- x@windows[,2]
-  vcf <- x@vcf.fix[x@mask,]$POS
+  vcf <- x@vcf.fix$POS[x@var.info$mask]
   #
   count.snps <- function(x){
     vcf2 <- vcf[vcf >= x[2] & vcf <= x[3]]
@@ -704,11 +721,11 @@ gt.m2sfs <- function(x){
 
 gt2popsum <- function(x){
   gt <- x@gt.m
-  mask <- x@mask
+  mask <- x@var.info$mask
   summ <- matrix(ncol=11, nrow=nrow(gt), 
                      dimnames=list(c(),
-    c('Allele_num','R_num','A_num','Ho','He','Ne',
-    'theta_pi','theta_w','theta_h','tajimas_d', 'fw_h'))
+    c('Allele_num','REF_num','ALT_num','Ho','He','Ne',
+    'theta_pi','theta_w','theta_h','tajimas_d', 'faywu_h'))
   )
   summ[mask,2] <- unlist(apply(gt[mask,], MARGIN=1,
                      function(x){sum(2*length(na.omit(x))-sum(x))})
@@ -730,7 +747,8 @@ gt2popsum <- function(x){
   summ[,11] <- summ[,7] - summ[,9]
   #
 #  print(head(summ))
-  x@vcf.stat <- as.data.frame(summ)
+#  x@vcf.stat <- as.data.frame(summ)
+  x@var.info <- cbind(x@var.info, as.data.frame(summ))
   return(x)
 }
 
@@ -882,20 +900,20 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
   brows <- 0
   srows <- 0
   #
-  if(length(x@vcf.info)>0 & DP){brows <- brows+1} # dp
-  if(length(x@vcf.info)>0 & MQ){brows <- brows+1} # mq
-  if(length(x@vcf.fix)>0 & QUAL){brows <- brows+1} # qual
+  if(length( x@var.info$DP[x@var.info$mask])>0 & DP  ){brows <- brows+1} # dp
+  if(length( x@var.info$MQ[x@var.info$mask])>0 & MQ  ){brows <- brows+1} # mq
+  if(length(x@vcf.fix$QUAL[x@var.info$mask])>0 & QUAL){brows <- brows+1} # qual
   #
-  if(length(x@vcf.stat)>0 & NE){brows <- brows+1} # Ne
-  if(length(x@vcf.stat)>0 & TPI){brows <- brows+1} # Theta_pi
-  if(length(x@vcf.stat)>0 & TAJD){brows <- brows+1} # Tajima's D
-  if(length(x@vcf.stat)>0 & FWH){brows <- brows+1} # Fay and Wu's
+  if(length(       x@var.info$Ne[x@var.info$mask])>0 & NE  ){brows <- brows+1} # Ne
+  if(length( x@var.info$theta_pi[x@var.info$mask])>0 & TPI ){brows <- brows+1} # Theta_pi
+  if(length(x@var.info$tajimas_d[x@var.info$mask])>0 & TAJD){brows <- brows+1} # Tajima's D
+  if(length(    x@var.info$faywu[x@var.info$mask])>0 & FWH ){brows <- brows+1} # Fay and Wu's
   #
-  if(length(x@snpden.w)>0 & SNPDEN){brows <- brows+1}
-  if(length(x@nuccomp.w)>0 & NUC){brows <- brows+1}
+  if( length(x@snpden.w)>0 & SNPDEN){brows <- brows+1}
+  if(length(x@nuccomp.w)>0 & NUC   ){brows <- brows+1}
   #
   if(length(x@ann)>0 & ANN){srows <- srows+1}
-  if(length(x@acgt.w)>0){srows <- srows+1}
+  if(length(x@acgt.w)>0   ){srows <- srows+1}
   #
   if(verbose){
     cat('  Chromo\n')
@@ -909,56 +927,68 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
   par(mar=c(0,0,0,0))
   par(oma=c(4,4,3,1))
   #
-  if(length(x@vcf.info)>0 & DP){ # dp
-    plot(x@vcf.fix[x@mask,2], x@vcf.info[x@mask,1], pch=20, col="#0080ff22", axes=F, frame.plot=T, ylab="", ...)
+  if(length(x@var.info$DP[x@var.info$mask])>0 & DP){ # dp
+#    plot(x@vcf.fix[x@mask,2], x@vcf.info[x@mask,1], pch=20, col="#0080ff22", axes=F, frame.plot=T, ylab="", ...)
+    plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$DP[x@var.info$mask], pch=20, col="#0080ff22", axes=F, frame.plot=T, ylab="", ...)
     axis(side=2, las=2)
     title(main="Read depth (DP)", line=-1)
-    boxplot(x@vcf.info[x@mask,1], axes=FALSE, frame.plot=T, col="#0080ff")
+#    boxplot(x@vcf.info[x@mask,1], axes=FALSE, frame.plot=T, col="#0080ff")
+    boxplot(x@var.info$DP[x@var.info$mask], axes=FALSE, frame.plot=T, col="#0080ff")
   }
   #
-  if(length(x@vcf.info)>0 & MQ){ # dp
-    plot(x@vcf.fix[x@mask,2], x@vcf.info[x@mask,2], pch=20, col="#3CB37122", axes=F, frame.plot=T, ylab="", ...)
+  if(length(x@var.info$MQ[x@var.info$mask])>0 & MQ){ # dp
+#    plot(x@vcf.fix[x@mask,2], x@vcf.info[x@mask,2], pch=20, col="#3CB37122", axes=F, frame.plot=T, ylab="", ...)
+    plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$MQ[x@var.info$mask], pch=20, col="#3CB37122", axes=F, frame.plot=T, ylab="", ...)
     axis(side=2, las=2)
     title(main="Mapping quality (MQ)", line=-1)
-    boxplot(x@vcf.info[x@mask,2], axes=FALSE, frame.plot=T, col="#3CB371")
+#    boxplot(x@vcf.info[x@mask,2], axes=FALSE, frame.plot=T, col="#3CB371")
+    boxplot(x@var.info$MQ[x@var.info$mask], axes=FALSE, frame.plot=T, col="#3CB371")
   }
   #
-  if(length(x@vcf.fix)>0 & QUAL){ # qual
-    plot(x@vcf.fix[x@mask,2], x@vcf.fix[x@mask,6], pch=20, col="#80008022", axes=F, frame.plot=T, ylab="", ...)
+  if(length(x@vcf.fix$QUAL[x@var.info$mask])>0 & QUAL){ # qual
+#    plot(x@vcf.fix[x@mask,2], x@vcf.fix[x@mask,6], pch=20, col="#80008022", axes=F, frame.plot=T, ylab="", ...)
+    plot(x@vcf.fix$POS[x@var.info$mask], x@vcf.fix$QUAL[x@var.info$mask], pch=20, col="#80008022", axes=F, frame.plot=T, ylab="", ...)
     axis(side=2, las=2)
     title(main="QUAL", line=-1)
-    boxplot(as.numeric(x@vcf.fix[x@mask,6]), axes=FALSE, frame.plot=T, col="#800080")
+#    boxplot(as.numeric(x@vcf.fix[x@mask,6]), axes=FALSE, frame.plot=T, col="#800080")
+    boxplot(as.numeric(x@vcf.fix$QUAL[x@var.info$mask]), axes=FALSE, frame.plot=T, col="#800080")
   }
   #
-  if(length(x@vcf.stat)>0 & NE){ # Ne
-    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,6], pch=20, col="#00008B22", axes=F, frame.plot=T, ylab="", ...)
+  if(length(x@var.info$Ne[x@var.info$mask])>0 & NE){ # Ne
+#    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,6], pch=20, col="#00008B22", axes=F, frame.plot=T, ylab="", ...)
+    plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$Ne[x@var.info$mask], pch=20, col="#00008B22", axes=F, frame.plot=T, ylab="", ...)
     title(main="Ne", line=-1)
     axis(side=2, las=2)
-    boxplot(as.numeric(x@vcf.stat[x@mask,6]), axes=FALSE, frame.plot=T, col="#00008B")
+#    boxplot(as.numeric(x@vcf.stat[x@mask,6]), axes=FALSE, frame.plot=T, col="#00008B")
+    boxplot(as.numeric(x@var.info$Ne[x@var.info$mask]), axes=FALSE, frame.plot=T, col="#00008B")
   }
-
-  if(length(x@vcf.stat)>0 & TPI){ # Theta_pi
-    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,7], pch=20, col="#FF8C0022", axes=F, frame.plot=T, ylab="", ...)
+  if(length(x@var.info$theta_pi[x@var.info$mask])>0 & TPI){ # Theta_pi
+#    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,7], pch=20, col="#FF8C0022", axes=F, frame.plot=T, ylab="", ...)
+    plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$theta_pi[x@var.info$mask], pch=20, col="#FF8C0022", axes=F, frame.plot=T, ylab="", ...)
 #    title(main=expression(paste(theta[pi], pi, "Theta_pi")), line=-1)
     title(main="Theta_pi", line=-1)
     axis(side=2, las=2)
-    boxplot(as.numeric(x@vcf.stat[x@mask,7]), axes=FALSE, frame.plot=T, col="#FF8C00")
+#    boxplot(as.numeric(x@vcf.stat[x@mask,7]), axes=FALSE, frame.plot=T, col="#FF8C00")
+    boxplot(as.numeric(x@var.info$theta_pi[x@var.info$mask]), axes=FALSE, frame.plot=T, col="#FF8C00")
   }
   #
-  if(length(x@vcf.stat)>0 & TAJD){ # Tajima's D
-    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,10], pch=20, col="#00640022", axes=F, frame.plot=T, ylab="", ...)
+  if(length(x@var.info$tajimas_d[x@var.info$mask])>0 & TAJD){ # Tajima's D
+#    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,10], pch=20, col="#00640022", axes=F, frame.plot=T, ylab="", ...)
+    plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$tajimas_d[x@var.info$mask], pch=20, col="#00640022", axes=F, frame.plot=T, ylab="", ...)
     title(main="Tajima's D", line=-1)
     axis(side=2, las=2)
-    boxplot(as.numeric(x@vcf.stat[x@mask,10]), axes=FALSE, frame.plot=T, col="#006400")
+#    boxplot(as.numeric(x@vcf.stat[x@mask,10]), axes=FALSE, frame.plot=T, col="#006400")
+    boxplot(as.numeric(x@var.info$tajimas_d[x@var.info$mask]), axes=FALSE, frame.plot=T, col="#006400")
   }
   #
-  if(length(x@vcf.stat)>0 & FWH){ # Fay and Wu's H
-    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,11], pch=20, col="#8B008B22", axes=F, frame.plot=T, ylab="", ...)
+  if(length(x@var.info$faywu_h[x@var.info$mask])>0 & FWH){ # Fay and Wu's H
+#    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,11], pch=20, col="#8B008B22", axes=F, frame.plot=T, ylab="", ...)
+    plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$faywu_h[x@var.info$mask], pch=20, col="#8B008B22", axes=F, frame.plot=T, ylab="", ...)
     title(main="Fay and Wu's H", line=-1)
     axis(side=2, las=2)
-    boxplot(as.numeric(x@vcf.stat[x@mask,11]), axes=FALSE, frame.plot=T, col="#8B008B")
+#    boxplot(as.numeric(x@vcf.stat[x@mask,11]), axes=FALSE, frame.plot=T, col="#8B008B")
+    boxplot(as.numeric(x@var.info$faywu_h[x@var.info$mask]), axes=FALSE, frame.plot=T, col="#8B008B")
   }
-
   if(length(x@snpden.w)>0 & SNPDEN){
     # SNP density.
     plot(c(0,x@len), c(0,max(x@snpden.w$density)), type='n', xlab="", ylab="", axes=F, frame.plot=T, ...)
