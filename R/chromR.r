@@ -413,6 +413,8 @@ ann2chrom <- function(x,y,...){
 #' chromopop(pinf_mt)
 #' gt <- extract.gt(pinf_mt)
 #' head(gt)
+#' tab <- variant.table(pinf_mt)
+#' head(tab)
 #' 
 create.chrom <- function(name, seq, vcf=NULL, ann=NULL){
   x <- new(Class="Chrom")
@@ -1128,7 +1130,15 @@ extract.gt <- function(x, element="GT", mask=logical(0), as.matrix=FALSE){
   gt
 }
 
-
+#' @rdname Chrom-methods
+#' @export
+#' @aliases variant.table
+#' 
+variant.table <- function(x){
+  tab <- x@var.info[x@var.info$mask,]
+  tab <- cbind(rep(x@name, times=nrow(tab)), tab)
+  names(tab)[1] <- "chrom"
+}
 
 ##### ##### ##### ##### #####
 # EOF.

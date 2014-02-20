@@ -17,6 +17,7 @@
 \alias{proc.chrom}
 \alias{set.pop1}
 \alias{set.pop2}
+\alias{variant.table}
 \alias{vcf2chrom}
 \alias{windowize}
 \title{Chrom methods}
@@ -51,6 +52,8 @@ chromo(x, verbose = TRUE, nsum = TRUE, DP = FALSE, QUAL = FALSE,
   SNPDEN = FALSE, NUC = FALSE, ANN = FALSE, ...)
 
 extract.gt(x, element = "GT", mask = logical(0), as.matrix = FALSE)
+
+variant.table(x)
 }
 \arguments{
   \item{x}{an object of class chrom}
@@ -157,5 +160,7 @@ chromoqc(pinf_mt)
 chromopop(pinf_mt)
 gt <- extract.gt(pinf_mt)
 head(gt)
+tab <- variant.table(pinf_mt)
+head(tab)
 }
 
