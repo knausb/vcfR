@@ -1058,8 +1058,9 @@ plot.sfs <- function(x, log10=TRUE, ...){
 #' 
 #' @param element element to extract from vcf genotype data. Common options include "DP", "GT" and "GQ"
 #' @param mask a logical vector indicating which variants (rows) to include
+#' @param as.matrix attempt to recast as a numeric matrix
 #' 
-extract.gt <- function(x, element="GT", mask=logical(0)){
+extract.gt <- function(x, element="GT", mask=logical(0), as.matrix=FALSE){
   if(class(x) != "Chrom"){stop("Expected object of class Chrom")}
   if(length(mask) == 0 & length(x@mask) == 0){
     # Neither mask is set.
@@ -1081,6 +1082,13 @@ extract.gt <- function(x, element="GT", mask=logical(0)){
   }
   gt <- t(apply(x@vcf.gt[mask,], MARGIN=1, get.gt1, element=element))
   colnames(gt) <- names(x@vcf.gt)[-1]
+  if(as.matrix==TRUE){
+    tmp <- matrix(nrow=nrow(gt), ncol=ncol(gt))
+    for(i in 1:ncol(gt)){
+      tmp[,i] <- as.numeric(gt[,i])
+      gt <- tmp
+    }
+  }
   gt
 }
 

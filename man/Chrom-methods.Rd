@@ -50,7 +50,7 @@ chromo(x, verbose = TRUE, nsum = TRUE, DP = FALSE, QUAL = FALSE,
   MQ = FALSE, NE = FALSE, TPI = FALSE, TAJD = FALSE, FWH = FALSE,
   SNPDEN = FALSE, NUC = FALSE, ANN = FALSE, ...)
 
-extract.gt(x, element = "GT", mask = logical(0))
+extract.gt(x, element = "GT", mask = logical(0), as.matrix = FALSE)
 }
 \arguments{
   \item{x}{an object of class chrom}
@@ -125,6 +125,8 @@ extract.gt(x, element = "GT", mask = logical(0))
 
   \item{mask}{a logical vector indicating which variants
   (rows) to include}
+
+  \item{as.matrix}{attempt to recast as a numeric matrix}
 }
 \description{
 Methods to work with objects of the chrom class
