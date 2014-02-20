@@ -25,7 +25,10 @@ setOldClass("DNAbin")
 #'   \item vcf.gt vcf genotype data
 #'   \item vcf.info data extracted from the vcf.gt
 #'   \item ann annotation data in a gff-like data.frame
-#'   
+#'
+#'   \item var.info a data.frame containing information on variants
+#'   \item win.info a data.frame containing information on windows
+#'      
 #'   \item pop1 vector indicating members of pop1
 #'   \item pop2 vector indicating members of pop2
 #'   
@@ -61,6 +64,9 @@ setClass(
     #
     pop1 = "vector",
     pop2 = "vector",
+    #
+    var.info = "data.frame",
+    win.info = "data.frame",
     #
     acgt.w = "matrix",
     n.w = "matrix",
@@ -391,7 +397,7 @@ ann2chrom <- function(x,y,...){
 #' pinf_mt <- proc.chrom(pinf_mt)
 #' chromoqc(pinf_mt)
 #' chromopop(pinf_mt)
-#' gt <- extract.gt(pinf_mt)
+#' gt <- extract.gt(pinf_mt, as.matrix=TRUE)
 #' head(gt)
 #' 
 create.chrom <- function(name, seq, vcf=NULL, ann=NULL){

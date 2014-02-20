@@ -17,6 +17,10 @@ class DNAbin (ape) \item len length of sequence (integer)
 extracted from the vcf.gt \item ann annotation data in a
 gff-like data.frame
 
+\item var.info a data.frame containing information on
+variants \item win.info a data.frame containing information
+on windows
+
 \item pop1 vector indicating members of pop1 \item pop2
 vector indicating members of pop2
 

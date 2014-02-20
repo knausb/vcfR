@@ -154,7 +154,7 @@ plot(pinf_mt)
 pinf_mt <- proc.chrom(pinf_mt)
 chromoqc(pinf_mt)
 chromopop(pinf_mt)
-gt <- extract.gt(pinf_mt)
+gt <- extract.gt(pinf_mt, as.matrix=TRUE)
 head(gt)
 }
 
