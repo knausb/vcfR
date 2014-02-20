@@ -219,6 +219,9 @@ setMethod(
     print(names(x@vcf.gt)[-1])
     cat("******* Vcf fixed data (Chrom) ******* \n")
     print(x@vcf.fix[1:6,1:7])
+    cat("\nFirst INFO record:\n")
+    print(as.character(x@vcf.fix$INFO[1]))
+    cat("\n")
     cat("******* Vcf genotype data (Chrom) ******* \n")
     if(ncol(x@vcf.gt)>=6){
       cat("***** *****  First 6 columns  ***** ***** \n")
@@ -1142,8 +1145,9 @@ extract.gt <- function(x, element="GT", mask=logical(0), as.matrix=FALSE){
 #' 
 variant.table <- function(x){
   tab <- x@var.info[x@var.info$mask,]
-  tab <- cbind(rep(x@name, times=nrow(tab)), tab)
+  tab <- cbind(rep(x@name, times=nrow(tab)), x@vcf.fix$QUAL[x@var.info$mask], tab)
   names(tab)[1] <- "chrom"
+  names(tab)[2] <- "QUAL"
   tab
 }
 
