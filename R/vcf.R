@@ -16,7 +16,7 @@
 #' 
 #' @references Brian Knaus (2014). Variant call format files processed 
 #' with vcfR. Journal TBA, NN(N),
-#'   N-NN. \url{http://www.jstatsoft.org/v40/i03/}.
+#'   N-NN. \url{http://www.someurl.org/v40/i03/}.
 #' @import ape
 #' @docType package
 #' @name vcfR
@@ -61,8 +61,7 @@ setClass(
   )
 )
 
-##### ##### ##### ##### #####
-# Generic methods.
+#### Generic methods. ####
 
 setMethod(
   f="show",
@@ -139,8 +138,25 @@ setMethod(
   }
 )
 
-##### ##### ##### ##### #####
-# Data loading functions.
+#' @rdname vcfR-methods
+#' @export
+#' @aliases subset.vcf
+#'
+#' @param regex a regular expression to search for
+#'
+setMethod(
+  f= "subset",
+  signature= "vcfR",
+  definition=function (x,regex,...){
+    index <- grep(regex, x@vcf.fix[,1])
+    x@vcf.gt <- x@vcf.gt[index,]
+    x@vcf.fix <- x@vcf.fix[index,]
+    x
+  }
+)
+
+
+#### Data loading functions. ####
 
 #' @title vcfR methods
 #' @rdname vcfR-methods
@@ -239,7 +255,4 @@ write.vcf<-function(xvcf, vfile, mask=logical(0)){
 #              col.names = TRUE)
 }
 
-
-
-##### ##### ##### ##### #####
-# EOF.
+#### EOF. ####

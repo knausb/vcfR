@@ -18,6 +18,6 @@ in its help documentation.
 \references{
 Brian Knaus (2014). Variant call format files processed
 with vcfR. Journal TBA, NN(N), N-NN.
-\url{http://www.jstatsoft.org/v40/i03/}.
+\url{http://www.someurl.org/v40/i03/}.
 }
 

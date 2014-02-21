@@ -5,6 +5,8 @@
 \alias{plot,vcfR-method}
 \alias{plot.vcfR}
 \alias{read.vcf}
+\alias{subset,vcfR-method}
+\alias{subset.vcf}
 \alias{write.vcf}
 \title{vcfR methods}
 \usage{
@@ -12,12 +14,16 @@
 
 \S4method{plot}{vcfR}(x, y, ...)
 
+\S4method{subset}{vcfR}(x, regex, ...)
+
 read.vcf(x)
 
 write.vcf(xvcf, vfile, mask = logical(0))
 }
 \arguments{
   \item{...}{Arguments to be passed to methods}
+
+  \item{regex}{a regular expression to search for}
 
   \item{x}{variant call format (vcf) file}
 
