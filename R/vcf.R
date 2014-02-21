@@ -148,9 +148,9 @@ setMethod(
   f= "subset",
   signature= "vcfR",
   definition=function (x,regex,...){
-    index <- grep(regex, x@vcf.fix[,1])
-    x@vcf.gt <- x@vcf.gt[index,]
-    x@vcf.fix <- x@vcf.fix[index,]
+    index <- grep(regex, x@fix[,1])
+    x@gt <- x@gt[index,]
+    x@fix <- x@fix[index,]
     x
   }
 )
