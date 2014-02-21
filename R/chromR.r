@@ -1,6 +1,6 @@
 # chromR.
-##### ##### ##### ##### #####
-# Class definition.
+
+##### ##### Class definition. #####
 
 setOldClass("DNAbin")
 
@@ -28,12 +28,14 @@ setOldClass("DNAbin")
 #'
 #'   \item var.info a data.frame containing information on variants
 #'   \item win.info a data.frame containing information on windows
+#'   \item seq.info a list containing information on the sequence
 #'      
 #'   \item pop1 vector indicating members of pop1
 #'   \item pop2 vector indicating members of pop2
 #'   
 #'   \item acgt.w matrix indicating range of chromosome # of nucleotide compositions
 #'   \item n.w matrix indicating locations of blocks of Ns in chromosome
+#'   
 #'   \item windows matrix of windows
 #'   \item nuccomp.w data.frame of nucleotide composition windows
 #'   \item snpden.w data.frame of snp density windows
@@ -62,14 +64,16 @@ setClass(
     vcf.info = "data.frame",
     ann = "data.frame",
     #
+    var.info = "data.frame",
+    win.info = "data.frame",
+    seq.info = "list",
+    #
     pop1 = "vector",
     pop2 = "vector",
     #
-    var.info = "data.frame",
-    win.info = "data.frame",
-    #
     acgt.w = "matrix",
     n.w = "matrix",
+    #
     windows = "matrix",
     nuccomp.w = "data.frame",
     snpden.w = "data.frame",
@@ -96,8 +100,7 @@ c('chrom','pos','id','ref','alt','qual','filter','info'))),
   )
 )
 
-##### ##### ##### ##### #####
-# Generic methods.
+##### ##### Generic methods. #####
 
 setMethod(
   f="show",
@@ -215,36 +218,39 @@ setMethod(
     cat("*** Class Chrom, method head *** \n")
     cat(paste("Name: ", x@name, "\n"))
     cat(paste("Length: ", x@len, "\n"))
-    cat("******* Sample names (Chrom) ******* \n")
+    cat("\n")
+    cat("**** ** Sample names (Chrom) ** **** \n")
     print(names(x@vcf.gt)[-1])
-    cat("******* Vcf fixed data (Chrom) ******* \n")
+    cat("\n")
+    cat("**** ** Vcf fixed data (Chrom) ** **** \n")
     print(x@vcf.fix[1:6,1:7])
     cat("\nFirst INFO record:\n")
-    print(strsplit(as.character(x@vcf.fix$INFO[1]), split=";"))
+    print(unlist(strsplit(as.character(x@vcf.fix$INFO[1]), split=";")))
     cat("\n")
-    cat("******* Vcf genotype data (Chrom) ******* \n")
+    cat("**** ** Vcf genotype data (Chrom) ** **** \n")
     if(ncol(x@vcf.gt)>=6){
-      cat("***** *****  First 6 columns  ***** ***** \n")
+      cat("**** **** * First 6 columns * **** **** \n")
       print(x@vcf.gt[1:6,1:6])
     } else {
       print(x@vcf.gt[1:6,])
     }
+    cat("\n")
 #    cat("******* Vcf info (Chrom) ******* \n")
 #    print(x@vcf.info[1:6,])
-    cat("******* Var info (Chrom) ******* \n")
+    cat("**** ** Var info (Chrom) ** **** \n")
     if(ncol(x@var.info)>=6){
-      cat("***** *****  First 6 columns  ***** ***** \n")
+      cat("**** **** First 6 columns ***** **** \n")
       print(x@var.info[1:6,1:6])
     } else {
       print(x@var.info[1:6,])
     }
-    cat("******* Vcf mask (Chrom) ******* \n")
+    cat("\n")
+    cat("**** ** Vcf mask (Chrom) ** **** \n")
     cat("Percent unmasked: ")
 #    cat(100*(sum(x@mask)/length(x@mask)))
     cat(100*(sum(x@var.info$mask)/length(x@var.info$mask)))
     cat("\n")
-    cat("******* End Show (Chrom) ******* \n")
-    
+    cat("**** ** End head (Chrom) ** **** \n")
     #    cat("*** Class Chrom, method Names *** \n")
 #    temp <- names(x@vcf.gt)[-1]
     #    for(i in 1:length(temp)){
@@ -256,8 +262,7 @@ setMethod(
   }
 )
 
-##### ##### ##### ##### #####
-# Accessors.
+##### ##### Accessors.  #####
 
 ### Getter for "names"
 setGeneric("getName",function(object){standardGeneric ("getName")})
@@ -302,8 +307,7 @@ setReplaceMethod(
   }
 )
 
-##### ##### ##### ##### #####
-# Data loading functions.
+##### ##### Data loading functions. #####
 
 #' @title Chrom methods
 #' @rdname Chrom-methods
@@ -439,7 +443,7 @@ create.chrom <- function(name, seq, vcf=NULL, ann=NULL){
   return(x)
 }
 
-##### ##### Set populations ##### #####
+##### ##### Set populations #####
 
 #' @rdname Chrom-methods
 #' @export
@@ -457,7 +461,7 @@ set.pop2 <- function(x, pop2){
   return(x)  
 }
 
-##### ##### Set a mask ##### #####
+##### ##### Set a mask #####
 
 #' @rdname Chrom-methods
 #' @export
@@ -497,8 +501,7 @@ masker <- function(x, QUAL=999, mindp=0.25, maxdp=0.75, minmq=0.25, maxmq=0.75, 
   return(x)
 }
 
-##### ##### Window functions ##### #####
-
+##### ##### seq.info functions #####
 
 #acgt.win <- function(x, max.win=1000, regex="[acgtwsmkrybdhv]"){
 regex.win <- function(x, max.win=1000, regex="[acgtwsmkrybdhv]"){
@@ -523,7 +526,7 @@ regex.win <- function(x, max.win=1000, regex="[acgtwsmkrybdhv]"){
   i <- 1
   # Scroll through the sequence looking for 
   # gaps (nucledotides not in the regex).
-  # When you find them amke a window.
+  # When you find them make a window.
   # Sequences with no gaps will have no
   # windows.
   for(j in 2:length(seq)){
@@ -547,47 +550,7 @@ regex.win <- function(x, max.win=1000, regex="[acgtwsmkrybdhv]"){
   return(bp.windows)
 }
 
-#n.win <- function(x, max.win=1000, regex="[n]"){
-  # A DNAbin will store in a list when the fasta contains
-  # multiple sequences, but as a matrix when the fasta
-  # only contains one sequence.
-#  if(is.matrix(as.character(x@seq))){
-#    seq <- as.character(x@seq)[1:length(x@seq)]    
-#  }
-#  if(is.list(as.character(x@seq))){
-#    seq <- as.character(x@seq)[[1]]
-#  }
-  # Subset to nucleotides of interest.
-#  seq <- grep(regex, seq, ignore.case=T, perl=TRUE)
-  #
-#  bp.windows <- matrix(NA, ncol=2, nrow=max.win)
-#  bp.windows[1,1] <- seq[1]
-#  i <- 1
-  # Scroll through the sequence looking for 
-  # gaps (nucledotides not in the regex).
-  # When you find them amke a window.
-  # Sequences with no gaps will have no
-  # windows.
-#  for(j in 2:length(seq)){
-#    if(seq[j]-seq[j-1] > 1){
-#      bp.windows[i,2] <- seq[j-1]
-#      i <- i+1
-#      bp.windows[i,1] <- seq[j]
-#    }
-#  }
-#  if(i == 1){
-    # If there is one row we get an integer.
-    # We need a matrix.
-#    bp.windows <- bp.windows[1:i,]
-#    bp.windows <- matrix(bp.windows, ncol=2)
-#  } else {
-#    bp.windows <- bp.windows[1:i,]
-#  }
-#  bp.windows[i,2] <- seq[j]
-#  bp.windows <- bp.windows[1:i,]
-#  x@n.w <- bp.windows
-#  return(x)
-#}
+##### ##### win.info functions #####
 
 #' @rdname Chrom-methods
 #' @export
@@ -674,6 +637,8 @@ snp.win <- function(x){
   return(x)
 }
 
+##### ##### vcf functions #####
+
 vcf.fix2gt.m <- function(x){
   snames <- names(x@vcf.gt)[-1]
   pos <- paste(x@vcf.fix[,1], x@vcf.fix[,2], sep="_")
@@ -699,6 +664,8 @@ vcf.fix2gt.m <- function(x){
   x@gt.m <- x1
   return(x)
 }
+
+##### ##### gt.m2sfs #####
 
 gt.m2sfs <- function(x){
 #  cat(x@pop1)
@@ -860,7 +827,7 @@ proc.chrom <- function(x, pop1=NA, pop2=NA, verbose=TRUE){
   return(x)
 }
 
-##### ##### Graphic functions
+#### Graphic functions ####
 
 #' @rdname Chrom-methods
 #' @export
@@ -1155,5 +1122,4 @@ variant.table <- function(x){
   tab
 }
 
-##### ##### ##### ##### #####
-# EOF.
+##### ##### EOF #####
