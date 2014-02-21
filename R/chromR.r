@@ -33,8 +33,8 @@ setOldClass("DNAbin")
 #'   \item pop1 vector indicating members of pop1
 #'   \item pop2 vector indicating members of pop2
 #'   
-#'   \item acgt.w matrix indicating range of chromosome # of nucleotide compositions
-#'   \item n.w matrix indicating locations of blocks of Ns in chromosome
+#   \item acgt.w matrix indicating range of chromosome # of nucleotide compositions
+#   \item n.w matrix indicating locations of blocks of Ns in chromosome
 #'   
 #'   \item windows matrix of windows
 #'   \item nuccomp.w data.frame of nucleotide composition windows
@@ -61,7 +61,7 @@ setClass(
     vcf.meta = "character",
     vcf.fix = "data.frame",
     vcf.gt = "data.frame",
-    vcf.info = "data.frame",
+#    vcf.info = "data.frame",
     ann = "data.frame",
     #
     var.info = "data.frame",
@@ -71,8 +71,8 @@ setClass(
     pop1 = "vector",
     pop2 = "vector",
     #
-    acgt.w = "matrix",
-    n.w = "matrix",
+#    acgt.w = "matrix",
+#    n.w = "matrix",
     #
     windows = "matrix",
     nuccomp.w = "data.frame",
@@ -567,7 +567,8 @@ regex.win <- function(x, max.win=1000, regex="[acgtwsmkrybdhv]"){
 #' 
 #'
 windowize <- function(x, win.size=1000, max.win=10000){
-  acgt.w <- x@acgt.w
+#  acgt.w <- x@acgt.w
+  acgt.w <- x@seq.info$nuc.win
   windows <- matrix(NA, ncol=2, nrow=max.win)
   i <- 1
   for(j in 1:nrow(acgt.w)){
@@ -773,14 +774,13 @@ linkage <- function(x){
 proc.chrom <- function(x, pop1=NA, pop2=NA, verbose=TRUE){
   x <- set.pop1(x, pop1)
   x <- set.pop2(x, pop2)
-#  ptime <- system.time(x <- acgt.win(x))
-#  ptime <- system.time(x@acgt.w <- acgt.win(x))
-  ptime <- system.time(x@acgt.w <- regex.win(x))
+#  ptime <- system.time(x@acgt.w <- regex.win(x))
+  ptime <- system.time(x@seq.info$nuc.win <- regex.win(x))
   if(verbose==TRUE){
     cat("Nucleotide regions complete.\n")
     print(ptime)
   }
-  ptime <- system.time(x@n.w <- regex.win(x, regex="[n]"))
+  ptime <- system.time(x@seq.info$N.win <- regex.win(x, regex="[n]"))
 #  ptime <- system.time(x@n.w <- acgt.win(x, regex="[n]"))
 #  ptime <- system.time(x <- n.win(x))
   if(verbose==TRUE){
@@ -891,7 +891,7 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
   if(length(x@nuccomp.w)>0 & NUC   ){brows <- brows+1}
   #
   if(length(x@ann)>0 & ANN){srows <- srows+1}
-  if(length(x@acgt.w)>0   ){srows <- srows+1}
+  if(nrow(x@seq.info$nuc.win)>0   ){srows <- srows+1}
   #
   if(verbose){
     cat('  Chromo\n')
@@ -974,8 +974,8 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
     abline(h=seq(0.02, 0.08, by=0.02), lty=3, col="#a0a0a0")
     rect(x@snpden.w$start, 0, x@snpden.w$stop, x@snpden.w$density, col="#cc0000", border=NA)
     axis(side=2, las=2)
-    title(main="SNPs per site", line=-1)
-    title(main=paste(sum(x@snpden.w$count), "total SNPs"), line=-2)
+    title(main="Variants per site", line=-1)
+    title(main=paste(sum(x@snpden.w$count), "total variants"), line=-2)
     boxplot(x@snpden.w$density, axes=FALSE, frame.plot=T, col="#cc0000", ylim=c(0,max(x@snpden.w$density)))
   }
   if(length(x@nuccomp.w)>0 & NUC){
@@ -1005,12 +1005,17 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
     }
   }
   #
-  if(length(x@acgt.w)>0){
+#  if(length(x@acgt.w)>0){
+  if(nrow(x@seq.info$nuc.win)>0){    
     # Chromosome.
     plot(c(0,x@len), c(-1,1), type='n', xlab="", ylab="", las=1, axes=FALSE, frame.plot=TRUE, ...)
     lines(c(0,x@len),c(0, 0), lwd=2)
-    rect(x@acgt.w[,1], -0.7, x@acgt.w[,2], 0.7, col="#00cc00", border=NA)
-    rect(x@n.w[,1], -0.4, x@n.w[,2], 0.4, col="#ff6666", border=NA)
+#    rect(x@acgt.w[,1], -0.7, x@acgt.w[,2], 0.7, col="#00cc00", border=NA)
+#    rect(x@n.w[,1], -0.4, x@n.w[,2], 0.4, col="#ff6666", border=NA)
+    rect(x@seq.info$nuc.win[,1], -0.7, x@seq.info$nuc.win[,2], 0.7, col="#00cc00", border=NA)
+    if(!is.na(x@seq.info$N.win[1,1])){
+      rect(x@seq.info$Ns.win[,1], -0.4, x@seq.info$Ns.win[,2], 0.4, col="#ff6666", border=NA)
+    }
     axis(side=1)
     title(xlab="Base pairs", line=2, outer=T)
     title(main="Green = called bases; Red = n", line=-1)
