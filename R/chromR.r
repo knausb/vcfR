@@ -220,7 +220,7 @@ setMethod(
     cat("******* Vcf fixed data (Chrom) ******* \n")
     print(x@vcf.fix[1:6,1:7])
     cat("\nFirst INFO record:\n")
-    print(as.character(x@vcf.fix$INFO[1]))
+    print(strsplit(as.character(x@vcf.fix$INFO[1]), split=";"))
     cat("\n")
     cat("******* Vcf genotype data (Chrom) ******* \n")
     if(ncol(x@vcf.gt)>=6){
