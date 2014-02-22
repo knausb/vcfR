@@ -30,15 +30,15 @@ setOldClass("DNAbin")
 #'   \item win.info a data.frame containing information on windows
 #'   \item seq.info a list containing information on the sequence
 #'      
-#'   \item pop1 vector indicating members of pop1
-#'   \item pop2 vector indicating members of pop2
+#   \item pop1 vector indicating members of pop1
+#   \item pop2 vector indicating members of pop2
 #'   
 #   \item acgt.w matrix indicating range of chromosome # of nucleotide compositions
 #   \item n.w matrix indicating locations of blocks of Ns in chromosome
 #'   
-#'   \item windows matrix of windows
-#'   \item nuccomp.w data.frame of nucleotide composition windows
-#'   \item snpden.w data.frame of snp density windows
+#   \item windows matrix of windows
+#   \item nuccomp.w data.frame of nucleotide composition windows
+#   \item snpden.w data.frame of snp density windows
 #'   
 #'   \item gt.m matrix of genotypes
 #   \item vcf.stat data.frame of variant stats
@@ -68,15 +68,15 @@ setClass(
     win.info = "data.frame",
     seq.info = "list",
     #
-    pop1 = "vector",
-    pop2 = "vector",
+#    pop1 = "vector",
+#    pop2 = "vector",
     #
 #    acgt.w = "matrix",
 #    n.w = "matrix",
     #
-    windows = "matrix",
-    nuccomp.w = "data.frame",
-    snpden.w = "data.frame",
+#    windows = "matrix",
+#    nuccomp.w = "data.frame",
+#    snpden.w = "data.frame",
     #
     gt.m = "matrix",
     vcf.stat = "data.frame",
@@ -177,9 +177,12 @@ setMethod(
       plot(1:2,1:2, type='n')
       title(main="No qualities found")
     }
-    if(length(x@snpden.w)>0){
-      hist(x@snpden.w$count, col=6, main="SNP count (per window)", xlab="")
-      rug(x@snpden.w$count)
+#    if(length(x@snpden.w)>0){
+#      hist(x@snpden.w$count, col=6, main="SNP count (per window)", xlab="")
+#      rug(x@snpden.w$count)
+    if(length(x@win.info$variants)>0){
+      hist(x@win.info$variants/x@win.info$length, col=6, main="Variant count (per window)", xlab="")
+      rug(x@win.info$variants/x@win.info$length)
     } else {
       plot(1:2,1:2, type='n')
       title(main="No SNP densities found")
@@ -422,7 +425,7 @@ ann2chrom <- function(x,y,...){
 #' head(gt)
 #' tab <- variant.table(pinf_mt)
 #' head(tab)
-#' hist(tab$Ho - tab$He, col=5)
+# hist(tab$Ho - tab$He, col=5)
 #' # Note that this example is a mitochondrion, so this is a bit silly.
 #' 
 create.chrom <- function(name, seq, vcf=NULL, ann=NULL){
@@ -447,15 +450,21 @@ create.chrom <- function(name, seq, vcf=NULL, ann=NULL){
 
 #' @rdname Chrom-methods
 #' @export
-#' @aliases set.pop1 set.pop2
+#' @aliases set.pop1 
 #' 
 #' @param pop1 a numeric vector indicating the samples in population 1
-#' @param pop2 a numeric vector indicating the samples in population 2
 #' 
 set.pop1 <- function(x, pop1){
   x@pop1 <- pop1
   return(x)  
 }
+
+#' @rdname Chrom-methods
+#' @export
+#' @aliases set.pop2
+#' 
+#' @param pop2 a numeric vector indicating the samples in population 2
+#' 
 set.pop2 <- function(x, pop2){
   x@pop2 <- pop2
   return(x)  
@@ -638,6 +647,31 @@ snp.win <- function(x){
   return(x)
 }
 
+var.win <- function(x, win.size=1000){
+  win.info <- seq(1,x@len, by=win.size)
+  win.info <- cbind(win.info, c(win.info[-1]-1, x@len))
+  win.info <- cbind(1:nrow(win.info), win.info)
+  win.info <- cbind(win.info, win.info[,3]-win.info[,2]+1)
+#  win.info <- cbind(win.info, matrix(ncol=7, nrow=nrow(win.info)))
+  #
+  win.proc <- function(y){
+    seq <- as.character(x@seq)[[1]][1,y[2]:y[3]]
+    a <- length(grep("[aA]", seq, perl=TRUE))
+    c <- length(grep("[cC]", seq, perl=TRUE))
+    g <- length(grep("[gG]", seq, perl=TRUE))
+    t <- length(grep("[tT]", seq, perl=TRUE))
+    n <- length(grep("[nN]", seq, perl=TRUE))
+    o <- length(grep("[^aAcCgGtTnN]", seq, perl=TRUE))
+    count <- sum(x@vcf.fix$POS[x@var.info$mask] >= y[2] & x@vcf.fix$POS[x@var.info$mask] <= y[3])
+    c(a,c,g,t,n,o, count)
+  }
+  #
+  win.info <- cbind(win.info, t(apply(win.info, MARGIN=1, win.proc)))
+  win.info <- as.data.frame(win.info)
+  names(win.info) <- c('window','start','end','length','A','C','G','T','N','other','variants')
+  win.info
+}
+
 ##### ##### vcf functions #####
 
 vcf.fix2gt.m <- function(x){
@@ -771,9 +805,10 @@ linkage <- function(x){
 #'
 #' 
 #proc.chrom <- function(x, pop1=NA, pop2=NA, win.size=1000, max.win=10000, verbose=TRUE){
-proc.chrom <- function(x, pop1=NA, pop2=NA, verbose=TRUE){
-  x <- set.pop1(x, pop1)
-  x <- set.pop2(x, pop2)
+proc.chrom <- function(x, verbose=TRUE, ...){
+  stopifnot(class(x) == "Chrom")
+#  x <- set.pop1(x, pop1)
+#  x <- set.pop2(x, pop2)
 #  ptime <- system.time(x@acgt.w <- regex.win(x))
   ptime <- system.time(x@seq.info$nuc.win <- regex.win(x))
   if(verbose==TRUE){
@@ -787,43 +822,49 @@ proc.chrom <- function(x, pop1=NA, pop2=NA, verbose=TRUE){
     cat("N regions complete.\n")
     print(ptime)
   }
+ptime <- system.time(x@win.info <- var.win(x, ...))
+if(verbose==TRUE){
+  cat("Window analysis complete.\n")
+  print(ptime)
+}
+
 #  ptime <- system.time(x <- windowize(x, win.size=win.size, max.win=max.win))
-  ptime <- system.time(x <- windowize(x))
-  if(verbose==TRUE){
-    cat("Sliding windows created.\n")
-    print(ptime)
-  }
-  ptime <- system.time(x <- gc.win(x))
-  if(verbose==TRUE){
-    cat("Sliding GC windows complete.\n")
-    print(ptime)
-  }
-  ptime <- system.time(x <- snp.win(x))
-  if(verbose==TRUE){
-    cat("Sliding SNP windows complete.\n")
-    print(ptime)
-  }
-  ptime <- system.time(x <- vcf.fix2gt.m(x))
-  if(verbose==TRUE){
-    cat("Genotype matrix complete.\n")
-    print(ptime)
-  }
+#  ptime <- system.time(x <- windowize(x))
+#  if(verbose==TRUE){
+#    cat("Sliding windows created.\n")
+#    print(ptime)
+#  }
+#  ptime <- system.time(x <- gc.win(x))
+#  if(verbose==TRUE){
+#    cat("Sliding GC windows complete.\n")
+#    print(ptime)
+#  }
+#  ptime <- system.time(x <- snp.win(x))
+#  if(verbose==TRUE){
+#    cat("Sliding SNP windows complete.\n")
+#    print(ptime)
+#  }
+#  ptime <- system.time(x <- vcf.fix2gt.m(x))
+#  if(verbose==TRUE){
+#    cat("Genotype matrix complete.\n")
+#    print(ptime)
+#  }
 #  ptime <- system.time(x <- gt.m2sfs(x))
-  cat("gt.m2sfs is commented out\n")
-  if(verbose==TRUE){
-    cat("SFS complete.\n")
-    print(ptime)
-  }
-  ptime <- system.time(x <- gt2popsum(x))
-  if(verbose==TRUE){
-    cat("Population summary complete.\n")
-    print(ptime)
-  }
-  ptime <- system.time(x <- linkage(x))
-  if(verbose==TRUE){
-    cat("Linkage calculation complete.\n")
-    print(ptime)
-  }
+#  cat("gt.m2sfs is commented out\n")
+#  if(verbose==TRUE){
+#    cat("SFS complete.\n")
+#    print(ptime)
+#  }
+#  ptime <- system.time(x <- gt2popsum(x))
+#  if(verbose==TRUE){
+#    cat("Population summary complete.\n")
+#    print(ptime)
+#  }
+#  ptime <- system.time(x <- linkage(x))
+#  if(verbose==TRUE){
+#    cat("Linkage calculation complete.\n")
+#    print(ptime)
+#  }
   return(x)
 }
 
@@ -887,8 +928,8 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
   if(length(x@var.info$tajimas_d[x@var.info$mask])>0 & TAJD){brows <- brows+1} # Tajima's D
   if(length(    x@var.info$faywu[x@var.info$mask])>0 & FWH ){brows <- brows+1} # Fay and Wu's
   #
-  if( length(x@snpden.w)>0 & SNPDEN){brows <- brows+1}
-  if(length(x@nuccomp.w)>0 & NUC   ){brows <- brows+1}
+  if( length(x@win.info$variants)>0 & SNPDEN){brows <- brows+1}
+  if(length(x@win.info$A)>0 & NUC   ){brows <- brows+1}
   #
   if(length(x@ann)>0 & ANN){srows <- srows+1}
   if(nrow(x@seq.info$nuc.win)>0   ){srows <- srows+1}
@@ -967,25 +1008,28 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
 #    boxplot(as.numeric(x@vcf.stat[x@mask,11]), axes=FALSE, frame.plot=T, col="#8B008B")
     boxplot(as.numeric(x@var.info$faywu_h[x@var.info$mask]), axes=FALSE, frame.plot=T, col="#8B008B")
   }
-  if(length(x@snpden.w)>0 & SNPDEN){
+  if(length(x@win.info$variants)>0 & SNPDEN){
     # SNP density.
-    plot(c(0,x@len), c(0,max(x@snpden.w$density)), type='n', xlab="", ylab="", axes=F, frame.plot=T, ...)
+    snpden <- x@win.info$variants/x@win.info$length
+    plot(c(0,x@len), c(0,max(snpden)), type='n', xlab="", ylab="", axes=F, frame.plot=T, ...)
     abline(h=seq(0.1, 1, by=0.1), col="#a0a0a0")
     abline(h=seq(0.02, 0.08, by=0.02), lty=3, col="#a0a0a0")
-    rect(x@snpden.w$start, 0, x@snpden.w$stop, x@snpden.w$density, col="#cc0000", border=NA)
+    rect(x@win.info$start, 0, x@win.info$end, snpden, col="#cc0000", border=NA)
     axis(side=2, las=2)
     title(main="Variants per site", line=-1)
-    title(main=paste(sum(x@snpden.w$count), "total variants"), line=-2)
-    boxplot(x@snpden.w$density, axes=FALSE, frame.plot=T, col="#cc0000", ylim=c(0,max(x@snpden.w$density)))
+    title(main=paste(sum(x@win.info$variants), "total variants"), line=-2)
+    boxplot(snpden, axes=FALSE, frame.plot=T, col="#cc0000", ylim=c(0,max(snpden)))
   }
-  if(length(x@nuccomp.w)>0 & NUC){
+  if(length(x@win.info$A)>0 & NUC){
     # GC and AT content.
+    AT <- rowSums(cbind(x@win.info$A, x@win.info$A))/x@win.info$length
+    GC <- rowSums(cbind(x@win.info$G, x@win.info$C))/x@win.info$length
     plot(c(0,x@len), c(0,1), type='n', xlab="", ylab="", axes=F, frame.plot=T, ...)
-    rect(x@nuccomp.w[,2], 0, x@nuccomp.w[,3], x@nuccomp.w[,6], col="#0000cc", border=NA)
-    rect(x@nuccomp.w[,2], x@nuccomp.w[,6], x@nuccomp.w[,3], x@nuccomp.w[,6]+x@nuccomp.w[,7], col="#ffd700", border=NA)
+    rect(x@win.info$start,  0, x@win.info$end, GC, col="#0000cc", border=NA)
+    rect(x@win.info$start, GC, x@win.info$end, GC+AT, col="#ffd700", border=NA)
     axis(side=2, las=2)
     title(main="GC and AT content", line=-1)
-    boxplot(x@nuccomp.w[,6:7], axes=FALSE, frame.plot=T, col=c("#0000cc", "#ffd700"), ylim=c(0,1), border=c("#0000cc", "#ffd700"))
+    boxplot(cbind(GC,AT), axes=FALSE, frame.plot=T, col=c("#0000cc", "#ffd700"), ylim=c(0,1), border=c("#0000cc", "#ffd700"))
     text(1,0.1, "G/C")
     text(2,0.1, "A/T")
   }

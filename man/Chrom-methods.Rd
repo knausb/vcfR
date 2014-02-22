@@ -36,12 +36,14 @@ create.chrom(name, seq, vcf = NULL, ann = NULL)
 
 set.pop1(x, pop1)
 
+set.pop2(x, pop2)
+
 masker(x, QUAL = 999, mindp = 0.25, maxdp = 0.75, minmq = 0.25,
   maxmq = 0.75, ...)
 
 windowize(x, win.size = 1000, max.win = 10000)
 
-proc.chrom(x, pop1 = NA, pop2 = NA, verbose = TRUE)
+proc.chrom(x, verbose = TRUE, ...)
 
 chromoqc(x, nsum = FALSE, ...)
 
@@ -162,7 +164,6 @@ gt <- extract.gt(pinf_mt)
 head(gt)
 tab <- variant.table(pinf_mt)
 head(tab)
-hist(tab$Ho - tab$He, col=5)
 # Note that this example is a mitochondrion, so this is a bit silly.
 }
 
