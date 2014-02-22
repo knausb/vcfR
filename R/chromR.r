@@ -648,14 +648,24 @@ snp.win <- function(x){
 }
 
 var.win <- function(x, win.size=1000){
+  # A DNAbin will store in a list when the fasta contains
+  # multiple sequences, but as a matrix when the fasta
+  # only contains one sequence.
+  if(is.matrix(as.character(x@seq))){
+    seq <- as.character(x@seq)[1:length(x@seq)]    
+  }
+  if(is.list(as.character(x@seq))){
+    seq <- as.character(x@seq)[[1]]
+  }
+  #
   win.info <- seq(1,x@len, by=win.size)
   win.info <- cbind(win.info, c(win.info[-1]-1, x@len))
   win.info <- cbind(1:nrow(win.info), win.info)
   win.info <- cbind(win.info, win.info[,3]-win.info[,2]+1)
 #  win.info <- cbind(win.info, matrix(ncol=7, nrow=nrow(win.info)))
   #
-  win.proc <- function(y){
-    seq <- as.character(x@seq)[[1]][1,y[2]:y[3]]
+  win.proc <- function(y, seq){
+    seq <- seq[y[2]:y[3]]
     a <- length(grep("[aA]", seq, perl=TRUE))
     c <- length(grep("[cC]", seq, perl=TRUE))
     g <- length(grep("[gG]", seq, perl=TRUE))
@@ -666,7 +676,7 @@ var.win <- function(x, win.size=1000){
     c(a,c,g,t,n,o, count)
   }
   #
-  win.info <- cbind(win.info, t(apply(win.info, MARGIN=1, win.proc)))
+  win.info <- cbind(win.info, t(apply(win.info, MARGIN=1, win.proc, seq=seq)))
   win.info <- as.data.frame(win.info)
   names(win.info) <- c('window','start','end','length','A','C','G','T','N','other','variants')
   win.info
