@@ -1022,7 +1022,7 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
   }
   if(length(x@win.info$A)>0 & NUC){
     # GC and AT content.
-    AT <- rowSums(cbind(x@win.info$A, x@win.info$A))/x@win.info$length
+    AT <- rowSums(cbind(x@win.info$A, x@win.info$T))/x@win.info$length
     GC <- rowSums(cbind(x@win.info$G, x@win.info$C))/x@win.info$length
     plot(c(0,x@len), c(0,1), type='n', xlab="", ylab="", axes=F, frame.plot=T, ...)
     rect(x@win.info$start,  0, x@win.info$end, GC, col="#0000cc", border=NA)
