@@ -97,6 +97,7 @@ heatmap.bp <- function(x, cbarplot = TRUE, rbarplot = TRUE, legend = TRUE, ...){
     text(0.5, 95, "High", col="#FFFFFF")
   }
   par(mfrow=c(1,1))
+  par(mar=c(5,4,4,2))
   #
 
   #
