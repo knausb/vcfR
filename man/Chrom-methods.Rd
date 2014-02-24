@@ -32,7 +32,7 @@ vcf2chrom(x, y, ...)
 
 ann2chrom(x, y, ...)
 
-create.chrom(name, seq, vcf = NULL, ann = NULL)
+create.chrom(name, seq, vcf = NULL, ann = NULL, verbose = TRUE)
 
 set.pop1(x, pop1)
 
@@ -156,9 +156,11 @@ pinf_mt
 names(pinf_mt)
 plot(pinf_mt)
 pinf_mt <- masker(pinf_mt)
-pinf_mt <- proc.chrom(pinf_mt)
+pinf_mt <- proc.chrom(pinf_mt, win.size=1000)
 plot(pinf_mt)
 chromoqc(pinf_mt)
+chromoqc(pinf_mt, xlim=c(25e+03, 3e+04))
+
 chromopop(pinf_mt)
 gt <- extract.gt(pinf_mt)
 head(gt)

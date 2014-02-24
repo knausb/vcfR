@@ -417,9 +417,11 @@ ann2chrom <- function(x,y,...){
 #' names(pinf_mt)
 #' plot(pinf_mt)
 #' pinf_mt <- masker(pinf_mt)
-#' pinf_mt <- proc.chrom(pinf_mt)
+#' pinf_mt <- proc.chrom(pinf_mt, win.size=1000)
 #' plot(pinf_mt)
 #' chromoqc(pinf_mt)
+#' chromoqc(pinf_mt, xlim=c(25e+03, 3e+04))
+#' 
 #' chromopop(pinf_mt)
 #' gt <- extract.gt(pinf_mt)
 #' head(gt)
@@ -428,7 +430,10 @@ ann2chrom <- function(x,y,...){
 # hist(tab$Ho - tab$He, col=5)
 #' # Note that this example is a mitochondrion, so this is a bit silly.
 #' 
-create.chrom <- function(name, seq, vcf=NULL, ann=NULL){
+create.chrom <- function(name, seq, vcf=NULL, ann=NULL, verbose=TRUE){
+  stopifnot(class(seq)=="DNAbin")
+  if(!is.null(vcf)){stopifnot(class(vcf) == "vcfR")}
+  #
   x <- new(Class="Chrom")
   setName(x) <- name
   if(class(seq)=="DNAbin"){
@@ -442,6 +447,20 @@ create.chrom <- function(name, seq, vcf=NULL, ann=NULL){
   }
   if(length(ann)>0){
     x <- ann2chrom(x, ann)
+  }
+  if(verbose == TRUE){
+    # Print names of elements to see if they match.
+    cat("Names of sequences:\n")
+    print(unique(names(x@seq)))
+    cat("Names in vcf:\n")
+    print(unique(as.character(x@vcf.fix$CHROM)))
+    cat("Names in annotation:\n")
+    print(unique(as.character(x@ann[,1])))
+    if(unique(names(x@seq)) != unique(as.character(x@vcf.fix$CHROM)) | unique(names(x@seq)) != unique(as.character(x@ann[,1]))){
+      cat("Names in sequence file, variant file or annotation file do not match perfectly.\n")
+      cat("If you choose to proceed, we'll do our best to match data.\n")
+      cat("But prepare yourself for unexpected results.\n")
+    }
   }
   return(x)
 }
@@ -1037,9 +1056,10 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
     plot(c(0,x@len), c(0,1), type='n', xlab="", ylab="", axes=F, frame.plot=T, ...)
     rect(x@win.info$start,  0, x@win.info$end, GC, col="#0000cc", border=NA)
     rect(x@win.info$start, GC, x@win.info$end, GC+AT, col="#ffd700", border=NA)
+    segments(x@win.info$start, AT+GC, x@win.info$end, GC+AT, col="#000000")
     axis(side=2, las=2)
     title(main="GC and AT content", line=-1)
-    boxplot(cbind(GC,AT), axes=FALSE, frame.plot=T, col=c("#0000cc", "#ffd700"), ylim=c(0,1), border=c("#0000cc", "#ffd700"))
+    boxplot(cbind(GC, AT), axes=FALSE, frame.plot=T, col=c("#0000cc", "#ffd700"), ylim=c(0,1), border=c("#0000cc", "#ffd700"))
     text(1,0.1, "G/C")
     text(2,0.1, "A/T")
   }
@@ -1048,14 +1068,19 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
     # Annotations.
     plot(c(0,x@len), c(-1,1), type='n', xlab="", ylab="", las=1, axes=FALSE, frame.plot=TRUE, ...)
     lines(c(0,x@len),c(0, 0), lwd=2)
-    rect(as.numeric(as.character(x@ann[,4])), -1, as.numeric(as.character(x@ann[,5])), 1, col="#b22222", border=NA)
-    title(main="Annotations", line=-1)
-    #
-    plot(1:10,1:10,type='n', axes=FALSE, xlab="", ylab="", ...)
-    if(nsum){
-      text(5,10,"Genic bases:")
-      text(5,9,sum(as.numeric(as.character(x@ann[,5]))-as.numeric(as.character(x@ann[,4]))))
-      text(5,8,format(sum(as.numeric(as.character(x@ann[,5]))-as.numeric(as.character(x@ann[,4])))/x@len, digits=3))
+    if(nrow(x@ann) == 0){
+      title(main="No annotations found", line= -1)
+      boxplot(1)
+    } else {
+      rect(as.numeric(as.character(x@ann[,4])), -1, as.numeric(as.character(x@ann[,5])), 1, col="#b22222", border=NA)
+      title(main="Annotations", line=-1)
+      #
+      plot(1:10,1:10,type='n', axes=FALSE, xlab="", ylab="", ...)
+      if(nsum){
+        text(5,10,"Genic bases:")
+        text(5,9,sum(as.numeric(as.character(x@ann[,5]))-as.numeric(as.character(x@ann[,4]))))
+        text(5,8,format(sum(as.numeric(as.character(x@ann[,5]))-as.numeric(as.character(x@ann[,4])))/x@len, digits=3))
+      }
     }
   }
   #
@@ -1068,7 +1093,7 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
 #    rect(x@n.w[,1], -0.4, x@n.w[,2], 0.4, col="#ff6666", border=NA)
     rect(x@seq.info$nuc.win[,1], -0.7, x@seq.info$nuc.win[,2], 0.7, col="#00cc00", border=NA)
     if(!is.na(x@seq.info$N.win[1,1])){
-      rect(x@seq.info$Ns.win[,1], -0.4, x@seq.info$Ns.win[,2], 0.4, col="#ff6666", border=NA)
+      rect(x@seq.info$N.win[,1], -0.4, x@seq.info$N.win[,2], 0.4, col="#ff6666", border=NA)
     }
     axis(side=1)
     title(xlab="Base pairs", line=2, outer=T)
@@ -1162,9 +1187,9 @@ extract.gt <- function(x, element="GT", mask=logical(0), as.matrix=FALSE){
   if(as.matrix==TRUE){
     tmp <- matrix(nrow=nrow(gt), ncol=ncol(gt))
     for(i in 1:ncol(gt)){
-      tmp[,i] <- as.numeric(gt[,i])
-      gt <- tmp
+      tmp[,i] <- as.numeric(gt[,i]) 
     }
+    gt <- tmp
   }
   gt
 }
