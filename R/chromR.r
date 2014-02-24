@@ -1191,6 +1191,7 @@ extract.gt <- function(x, element="GT", mask=logical(0), as.matrix=FALSE){
     }
     gt <- tmp
   }
+  colnames(gt) <- names(x)
   gt
 }
 
