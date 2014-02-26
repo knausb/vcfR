@@ -501,7 +501,8 @@ set.pop2 <- function(x, pop2){
 #' @param minmq minimum mapping quality
 #' @param maxmq maximum mapping quality
 #' 
-masker <- function(x, QUAL=999, mindp=0.25, maxdp=0.75, minmq=0.25, maxmq=0.75, ...){
+#masker <- function(x, QUAL=999, mindp=0.25, maxdp=0.75, minmq=0.25, maxmq=0.75, ...){
+masker <- function(x, QUAL=999, mindp=0.25, maxdp=0.75, minmq=0.25, maxmq=50.0, ...){  
   quals  <- x@vcf.fix$QUAL
   info <- x@var.info[,grep("DP|MQ",names(x@var.info))]
   mask <- rep(TRUE, times=nrow(info))
@@ -522,8 +523,10 @@ masker <- function(x, QUAL=999, mindp=0.25, maxdp=0.75, minmq=0.25, maxmq=0.75, 
     mask[info$DP > quantile(info$DP, probs=c(maxdp))] <- FALSE
   }
   if(sum(is.na(info$MQ)) < length(info$MQ)){
-    mask[info$MQ < quantile(info$MQ, probs=c(minmq))] <- FALSE
-    mask[info$MQ > quantile(info$MQ, probs=c(maxmq))] <- FALSE
+    mask[info$MQ < minmq] <- FALSE
+    mask[info$MQ > maxmq] <- FALSE
+#    mask[info$MQ < quantile(info$MQ, probs=c(minmq))] <- FALSE
+#    mask[info$MQ > quantile(info$MQ, probs=c(maxmq))] <- FALSE
   }
   x@var.info$mask <- mask
   return(x)
@@ -758,7 +761,19 @@ gt.m2sfs <- function(x){
 }
 
 gt2popsum <- function(x){
-  gt <- x@gt.m
+  stopifnot(class(x) == "Chrom")
+  gt <- extract.gt(x, element = "GT", mask = rep(TRUE, times=nrow(x@var.info)))
+#  , mask = x@var.info$mask)
+  stopifnot(length(grep("(1/1|0/0|0/1)", unique(as.vector(gt)))) == 3)
+#  gt <- x@gt.m
+  tmp <- matrix(ncol=ncol(gt), nrow=nrow(gt))
+  tmp[gt == "0/0"] <- 0
+  tmp[gt == "0/1"] <- 1
+  tmp[gt == "1/0"] <- 1
+  tmp[gt == "1/1"] <- 2
+  gt <- tmp
+  rm(tmp)
+  #
   mask <- x@var.info$mask
   summ <- matrix(ncol=11, nrow=nrow(gt), 
                      dimnames=list(c(),
@@ -851,12 +866,17 @@ proc.chrom <- function(x, verbose=TRUE, ...){
     cat("N regions complete.\n")
     print(ptime)
   }
-ptime <- system.time(x@win.info <- var.win(x, ...))
-if(verbose==TRUE){
-  cat("Window analysis complete.\n")
-  print(ptime)
-}
-
+  ptime <- system.time(x@win.info <- var.win(x, ...))
+  if(verbose==TRUE){
+    cat("Window analysis complete.\n")
+    print(ptime)
+  }
+  #
+  ptime <- system.time(x <- gt2popsum(x))
+  if(verbose==TRUE){
+    cat("Population summary complete.\n")
+    print(ptime)
+  }
 #  ptime <- system.time(x <- windowize(x, win.size=win.size, max.win=max.win))
 #  ptime <- system.time(x <- windowize(x))
 #  if(verbose==TRUE){
@@ -882,11 +902,6 @@ if(verbose==TRUE){
 #  cat("gt.m2sfs is commented out\n")
 #  if(verbose==TRUE){
 #    cat("SFS complete.\n")
-#    print(ptime)
-#  }
-#  ptime <- system.time(x <- gt2popsum(x))
-#  if(verbose==TRUE){
-#    cat("Population summary complete.\n")
 #    print(ptime)
 #  }
 #  ptime <- system.time(x <- linkage(x))
@@ -1023,6 +1038,7 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
   if(length(x@var.info$tajimas_d[x@var.info$mask])>0 & TAJD){ # Tajima's D
 #    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,10], pch=20, col="#00640022", axes=F, frame.plot=T, ylab="", ...)
     plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$tajimas_d[x@var.info$mask], pch=20, col="#00640022", axes=F, frame.plot=T, ylab="", ...)
+    abline(0, 0, lty=2)
     title(main="Tajima's D", line=-1)
     axis(side=2, las=2)
 #    boxplot(as.numeric(x@vcf.stat[x@mask,10]), axes=FALSE, frame.plot=T, col="#006400")
@@ -1032,6 +1048,7 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
   if(length(x@var.info$faywu_h[x@var.info$mask])>0 & FWH){ # Fay and Wu's H
 #    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,11], pch=20, col="#8B008B22", axes=F, frame.plot=T, ylab="", ...)
     plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$faywu_h[x@var.info$mask], pch=20, col="#8B008B22", axes=F, frame.plot=T, ylab="", ...)
+    abline(0, 0, lty=2)
     title(main="Fay and Wu's H", line=-1)
     axis(side=2, las=2)
 #    boxplot(as.numeric(x@vcf.stat[x@mask,11]), axes=FALSE, frame.plot=T, col="#8B008B")
