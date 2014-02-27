@@ -502,7 +502,7 @@ set.pop2 <- function(x, pop2){
 #' @param maxmq maximum mapping quality
 #' 
 #masker <- function(x, QUAL=999, mindp=0.25, maxdp=0.75, minmq=0.25, maxmq=0.75, ...){
-masker <- function(x, QUAL=999, mindp=0.25, maxdp=0.75, minmq=0.25, maxmq=50.0, ...){  
+masker <- function(x, QUAL=999, mindp=0.25, maxdp=0.75, minmq=20, maxmq=50, ...){  
   quals  <- x@vcf.fix$QUAL
   info <- x@var.info[,grep("DP|MQ",names(x@var.info))]
   mask <- rep(TRUE, times=nrow(info))
