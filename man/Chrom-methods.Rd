@@ -38,7 +38,7 @@ set.pop1(x, pop1)
 
 set.pop2(x, pop2)
 
-masker(x, QUAL = 999, mindp = 0.25, maxdp = 0.75, minmq = 0.25,
+masker(x, QUAL = 999, mindp = 0.25, maxdp = 0.75, minmq = 20,
   maxmq = 50, ...)
 
 windowize(x, win.size = 1000, max.win = 10000)

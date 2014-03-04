@@ -1001,11 +1001,17 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
   #
   if(length(x@var.info$MQ[x@var.info$mask])>0 & MQ){ # dp
 #    plot(x@vcf.fix[x@mask,2], x@vcf.info[x@mask,2], pch=20, col="#3CB37122", axes=F, frame.plot=T, ylab="", ...)
-    plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$MQ[x@var.info$mask], pch=20, col="#3CB37122", axes=F, frame.plot=T, ylab="", ...)
-    axis(side=2, las=2)
-    title(main="Mapping quality (MQ)", line=-1)
+    if(sum(is.na(x@var.info$MQ[x@var.info$mask])) <= length(x@var.info$MQ[x@var.info$mask])){
+      plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$MQ[x@var.info$mask], pch=20, col="#3CB37122", axes=F, frame.plot=T, ylab="", ...)
+      axis(side=2, las=2)
+      title(main="Mapping quality (MQ)", line=-1)
 #    boxplot(x@vcf.info[x@mask,2], axes=FALSE, frame.plot=T, col="#3CB371")
-    boxplot(x@var.info$MQ[x@var.info$mask], axes=FALSE, frame.plot=T, col="#3CB371")
+      boxplot(x@var.info$MQ[x@var.info$mask], axes=FALSE, frame.plot=T, col="#3CB371")
+    } else {
+      plot(1,1, type='n')
+      text(1,1,"No mapping qualities found")
+      plot(1,1, type='n')
+    }
   }
   #
   if(length(x@vcf.fix$QUAL[x@var.info$mask])>0 & QUAL){ # qual
