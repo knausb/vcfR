@@ -1001,7 +1001,7 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
   #
   if(length(x@var.info$MQ[x@var.info$mask])>0 & MQ){ # dp
 #    plot(x@vcf.fix[x@mask,2], x@vcf.info[x@mask,2], pch=20, col="#3CB37122", axes=F, frame.plot=T, ylab="", ...)
-    if(sum(is.na(x@var.info$MQ[x@var.info$mask])) <= length(x@var.info$MQ[x@var.info$mask])){
+    if(sum(is.na(x@var.info$MQ[x@var.info$mask])) < length(x@var.info$MQ[x@var.info$mask])){
       plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$MQ[x@var.info$mask], pch=20, col="#3CB37122", axes=F, frame.plot=T, ylab="", ...)
       axis(side=2, las=2)
       title(main="Mapping quality (MQ)", line=-1)
