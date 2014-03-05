@@ -1010,7 +1010,7 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
     } else {
       plot(1,1, type='n')
       text(1,1,"No mapping qualities found")
-      plot(1,1, type='n')
+      plot(1,1, type='n', axes=FALSE, frame.plot=FALSE)
     }
   }
   #
