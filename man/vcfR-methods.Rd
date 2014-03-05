@@ -10,7 +10,7 @@
 \alias{write.vcf}
 \title{vcfR methods}
 \usage{
-\S4method{head}{vcfR}(x, y, ...)
+\S4method{head}{vcfR}(x, y, n = 6, ...)
 
 \S4method{plot}{vcfR}(x, y, ...)
 
@@ -33,6 +33,12 @@ write.vcf(xvcf, vfile, mask = logical(0))
 
   \item{mask}{logical vector indicating rows to use}
 
+  \item{n}{a single integer. If positive, size for the
+  resulting object: number of elements for a vector
+  (including lists), rows for a matrix or data frame or
+  lines for a function. If negative, all but the \code{n}
+  last/first number of elements of \code{x}.}
+
   \item{y}{the y coordinates of points in the plot,
   \emph{optional} if \code{x} is an appropriate structure.}
 }
@@ -48,6 +54,7 @@ genotype data.
 \examples{
 library(vcfR)
 data(vcfR_example)
+head(pinf_vcf)
 plot(pinf_vcf)
 }
 

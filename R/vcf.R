@@ -24,7 +24,7 @@
 NULL
 
 ##### ##### ##### ##### #####
-# Class definition.
+#### Class definition. ####
 
 #' @title vcfR class
 #'
@@ -115,9 +115,38 @@ setMethod(
 setMethod(
   f="head",
   signature="vcfR",
-  definition=function (x,y,...){
+  definition=function (x, y, n=6, ...){
     cat("***** Object of class 'vcf' *****\n")
-    cat("***** Head not implemented *****\n")
+    cat("***** Meta section *****\n")
+    if(length(x@meta) > n){
+      print(x@meta[1:n])
+      cat("First ", n, " rows.\n")
+    } else {
+      print(x@meta)
+    }
+    #
+    cat("\n***** Fixed section *****\n")
+    if(nrow(x@fix) >= n){
+      print(x@fix[1:n,1:7])
+    } else {
+      print(x@fix[,1:7])
+    }
+    #
+    cat("\n***** Genotype section *****\n")
+    if(nrow(x@gt) >= n){
+       if(ncol(x@gt)<6){
+         print(x@gt[1:n,])
+       } else {
+         print(x@gt[1:n,1:6])
+       }
+    } else {
+      if(ncol(x@gt)<6){
+        print(x@gt)
+      } else {
+        print(x@gt[,1:6])
+      }
+    }
+#    cat("***** Head not implemented *****\n")
   }
 )
 
@@ -175,6 +204,7 @@ setMethod(
 #' @examples
 #' library(vcfR)
 #' data(vcfR_example)
+#' head(pinf_vcf)
 #' plot(pinf_vcf)
 #' 
 read.vcf<-function(x){
