@@ -19,6 +19,7 @@
 \alias{set.pop2}
 \alias{variant.table}
 \alias{vcf2chrom}
+\alias{windowTable}
 \alias{windowize}
 \title{Chrom methods}
 \usage{
@@ -56,6 +57,8 @@ chromo(x, verbose = TRUE, nsum = TRUE, DP = FALSE, QUAL = FALSE,
 extract.gt(x, element = "GT", mask = logical(0), as.matrix = FALSE)
 
 variant.table(x)
+
+windowTable(x)
 }
 \arguments{
   \item{x}{an object of class chrom}
@@ -166,6 +169,7 @@ gt <- extract.gt(pinf_mt)
 head(gt)
 tab <- variant.table(pinf_mt)
 head(tab)
-# Note that this example is a mitochondrion, so this is a bit silly.
+win <- windowTable(pinf_mt)
+head(win)
 }
 

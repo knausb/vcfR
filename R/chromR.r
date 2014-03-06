@@ -182,14 +182,14 @@ setMethod(
   f="names",
   signature = "Chrom",
   definition=function(x){
-    cat("**** Class Chrom, method names **** \n")
-    cat("Sequence name: ", as.character(names(x@seq)), "\n")
-    cat("First annotation name: ")
-    print(as.character(x@ann[1,1]))
-    cat("First variant name: ")
-    print(as.character(x@vcf.fix[1,1]))
-    cat("\n")
-    cat("Sample names: \n")
+#    cat("**** Class Chrom, method names **** \n")
+#    cat("Sequence name: ", as.character(names(x@seq)), "\n")
+#    cat("First annotation name: ")
+#    print(as.character(x@ann[1,1]))
+#    cat("First variant name: ")
+#    print(as.character(x@vcf.fix[1,1]))
+#    cat("\n")
+#    cat("Sample names: \n")
     temp <- names(x@vcf.gt)[-1]
     temp
   }
@@ -399,8 +399,10 @@ ann2chrom <- function(x,y,...){
 #' head(gt)
 #' tab <- variant.table(pinf_mt)
 #' head(tab)
+#' win <- windowTable(pinf_mt)
+#' head(win)
 # hist(tab$Ho - tab$He, col=5)
-#' # Note that this example is a mitochondrion, so this is a bit silly.
+# # Note that this example is a mitochondrion, so this is a bit silly.
 #' 
 create.chrom <- function(name, seq, vcf=NULL, ann=NULL, verbose=TRUE){
   stopifnot(class(seq)=="DNAbin")
@@ -1201,5 +1203,18 @@ variant.table <- function(x){
   names(tab)[2] <- "QUAL"
   tab
 }
+
+#' @rdname Chrom-methods
+#' @export
+#' @aliases windowTable
+#' 
+windowTable <- function(x){
+  tab <- x@win.info
+  tab <- cbind(rep(x@name, times=nrow(tab)), tab)
+  names(tab)[1] <- "chrom"
+  tab
+}
+
+
 
 #### EOF ####
