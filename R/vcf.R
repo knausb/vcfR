@@ -1,5 +1,4 @@
 # vcf.R.
-##### ##### ##### ##### #####
 
 #' Variant call format files processed with vcfR.
 #'
@@ -23,7 +22,6 @@
 #' @rdname vcfR
 NULL
 
-##### ##### ##### ##### #####
 #### Class definition. ####
 
 #' @title vcfR class
@@ -63,6 +61,7 @@ setClass(
 
 #### Generic methods. ####
 
+#### Method show ####
 setMethod(
   f="show",
   signature = "vcfR",
@@ -84,6 +83,7 @@ setMethod(
   }
 )
 
+#### Mehtod print ####
 setMethod(
   f="print",
   signature="vcfR",
@@ -107,7 +107,7 @@ setMethod(
   }
 )
 
-
+#### Method head ####
 #' @rdname vcfR-methods
 #' @export
 #' @aliases head.vcfR
@@ -150,6 +150,7 @@ setMethod(
   }
 )
 
+#### Method plot ####
 #' @rdname vcfR-methods
 #' @export
 #' @aliases plot.vcfR
@@ -167,6 +168,7 @@ setMethod(
   }
 )
 
+#### Method subset ####
 #' @rdname vcfR-methods
 #' @export
 #' @aliases subset.vcf

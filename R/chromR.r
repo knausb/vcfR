@@ -1,6 +1,6 @@
 # chromR.
 
-##### ##### Class definition. #####
+#### Class definition. ####
 
 setOldClass("DNAbin")
 
@@ -23,7 +23,6 @@ setOldClass("DNAbin")
 #'   \item vcf.meta vcf meta data
 #'   \item vcf.fix vcf fixed data
 #'   \item vcf.gt vcf genotype data
-#   \item vcf.info data extracted from the vcf.gt
 #'   \item ann annotation data in a gff-like data.frame
 #'
 #'   \item var.info a data.frame containing information on variants
@@ -41,7 +40,6 @@ setOldClass("DNAbin")
 #   \item snpden.w data.frame of snp density windows
 #'   
 #'   \item gt.m matrix of genotypes
-#   \item vcf.stat data.frame of variant stats
 #'   \item sfs matrix for the site frequency spectrum
 #'   \item link matrix for linkages
 #'   
@@ -61,7 +59,6 @@ setClass(
     vcf.meta = "character",
     vcf.fix = "data.frame",
     vcf.gt = "data.frame",
-#    vcf.info = "data.frame",
     ann = "data.frame",
     #
     var.info = "data.frame",
@@ -95,8 +92,6 @@ c('chrom','pos','id','ref','alt','qual','filter','info'))),
   c('Allele_num','R_num','A_num','Ho','He','Ne',
   'theta_pi','theta_w','theta_h','tajimas_d','fw_h'))),
                        stringsAsFactors=FALSE)
-#, dimnames=list(c(), c('chrom','pos','id','ref','alt','qual','filter','info')))
-#    vcf.fix = matrix(ncol=8, nrow=0, dimnames=list(c(), c('chrom','pos','id','ref','alt','qual','filter','info')))
   )
 )
 
@@ -122,7 +117,6 @@ setMethod(
     cat(paste("Name: ", x@name, "\n"))
     cat(paste("Length: ", x@len, "\n"))
     cat("\nVCF fixed data:\n")
-#    cat(x@vcf.fix[,1:7], n=4)
     cat("Last column (info) omitted.\n")
     cat("\nVCF variable data:\n")
     cat(paste("Columns: ", ncol(x@vcf.gt), "\n"))
@@ -147,11 +141,7 @@ setMethod(
   f= "plot",
   signature= "Chrom",
   definition=function (x,y,...){
-#    cat("***** Object of class 'Chrom' *****\n")
-#    cat("***** Plot not yet implemented *****\n")
     par(mfrow=c(2,2))
-#    if(length(x@vcf.info)>0){
-#    if(sum(is.na(x@vcf.info$DP)) > length(x@vcf.info$DP)){
     if(sum(!is.na(x@var.info$DP[x@var.info$mask])) >= 1){
       hist(x@var.info$DP[x@var.info$mask], col=3, main="Depth (DP)", xlab="")
       rug(x@var.info$DP[x@var.info$mask])
@@ -159,8 +149,6 @@ setMethod(
       plot(1:2,1:2, type='n')
       title(main="No depths found")
     }
-#    if(length(x@vcf.info)>0){
-#    if(sum(is.na(x@vcf.info$MQ)) > length(x@vcf.info$MQ)){
     if(sum(!is.na(x@var.info$MQ[x@var.info$mask])) >= 1){
       hist(x@var.info$MQ[x@var.info$mask], col=4, main="Mapping quality (MQ)", xlab="")
       rug(x@var.info$MQ[x@var.info$mask])
@@ -168,8 +156,6 @@ setMethod(
       plot(1:2,1:2, type='n')
       title(main="No mapping qualities found")
     }
-#    if(length(x@vcf.fix)>0){
-#    if(sum(is.na(x@vcf.fix$QUAL)) > length(x@vcf.fix$QUAL)){
     if(sum(!is.na(x@vcf.fix$QUAL[x@var.info$mask])) >= 1){
       hist(x@vcf.fix$QUAL[x@var.info$mask], col=5, main="Quality (QUAL)", xlab="")
       rug(x@vcf.fix$QUAL[x@var.info$mask])
@@ -177,9 +163,6 @@ setMethod(
       plot(1:2,1:2, type='n')
       title(main="No qualities found")
     }
-#    if(length(x@snpden.w)>0){
-#      hist(x@snpden.w$count, col=6, main="SNP count (per window)", xlab="")
-#      rug(x@snpden.w$count)
     if(length(x@win.info$variants)>0){
       hist(x@win.info$variants/x@win.info$length, col=6, main="Variant count (per window)", xlab="")
       rug(x@win.info$variants/x@win.info$length)
@@ -199,13 +182,15 @@ setMethod(
   f="names",
   signature = "Chrom",
   definition=function(x){
-#    cat("*** Class Chrom, method Names *** \n")
+    cat("**** Class Chrom, method names **** \n")
+    cat("Sequence name: ", as.character(names(x@seq)), "\n")
+    cat("First annotation name: ")
+    print(as.character(x@ann[1,1]))
+    cat("First variant name: ")
+    print(as.character(x@vcf.fix[1,1]))
+    cat("\n")
+    cat("Sample names: \n")
     temp <- names(x@vcf.gt)[-1]
-#    for(i in 1:length(temp)){
-#      cat(i, paste(temp[i], "\n"))
-#    }
-#    invisible(cat("******* End names (Chrom) ******* \n"))
-#    invisible(x)
     temp
   }
 )
@@ -238,8 +223,6 @@ setMethod(
       print(x@vcf.gt[1:6,])
     }
     cat("\n")
-#    cat("******* Vcf info (Chrom) ******* \n")
-#    print(x@vcf.info[1:6,])
     cat("**** ** Var info (Chrom) ** **** \n")
     if(ncol(x@var.info)>=6){
       cat("**** **** First 6 columns ***** **** \n")
@@ -250,24 +233,15 @@ setMethod(
     cat("\n")
     cat("**** ** Vcf mask (Chrom) ** **** \n")
     cat("Percent unmasked: ")
-#    cat(100*(sum(x@mask)/length(x@mask)))
     cat(100*(sum(x@var.info$mask)/length(x@var.info$mask)))
     cat("\n")
     cat("**** ** End head (Chrom) ** **** \n")
-    #    cat("*** Class Chrom, method Names *** \n")
-#    temp <- names(x@vcf.gt)[-1]
-    #    for(i in 1:length(temp)){
-    #      cat(i, paste(temp[i], "\n"))
-    #    }
-    #    invisible(cat("******* End names (Chrom) ******* \n"))
-    #    invisible(x)
-#    temp
   }
 )
 
 ##### ##### Accessors.  #####
 
-### Getter for "names"
+#### Getter for "names" ####
 setGeneric("getName",function(object){standardGeneric ("getName")})
 
 setMethod("getName","Chrom",
@@ -276,7 +250,7 @@ setMethod("getName","Chrom",
   }
 )
 
-# Setter for name.
+#### Setter for name. ####
 
 setGeneric("setName<-",function(object,value){standardGeneric("setName<-")})
 
@@ -289,7 +263,7 @@ setReplaceMethod(
   }
 )
 
-# Setter for seq.
+#### Setter for seq. ####
 
 setGeneric("seq2chrom<-",function(object,value){standardGeneric("seq2chrom<-")})
 
@@ -310,7 +284,8 @@ setReplaceMethod(
   }
 )
 
-##### ##### Data loading functions. #####
+##### ##### ##### ##### #####
+#### Data loading functions. ####
 
 #' @title Chrom methods
 #' @rdname Chrom-methods
@@ -331,7 +306,6 @@ setReplaceMethod(
 #'
 vcf2chrom <- function(x,y,...){
   x@vcf.fix <- as.data.frame(y@fix)
-#  x@vcf.fix <- as.data.frame(y[,1:8])
 #  colnames(x@vcf.fix) <- c('chrom','pos','id','ref','alt','qual','filter','info')
   colnames(x@vcf.fix) <- c('CHROM','POS','ID','REF','ALT','QUAL','FILTER','INFO')
   x@vcf.fix[,2] <- as.numeric(x@vcf.fix[,2])
@@ -341,8 +315,6 @@ vcf2chrom <- function(x,y,...){
     y@gt[,i] <- as.character(y@gt[,i])
   }
   x@vcf.gt <- y@gt
-#  x@vcf.gt <- as.data.frame(y@gt, stringsAsFactors = F)
-#  x@vcf.gt <- y[,9:ncol(y)]
   #
   x@vcf.meta <- y@meta
   #
@@ -1230,4 +1202,4 @@ variant.table <- function(x){
   tab
 }
 
-##### ##### EOF #####
+#### EOF ####
