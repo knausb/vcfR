@@ -56,7 +56,7 @@ heatmap.bp <- function(x, cbarplot = TRUE, rbarplot = TRUE, legend = TRUE, ...){
            widths=c(4, 0.6, 0.2), heights=c(1, 4))
     par(mar=c(0,0,0,0))
     par(oma=c(1,1,1,1))
-    barplot(colSums(x), space=0, border=NA, axes=FALSE,
+    barplot(colSums(x, na.rm=TRUE), space=0, border=NA, axes=FALSE,
             names.arg="",
             col=c("#808080", "#c0c0c0"), xaxs="i")
 #    text(c(1:ncol(x))-0.5, min(colSums(x)), colnames(x), srt=90)
@@ -79,7 +79,7 @@ heatmap.bp <- function(x, cbarplot = TRUE, rbarplot = TRUE, legend = TRUE, ...){
     image(t(x), col = colorRampPalette(c("red", "yellow", "#008000"))(100),
           axes=FALSE, frame.plot=TRUE)
     #
-    barplot(rowSums(x), space=0, border=NA,
+    barplot(rowSums(x, na.rm=TRUE), space=0, border=NA,
             horiz=TRUE, axes=FALSE,
             col=c("#808080", "#c0c0c0"),
             yaxs="i")
