@@ -83,16 +83,23 @@ setClass(
     mask = "logical"
   ),
   prototype=prototype(
-    vcf.fix = data.frame(matrix(ncol=8, nrow=0, 
-                              dimnames=list(c(),
-c('chrom','pos','id','ref','alt','qual','filter','info'))),
-                       stringsAsFactors=FALSE),
+    vcf.fix = data.frame(matrix(ncol=8, nrow=0,
+           dimnames=list(c(),
+                         c('chrom','pos','id','ref','alt','qual','filter','info'))
+           ),
+           stringsAsFactors=FALSE),
     vcf.stat = data.frame(matrix(ncol=11, nrow=0, 
-                              dimnames=list(c(),
-  c('Allele_num','R_num','A_num','Ho','He','Ne',
-  'theta_pi','theta_w','theta_h','tajimas_d','fw_h'))),
-                       stringsAsFactors=FALSE)
+           dimnames=list(c(),
+                         c('Allele_num','R_num','A_num','Ho','He','Ne','theta_pi','theta_w','theta_h','tajimas_d','fw_h'))
+           ),
+           stringsAsFactors=FALSE),
+    ann = data.frame(matrix(ncol=9, nrow=0,
+          dimnames=list(c(),
+                        c("seqid", "source", "type", "start", "end", "score", "strand", "phase", "attributes"))
+          ),
+          stringsAsFactors=FALSE)
   )
+#  )
 )
 
 ##### ##### Generic methods. #####
@@ -419,7 +426,8 @@ create.chrom <- function(name, seq, vcf=NULL, ann=NULL, verbose=TRUE){
   if(length(vcf)>0){
     x <- vcf2chrom(x, vcf)
   }
-  if(length(ann)>0){
+#  if(length(ann)>0){
+  if(nrow(ann)>0){
     x <- ann2chrom(x, ann)
   }
   if(verbose == TRUE){
@@ -737,8 +745,8 @@ gt.m2sfs <- function(x){
 gt2popsum <- function(x){
   stopifnot(class(x) == "Chrom")
   gt <- extract.gt(x, element = "GT", mask = rep(TRUE, times=nrow(x@var.info)))
-#  , mask = x@var.info$mask)
-  stopifnot(length(grep("(1/1|0/0|0/1)", unique(as.vector(gt)))) == 3)
+#  gt <- extract.gt(x, element = "GT", mask = x@var.info$mask)
+#  stopifnot(length(grep("(1/1|0/0|0/1)", unique(as.vector(gt)))) == 3)
 #  gt <- x@gt.m
   tmp <- matrix(ncol=ncol(gt), nrow=nrow(gt))
   tmp[gt == "0/0"] <- 0
@@ -754,14 +762,14 @@ gt2popsum <- function(x){
     c('Allele_num','REF_num','ALT_num','Ho','He','Ne',
     'theta_pi','theta_w','theta_h','tajimas_d', 'faywu_h'))
   )
-  summ[mask,2] <- unlist(apply(gt[mask,], MARGIN=1,
+  summ[mask,2] <- unlist(apply(gt[mask, , drop=FALSE], MARGIN=1,
                      function(x){sum(2*length(na.omit(x))-sum(x))})
                     )
-  summ[mask,3] <- rowSums(gt[mask,])
+  summ[mask,3] <- rowSums(gt[mask, , drop=FALSE])
   summ[,1] <- summ[,2]+summ[,3]
   #
   # Observed heterozygosity
-  summ[mask,4] <- unlist(apply(gt[mask,], MARGIN=1,
+  summ[mask,4] <- unlist(apply(gt[mask, , drop=FALSE], MARGIN=1,
                      function(x){sum(x==1)/length(na.omit(x))}
 #                     function(x){sum(x==1)}
                           )
@@ -772,7 +780,7 @@ gt2popsum <- function(x){
   summ[,6] <- 1/(1-summ[,5])
   #
   # Thetas.
-  summ[,7:9] <- t(apply(summ[,2:3],MARGIN=1,thetas))
+  summ[,7:9] <- t(apply(summ[,2:3, drop=FALSE], MARGIN=1,thetas))
   #
   summ[,10] <- summ[,7] - summ[,8]
   summ[,11] <- summ[,7] - summ[,9]
@@ -846,10 +854,12 @@ proc.chrom <- function(x, verbose=TRUE, ...){
     print(ptime)
   }
   #
-  ptime <- system.time(x <- gt2popsum(x))
-  if(verbose==TRUE){
-    cat("Population summary complete.\n")
-    print(ptime)
+  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
+    ptime <- system.time(x <- gt2popsum(x))
+    if(verbose==TRUE){
+      cat("Population summary complete.\n")
+      print(ptime)
+    }
   }
 #  ptime <- system.time(x <- windowize(x, win.size=win.size, max.win=max.win))
 #  ptime <- system.time(x <- windowize(x))
@@ -896,6 +906,23 @@ chromoqc <- function(x, nsum=FALSE, ...){
   chromo(x, verbose=TRUE, nsum=FALSE, DP=TRUE, QUAL=TRUE, MQ=TRUE, SNPDEN=TRUE, NUC=TRUE, ANN=TRUE, ...)
 }
 
+#### Graphic functions ####
+
+#' @rdname Chrom-methods
+#' @export
+#' @aliases chromodot
+#'
+chromodot <- function(x, nsum=FALSE, ...){
+  chromo(x, verbose=TRUE, nsum=FALSE, DP=TRUE,
+         QUAL=FALSE, MQ=FALSE, 
+         SNPDEN=TRUE, NUC=TRUE, ANN=TRUE,
+         x1=FALSE, y1=FALSE, x2=FALSE, y2=FALSE, ...)
+}
+
+
+
+
+
 #' @rdname Chrom-methods
 #' @export
 #' @aliases chromopop
@@ -928,12 +955,18 @@ chromoall <- function(x, ...){
 #' @param SNPDEN logical for whether variant density will be displayed
 #' @param NUC logical for whether nucleotide content will be displayed
 #' @param ANN logical for whether annotation will be displayed
+#' @param x1 numeric vector for custom tracks
+#' @param y1 numeric vector for custom tracks
+#' @param x2 numeric vector for custom tracks
+#' @param y2 numeric vector for custom tracks
 #' 
 chromo <- function(x, verbose=TRUE, nsum=TRUE,
                    DP=FALSE, QUAL=FALSE, MQ=FALSE,
                    NE=FALSE, TPI=FALSE, TAJD=FALSE, FWH=FALSE,
                    SNPDEN=FALSE, NUC=FALSE,
-                   ANN=FALSE, ...){
+                   ANN=FALSE,
+                   x1=FALSE, y1=FALSE, x2=FALSE, y2=FALSE,
+                   ...){
   brows <- 0
   srows <- 0
   #
@@ -1067,7 +1100,7 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
     lines(c(0,x@len),c(0, 0), lwd=2)
     if(nrow(x@ann) == 0){
       title(main="No annotations found", line= -1)
-      boxplot(1)
+      boxplot(1, axes=FALSE, frame.plot=TRUE)
     } else {
       rect(as.numeric(as.character(x@ann[,4])), -1, as.numeric(as.character(x@ann[,5])), 1, col="#b22222", border=NA)
       title(main="Annotations", line=-1)

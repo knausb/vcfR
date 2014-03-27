@@ -3,6 +3,7 @@
 \alias{ann2chrom}
 \alias{chrom-methods}
 \alias{chromo}
+\alias{chromodot}
 \alias{chromopop}
 \alias{chromoqc}
 \alias{create.chrom}
@@ -48,11 +49,14 @@ proc.chrom(x, verbose = TRUE, ...)
 
 chromoqc(x, nsum = FALSE, ...)
 
+chromodot(x, nsum = FALSE, ...)
+
 chromopop(x, ...)
 
 chromo(x, verbose = TRUE, nsum = TRUE, DP = FALSE, QUAL = FALSE,
   MQ = FALSE, NE = FALSE, TPI = FALSE, TAJD = FALSE, FWH = FALSE,
-  SNPDEN = FALSE, NUC = FALSE, ANN = FALSE, ...)
+  SNPDEN = FALSE, NUC = FALSE, ANN = FALSE, x1 = FALSE, y1 = FALSE,
+  x2 = FALSE, y2 = FALSE, ...)
 
 extract.gt(x, element = "GT", mask = logical(0), as.matrix = FALSE)
 
@@ -127,6 +131,14 @@ windowTable(x)
 
   \item{ANN}{logical for whether annotation will be
   displayed}
+
+  \item{x1}{numeric vector for custom tracks}
+
+  \item{y1}{numeric vector for custom tracks}
+
+  \item{x2}{numeric vector for custom tracks}
+
+  \item{y2}{numeric vector for custom tracks}
 
   \item{element}{element to extract from vcf genotype data.
   Common options include "DP", "GT" and "GQ"}

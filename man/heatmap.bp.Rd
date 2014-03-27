@@ -3,19 +3,34 @@
 \alias{heatmap.bp}
 \title{Heatmap with barplots}
 \usage{
-heatmap.bp(x, cbarplot = TRUE, rbarplot = TRUE, legend = TRUE, ...)
+heatmap.bp(x, cbarplot = TRUE, rbarplot = TRUE, legend = TRUE,
+  clabels = TRUE, rlabels = TRUE, na.rm = TRUE, scale = c("row",
+  "column", "none"), ...)
 }
 \arguments{
   \item{x}{a numeric matrix}
 
-  \item{rbarplot}{logical indicating whether the rows
+  \item{cbarplot}{a logical indicating whether the columns
   should be summarized with a barplot}
 
-  \item{cbarplot}{logical indicating whether the columns
+  \item{rbarplot}{a logical indicating whether the rows
   should be summarized with a barplot}
 
-  \item{legend}{logical indicating whether a legend should
-  be plotted}
+  \item{legend}{a logical indicating whether a legend
+  should be plotted}
+
+  \item{clabels}{a logical indicating whether column labels
+  should be included}
+
+  \item{rlabels}{a logical indicating whether row labels
+  should be included}
+
+  \item{na.rm}{a logical indicating whether missing values
+  should be removed.}
+
+  \item{scale}{character indicating if the values should be
+  centered and scaled in either the row direction or the
+  column direction, or none. The default is "none".}
 
   \item{...}{additional arguments to be passed on}
 }
@@ -35,6 +50,7 @@ pinf_mt <- create.chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
 pinf_mt <- masker(pinf_mt)
 pinf_gq <- extract.gt(pinf_mt, element="GQ", as.matrix=TRUE)
 heatmap.bp(pinf_gq)
+heatmap.bp(pinf_gq, scale="col")
 }
 \seealso{
 heatmap, image, heatmap2 in library(gplots)
