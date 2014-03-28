@@ -49,14 +49,15 @@ proc.chrom(x, verbose = TRUE, ...)
 
 chromoqc(x, nsum = FALSE, ...)
 
-chromodot(x, nsum = FALSE, ...)
+chromodot(x, nsum = FALSE, x1 = NULL, y1 = NULL, x2 = NULL, y2 = NULL,
+  ...)
 
 chromopop(x, ...)
 
 chromo(x, verbose = TRUE, nsum = TRUE, DP = FALSE, QUAL = FALSE,
   MQ = FALSE, NE = FALSE, TPI = FALSE, TAJD = FALSE, FWH = FALSE,
-  SNPDEN = FALSE, NUC = FALSE, ANN = FALSE, x1 = FALSE, y1 = FALSE,
-  x2 = FALSE, y2 = FALSE, ...)
+  SNPDEN = FALSE, NUC = FALSE, ANN = FALSE, x1 = NULL, y1 = NULL,
+  x2 = NULL, y2 = NULL, ...)
 
 extract.gt(x, element = "GT", mask = logical(0), as.matrix = FALSE)
 
@@ -172,9 +173,17 @@ names(pinf_mt)
 plot(pinf_mt)
 pinf_mt <- masker(pinf_mt)
 pinf_mt <- proc.chrom(pinf_mt, win.size=1000)
+str(pinf_mt)
 plot(pinf_mt)
+
 chromoqc(pinf_mt)
 chromoqc(pinf_mt, xlim=c(25e+03, 3e+04))
+
+set.seed(10)
+x1 <- as.integer(runif(n=20, min=1, max=39000))
+y1 <- runif(n=length(x1), min=1, max=100)
+chromodot(pinf_mt, x1=x1, y1=y1)
+chromodot(pinf_mt, x1=x1, y1=y1, x2=x1, y2=y1)
 
 chromopop(pinf_mt)
 gt <- extract.gt(pinf_mt)

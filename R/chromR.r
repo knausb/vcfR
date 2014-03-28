@@ -397,9 +397,17 @@ ann2chrom <- function(x,y,...){
 #' plot(pinf_mt)
 #' pinf_mt <- masker(pinf_mt)
 #' pinf_mt <- proc.chrom(pinf_mt, win.size=1000)
+#' str(pinf_mt)
 #' plot(pinf_mt)
+#' 
 #' chromoqc(pinf_mt)
 #' chromoqc(pinf_mt, xlim=c(25e+03, 3e+04))
+#' 
+#' set.seed(10)
+#' x1 <- as.integer(runif(n=20, min=1, max=39000))
+#' y1 <- runif(n=length(x1), min=1, max=100)
+#' chromodot(pinf_mt, x1=x1, y1=y1)
+#' chromodot(pinf_mt, x1=x1, y1=y1, x2=x1, y2=y1)
 #' 
 #' chromopop(pinf_mt)
 #' gt <- extract.gt(pinf_mt)
@@ -903,24 +911,26 @@ proc.chrom <- function(x, verbose=TRUE, ...){
 #' @aliases chromoqc
 #'
 chromoqc <- function(x, nsum=FALSE, ...){
-  chromo(x, verbose=TRUE, nsum=FALSE, DP=TRUE, QUAL=TRUE, MQ=TRUE, SNPDEN=TRUE, NUC=TRUE, ANN=TRUE, ...)
+  chromo(x, verbose=TRUE, nsum=FALSE, DP=TRUE,
+         QUAL=TRUE, MQ=TRUE,
+         SNPDEN=TRUE, NUC=TRUE, ANN=TRUE,
+#         x1=FALSE, y1=FALSE, x2=FALSE, y2=FALSE,
+         ...)
 }
 
-#### Graphic functions ####
 
 #' @rdname Chrom-methods
 #' @export
 #' @aliases chromodot
 #'
-chromodot <- function(x, nsum=FALSE, ...){
+chromodot <- function(x, nsum=FALSE, x1=NULL, y1=NULL, x2=NULL, y2=NULL, ...){
   chromo(x, verbose=TRUE, nsum=FALSE, DP=TRUE,
-         QUAL=FALSE, MQ=FALSE, 
+#         QUAL=FALSE, MQ=FALSE, 
          SNPDEN=TRUE, NUC=TRUE, ANN=TRUE,
-         x1=FALSE, y1=FALSE, x2=FALSE, y2=FALSE, ...)
+         x1=x1, y1=y1,
+         x2=x2, y2=y2,
+         ...)
 }
-
-
-
 
 
 #' @rdname Chrom-methods
@@ -965,7 +975,7 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
                    NE=FALSE, TPI=FALSE, TAJD=FALSE, FWH=FALSE,
                    SNPDEN=FALSE, NUC=FALSE,
                    ANN=FALSE,
-                   x1=FALSE, y1=FALSE, x2=FALSE, y2=FALSE,
+                   x1=NULL, y1=NULL, x2=NULL, y2=NULL,
                    ...){
   brows <- 0
   srows <- 0
@@ -982,6 +992,12 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
   if( length(x@win.info$variants)>0 & SNPDEN){brows <- brows+1}
   if(length(x@win.info$A)>0 & NUC   ){brows <- brows+1}
   #
+#  if( sum(x1 == FALSE) > 0 & sum(y1 == FALSE) > 0 ){brows <- brows+1}
+  if(is.null(x1) == FALSE & is.null(y1) == FALSE){brows <- brows+1}
+  if(is.null(x2) == FALSE & is.null(y2) == FALSE){brows <- brows+1}
+#  if( sum(x2 == FALSE) > 0 & sum(y2 == FALSE) > 0 ){brows <- brows+1}
+#  if(x2 != FALSE & y2 != FALSE){brows <- brows+1}
+  #
   if(length(x@ann)>0 & ANN){srows <- srows+1}
   if(nrow(x@seq.info$nuc.win)>0   ){srows <- srows+1}
   #
@@ -996,6 +1012,26 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
     heights=c(rep(1,times=brows),rep(0.4, times=srows)))
   par(mar=c(0,0,0,0))
   par(oma=c(4,4,3,1))
+  #
+#  if(sum(x1 == FALSE) > 0 & sum(y1 == FALSE) > 0 ){
+  if(is.null(x1) == FALSE & is.null(y1) == FALSE){
+#    if(class(x1) == "integer" & class(y1) == "numeric"
+#       ) stop("x1 is not an integer")
+#    if() stop("y1 is not numeric")
+    plot(x1, y1, pch=20, col="#FF800022", axes=F, frame.plot=T, ylab="", ...)
+    title(main="Custom track 1", line=-1)
+    axis(side=2, las=2)
+    #
+    boxplot(y1, axes=FALSE, frame.plot=T, col="#FF8000")
+  }
+  #
+  if(is.null(x2) == FALSE & is.null(y2) == FALSE){
+    plot(x2, y2, pch=20, col="#228B2222", axes=F, frame.plot=T, ylab="", ...)
+    title(main="Custom track 2", line=-1)
+    axis(side=2, las=2)
+    #
+    boxplot(y2, axes=FALSE, frame.plot=T, col="#228B22")
+  }
   #
   if(length(x@var.info$DP[x@var.info$mask])>0 & DP){ # dp
 #    plot(x@vcf.fix[x@mask,2], x@vcf.info[x@mask,1], pch=20, col="#0080ff22", axes=F, frame.plot=T, ylab="", ...)
