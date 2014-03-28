@@ -57,7 +57,7 @@ chromopop(x, ...)
 chromo(x, verbose = TRUE, nsum = TRUE, DP = FALSE, QUAL = FALSE,
   MQ = FALSE, NE = FALSE, TPI = FALSE, TAJD = FALSE, FWH = FALSE,
   SNPDEN = FALSE, NUC = FALSE, ANN = FALSE, x1 = NULL, y1 = NULL,
-  x2 = NULL, y2 = NULL, ...)
+  x2 = NULL, y2 = NULL, dot.alpha = 22, ...)
 
 extract.gt(x, element = "GT", mask = logical(0), as.matrix = FALSE)
 
@@ -141,6 +141,9 @@ windowTable(x)
 
   \item{y2}{numeric vector for custom tracks}
 
+  \item{dot.alpha}{integer [00,99] indicating transparency
+  of dots.}
+
   \item{element}{element to extract from vcf genotype data.
   Common options include "DP", "GT" and "GQ"}
 
@@ -177,7 +180,7 @@ str(pinf_mt)
 plot(pinf_mt)
 
 chromoqc(pinf_mt)
-chromoqc(pinf_mt, xlim=c(25e+03, 3e+04))
+chromoqc(pinf_mt, xlim=c(25e+03, 3e+04), dot.alpha=99)
 
 set.seed(10)
 x1 <- as.integer(runif(n=20, min=1, max=39000))

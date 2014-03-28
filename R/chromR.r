@@ -401,7 +401,7 @@ ann2chrom <- function(x,y,...){
 #' plot(pinf_mt)
 #' 
 #' chromoqc(pinf_mt)
-#' chromoqc(pinf_mt, xlim=c(25e+03, 3e+04))
+#' chromoqc(pinf_mt, xlim=c(25e+03, 3e+04), dot.alpha=99)
 #' 
 #' set.seed(10)
 #' x1 <- as.integer(runif(n=20, min=1, max=39000))
@@ -969,6 +969,7 @@ chromoall <- function(x, ...){
 #' @param y1 numeric vector for custom tracks
 #' @param x2 numeric vector for custom tracks
 #' @param y2 numeric vector for custom tracks
+#' @param dot.alpha integer [00,99] indicating transparency of dots.
 #' 
 chromo <- function(x, verbose=TRUE, nsum=TRUE,
                    DP=FALSE, QUAL=FALSE, MQ=FALSE,
@@ -976,6 +977,7 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
                    SNPDEN=FALSE, NUC=FALSE,
                    ANN=FALSE,
                    x1=NULL, y1=NULL, x2=NULL, y2=NULL,
+                   dot.alpha=22,
                    ...){
   brows <- 0
   srows <- 0
@@ -1018,7 +1020,8 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
 #    if(class(x1) == "integer" & class(y1) == "numeric"
 #       ) stop("x1 is not an integer")
 #    if() stop("y1 is not numeric")
-    plot(x1, y1, pch=20, col="#FF800022", axes=F, frame.plot=T, ylab="", ...)
+#    plot(x1, y1, pch=20, col="#FF800022", axes=F, frame.plot=T, ylab="", ...)
+    plot(x1, y1, pch=20, col=paste("#FF8000", dot.alpha, sep=""), axes=F, frame.plot=T, ylab="", ...)
     title(main="Custom track 1", line=-1)
     axis(side=2, las=2)
     #
@@ -1026,7 +1029,7 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
   }
   #
   if(is.null(x2) == FALSE & is.null(y2) == FALSE){
-    plot(x2, y2, pch=20, col="#228B2222", axes=F, frame.plot=T, ylab="", ...)
+    plot(x2, y2, pch=20, col=paste("#228B22", dot.alpha, sep=""), axes=F, frame.plot=T, ylab="", ...)
     title(main="Custom track 2", line=-1)
     axis(side=2, las=2)
     #
@@ -1035,7 +1038,8 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
   #
   if(length(x@var.info$DP[x@var.info$mask])>0 & DP){ # dp
 #    plot(x@vcf.fix[x@mask,2], x@vcf.info[x@mask,1], pch=20, col="#0080ff22", axes=F, frame.plot=T, ylab="", ...)
-    plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$DP[x@var.info$mask], pch=20, col="#0080ff22", axes=F, frame.plot=T, ylab="", ...)
+    plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$DP[x@var.info$mask], pch=20, 
+         col=paste("#0080ff", dot.alpha, sep=""), axes=F, frame.plot=T, ylab="", ...)
     axis(side=2, las=2)
     title(main="Read depth (DP)", line=-1)
 #    boxplot(x@vcf.info[x@mask,1], axes=FALSE, frame.plot=T, col="#0080ff")
@@ -1045,7 +1049,9 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
   if(length(x@var.info$MQ[x@var.info$mask])>0 & MQ){ # dp
 #    plot(x@vcf.fix[x@mask,2], x@vcf.info[x@mask,2], pch=20, col="#3CB37122", axes=F, frame.plot=T, ylab="", ...)
     if(sum(is.na(x@var.info$MQ[x@var.info$mask])) < length(x@var.info$MQ[x@var.info$mask])){
-      plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$MQ[x@var.info$mask], pch=20, col="#3CB37122", axes=F, frame.plot=T, ylab="", ...)
+      plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$MQ[x@var.info$mask], pch=20, 
+           col=paste("#3CB371", dot.alpha, sep=""), 
+           axes=F, frame.plot=T, ylab="", ...)
       axis(side=2, las=2)
       title(main="Mapping quality (MQ)", line=-1)
 #    boxplot(x@vcf.info[x@mask,2], axes=FALSE, frame.plot=T, col="#3CB371")
@@ -1059,7 +1065,9 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
   #
   if(length(x@vcf.fix$QUAL[x@var.info$mask])>0 & QUAL){ # qual
 #    plot(x@vcf.fix[x@mask,2], x@vcf.fix[x@mask,6], pch=20, col="#80008022", axes=F, frame.plot=T, ylab="", ...)
-    plot(x@vcf.fix$POS[x@var.info$mask], x@vcf.fix$QUAL[x@var.info$mask], pch=20, col="#80008022", axes=F, frame.plot=T, ylab="", ...)
+    plot(x@vcf.fix$POS[x@var.info$mask], x@vcf.fix$QUAL[x@var.info$mask], pch=20,
+         col=paste("#800080", dot.alpha, sep=""),  
+         axes=F, frame.plot=T, ylab="", ...)
     axis(side=2, las=2)
     title(main="QUAL", line=-1)
 #    boxplot(as.numeric(x@vcf.fix[x@mask,6]), axes=FALSE, frame.plot=T, col="#800080")
@@ -1068,7 +1076,9 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
   #
   if(length(x@var.info$Ne[x@var.info$mask])>0 & NE){ # Ne
 #    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,6], pch=20, col="#00008B22", axes=F, frame.plot=T, ylab="", ...)
-    plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$Ne[x@var.info$mask], pch=20, col="#00008B22", axes=F, frame.plot=T, ylab="", ...)
+    plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$Ne[x@var.info$mask], pch=20, 
+         col=paste("#00008B", dot.alpha, sep=""),
+         axes=F, frame.plot=T, ylab="", ...)
     title(main="Ne", line=-1)
     axis(side=2, las=2)
 #    boxplot(as.numeric(x@vcf.stat[x@mask,6]), axes=FALSE, frame.plot=T, col="#00008B")
@@ -1076,7 +1086,9 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
   }
   if(length(x@var.info$theta_pi[x@var.info$mask])>0 & TPI){ # Theta_pi
 #    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,7], pch=20, col="#FF8C0022", axes=F, frame.plot=T, ylab="", ...)
-    plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$theta_pi[x@var.info$mask], pch=20, col="#FF8C0022", axes=F, frame.plot=T, ylab="", ...)
+    plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$theta_pi[x@var.info$mask], pch=20,
+         col=paste("#FF8C00", dot.alpha, sep=""),
+         axes=F, frame.plot=T, ylab="", ...)
 #    title(main=expression(paste(theta[pi], pi, "Theta_pi")), line=-1)
     title(main="Theta_pi", line=-1)
     axis(side=2, las=2)
@@ -1086,7 +1098,9 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
   #
   if(length(x@var.info$tajimas_d[x@var.info$mask])>0 & TAJD){ # Tajima's D
 #    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,10], pch=20, col="#00640022", axes=F, frame.plot=T, ylab="", ...)
-    plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$tajimas_d[x@var.info$mask], pch=20, col="#00640022", axes=F, frame.plot=T, ylab="", ...)
+    plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$tajimas_d[x@var.info$mask], pch=20,
+         col=paste("#006400", dot.alpha, sep=""),
+         axes=F, frame.plot=T, ylab="", ...)
     abline(0, 0, lty=2)
     title(main="Tajima's D", line=-1)
     axis(side=2, las=2)
@@ -1096,7 +1110,9 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
   #
   if(length(x@var.info$faywu_h[x@var.info$mask])>0 & FWH){ # Fay and Wu's H
 #    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,11], pch=20, col="#8B008B22", axes=F, frame.plot=T, ylab="", ...)
-    plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$faywu_h[x@var.info$mask], pch=20, col="#8B008B22", axes=F, frame.plot=T, ylab="", ...)
+    plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$faywu_h[x@var.info$mask], pch=20, 
+         col=paste("#8B008B", dot.alpha, sep=""),
+         axes=F, frame.plot=T, ylab="", ...)
     abline(0, 0, lty=2)
     title(main="Fay and Wu's H", line=-1)
     axis(side=2, las=2)
