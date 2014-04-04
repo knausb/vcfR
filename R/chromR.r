@@ -65,15 +65,15 @@ setClass(
     win.info = "data.frame",
     seq.info = "list",
     #
-#    pop1 = "vector",
-#    pop2 = "vector",
+    #    pop1 = "vector",
+    #    pop2 = "vector",
     #
-#    acgt.w = "matrix",
-#    n.w = "matrix",
+    #    acgt.w = "matrix",
+    #    n.w = "matrix",
     #
-#    windows = "matrix",
-#    nuccomp.w = "data.frame",
-#    snpden.w = "data.frame",
+    #    windows = "matrix",
+    #    nuccomp.w = "data.frame",
+    #    snpden.w = "data.frame",
     #
     gt.m = "matrix",
     vcf.stat = "data.frame",
@@ -84,22 +84,22 @@ setClass(
   ),
   prototype=prototype(
     vcf.fix = data.frame(matrix(ncol=8, nrow=0,
-           dimnames=list(c(),
-                         c('chrom','pos','id','ref','alt','qual','filter','info'))
-           ),
-           stringsAsFactors=FALSE),
+                                dimnames=list(c(),
+                                              c('chrom','pos','id','ref','alt','qual','filter','info'))
+    ),
+    stringsAsFactors=FALSE),
     vcf.stat = data.frame(matrix(ncol=11, nrow=0, 
-           dimnames=list(c(),
-                         c('Allele_num','R_num','A_num','Ho','He','Ne','theta_pi','theta_w','theta_h','tajimas_d','fw_h'))
-           ),
-           stringsAsFactors=FALSE),
+                                 dimnames=list(c(),
+                                               c('Allele_num','R_num','A_num','Ho','He','Ne','theta_pi','theta_w','theta_h','tajimas_d','fw_h'))
+    ),
+    stringsAsFactors=FALSE),
     ann = data.frame(matrix(ncol=9, nrow=0,
-          dimnames=list(c(),
-                        c("seqid", "source", "type", "start", "end", "score", "strand", "phase", "attributes"))
-          ),
-          stringsAsFactors=FALSE)
+                            dimnames=list(c(),
+                                          c("seqid", "source", "type", "start", "end", "score", "strand", "phase", "attributes"))
+    ),
+    stringsAsFactors=FALSE)
   )
-#  )
+  #  )
 )
 
 ##### ##### Generic methods. #####
@@ -189,14 +189,14 @@ setMethod(
   f="names",
   signature = "Chrom",
   definition=function(x){
-#    cat("**** Class Chrom, method names **** \n")
-#    cat("Sequence name: ", as.character(names(x@seq)), "\n")
-#    cat("First annotation name: ")
-#    print(as.character(x@ann[1,1]))
-#    cat("First variant name: ")
-#    print(as.character(x@vcf.fix[1,1]))
-#    cat("\n")
-#    cat("Sample names: \n")
+    #    cat("**** Class Chrom, method names **** \n")
+    #    cat("Sequence name: ", as.character(names(x@seq)), "\n")
+    #    cat("First annotation name: ")
+    #    print(as.character(x@ann[1,1]))
+    #    cat("First variant name: ")
+    #    print(as.character(x@vcf.fix[1,1]))
+    #    cat("\n")
+    #    cat("Sample names: \n")
     temp <- names(x@vcf.gt)[-1]
     temp
   }
@@ -252,9 +252,9 @@ setMethod(
 setGeneric("getName",function(object){standardGeneric ("getName")})
 
 setMethod("getName","Chrom",
-  function(object){
-    return(object@name)
-  }
+          function(object){
+            return(object@name)
+          }
 )
 
 #### Setter for name. ####
@@ -313,7 +313,7 @@ setReplaceMethod(
 #'
 vcf2chrom <- function(x,y,...){
   x@vcf.fix <- as.data.frame(y@fix)
-#  colnames(x@vcf.fix) <- c('chrom','pos','id','ref','alt','qual','filter','info')
+  #  colnames(x@vcf.fix) <- c('chrom','pos','id','ref','alt','qual','filter','info')
   colnames(x@vcf.fix) <- c('CHROM','POS','ID','REF','ALT','QUAL','FILTER','INFO')
   x@vcf.fix[,2] <- as.numeric(x@vcf.fix[,2])
   x@vcf.fix[,6] <- as.numeric(x@vcf.fix[,6])
@@ -326,20 +326,20 @@ vcf2chrom <- function(x,y,...){
   x@vcf.meta <- y@meta
   #
   info <- matrix(ncol=2, nrow=nrow(y@fix))
-#  colnames(info) <- c('dp','mq')
+  #  colnames(info) <- c('dp','mq')
   colnames(info) <- c('DP','MQ')
   if(length(grep("DP=", y@fix[,8])) > 0){
     info[,1] <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y@fix[,8]), ";"), function(x){grep("^DP=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
-#    x@var.info$DP <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y@fix[,8]), ";"), function(x){grep("^DP=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
+    #    x@var.info$DP <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y@fix[,8]), ";"), function(x){grep("^DP=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
   }
   if(length(grep("MQ=", y@fix[,8])) > 0){
     info[,2] <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y@fix[,8]), ";"), function(x){grep("^MQ=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
-#    x@var.info$MQ <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y@fix[,8]), ";"), function(x){grep("^MQ=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
+    #    x@var.info$MQ <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y@fix[,8]), ";"), function(x){grep("^MQ=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
   }
-#  x@vcf.info <- as.data.frame(info)
+  #  x@vcf.info <- as.data.frame(info)
   x@var.info <- as.data.frame(info)
   #
-#  x@mask <- rep(TRUE, times=nrow(x@vcf.fix))
+  #  x@mask <- rep(TRUE, times=nrow(x@vcf.fix))
   x@var.info$mask <- rep(TRUE, times=nrow(x@vcf.fix))
   # assign may be more efficient.
   return(x)
@@ -397,7 +397,7 @@ ann2chrom <- function(x,y,...){
 #' plot(pinf_mt)
 #' pinf_mt <- masker(pinf_mt)
 #' pinf_mt <- proc.chrom(pinf_mt, win.size=1000)
-#' str(pinf_mt)
+# str(pinf_mt)
 #' plot(pinf_mt)
 #' 
 #' chromoqc(pinf_mt)
@@ -407,7 +407,7 @@ ann2chrom <- function(x,y,...){
 #' x1 <- as.integer(runif(n=20, min=1, max=39000))
 #' y1 <- runif(n=length(x1), min=1, max=100)
 #' chromodot(pinf_mt, x1=x1, y1=y1)
-#' chromodot(pinf_mt, x1=x1, y1=y1, x2=x1, y2=y1)
+#' chromodot(pinf_mt, x1=x1, y1=y1, label1='My data', x2=x1, y2=y1, label2='More of my data', dot.alpha='ff')
 #' 
 #' chromopop(pinf_mt)
 #' gt <- extract.gt(pinf_mt)
@@ -434,7 +434,7 @@ create.chrom <- function(name, seq, vcf=NULL, ann=NULL, verbose=TRUE){
   if(length(vcf)>0){
     x <- vcf2chrom(x, vcf)
   }
-#  if(length(ann)>0){
+  #  if(length(ann)>0){
   if(nrow(ann)>0){
     x <- ann2chrom(x, ann)
   }
@@ -500,14 +500,14 @@ masker <- function(x, QUAL=999, mindp=0.25, maxdp=0.75, minmq=20, maxmq=50, ...)
   if(sum(is.na(quals)) < length(quals)){
     mask[quals < QUAL] <- FALSE
   }
-#  if(sum(is.na(x@vcf.info$DP)) < length(x@vcf.info$DP)){
-#    mask[x@vcf.info$DP < quantile(x@vcf.info$DP, probs=c(mindp))] <- FALSE
-#    mask[x@vcf.info$DP > quantile(x@vcf.info$DP, probs=c(maxdp))] <- FALSE
-#  }
-#  if(sum(is.na(x@vcf.info$MQ)) < length(x@vcf.info$MQ)){
-#    mask[x@vcf.info$MQ < quantile(x@vcf.info$MQ, probs=c(minmq))] <- FALSE
-#    mask[x@vcf.info$MQ > quantile(x@vcf.info$MQ, probs=c(maxmq))] <- FALSE
-#  }
+  #  if(sum(is.na(x@vcf.info$DP)) < length(x@vcf.info$DP)){
+  #    mask[x@vcf.info$DP < quantile(x@vcf.info$DP, probs=c(mindp))] <- FALSE
+  #    mask[x@vcf.info$DP > quantile(x@vcf.info$DP, probs=c(maxdp))] <- FALSE
+  #  }
+  #  if(sum(is.na(x@vcf.info$MQ)) < length(x@vcf.info$MQ)){
+  #    mask[x@vcf.info$MQ < quantile(x@vcf.info$MQ, probs=c(minmq))] <- FALSE
+  #    mask[x@vcf.info$MQ > quantile(x@vcf.info$MQ, probs=c(maxmq))] <- FALSE
+  #  }
   if(sum(is.na(info$DP)) < length(info$DP)){
     mask[info$DP < quantile(info$DP, probs=c(mindp))] <- FALSE
     mask[info$DP > quantile(info$DP, probs=c(maxdp))] <- FALSE
@@ -515,8 +515,8 @@ masker <- function(x, QUAL=999, mindp=0.25, maxdp=0.75, minmq=20, maxmq=50, ...)
   if(sum(is.na(info$MQ)) < length(info$MQ)){
     mask[info$MQ < minmq] <- FALSE
     mask[info$MQ > maxmq] <- FALSE
-#    mask[info$MQ < quantile(info$MQ, probs=c(minmq))] <- FALSE
-#    mask[info$MQ > quantile(info$MQ, probs=c(maxmq))] <- FALSE
+    #    mask[info$MQ < quantile(info$MQ, probs=c(minmq))] <- FALSE
+    #    mask[info$MQ > quantile(info$MQ, probs=c(maxmq))] <- FALSE
   }
   x@var.info$mask <- mask
   return(x)
@@ -566,8 +566,8 @@ regex.win <- function(x, max.win=1000, regex="[acgtwsmkrybdhv]"){
   } else {
     bp.windows <- bp.windows[1:i,]
   }
-#  x@acgt.w <- bp.windows
-#  return(x)
+  #  x@acgt.w <- bp.windows
+  #  return(x)
   return(bp.windows)
 }
 
@@ -588,7 +588,7 @@ regex.win <- function(x, max.win=1000, regex="[acgtwsmkrybdhv]"){
 #' 
 #'
 windowize <- function(x, win.size=1000, max.win=10000){
-#  acgt.w <- x@acgt.w
+  #  acgt.w <- x@acgt.w
   acgt.w <- x@seq.info$nuc.win
   windows <- matrix(NA, ncol=2, nrow=max.win)
   i <- 1
@@ -619,7 +619,7 @@ gc.win <- function(x){
                 nrow=nrow(x@windows),
                 dimnames=list(c(),
                               c('index','start','stop','gc','at','gcf','atf'))
-               )
+  )
   win[,1] <- 1:nrow(win)
   win[,2] <- x@windows[,1]
   win[,3] <- x@windows[,2]
@@ -643,7 +643,7 @@ snp.win <- function(x){
                 nrow=nrow(x@windows),
                 dimnames=list(c(),
                               c('index','start','stop','count','density'))
-               )
+  )
   snp[,1] <- 1:nrow(snp)
   snp[,2] <- x@windows[,1]
   snp[,3] <- x@windows[,2]
@@ -674,7 +674,7 @@ var.win <- function(x, win.size=1000){
   win.info <- cbind(win.info, c(win.info[-1]-1, x@len))
   win.info <- cbind(1:nrow(win.info), win.info)
   win.info <- cbind(win.info, win.info[,3]-win.info[,2]+1)
-#  win.info <- cbind(win.info, matrix(ncol=7, nrow=nrow(win.info)))
+  #  win.info <- cbind(win.info, matrix(ncol=7, nrow=nrow(win.info)))
   #
   win.proc <- function(y, seq){
     seq <- seq[y[2]:y[3]]
@@ -699,7 +699,7 @@ var.win <- function(x, win.size=1000){
 vcf.fix2gt.m <- function(x){
   snames <- names(x@vcf.gt)[-1]
   pos <- paste(x@vcf.fix[,1], x@vcf.fix[,2], sep="_")
-#  pos <- x@vcf.fix[,2]
+  #  pos <- x@vcf.fix[,2]
   x1 <- as.matrix(x@vcf.gt)
   nsamp <- ncol(x1) - 1
   #
@@ -725,15 +725,15 @@ vcf.fix2gt.m <- function(x){
 ##### ##### gt.m2sfs #####
 
 gt.m2sfs <- function(x){
-#  cat(x@pop1)
-#  cat(length(x@pop1))
-#  cat('\n')
-#  if(length(x@pop1) < 1 | length(x@pop2) < 1 | is.na(x@pop1) | is.na(x@pop2)){
-#    cat("One or both populations are not defined\n")
-#    cat("Creating arbitrary populations\n")
-#    x@pop1 <- 1:floor(ncol(x@vcf.gt[,-1])/2)
-#    x@pop2 <- c(1+max(1:floor(ncol(x@vcf.gt[,-1])/2))):ncol(x@vcf.gt)
-#  }
+  #  cat(x@pop1)
+  #  cat(length(x@pop1))
+  #  cat('\n')
+  #  if(length(x@pop1) < 1 | length(x@pop2) < 1 | is.na(x@pop1) | is.na(x@pop2)){
+  #    cat("One or both populations are not defined\n")
+  #    cat("Creating arbitrary populations\n")
+  #    x@pop1 <- 1:floor(ncol(x@vcf.gt[,-1])/2)
+  #    x@pop2 <- c(1+max(1:floor(ncol(x@vcf.gt[,-1])/2))):ncol(x@vcf.gt)
+  #  }
   pop1 <- x@gt.m[x@mask, x@pop1]
   pop2 <- x@gt.m[x@mask, x@pop2]
   sfs <- matrix(ncol=ncol(pop1)*2+1, nrow=ncol(pop2)*2+1)
@@ -751,56 +751,105 @@ gt.m2sfs <- function(x){
 }
 
 gt2popsum <- function(x){
-  stopifnot(class(x) == "Chrom")
+  if(class(x) != "Chrom"){stop("Object is not of class Chrom")}
+  #  stopifnot(class(x) == "Chrom")
+  #  gt <- extract.gt(x, element = "GT", mask = x@var.info$mask)
+  #  stopifnot(length(grep("(1/1|0/0|0/1)", unique(as.vector(gt)))) == 3)
+  #  gt <- x@gt.m
+  #
+  hwe <- function(x){
+    # Genotype counts
+    n11 <- x[1]
+    n1i <- x[2]
+    nii <- x[3]
+    n   <- sum(n11, n1i, nii)
+    #
+    # Allele count and frequency
+    n1 <- 2*n11 + n1i
+    p1 <- n1/(2*n)
+    #
+    # Probability
+    num <- (factorial(n) * factorial(n1) * factorial(2*n - n1) * 2^(n1i))
+    den <- (factorial((n1 - n1i)/2) * factorial(n1i) * factorial(n-(n1+n1i)/2) * factorial(2*n))
+    prob <- num/den
+    #
+    # Disequilibrium
+    Da <- n11/n - (n1/(2*n))^2
+    # Chi-square
+    chisq <- ((n*Da)^2)/(n*p1^2) + ((-2*n*Da)^2)/(2*n*p1*(1-p1)) + ((n*Da)^2)/(n*(1-p1)^2)
+    p <- 1 - pchisq(chisq, df=1)
+    return(c(prob, Da, chisq, p))
+  }
+  #  tmp[gt == "0/0"] <- 0
+  #  tmp[gt == "0/1"] <- 1
+  #  tmp[gt == "1/0"] <- 1
+  #  tmp[gt == "1/1"] <- 2
   gt <- extract.gt(x, element = "GT", mask = rep(TRUE, times=nrow(x@var.info)))
-#  gt <- extract.gt(x, element = "GT", mask = x@var.info$mask)
-#  stopifnot(length(grep("(1/1|0/0|0/1)", unique(as.vector(gt)))) == 3)
-#  gt <- x@gt.m
   tmp <- matrix(ncol=ncol(gt), nrow=nrow(gt))
-  tmp[gt == "0/0"] <- 0
-  tmp[gt == "0/1"] <- 1
-  tmp[gt == "1/0"] <- 1
-  tmp[gt == "1/1"] <- 2
+  tmp[gt == "0/0" | gt == "0|0"] <- 0
+  tmp[gt == "0/1" | gt == "0|1"] <- 1
+  tmp[gt == "1/0" | gt == "1|0"] <- 1
+  tmp[gt == "1/1" | gt == "1|1"] <- 2
+  #
   gt <- tmp
   rm(tmp)
   #
   mask <- x@var.info$mask
-  summ <- matrix(ncol=11, nrow=nrow(gt), 
-                     dimnames=list(c(),
-    c('Allele_num','REF_num','ALT_num','Ho','He','Ne',
-    'theta_pi','theta_w','theta_h','tajimas_d', 'faywu_h'))
+  summ <- matrix(ncol=19, nrow=nrow(gt), 
+                 dimnames=list(c(),
+                               c('n', 'RR','RA','AA','nAllele','nREF','nALT','Ho','He',
+                                 'hwe.prob', 'hwe.Da', 'hwe.chisq', 'hwe.p',
+                                 'Ne','theta_pi','theta_w','theta_h','tajimas_d', 'faywu_h'))
   )
-  summ[mask,2] <- unlist(apply(gt[mask, , drop=FALSE], MARGIN=1,
-                     function(x){sum(2*length(na.omit(x))-sum(x))})
-                    )
-  summ[mask,3] <- rowSums(gt[mask, , drop=FALSE])
-  summ[,1] <- summ[,2]+summ[,3]
+  #
+  # Homozygous for reference allele.
+  summ[mask,'RR'] <- unlist(apply(gt[mask, , drop=FALSE], MARGIN=1,
+                                  function(x){sum(x==0)}))
+  # Heterozygote.
+  summ[mask,'RA'] <- unlist(apply(gt[mask, , drop=FALSE], MARGIN=1,
+                                  function(x){sum(x==1)}))
+  # Homozygous for alternate allele.
+  summ[mask,'AA'] <- unlist(apply(gt[mask, , drop=FALSE], MARGIN=1,
+                                  function(x){sum(x==2)}))
+  #
+  summ[mask, 'n'] <- unlist(apply(gt[mask, , drop=FALSE], MARGIN=1,
+                                  function(x){sum(!is.na(x))}))
+  #
+  summ[mask,'nREF'] <- unlist(apply(gt[mask, , drop=FALSE], MARGIN=1,
+                                    function(x){sum(2*length(na.omit(x))-sum(x))})
+  )
+  summ[mask,'nALT'] <- rowSums(gt[mask, , drop=FALSE])
+  summ[,'nAllele'] <- summ[,'nREF']+summ[,'nALT']
   #
   # Observed heterozygosity
-  summ[mask,4] <- unlist(apply(gt[mask, , drop=FALSE], MARGIN=1,
-                     function(x){sum(x==1)/length(na.omit(x))}
-#                     function(x){sum(x==1)}
-                          )
-                    )
+  summ[mask,'Ho'] <- unlist(apply(gt[mask, , drop=FALSE], MARGIN=1,
+                                  function(x){sum(x==1)/length(na.omit(x))}))
   #
   # Expected heterozygosity
-  summ[,5] <- 1 - ((summ[,2]/summ[,1])^2 + (summ[,3]/summ[,1])^2)
-  summ[,6] <- 1/(1-summ[,5])
+  summ[,'He'] <- 1 - ((summ[,'nREF']/summ[,'nAllele'])^2 + (summ[,'nALT']/summ[,'nAllele'])^2)
+  #
+  summ[,'Ne'] <- 1/(1-summ[,'He'])
+  #
+  # Hardy-Weinberg Disequilibrium
+  summ[mask,c('hwe.prob', 'hwe.Da', 'hwe.chisq', 'hwe.p')] <- t(apply(summ[mask,c('RR', 'RA', 'AA')], MARGIN=1, FUN=hwe))
   #
   # Thetas.
-  summ[,7:9] <- t(apply(summ[,2:3, drop=FALSE], MARGIN=1,thetas))
+  summ[,c('theta_pi','theta_w','theta_h')] <- t(apply(summ[,c('nREF','nALT'), drop=FALSE], MARGIN=1,thetas))
+  #summ[,7:9] <- t(apply(summ[,c('nREF','nALT'), drop=FALSE], MARGIN=1,thetas))
   #
-  summ[,10] <- summ[,7] - summ[,8]
-  summ[,11] <- summ[,7] - summ[,9]
+  summ[,'tajimas_d'] <- summ[,'theta_pi'] - summ[,'theta_w']
+  summ[,'faywu_h'] <- summ[,'theta_pi'] - summ[,'theta_h']
+  #  summ[,10] <- summ[,7] - summ[,8]
+  #  summ[,11] <- summ[,7] - summ[,9]
   #
-#  print(head(summ))
-#  x@vcf.stat <- as.data.frame(summ)
+  #  print(head(summ))
+  #  x@vcf.stat <- as.data.frame(summ)
   x@var.info <- cbind(x@var.info, as.data.frame(summ))
   return(x)
 }
 
 thetas <- function(x){
-#  print(x)
+  #  print(x)
   rnum <- x[1]
   anum <- x[2]
   if(is.na(rnum)){return(c(NA,NA,NA))}
@@ -818,15 +867,15 @@ linkage <- function(x){
   mask <- x@mask
   link.m <- matrix(ncol=8, nrow=nrow(gt)-1,
                    dimnames=list(c(), c('pos', 'len', 'bigD', 'Delta', 'Dprime', 'delta', 'd', 'Q'))
-                  )
+  )
   link <- function(x){
     n1 <- length(!is.na(gt[x,]))
     n2 <- length(!is.na(gt[x+1,]))
-#    print(x)
+    #    print(x)
   }
   lapply(1:nrow(link.m), link)
-#  print(head(gt))
-
+  #  print(head(gt))
+  
   return(x)
 }
 
@@ -841,17 +890,17 @@ linkage <- function(x){
 #proc.chrom <- function(x, pop1=NA, pop2=NA, win.size=1000, max.win=10000, verbose=TRUE){
 proc.chrom <- function(x, verbose=TRUE, ...){
   stopifnot(class(x) == "Chrom")
-#  x <- set.pop1(x, pop1)
-#  x <- set.pop2(x, pop2)
-#  ptime <- system.time(x@acgt.w <- regex.win(x))
+  #  x <- set.pop1(x, pop1)
+  #  x <- set.pop2(x, pop2)
+  #  ptime <- system.time(x@acgt.w <- regex.win(x))
   ptime <- system.time(x@seq.info$nuc.win <- regex.win(x))
   if(verbose==TRUE){
     cat("Nucleotide regions complete.\n")
     print(ptime)
   }
   ptime <- system.time(x@seq.info$N.win <- regex.win(x, regex="[n]"))
-#  ptime <- system.time(x@n.w <- acgt.win(x, regex="[n]"))
-#  ptime <- system.time(x <- n.win(x))
+  #  ptime <- system.time(x@n.w <- acgt.win(x, regex="[n]"))
+  #  ptime <- system.time(x <- n.win(x))
   if(verbose==TRUE){
     cat("N regions complete.\n")
     print(ptime)
@@ -869,38 +918,38 @@ proc.chrom <- function(x, verbose=TRUE, ...){
       print(ptime)
     }
   }
-#  ptime <- system.time(x <- windowize(x, win.size=win.size, max.win=max.win))
-#  ptime <- system.time(x <- windowize(x))
-#  if(verbose==TRUE){
-#    cat("Sliding windows created.\n")
-#    print(ptime)
-#  }
-#  ptime <- system.time(x <- gc.win(x))
-#  if(verbose==TRUE){
-#    cat("Sliding GC windows complete.\n")
-#    print(ptime)
-#  }
-#  ptime <- system.time(x <- snp.win(x))
-#  if(verbose==TRUE){
-#    cat("Sliding SNP windows complete.\n")
-#    print(ptime)
-#  }
-#  ptime <- system.time(x <- vcf.fix2gt.m(x))
-#  if(verbose==TRUE){
-#    cat("Genotype matrix complete.\n")
-#    print(ptime)
-#  }
-#  ptime <- system.time(x <- gt.m2sfs(x))
-#  cat("gt.m2sfs is commented out\n")
-#  if(verbose==TRUE){
-#    cat("SFS complete.\n")
-#    print(ptime)
-#  }
-#  ptime <- system.time(x <- linkage(x))
-#  if(verbose==TRUE){
-#    cat("Linkage calculation complete.\n")
-#    print(ptime)
-#  }
+  #  ptime <- system.time(x <- windowize(x, win.size=win.size, max.win=max.win))
+  #  ptime <- system.time(x <- windowize(x))
+  #  if(verbose==TRUE){
+  #    cat("Sliding windows created.\n")
+  #    print(ptime)
+  #  }
+  #  ptime <- system.time(x <- gc.win(x))
+  #  if(verbose==TRUE){
+  #    cat("Sliding GC windows complete.\n")
+  #    print(ptime)
+  #  }
+  #  ptime <- system.time(x <- snp.win(x))
+  #  if(verbose==TRUE){
+  #    cat("Sliding SNP windows complete.\n")
+  #    print(ptime)
+  #  }
+  #  ptime <- system.time(x <- vcf.fix2gt.m(x))
+  #  if(verbose==TRUE){
+  #    cat("Genotype matrix complete.\n")
+  #    print(ptime)
+  #  }
+  #  ptime <- system.time(x <- gt.m2sfs(x))
+  #  cat("gt.m2sfs is commented out\n")
+  #  if(verbose==TRUE){
+  #    cat("SFS complete.\n")
+  #    print(ptime)
+  #  }
+  #  ptime <- system.time(x <- linkage(x))
+  #  if(verbose==TRUE){
+  #    cat("Linkage calculation complete.\n")
+  #    print(ptime)
+  #  }
   return(x)
 }
 
@@ -914,7 +963,21 @@ chromoqc <- function(x, nsum=FALSE, ...){
   chromo(x, verbose=TRUE, nsum=FALSE, DP=TRUE,
          QUAL=TRUE, MQ=TRUE,
          SNPDEN=TRUE, NUC=TRUE, ANN=TRUE,
-#         x1=FALSE, y1=FALSE, x2=FALSE, y2=FALSE,
+         #         x1=FALSE, y1=FALSE, x2=FALSE, y2=FALSE,
+         ...)
+}
+
+
+#' @rdname Chrom-methods
+#' @export
+#' @aliases chromoqc
+#'
+chromohwe <- function(x, nsum=FALSE, ...){
+  chromo(x, verbose=TRUE, nsum=FALSE, DP=TRUE,
+         #         QUAL=TRUE, MQ=TRUE,
+         HWE = TRUE,
+         SNPDEN=TRUE, NUC=TRUE, ANN=TRUE,
+         #         x1=FALSE, y1=FALSE, x2=FALSE, y2=FALSE,
          ...)
 }
 
@@ -925,10 +988,11 @@ chromoqc <- function(x, nsum=FALSE, ...){
 #'
 chromodot <- function(x, nsum=FALSE, x1=NULL, y1=NULL, x2=NULL, y2=NULL, ...){
   chromo(x, verbose=TRUE, nsum=FALSE, DP=TRUE,
-#         QUAL=FALSE, MQ=FALSE, 
+         #         QUAL=FALSE, MQ=FALSE, 
          SNPDEN=TRUE, NUC=TRUE, ANN=TRUE,
          x1=x1, y1=y1,
          x2=x2, y2=y2,
+         #         label1=NULL, label2=NULL,
          ...)
 }
 
@@ -958,6 +1022,7 @@ chromoall <- function(x, ...){
 #' @param DP logical for whether cumulative depth will be displayed
 #' @param QUAL logical for whether variant quality will be displayed
 #' @param MQ logical for whether mapping quality will be displayed
+#' @param HWE logical for whether Hardy-Weinberg equilibrium should be displayed
 #' @param NE logical for whether effective size will be displayed
 #' @param TPI logical for whether Theta sub pi will be displayed
 #' @param TAJD logical for whether Tajima's D will be displayed
@@ -967,16 +1032,19 @@ chromoall <- function(x, ...){
 #' @param ANN logical for whether annotation will be displayed
 #' @param x1 numeric vector for custom tracks
 #' @param y1 numeric vector for custom tracks
+#' @param label1 optional string label for dot track one.
 #' @param x2 numeric vector for custom tracks
 #' @param y2 numeric vector for custom tracks
-#' @param dot.alpha integer [00,99] indicating transparency of dots.
+#' @param label2 optional string label for dot track two.
+#' @param dot.alpha hexadecimal [00, ff] indicating transparency of dots.
 #' 
 chromo <- function(x, verbose=TRUE, nsum=TRUE,
                    DP=FALSE, QUAL=FALSE, MQ=FALSE,
+                   HWE=FALSE,
                    NE=FALSE, TPI=FALSE, TAJD=FALSE, FWH=FALSE,
                    SNPDEN=FALSE, NUC=FALSE,
                    ANN=FALSE,
-                   x1=NULL, y1=NULL, x2=NULL, y2=NULL,
+                   x1=NULL, y1=NULL, label1=NULL, x2=NULL, y2=NULL, label2=NULL,
                    dot.alpha=22,
                    ...){
   brows <- 0
@@ -986,6 +1054,8 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
   if(length( x@var.info$MQ[x@var.info$mask])>0 & MQ  ){brows <- brows+1} # mq
   if(length(x@vcf.fix$QUAL[x@var.info$mask])>0 & QUAL){brows <- brows+1} # qual
   #
+  if(length( x@var.info$hwe.Da[x@var.info$mask])>0 & HWE ){brows <- brows+1} # HWE
+  #
   if(length(       x@var.info$Ne[x@var.info$mask])>0 & NE  ){brows <- brows+1} # Ne
   if(length( x@var.info$theta_pi[x@var.info$mask])>0 & TPI ){brows <- brows+1} # Theta_pi
   if(length(x@var.info$tajimas_d[x@var.info$mask])>0 & TAJD){brows <- brows+1} # Tajima's D
@@ -994,11 +1064,11 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
   if( length(x@win.info$variants)>0 & SNPDEN){brows <- brows+1}
   if(length(x@win.info$A)>0 & NUC   ){brows <- brows+1}
   #
-#  if( sum(x1 == FALSE) > 0 & sum(y1 == FALSE) > 0 ){brows <- brows+1}
+  #  if( sum(x1 == FALSE) > 0 & sum(y1 == FALSE) > 0 ){brows <- brows+1}
   if(is.null(x1) == FALSE & is.null(y1) == FALSE){brows <- brows+1}
   if(is.null(x2) == FALSE & is.null(y2) == FALSE){brows <- brows+1}
-#  if( sum(x2 == FALSE) > 0 & sum(y2 == FALSE) > 0 ){brows <- brows+1}
-#  if(x2 != FALSE & y2 != FALSE){brows <- brows+1}
+  #  if( sum(x2 == FALSE) > 0 & sum(y2 == FALSE) > 0 ){brows <- brows+1}
+  #  if(x2 != FALSE & y2 != FALSE){brows <- brows+1}
   #
   if(length(x@ann)>0 & ANN){srows <- srows+1}
   if(nrow(x@seq.info$nuc.win)>0   ){srows <- srows+1}
@@ -1010,51 +1080,49 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
   }
   #
   layout(matrix(c(1:((brows+srows)*2)), ncol=2, byrow=T),
-    widths=rep(c(1,0.1), times=c(brows+srows)),
-    heights=c(rep(1,times=brows),rep(0.4, times=srows)))
+         widths=rep(c(1,0.1), times=c(brows+srows)),
+         heights=c(rep(1,times=brows),rep(0.4, times=srows)))
   par(mar=c(0,0,0,0))
   par(oma=c(4,4,3,1))
   #
-#  if(sum(x1 == FALSE) > 0 & sum(y1 == FALSE) > 0 ){
+  #  if(sum(x1 == FALSE) > 0 & sum(y1 == FALSE) > 0 ){
   if(is.null(x1) == FALSE & is.null(y1) == FALSE){
-#    if(class(x1) == "integer" & class(y1) == "numeric"
-#       ) stop("x1 is not an integer")
-#    if() stop("y1 is not numeric")
-#    plot(x1, y1, pch=20, col="#FF800022", axes=F, frame.plot=T, ylab="", ...)
+    if(is.null(label1)){label1 <- "Custom track 1"}
     plot(x1, y1, pch=20, col=paste("#FF8000", dot.alpha, sep=""), axes=F, frame.plot=T, ylab="", ...)
-    title(main="Custom track 1", line=-1)
+    title(main=label1, line=-1)
     axis(side=2, las=2)
     #
     boxplot(y1, axes=FALSE, frame.plot=T, col="#FF8000")
   }
   #
   if(is.null(x2) == FALSE & is.null(y2) == FALSE){
+    if(is.null(label2)){label2 <- "Custom track 2"}
     plot(x2, y2, pch=20, col=paste("#228B22", dot.alpha, sep=""), axes=F, frame.plot=T, ylab="", ...)
-    title(main="Custom track 2", line=-1)
+    title(main=label2, line=-1)
     axis(side=2, las=2)
     #
     boxplot(y2, axes=FALSE, frame.plot=T, col="#228B22")
   }
   #
   if(length(x@var.info$DP[x@var.info$mask])>0 & DP){ # dp
-#    plot(x@vcf.fix[x@mask,2], x@vcf.info[x@mask,1], pch=20, col="#0080ff22", axes=F, frame.plot=T, ylab="", ...)
+    #    plot(x@vcf.fix[x@mask,2], x@vcf.info[x@mask,1], pch=20, col="#0080ff22", axes=F, frame.plot=T, ylab="", ...)
     plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$DP[x@var.info$mask], pch=20, 
          col=paste("#0080ff", dot.alpha, sep=""), axes=F, frame.plot=T, ylab="", ...)
     axis(side=2, las=2)
     title(main="Read depth (DP)", line=-1)
-#    boxplot(x@vcf.info[x@mask,1], axes=FALSE, frame.plot=T, col="#0080ff")
+    #    boxplot(x@vcf.info[x@mask,1], axes=FALSE, frame.plot=T, col="#0080ff")
     boxplot(x@var.info$DP[x@var.info$mask], axes=FALSE, frame.plot=T, col="#0080ff")
   }
   #
-  if(length(x@var.info$MQ[x@var.info$mask])>0 & MQ){ # dp
-#    plot(x@vcf.fix[x@mask,2], x@vcf.info[x@mask,2], pch=20, col="#3CB37122", axes=F, frame.plot=T, ylab="", ...)
+  if(length(x@var.info$MQ[x@var.info$mask])>0 & MQ){ # MQ
+    #    plot(x@vcf.fix[x@mask,2], x@vcf.info[x@mask,2], pch=20, col="#3CB37122", axes=F, frame.plot=T, ylab="", ...)
     if(sum(is.na(x@var.info$MQ[x@var.info$mask])) < length(x@var.info$MQ[x@var.info$mask])){
       plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$MQ[x@var.info$mask], pch=20, 
            col=paste("#3CB371", dot.alpha, sep=""), 
            axes=F, frame.plot=T, ylab="", ...)
       axis(side=2, las=2)
       title(main="Mapping quality (MQ)", line=-1)
-#    boxplot(x@vcf.info[x@mask,2], axes=FALSE, frame.plot=T, col="#3CB371")
+      #    boxplot(x@vcf.info[x@mask,2], axes=FALSE, frame.plot=T, col="#3CB371")
       boxplot(x@var.info$MQ[x@var.info$mask], axes=FALSE, frame.plot=T, col="#3CB371")
     } else {
       plot(1,1, type='n')
@@ -1064,59 +1132,74 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
   }
   #
   if(length(x@vcf.fix$QUAL[x@var.info$mask])>0 & QUAL){ # qual
-#    plot(x@vcf.fix[x@mask,2], x@vcf.fix[x@mask,6], pch=20, col="#80008022", axes=F, frame.plot=T, ylab="", ...)
+    #    plot(x@vcf.fix[x@mask,2], x@vcf.fix[x@mask,6], pch=20, col="#80008022", axes=F, frame.plot=T, ylab="", ...)
     plot(x@vcf.fix$POS[x@var.info$mask], x@vcf.fix$QUAL[x@var.info$mask], pch=20,
          col=paste("#800080", dot.alpha, sep=""),  
          axes=F, frame.plot=T, ylab="", ...)
     axis(side=2, las=2)
     title(main="QUAL", line=-1)
-#    boxplot(as.numeric(x@vcf.fix[x@mask,6]), axes=FALSE, frame.plot=T, col="#800080")
+    #    boxplot(as.numeric(x@vcf.fix[x@mask,6]), axes=FALSE, frame.plot=T, col="#800080")
     boxplot(as.numeric(x@vcf.fix$QUAL[x@var.info$mask]), axes=FALSE, frame.plot=T, col="#800080")
   }
   #
+  if(length( x@var.info$hwe.Da[x@var.info$mask])>0 & HWE ){ # HWE
+    colv <- rep('#008000', times=length(x@var.info$hwe.p))
+    colv[x@var.info$hwe.p < 0.05] <- "#ff0000"
+    #    plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$hwe.Da[x@var.info$mask], pch=20,
+    plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$hwe.chisq[x@var.info$mask], pch=20,
+         col=paste(colv[x@var.info$mask], dot.alpha, sep=""),
+         #         col=paste("#800080", dot.alpha, sep=""),
+         axes=F, frame.plot=T, ylab="", ...)
+    axis(side=2, las=2)
+    title(main="H-W Disequilibrium", line=-1)
+    #    boxplot(as.numeric(x@vcf.fix[x@mask,6]), axes=FALSE, frame.plot=T, col="#800080")
+    #    boxplot(as.numeric(x@var.info$hwe.Da[x@var.info$mask]), axes=FALSE, frame.plot=T, col="#008000")    
+    boxplot(as.numeric(x@var.info$hwe.chisq[x@var.info$mask]), axes=FALSE, frame.plot=T, col="#008000")    
+  }
+  #
   if(length(x@var.info$Ne[x@var.info$mask])>0 & NE){ # Ne
-#    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,6], pch=20, col="#00008B22", axes=F, frame.plot=T, ylab="", ...)
+    #    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,6], pch=20, col="#00008B22", axes=F, frame.plot=T, ylab="", ...)
     plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$Ne[x@var.info$mask], pch=20, 
          col=paste("#00008B", dot.alpha, sep=""),
          axes=F, frame.plot=T, ylab="", ...)
     title(main="Ne", line=-1)
     axis(side=2, las=2)
-#    boxplot(as.numeric(x@vcf.stat[x@mask,6]), axes=FALSE, frame.plot=T, col="#00008B")
+    #    boxplot(as.numeric(x@vcf.stat[x@mask,6]), axes=FALSE, frame.plot=T, col="#00008B")
     boxplot(as.numeric(x@var.info$Ne[x@var.info$mask]), axes=FALSE, frame.plot=T, col="#00008B")
   }
   if(length(x@var.info$theta_pi[x@var.info$mask])>0 & TPI){ # Theta_pi
-#    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,7], pch=20, col="#FF8C0022", axes=F, frame.plot=T, ylab="", ...)
+    #    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,7], pch=20, col="#FF8C0022", axes=F, frame.plot=T, ylab="", ...)
     plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$theta_pi[x@var.info$mask], pch=20,
          col=paste("#FF8C00", dot.alpha, sep=""),
          axes=F, frame.plot=T, ylab="", ...)
-#    title(main=expression(paste(theta[pi], pi, "Theta_pi")), line=-1)
+    #    title(main=expression(paste(theta[pi], pi, "Theta_pi")), line=-1)
     title(main="Theta_pi", line=-1)
     axis(side=2, las=2)
-#    boxplot(as.numeric(x@vcf.stat[x@mask,7]), axes=FALSE, frame.plot=T, col="#FF8C00")
+    #    boxplot(as.numeric(x@vcf.stat[x@mask,7]), axes=FALSE, frame.plot=T, col="#FF8C00")
     boxplot(as.numeric(x@var.info$theta_pi[x@var.info$mask]), axes=FALSE, frame.plot=T, col="#FF8C00")
   }
   #
   if(length(x@var.info$tajimas_d[x@var.info$mask])>0 & TAJD){ # Tajima's D
-#    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,10], pch=20, col="#00640022", axes=F, frame.plot=T, ylab="", ...)
+    #    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,10], pch=20, col="#00640022", axes=F, frame.plot=T, ylab="", ...)
     plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$tajimas_d[x@var.info$mask], pch=20,
          col=paste("#006400", dot.alpha, sep=""),
          axes=F, frame.plot=T, ylab="", ...)
     abline(0, 0, lty=2)
     title(main="Tajima's D", line=-1)
     axis(side=2, las=2)
-#    boxplot(as.numeric(x@vcf.stat[x@mask,10]), axes=FALSE, frame.plot=T, col="#006400")
+    #    boxplot(as.numeric(x@vcf.stat[x@mask,10]), axes=FALSE, frame.plot=T, col="#006400")
     boxplot(as.numeric(x@var.info$tajimas_d[x@var.info$mask]), axes=FALSE, frame.plot=T, col="#006400")
   }
   #
   if(length(x@var.info$faywu_h[x@var.info$mask])>0 & FWH){ # Fay and Wu's H
-#    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,11], pch=20, col="#8B008B22", axes=F, frame.plot=T, ylab="", ...)
+    #    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,11], pch=20, col="#8B008B22", axes=F, frame.plot=T, ylab="", ...)
     plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$faywu_h[x@var.info$mask], pch=20, 
          col=paste("#8B008B", dot.alpha, sep=""),
          axes=F, frame.plot=T, ylab="", ...)
     abline(0, 0, lty=2)
     title(main="Fay and Wu's H", line=-1)
     axis(side=2, las=2)
-#    boxplot(as.numeric(x@vcf.stat[x@mask,11]), axes=FALSE, frame.plot=T, col="#8B008B")
+    #    boxplot(as.numeric(x@vcf.stat[x@mask,11]), axes=FALSE, frame.plot=T, col="#8B008B")
     boxplot(as.numeric(x@var.info$faywu_h[x@var.info$mask]), axes=FALSE, frame.plot=T, col="#8B008B")
   }
   if(length(x@win.info$variants)>0 & SNPDEN){
@@ -1166,13 +1249,13 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
     }
   }
   #
-#  if(length(x@acgt.w)>0){
+  #  if(length(x@acgt.w)>0){
   if(nrow(x@seq.info$nuc.win)>0){    
     # Chromosome.
     plot(c(0,x@len), c(-1,1), type='n', xlab="", ylab="", las=1, axes=FALSE, frame.plot=TRUE, ...)
     lines(c(0,x@len),c(0, 0), lwd=2)
-#    rect(x@acgt.w[,1], -0.7, x@acgt.w[,2], 0.7, col="#00cc00", border=NA)
-#    rect(x@n.w[,1], -0.4, x@n.w[,2], 0.4, col="#ff6666", border=NA)
+    #    rect(x@acgt.w[,1], -0.7, x@acgt.w[,2], 0.7, col="#00cc00", border=NA)
+    #    rect(x@n.w[,1], -0.4, x@n.w[,2], 0.4, col="#ff6666", border=NA)
     rect(x@seq.info$nuc.win[,1], -0.7, x@seq.info$nuc.win[,2], 0.7, col="#00cc00", border=NA)
     if(!is.na(x@seq.info$N.win[1,1])){
       rect(x@seq.info$N.win[,1], -0.4, x@seq.info$N.win[,2], 0.4, col="#ff6666", border=NA)
@@ -1206,7 +1289,7 @@ plot.sfs <- function(x, log10=TRUE, ...){
   layout(matrix(c(1,2), nrow=1), widths=c(4,1))
   image(t(sfs)[,nrow(sfs):1], col=rainbow(100, end=0.85),
         axes=FALSE, frame.plot=TRUE)
-#  axis(side=1, at=seq(1,ncol(sfs), by=1)/ncol(sfs), labels=NA)
+  #  axis(side=1, at=seq(1,ncol(sfs), by=1)/ncol(sfs), labels=NA)
   axis(side=1, at=seq(0, ncol(sfs)-1, by=1)/(ncol(sfs)-1), labels=NA)
   axis(side=1, at=seq(0, ncol(sfs)-1, by=5)/(ncol(sfs)-1), labels=seq(0, ncol(sfs)-1, by=5), las=1, tcl=-0.7)
   axis(side=3, at=seq(0, ncol(sfs)-1, by=1)/(ncol(sfs)-1), labels=NA)
@@ -1224,7 +1307,7 @@ plot.sfs <- function(x, log10=TRUE, ...){
        las=1)
   axis(side=4, at=seq(1, max(sfs, na.rm=TRUE), by=1)*(100/max(sfs, na.rm=TRUE)),
        labels=10^seq(1, max(sfs, na.rm=TRUE), by=1), las=1
-      )
+  )
   #
   par(mar=c(5,4,4,2), mfrow=c(1,1))
 }
@@ -1261,7 +1344,7 @@ extract.gt <- function(x, element="GT", mask=logical(0), as.matrix=FALSE){
     if(length(pos) == 0){
       rep(NA, times=length(x))
     } else {
-    unlist(lapply(strsplit(as.character(x), ":"), function(x){x[pos]}))
+      unlist(lapply(strsplit(as.character(x), ":"), function(x){x[pos]}))
     }
   }
   gt <- t(apply(x@vcf.gt[mask,], MARGIN=1, get.gt1, element=element))
