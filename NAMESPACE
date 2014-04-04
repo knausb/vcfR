@@ -1,6 +1,7 @@
 export(ann2chrom)
 export(chromo)
 export(chromodot)
+export(chromohwe)
 export(chromopop)
 export(chromoqc)
 export(create.chrom)

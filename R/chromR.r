@@ -409,6 +409,8 @@ ann2chrom <- function(x,y,...){
 #' chromodot(pinf_mt, x1=x1, y1=y1)
 #' chromodot(pinf_mt, x1=x1, y1=y1, label1='My data', x2=x1, y2=y1, label2='More of my data', dot.alpha='ff')
 #' 
+#' chromohwe(pinf_mt, dot.alpha='ff')
+#' 
 #' chromopop(pinf_mt)
 #' gt <- extract.gt(pinf_mt)
 #' head(gt)
@@ -1104,6 +1106,22 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
     boxplot(y2, axes=FALSE, frame.plot=T, col="#228B22")
   }
   #
+  if(length( x@var.info$hwe.Da[x@var.info$mask])>0 & HWE ){ # HWE
+    colv <- rep('#008000', times=length(x@var.info$hwe.p))
+    colv[x@var.info$hwe.p < 0.05] <- "#ff0000"
+    #    plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$hwe.Da[x@var.info$mask], pch=20,
+    plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$hwe.chisq[x@var.info$mask], pch=20,
+         col=paste(colv[x@var.info$mask], dot.alpha, sep=""),
+         #         col=paste("#800080", dot.alpha, sep=""),
+         axes=F, frame.plot=T, ylab="", 
+         ylim=c(0, max(x@var.info$hwe.chisq[x@var.info$mask], na.rm=TRUE)), ...)
+    axis(side=2, las=2)
+    title(main="H-W Disequilibrium (Chi-square)", line=-1)
+    #    boxplot(as.numeric(x@vcf.fix[x@mask,6]), axes=FALSE, frame.plot=T, col="#800080")
+    #    boxplot(as.numeric(x@var.info$hwe.Da[x@var.info$mask]), axes=FALSE, frame.plot=T, col="#008000")    
+    boxplot(as.numeric(x@var.info$hwe.chisq[x@var.info$mask]), axes=FALSE, frame.plot=T, col="#008000")    
+  }
+  #  
   if(length(x@var.info$DP[x@var.info$mask])>0 & DP){ # dp
     #    plot(x@vcf.fix[x@mask,2], x@vcf.info[x@mask,1], pch=20, col="#0080ff22", axes=F, frame.plot=T, ylab="", ...)
     plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$DP[x@var.info$mask], pch=20, 
@@ -1142,20 +1160,6 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
     boxplot(as.numeric(x@vcf.fix$QUAL[x@var.info$mask]), axes=FALSE, frame.plot=T, col="#800080")
   }
   #
-  if(length( x@var.info$hwe.Da[x@var.info$mask])>0 & HWE ){ # HWE
-    colv <- rep('#008000', times=length(x@var.info$hwe.p))
-    colv[x@var.info$hwe.p < 0.05] <- "#ff0000"
-    #    plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$hwe.Da[x@var.info$mask], pch=20,
-    plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$hwe.chisq[x@var.info$mask], pch=20,
-         col=paste(colv[x@var.info$mask], dot.alpha, sep=""),
-         #         col=paste("#800080", dot.alpha, sep=""),
-         axes=F, frame.plot=T, ylab="", ...)
-    axis(side=2, las=2)
-    title(main="H-W Disequilibrium", line=-1)
-    #    boxplot(as.numeric(x@vcf.fix[x@mask,6]), axes=FALSE, frame.plot=T, col="#800080")
-    #    boxplot(as.numeric(x@var.info$hwe.Da[x@var.info$mask]), axes=FALSE, frame.plot=T, col="#008000")    
-    boxplot(as.numeric(x@var.info$hwe.chisq[x@var.info$mask]), axes=FALSE, frame.plot=T, col="#008000")    
-  }
   #
   if(length(x@var.info$Ne[x@var.info$mask])>0 & NE){ # Ne
     #    plot(x@vcf.fix[x@mask,2], x@vcf.stat[x@mask,6], pch=20, col="#00008B22", axes=F, frame.plot=T, ylab="", ...)
