@@ -1116,7 +1116,7 @@ chromo <- function(x, verbose=TRUE, nsum=TRUE,
          axes=F, frame.plot=T, ylab="", 
          ylim=c(0, max(x@var.info$hwe.chisq[x@var.info$mask], na.rm=TRUE)), ...)
     axis(side=2, las=2)
-    title(main="H-W Disequilibrium (Chi-square)", line=-1)
+    title(main="H-W disequilibrium (Chi-square)", line=-1)
     #    boxplot(as.numeric(x@vcf.fix[x@mask,6]), axes=FALSE, frame.plot=T, col="#800080")
     #    boxplot(as.numeric(x@var.info$hwe.Da[x@var.info$mask]), axes=FALSE, frame.plot=T, col="#008000")    
     boxplot(as.numeric(x@var.info$hwe.chisq[x@var.info$mask]), axes=FALSE, frame.plot=T, col="#008000")    
