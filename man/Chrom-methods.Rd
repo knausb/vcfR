@@ -57,7 +57,7 @@ chromodot(x, nsum = FALSE, x1 = NULL, y1 = NULL, x2 = NULL, y2 = NULL,
 
 chromopop(x, ...)
 
-chromo(x, verbose = TRUE, nsum = TRUE, DP = FALSE, QUAL = FALSE,
+chromo(x = x, verbose = TRUE, nsum = TRUE, DP = FALSE, QUAL = FALSE,
   MQ = FALSE, HWE = FALSE, NE = FALSE, TPI = FALSE, TAJD = FALSE,
   FWH = FALSE, SNPDEN = FALSE, NUC = FALSE, ANN = FALSE, x1 = NULL,
   y1 = NULL, label1 = NULL, x2 = NULL, y2 = NULL, label2 = NULL,

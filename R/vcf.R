@@ -138,6 +138,7 @@ setMethod(
          print(x@gt[1:n,])
        } else {
          print(x@gt[1:n,1:6])
+         cat("First 6 columns only.\n")
        }
     } else {
       if(ncol(x@gt)<6){
@@ -146,6 +147,10 @@ setMethod(
         print(x@gt[,1:6])
       }
     }
+    cat("\n")
+    cat("Unique GT formats:\n")
+    print(unique(as.character(x@gt[,1])))
+    cat("\n")
 #    cat("***** Head not implemented *****\n")
   }
 )
