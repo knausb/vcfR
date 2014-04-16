@@ -192,6 +192,27 @@ setMethod(
 )
 
 
+#### Method [] ####
+#' @rdname vcfR-methods
+#' @export
+#' @aliases []
+#'
+#' @param i rows (variants) to include
+#' @param j columns (samples) to include
+#' @param drop delete the dimensions of an array which only has one level
+#'
+setMethod(
+  f= "[",
+  signature="vcfR",
+  definition=function(x,i,j,drop){
+    x@fix <- x@fix[i,]
+    x@gt <- x@gt[i,j]
+#    if(i=="times"){return(x@times)}else {}
+#    if(i=="traj"){return(x@traj)}else {}
+  }
+)
+
+
 #### Data loading functions. ####
 
 #' @title vcfR methods

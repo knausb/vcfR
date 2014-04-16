@@ -1,5 +1,7 @@
 \docType{methods}
 \name{head,vcfR-method}
+\alias{[,vcfR-method}
+\alias{[]}
 \alias{head,vcfR-method}
 \alias{head.vcfR}
 \alias{plot,vcfR-method}
@@ -16,6 +18,8 @@
 
 \S4method{subset}{vcfR}(x, regex, ...)
 
+\S4method{[}{vcfR}(x, i, j, drop)
+
 read.vcf(x)
 
 write.vcf(xvcf, vfile, mask = logical(0))
@@ -24,6 +28,13 @@ write.vcf(xvcf, vfile, mask = logical(0))
   \item{...}{Arguments to be passed to methods}
 
   \item{regex}{a regular expression to search for}
+
+  \item{i}{rows (variants) to include}
+
+  \item{j}{columns (samples) to include}
+
+  \item{drop}{delete the dimensions of an array which only
+  has one level}
 
   \item{x}{variant call format (vcf) file}
 
