@@ -197,14 +197,14 @@ setMethod(
 #' @export
 #' @aliases []
 #'
-#' @param i rows (variants) to include
-#' @param j columns (samples) to include
+#' @param i vector of rows (variants) to include
+#' @param j vector of columns (samples) to include
 #' @param drop delete the dimensions of an array which only has one level
 #'
 setMethod(
   f= "[",
   signature="vcfR",
-  definition=function(x,i,j,drop){
+  definition=function(x, i, j, drop){
     x@fix <- x@fix[i,]
     x@gt <- x@gt[i,j]
 #    if(i=="times"){return(x@times)}else {}
@@ -234,6 +234,7 @@ setMethod(
 #' data(vcfR_example)
 #' head(pinf_vcf)
 #' plot(pinf_vcf)
+#' pinf_vcf[1:6,]
 #' 
 read.vcf<-function(x){
   vcf <- new(Class="vcfR")

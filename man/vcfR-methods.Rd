@@ -29,9 +29,9 @@ write.vcf(xvcf, vfile, mask = logical(0))
 
   \item{regex}{a regular expression to search for}
 
-  \item{i}{rows (variants) to include}
+  \item{i}{vector of rows (variants) to include}
 
-  \item{j}{columns (samples) to include}
+  \item{j}{vector of columns (samples) to include}
 
   \item{drop}{delete the dimensions of an array which only
   has one level}
@@ -67,5 +67,6 @@ library(vcfR)
 data(vcfR_example)
 head(pinf_vcf)
 plot(pinf_vcf)
+pinf_vcf[1:6,]
 }
 
