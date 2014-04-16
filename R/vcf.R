@@ -207,6 +207,7 @@ setMethod(
   definition=function(x, i, j, drop){
     x@fix <- x@fix[i,]
     x@gt <- x@gt[i,j]
+    return(x)
 #    if(i=="times"){return(x@times)}else {}
 #    if(i=="traj"){return(x@traj)}else {}
   }
