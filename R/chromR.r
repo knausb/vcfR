@@ -1106,7 +1106,7 @@ chromo <- function(x = x,
   if(length(       x@var.info$Ne[x@var.info$mask])>0 & NE  ){brows <- brows+1} # Ne
   if(length( x@var.info$theta_pi[x@var.info$mask])>0 & TPI ){brows <- brows+1} # Theta_pi
   if(length(x@var.info$tajimas_d[x@var.info$mask])>0 & TAJD){brows <- brows+1} # Tajima's D
-  if(length(    x@var.info$faywu[x@var.info$mask])>0 & FWH ){brows <- brows+1} # Fay and Wu's
+  if(length(  x@var.info$faywu_h[x@var.info$mask])>0 & FWH ){brows <- brows+1} # Fay and Wu's
   #
   if( length(x@win.info$variants)>0 & SNPDEN){brows <- brows+1}
   if(length(x@win.info$A)>0 & NUC   ){brows <- brows+1}
@@ -1146,7 +1146,7 @@ chromo <- function(x = x,
     points(x = x1,
            y = y1,
            pch = 20,
-           col = paste("#FF8000", dot.alpha, sep=""),
+           col = paste("#FF8000", dot.alpha, sep = ""),
            )
     title(main = label1, line = -1)
     axis(side = 2, las = 2)
@@ -1180,11 +1180,11 @@ chromo <- function(x = x,
     colv[x@var.info$hwe.p < 0.05] <- "#ff0000"
     #    plot(x@vcf.fix$POS[x@var.info$mask], x@var.info$hwe.Da[x@var.info$mask], pch=20,
     plot(x = c(1, x@len),
-         y=c(0, max(x@var.info$hwe.chisq[x@var.info$mask], na.rm=TRUE)),
-         type="n",
+         y = c(0, max(x@var.info$hwe.chisq[x@var.info$mask], na.rm=TRUE)),
+         type = "n",
          axes = FALSE,
-         frame.plot=TRUE,
-         ylab="",
+         frame.plot = TRUE,
+         ylab = "",
          ...,
          )
 #    plot(x = x@vcf.fix$POS[x@var.info$mask],
@@ -1562,7 +1562,6 @@ plot.sfs <- function(x, log10=TRUE, ...){
 }
 
 ##### ##### extract.gt
-
 #
 #' @rdname Chrom-methods
 #' @export
@@ -1573,31 +1572,50 @@ plot.sfs <- function(x, log10=TRUE, ...){
 #' @param as.matrix attempt to recast as a numeric matrix
 #' 
 extract.gt <- function(x, element="GT", mask=logical(0), as.matrix=FALSE){
-  if(class(x) != "Chrom"){stop("Expected object of class Chrom")}
-  if(length(mask) == 0 & length(x@var.info$mask) == 0){
-    # Neither mask is set.
-    mask <- 1:nrow(x@vcf.gt)
+  if(class(x) == "Chrom"){
+    vcf <- new(Class="vcfR")
+    vcf@meta <- x@vcf.meta
+    vcf@fix  <- x@vcf.fix
+    vcf@gt   <- x@vcf.gt
+    mask     <- x@var.info$mask
+    x <- vcf
+    rm(vcf)
+  }
+  if(class(x) != "vcfR"){stop("Expected an object of class vcfR or Chrom")}
+  #
+  # Make element regex more spercific.
+  element <- paste("^[:]{0,1}", element, "[:]{0,1}$", sep="")
+  #
+  # Manage mask.
+  if(length(mask) == 0){
+    mask <- 1:nrow(x@gt)
   } else if (length(mask) > 0){
     # Use specified mask.
-  } else if (sum(x@var.info$mask) > 0){
+  } else if (sum(mask) > 0){
     # Use the mask in the Chom object.
-    mask <- x@var.info$mask
+    mask <- mask
   } else {
     stop("Unexpected mask.")
   }
   #
+  # Create a function to get a single elements for a single variant (row).
   get.gt1 <- function(x, element="GT"){
     FORMAT <- unlist(strsplit(as.character(x[1]), ":"))
     x <- x[-1]
     pos <- grep(element, FORMAT)
     if(length(pos) == 0){
-      rep(NA, times=length(x))
+      x <- rep(NA, times=length(x))
     } else {
-      unlist(lapply(strsplit(as.character(x), ":"), function(x){x[pos]}))
+      x <- unlist(lapply(strsplit(as.character(x), ":"), function(x){x[pos]}))
     }
+    is.na(x[x=="./."]) <- TRUE
+    return(x)
   }
-  gt <- t(apply(x@vcf.gt[mask,], MARGIN=1, get.gt1, element=element))
-  colnames(gt) <- names(x@vcf.gt)[-1]
+  #
+  # Implement this function over the matrix.
+#  gt <- t(apply(x@gt[mask,], MARGIN=1, get.gt1, element=element))
+  gt <- t(apply(x@gt, MARGIN=1, get.gt1, element=element))
+  colnames(gt) <- names(x@gt)[-1]
   if(as.matrix==TRUE){
     tmp <- matrix(nrow=nrow(gt), ncol=ncol(gt))
     for(i in 1:ncol(gt)){
@@ -1605,9 +1623,10 @@ extract.gt <- function(x, element="GT", mask=logical(0), as.matrix=FALSE){
     }
     gt <- tmp
   }
-  colnames(gt) <- names(x)
-  gt
+  return(gt)
 }
+
+
 
 #' @rdname Chrom-methods
 #' @export
