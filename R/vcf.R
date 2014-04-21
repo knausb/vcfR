@@ -287,7 +287,7 @@ write.vcf<-function(xvcf, vfile, mask=logical(0)){
     xvcf@meta <- temp@vcf.meta
     xvcf@fix <- temp@vcf.fix
     xvcf@gt <- temp@vcf.gt
-    mask <- temp@mask
+    mask <- temp@var.info$mask
     rm(temp)
   }
   if(class(xvcf) != "vcfR"){
