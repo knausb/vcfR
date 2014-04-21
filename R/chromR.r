@@ -833,7 +833,7 @@ gt2popsum <- function(x){
   summ[,'Ne'] <- 1/(1-summ[,'He'])
   #
   # Hardy-Weinberg Disequilibrium
-  summ[mask,c('hwe.prob', 'hwe.Da', 'hwe.chisq', 'hwe.p')] <- t(apply(summ[mask,c('RR', 'RA', 'AA')], MARGIN=1, FUN=hwe))
+  summ[mask,c('hwe.prob', 'hwe.Da', 'hwe.chisq', 'hwe.p')] <- t(apply(summ[mask,c('RR', 'RA', 'AA'), drop=FALSE], MARGIN=1, FUN=hwe))
   #
   # Thetas.
   summ[,c('theta_pi','theta_w','theta_h')] <- t(apply(summ[,c('nREF','nALT'), drop=FALSE], MARGIN=1,thetas))
