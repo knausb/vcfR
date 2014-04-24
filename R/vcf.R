@@ -249,21 +249,27 @@ read.vcf<-function(x){
       if(length(grep('^##',tmp)) == 0){j <- 1}
     }
     vcf@meta <- scan(x, what="character", sep="\n", skip=0, nlines=i, quiet=T, comment.char="")
-    vcf@fix <- read.table(x,header=T,sep='\t',skip=i,comment.char='')
+    vcf@fix <- read.table(x, header=T, sep='\t', skip=i, comment.char='', colClasses = "character")
     vcf@gt <- vcf@fix[,9:ncol(vcf@fix)]
     vcf@fix <- vcf@fix[,1:8]
+    vcf@fix$POS  <- as.integer(vcf@fix$POS)
+    vcf@fix$QUAL <- as.integer(vcf@fix$QUAL)
   } else if (length(grep('^#',tmp)) >0 ){
     # No meta region, but a header line.
-    vcf@fix <- read.table(x,header=T,sep='\t',skip=0,comment.char='')
+    vcf@fix <- read.table(x,header=T,sep='\t',skip=0,comment.char='', colClasses = "character")
     vcf@gt <- vcf@fix[,9:ncol(vcf@fix)]
     vcf@fix <- vcf@fix[,1:8]
-    colnames(vcf@fix) <- c('chrom','pos','id','ref','alt','qual','filter','info')
+#    colnames(vcf@fix) <- c('chrom','pos','id','ref','alt','qual','filter','info')
+    vcf@fix$POS  <- as.integer(vcf@fix$POS)
+    vcf@fix$QUAL <- as.integer(vcf@fix$QUAL)
   } else {
     # No meta region or header line.
-    vcf@fix <- read.table(x,header=F,sep='\t',skip=0,comment.char='')
+    vcf@fix <- read.table(x,header=F,sep='\t',skip=0,comment.char='', colClasses = "character")
     vcf@gt <- vcf@fix[,9:ncol(vcf@fix)]
     vcf@fix <- vcf@fix[,1:8]
-    colnames(vcf@fix) <- c('chrom','pos','id','ref','alt','qual','filter','info')
+    colnames(vcf@fix) <- c('CHROM','POS','ID','REF','ALT','QUAL','FILTER','INFO')
+    vcf@fix$POS  <- as.integer(vcf@fix$POS)
+    vcf@fix$QUAL <- as.integer(vcf@fix$QUAL)    
   }
   return(vcf)
 }
