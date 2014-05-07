@@ -281,11 +281,12 @@ read.vcf<-function(x){
 #' 
 #' @param xvcf a vcfR object
 #' @param vfile an output filename
-#' @param mask logical vector indicating rows to use
+# @param mask logical vector indicating rows to use
 #' 
 #' @export
 #' 
-write.vcf<-function(xvcf, vfile, mask=logical(0)){
+#write.vcf<-function(xvcf, vfile, mask=logical(0)){
+write.vcf<-function(xvcf, vfile, ...){
   if(class(xvcf) == 'Chrom'){
     # Recast as a vcfR object.
     temp <- xvcf
@@ -307,21 +308,29 @@ write.vcf<-function(xvcf, vfile, mask=logical(0)){
   #
   orig_scipen <- getOption("scipen")
   options(scipen=999)
-  header <- c(names(xvcf@fix), names(xvcf@gt))
-  header[1] <- paste("#",header[1],sep='')
-  write.table(xvcf@meta, file = vfile, append = FALSE, quote = FALSE, sep = "\t",
+  if(append == FALSE){
+    header <- c(names(xvcf@fix), names(xvcf@gt))
+    header[1] <- paste("#",header[1],sep='')
+    write.table(xvcf@meta, file = vfile, append = FALSE, quote = FALSE, sep = "\t",
               eol = "\n", na = "NA", dec = ".", row.names = FALSE,
               col.names = FALSE)
-  write(header, file = vfile,
+    write(header, file = vfile,
         ncolumns=length(header),
         append = TRUE,
         sep = "\t")
-  write.table(cbind(xvcf@fix[mask,], xvcf@gt[mask,]), file = vfile, append = TRUE,
+    write.table(cbind(xvcf@fix[mask,], xvcf@gt[mask,]), file = vfile, append = TRUE,
               quote = FALSE, sep = "\t",
               eol = "\n", na = "NA", dec = ".",
               row.names = FALSE,
               col.names = FALSE)
 #              col.names = TRUE)
+  } else if (append == TRUE){
+    write.table(cbind(xvcf@fix[mask,], xvcf@gt[mask,]), file = vfile, append = TRUE,
+                quote = FALSE, sep = "\t",
+                eol = "\n", na = "NA", dec = ".",
+                row.names = FALSE,
+                col.names = FALSE)    
+  }
   options(scipen=orig_scipen)
 }
 
