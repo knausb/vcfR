@@ -309,7 +309,7 @@ write.vcf<-function(xvcf, vfile, mask=logical(0), APPEND=FALSE){
   #
   orig_scipen <- getOption("scipen")
   options(scipen=999)
-  if(append == FALSE){
+  if(APPEND == FALSE){
     header <- c(names(xvcf@fix), names(xvcf@gt))
     header[1] <- paste("#",header[1],sep='')
     write.table(xvcf@meta, file = vfile, append = FALSE, quote = FALSE, sep = "\t",
@@ -325,7 +325,7 @@ write.vcf<-function(xvcf, vfile, mask=logical(0), APPEND=FALSE){
               row.names = FALSE,
               col.names = FALSE)
 #              col.names = TRUE)
-  } else if (append == TRUE){
+  } else if (APPEND == TRUE){
     write.table(cbind(xvcf@fix[mask,], xvcf@gt[mask,]), file = vfile, append = TRUE,
                 quote = FALSE, sep = "\t",
                 eol = "\n", na = "NA", dec = ".",
