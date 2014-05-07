@@ -282,11 +282,12 @@ read.vcf<-function(x){
 #' @param xvcf a vcfR object
 #' @param vfile an output filename
 #' @param mask logical vector indicating rows to use
+#' @param APPEND logical indicating whether to append to existing vcf file or write a new file
 #' 
 #' @export
 #' 
 #write.vcf<-function(xvcf, vfile, mask=logical(0)){
-write.vcf<-function(xvcf, vfile, mask=logical(0), ...){
+write.vcf<-function(xvcf, vfile, mask=logical(0), APPEND=FALSE){
   if(class(xvcf) == 'Chrom'){
     # Recast as a vcfR object.
     temp <- xvcf

@@ -22,7 +22,7 @@
 
 read.vcf(x)
 
-write.vcf(xvcf, vfile, mask = logical(0), ...)
+write.vcf(xvcf, vfile, mask = logical(0), APPEND = FALSE)
 }
 \arguments{
   \item{...}{Arguments to be passed to methods}
@@ -43,6 +43,9 @@ write.vcf(xvcf, vfile, mask = logical(0), ...)
   \item{vfile}{an output filename}
 
   \item{mask}{logical vector indicating rows to use}
+
+  \item{APPEND}{logical indicating whether to append to
+  existing vcf file or write a new file}
 
   \item{n}{a single integer. If positive, size for the
   resulting object: number of elements for a vector
