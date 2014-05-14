@@ -1616,11 +1616,14 @@ extract.gt <- function(x, element="GT", mask=logical(0), as.matrix=FALSE){
 #  gt <- t(apply(x@gt[mask,], MARGIN=1, get.gt1, element=element))
   gt <- t(apply(x@gt, MARGIN=1, get.gt1, element=element))
   colnames(gt) <- names(x@gt)[-1]
+  rownames(gt) <- rownames(x@gt)
   if(as.matrix==TRUE){
     tmp <- matrix(nrow=nrow(gt), ncol=ncol(gt))
     for(i in 1:ncol(gt)){
       tmp[,i] <- as.numeric(gt[,i]) 
     }
+    colnames(tmp) <- colnames(gt)
+    rownames(tmp) <- rownames(gt)
     gt <- tmp
   }
   return(gt)
