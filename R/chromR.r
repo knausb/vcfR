@@ -672,6 +672,9 @@ var.win <- function(x, win.size=1000){
     seq <- as.character(x@seq)[[1]]
   }
   #
+  genic_sites <- rep(0, times=x@len)
+  genic_sites[unlist(apply(x@ann[, 4:5], MARGIN=1, function(x){seq(from=x[1], to=x[2], by=1)}))] <- 1
+  #
   win.info <- seq(1,x@len, by=win.size)
   win.info <- cbind(win.info, c(win.info[-1]-1, x@len))
   win.info <- cbind(1:nrow(win.info), win.info)
@@ -687,12 +690,14 @@ var.win <- function(x, win.size=1000){
     n <- length(grep("[nN]", seq, perl=TRUE))
     o <- length(grep("[^aAcCgGtTnN]", seq, perl=TRUE))
     count <- sum(x@vcf.fix$POS[x@var.info$mask] >= y[2] & x@vcf.fix$POS[x@var.info$mask] <= y[3])
-    c(a,c,g,t,n,o, count)
+    genic <- sum(genic_sites[y[2]:y[3]])
+    #
+    c(a,c,g,t,n,o, count, genic)
   }
   #
   win.info <- cbind(win.info, t(apply(win.info, MARGIN=1, win.proc, seq=seq)))
   win.info <- as.data.frame(win.info)
-  names(win.info) <- c('window','start','end','length','A','C','G','T','N','other','variants')
+  names(win.info) <- c('window','start','end','length','A','C','G','T','N','other','variants', 'genic')
   win.info
 }
 
