@@ -12,4 +12,3 @@ While this project is in development it can be installed through github:
     install_github(repo="vcfR", username="knausb")
     library(vcfR)
 
-# EOF. 

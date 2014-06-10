@@ -414,9 +414,9 @@ ann2chrom <- function(x,y,...){
 #' chromopop(pinf_mt)
 #' gt <- extract.gt(pinf_mt)
 #' head(gt)
-#' tab <- variant.table(pinf_mt)
+#' tab <- variant_table(pinf_mt)
 #' head(tab)
-#' win <- windowTable(pinf_mt)
+#' win <- window_table(pinf_mt)
 #' head(win)
 # hist(tab$Ho - tab$He, col=5)
 # # Note that this example is a mitochondrion, so this is a bit silly.
@@ -1638,9 +1638,9 @@ extract.gt <- function(x, element="GT", mask=logical(0), as.matrix=FALSE){
 
 #' @rdname Chrom-methods
 #' @export
-#' @aliases variant.table
+#' @aliases variant_table
 #' 
-variant.table <- function(x){
+variant_table <- function(x){
   tab <- x@var.info[x@var.info$mask,]
   tab <- cbind(rep(x@name, times=nrow(tab)), x@vcf.fix$QUAL[x@var.info$mask], tab)
   names(tab)[1] <- "chrom"
@@ -1650,9 +1650,9 @@ variant.table <- function(x){
 
 #' @rdname Chrom-methods
 #' @export
-#' @aliases windowTable
+#' @aliases window_table
 #' 
-windowTable <- function(x){
+window_table <- function(x){
   tab <- x@win.info
   tab <- cbind(rep(x@name, times=nrow(tab)), tab)
   names(tab)[1] <- "chrom"
