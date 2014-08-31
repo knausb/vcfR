@@ -11,19 +11,20 @@
 #' Heatmap of a numeric matrix with barplots summarizing columns and rows.
 #'
 #' 
-#' @param x a numeric matrix
-#' @param cbarplot a logical indicating whether the columns should be summarized with a barplot 
-#' @param rbarplot a logical indicating whether the rows should be summarized with a barplot
-#' @param legend a logical indicating whether a legend should be plotted
-#' @param clabels a logical indicating whether column labels should be included
-#' @param rlabels a logical indicating whether row labels should be included
+#' @param x a numeric matrix.
+#' @param cbarplot a logical indicating whether the columns should be summarized with a barplot.
+#' @param rbarplot a logical indicating whether the rows should be summarized with a barplot.
+#' @param legend a logical indicating whether a legend should be plotted.
+#' @param clabels a logical indicating whether column labels should be included.
+#' @param rlabels a logical indicating whether row labels should be included.
 #' @param na.rm a logical indicating whether missing values should be removed.
 #' @param scale character indicating if the values should be centered and scaled in either the row direction or the column direction, or none. The default is "none".
-#' @param ...  additional arguments to be passed on
+#' @param col.ramp vector of colors to be used for the color ramp.
+#' @param ...  additional arguments to be passed on.
 #' 
 #' @details The function heatmap.bp creates a heatmap from a numeric matrix with optional barplots to summarize the rows and columns.
 #' 
-#' @seealso heatmap, image, heatmap2 in library(gplots)
+#' @seealso heatmap, image, heatmap2 in library(gplots).
 #' 
 #' @examples
 #' library(vcfR)
@@ -33,10 +34,13 @@
 #' pinf_gq <- extract.gt(pinf_mt, element="GQ", as.matrix=TRUE)
 #' heatmap.bp(pinf_gq)
 #' heatmap.bp(pinf_gq, scale="col")
+#' heatmap.bp(pinf_gq, col.ramp = colorRampPalette(c("red", "yellow", "#008000"))(100))
+#' heatmap.bp(pinf_gq, col.ramp = colorRampPalette(c("#D55E00", "#F0E442", "#009E73"))(100))
 #' 
 heatmap.bp <- function(x, cbarplot = TRUE, rbarplot = TRUE,
                        legend = TRUE, clabels = TRUE, rlabels = TRUE,
                        na.rm = TRUE, scale = c("row", "column", "none"),
+                       col.ramp = colorRampPalette(c("red", "yellow", "#008000"))(100),
                        ...){
   stopifnot(class(x) == 'matrix')
   scale <- if(missing(scale))
@@ -68,7 +72,9 @@ heatmap.bp <- function(x, cbarplot = TRUE, rbarplot = TRUE,
   #
   if(ncols == 1 & nrows == 1){
     cat("1 and 1\n")
-    image(t(x), col = colorRampPalette(c("red", "yellow", "#008000"))(100),
+    image(t(x),
+#          col = colorRampPalette(c("red", "yellow", "#008000"))(100),
+          col = col.ramp,          
           axes=FALSE, frame.plot=TRUE)
   }
   if(nrows == 1 & ncols == 2){}
@@ -100,7 +106,9 @@ heatmap.bp <- function(x, cbarplot = TRUE, rbarplot = TRUE,
     #
     plot(1, 1, type="n", axes=FALSE, xlab="", ylab="")
     plot(1, 1, type="n", axes=FALSE, xlab="", ylab="")
-    image(t(x), col = colorRampPalette(c("red", "yellow", "#008000"))(100),
+    image(t(x),
+#          col = colorRampPalette(c("red", "yellow", "#008000"))(100),
+          col = col.ramp,
           axes=FALSE, frame.plot=TRUE)
     #
 #    barplot(rowSums(x, na.rm=na.rm)/max(rowSums(x, na.rm=na.rm)),
@@ -118,7 +126,8 @@ heatmap.bp <- function(x, cbarplot = TRUE, rbarplot = TRUE,
     }
     #
     barplot(rep(1, times=100), space=0, border=NA, horiz = TRUE,
-            col=colorRampPalette(c("red", "yellow", "#008000"))(100),
+#            col=colorRampPalette(c("red", "yellow", "#008000"))(100),
+            col = col.ramp,
             axes=FALSE)
     text(0.5, 5, "Low", col="#FFFFFF")
     text(0.5, 95, "High", col="#FFFFFF")

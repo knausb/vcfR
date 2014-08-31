@@ -5,25 +5,26 @@
 \usage{
 heatmap.bp(x, cbarplot = TRUE, rbarplot = TRUE, legend = TRUE,
   clabels = TRUE, rlabels = TRUE, na.rm = TRUE, scale = c("row",
-  "column", "none"), ...)
+  "column", "none"), col.ramp = colorRampPalette(c("red", "yellow",
+  "#008000"))(100), ...)
 }
 \arguments{
-  \item{x}{a numeric matrix}
+  \item{x}{a numeric matrix.}
 
   \item{cbarplot}{a logical indicating whether the columns
-  should be summarized with a barplot}
+  should be summarized with a barplot.}
 
   \item{rbarplot}{a logical indicating whether the rows
-  should be summarized with a barplot}
+  should be summarized with a barplot.}
 
   \item{legend}{a logical indicating whether a legend
-  should be plotted}
+  should be plotted.}
 
   \item{clabels}{a logical indicating whether column labels
-  should be included}
+  should be included.}
 
   \item{rlabels}{a logical indicating whether row labels
-  should be included}
+  should be included.}
 
   \item{na.rm}{a logical indicating whether missing values
   should be removed.}
@@ -32,7 +33,10 @@ heatmap.bp(x, cbarplot = TRUE, rbarplot = TRUE, legend = TRUE,
   centered and scaled in either the row direction or the
   column direction, or none. The default is "none".}
 
-  \item{...}{additional arguments to be passed on}
+  \item{col.ramp}{vector of colors to be used for the color
+  ramp.}
+
+  \item{...}{additional arguments to be passed on.}
 }
 \description{
 Heatmap of a numeric matrix with barplots summarizing
@@ -51,8 +55,10 @@ pinf_mt <- masker(pinf_mt)
 pinf_gq <- extract.gt(pinf_mt, element="GQ", as.matrix=TRUE)
 heatmap.bp(pinf_gq)
 heatmap.bp(pinf_gq, scale="col")
+heatmap.bp(pinf_gq, col.ramp = colorRampPalette(c("red", "yellow", "#008000"))(100))
+heatmap.bp(pinf_gq, col.ramp = colorRampPalette(c("#D55E00", "#F0E442", "#009E73"))(100))
 }
 \seealso{
-heatmap, image, heatmap2 in library(gplots)
+heatmap, image, heatmap2 in library(gplots).
 }
 
