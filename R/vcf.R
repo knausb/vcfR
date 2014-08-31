@@ -248,8 +248,10 @@ read.vcf<-function(x){
       tmp <- scan(x, what="character", sep="\n", skip=i, nlines=1, quiet=T, comment.char="")
       if(length(grep('^##',tmp)) == 0){j <- 1}
     }
-    vcf@meta <- scan(x, what="character", sep="\n", skip=0, nlines=i, quiet=T, comment.char="")
-    vcf@fix <- read.table(x, header=T, sep='\t', skip=i, comment.char='', colClasses = "character")
+    vcf@meta <- scan(x, what = "character", sep = "\n", skip = 0, nlines = i,
+                     quiet = T, comment.char = "")
+    vcf@fix <- read.table(x, header = TRUE, sep = '\t', skip = i, comment.char = '',
+                          colClasses = "character", check.names = FALSE)
     vcf@gt <- vcf@fix[,9:ncol(vcf@fix)]
     vcf@fix <- vcf@fix[,1:8]
     vcf@fix$POS  <- as.integer(vcf@fix$POS)
