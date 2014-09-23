@@ -262,6 +262,7 @@ read.vcf<-function(x){
     vcf@gt <- vcf@fix[,9:ncol(vcf@fix)]
     vcf@fix <- vcf@fix[,1:8]
 #    colnames(vcf@fix) <- c('chrom','pos','id','ref','alt','qual','filter','info')
+    colnames(vcf@fix) <- c('CHROM','POS','ID','REF','ALT','QUAL','FILTER','INFO')
     vcf@fix$POS  <- as.integer(vcf@fix$POS)
     vcf@fix$QUAL <- as.integer(vcf@fix$QUAL)
   } else {
