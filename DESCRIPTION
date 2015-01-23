@@ -7,7 +7,10 @@ Author: Brian Knaus <briank.lists@gmail.com>
 Maintainer: Brian Knaus <briank.lists@gmail.com>
 Depends:
     R (>= 3.0.1)
+LinkingTo:
+    Rcpp
 Imports:
     methods,
-    ape
+    ape,
+    Rcpp
 License: GPL

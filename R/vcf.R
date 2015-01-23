@@ -20,6 +20,8 @@
 #' @docType package
 #' @name vcfR
 #' @rdname vcfR
+#' @useDynLib vcfR
+#' @importFrom Rcpp sourceCpp
 NULL
 
 #### Class definition. ####
@@ -87,7 +89,8 @@ setMethod(
 setMethod(
   f="print",
   signature="vcfR",
-  definition=function (x,y,...){
+#  definition=function (x,y,...){
+  definition=function (x, ...){
     cat("***** Object of class vcf *****\n")
     if(length(x@meta)>0){
       cat("Meta\n")
@@ -112,10 +115,12 @@ setMethod(
 #' @export
 #' @aliases head.vcfR
 #' 
+#' @param n number of rows to print
+#' 
 setMethod(
   f="head",
   signature="vcfR",
-  definition=function (x, y, n=6, ...){
+  definition=function (x, n=6, ...){
     cat("***** Object of class 'vcf' *****\n")
     cat("***** Meta section *****\n")
     if(length(x@meta) > n){
@@ -155,17 +160,19 @@ setMethod(
   }
 )
 
+setGeneric("plot")
 #### Method plot ####
 #' @rdname vcfR-methods
 #' @export
 #' @aliases plot.vcfR
 #' 
+#' @param y not used
 #' @param ... Arguments to be passed to methods
 #' 
 setMethod(
-  f= "plot",
+  f="plot",
   signature= "vcfR",
-  definition=function (x,y,...){
+  definition=function(x, y, ...){
 #    cat("***** Object of class 'vcf' *****\n")
 #    cat("***** Plot not implemented *****\n")
     hist(x@fix$QUAL, col=5, main='Histogram of qualities', xlab='QUAL')
@@ -337,5 +344,7 @@ write.vcf<-function(xvcf, vfile, mask=logical(0), APPEND=FALSE){
   }
   options(scipen=orig_scipen)
 }
+
+
 
 #### EOF. ####
