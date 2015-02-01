@@ -5,6 +5,21 @@
 
 using namespace Rcpp;
 
+// extractGT2NM
+NumericMatrix extractGT2NM(DataFrame x);
+RcppExport SEXP vcfR_extractGT2NM(SEXP xSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< DataFrame >::type x(xSEXP );
+        NumericMatrix __result = extractGT2NM(x);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // one
 int one();
 RcppExport SEXP vcfR_one() {
