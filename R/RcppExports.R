@@ -3,10 +3,11 @@
 
 #' Extract numeric data from genotype field of VCF
 #' 
-#' @param x A dataframe.
+#' @param x A dataframe
+#' @param element A string matching the element to be retrieved
 #' @export
-extractGT2NM <- function(x) {
-    .Call('vcfR_extractGT2NM', PACKAGE = 'vcfR', x)
+extractGT2NM <- function(x, element = "DP") {
+    .Call('vcfR_extractGT2NM', PACKAGE = 'vcfR', x, element)
 }
 
 one <- function() {

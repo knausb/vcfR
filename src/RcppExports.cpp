@@ -6,14 +6,15 @@
 using namespace Rcpp;
 
 // extractGT2NM
-NumericMatrix extractGT2NM(DataFrame x);
-RcppExport SEXP vcfR_extractGT2NM(SEXP xSEXP) {
+NumericMatrix extractGT2NM(DataFrame x, std::string element = "DP");
+RcppExport SEXP vcfR_extractGT2NM(SEXP xSEXP, SEXP elementSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
         Rcpp::traits::input_parameter< DataFrame >::type x(xSEXP );
-        NumericMatrix __result = extractGT2NM(x);
+        Rcpp::traits::input_parameter< std::string >::type element(elementSEXP );
+        NumericMatrix __result = extractGT2NM(x, element);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
