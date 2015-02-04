@@ -35,6 +35,24 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// NM2winNM
+NumericMatrix NM2winNM(NumericMatrix x, std::vector<int> pos, int maxbp, int winsize = 100);
+RcppExport SEXP vcfR_NM2winNM(SEXP xSEXP, SEXP posSEXP, SEXP maxbpSEXP, SEXP winsizeSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP );
+        Rcpp::traits::input_parameter< std::vector<int> >::type pos(posSEXP );
+        Rcpp::traits::input_parameter< int >::type maxbp(maxbpSEXP );
+        Rcpp::traits::input_parameter< int >::type winsize(winsizeSEXP );
+        NumericMatrix __result = NM2winNM(x, pos, maxbp, winsize);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // timesTwo
 int timesTwo(int x);
 RcppExport SEXP vcfR_timesTwo(SEXP xSEXP) {

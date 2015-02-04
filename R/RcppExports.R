@@ -14,6 +14,16 @@ one <- function() {
     .Call('vcfR_one', PACKAGE = 'vcfR')
 }
 
+#' Extract numeric data from genotype field of VCF
+#' 
+#' @param x A NumericMatrix
+#' @param maxbp max
+#' @param winsize
+#' @export
+NM2winNM <- function(x, pos, maxbp, winsize = 100L) {
+    .Call('vcfR_NM2winNM', PACKAGE = 'vcfR', x, pos, maxbp, winsize)
+}
+
 #' Multiply a number by two
 #' 
 #' @param x A single integer.
