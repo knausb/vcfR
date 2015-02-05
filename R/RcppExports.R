@@ -17,6 +17,7 @@ one <- function() {
 #' Extract numeric data from genotype field of VCF
 #' 
 #' @param x A NumericMatrix
+#' @param pos A vector of chromosomal positions
 #' @param maxbp max
 #' @param winsize
 #' @export
