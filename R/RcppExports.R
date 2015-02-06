@@ -10,10 +10,6 @@ extractGT2NM <- function(x, element = "DP") {
     .Call('vcfR_extractGT2NM', PACKAGE = 'vcfR', x, element)
 }
 
-one <- function() {
-    .Call('vcfR_one', PACKAGE = 'vcfR')
-}
-
 #' Extract numeric data from genotype field of VCF
 #' 
 #' @param x A NumericMatrix
@@ -25,11 +21,21 @@ NM2winNM <- function(x, pos, maxbp, winsize = 100L) {
     .Call('vcfR_NM2winNM', PACKAGE = 'vcfR', x, pos, maxbp, winsize)
 }
 
-#' Multiply a number by two
+#' Read vcf header
 #' 
-#' @param x A single integer.
+#' @param x A String containing the filename
+#' @rdname readvcf2
 #' @export
-timesTwo <- function(x) {
-    .Call('vcfR_timesTwo', PACKAGE = 'vcfR', x)
+readVcfHeader <- function(x) {
+    .Call('vcfR_readVcfHeader', PACKAGE = 'vcfR', x)
+}
+
+#' Read vcf body
+#' 
+#' @param x A String containing the filename
+#' @rdname readvcf2
+#' @export
+readVcfBody <- function(x) {
+    .Call('vcfR_readVcfBody', PACKAGE = 'vcfR', x)
 }
 
