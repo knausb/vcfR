@@ -1,5 +1,6 @@
 // [[Rcpp::plugins(cpp11)]]
 #include <Rcpp.h>
+#include <string>
 
 using namespace Rcpp;
 
@@ -96,7 +97,9 @@ double extractElementD(String x, int number=1){
     if(istring[i] == ':'){
       if(pos == number){
         teststring = istring.substr(start, i-start);
-        return stod(teststring);
+        double teststring2 = atof(teststring.c_str());
+        return teststring2;
+//        return std::stod(teststring);
       } else {
         start = i+1;
         pos++;

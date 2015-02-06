@@ -9,6 +9,7 @@ using namespace Rcpp;
 //' 
 //' @param x A String containing the filename
 //' @rdname readvcf2
+//' @aliases readVcfHeader
 //' @export
 // [[Rcpp::export]]
 std::vector<std::string> readVcfHeader(String x) {
@@ -74,7 +75,6 @@ CharacterMatrix addRow(CharacterMatrix x){
 
 //' Read vcf body
 //' 
-//' @param x A String containing the filename
 //' @rdname readvcf2
 //' @export
 // [[Rcpp::export]]

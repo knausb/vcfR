@@ -11,8 +11,6 @@ readVcfBody(x)
 }
 \arguments{
 \item{x}{A String containing the filename}
-
-\item{x}{A String containing the filename}
 }
 \description{
 Read vcf header

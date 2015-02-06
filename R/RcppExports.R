@@ -14,8 +14,8 @@ extractGT2NM <- function(x, element = "DP") {
 #' 
 #' @param x A NumericMatrix
 #' @param pos A vector of chromosomal positions
-#' @param maxbp max
-#' @param winsize
+#' @param maxbp Length of chromosome
+#' @param winsize Size (in bp) for windows
 #' @export
 NM2winNM <- function(x, pos, maxbp, winsize = 100L) {
     .Call('vcfR_NM2winNM', PACKAGE = 'vcfR', x, pos, maxbp, winsize)
@@ -25,6 +25,7 @@ NM2winNM <- function(x, pos, maxbp, winsize = 100L) {
 #' 
 #' @param x A String containing the filename
 #' @rdname readvcf2
+#' @aliases readVcfHeader
 #' @export
 readVcfHeader <- function(x) {
     .Call('vcfR_readVcfHeader', PACKAGE = 'vcfR', x)
@@ -32,7 +33,6 @@ readVcfHeader <- function(x) {
 
 #' Read vcf body
 #' 
-#' @param x A String containing the filename
 #' @rdname readvcf2
 #' @export
 readVcfBody <- function(x) {

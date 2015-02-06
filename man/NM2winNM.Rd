@@ -11,9 +11,9 @@ NM2winNM(x, pos, maxbp, winsize = 100L)
 
 \item{pos}{A vector of chromosomal positions}
 
-\item{maxbp}{max}
+\item{maxbp}{Length of chromosome}
 
-\item{winsize}{}
+\item{winsize}{Size (in bp) for windows}
 }
 \description{
 Extract numeric data from genotype field of VCF

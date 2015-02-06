@@ -67,8 +67,8 @@ NumericVector win_mean(std::vector< std::vector<double> > win){
 //' 
 //' @param x A NumericMatrix
 //' @param pos A vector of chromosomal positions
-//' @param maxbp max
-//' @param winsize
+//' @param maxbp Length of chromosome
+//' @param winsize Size (in bp) for windows
 //' @export
 // [[Rcpp::export]]
 NumericMatrix NM2winNM(NumericMatrix x, std::vector<int> pos, int maxbp, int winsize=100) {
