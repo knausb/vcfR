@@ -263,6 +263,7 @@ read.vcf<-function(x){
     vcf@fix <- vcf@fix[,1:8]
     vcf@fix$POS  <- as.integer(vcf@fix$POS)
     vcf@fix$QUAL <- as.integer(vcf@fix$QUAL)
+    colnames(vcf@fix) <- c('CHROM','POS','ID','REF','ALT','QUAL','FILTER','INFO')
   } else if (length(grep('^#',tmp)) >0 ){
     # No meta region, but a header line.
     vcf@fix <- read.table(x,header=T,sep='\t',skip=0,comment.char='', colClasses = "character")
