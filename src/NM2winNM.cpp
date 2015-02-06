@@ -63,7 +63,7 @@ NumericVector win_mean(std::vector< std::vector<double> > win){
 
 
 
-//' Extract numeric data from genotype field of VCF
+//' Extract windows of numeric data from genotype field of VCF
 //' 
 //' @param x A NumericMatrix
 //' @param pos A vector of chromosomal positions

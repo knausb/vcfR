@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{NM2winNM}
 \alias{NM2winNM}
-\title{Extract numeric data from genotype field of VCF}
+\title{Extract windows of numeric data from genotype field of VCF}
 \usage{
 NM2winNM(x, pos, maxbp, winsize = 100L)
 }
@@ -16,6 +16,6 @@ NM2winNM(x, pos, maxbp, winsize = 100L)
 \item{winsize}{Size (in bp) for windows}
 }
 \description{
-Extract numeric data from genotype field of VCF
+Extract windows of numeric data from genotype field of VCF
 }
 

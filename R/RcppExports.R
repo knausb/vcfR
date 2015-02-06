@@ -10,7 +10,7 @@ extractGT2NM <- function(x, element = "DP") {
     .Call('vcfR_extractGT2NM', PACKAGE = 'vcfR', x, element)
 }
 
-#' Extract numeric data from genotype field of VCF
+#' Extract windows of numeric data from genotype field of VCF
 #' 
 #' @param x A NumericMatrix
 #' @param pos A vector of chromosomal positions

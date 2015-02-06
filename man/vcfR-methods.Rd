@@ -10,6 +10,7 @@
 \alias{plot.vcfR}
 \alias{subset,vcfR-method}
 \alias{subset.vcf}
+\title{vcfR methods}
 \usage{
 \S4method{head}{vcfR}(x, n = 6, ...)
 
@@ -20,6 +21,8 @@
 \S4method{[}{vcfR}(x, i, j, drop)
 }
 \arguments{
+\item{x}{variant call format (vcf) file}
+
 \item{n}{number of rows to print}
 
 \item{...}{Arguments to be passed to methods}
@@ -33,5 +36,8 @@
 \item{j}{vector of columns (samples) to include}
 
 \item{drop}{delete the dimensions of an array which only has one level}
+}
+\description{
+vcfR methods
 }
 

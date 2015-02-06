@@ -1,8 +1,15 @@
-#' @name read_write_vcf
-#' @title Read and write vcf files
 
-#' @rdname vcfR_read_write
-#' @aliases read.vcf
+#' Read vcf format file
+#'
+#' @rdname io_vcfR
+#' 
+read.vcf.devel <- function(x){
+  vcf <- new(Class="vcfR")
+  return(0)
+}
+
+
+#' @rdname io_vcfR
 #' @export
 #'
 #' @description
@@ -39,7 +46,6 @@ read.vcf<-function(x){
     vcf@fix <- vcf@fix[,1:8]
     vcf@fix$POS  <- as.integer(vcf@fix$POS)
     vcf@fix$QUAL <- as.integer(vcf@fix$QUAL)
-    colnames(vcf@fix) <- c('CHROM','POS','ID','REF','ALT','QUAL','FILTER','INFO')
   } else if (length(grep('^#',tmp)) >0 ){
     # No meta region, but a header line.
     vcf@fix <- read.table(x,header=T,sep='\t',skip=0,comment.char='', colClasses = "character")
@@ -62,14 +68,9 @@ read.vcf<-function(x){
 }
 
 
-#read.vcf2<-function(x){
-#  vcf <- new(Class="vcfR")
-#  
-#}
 
 
-
-#' @rdname vcfR_read_write
+#' @rdname io_vcfR
 #' @aliases write.vcf
 #' 
 # @usage write.vcf(xvcf, vfile)
@@ -129,4 +130,6 @@ write.vcf<-function(xvcf, vfile, mask=logical(0), APPEND=FALSE){
   }
   options(scipen=orig_scipen)
 }
+
+
 

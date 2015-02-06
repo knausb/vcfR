@@ -56,8 +56,9 @@ setClass(
   prototype=prototype(
     fix = data.frame(matrix(ncol=8, nrow=0, 
                             dimnames=list(c(),
-                                          c('chrom','pos','id','ref','alt','qual','filter','info'))),
-                       stringsAsFactors=FALSE)
+#                                          c('chrom','pos','id','ref','alt','qual','filter','info'))),
+                                          c('CHROM','POS','ID','REF','ALT','QUAL','FILTER','INFO'))),
+                     stringsAsFactors=FALSE)
   )
 )
 
@@ -71,7 +72,7 @@ setMethod(
     cat("*** Class vcf, method Show *** \n")
     if(length(object@meta)>0){
       cat("Meta")
-#      cat(head(object@meta))
+      #      cat(head(object@meta))
       head(object@meta)
       cat("\n\n")
     }
@@ -89,7 +90,7 @@ setMethod(
 setMethod(
   f="print",
   signature="vcfR",
-#  definition=function (x,y,...){
+  #  definition=function (x,y,...){
   definition=function (x, ...){
     cat("***** Object of class vcf *****\n")
     if(length(x@meta)>0){
@@ -114,7 +115,9 @@ setMethod(
 #' @rdname vcfR-methods
 #' @export
 #' @aliases head.vcfR
+#' @title vcfR methods
 #' 
+#' @param x variant call format (vcf) file
 #' @param n number of rows to print
 #' 
 setMethod(
@@ -139,12 +142,12 @@ setMethod(
     #
     cat("\n***** Genotype section *****\n")
     if(nrow(x@gt) >= n){
-       if(ncol(x@gt)<6){
-         print(x@gt[1:n,])
-       } else {
-         print(x@gt[1:n,1:6])
-         cat("First 6 columns only.\n")
-       }
+      if(ncol(x@gt)<6){
+        print(x@gt[1:n,])
+      } else {
+        print(x@gt[1:n,1:6])
+        cat("First 6 columns only.\n")
+      }
     } else {
       if(ncol(x@gt)<6){
         print(x@gt)
@@ -156,7 +159,7 @@ setMethod(
     cat("Unique GT formats:\n")
     print(unique(as.character(x@gt[,1])))
     cat("\n")
-#    cat("***** Head not implemented *****\n")
+    #    cat("***** Head not implemented *****\n")
   }
 )
 
@@ -173,8 +176,8 @@ setMethod(
   f="plot",
   signature= "vcfR",
   definition=function(x, y, ...){
-#    cat("***** Object of class 'vcf' *****\n")
-#    cat("***** Plot not implemented *****\n")
+    #    cat("***** Object of class 'vcf' *****\n")
+    #    cat("***** Plot not implemented *****\n")
     hist(x@fix$QUAL, col=5, main='Histogram of qualities', xlab='QUAL')
     rug(x@fix$QUAL)
   }
@@ -215,11 +218,10 @@ setMethod(
     x@fix <- x@fix[i,]
     x@gt <- x@gt[i,j]
     return(x)
-#    if(i=="times"){return(x@times)}else {}
-#    if(i=="traj"){return(x@traj)}else {}
+    #    if(i=="times"){return(x@times)}else {}
+    #    if(i=="traj"){return(x@traj)}else {}
   }
 )
-
 
 
 
