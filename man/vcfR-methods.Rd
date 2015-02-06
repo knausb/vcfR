@@ -8,11 +8,8 @@
 \alias{head.vcfR}
 \alias{plot,vcfR-method}
 \alias{plot.vcfR}
-\alias{read.vcf}
 \alias{subset,vcfR-method}
 \alias{subset.vcf}
-\alias{write.vcf}
-\title{vcfR methods}
 \usage{
 \S4method{head}{vcfR}(x, n = 6, ...)
 
@@ -21,14 +18,8 @@
 \S4method{subset}{vcfR}(x, regex, ...)
 
 \S4method{[}{vcfR}(x, i, j, drop)
-
-read.vcf(x)
-
-write.vcf(xvcf, vfile, mask = logical(0), APPEND = FALSE)
 }
 \arguments{
-\item{x}{variant call format (vcf) file}
-
 \item{n}{number of rows to print}
 
 \item{...}{Arguments to be passed to methods}
@@ -42,26 +33,5 @@ write.vcf(xvcf, vfile, mask = logical(0), APPEND = FALSE)
 \item{j}{vector of columns (samples) to include}
 
 \item{drop}{delete the dimensions of an array which only has one level}
-
-\item{xvcf}{a vcfR object}
-
-\item{vfile}{an output filename}
-
-\item{mask}{logical vector indicating rows to use}
-
-\item{APPEND}{logical indicating whether to append to existing vcf file or write a new file}
-}
-\description{
-Reads in a vcf file and stores it in a vcf class.
-}
-\details{
-Reads in a vcf file and stores it in a vcf class.  Once the number of lines the meta information contains the data is divided into three tables: meta data, fixed data and genotype data.
-}
-\examples{
-library(vcfR)
-data(vcfR_example)
-head(pinf_vcf)
-plot(pinf_vcf)
-pinf_vcf[1:6,]
 }
 
