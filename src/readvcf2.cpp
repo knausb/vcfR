@@ -7,10 +7,6 @@ using namespace Rcpp;
 
 //' Read vcf header
 //' 
-//' @param x A String containing the filename
-//' @rdname readvcf2
-//' @aliases readVcfHeader
-//' @export
 // [[Rcpp::export]]
 std::vector<std::string> readVcfHeader(String x) {
   std::vector<std::string> header;
@@ -75,8 +71,6 @@ CharacterMatrix addRow(CharacterMatrix x){
 
 //' Read vcf body
 //' 
-//' @rdname readvcf2
-//' @export
 // [[Rcpp::export]]
 CharacterMatrix readVcfBody(String x) {
 //  CharacterMatrix body;
@@ -88,7 +82,6 @@ CharacterMatrix readVcfBody(String x) {
   std::vector<std::string> linesv;
   int i;
   int j;
-  
 
   std::ifstream myfile;
   myfile.open (x2.c_str(), std::ios::in);
@@ -105,15 +98,11 @@ CharacterMatrix readVcfBody(String x) {
     temp = line.substr(0,2);
   }
 
-
-
   // Process header line.
   line = line.substr(1,line.size());
     
   // Split on tab.
   header = splitTab(line);
-
-
 
   // Loop over the rest of the file.
   while ( getline (myfile,line) ){
@@ -124,18 +113,19 @@ CharacterMatrix readVcfBody(String x) {
 
 //  Rcout << "linesv size: " << linesv.size() << "\n";
 
+  CharacterMatrix body( linesv.size()+1, header.size() );
 
-  CharacterMatrix body( linesv.size(), header.size() );
-
-  for(i=0; i<linesv.size(); i++){
+  for(i=1; i<linesv.size(); i++){
     tempv = splitTab(linesv[i]);
     for(j = 0; j < header.size(); j++){
       body(i, j) = tempv[j];
     }
   }
 
-
-
+  // Add header to first row.
+  for(j = 0; j < header.size(); j++){
+    body(0, j) = header[j];
+  }
   return body;
 }
 

@@ -23,18 +23,12 @@ NM2winNM <- function(x, pos, maxbp, winsize = 100L) {
 
 #' Read vcf header
 #' 
-#' @param x A String containing the filename
-#' @rdname readvcf2
-#' @aliases readVcfHeader
-#' @export
 readVcfHeader <- function(x) {
     .Call('vcfR_readVcfHeader', PACKAGE = 'vcfR', x)
 }
 
 #' Read vcf body
 #' 
-#' @rdname readvcf2
-#' @export
 readVcfBody <- function(x) {
     .Call('vcfR_readVcfBody', PACKAGE = 'vcfR', x)
 }

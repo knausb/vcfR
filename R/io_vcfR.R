@@ -1,24 +1,18 @@
 
-#' Read vcf format file
-#'
-#' @rdname io_vcfR
-#' 
-read.vcf.devel <- function(x){
-  vcf <- new(Class="vcfR")
-  return(0)
-}
 
-
+#' @title Read and write vcf format files
 #' @rdname io_vcfR
 #' @export
 #'
 #' @description
-#' Reads in a vcf file and stores it in a vcf class.
-#'
-#' @param x variant call format (vcf) file
+#' Reads and writes files in the vcf format.
+#' 
+#' @param x A filename for a variant call format (vcf) file
 #'
 #' @details
 #' Reads in a vcf file and stores it in a vcf class.  Once the number of lines the meta information contains the data is divided into three tables: meta data, fixed data and genotype data.
+#'
+#' \code{read.vcf.devel} is a custom C++ implementation which may be faster than read.vcf.
 #'
 #' @examples
 #' library(vcfR)
@@ -75,15 +69,15 @@ read.vcf<-function(x){
 #' 
 # @usage write.vcf(xvcf, vfile)
 #' 
-#' @param xvcf a vcfR object
-#' @param vfile an output filename
+#' @param xvcf A vcfR object
+# @param vfile an output filename
 #' @param mask logical vector indicating rows to use
 #' @param APPEND logical indicating whether to append to existing vcf file or write a new file
 #' 
 #' @export
 #' 
-#write.vcf<-function(xvcf, vfile, mask=logical(0)){
-write.vcf<-function(xvcf, vfile, mask=logical(0), APPEND=FALSE){
+#write.vcf<-function(xvcf, vfile, mask=logical(0), APPEND=FALSE){
+write.vcf<-function(xvcf, x, mask=logical(0), APPEND=FALSE){
   if(class(xvcf) == 'Chrom'){
     # Recast as a vcfR object.
     temp <- xvcf
@@ -132,4 +126,17 @@ write.vcf<-function(xvcf, vfile, mask=logical(0), APPEND=FALSE){
 }
 
 
+#' @rdname io_vcfR
+#' @export
+#' 
+read.vcf.devel <- function(x){
+  vcf <- new(Class="vcfR")
+  vcf@meta <- .Call('vcfR_readVcfHeader', PACKAGE = 'vcfR', x)
+  temp <- .Call('vcfR_readVcfBody', PACKAGE = 'vcfR', x)
+  vcf@fix <- as.data.frame(temp[-1,1:8])
+  names(vcf@fix) <- temp[1,1:8]
+  vcf@gt <- as.data.frame(temp[-1,-c(1:8)])
+  names(vcf@gt) <- temp[1,-c(1:8)]
+  return(vcf)
+}
 
