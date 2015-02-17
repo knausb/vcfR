@@ -6,14 +6,14 @@
 \alias{write.vcf}
 \title{Read and write vcf format files}
 \usage{
-read.vcf(x)
+read.vcf(file)
 
-write.vcf(xvcf, x, mask = logical(0), APPEND = FALSE)
+write.vcf(xvcf, file = file, mask = logical(0), APPEND = FALSE)
 
-read.vcf.devel(x)
+read.vcf.devel(file)
 }
 \arguments{
-\item{x}{A filename for a variant call format (vcf) file}
+\item{file}{A filename for a variant call format (vcf) file}
 
 \item{xvcf}{A vcfR object}
 
@@ -22,7 +22,7 @@ read.vcf.devel(x)
 \item{APPEND}{logical indicating whether to append to existing vcf file or write a new file}
 }
 \description{
-Reads and writes files in the vcf format.
+Read and write files in the vcf format.
 }
 \details{
 Reads in a vcf file and stores it in a vcf class.  Once the number of lines the meta information contains the data is divided into three tables: meta data, fixed data and genotype data.
