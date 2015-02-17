@@ -78,6 +78,8 @@ std::string extractElementS(String x, int number=0){
       }
     }
   }
+  // If we get here we did not find the element.
+  return(0);
 //  std::string ostring = istring.substr(3,2);
 //  return "yup\n";
 //  return ostring;
@@ -112,6 +114,8 @@ double extractElementD(String x, int number=1){
       }
     }
   }
+  // If we get here we did not find the element.
+  return(0);
 }
 
 
