@@ -4,10 +4,11 @@
 
 using namespace Rcpp;
 
-// For more on using Rcpp click the Help button on the editor toolbar
-
 
 int elementNumber(String x, std::string element = "DP"){
+  //
+  //  Determine the position of a query element
+  //  in a colon delimited string.
   //
   //  x is a string similar to:
   //  GT:GQ:DP:RO:QR:AO:QA:GL
@@ -15,9 +16,9 @@ int elementNumber(String x, std::string element = "DP"){
   //  element is which element 
   //  we're looking for.
 
-  int eNum = 0;
+//  int eNum = 0;
   int start = 0;
-  int len = 0;
+//  int len = 0;
   int pos = 1;
   int i;
   std::string istring = x;
@@ -46,21 +47,25 @@ int elementNumber(String x, std::string element = "DP"){
 
 // Don't really need this here.
 // Perhaps for CharacterMatrix function?
-std::string extractElementS(String x, int number=1){
+std::string extractElementS(String x, int number=0){
   //
-  // x is a string similar to:
+  // x is a colon delimited string similar to:
   // GT:GQ:DP:RO:QR:AO:QA:GL
   //
   // number is the position in the colon delimited 
   // string which needs to be extracted.
   //
-  int count = 0;
+//  int count = 0;
   int start = 0;
   int pos = 1;
   std::string istring = x;
   std::string teststring;
+  int i;
+
+  // Hmm, what if we do not find our string.  We need to handle this.
   
-  for(int i=1; i <= istring.size(); i++){
+
+  for(i=1; i <= istring.size(); i++){
     if(istring[i] == ':'){
 //      Rcout << "Pos: " << pos << ",\tNumber: " << number << "\n";
       if(pos == number){
@@ -87,7 +92,7 @@ double extractElementD(String x, int number=1){
   // number is the position in the colon delimited 
   // string which needs to be extracted.
   //
-  int count = 0;
+//  int count = 0;
   int start = 0;
   int pos = 1;
   std::string istring = x;
@@ -113,46 +118,41 @@ double extractElementD(String x, int number=1){
 //' Extract numeric data from genotype field of VCF
 //' 
 //' @param x A dataframe
-//' @param element A string matching the element to be retrieved
+//' @param element A string matching the element to be retrieved, for example 'DP'
 //' @export
 // [[Rcpp::export]]
 NumericMatrix extractGT2NM(DataFrame x, std::string element="DP") {
   int i = 0;
   int j = 0;
-  
-/*  
-  Rcout << "Inside of extractGT2NV";
-  Rcout << "\n";
-  int dfsize = x.size();
-  Rcout << "DF size: ";
-  Rcout << dfsize;
-  Rcout << "\n";
-//  CharacterVector format = x[0];
-  StringVector format = x[0];
-  Rcout << "format 0: ";
-  Rcout << format(0);
-  Rcout << "\t";
-  Rcout << format[1];
-  Rcout << "\t";
-  Rcout << format[1][0];
-  Rcout << "\n";
-  */
 
   NumericMatrix outM(x.nrows(), x.size()-1);
-  StringVector format = x(0);
-
-  std::vector<int> positions(format.size());
+  // Vector to check out DataFrame columns to
+//  StringVector format = x(0);
+  StringVector column = x(0);
   
-  for(i=0; i<format.size(); i++){
-    positions[i] = elementNumber(format(i), element);
+  // Vector to hold position data
+//  std::vector<int> positions(format.size());
+  std::vector<int> positions(column.size());
+  //
+//  Rcpp::NumericVector outV(format.size());
+  
+  
+  // Determine the position where the query element is 
+  // located in each row (varioant)
+//  for(i=0; i<format.size(); i++){
+  for(i=0; i<column.size(); i++){
+//    positions[i] = elementNumber(format(i), element);
+    positions[i] = elementNumber(column(i), element);
   }
 
-  Rcpp::NumericVector outV(format.size());
-  
-  for(i=1; i<x.size(); i++){ // Sample counter
-    StringVector sample = x(i);
-    for(j=0; j<format.size(); j++){ // Variant counter
-      outM(j, i-1) = extractElementD(sample(j), positions[j]);
+
+  for(i=1; i<x.size(); i++){ // Sample (column) counter
+//    StringVector sample = x(i);
+    column = x(i);
+//    for(j=0; j<format.size(); j++){ // Variant (row) counter
+    for(j=0; j<column.size(); j++){ // Variant (row) counter
+//      outM(j, i-1) = extractElementD(sample(j), positions[j]);
+      outM(j, i-1) = extractElementD(column(j), positions[j]);
     }
   }
 
