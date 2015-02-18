@@ -9,6 +9,6 @@ Functions created to work with vcf files.
 While this project is in development it can be installed through github:
 
     library(devtools)
-    install_github(repo="vcfR", username="knausb")
+    install_github(repo="knausb/vcfR")
     library(vcfR)
 
