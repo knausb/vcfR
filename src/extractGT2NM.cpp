@@ -169,7 +169,7 @@ NumericMatrix extractGT2NM(DataFrame x, std::string element="DP") {
 DataFrame extract_GT_to_DF(DataFrame x, std::string element="DP") {
   int i = 0;
   int j = 0;
-  Rcpp::DataFrame outDF(x.size()-1); // DataFrame for output
+  Rcpp::DataFrame outDF(x.size()); // DataFrame for output
   Rcpp::StringVector column = x(0);   // Vector to check out DataFrame columns to
   std::vector<int> positions(column.size());  // Vector to hold position data
 
@@ -180,11 +180,22 @@ DataFrame extract_GT_to_DF(DataFrame x, std::string element="DP") {
   }
 
 
-  for(i=1; i<x.size(); i++){ // Sample (column) counter
+  Rcout << "Made it to process DF" << "\n";
+//  Rcpp::StringVector temp = x(3);
+//  Rcout << x(2) << "\n";
+  Rcout << "outDF has size of: " << outDF.size() << "\n";
+  
+  for(i = 1; i < x.size(); i++){ // Sample (column) counter
+    Rcout << "\t i is: " << i << " of " << x.size()  << "\n";
     column = x(i);
-    for(j=0; j<column.size(); j++){ // Variant (row) counter
+    Rcpp::StringVector outV(column.size());
+//    for(j=0; j<column.size(); j++){ // Variant (row) counter
+//      Rcout << "\t\t j is: " << j << "\n";
 //      out(j, i-1) = extractElementD(column(j), positions[j]);
-    }
+//      outV(j) = extractElementD(column(j), positions[j]);
+//      outV(j) = extractElementS(column(j), positions[j]);
+//    }
+//    outDF(i-1) = outV;
   }
 
   return outDF;
