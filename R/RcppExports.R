@@ -10,6 +10,10 @@ extractGT2NM <- function(x, element = "DP") {
     .Call('vcfR_extractGT2NM', PACKAGE = 'vcfR', x, element)
 }
 
+extract_GT_to_DF <- function(x, element = "DP") {
+    .Call('vcfR_extract_GT_to_DF', PACKAGE = 'vcfR', x, element)
+}
+
 #' Extract windows of numeric data from genotype field of VCF
 #' 
 #' @param x A NumericMatrix
