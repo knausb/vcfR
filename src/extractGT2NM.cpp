@@ -59,11 +59,15 @@ std::string extractElementS(String x, int number=0){
   int start = 0;
   int pos = 1;
   std::string istring = x;
+  istring.push_back(':');
   std::string teststring;
   int i;
 
-  // Hmm, what if we do not find our string.  We need to handle this.
-  
+//  Rcout << "\nistring is: " << istring << " position is: " << number << "\n";
+//  Rcout << "x is: ";
+//  Rcout << istring;
+//  Rcout << "\n";
+
 
   for(i=1; i <= istring.size(); i++){
     if(istring[i] == ':'){
@@ -79,7 +83,8 @@ std::string extractElementS(String x, int number=0){
     }
   }
   // If we get here we did not find the element.
-  return(0);
+//  return istring;
+  return std::string("NA");
 //  std::string ostring = istring.substr(3,2);
 //  return "yup\n";
 //  return ostring;
@@ -169,7 +174,9 @@ NumericMatrix extractGT2NM(DataFrame x, std::string element="DP") {
 DataFrame extract_GT_to_DF(DataFrame x, std::string element="DP") {
   int i = 0;
   int j = 0;
-  Rcpp::DataFrame outDF(x.size()); // DataFrame for output
+//  Rcpp::DataFrame outDF(x.size()); // DataFrame for output
+  Rcpp::DataFrame outDF = clone(x); // DataFrame for output
+  
   Rcpp::StringVector column = x(0);   // Vector to check out DataFrame columns to
   std::vector<int> positions(column.size());  // Vector to hold position data
 
@@ -177,27 +184,17 @@ DataFrame extract_GT_to_DF(DataFrame x, std::string element="DP") {
   // located in each row (varioant)
   for(i=0; i<column.size(); i++){
     positions[i] = elementNumber(column(i), element);
+    column(i) = element;
   }
-
-
-  Rcout << "Made it to process DF" << "\n";
-//  Rcpp::StringVector temp = x(3);
-//  Rcout << x(2) << "\n";
-  Rcout << "outDF has size of: " << outDF.size() << "\n";
+  outDF(0) = column;
   
   for(i = 1; i < x.size(); i++){ // Sample (column) counter
-    Rcout << "\t i is: " << i << " of " << x.size()  << "\n";
     column = x(i);
-    Rcpp::StringVector outV(column.size());
-//    for(j=0; j<column.size(); j++){ // Variant (row) counter
-//      Rcout << "\t\t j is: " << j << "\n";
-//      out(j, i-1) = extractElementD(column(j), positions[j]);
-//      outV(j) = extractElementD(column(j), positions[j]);
-//      outV(j) = extractElementS(column(j), positions[j]);
-//    }
-//    outDF(i-1) = outV;
+    for(j=0; j<column.size(); j++){ // Variant (row) counter
+      column(j) = extractElementS(column(j), positions[j]);
+    }
+    outDF(i) = column;
   }
-
   return outDF;
 }
 
