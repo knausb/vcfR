@@ -33,14 +33,10 @@ NM2winNM <- function(x, pos, maxbp, winsize = 100L) {
     .Call('vcfR_NM2winNM', PACKAGE = 'vcfR', x, pos, maxbp, winsize)
 }
 
-#' Read vcf header
-#' 
 readVcfHeader <- function(x) {
     .Call('vcfR_readVcfHeader', PACKAGE = 'vcfR', x)
 }
 
-#' Read vcf body
-#' 
 readVcfBody <- function(x) {
     .Call('vcfR_readVcfBody', PACKAGE = 'vcfR', x)
 }

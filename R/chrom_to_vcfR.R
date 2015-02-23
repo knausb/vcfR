@@ -27,8 +27,8 @@ chrom_to_vcfR <- function(x, use.mask=TRUE){
   vcf@meta <- x@vcf.meta
 
   if(use.mask == TRUE){
-    vcf@fix  <- x@vcf.fix[mask,]
-    vcf@gt   <- x@vcf.gt[mask,]
+    vcf@fix  <- x@vcf.fix[x@mask,]
+    vcf@gt   <- x@vcf.gt[x@mask,]
   } else {
     vcf@fix  <- x@vcf.fix
     vcf@gt   <- x@vcf.gt

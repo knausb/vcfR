@@ -69,8 +69,10 @@ extract.gt <- function(x, element="GT", mask=logical(0), as.matrix=FALSE){
 
 #' @rdname extract_gt
 #' 
+#' @param as.numeric Logical, should the matrix be converted to numerics
 #' @export
-extract.gt2 <- function(x, element="GT", mask=logical(0), as.matrix=FALSE){
+#extract.gt2 <- function(x, element="GT", mask=logical(0), as.matrix=FALSE){
+extract.gt2 <- function(x, element="GT", mask=logical(0), as.numeric=FALSE){
   if(class(x) != "chrom" & class(x) != "vcfR" & class(x) != "data.frame"){
     stop("Expected an object of class chrom, vcfR or data.frame")
   }
@@ -80,11 +82,17 @@ extract.gt2 <- function(x, element="GT", mask=logical(0), as.matrix=FALSE){
   }
   
   if(class(x) == "vcfR"){
-    outM <- .Call('vcfR_extractGT2NM', PACKAGE = 'vcfR', x@gt, element)
+#    outM <- .Call('vcfR_extractGT2NM', PACKAGE = 'vcfR', x@gt, element)
+    outM <- .Call('vcfR_extract_GT_to_CM', PACKAGE = 'vcfR', x@gt, element)
   }
   
   if(class(x) == "data.frame"){
     outM <- .Call('vcfR_extractGT2NM', PACKAGE = 'vcfR', x, element)
+    outM <- .Call('vcfR_extract_GT_to_CM', PACKAGE = 'vcfR', x, element)
+  }
+
+  if(as.numeric == TRUE){
+    outM <- .Call('vcfR_CM_to_NM', PACKAGE = 'vcfR', outM)
   }
 
   return(outM)

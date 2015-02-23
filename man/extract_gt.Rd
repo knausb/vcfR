@@ -7,7 +7,7 @@
 \usage{
 extract.gt(x, element = "GT", mask = logical(0), as.matrix = FALSE)
 
-extract.gt2(x, element = "GT", mask = logical(0), as.matrix = FALSE)
+extract.gt2(x, element = "GT", mask = logical(0), as.numeric = FALSE)
 }
 \arguments{
 \item{x}{An object of class chrom, vcfR or data.frame}
@@ -17,6 +17,8 @@ extract.gt2(x, element = "GT", mask = logical(0), as.matrix = FALSE)
 \item{mask}{a logical vector indicating which variants (rows) to include}
 
 \item{as.matrix}{attempt to recast as a numeric matrix}
+
+\item{as.numeric}{Logical, should the matrix be converted to numerics}
 }
 \description{
 Extract elements from the GT section of a vcf format object

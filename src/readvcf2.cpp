@@ -5,8 +5,8 @@
 using namespace Rcpp;
 
 
-//' Read vcf header
-//' 
+// Read vcf header
+// 
 // [[Rcpp::export]]
 std::vector<std::string> readVcfHeader(String x) {
   std::vector<std::string> header;
@@ -69,8 +69,8 @@ CharacterMatrix addRow(CharacterMatrix x){
 
 
 
-//' Read vcf body
-//' 
+// Read vcf body
+// 
 // [[Rcpp::export]]
 CharacterMatrix readVcfBody(String x) {
 //  CharacterMatrix body;
