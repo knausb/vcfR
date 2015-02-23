@@ -37,6 +37,37 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// extract_GT_to_CM
+CharacterMatrix extract_GT_to_CM(DataFrame x, std::string element = "DP");
+RcppExport SEXP vcfR_extract_GT_to_CM(SEXP xSEXP, SEXP elementSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< DataFrame >::type x(xSEXP );
+        Rcpp::traits::input_parameter< std::string >::type element(elementSEXP );
+        CharacterMatrix __result = extract_GT_to_CM(x, element);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// CM_to_NM
+NumericMatrix CM_to_NM(CharacterMatrix x);
+RcppExport SEXP vcfR_CM_to_NM(SEXP xSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< CharacterMatrix >::type x(xSEXP );
+        NumericMatrix __result = CM_to_NM(x);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // NM2winNM
 NumericMatrix NM2winNM(NumericMatrix x, std::vector<int> pos, int maxbp, int winsize = 100);
 RcppExport SEXP vcfR_NM2winNM(SEXP xSEXP, SEXP posSEXP, SEXP maxbpSEXP, SEXP winsizeSEXP) {

@@ -20,3 +20,11 @@ head(outm)
 
 
 
+outm <- .Call('vcfR_extract_GT_to_CM', PACKAGE = 'vcfR', pinf_vcf@gt, element="GQ")
+
+head(outm)
+
+
+outm2 <- .Call('vcfR_CM_to_NM', PACKAGE = 'vcfR', outm)
+head(outm2)
+
