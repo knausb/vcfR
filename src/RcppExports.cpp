@@ -69,3 +69,18 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// readVcfBody2
+Rcpp::DataFrame readVcfBody2(std::string x);
+RcppExport SEXP vcfR_readVcfBody2(SEXP xSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< std::string >::type x(xSEXP );
+        Rcpp::DataFrame __result = readVcfBody2(x);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
