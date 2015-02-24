@@ -2,10 +2,6 @@
 \name{names,Chrom-method}
 \alias{ann2chrom}
 \alias{chrom-methods}
-\alias{chromodot}
-\alias{chromohwe}
-\alias{chromopop}
-\alias{chromoqc}
 \alias{create.chrom}
 \alias{head,Chrom-method}
 \alias{head.chrom}
@@ -46,15 +42,6 @@ windowize(x, win.size = 1000, max.win = 10000)
 
 proc.chrom(x, verbose = TRUE, ...)
 
-chromoqc(x, nsum = FALSE, ...)
-
-chromohwe(x, nsum = FALSE, ...)
-
-chromodot(x, nsum = FALSE, x1 = NULL, y1 = NULL, x2 = NULL, y2 = NULL,
-  ...)
-
-chromopop(x, ...)
-
 variant_table(x)
 
 window_table(x)
@@ -79,6 +66,8 @@ window_table(x)
 
   \item{pop2}{a numeric vector indicating the samples in
   population 2}
+
+  \item{QUAL}{variant quality}
 
   \item{mindp}{minimum cumulative depth}
 

@@ -491,7 +491,7 @@ set.pop2 <- function(x, pop2){
 #' @export
 #' @aliases masker
 #' 
-# @param QUAL variant quality
+#' @param QUAL variant quality
 #' @param mindp minimum cumulative depth
 #' @param maxdp maximum cumulative depth
 #' @param minmq minimum mapping quality
@@ -965,97 +965,6 @@ proc.chrom <- function(x, verbose=TRUE, ...){
 }
 
 #### Graphic functions ####
-
-#' @rdname Chrom-methods
-#' @export
-#' @aliases chromoqc
-#'
-chromoqc <- function(x, nsum = FALSE, ...){
-  chromo(x = x,
-         verbose = TRUE,
-         nsum = FALSE,
-         DP = TRUE,
-         QUAL = TRUE, 
-         MQ = TRUE,
-         SNPDEN = TRUE, 
-         NUC = TRUE, 
-         ANN = TRUE,
-         #         x1=FALSE, y1=FALSE, x2=FALSE, y2=FALSE,
-         ...)
-}
-
-
-#' @rdname Chrom-methods
-#' @export
-#' @aliases chromoqc
-#'
-chromohwe <- function(x, nsum = FALSE, ...){
-  chromo(x, 
-         verbose = TRUE, 
-         nsum = FALSE, 
-         DP = TRUE,
-         #         QUAL=TRUE, MQ=TRUE,
-         HWE = TRUE,
-         SNPDEN = TRUE, 
-         NUC = TRUE, 
-         ANN = TRUE,
-         #         x1=FALSE, y1=FALSE, x2=FALSE, y2=FALSE,
-         ...)
-}
-
-
-#' @rdname Chrom-methods
-#' @export
-#' @aliases chromodot
-#'
-chromodot <- function(x, nsum = FALSE, x1 = NULL, y1 = NULL, x2 = NULL, y2 = NULL, ...){
-  chromo(x = x,
-         verbose = TRUE,
-         nsum = FALSE,
-         DP = TRUE,
-         #         QUAL=FALSE, MQ=FALSE, 
-         SNPDEN = TRUE,
-         NUC = TRUE,
-         ANN = TRUE,
-         x1 = x1,
-         y1 = y1,
-         x2 = x2,
-         y2 = y2,
-         #         label1=NULL, label2=NULL,
-         ...)
-}
-
-
-#' @rdname Chrom-methods
-#' @export
-#' @aliases chromopop
-#'
-chromopop <- function(x, ...){
-  chromo(x = x,
-         ANN=TRUE,
-         nsum=FALSE, 
-         NE=TRUE, 
-         TPI=TRUE,
-         TAJD=TRUE, 
-         FWH=TRUE,
-         SNPDEN=TRUE,
-         ...)
-}
-
-chromoall <- function(x, ...){
-  chromo(x = x,
-         ANN=TRUE,
-         nsum=FALSE,
-         DP=TRUE,
-         QUAL=TRUE,
-         MQ=TRUE,
-         NE=TRUE,
-         TPI=TRUE,
-         TAJD=TRUE,
-         FWH=TRUE,
-         SNPDEN=TRUE,
-         NUC=TRUE, ...)
-}
 
 
 plot.sfs <- function(x, log10=TRUE, ...){
