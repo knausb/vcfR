@@ -1,0 +1,86 @@
+\name{Chrom_plot}
+\alias{Chrom_plot}
+\alias{chromo}
+\alias{chromodot}
+\alias{chromohwe}
+\alias{chromopop}
+\alias{chromoqc}
+\title{Chrom_plot}
+\usage{
+chromo(x = x, verbose = TRUE, nsum = TRUE, DP = FALSE, QUAL = FALSE,
+  MQ = FALSE, HWE = FALSE, NE = FALSE, TPI = FALSE, TAJD = FALSE,
+  FWH = FALSE, SNPDEN = FALSE, NUC = FALSE, ANN = FALSE, x1 = NULL,
+  y1 = NULL, label1 = NULL, x2 = NULL, y2 = NULL, label2 = NULL,
+  dot.alpha = 22, ...)
+
+chromoqc(x, nsum = FALSE, ...)
+
+chromohwe(x, nsum = FALSE, ...)
+
+chromodot(x, nsum = FALSE, x1 = NULL, y1 = NULL, x2 = NULL, y2 = NULL,
+  ...)
+
+chromopop(x, ...)
+}
+\arguments{
+  \item{x}{an object of class chrom}
+
+  \item{nsum}{logical for whether nsum will be displayed}
+
+  \item{DP}{logical for whether cumulative depth will be
+  displayed}
+
+  \item{QUAL}{logical for whether variant quality will be
+  displayed}
+
+  \item{MQ}{logical for whether mapping quality will be
+  displayed}
+
+  \item{HWE}{logical for whether Hardy-Weinberg equilibrium
+  should be displayed}
+
+  \item{NE}{logical for whether effective size will be
+  displayed}
+
+  \item{TPI}{logical for whether Theta sub pi will be
+  displayed}
+
+  \item{TAJD}{logical for whether Tajima's D will be
+  displayed}
+
+  \item{FWH}{logical for whether Fay and Wu's H will be
+  displayed}
+
+  \item{SNPDEN}{logical for whether variant density will be
+  displayed}
+
+  \item{NUC}{logical for whether nucleotide content will be
+  displayed}
+
+  \item{ANN}{logical for whether annotation will be
+  displayed}
+
+  \item{x1}{numeric vector for custom tracks}
+
+  \item{y1}{numeric vector for custom tracks}
+
+  \item{label1}{optional string label for dot track one.}
+
+  \item{x2}{numeric vector for custom tracks}
+
+  \item{y2}{numeric vector for custom tracks}
+
+  \item{label2}{optional string label for dot track two.}
+
+  \item{dot.alpha}{hexadecimal [00, ff] indicating
+  transparency of dots.}
+
+  \item{verbose}{logical stating whether to produce verbose
+  output}
+
+  \item{...}{arguments}
+}
+\description{
+Chrom_plot
+}
+
