@@ -59,11 +59,15 @@ std::string extractElementS(String x, int number=0){
   int start = 0;
   int pos = 1;
   std::string istring = x;
+  istring.push_back(':');
   std::string teststring;
   int i;
 
-  // Hmm, what if we do not find our string.  We need to handle this.
-  
+//  Rcout << "\nistring is: " << istring << " position is: " << number << "\n";
+//  Rcout << "x is: ";
+//  Rcout << istring;
+//  Rcout << "\n";
+
 
   for(i=1; i <= istring.size(); i++){
     if(istring[i] == ':'){
@@ -79,7 +83,8 @@ std::string extractElementS(String x, int number=0){
     }
   }
   // If we get here we did not find the element.
-  return(0);
+//  return istring;
+  return std::string("NA");
 //  std::string ostring = istring.substr(3,2);
 //  return "yup\n";
 //  return ostring;
@@ -165,4 +170,78 @@ NumericMatrix extractGT2NM(DataFrame x, std::string element="DP") {
 
 
 
+// [[Rcpp::export]]
+DataFrame extract_GT_to_DF(DataFrame x, std::string element="DP") {
+  int i = 0;
+  int j = 0;
+//  Rcpp::DataFrame outDF(x.size()); // DataFrame for output
+  Rcpp::DataFrame outDF = clone(x); // DataFrame for output
+  
+  Rcpp::StringVector column = x(0);   // Vector to check out DataFrame columns to
+  std::vector<int> positions(column.size());  // Vector to hold position data
 
+  // Determine the position where the query element is 
+  // located in each row (varioant)
+  for(i=0; i<column.size(); i++){
+    positions[i] = elementNumber(column(i), element);
+    column(i) = element;
+  }
+  outDF(0) = column;
+  
+  for(i = 1; i < x.size(); i++){ // Sample (column) counter
+    column = x(i);
+    for(j=0; j<column.size(); j++){ // Variant (row) counter
+      column(j) = extractElementS(column(j), positions[j]);
+    }
+    outDF(i) = column;
+  }
+  return outDF;
+}
+
+
+// [[Rcpp::export]]
+CharacterMatrix extract_GT_to_CM(DataFrame x, std::string element="DP") {
+  int i = 0;
+  int j = 0;
+  Rcpp::StringVector column = x(0);   // Vector to check out DataFrame columns to
+  std::vector<int> positions(column.size());  // Vector to hold position data
+  Rcpp::CharacterMatrix cm(column.size(), x.size() - 1);  // CharacterMatrix for output
+  
+  // Swap column names, minus the first, from x to cm
+  Rcpp::StringVector colnames = x.attr("names");
+  colnames.erase(0);
+  cm.attr("dimnames") = Rcpp::List::create(Rcpp::CharacterVector::create(), colnames);
+  
+  // Determine the position where the query element is 
+  // located in each row (varioant)
+  for(i=0; i<column.size(); i++){
+    positions[i] = elementNumber(column(i), element);
+  }
+  
+  // Process the input DataFrame
+  for(i = 1; i < x.size(); i++){ // Sample (column) counter
+    column = x(i);
+    for(j=0; j<column.size(); j++){ // Variant (row) counter
+      cm(j, i-1) = extractElementS(column(j), positions[j]);
+    }
+  }
+
+  return cm;
+}
+
+
+// [[Rcpp::export]]
+NumericMatrix CM_to_NM(CharacterMatrix x) {
+  int i = 0;
+  int j = 0;
+  Rcpp::NumericMatrix nm(x.nrow(), x.ncol());  // NumericMatrix for output
+  nm.attr("dimnames") = x.attr("dimnames");
+
+  for(i=0; i<x.ncol(); i++){
+    for(j=0; j<x.nrow(); j++){
+      nm(j, i) = atof(x(j, i));
+    }
+  }
+
+  return nm;
+}
