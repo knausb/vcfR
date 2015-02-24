@@ -135,11 +135,14 @@ write.vcf<-function(xvcf, file=file, mask=logical(0), APPEND=FALSE){
 read.vcf.devel <- function(file){
   vcf <- new(Class="vcfR")
   vcf@meta <- .Call('vcfR_readVcfHeader', PACKAGE = 'vcfR', file)
-  temp <- .Call('vcfR_readVcfBody', PACKAGE = 'vcfR', file)
-  vcf@fix <- as.data.frame(temp[-1,1:8])
-  names(vcf@fix) <- temp[1,1:8]
-  vcf@gt <- as.data.frame(temp[-1,-c(1:8)])
-  names(vcf@gt) <- temp[1,-c(1:8)]
+#  temp <- .Call('vcfR_readVcfBody', PACKAGE = 'vcfR', file)
+#  vcf@fix <- as.data.frame(temp[-1,1:8])
+#  names(vcf@fix) <- temp[1,1:8]
+#  vcf@gt <- as.data.frame(temp[-1,-c(1:8)])
+#  names(vcf@gt) <- temp[1,-c(1:8)]
+  temp <- .Call('vcfR_readVcfBody2', PACKAGE = 'vcfR', file)
+  vcf@fix <- temp[,1:8]
+  vcf@gt <- temp[,9:ncol(temp)]
   return(vcf)
 }
 
