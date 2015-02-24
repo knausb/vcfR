@@ -1,8 +1,8 @@
 
 
-#' @rdname Chrom-plot
-#' @title Chrom_plot
-#' @name Chrom_plot
+#' @rdname chrom_plot
+#' @title Plot chrom object
+#' @name Chrom_plot2
 #' @export
 #' @aliases chromo
 #' 
@@ -489,7 +489,7 @@ chromo <- function(x = x,
 }
 
 
-#' @rdname Chrom-plot
+#' @rdname chrom_plot
 #' @export
 #' @aliases chromoqc
 #'
@@ -508,7 +508,7 @@ chromoqc <- function(x, nsum = FALSE, ...){
 }
 
 
-#' @rdname Chrom-plot
+#' @rdname chrom_plot
 #' @export
 #' @aliases chromoqc
 #'
@@ -527,7 +527,7 @@ chromohwe <- function(x, nsum = FALSE, ...){
 }
 
 
-#' @rdname Chrom-plot
+#' @rdname chrom_plot
 #' @export
 #' @aliases chromodot
 #'
@@ -549,7 +549,7 @@ chromodot <- function(x, nsum = FALSE, x1 = NULL, y1 = NULL, x2 = NULL, y2 = NUL
 }
 
 
-#' @rdname Chrom-plot
+#' @rdname chrom_plot
 #' @export
 #' @aliases chromopop
 #'
