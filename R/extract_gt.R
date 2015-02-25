@@ -73,11 +73,11 @@ extract.gt <- function(x, element="GT", mask=logical(0), as.matrix=FALSE){
 #' @export
 #extract.gt2 <- function(x, element="GT", mask=logical(0), as.matrix=FALSE){
 extract.gt2 <- function(x, element="GT", mask=logical(0), as.numeric=FALSE){
-  if(class(x) != "chrom" & class(x) != "vcfR" & class(x) != "data.frame"){
-    stop("Expected an object of class chrom, vcfR or data.frame")
+  if(class(x) != "Chrom" & class(x) != "vcfR" & class(x) != "data.frame"){
+    stop("Expected an object of class Chrom, vcfR or data.frame")
   }
   
-  if(class(x) == "chrom"){
+  if(class(x) == "Chrom"){
     x <- chrom_to_vcfR(x)
   }
   

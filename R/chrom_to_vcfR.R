@@ -19,16 +19,18 @@
 #' 
 #'
 chrom_to_vcfR <- function(x, use.mask=TRUE){
-  if(class(x) != "chrom"){
-    stop("Unexpected class! Expecting an object of class chrom.")
+  if(class(x) != "Chrom"){
+    stop("Unexpected class! Expecting an object of class Chrom.")
   }
 
   vcf <- new(Class = "vcfR")
   vcf@meta <- x@vcf.meta
 
   if(use.mask == TRUE){
-    vcf@fix  <- x@vcf.fix[x@mask,]
-    vcf@gt   <- x@vcf.gt[x@mask,]
+#    vcf@fix  <- x@vcf.fix[x@mask,]
+#    vcf@gt   <- x@vcf.gt[x@mask,]
+    vcf@fix  <- x@vcf.fix[x@var.info$mask,]
+    vcf@gt   <- x@vcf.gt[x@var.info$mask,]
   } else {
     vcf@fix  <- x@vcf.fix
     vcf@gt   <- x@vcf.gt

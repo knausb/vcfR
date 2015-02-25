@@ -47,7 +47,8 @@ int elementNumber(String x, std::string element = "DP"){
 
 // Don't really need this here.
 // Perhaps for CharacterMatrix function?
-std::string extractElementS(String x, int number=0){
+//std::string extractElementS(String x, int number=0){
+Rcpp::String extractElementS(Rcpp::String x, int number=0){
   //
   // x is a colon delimited string similar to:
   // GT:GQ:DP:RO:QR:AO:QA:GL
@@ -63,15 +64,8 @@ std::string extractElementS(String x, int number=0){
   std::string teststring;
   int i;
 
-//  Rcout << "\nistring is: " << istring << " position is: " << number << "\n";
-//  Rcout << "x is: ";
-//  Rcout << istring;
-//  Rcout << "\n";
-
-
   for(i=1; i <= istring.size(); i++){
     if(istring[i] == ':'){
-//      Rcout << "Pos: " << pos << ",\tNumber: " << number << "\n";
       if(pos == number){
         teststring = istring.substr(start, i-start);
         return teststring;
@@ -83,11 +77,10 @@ std::string extractElementS(String x, int number=0){
     }
   }
   // If we get here we did not find the element.
-//  return istring;
-  return std::string("NA");
-//  std::string ostring = istring.substr(3,2);
-//  return "yup\n";
-//  return ostring;
+//  return std::string("NA");
+//  return CharacterVector::create(NA_STRING);
+//  return Rcpp::String::create(NA_STRING);
+  return NA_STRING;
 }
 
 
@@ -134,7 +127,7 @@ NumericMatrix extractGT2NM(DataFrame x, std::string element="DP") {
   int i = 0;
   int j = 0;
 
-  NumericMatrix outM(x.nrows(), x.size()-1);
+  Rcpp::NumericMatrix outM(x.nrows(), x.size()-1);
   // Vector to check out DataFrame columns to
 //  StringVector format = x(0);
   StringVector column = x(0);
@@ -239,7 +232,15 @@ NumericMatrix CM_to_NM(CharacterMatrix x) {
 
   for(i=0; i<x.ncol(); i++){
     for(j=0; j<x.nrow(); j++){
-      nm(j, i) = atof(x(j, i));
+//      Rcpp::String element = x(j, i);
+//      Rcout << x(j,i) << " is NA? "  << CharacterMatrix::is_na(x(j, i)) << "\n";
+//      if(CharacterMatrix::is_na(x(j, i)) == TRUE){
+      if(x(j,i) == NA_STRING){
+//      if(ISNA(x(j, i))){
+        nm(j, i) = NA_REAL;
+      } else {
+        nm(j, i) = atof(x(j, i));
+      }
     }
   }
 
