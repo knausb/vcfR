@@ -22,7 +22,7 @@ window_table(x)
 \arguments{
 \item{x}{object of class Chrom}
 
-\item{QUAL}{variant quality}
+\item{QUAL}{minimum variant quality}
 
 \item{mindp}{minimum cumulative depth}
 
