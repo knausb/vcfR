@@ -38,6 +38,28 @@ setOldClass("DNAbin")
 #' 
 #' More descriptions can be put here.
 #' 
+#' The \strong{vcf.meta} slot is a list containing the meta information from the top of the vcf file.
+#' 
+#' The \strong{vcf.fix} slot is a data.frame containing the fixed data (the first eight columns) from the vcf file.
+#' 
+#' The \strong{vcf.gt} slot is a data.frame containing information about the samples.  The number of rows is the number of samples plus one, where the first row describes the format of the data in each cell.  The number of rows is equal to the numnber of variants.
+#' 
+#' The \strong{ann} slot is a data.frame containing gff format data.
+#' 
+#' The \strong{var.info} slot contains a data.frame containing information about variants
+#' 
+#' The \strong{win.info} slot contains a data.frame containing information about windows.  For example, window, start, end, length, A, C, G, T, N, other, variants and genic fields are stored here.
+#' 
+#' The \strong{seq.info} slot is a list containing two data.frames.  The first describes rectangles for called nucleotides and the second describes rectangles for 'N' calls.
+#' 
+#' 
+#' 
+#' @seealso \code{\link{vcfR-class}}, \code{\link[ape]{DNAbin}},
+#' \href{http://www.1000genomes.org/wiki/analysis/variant\%20call\%20format/vcf-variant-call-format-version-41}{vcf format}, 
+#' \href{http://www.sequenceontology.org/gff3.shtml}{gff3 format}
+#' 
+#' 
+#' 
 #' @export
 #' @import methods
 setClass(

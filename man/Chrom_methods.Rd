@@ -36,6 +36,8 @@ proc.chrom(x, verbose = TRUE, ...)
 windowize(x, win.size = 1000, max.win = 10000)
 }
 \arguments{
+\item{object}{an object of class Chrom}
+
 \item{x}{an object of class Chrom}
 
 \item{y}{an object}
@@ -55,8 +57,6 @@ windowize(x, win.size = 1000, max.win = 10000)
 \item{win.size}{window size, in base pairs}
 
 \item{max.win}{maximum window size}
-
-\item{x}{an object of class chrom}
 }
 \description{
 Chrom methods

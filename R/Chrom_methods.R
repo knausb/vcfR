@@ -2,19 +2,25 @@
 #' @title Chrom methods
 #' 
 #' @param x an object of class Chrom
+#' @param object an object of class Chrom
+#' 
 #' @rdname Chrom_methods
-
+#
 
 ##### ##### Generic methods. #####
 
 setMethod(
   f="show",
   signature = "Chrom",
+#  definition=function(x){
   definition=function(object){
     message("*** Class Chrom, method Show *** \n")
     message(paste("Name: ", object@name, "\n"))
     message(paste("Length: ", object@len, "\n"))
     message("Use head(object) for more details.\n")
+#    message(paste("Name: ", x@name, "\n"))
+#    message(paste("Length: ", x@len, "\n"))
+#    message("Use head(x) for more details.\n")    
     message("******* End Show (Chrom) ******* \n")
   }
 )
@@ -215,7 +221,7 @@ setReplaceMethod(
 #' Methods to work with objects of the chrom class
 # Reads in a vcf file and stores it in a vcf class.
 #'
-#' @param x an object of class chrom
+# @param x an object of class chrom
 #' @param y an object
 #' @param ... arguments
 #'
