@@ -8,7 +8,6 @@
 \alias{names.chrom}
 \alias{plot,Chrom-method}
 \alias{plot.chrom}
-\alias{proc.chrom}
 \alias{show,Chrom-method}
 \alias{windowize}
 \title{Chrom methods}
@@ -21,8 +20,6 @@
 
 \S4method{plot}{Chrom}(x, y, ...)
 
-proc.chrom(x, verbose = TRUE, ...)
-
 windowize(x, win.size = 1000, max.win = 10000)
 }
 \arguments{
@@ -33,8 +30,6 @@ windowize(x, win.size = 1000, max.win = 10000)
 \item{y}{some sort of object???}
 
 \item{...}{Arguments to be passed to methods}
-
-\item{verbose}{logical stating whether to produce verbose output}
 
 \item{win.size}{window size, in base pairs}
 

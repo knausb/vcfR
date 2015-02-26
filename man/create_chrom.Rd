@@ -27,22 +27,23 @@ ann2chrom(x, y, ...)
 
 \item{x}{an object of class Chrom}
 
-\item{y}{an object}
+\item{y}{a vcfR object}
 
 \item{...}{arguments}
 }
 \description{
-Create Chrom object
-
-Methods to work with objects of the chrom class
+Creates and populates an object of class Chrom.
 }
 \details{
-Creates and names a chrom object from a name, a sequence (a DNA bin object),
-vcf data (a vcfR object) and annotation data (gff-like).
+Creates and names a chrom object from a name, a chromosome (an ape::DNAbin object), variant data (a vcfR object) and annotation data (gff-like).
+The function \strong{create.chrome} is a wrapper which calls functions to populate the slots of the Chrom object.
 
-Reads in a vcf file and stores it in a Chrom class.
+The function \strong{vcf2chrom} transfers the data from the slots of a vcfR object to the slots of a Chrom object.
+It also tries to move data from the 'DP' and 'MQ' portion of the fix region of the vcf to the var.info slot of the Chrom object.
+It is not anticipated that a user would need to use this function directly, but its placed here in case they do.
 
-Reads in a vcf file and stores it in a Chrom class.
+The function \strong{ann2chrom} transfers the information from a gff-like object to the 'ann' slot of a Chrom object.
+It is not anticipated that a user would need to use this function directly, but its placed here in case they do.
 }
 \examples{
 library(vcfR)
@@ -76,6 +77,8 @@ win <- window_table(pinf_mt)
 head(win)
 }
 \seealso{
+\code{\link{Chrom-class}},
+\code{\link{vcfR-class}},
 \code{\link[ape]{DNAbin}},
 \href{http://www.1000genomes.org/wiki/analysis/variant\%20call\%20format/vcf-variant-call-format-version-41}{vcf format},
 \href{http://www.sequenceontology.org/gff3.shtml}{gff3 format}

@@ -7,8 +7,8 @@
 #' @export
 #' @aliases create.chrom
 #'
-# @description
-# Creates and populates a Chrom class.
+#' @description
+#' Creates and populates an object of class Chrom.
 #'
 #' @param name a name for the object
 #' @param seq a sequence as a DNAbin object
@@ -18,14 +18,15 @@
 #' @param x an object of class Chrom
 #'
 #' @details
-#' Creates and names a chrom object from a name, a sequence (a DNA bin object),
-#' vcf data (a vcfR object) and annotation data (gff-like).
+#' Creates and names a chrom object from a name, a chromosome (an ape::DNAbin object), variant data (a vcfR object) and annotation data (gff-like).
+#' The function \strong{create.chrome} is a wrapper which calls functions to populate the slots of the Chrom object.
 #' 
 #' 
 #' @seealso 
 # \code{\link{seq2chrome}},
 # \code{\link{vcf2chrome}},
-# \code{\link{ann2chrome}},
+#' \code{\link{Chrom-class}},
+#' \code{\link{vcfR-class}},
 #' \code{\link[ape]{DNAbin}},
 #' \href{http://www.1000genomes.org/wiki/analysis/variant\%20call\%20format/vcf-variant-call-format-version-41}{vcf format}, 
 #' \href{http://www.sequenceontology.org/gff3.shtml}{gff3 format}
@@ -115,17 +116,18 @@ create.chrom <- function(name, seq, vcf=NULL, ann=NULL, verbose=TRUE){
 #' @export
 #' @aliases chrom-methods vcf2chrom
 #'
-#' @description
-#' Methods to work with objects of the chrom class
+# @description
+# Methods to work with objects of the chrom class
 # Reads in a vcf file and stores it in a vcf class.
 #'
 # @param x an object of class chrom
-#' @param y an object
+#' @param y a vcfR object
 #' @param ... arguments
 #'
 #' @details
-#' Reads in a vcf file and stores it in a Chrom class.
-#' 
+#' The function \strong{vcf2chrom} transfers the data from the slots of a vcfR object to the slots of a Chrom object.
+#' It also tries to move data from the 'DP' and 'MQ' portion of the fix region of the vcf to the var.info slot of the Chrom object.
+#' It is not anticipated that a user would need to use this function directly, but its placed here in case they do.
 #'
 vcf2chrom <- function(x,y,...){
   x@vcf.fix <- as.data.frame(y@fix)
@@ -175,8 +177,9 @@ vcf2chrom <- function(x,y,...){
 # @param ... arguments
 #'
 #' @details
-#' Reads in a vcf file and stores it in a Chrom class.
-#' 
+#' The function \strong{ann2chrom} transfers the information from a gff-like object to the 'ann' slot of a Chrom object.
+#' It is not anticipated that a user would need to use this function directly, but its placed here in case they do.
+#'
 #'
 ann2chrom <- function(x,y,...){
   x@ann <- as.data.frame(y)
