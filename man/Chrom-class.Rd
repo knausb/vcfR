@@ -10,7 +10,7 @@ A class for representing chromosomes (or contigs).
 \details{
 Defines a class for chromosomal or contig data.
 
-This object has quite a few slots.
+This object has a numbr of slots.
 
 \itemize{
   \item name name of the object
@@ -24,13 +24,6 @@ This object has quite a few slots.
   \item var.info a data.frame containing information on variants
   \item win.info a data.frame containing information on windows
   \item seq.info a list containing information on the sequence
-
-
-
-
-  \item gt.m matrix of genotypes
-  \item sfs matrix for the site frequency spectrum
-  \item link matrix for linkages
 
 }
 

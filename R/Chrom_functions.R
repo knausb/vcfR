@@ -1,15 +1,16 @@
 
 
 #' @title Chrom_functions
-#' 
-#' 
+#' @aliases Chrom functions
+#' @rdname Chrom_functions
+#'  
 #' 
 #' 
 #' 
 
 
 
-##### ##### Set a mask #####
+##### Set a mask #####
 
 #' @rdname Chrom_functions
 #' @export
@@ -71,7 +72,10 @@ variant_table <- function(x){
   tab
 }
 
-#' @rdname Chrom-methods
+
+
+
+#' @rdname Chrom_functions
 #' @export
 #' @aliases window_table
 #' 
