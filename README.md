@@ -12,3 +12,11 @@ While this project is in development it can be installed through github:
     install_github(repo="knausb/vcfR")
     library(vcfR)
 
+
+The development version (which may not be stable) can also be installed:
+
+    library(devtools)
+    install_github(repo="knausb/vcfR", ref="devel")
+    library(vcfR)
+
+Use with caution.
