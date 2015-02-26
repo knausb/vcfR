@@ -1,6 +1,6 @@
 # extractgt devel
 
-detach(package:vcfR, unload=TRUE)
+#detach(package:vcfR, unload=TRUE)
 library(vcfR)
 
 data(vcfR_example)
@@ -31,6 +31,6 @@ head(outm)
 head(outm)
 
 
-outm2 <- .Call('vcfR_CM_to_NM', PACKAGE = 'vcfR', outm)
-head(outm2)
+#outm2 <- .Call('vcfR_CM_to_NM', PACKAGE = 'vcfR', outm)
+#head(outm2)
 

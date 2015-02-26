@@ -108,11 +108,11 @@ setMethod(
   f="show",
   signature = "Chrom",
   definition=function(object){
-    cat("*** Class Chrom, method Show *** \n")
-    cat(paste("Name: ", object@name, "\n"))
-    cat(paste("Length: ", object@len, "\n"))
-    cat("Use head(object) for more details.\n")
-    cat("******* End Show (Chrom) ******* \n")
+    message("*** Class Chrom, method Show *** \n")
+    message(paste("Name: ", object@name, "\n"))
+    message(paste("Length: ", object@len, "\n"))
+    message("Use head(object) for more details.\n")
+    message("******* End Show (Chrom) ******* \n")
   }
 )
 
@@ -120,23 +120,23 @@ setMethod(
   f="print",
   signature="Chrom",
   definition=function (x,y,...){
-    cat("***** Object of class 'Chrom' *****\n")
-    cat(paste("Name: ", x@name, "\n"))
-    cat(paste("Length: ", x@len, "\n"))
-    cat("\nVCF fixed data:\n")
-    cat("Last column (info) omitted.\n")
-    cat("\nVCF variable data:\n")
-    cat(paste("Columns: ", ncol(x@vcf.gt), "\n"))
-    cat(paste("Rows: ", nrow(x@vcf.gt), "\n"))
-    cat("(First column is format.)\n")
-    cat("\nAnnotation data:\n")
+    message("***** Object of class 'Chrom' *****\n")
+    message(paste("Name: ", x@name, "\n"))
+    message(paste("Length: ", x@len, "\n"))
+    message("\nVCF fixed data:\n")
+    message("Last column (info) omitted.\n")
+    message("\nVCF variable data:\n")
+    message(paste("Columns: ", ncol(x@vcf.gt), "\n"))
+    message(paste("Rows: ", nrow(x@vcf.gt), "\n"))
+    message("(First column is format.)\n")
+    message("\nAnnotation data:\n")
     if(length(x@ann)>0){
       print(head(x@ann[,1:8], n=4))
-      cat("Last column (attributes) omitted.\n")
+      message("Last column (attributes) omitted.\n")
     } else {
-      cat("Empty slot.\n")
+      message("Empty slot.\n")
     }
-    cat("***** End print (Chrom) ***** \n")
+    message("***** End print (Chrom) ***** \n")
   }
 )
 
@@ -171,39 +171,39 @@ setMethod(
   f="head",
   signature = "Chrom",
   definition=function(x){
-    cat("*** Class Chrom, method head *** \n")
-    cat(paste("Name: ", x@name, "\n"))
-    cat(paste("Length: ", x@len, "\n"))
-    cat("\n")
-    cat("**** ** Sample names (Chrom) ** **** \n")
+    message("*** Class Chrom, method head *** \n")
+    message(paste("Name: ", x@name, "\n"))
+    message(paste("Length: ", x@len, "\n"))
+    message("\n")
+    message("**** ** Sample names (Chrom) ** **** \n")
     print(names(x@vcf.gt)[-1])
-    cat("\n")
-    cat("**** ** Vcf fixed data (Chrom) ** **** \n")
+    message("\n")
+    message("**** ** Vcf fixed data (Chrom) ** **** \n")
     print(x@vcf.fix[1:6,1:7])
-    cat("\nFirst INFO record:\n")
+    message("\nFirst INFO record:\n")
     print(unlist(strsplit(as.character(x@vcf.fix$INFO[1]), split=";")))
-    cat("\n")
-    cat("**** ** Vcf genotype data (Chrom) ** **** \n")
+    message("\n")
+    message("**** ** Vcf genotype data (Chrom) ** **** \n")
     if(ncol(x@vcf.gt)>=6){
-      cat("**** **** * First 6 columns * **** **** \n")
+      message("**** **** * First 6 columns * **** **** \n")
       print(x@vcf.gt[1:6,1:6])
     } else {
       print(x@vcf.gt[1:6,])
     }
-    cat("\n")
-    cat("**** ** Var info (Chrom) ** **** \n")
+    message("\n")
+    message("**** ** Var info (Chrom) ** **** \n")
     if(ncol(x@var.info)>=6){
-      cat("**** **** First 6 columns ***** **** \n")
+      message("**** **** First 6 columns ***** **** \n")
       print(x@var.info[1:6,1:6])
     } else {
       print(x@var.info[1:6,])
     }
-    cat("\n")
-    cat("**** ** Vcf mask (Chrom) ** **** \n")
-    cat("Percent unmasked: ")
-    cat(100*(sum(x@var.info$mask)/length(x@var.info$mask)))
-    cat("\n")
-    cat("**** ** End head (Chrom) ** **** \n")
+    message("\n")
+    message("**** ** Vcf mask (Chrom) ** **** \n")
+    message("Percent unmasked: ")
+    message(100*(sum(x@var.info$mask)/length(x@var.info$mask)))
+    message("\n")
+    message("**** ** End head (Chrom) ** **** \n")
   }
 )
 
@@ -434,7 +434,7 @@ create.chrom <- function(name, seq, vcf=NULL, ann=NULL, verbose=TRUE){
   if(class(seq)=="DNAbin"){
     seq2chrom(x) <- seq
   } else {
-    cat("** Error: seq is not of class DNAbin** \n")
+    message("** Error: seq is not of class DNAbin** \n")
     break
   }
   if(length(vcf)>0){
@@ -446,16 +446,16 @@ create.chrom <- function(name, seq, vcf=NULL, ann=NULL, verbose=TRUE){
   }
   if(verbose == TRUE){
     # Print names of elements to see if they match.
-    cat("Names of sequences:\n")
+    message("Names of sequences:\n")
     print(unique(names(x@seq)))
-    cat("Names in vcf:\n")
+    message("Names in vcf:\n")
     print(unique(as.character(x@vcf.fix$CHROM)))
-    cat("Names in annotation:\n")
+    message("Names in annotation:\n")
     print(unique(as.character(x@ann[,1])))
     if(unique(names(x@seq)) != unique(as.character(x@vcf.fix$CHROM)) | unique(names(x@seq)) != unique(as.character(x@ann[,1]))){
-      cat("Names in sequence file, variant file or annotation file do not match perfectly.\n")
-      cat("If you choose to proceed, we'll do our best to match data.\n")
-      cat("But prepare yourself for unexpected results.\n")
+      message("Names in sequence file, variant file or annotation file do not match perfectly.\n")
+      message("If you choose to proceed, we'll do our best to match data.\n")
+      message("But prepare yourself for unexpected results.\n")
     }
   }
   return(x)
@@ -608,7 +608,7 @@ windowize <- function(x, win.size=1000, max.win=10000){
         print(paste("max i equals", max.win))
         print(paste("i equals", i))
         print(paste("j equals", j))
-        cat("chrom.r error: max.win is too small.\n")
+        message("chrom.r error: max.win is too small.\n")
         break
       }
     }
@@ -906,26 +906,26 @@ proc.chrom <- function(x, verbose=TRUE, ...){
   #  ptime <- system.time(x@acgt.w <- regex.win(x))
   ptime <- system.time(x@seq.info$nuc.win <- regex.win(x))
   if(verbose==TRUE){
-    cat("Nucleotide regions complete.\n")
+    message("Nucleotide regions complete.\n")
     print(ptime)
   }
   ptime <- system.time(x@seq.info$N.win <- regex.win(x, regex="[n]"))
   #  ptime <- system.time(x@n.w <- acgt.win(x, regex="[n]"))
   #  ptime <- system.time(x <- n.win(x))
   if(verbose==TRUE){
-    cat("N regions complete.\n")
+    message("N regions complete.\n")
     print(ptime)
   }
   ptime <- system.time(x@win.info <- var.win(x, ...))
   if(verbose==TRUE){
-    cat("Window analysis complete.\n")
+    message("Window analysis complete.\n")
     print(ptime)
   }
   #
   if(nrow(x@vcf.gt[x@var.info$mask,])>0){
     ptime <- system.time(x <- gt2popsum(x))
     if(verbose==TRUE){
-      cat("Population summary complete.\n")
+      message("Population summary complete.\n")
       print(ptime)
     }
   }
