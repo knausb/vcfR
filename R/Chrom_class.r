@@ -17,7 +17,7 @@ setOldClass("DNAbin")
 #' This object has a numbr of slots.
 #' 
 #' \itemize{
-#'   \item name name of the object  
+#'   \item name name of the object (class character)
 #'   \item seq object of class DNAbin (ape)
 #'   \item len length of sequence (integer)
 #'   \item vcf.meta vcf meta data
