@@ -1,8 +1,12 @@
 ---
 title: "Introduction to vcfR"
-author: "Brian Knaus"
-date: "02/27/2015"
-output: html_document
+author: "Brian J. Knaus"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  \VignetteIndexEntry{Introduction to vcfR}
+  \VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
 
 This is a test.
