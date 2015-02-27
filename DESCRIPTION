@@ -12,4 +12,8 @@ Imports:
     methods,
     ape,
     Rcpp
+Suggests:
+    knitr
+VignetteBuilder:
+    knitr
 License: GPL
