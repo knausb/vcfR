@@ -4,15 +4,16 @@
 #'
 #' vcfR
 #' 
-#' The complete list of functions can be displayed with
-#' "library(help = vcfR)".
+#' The complete list of functions can be displayed with "library(help = vcfR)".
+#'
+#' Vignettes can be listed with: vignette(package='vcfR').
 #'
 #' Lubridate provides tools that make it easier to parse and 
 #' manipulate dates. These tools are grouped below by common 
 #' purpose. More information about each function can be found in 
 #' its help documentation.
 #'
-#' 
+#'
 #' @references Brian J Knaus (2015). Variant call format files processed 
 #' with vcfR. Journal TBA, NN(N),
 #'   N-NN. \url{http://www.someurl.org/v40/i03/}.
