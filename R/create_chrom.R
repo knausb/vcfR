@@ -5,7 +5,7 @@
 #' @name Create Chrom object
 #' @rdname create_chrom
 #' @export
-#' @aliases create.chrom
+#' @aliases create_chrom
 #'
 #' @description
 #' Creates and populates an object of class Chrom.
@@ -19,8 +19,11 @@
 #'
 #' @details
 #' Creates and names a chrom object from a name, a chromosome (an ape::DNAbin object), variant data (a vcfR object) and annotation data (gff-like).
-#' The function \strong{create.chrome} is a wrapper which calls functions to populate the slots of the Chrom object.
+#' The function \strong{create_chrom} is a wrapper which calls functions to populate the slots of the Chrom object.
 #' 
+#' The function \strong{seq2chrom} is currently defined as a generic function.
+#' This may change in the future.
+#' This function takes an object of class DNAbin and assigns it to the 'seq' slot of a Chrom object.
 #' 
 #' @seealso 
 # \code{\link{seq2chrome}},
@@ -34,13 +37,15 @@
 #' @examples
 #' library(vcfR)
 #' data(vcfR_example)
-#' pinf_mt <- create.chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
+#' pinf_mt <- create_chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
 #' head(pinf_mt)
 #' pinf_mt
 #' names(pinf_mt)
 #' plot(pinf_mt)
 #' pinf_mt <- masker(pinf_mt)
-#' pinf_mt <- proc.chrom(pinf_mt, win.size=1000)
+#' pinf_mt <- proc_chrom(pinf_mt, win.size=1000)
+# pinf_mt <- proc.chrom(pinf_mt, win.size=1000)
+#'  
 # str(pinf_mt)
 #' plot(pinf_mt)
 #' 
@@ -65,7 +70,7 @@
 # hist(tab$Ho - tab$He, col=5)
 # # Note that this example is a mitochondrion, so this is a bit silly.
 #' 
-create.chrom <- function(name, seq, vcf=NULL, ann=NULL, verbose=TRUE){
+create_chrom <- function(name, seq, vcf=NULL, ann=NULL, verbose=TRUE){
   stopifnot(class(seq)=="DNAbin")
   if(!is.null(vcf)){stopifnot(class(vcf) == "vcfR")}
   #
@@ -74,6 +79,7 @@ create.chrom <- function(name, seq, vcf=NULL, ann=NULL, verbose=TRUE){
   if(class(seq)=="DNAbin"){
     seq2chrom(x) <- seq
   } else {
+    # stop???
     message("** Error: seq is not of class DNAbin** \n")
     break
   }
@@ -125,7 +131,7 @@ create.chrom <- function(name, seq, vcf=NULL, ann=NULL, verbose=TRUE){
 #' @param ... arguments
 #'
 #' @details
-#' The function \strong{vcf2chrom} transfers the data from the slots of a vcfR object to the slots of a Chrom object.
+#' The function \strong{vcf2chrom} is called by create_chrome and transfers the data from the slots of a vcfR object to the slots of a Chrom object.
 #' It also tries to move data from the 'DP' and 'MQ' portion of the fix region of the vcf to the var.info slot of the Chrom object.
 #' It is not anticipated that a user would need to use this function directly, but its placed here in case they do.
 #'
@@ -177,7 +183,7 @@ vcf2chrom <- function(x,y,...){
 # @param ... arguments
 #'
 #' @details
-#' The function \strong{ann2chrom} transfers the information from a gff-like object to the 'ann' slot of a Chrom object.
+#' The function \strong{ann2chrom} is called by create_chrome and transfers the information from a gff-like object to the 'ann' slot of a Chrom object.
 #' It is not anticipated that a user would need to use this function directly, but its placed here in case they do.
 #'
 #'

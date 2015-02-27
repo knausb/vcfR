@@ -2,12 +2,9 @@
 
 #' @title Chrom_functions
 #' @name Chrom functions
-#' @aliases Chrom functions
+# @aliases Chrom functions
 #' @rdname Chrom_functions
 #' @description Functions which act on Chrom objects 
-#' 
-#' 
-#' 
 
 
 
@@ -28,7 +25,6 @@
 #' The function \strong{masker} creates a logical vector that determines which variants are masked.
 #' This vector is stored in the var.info slot of a Chrom object.
 #' 
-#masker <- function(x, QUAL=999, mindp=0.25, maxdp=0.75, minmq=0.25, maxmq=0.75, ...){
 masker <- function(x, QUAL=999, mindp=0.25, maxdp=0.75, minmq=20, maxmq=50, ...){
   quals  <- x@vcf.fix$QUAL
   info <- x@var.info[,grep("DP|MQ",names(x@var.info))]

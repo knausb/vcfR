@@ -29,7 +29,7 @@
 #' @examples
 #' library(vcfR)
 #' data(vcfR_example)
-#' pinf_mt <- create.chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
+#' pinf_mt <- create_chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
 #' pinf_mt <- masker(pinf_mt)
 #' pinf_gq <- extract.gt(pinf_mt, element="GQ", as.matrix=TRUE)
 #' heatmap.bp(pinf_gq)
