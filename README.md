@@ -19,4 +19,8 @@ The development version (which may not be stable) can also be installed:
     install_github(repo="knausb/vcfR@devel")
     library(vcfR)
 
+If you would like the vignettes use:
 
+    devtools::install_github(repo="knausb/vcfR@devel", build_vignettes=TRUE)
+
+Enjoy!
