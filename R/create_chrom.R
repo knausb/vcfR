@@ -92,12 +92,13 @@ create_chrom <- function(name, seq, vcf=NULL, ann=NULL, verbose=TRUE){
   }
   if(verbose == TRUE){
     # Print names of elements to see if they match.
-    message("Names of sequences:\n")
-    print(unique(names(x@seq)))
-    message("Names in vcf:\n")
-    print(unique(as.character(x@vcf.fix$CHROM)))
-    message("Names in annotation:\n")
-    print(unique(as.character(x@ann[,1])))
+    message("Names of sequences:")
+    message(paste('  ', unique(names(x@seq)), sep=""))
+    message("Names in vcf:")
+    message(paste('  ', unique(as.character(x@vcf.fix$CHROM)), sep=""))
+#    message(unique(as.character(x@vcf.fix$CHROM)))
+    message("Names in annotation:")
+    message(paste('  ', unique(as.character(x@ann[,1])), sep=""))
     if(unique(names(x@seq)) != unique(as.character(x@vcf.fix$CHROM)) | unique(names(x@seq)) != unique(as.character(x@ann[,1]))){
       message("Names in sequence file, variant file or annotation file do not match perfectly.\n")
       message("If you choose to proceed, we'll do our best to match data.\n")

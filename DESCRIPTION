@@ -14,6 +14,5 @@ Imports:
     Rcpp
 Suggests:
     knitr
-VignetteBuilder:
-    knitr
+VignetteBuilder: knitr
 License: GPL
