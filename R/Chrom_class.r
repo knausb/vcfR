@@ -80,11 +80,11 @@ setClass(
     seq.info = "list",
     #
     gt.m = "matrix",
-    vcf.stat = "data.frame",
-    sfs = "matrix",
-    link = "matrix",
+    vcf.stat = "data.frame"
+#    sfs = "matrix",
+#    link = "matrix",
     #
-    mask = "logical"
+#    mask = "logical"
   ),
   prototype=prototype(
     vcf.fix = data.frame(matrix(ncol=8, nrow=0,
