@@ -108,13 +108,15 @@ The create_chrom() function creates a new Chrom object and populates it with dat
 ```{r}
 library(vcfR)
 data(vcfR_example)
-pinf_mt <- create_chrom(title='pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
-
+pinf_mt <- create_chrom(title='pinf_mt', vcf=pinf_vcf, seq=pinf_dna, ann=pinf_gff)
 ```
 
 
 The parameter 'title' ia a name you can assign to your object.
 This information is used when plotting the Chrom object.
+The vcf object should be of class vcfR, which was most likely created with the function read.vcf().
+This object is inserted into the chrom object with the function **vcf2chrom()**.
+
 The 'seq' should be a DNAbin object with one sequence in it.
 This sequence will be inserted into the Chrom object with the function **seq2chrom**.
 If a sequence is not provided, seq2chrom will infer the length of your chromosome from the maximum position in the vcf file.

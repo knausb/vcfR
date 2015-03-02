@@ -1,6 +1,3 @@
-
-
-
 #' @title Create Chrom object
 #' @name Create Chrom object
 #' @rdname create_chrom
@@ -12,18 +9,28 @@
 #'
 #' @param title a name for the chromosome (for plotting purposes)
 #' @param seq a sequence as a DNAbin object
-#' @param vcf a vcfR object
 #' @param ann an annotation file (gff-like)
 #' @param verbose should verbose output be printed to the console?
 #' @param x an object of class Chrom
+#' @param vcf an object of class vcfR
+#' @param gff a data.frame containing annotation data in the gff format
+# @param ... arguments
 #'
 #' @details
 #' Creates and names a chrom object from a name, a chromosome (an ape::DNAbin object), variant data (a vcfR object) and annotation data (gff-like).
 #' The function \strong{create_chrom} is a wrapper which calls functions to populate the slots of the Chrom object.
 #' 
+#' The function \strong{vcf2chrom} is called by create_chrome and transfers the data from the slots of a vcfR object to the slots of a Chrom object.
+#' It also tries to extract the 'DP' and 'MQ' fileds (when present) from teh fix region's INFO column.
+#' It is not anticipated that a user would need to use this function directly, but its placed here in case they do.
+#' 
 #' The function \strong{seq2chrom} is currently defined as a generic function.
 #' This may change in the future.
 #' This function takes an object of class DNAbin and assigns it to the 'seq' slot of a Chrom object.
+#' 
+#' The function \strong{ann2chrom} is called by create_chrome and transfers the information from a gff-like object to the 'ann' slot of a Chrom object.
+#' It is not anticipated that a user would need to use this function directly, but its placed here in case they do.
+#' 
 #' 
 #' @seealso 
 # \code{\link{seq2chrome}},
@@ -135,43 +142,32 @@ create_chrom <- function(title="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
 # Reads in a vcf file and stores it in a vcf class.
 #'
 # @param x an object of class chrom
-#' @param y a vcfR object
-#' @param ... arguments
 #'
-#' @details
-#' The function \strong{vcf2chrom} is called by create_chrome and transfers the data from the slots of a vcfR object to the slots of a Chrom object.
-#' It also tries to move data from the 'DP' and 'MQ' portion of the fix region of the vcf to the var.info slot of the Chrom object.
-#' It is not anticipated that a user would need to use this function directly, but its placed here in case they do.
 #'
-vcf2chrom <- function(x,y,...){
-  x@vcf.fix <- as.data.frame(y@fix)
-  #  colnames(x@vcf.fix) <- c('chrom','pos','id','ref','alt','qual','filter','info')
-  colnames(x@vcf.fix) <- c('CHROM','POS','ID','REF','ALT','QUAL','FILTER','INFO')
-  x@vcf.fix[,2] <- as.numeric(x@vcf.fix[,2])
-  x@vcf.fix[,6] <- as.numeric(x@vcf.fix[,6])
+vcf2chrom <- function(x, vcf){
+  x@vcf.fix <- as.data.frame(vcf@fix)
+#  colnames(x@vcf.fix) <- c('CHROM','POS','ID','REF','ALT','QUAL','FILTER','INFO')
+#  x@vcf.fix[,2] <- as.numeric(x@vcf.fix[,2])
+#  x@vcf.fix[,6] <- as.numeric(x@vcf.fix[,6])
   #
-  for(i in 1:ncol(y@gt)){
-    y@gt[,i] <- as.character(y@gt[,i])
+  for(i in 1:ncol(vcf@gt)){
+    vcf@gt[,i] <- as.character(vcf@gt[,i])
   }
-  x@vcf.gt <- y@gt
+  x@vcf.gt <- vcf@gt
   #
-  x@vcf.meta <- y@meta
+  x@vcf.meta <- vcf@meta
   #
-  info <- matrix(ncol=2, nrow=nrow(y@fix))
-  #  colnames(info) <- c('dp','mq')
-  colnames(info) <- c('DP','MQ')
-  if(length(grep("DP=", y@fix[,8])) > 0){
-    info[,1] <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y@fix[,8]), ";"), function(x){grep("^DP=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
-    #    x@var.info$DP <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y@fix[,8]), ";"), function(x){grep("^DP=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
+  # Initialize var.info slot
+  x@var.info <- data.frame(matrix(ncol=3, nrow=nrow(vcf@fix)))
+  names(x@var.info) <- c('DP','MQ', 'mask')
+  #
+  if(length(grep("DP=", vcf@fix[,8])) > 0){
+    x@var.info$DP <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(vcf@fix[,8]), ";"), function(x){grep("^DP=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
   }
-  if(length(grep("MQ=", y@fix[,8])) > 0){
-    info[,2] <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y@fix[,8]), ";"), function(x){grep("^MQ=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
-    #    x@var.info$MQ <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(y@fix[,8]), ";"), function(x){grep("^MQ=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
+  if(length(grep("MQ=", vcf@fix[,8])) > 0){
+    x@var.info$MQ <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(vcf@fix[,8]), ";"), function(x){grep("^MQ=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
   }
-  #  x@vcf.info <- as.data.frame(info)
-  x@var.info <- as.data.frame(info)
   #
-  #  x@mask <- rep(TRUE, times=nrow(x@vcf.fix))
   x@var.info$mask <- rep(TRUE, times=nrow(x@vcf.fix))
   # assign may be more efficient.
   return(x)
@@ -211,20 +207,8 @@ seq2chrom <- function(x, seq=NULL){
 #' @export
 #' @aliases ann2chrom
 #'
-# @description
-# Reads in an annotation file and stores it in a Chrom class.
-#'
-# @param x an object of class chrom
-# @param y an object
-# @param ... arguments
-#'
-#' @details
-#' The function \strong{ann2chrom} is called by create_chrome and transfers the information from a gff-like object to the 'ann' slot of a Chrom object.
-#' It is not anticipated that a user would need to use this function directly, but its placed here in case they do.
-#'
-#'
-ann2chrom <- function(x,y,...){
-  x@ann <- as.data.frame(y)
+ann2chrom <- function(x, gff){
+  x@ann <- as.data.frame(gff)
   colnames(x@ann) <- c('seqid','source','type','start','end','score','strand','phase','attributes')
   x@ann$start <- as.numeric(as.character(x@ann$start))
   x@ann$end   <- as.numeric(as.character(x@ann$end))

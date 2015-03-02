@@ -12,16 +12,16 @@
 create_chrom(title = "CHROM1", vcf, seq = NULL, ann = NULL,
   verbose = TRUE)
 
-vcf2chrom(x, y, ...)
+vcf2chrom(x, vcf)
 
 seq2chrom(x, seq = NULL)
 
-ann2chrom(x, y, ...)
+ann2chrom(x, gff)
 }
 \arguments{
 \item{title}{a name for the chromosome (for plotting purposes)}
 
-\item{vcf}{a vcfR object}
+\item{vcf}{an object of class vcfR}
 
 \item{seq}{a sequence as a DNAbin object}
 
@@ -31,9 +31,7 @@ ann2chrom(x, y, ...)
 
 \item{x}{an object of class Chrom}
 
-\item{y}{a vcfR object}
-
-\item{...}{arguments}
+\item{gff}{a data.frame containing annotation data in the gff format}
 }
 \description{
 Creates and populates an object of class Chrom.
@@ -42,13 +40,13 @@ Creates and populates an object of class Chrom.
 Creates and names a chrom object from a name, a chromosome (an ape::DNAbin object), variant data (a vcfR object) and annotation data (gff-like).
 The function \strong{create_chrom} is a wrapper which calls functions to populate the slots of the Chrom object.
 
+The function \strong{vcf2chrom} is called by create_chrome and transfers the data from the slots of a vcfR object to the slots of a Chrom object.
+It also tries to extract the 'DP' and 'MQ' fileds (when present) from teh fix region's INFO column.
+It is not anticipated that a user would need to use this function directly, but its placed here in case they do.
+
 The function \strong{seq2chrom} is currently defined as a generic function.
 This may change in the future.
 This function takes an object of class DNAbin and assigns it to the 'seq' slot of a Chrom object.
-
-The function \strong{vcf2chrom} is called by create_chrome and transfers the data from the slots of a vcfR object to the slots of a Chrom object.
-It also tries to move data from the 'DP' and 'MQ' portion of the fix region of the vcf to the var.info slot of the Chrom object.
-It is not anticipated that a user would need to use this function directly, but its placed here in case they do.
 
 The function \strong{ann2chrom} is called by create_chrome and transfers the information from a gff-like object to the 'ann' slot of a Chrom object.
 It is not anticipated that a user would need to use this function directly, but its placed here in case they do.
