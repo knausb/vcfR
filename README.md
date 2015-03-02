@@ -17,9 +17,9 @@ While this project is in development it can be installed through github:
 
 The development version (which may not be stable) can also be installed:
 
-    library(devtools)
-    install_github(repo="knausb/vcfR@devel")
+    devtools::install_github(repo="knausb/vcfR@devel")
     library(vcfR)
+
 
 If you would like the vignettes use:
 
