@@ -1,15 +1,28 @@
 
 #' @title Process chrom object
-#' @name Proc_chrom
+#' @name Process chrom objects
 #' @rdname proc_chrom
 #' @description Functions which process Chrom objects 
 #' 
-#' @param x oject of class chrom
+#' @param x oject of class Chrom
 #' @param win.size integer indicating size for windowing processes
 #' @param verbose logical indicating whether verbose output should be reported
 #' @param ... arguments to be passed to methods
 #' @param max.win maximum window size
 #' @param regex a regular expression to indicate nucleotides to be searched for
+#' 
+#' @details
+#' The function \strong{proc_chrom()} calls helper functions to process the data present in a Chrom object into summaries statistics.
+#' 
+#' 
+#' The function \strong{regex.win()} is used to generate coordinates to define rectangles to represent regions of the chromosome containing called nucleotides (acgtwsmkrybdhv).
+#' It is then called a second time to generate coordinates to define rectangles to represent regions called as ambiguous nucleotides (n).
+#' 
+#' The function \strong{gt2popsum} is called to create summaries of the variant data.
+#' 
+#' The function \strong{var.win} is called to create windowized summaries of the Chrom object.
+#' 
+#' 
 #' 
 #' 
 
@@ -19,8 +32,7 @@
 #' @export
 #' @aliases proc_chrom
 #'
-#proc.chrom <- function(x, pop1=NA, pop2=NA, win.size=1000, max.win=10000, verbose=TRUE){
-proc_chrom <- function(x, win.size = 1e3, verbose=TRUE, ...){
+proc_chrom <- function(x, win.size = 1e3, verbose=TRUE){
   stopifnot(class(x) == "Chrom")
   ptime <- system.time(x@seq.info$nuc.win <- regex.win(x))
   if(verbose==TRUE){
@@ -28,18 +40,10 @@ proc_chrom <- function(x, win.size = 1e3, verbose=TRUE, ...){
     print(ptime)
   }
   ptime <- system.time(x@seq.info$N.win <- regex.win(x, regex="[n]"))
-  #  ptime <- system.time(x@n.w <- acgt.win(x, regex="[n]"))
-  #  ptime <- system.time(x <- n.win(x))
   if(verbose==TRUE){
     message("N regions complete.\n")
     print(ptime)
   }
-  ptime <- system.time(x@win.info <- var.win(x, ...))
-  if(verbose==TRUE){
-    message("Window analysis complete.\n")
-    print(ptime)
-  }
-  #
   if(nrow(x@vcf.gt[x@var.info$mask,])>0){
     ptime <- system.time(x <- gt2popsum(x))
     if(verbose==TRUE){
@@ -47,38 +51,12 @@ proc_chrom <- function(x, win.size = 1e3, verbose=TRUE, ...){
       print(ptime)
     }
   }
-  #  ptime <- system.time(x <- windowize(x, win.size=win.size, max.win=max.win))
-  #  ptime <- system.time(x <- windowize(x))
-  #  if(verbose==TRUE){
-  #    cat("Sliding windows created.\n")
-  #    print(ptime)
-  #  }
-  #  ptime <- system.time(x <- gc.win(x))
-  #  if(verbose==TRUE){
-  #    cat("Sliding GC windows complete.\n")
-  #    print(ptime)
-  #  }
-  #  ptime <- system.time(x <- snp.win(x))
-  #  if(verbose==TRUE){
-  #    cat("Sliding SNP windows complete.\n")
-  #    print(ptime)
-  #  }
-  #  ptime <- system.time(x <- vcf.fix2gt.m(x))
-  #  if(verbose==TRUE){
-  #    cat("Genotype matrix complete.\n")
-  #    print(ptime)
-  #  }
-  #  ptime <- system.time(x <- gt.m2sfs(x))
-  #  cat("gt.m2sfs is commented out\n")
-  #  if(verbose==TRUE){
-  #    cat("SFS complete.\n")
-  #    print(ptime)
-  #  }
-  #  ptime <- system.time(x <- linkage(x))
-  #  if(verbose==TRUE){
-  #    cat("Linkage calculation complete.\n")
-  #    print(ptime)
-  #  }
+  ptime <- system.time(x@win.info <- var.win(x))
+  if(verbose==TRUE){
+    message("Window analysis complete.\n")
+    print(ptime)
+  }
+  #
   return(x)
 }
 
@@ -145,7 +123,7 @@ regex.win <- function(x, max.win=1000, regex="[acgtwsmkrybdhv]"){
 #' @export
 #' @aliases var.win
 #' 
-var.win <- function(x, win.size=1000){
+var.win <- function(x, win.size=1e3){
   # A DNAbin will store in a list when the fasta contains
   # multiple sequences, but as a matrix when the fasta
   # only contains one sequence.
