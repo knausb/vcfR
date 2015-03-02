@@ -8,7 +8,8 @@
 #' @param win.size integer indicating size for windowing processes
 #' @param verbose logical indicating whether verbose output should be reported
 #' @param ... arguments to be passed to methods
-#' 
+#' @param max.win maximum window size
+#' @param regex a regular expression to indicate nucleotides to be searched for
 #' 
 #' 
 

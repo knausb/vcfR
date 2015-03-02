@@ -73,7 +73,7 @@ The below flowchart outlines the major steps involved with vcfR use.
 
 
 
-Note that there is a fairly complete example in the manual.
+Note that there is also a fairly complete example in the manual.
 
 
 ```{r, eval=FALSE}
@@ -94,6 +94,19 @@ By dividing the analysis into these three phases I've divided that workflow into
 
 
 
+## Creating objects from data
+
+
+
+## Processing objects
+
+
+
+## Visualizing data
+
+
+
+## Outputting data
 
 
 
