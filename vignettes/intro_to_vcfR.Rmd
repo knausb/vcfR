@@ -32,6 +32,9 @@ vcf <- read.vcf("my_file.vcf")
 ```
 
 
+The function **read.vcf()** takes the filename you specify and uses it to read the file into a **vcfR** object.  The **vcfR** object is an S4 class object with three slots containing the metadata, the fixed data and the genotype data.  This object provides a known organization of the data so that downstream functions can easily access it.
+
+
 Genomic reference sequence files are typically in fasta format files.
 These can be read in using the package ape.
 
@@ -56,6 +59,7 @@ Once the data has been read into memory and modifications can be made to chromos
 vcfR was designed to work on individual chromosomes, or supercontigs or contigs, depending on the state of your genome.
 Reading an entire genome into memory may present a technical challenge when there is a lot of data, the genome is large or there are a lot of saples.
 Working on chromosomes appears to be a natural way to decompose this problem.
+Once you have read an object into R you may therefore want to subset it to data for a single chromosome, if necessary.
 
 
 
@@ -73,7 +77,7 @@ The below flowchart outlines the major steps involved with vcfR use.
 
 
 
-Note that there is also a fairly complete example in the manual.
+Note that there is also a fairly complete example of this workflow in the manual.
 
 
 ```{r, eval=FALSE}
@@ -95,6 +99,13 @@ By dividing the analysis into these three phases I've divided that workflow into
 
 
 ## Creating objects from data
+
+
+Once the data are in memory we can use it to create a **Chrom** object with the function **create_chrom()**.
+
+
+
+
 
 
 
