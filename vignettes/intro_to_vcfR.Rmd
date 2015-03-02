@@ -9,14 +9,91 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
+
+vcfR is a package intended to help people view, understand and filter data in vcf format files.
+
+
 ## Preliminaries
+
+Input files frequently present challenges to analysis.
+A common problem I see is that chromosome names are not standardized among vcf, fasta and gff format files.
+This presents work for the analyst.
+I suggest reading these files into R, syncronizing the names in R and then proceeding with downstream analyses.
+The other option I see is to create a set of files where the data is identical to the initial files, but the names have been syncronized.
+This later choice results in the creation of files which are largely redundant which I feel is unnecessary.
+
+
+Reading in of the vcf file can be performed with a function in vcfR.
+
+
+```{r, eval=FALSE}
+library(vcfR)
+vcf <- read.vcf("my_file.vcf")
+```
+
+
+Genomic reference sequence files are typically in fasta format files.
+These can be read in using the package ape.
+
+
+```{r, eval=FALSE}
+library(ape)
+ref <- read.dna("my_reference.fasta", format="fasta")
+```
+
+
+Annotation files, files which contain coordinates of features such as start and end points of genes, are tabular and can be read in with typical R functions.
+
+
+```{r, eval=FALSE}
+gff <- read.table("my_annotations.gff", header=F, sep="\t")
+```
+
+
+Once the data has been read into memory and modifications can be made to chromosome names or any other inconsistencies and one can proceed.
+
+
+vcfR was designed to work on individual chromosomes, or supercontigs or contigs, depending on the state of your genome.
+Reading an entire genome into memory may present a technical challenge when there is a lot of data, the genome is large or there are a lot of saples.
+Working on chromosomes appears to be a natural way to decompose this problem.
+
 
 
 ## Workflow
 
 
+Work begins with a variant call format file (vcf).
+A reference files (fasta) and an annotation file are also suggested.
+These later two files are not necessary, but I feel they contribute substantially.
+The below flowchart outlines the major steps involved with vcfR use.
+
+
 
 ![](vcfR_flowchart.png)
+
+
+
+Note that there is a fairly complete example in the manual.
+
+
+```{r, eval=FALSE}
+?create_chrom
+```
+
+
+
+The green rectangles contain functions that the user will want to become familiar with.
+There are effectively three phases in the workflow: reading in data, processing the objects in memory and plotting the data graphically.
+Reading in the data frequently presents a bottleneck.
+Unfortunately, this is typically due to the time it takes to read from a drive and therefore may not be anything I can improve on.
+Once the data are in memory we can manipulate it.
+I've been rewriting a number of function in C++ to try to improve the performance of these function.
+Lastly, we visualize the objects. Visualisation relies on R's base graphics package.
+This is also something that I am not likely to be able to improve on if it becomes a bottleneck.
+By dividing the analysis into these three phases I've divided that workflow into things I may be able to improve upon through my code writing, and things which I have little control over.
+
+
+
 
 
 
