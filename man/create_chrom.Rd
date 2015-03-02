@@ -5,21 +5,25 @@
 \alias{ann2chrom}
 \alias{chrom-methods}
 \alias{create_chrom}
+\alias{seq2chrom}
 \alias{vcf2chrom}
 \title{Create Chrom object}
 \usage{
-create_chrom(name, seq, vcf = NULL, ann = NULL, verbose = TRUE)
+create_chrom(title = "CHROM1", vcf, seq = NULL, ann = NULL,
+  verbose = TRUE)
 
 vcf2chrom(x, y, ...)
+
+seq2chrom(x, seq = NULL)
 
 ann2chrom(x, y, ...)
 }
 \arguments{
-\item{name}{a name for the object}
-
-\item{seq}{a sequence as a DNAbin object}
+\item{title}{a name for the chromosome (for plotting purposes)}
 
 \item{vcf}{a vcfR object}
+
+\item{seq}{a sequence as a DNAbin object}
 
 \item{ann}{an annotation file (gff-like)}
 

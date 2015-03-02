@@ -201,26 +201,30 @@ setReplaceMethod(
   }
 )
 
-#### Setter for seq. ####
 
-setGeneric("seq2chrom<-",function(object,value){standardGeneric("seq2chrom<-")})
 
-setReplaceMethod(
-  f="seq2chrom",
-  signature="Chrom",
-  definition=function(object,value){
-    # A DNAbin will store in a list when the fasta contains
-    # multiple sequences, but as a matrix when the fasta
-    # only contains one sequence.
-    if(!is.list(class(as.character(value)))){
-      object@seq <- as.list(value)
-    } else {
-      object@seq <-value      
-    }
-    object@len <-length(object@seq[[1]])
-    return (object)
-  }
-)
+
+
+# Setter for seq. ####
+
+#setGeneric("seq2chrom<-",function(object,value){standardGeneric("seq2chrom<-")})
+
+#setReplaceMethod(
+#  f="seq2chrom",
+#  signature="Chrom",
+#  definition=function(object,value){
+#    # A DNAbin will store in a list when the fasta contains
+#    # multiple sequences, but as a matrix when the fasta
+#    # only contains one sequence.
+#    if(!is.list(class(as.character(value)))){
+#      object@seq <- as.list(value)
+#    } else {
+#      object@seq <-value      
+#    }
+#    object@len <-length(object@seq[[1]])
+#    return (object)
+#  }
+#)
 
 ##### ##### ##### ##### #####
 

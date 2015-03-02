@@ -10,7 +10,7 @@
 #' @description
 #' Creates and populates an object of class Chrom.
 #'
-#' @param name a name for the object
+#' @param title a name for the chromosome (for plotting purposes)
 #' @param seq a sequence as a DNAbin object
 #' @param vcf a vcfR object
 #' @param ann an annotation file (gff-like)
@@ -70,26 +70,33 @@
 # hist(tab$Ho - tab$He, col=5)
 # # Note that this example is a mitochondrion, so this is a bit silly.
 #' 
-create_chrom <- function(name, seq, vcf=NULL, ann=NULL, verbose=TRUE){
+create_chrom <- function(title="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
+  # Determine whether we received the expected classes.
   stopifnot(class(seq)=="DNAbin")
   if(!is.null(vcf)){stopifnot(class(vcf) == "vcfR")}
   #
   x <- new(Class="Chrom")
-  setName(x) <- name
-  if(class(seq)=="DNAbin"){
-    seq2chrom(x) <- seq
+  setName(x) <- title
+  
+  # Insert vcf into Chom.
+  if(length(vcf)>0){
+    x <- vcf2chrom(x, vcf)
+  }
+  # Insert seq into Chrom
+  if(class(seq)=="DNAbin" | is.null(seq)){
+#    seq2chrom(x) <- seq
+    x <- seq2chrom(x, seq)
   } else {
     # stop???
     message("** Error: seq is not of class DNAbin** \n")
     break
   }
-  if(length(vcf)>0){
-    x <- vcf2chrom(x, vcf)
-  }
   #  if(length(ann)>0){
-  if(nrow(ann)>0){
+  if(nrow(ann)>0 | is.null(ann)){
     x <- ann2chrom(x, ann)
   }
+  
+  # Report names of objects to user.
   if(verbose == TRUE){
     # Print names of elements to see if they match.
     message("Names of sequences:")
@@ -169,6 +176,34 @@ vcf2chrom <- function(x,y,...){
   # assign may be more efficient.
   return(x)
 }
+
+
+
+#' @rdname create_chrom
+#' @export
+#' @aliases seq2chrom
+#' 
+seq2chrom <- function(x, seq=NULL){
+  if(is.null(seq)){
+    x@len <- x@vcf.fix$POS[nrow(x@vcf.fix)]
+  }
+  
+  # A DNAbin will store in a list when the fasta contains
+  # multiple sequences, but as a matrix when the fasta
+  # only contains one sequence.
+  if(!is.list(class(as.character(seq)))){
+    x@seq <- as.list(seq)
+    x@len <-length(x@seq[[1]])
+  } else {
+    x@seq <-seq
+    x@len <-length(x@seq[[1]])
+  }
+
+  return(x)
+}
+
+
+
 
 
 
