@@ -1,5 +1,7 @@
 Functions created to work with vcf files.
 
+[![Travis-CI Build Status](https://travis-ci.org/knausb/vcfR.png?branch=master)](https://travis-ci.org/knausb/vcfR)
+
 *vcf.R* - S4 class to contain a vcf file as well as functions to load this object.
 
 *vcf_v1.R* - Non-formal functions to read in a vcf file.
