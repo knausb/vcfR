@@ -34,7 +34,15 @@ Functions which act on Chrom objects
 }
 \details{
 The function \strong{masker} creates a logical vector that determines which variants are masked.
-This vector is stored in the var.info slot of a Chrom object.
+By masking certain variants, instead of deleting them, it preserves the dimensions of the data structure until a change needs to be committed.
+Variants can be masked based on the value of the QUAL column of the vcf object.
+Experience seems to show that this value is either at its maximum (999) or a rather low value.
+The maximum and minimum sequence depth can also be used (mindp and maxdp).
+The default is to mask all variants with depths of less than the 0.25 quantile and greater than the 0.75 quantile (these are also known as the lower and upper quartile).
+The minimum and maximum mapping qualities (minmq, maxmq) can also be used.
+
+
+This vector is stored in the var.info$mask slot of a Chrom object.
 
 The function \strong{variant_table} creates a data.frame containing information about variants.
 
