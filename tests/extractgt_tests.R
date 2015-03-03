@@ -18,8 +18,8 @@ outm <- .Call('vcfR_extract_GT_to_DF', PACKAGE = 'vcfR', pinf_vcf@gt, element="D
 
 outm <- .Call('vcfR_extract_GT_to_CM', PACKAGE = 'vcfR', pinf_vcf@gt, element="DP")
 
-outm <- extract.gt2(pinf_vcf, element="DP", as.numeric=F)
-outm <- extract.gt2(pinf_vcf, element="GQ", as.numeric=T)
+#outm <- extract.gt2(pinf_vcf, element="DP", as.numeric=F)
+#outm <- extract.gt2(pinf_vcf, element="GQ", as.numeric=T)
 
 head(pinf_vcf@gt)
 head(outm)

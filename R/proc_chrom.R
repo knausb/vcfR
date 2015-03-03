@@ -209,7 +209,8 @@ gt2popsum <- function(x){
   #  tmp[gt == "0/1"] <- 1
   #  tmp[gt == "1/0"] <- 1
   #  tmp[gt == "1/1"] <- 2
-  gt <- extract.gt(x, element = "GT", mask = rep(TRUE, times=nrow(x@var.info)))
+#  gt <- extract.gt(x, element = "GT", mask = rep(TRUE, times=nrow(x@var.info)))
+  gt <- extract.gt(x, element = "GT")
   tmp <- matrix(ncol=ncol(gt), nrow=nrow(gt))
   tmp[gt == "0/0" | gt == "0|0"] <- 0
   tmp[gt == "0/1" | gt == "0|1"] <- 1

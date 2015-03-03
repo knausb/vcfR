@@ -4,7 +4,7 @@
 \alias{chrom_to_vcfR}
 \title{Convert chrom objects to vcfR objects}
 \usage{
-chrom_to_vcfR(x, use.mask = TRUE)
+chrom_to_vcfR(x, use.mask = FALSE)
 }
 \arguments{
 \item{x}{Object of class chrom}

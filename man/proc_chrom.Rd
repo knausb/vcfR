@@ -37,9 +37,12 @@ The function \strong{proc_chrom()} calls helper functions to process the data pr
 
 
 The function \strong{regex.win()} is used to generate coordinates to define rectangles to represent regions of the chromosome containing called nucleotides (acgtwsmkrybdhv).
-It is then called a second time to generate coordinates to define rectangles to represent regions called as ambiguous nucleotides (n).
+It is then called a second time to generate coordinates to define rectangles to represent regions called as uncalled nucleotides (n, but not gaps).
 
 The function \strong{gt2popsum} is called to create summaries of the variant data.
+
+
+
 
 The function \strong{var.win} is called to create windowized summaries of the Chrom object.
 }

@@ -1,14 +1,14 @@
 #' @title Extract elements from the GT section of a vcf format object
 #' @rdname extract_gt
 #' 
-#' @param x An object of class chrom, vcfR or data.frame 
+#' @param x An object of class Chrom, vcfR or data.frame 
 #' @param element element to extract from vcf genotype data. Common options include "DP", "GT" and "GQ"
 #' @param mask a logical vector indicating which variants (rows) to include
 #' @param as.matrix attempt to recast as a numeric matrix
 #' 
 #' @export
 #' 
-extract.gt <- function(x, element="GT", mask=logical(0), as.matrix=FALSE){
+extract.gt.allR <- function(x, element="GT", mask=logical(0), as.matrix=FALSE){
   if(class(x) == "Chrom"){
     vcf <- new(Class="vcfR")
     vcf@meta <- x@vcf.meta
@@ -71,8 +71,7 @@ extract.gt <- function(x, element="GT", mask=logical(0), as.matrix=FALSE){
 #' 
 #' @param as.numeric Logical, should the matrix be converted to numerics
 #' @export
-#extract.gt2 <- function(x, element="GT", mask=logical(0), as.matrix=FALSE){
-extract.gt2 <- function(x, element="GT", mask=logical(0), as.numeric=FALSE){
+extract.gt <- function(x, element="GT", mask=logical(0), as.numeric=FALSE){
   if(class(x) != "Chrom" & class(x) != "vcfR" & class(x) != "data.frame"){
     stop("Expected an object of class Chrom, vcfR or data.frame")
   }
