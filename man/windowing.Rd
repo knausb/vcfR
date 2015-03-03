@@ -3,9 +3,12 @@
 \name{Windowing}
 \alias{NM2winNM}
 \alias{Windowing}
+\alias{z_score}
 \title{Create window summaries of data}
 \usage{
 NM2winNM(x, pos, maxbp, winsize = 100L)
+
+z_score(x)
 }
 \arguments{
 \item{x}{A NumericMatrix}

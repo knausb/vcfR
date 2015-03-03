@@ -27,3 +27,15 @@ NM2winNM <- function(x, pos, maxbp, winsize = 100L) {
 }
 
 
+
+#' @rdname windowing
+#' @export
+#' 
+z_score <- function(x){
+  winave <- apply(x, MARGIN=2, mean, na.rm=TRUE)
+  winsd  <- apply(x, MARGIN=2, sd, na.rm=TRUE)
+  zsc <- sweep(x, MARGIN=2, STATS=winave, FUN="-")
+  zsc <- sweep(zsc, MARGIN=2, STATS=winsd, FUN="/")
+  zsc
+}
+
