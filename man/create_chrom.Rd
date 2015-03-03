@@ -71,7 +71,10 @@ set.seed(10)
 x1 <- as.integer(runif(n=20, min=1, max=39000))
 y1 <- runif(n=length(x1), min=1, max=100)
 chromodot(pinf_mt, x1=x1, y1=y1)
-chromodot(pinf_mt, x1=x1, y1=y1, label1='My data', x2=x1, y2=y1, label2='More of my data', dot.alpha='ff')
+
+chromodot(pinf_mt, x1=x1, y1=y1, label1='My data',
+          x2=x1, y2=y1, label2='More of my data',
+          dot.alpha='ff')
 
 chromohwe(pinf_mt, dot.alpha='ff')
 

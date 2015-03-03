@@ -16,9 +16,12 @@
 #' 
 #' 
 #' The function \strong{regex.win()} is used to generate coordinates to define rectangles to represent regions of the chromosome containing called nucleotides (acgtwsmkrybdhv).
-#' It is then called a second time to generate coordinates to define rectangles to represent regions called as ambiguous nucleotides (n).
+#' It is then called a second time to generate coordinates to define rectangles to represent regions called as uncalled nucleotides (n, but not gaps).
 #' 
 #' The function \strong{gt2popsum} is called to create summaries of the variant data.
+#' 
+#' 
+#' 
 #' 
 #' The function \strong{var.win} is called to create windowized summaries of the Chrom object.
 #' 
@@ -36,24 +39,24 @@ proc_chrom <- function(x, win.size = 1e3, verbose=TRUE){
   stopifnot(class(x) == "Chrom")
   ptime <- system.time(x@seq.info$nuc.win <- regex.win(x))
   if(verbose==TRUE){
-    message("Nucleotide regions complete.\n")
+    message("Nucleotide regions complete.")
     print(ptime)
   }
   ptime <- system.time(x@seq.info$N.win <- regex.win(x, regex="[n]"))
   if(verbose==TRUE){
-    message("N regions complete.\n")
+    message("N regions complete.")
     print(ptime)
   }
   if(nrow(x@vcf.gt[x@var.info$mask,])>0){
     ptime <- system.time(x <- gt2popsum(x))
     if(verbose==TRUE){
-      message("Population summary complete.\n")
+      message("Population summary complete.")
       print(ptime)
     }
   }
   ptime <- system.time(x@win.info <- var.win(x))
   if(verbose==TRUE){
-    message("Window analysis complete.\n")
+    message("Window analysis complete.")
     print(ptime)
   }
   #
