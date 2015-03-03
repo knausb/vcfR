@@ -18,7 +18,7 @@ after_failure:
 env:
   - WARNINGS_ARE_ERRORS=1
   global:
-    - R_CHECK_ARGS=""
+    - R_CHECK_ARGS="--compact-vignettes"
 
 notifications:
   email:
