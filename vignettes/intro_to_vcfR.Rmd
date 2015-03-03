@@ -1,14 +1,16 @@
+
 ---
 title: "Introduction to vcfR"
 author: "Brian J. Knaus"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to vcfR}
-  %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
-
+<!---
+  %\VignetteIndexEntry{Introduction to vcfR}
+  %\VignetteEngine{knitr::rmarkdown}
+--->
 
 vcfR is a package intended to help people view, understand and filter data in vcf format files.
 
