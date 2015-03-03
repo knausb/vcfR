@@ -1,0 +1,29 @@
+#' @title Create window summaries of data
+#' @name Windowing
+#' @rdname windowing
+#' 
+#' 
+#' @description
+#' Create windows of non-overlapping data and summarize.
+#' 
+#' @param x A NumericMatrix
+#' @param pos A vector of chromosomal positions for each row of data (variants) 
+#' @param maxbp Length of chromosome
+#' @param winsize Size (in bp) for windows
+#' 
+#' @details
+#' The numeric matrix where samples are in columns and variant data are in rows.
+#' The windowing process therefore occurs along columns of data.
+#' This matrix could be created with \code{\link{extract.gt}}.
+#' 
+#' The chromosome is expected to contain positions 1 though maxbp.
+#' If maxbp is not specified this can be inferred from the last element in pos.
+#' 
+#' 
+#' @export
+#' 
+NM2winNM <- function(x, pos, maxbp, winsize = 100L) {
+  .Call('vcfR_NM2winNM', PACKAGE = 'vcfR', x, pos, maxbp, winsize)
+}
+
+

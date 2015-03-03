@@ -22,13 +22,6 @@ CM_to_NM <- function(x) {
     .Call('vcfR_CM_to_NM', PACKAGE = 'vcfR', x)
 }
 
-#' Extract windows of numeric data from genotype field of VCF
-#' 
-#' @param x A NumericMatrix
-#' @param pos A vector of chromosomal positions
-#' @param maxbp Length of chromosome
-#' @param winsize Size (in bp) for windows
-#' @export
 NM2winNM <- function(x, pos, maxbp, winsize = 100L) {
     .Call('vcfR_NM2winNM', PACKAGE = 'vcfR', x, pos, maxbp, winsize)
 }
