@@ -18,6 +18,13 @@
 #'
 #' \code{read.vcf.devel} is a custom C++ implementation which may be faster than read.vcf.
 #'
+#'@seealso
+#'\code{\link[PopGenome]{readVCF}}
+#'
+#'From Bioconductor: \code{\link[VariantAnnotation]{readVcf}}
+#'
+#'
+#'
 #' @examples
 #' library(vcfR)
 #' data(vcfR_example)

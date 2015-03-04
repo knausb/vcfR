@@ -36,4 +36,9 @@ head(pinf_vcf)
 plot(pinf_vcf)
 pinf_vcf[1:6,]
 }
+\seealso{
+\code{\link[PopGenome]{readVCF}}
+
+From Bioconductor: \code{\link[VariantAnnotation]{readVcf}}
+}
 

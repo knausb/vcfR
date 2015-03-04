@@ -1,24 +1,14 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-// Below is a simple example of exporting a C++ function to R. You can
-// source this function into an R session using the Rcpp::sourceCpp 
-// function (or via the Source button on the editor toolbar)
-
-// For more on using Rcpp click the Help button on the editor toolbar
-
 
 
 NumericVector win_mean(std::vector< std::vector<double> > win){
   int i;
   NumericVector means(win.size());
-//  std::vector< long double > means;
-
-//  Rcout << "Size of win: " << win.size() << "\n";
 
   // Sum over samples.
   for(i=0; i<win.size(); i++){
-//    Rcout << "\twin[][]: " << win[i].size() << "\n";
     if(win[i].size() > 0){
       means[i] = win[i][0];
       if(win[i].size() > 1){
@@ -31,32 +21,11 @@ NumericVector win_mean(std::vector< std::vector<double> > win){
     }
   }
 
-
   for(i=0; i < means.size(); i++){
     if(win[i].size() > 1){
       means[i] = means[i] / win[i].size();
     }
   }
-
-
-
-/*
-  Rcout << "Means: " << means[0];
-  for(i=1; i<8; i++){
-    Rcout << ", " << means[i];
-  }
-  Rcout << "\n";
-*/
-
-
-
-//  NumericVector means2(means.size());
-/*
-  for(i=0; i<means.size(); i++){
-    means2[i] = means[i];
-  }
-//  means2 = means;
-*/
 
   return means;
 }
