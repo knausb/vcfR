@@ -3,12 +3,15 @@
 \name{Windowing}
 \alias{NM2winNM}
 \alias{Windowing}
+\alias{windowize_NM}
 \alias{z_score}
 \title{Create window summaries of data}
 \usage{
 NM2winNM(x, pos, maxbp, winsize = 100L)
 
 z_score(x)
+
+windowize_NM(x, pos, starts, ends, centrality = "mean")
 }
 \arguments{
 \item{x}{A NumericMatrix}
@@ -18,6 +21,12 @@ z_score(x)
 \item{maxbp}{Length of chromosome}
 
 \item{winsize}{Size (in bp) for windows}
+
+\item{starts}{integer vector of starting positions for windows}
+
+\item{ends}{integer vector of ending positions for windows}
+
+\item{centrality}{string indicating measure of central tendency (mean or median)}
 }
 \description{
 Create windows of non-overlapping data and summarize.

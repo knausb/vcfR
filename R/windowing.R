@@ -39,3 +39,18 @@ z_score <- function(x){
   zsc
 }
 
+
+#' @rdname windowing
+#' 
+# @param pos integer vector of chromosomal positions
+#' @param starts integer vector of starting positions for windows
+#' @param ends integer vector of ending positions for windows
+#' @param centrality string indicating measure of central tendency (mean or median)
+#' 
+#' @export
+#' 
+windowize_NM <- function(x, pos, starts, ends, centrality="mean"){
+  
+  .Call('vcfR_windowize_NM', PACKAGE = 'vcfR', x, pos, starts, ends, centrality="mean")  
+}
+
