@@ -105,3 +105,56 @@ NumericMatrix NM2winNM(NumericMatrix x, std::vector<int> pos, int maxbp, int win
 }
 
 
+double vector_mean(std::vector<double> x){
+  double mean=0;
+  
+  
+  return mean;
+}
+
+
+// [[Rcpp::export]]
+NumericMatrix windowize_NM(NumericMatrix x,
+                           NumericVector pos,
+                           NumericVector starts,
+                           NumericVector ends,
+                           String centrality="mean") {
+                             
+  // Declare a matrix for output.
+  NumericMatrix outM(starts.size(), x.ncol());
+
+  // Declare a vector of a vector of doubles to hold each
+  // window prior to summarization.
+  std::vector< std::vector<double> > window_tmp(x.ncol());
+
+  // Counters
+  int window_num = 0;
+  int i;
+  int j;
+  
+  // Scroll over variants and assign summaries to windows.
+  for(i = 0; i < pos.size(); i++){
+    if(pos(i) > ends(i)){
+      // Summarize
+      for(j=0; j<x.ncol(); j++){
+        outM(window_num, j) = vector_mean(window_tmp[j]);
+        window_tmp[j].clear();
+      }
+      window_num++;
+    } else {
+      for(j=0; j<x.ncol(); j++){
+        if(x(i,j) != NA_REAL){
+          window_tmp[j].push_back(x(i,j));
+        }
+      }
+    }
+  }
+  // Summarize the last window.
+  for(j=0; j<x.ncol(); j++){
+    outM(window_num, j) = vector_mean(window_tmp[j]);
+  }
+
+  return outM;
+}
+
+

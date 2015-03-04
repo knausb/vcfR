@@ -86,6 +86,25 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// windowize_NM
+NumericMatrix windowize_NM(NumericMatrix x, NumericVector pos, NumericVector starts, NumericVector ends, String centrality = "mean");
+RcppExport SEXP vcfR_windowize_NM(SEXP xSEXP, SEXP posSEXP, SEXP startsSEXP, SEXP endsSEXP, SEXP centralitySEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP );
+        Rcpp::traits::input_parameter< NumericVector >::type pos(posSEXP );
+        Rcpp::traits::input_parameter< NumericVector >::type starts(startsSEXP );
+        Rcpp::traits::input_parameter< NumericVector >::type ends(endsSEXP );
+        Rcpp::traits::input_parameter< String >::type centrality(centralitySEXP );
+        NumericMatrix __result = windowize_NM(x, pos, starts, ends, centrality);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // readVcfHeader
 std::vector<std::string> readVcfHeader(String x);
 RcppExport SEXP vcfR_readVcfHeader(SEXP xSEXP) {

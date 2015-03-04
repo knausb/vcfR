@@ -26,6 +26,10 @@ NM2winNM <- function(x, pos, maxbp, winsize = 100L) {
     .Call('vcfR_NM2winNM', PACKAGE = 'vcfR', x, pos, maxbp, winsize)
 }
 
+windowize_NM <- function(x, pos, starts, ends, centrality = "mean") {
+    .Call('vcfR_windowize_NM', PACKAGE = 'vcfR', x, pos, starts, ends, centrality)
+}
+
 readVcfHeader <- function(x) {
     .Call('vcfR_readVcfHeader', PACKAGE = 'vcfR', x)
 }
