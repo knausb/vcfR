@@ -106,10 +106,30 @@ NumericMatrix NM2winNM(NumericMatrix x, std::vector<int> pos, int maxbp, int win
 
 
 double vector_mean(std::vector<double> x){
-  double mean=0;
-  
-  
+  double mean = 0;
+  int i = 0;
+  for(i=0; i<x.size(); i++){
+    mean = mean + x[i];
+  }
+  mean = mean / x.size();
   return mean;
+}
+
+
+double vector_median(std::vector<double> x){
+  // http://stackoverflow.com/a/2114817
+  double median = 0;
+  size_t x_size = x.size();
+  
+  sort(x.begin(), x.end());
+
+  if (x_size  % 2 == 0){
+      median = (x[x_size / 2 - 1] + x[x_size / 2]) / 2;
+  } else {
+      median = x[x_size / 2];
+  }
+
+  return median;
 }
 
 
@@ -137,7 +157,12 @@ NumericMatrix windowize_NM(NumericMatrix x,
     if(pos(i) > ends(i)){
       // Summarize
       for(j=0; j<x.ncol(); j++){
-        outM(window_num, j) = vector_mean(window_tmp[j]);
+        if(centrality == "mean"){
+          outM(window_num, j) = vector_mean(window_tmp[j]);
+        }
+        if(centrality == "median"){
+          outM(window_num, j) = vector_median(window_tmp[j]);
+        }
         window_tmp[j].clear();
       }
       window_num++;
