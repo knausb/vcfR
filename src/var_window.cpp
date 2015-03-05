@@ -99,6 +99,12 @@ Rcpp::DataFrame windowize_variants(Rcpp::DataFrame wins, Rcpp::NumericVector pos
 // Windowize genic nucleotides
 // [[Rcpp::export]]
 Rcpp::DataFrame windowize_annotations(Rcpp::DataFrame wins, Rcpp::DataFrame ann) {
+  Rcpp::NumericVector ends = wins["end"];
+  Rcpp::NumericVector genic_nucs(ends(ends.size()));
+  int i=0;
+  int j=0;
+
+
 
 
 
