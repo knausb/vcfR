@@ -73,7 +73,8 @@ Rcpp::DataFrame windowize_fasta(Rcpp::DataFrame wins, Rcpp::CharacterVector seq)
 
 
 
-// Windowize variant number
+// Windowize variant 
+//
 // [[Rcpp::export]]
 Rcpp::DataFrame windowize_variants(Rcpp::DataFrame wins, Rcpp::NumericVector pos) {
   Rcpp::NumericVector ends = wins["end"];
@@ -96,19 +97,55 @@ Rcpp::DataFrame windowize_variants(Rcpp::DataFrame wins, Rcpp::NumericVector pos
 
 
 
-// Windowize genic nucleotides
+// Windowize annotated nucleotides
+//
 // [[Rcpp::export]]
-Rcpp::DataFrame windowize_annotations(Rcpp::DataFrame wins, Rcpp::DataFrame ann) {
-  Rcpp::NumericVector ends = wins["end"];
-  Rcpp::NumericVector genic_nucs(ends(ends.size()));
-  int i=0;
-  int j=0;
+Rcpp::DataFrame windowize_annotations(Rcpp::DataFrame wins,
+                                      Rcpp::NumericVector ann_starts,
+                                      Rcpp::NumericVector ann_ends,
+                                      int chrom_length) {
+  Rcpp::NumericVector win_ends = wins["end"];
+  Rcpp::NumericVector chrom(chrom_length);
+  Rcpp::NumericVector window_tally(win_ends.size());
+  int i;
+  int j;
+  int tmp;
 
+  // We create a chromosome of zeros and replace
+  // each genic position with a one.
+  // Some positions may be annotated more than
+  // once, so we need to handle this too.
+  
+//  for(i=0; i<chrom_length; i++){ Rcout << chrom(i); }
+//  for(i=0; i < window_tally.size(); i++){ Rcout << window_tally(i) << "\n"; }
+  
+  // Reorient reverse strand features.
+  for(i = 0; i < ann_starts.size(); i++){
+    if(ann_starts(i) > ann_ends(i)){
+      tmp = ann_starts(i);
+      ann_starts(i) = ann_ends(i);
+      ann_ends(i) = tmp;
+    }
+    
+    // Mark genic bases.
+//    Rcout << ann_starts(i) << "\t" << ann_ends(i) << "\n";
+    for(j = ann_starts(i); j < ann_ends(i); j++){
+      chrom(j) = 1;
+    }
+  }
 
+  // Now tally the number of genic positions in each window.
+  tmp = 0;
+  for(i = 0; i < chrom_length; i++){
+//    Rcout << chrom(i); // << "\n";
+    if(i + 1 > win_ends(tmp)){
+      tmp++;
+      }
+    if(chrom(i) == 1){window_tally(tmp)++;}
+  }
 
-
-
-  return wins;
+  return DataFrame::create(wins, _["genic"]=window_tally);
+//  return wins;
 }
 
 

@@ -24,3 +24,8 @@ test_that("vcfR_window_init creates ", {
 
 win3 <- .Call('vcfR_windowize_variants', PACKAGE = 'vcfR', wins=win2, pos=pinf_vcf@fix$POS)
 
+#win4 <- .Call('vcfR_windowize_annotations', PACKAGE = 'vcfR', wins=win3, ann=pinf_gff, chrom_length=length(pinf_dna))
+win4 <- .Call('vcfR_windowize_annotations', PACKAGE = 'vcfR', wins=win3,
+              ann_starts=as.numeric(as.character(pinf_gff[,4])), 
+              ann_ends=as.numeric(as.character(pinf_gff[,5])),
+              chrom_length=length(pinf_dna))
