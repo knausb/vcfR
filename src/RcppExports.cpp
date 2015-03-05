@@ -150,3 +150,35 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// window_init
+Rcpp::DataFrame window_init(int window_size, int max_bp);
+RcppExport SEXP vcfR_window_init(SEXP window_sizeSEXP, SEXP max_bpSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< int >::type window_size(window_sizeSEXP );
+        Rcpp::traits::input_parameter< int >::type max_bp(max_bpSEXP );
+        Rcpp::DataFrame __result = window_init(window_size, max_bp);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// windowize_fasta
+Rcpp::DataFrame windowize_fasta(Rcpp::DataFrame wins, Rcpp::CharacterVector seq);
+RcppExport SEXP vcfR_windowize_fasta(SEXP winsSEXP, SEXP seqSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< Rcpp::DataFrame >::type wins(winsSEXP );
+        Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type seq(seqSEXP );
+        Rcpp::DataFrame __result = windowize_fasta(wins, seq);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}

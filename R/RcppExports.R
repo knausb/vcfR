@@ -42,3 +42,11 @@ readVcfBody2 <- function(x) {
     .Call('vcfR_readVcfBody2', PACKAGE = 'vcfR', x)
 }
 
+window_init <- function(window_size, max_bp) {
+    .Call('vcfR_window_init', PACKAGE = 'vcfR', window_size, max_bp)
+}
+
+windowize_fasta <- function(wins, seq) {
+    .Call('vcfR_windowize_fasta', PACKAGE = 'vcfR', wins, seq)
+}
+

@@ -13,6 +13,7 @@ Imports:
     ape,
     Rcpp
 Suggests:
-    knitr
+    knitr,
+    testthat
 VignetteBuilder: knitr
 License: GPL

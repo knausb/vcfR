@@ -20,6 +20,7 @@ setOldClass("DNAbin")
 #'   \item name name of the object (class character)
 #'   \item seq object of class DNAbin (ape)
 #'   \item len length of sequence (integer)
+#'   \item window_size window size for windowing analyses (integer)
 #'   \item vcf.meta vcf meta data
 #'   \item vcf.fix vcf fixed data
 #'   \item vcf.gt vcf genotype data
@@ -70,6 +71,7 @@ setClass(
     name = "character",
     seq = "DNAbin",
     len = "integer",
+    window_size = "integer",
     vcf.meta = "character",
     vcf.fix = "data.frame",
     vcf.gt = "data.frame",
@@ -87,6 +89,7 @@ setClass(
 #    mask = "logical"
   ),
   prototype=prototype(
+    window_size = as.integer(1e3),
     vcf.fix = data.frame(matrix(ncol=8, nrow=0,
                                 dimnames=list(c(),
                                               c('CHROM','POS','ID','REF','ALT','QUAL','FILTER','INFO'))

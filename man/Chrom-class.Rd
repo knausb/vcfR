@@ -16,6 +16,7 @@ This object has a numbr of slots.
   \item name name of the object (class character)
   \item seq object of class DNAbin (ape)
   \item len length of sequence (integer)
+  \item window_size window size for windowing analyses (integer)
   \item vcf.meta vcf meta data
   \item vcf.fix vcf fixed data
   \item vcf.gt vcf genotype data
