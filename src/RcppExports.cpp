@@ -182,3 +182,35 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// windowize_variants
+Rcpp::DataFrame windowize_variants(Rcpp::DataFrame wins, Rcpp::NumericVector pos);
+RcppExport SEXP vcfR_windowize_variants(SEXP winsSEXP, SEXP posSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< Rcpp::DataFrame >::type wins(winsSEXP );
+        Rcpp::traits::input_parameter< Rcpp::NumericVector >::type pos(posSEXP );
+        Rcpp::DataFrame __result = windowize_variants(wins, pos);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// windowize_annotations
+Rcpp::DataFrame windowize_annotations(Rcpp::DataFrame wins, Rcpp::DataFrame ann);
+RcppExport SEXP vcfR_windowize_annotations(SEXP winsSEXP, SEXP annSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< Rcpp::DataFrame >::type wins(winsSEXP );
+        Rcpp::traits::input_parameter< Rcpp::DataFrame >::type ann(annSEXP );
+        Rcpp::DataFrame __result = windowize_annotations(wins, ann);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}

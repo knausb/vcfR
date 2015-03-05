@@ -25,9 +25,7 @@ Rcpp::DataFrame window_init(int window_size, int max_bp) {
 // [[Rcpp::export]]
 Rcpp::DataFrame windowize_fasta(Rcpp::DataFrame wins, Rcpp::CharacterVector seq) {
   // The sequence must begin at position one.
-  
-  
-//  Rcpp::CharacterVector window = wins["window"];
+
   Rcpp::NumericVector ends = wins["end"];
   
   Rcpp::NumericVector A(ends.size());
@@ -70,8 +68,42 @@ Rcpp::DataFrame windowize_fasta(Rcpp::DataFrame wins, Rcpp::CharacterVector seq)
       other(window_num)++;
   }
 
-
-//  return DataFrame::create(_["A"]=A, _["C"]=C);
   return DataFrame::create(wins, _["A"]=A, _["C"]=C, _["G"]=G, _["T"]=T, _["N"]=N, _["other"]=other);
-//  return wins;
 }
+
+
+
+// Windowize variant number
+// [[Rcpp::export]]
+Rcpp::DataFrame windowize_variants(Rcpp::DataFrame wins, Rcpp::NumericVector pos) {
+  Rcpp::NumericVector ends = wins["end"];
+  Rcpp::NumericVector var_counts(ends.size());
+  int window_num = 0;
+  
+  // Vectors are zero based.
+  // Positions are one based.
+  for(int i; i < pos.size(); i++){
+    if(pos(i) > ends(window_num)){
+      window_num++;
+    } else {
+      var_counts(window_num)++;
+    }
+  }
+
+  return DataFrame::create(wins, _["variants"]=var_counts);
+}
+
+
+
+
+// Windowize genic nucleotides
+// [[Rcpp::export]]
+Rcpp::DataFrame windowize_annotations(Rcpp::DataFrame wins, Rcpp::DataFrame ann) {
+
+
+
+  return wins;
+}
+
+
+

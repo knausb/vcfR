@@ -19,3 +19,8 @@ test_that("vcfR_window_init creates ", {
   expect_equal(nrow(win2), 40)
   expect_equal(rowSums(win2[,5:10]), c(rep(1000, times=39), 870))
 })
+
+
+
+win3 <- .Call('vcfR_windowize_variants', PACKAGE = 'vcfR', wins=win2, pos=pinf_vcf@fix$POS)
+

@@ -50,3 +50,11 @@ windowize_fasta <- function(wins, seq) {
     .Call('vcfR_windowize_fasta', PACKAGE = 'vcfR', wins, seq)
 }
 
+windowize_variants <- function(wins, pos) {
+    .Call('vcfR_windowize_variants', PACKAGE = 'vcfR', wins, pos)
+}
+
+windowize_annotations <- function(wins, ann) {
+    .Call('vcfR_windowize_annotations', PACKAGE = 'vcfR', wins, ann)
+}
+
