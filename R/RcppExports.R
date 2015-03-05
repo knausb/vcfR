@@ -54,7 +54,7 @@ windowize_variants <- function(wins, pos) {
     .Call('vcfR_windowize_variants', PACKAGE = 'vcfR', wins, pos)
 }
 
-windowize_annotations <- function(wins, ann) {
-    .Call('vcfR_windowize_annotations', PACKAGE = 'vcfR', wins, ann)
+windowize_annotations <- function(wins, ann_starts, ann_ends, chrom_length) {
+    .Call('vcfR_windowize_annotations', PACKAGE = 'vcfR', wins, ann_starts, ann_ends, chrom_length)
 }
 

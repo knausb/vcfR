@@ -98,11 +98,54 @@ Rcpp::DataFrame windowize_variants(Rcpp::DataFrame wins, Rcpp::NumericVector pos
 
 // Windowize genic nucleotides
 // [[Rcpp::export]]
-Rcpp::DataFrame windowize_annotations(Rcpp::DataFrame wins, Rcpp::DataFrame ann) {
+Rcpp::DataFrame windowize_annotations(Rcpp::DataFrame wins,
+                                      Rcpp::NumericVector ann_starts,
+                                      Rcpp::NumericVector ann_ends,
+                                      int chrom_length) {
+  Rcpp::NumericVector win_ends = wins["end"];
+//  Rcpp::NumericVector ann_starts = ann(3);
+//  Rcpp::NumericVector ann_ends = ann(4);
+    
+  Rcpp::NumericVector chrom(chrom_length);
+  Rcpp::NumericVector window_tally(win_ends);
+  int i;
+  int j;
+  int tmp;
 
+  // We create a chromosome of zeros and replace
+  // each genic position with a one.
+  // Some positions may be annotated more than
+  // once, so we need to handle this too.
+  
+  // Reorient reverse strand features.
+  for(i = 0; i < ann_starts.size(); i++){
+    if(ann_starts(i) > ann_ends(i)){
+      tmp = ann_starts(i);
+      ann_starts(i) = ann_ends(i);
+      ann_ends(i) = tmp;
+    }
+    
+    // Mark genic bases.
+    for(j = ann_starts(i); j < ann_ends(i); j++){
+      Rcout << ann_starts(i) << "\t" << ann_ends(i) << "\n";
+      chrom(i) = 1;
+    }
+  }
 
+  // Now tally the number of genic positions in each window.
+  tmp = 0;
+  window_tally(tmp) = 0;
+  for(i = 0; i < chrom_length; i++){
+//    Rcout << chrom(i); // << "\n";
+//    if(i > win_ends(tmp)){
+//      tmp++;
+//      window_tally(tmp) = 0;
+//      }
+//    if(chrom(i) == 1){window_tally(tmp)++;}
+  }
 
-  return wins;
+  return DataFrame::create(wins, _["genic"]=window_tally);
+//  return wins;
 }
 
 
