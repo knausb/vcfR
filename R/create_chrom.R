@@ -112,7 +112,7 @@ create_chrom <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
     if(class(ann[,4]) == "factor"){ann[,4] <- as.character(ann[,4])}
     if(class(ann[,5]) == "factor"){ann[,5] <- as.character(ann[,5])}
     if(class(ann[,4]) == "character"){ann[,4] <- as.numeric(ann[,4])}
-    if(class(ann[,4]) == "character"){ann[,4] <- as.numeric(ann[,4])}
+    if(class(ann[,5]) == "character"){ann[,5] <- as.numeric(ann[,5])}
     x@ann <- ann
   }
 
