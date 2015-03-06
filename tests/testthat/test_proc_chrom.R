@@ -1,5 +1,4 @@
-# 
-detach(package:vcfR, unload=T)
+# detach(package:vcfR, unload=T)
 library(vcfR)
 context("proc_chrom functions")
 
