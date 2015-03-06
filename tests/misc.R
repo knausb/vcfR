@@ -3,7 +3,7 @@ library(vcfR)
 
 data(vcfR_example)
 
-head(pinf_vcf)
+#head(pinf_vcf)
 
 
 original_wd <- getwd()
@@ -17,7 +17,7 @@ x <- .Call('vcfR_readVcfBody', PACKAGE = 'vcfR', "pinf_mt.vcf")
 
 x <- .Call('vcfR_readVcfBody2', PACKAGE = 'vcfR', "pinf_mt.vcf")
 
-head(x)
+#head(x)
 
 unlink("pinf_mt.vcf")
 

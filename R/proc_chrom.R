@@ -65,6 +65,64 @@ proc_chrom <- function(x, win.size = 1e3, verbose=TRUE){
 
 
 
+#' @rdname proc_chrom
+#' @export
+# @aliases proc_chrom
+#'
+proc_chrom2 <- function(x, win.size = 1e3, verbose=TRUE){
+  stopifnot(class(x) == "Chrom")
+  ptime <- system.time(x@seq.info$nuc.win <- regex.win(x))
+  if(verbose==TRUE){
+    message("Nucleotide regions complete.")
+    message(ptime)
+  }
+  ptime <- system.time(x@seq.info$N.win <- regex.win(x, regex="[n]"))
+  if(verbose==TRUE){
+    message("N regions complete.")
+    message(ptime)
+  }
+  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
+    ptime <- system.time(x <- gt2popsum(x))
+    if(verbose==TRUE){
+      message("Population summary complete.")
+      message(ptime)
+    }
+  }
+  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
+    ptime <- system.time(x@win.info <- .Call('vcfR_window_init', PACKAGE = 'vcfR', window_size=win.size, max_bp=x@len))
+    if(verbose==TRUE){
+      message("window_init complete.")
+      message(ptime)
+    }
+  }
+  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
+    ptime <- system.time(x@win.info <- .Call('vcfR_windowize_fasta', PACKAGE = 'vcfR', wins=x@win.info, seq=x@seq))
+    if(verbose==TRUE){
+      message("windowize_fasta complete.")
+      message(ptime)
+    }
+  }
+  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
+    ptime <- system.time(x@win.info <- .Call('vcfR_windowize_variants', PACKAGE = 'vcfR', wins=x@win.info, pos=x@vcf.fix$POS))
+    if(verbose==TRUE){
+      message("windowize_fasta complete.")
+      message(ptime)
+    }
+  }
+  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
+    ptime <- system.time(x@win.info <- .Call('vcfR_windowize_annotations', PACKAGE = 'vcfR', wins=x@win.info,
+                                             ann_starts=as.numeric(as.character(x@ann[,4])), 
+                                             ann_ends=as.numeric(as.character(x@ann[,5])),
+                                             chrom_length=x@len)
+    )
+    if(verbose==TRUE){
+      message("windowize_fasta complete.")
+      message(ptime)
+    }
+  }
+  return(x)
+}
+
 
 
 ##### ##### seq.info functions #####

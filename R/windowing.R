@@ -19,6 +19,15 @@
 #' The chromosome is expected to contain positions 1 though maxbp.
 #' If maxbp is not specified this can be inferred from the last element in pos.
 #' 
+#'
+#' @param starts integer vector of starting positions for windows
+#' @param ends integer vector of ending positions for windows
+#' @param centrality string indicating measure of central tendency (mean or median)
+#' 
+
+
+#' @rdname windowing
+#' @aliases windowing alias NM2winNM
 #' 
 #' @export
 #' 
@@ -42,10 +51,6 @@ z_score <- function(x){
 
 #' @rdname windowing
 #' 
-# @param pos integer vector of chromosomal positions
-#' @param starts integer vector of starting positions for windows
-#' @param ends integer vector of ending positions for windows
-#' @param centrality string indicating measure of central tendency (mean or median)
 #' 
 #' @export
 #' 
