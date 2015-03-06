@@ -39,6 +39,12 @@ setOldClass("DNAbin")
 #' 
 #' More descriptions can be put here.
 #' 
+#' The \strong{seq} slot contains an object of class ape::DNAbin.
+#' A DNAbin object is typically either a matrix or list of DNAbin objects.
+#' The matrix form appears to be better behaved than the list form.
+#' Because of this behavior this slot should be the matrix form.
+#' When this slot is not populated it is of class "S4" instead of "DNAbin".
+#' 
 #' The \strong{vcf.meta} slot is a list containing the meta information from the top of the vcf file.
 #' 
 #' The \strong{vcf.fix} slot is a data.frame containing the fixed data (the first eight columns) from the vcf file.
@@ -46,6 +52,7 @@ setOldClass("DNAbin")
 #' The \strong{vcf.gt} slot is a data.frame containing information about the samples.  The number of rows is the number of samples plus one, where the first row describes the format of the data in each cell.  The number of rows is equal to the numnber of variants.
 #' 
 #' The \strong{ann} slot is a data.frame containing gff format data.
+#' When this slot is not populated it has nrows equal to zero.
 #' 
 #' The \strong{var.info} slot contains a data.frame containing information about variants
 #' 

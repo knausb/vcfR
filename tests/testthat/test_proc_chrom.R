@@ -1,10 +1,12 @@
+# 
+detach(package:vcfR, unload=T)
 library(vcfR)
 context("proc_chrom functions")
 
 data(vcfR_example)
 
 
-pinf_mt <- create_chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
+pinf_mt <- create_chrom(name='pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
 #head(pinf_mt)
 #pinf_mt
 #names(pinf_mt)
