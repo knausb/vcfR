@@ -43,6 +43,7 @@ pinf_vcf[1:6,]
 \seealso{
 \code{\link[PopGenome]{readVCF}}
 
-From Bioconductor: \code{\link[VariantAnnotation]{readVcf}}
+Bioconductor:
+\href{www.bioconductor.org/packages/3.0/bioc/html/VariantAnnotation.html}{VariantAnnotation::readVcf}
 }
 

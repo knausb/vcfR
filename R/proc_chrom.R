@@ -74,39 +74,43 @@ proc_chrom2 <- function(x, win.size = 1e3, verbose=TRUE){
   ptime <- system.time(x@seq.info$nuc.win <- regex.win(x))
   if(verbose==TRUE){
     message("Nucleotide regions complete.")
-    message(ptime)
+    message(paste("elapsed time: ", round(ptime[3], digits=4)))
   }
   ptime <- system.time(x@seq.info$N.win <- regex.win(x, regex="[n]"))
   if(verbose==TRUE){
     message("N regions complete.")
-    message(ptime)
+    message(paste("elapsed time: ", round(ptime[3], digits=4)))
   }
   if(nrow(x@vcf.gt[x@var.info$mask,])>0){
     ptime <- system.time(x <- gt2popsum(x))
     if(verbose==TRUE){
       message("Population summary complete.")
-      message(ptime)
+      message(paste("elapsed time: ", round(ptime[3], digits=4)))
     }
   }
   if(nrow(x@vcf.gt[x@var.info$mask,])>0){
     ptime <- system.time(x@win.info <- .Call('vcfR_window_init', PACKAGE = 'vcfR', window_size=win.size, max_bp=x@len))
     if(verbose==TRUE){
       message("window_init complete.")
-      message(ptime)
+      message(paste("elapsed time: ", round(ptime[3], digits=4)))
     }
   }
   if(nrow(x@vcf.gt[x@var.info$mask,])>0){
-    ptime <- system.time(x@win.info <- .Call('vcfR_windowize_fasta', PACKAGE = 'vcfR', wins=x@win.info, seq=x@seq))
+    ptime <- system.time(x@win.info <- .Call('vcfR_windowize_fasta', 
+                                             PACKAGE = 'vcfR',
+                                             wins=x@win.info,
+                                             seq=as.character(x@seq[[1]])[1,]
+                                             ))
     if(verbose==TRUE){
       message("windowize_fasta complete.")
-      message(ptime)
+      message(paste("elapsed time: ", round(ptime[3], digits=4)))
     }
   }
   if(nrow(x@vcf.gt[x@var.info$mask,])>0){
     ptime <- system.time(x@win.info <- .Call('vcfR_windowize_variants', PACKAGE = 'vcfR', wins=x@win.info, pos=x@vcf.fix$POS))
     if(verbose==TRUE){
       message("windowize_fasta complete.")
-      message(ptime)
+      message(paste("elapsed time: ", round(ptime[3], digits=4)))
     }
   }
   if(nrow(x@vcf.gt[x@var.info$mask,])>0){
@@ -117,7 +121,7 @@ proc_chrom2 <- function(x, win.size = 1e3, verbose=TRUE){
     )
     if(verbose==TRUE){
       message("windowize_fasta complete.")
-      message(ptime)
+      message(paste("elapsed time: ", round(ptime[3], digits=4)))
     }
   }
   return(x)
