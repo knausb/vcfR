@@ -99,7 +99,7 @@ proc_chrom2 <- function(x, win.size = 1e3, verbose=TRUE){
     ptime <- system.time(x@win.info <- .Call('vcfR_windowize_fasta', 
                                              PACKAGE = 'vcfR',
                                              wins=x@win.info,
-                                             seq=as.character(x@seq[[1]])[1,]
+                                             seq=as.character(x@seq)[1,]
                                              ))
     if(verbose==TRUE){
       message("windowize_fasta complete.")
