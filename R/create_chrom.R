@@ -184,7 +184,7 @@ vcf2chrom <- function(x, vcf){
   x@vcf.meta <- vcf@meta
   #
   # Initialize var.info slot
-  x@var.info <- data.frame(matrix(ncol=3, nrow=nrow(vcf@fix)))
+  x@var.info <- data.frame(matrix(ncol=4, nrow=nrow(vcf@fix)))
   names(x@var.info) <- c('POS', 'mask', 'DP','MQ')
 #  names(x@var.info) <- c('DP','MQ', 'mask')
   #
