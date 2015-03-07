@@ -30,7 +30,7 @@ setOldClass("DNAbin")
 #'   \item win.info a data.frame containing information on windows
 #'   \item seq.info a list containing information on the sequence
 #'      
-#   \item gt.m matrix of genotypes
+#'   \item gt.m matrix of genotypes
 #   \item sfs matrix for the site frequency spectrum
 #   \item link matrix for linkages
 #   

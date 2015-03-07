@@ -90,9 +90,12 @@ Rcpp::DataFrame windowize_variants(Rcpp::DataFrame windows, Rcpp::DataFrame vari
   // Vectors are zero based.
   // Positions are one based.
   for(int i; i < pos.size(); i++){
-    if(pos(i) > ends(window_num)){
+//    Rcout << "i: " << i << ", pos(i): " << pos(i) << ", ends(window_num): " << ends(window_num) <<"\n";
+    while(pos(i) > ends(window_num)){
       window_num++;
-    } else if (mask(i) == TRUE){
+    }
+//    Rcout << "i: " << i << ", pos(i): " << pos(i) << ", ends(window_num): " << ends(window_num) <<"\n";
+    if (mask(i) == TRUE){
       var_counts(window_num)++;
     }
   }
