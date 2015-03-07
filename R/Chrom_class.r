@@ -88,8 +88,8 @@ setClass(
     win.info = "data.frame",
     seq.info = "list",
     #
-    gt.m = "matrix",
-    vcf.stat = "data.frame"
+    gt.m = "matrix"
+#    vcf.stat = "data.frame"
 #    sfs = "matrix",
 #    link = "matrix",
     #
@@ -103,11 +103,11 @@ setClass(
 #                                              c('chrom','pos','id','ref','alt','qual','filter','info'))
     ),
     stringsAsFactors=FALSE),
-    vcf.stat = data.frame(matrix(ncol=11, nrow=0, 
-                                 dimnames=list(c(),
-                                               c('Allele_num','R_num','A_num','Ho','He','Ne','theta_pi','theta_w','theta_h','tajimas_d','fw_h'))
-    ),
-    stringsAsFactors=FALSE),
+#    vcf.stat = data.frame(matrix(ncol=11, nrow=0, 
+#                                 dimnames=list(c(),
+#                                               c('Allele_num','R_num','A_num','Ho','He','Ne','theta_pi','theta_w','theta_h','tajimas_d','fw_h'))
+#    ),
+#    stringsAsFactors=FALSE),
     ann = data.frame(matrix(ncol=9, nrow=0,
                             dimnames=list(c(),
                                           c("seqid", "source", "type", "start", "end", "score", "strand", "phase", "attributes"))
