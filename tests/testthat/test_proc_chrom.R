@@ -14,3 +14,5 @@ pinf_mt <- proc_chrom(pinf_mt, win.size=1000)
 
 pinf_mt2 <- proc_chrom2(pinf_mt, win.size=1000)
 
+
+#print("proc_chrom functions finished")
