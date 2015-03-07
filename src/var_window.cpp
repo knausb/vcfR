@@ -36,13 +36,17 @@ Rcpp::DataFrame windowize_fasta(Rcpp::DataFrame wins, Rcpp::CharacterVector seq)
   Rcpp::NumericVector other(ends.size());
 
   int window_num = 0;
-  
+
+//Rcout << "seq.size: " << seq.size() << "\n";
+//Rcout << "ends.size: " << ends.size() << "\n";
+
   // Vectors are zero based.
   // Sequences are one based.
   for(int i; i < seq.size(); i++){
     if(i + 1 > ends(window_num)){
       window_num++;
     }
+//Rcout << "Made it to: " << i << "\n";
 
     if(seq(i) == "A")
       A(window_num)++;
@@ -78,6 +82,7 @@ Rcpp::DataFrame windowize_fasta(Rcpp::DataFrame wins, Rcpp::CharacterVector seq)
 // [[Rcpp::export]]
 Rcpp::DataFrame windowize_variants(Rcpp::DataFrame wins, Rcpp::NumericVector pos) {
   Rcpp::NumericVector ends = wins["end"];
+  Rcpp::LogicalVector mask = wins["mask"];
   Rcpp::NumericVector var_counts(ends.size());
   int window_num = 0;
   
@@ -86,7 +91,7 @@ Rcpp::DataFrame windowize_variants(Rcpp::DataFrame wins, Rcpp::NumericVector pos
   for(int i; i < pos.size(); i++){
     if(pos(i) > ends(window_num)){
       window_num++;
-    } else {
+    } else if (mask(i) == TRUE){
       var_counts(window_num)++;
     }
   }

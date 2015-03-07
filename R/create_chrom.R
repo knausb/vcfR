@@ -109,6 +109,7 @@ create_chrom <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
 
   # Annotations.
   if(nrow(ann) > 0){
+    stopifnot(class(ann) == "data.frame")
     if(class(ann[,4]) == "factor"){ann[,4] <- as.character(ann[,4])}
     if(class(ann[,5]) == "factor"){ann[,5] <- as.character(ann[,5])}
     if(class(ann[,4]) == "character"){ann[,4] <- as.numeric(ann[,4])}
@@ -184,7 +185,11 @@ vcf2chrom <- function(x, vcf){
   #
   # Initialize var.info slot
   x@var.info <- data.frame(matrix(ncol=3, nrow=nrow(vcf@fix)))
-  names(x@var.info) <- c('DP','MQ', 'mask')
+  names(x@var.info) <- c('POS', 'mask', 'DP','MQ')
+#  names(x@var.info) <- c('DP','MQ', 'mask')
+  #
+  x@var.info$POS <- x@vcf.fix$POS
+  x@var.info$mask <- rep(TRUE, times=nrow(x@vcf.fix))
   #
   if(length(grep("DP=", vcf@fix[,8])) > 0){
     x@var.info$DP <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(vcf@fix[,8]), ";"), function(x){grep("^DP=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
@@ -193,7 +198,6 @@ vcf2chrom <- function(x, vcf){
     x@var.info$MQ <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(vcf@fix[,8]), ";"), function(x){grep("^MQ=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
   }
   #
-  x@var.info$mask <- rep(TRUE, times=nrow(x@vcf.fix))
   # assign may be more efficient.
   return(x)
 }
@@ -213,7 +217,7 @@ seq2chrom <- function(x, seq=NULL){
   if(is.list(seq)){
     stopifnot(length(seq)==1)
     x@seq <- as.matrix(seq)
-    x@len <- length(seq)
+    x@len <- length(x@seq)
   } else if (is.matrix(seq)){
     stopifnot(nrow(seq)==1)
 #    x@seq <- ape::as.DNAbin(as.character(seq)[1,])

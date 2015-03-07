@@ -16,9 +16,9 @@ pinf_mt <- create_chrom(name='pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff
 
 
 # proc_chrom2
-#wins <- .Call('vcfR_window_init', PACKAGE = 'vcfR', window_size=1e3, max_bp=length(pinf_dna))
-#win2 <- .Call('vcfR_windowize_fasta', PACKAGE = 'vcfR', wins=wins, seq=as.character(pinf_dna)[1,])
+wins <- .Call('vcfR_window_init', PACKAGE = 'vcfR', window_size=1e3, max_bp=length(pinf_dna))
+win2 <- .Call('vcfR_windowize_fasta', PACKAGE = 'vcfR', wins=wins, seq=as.character(pinf_dna)[1,])
 #pinf_mt2 <- proc_chrom2(pinf_mt, win.size=1000)
 
-
+#chromoqc(pinf_mt2)
 

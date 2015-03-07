@@ -95,6 +95,7 @@ proc_chrom2 <- function(x, win.size = 1e3, verbose=TRUE){
       message(paste("elapsed time: ", round(ptime[3], digits=4)))
     }
   }
+  
   if(nrow(x@vcf.gt[x@var.info$mask,])>0){
     ptime <- system.time(x@win.info <- .Call('vcfR_windowize_fasta', 
                                              PACKAGE = 'vcfR',
@@ -106,13 +107,7 @@ proc_chrom2 <- function(x, win.size = 1e3, verbose=TRUE){
       message(paste("elapsed time: ", round(ptime[3], digits=4)))
     }
   }
-  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
-    ptime <- system.time(x@win.info <- .Call('vcfR_windowize_variants', PACKAGE = 'vcfR', wins=x@win.info, pos=x@vcf.fix$POS))
-    if(verbose==TRUE){
-      message("windowize_fasta complete.")
-      message(paste("elapsed time: ", round(ptime[3], digits=4)))
-    }
-  }
+  
   if(nrow(x@vcf.gt[x@var.info$mask,])>0){
     ptime <- system.time(x@win.info <- .Call('vcfR_windowize_annotations', PACKAGE = 'vcfR', wins=x@win.info,
                                              ann_starts=as.numeric(as.character(x@ann[,4])), 
@@ -120,10 +115,19 @@ proc_chrom2 <- function(x, win.size = 1e3, verbose=TRUE){
                                              chrom_length=x@len)
     )
     if(verbose==TRUE){
-      message("windowize_fasta complete.")
+      message("windowize_annotations complete.")
       message(paste("elapsed time: ", round(ptime[3], digits=4)))
     }
   }
+    
+  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
+    ptime <- system.time(x@win.info <- .Call('vcfR_windowize_variants', PACKAGE = 'vcfR', wins=x@win.info, pos=x@vcf.fix$POS))
+    if(verbose==TRUE){
+      message("windowize_variants complete.")
+      message(paste("elapsed time: ", round(ptime[3], digits=4)))
+    }
+  }
+  
   return(x)
 }
 
