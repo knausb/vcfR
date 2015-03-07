@@ -1,12 +1,16 @@
-Functions created to work with vcf files.
+
+## Explore and manipulate variant call format files
+
+VcfR, tools created to work with vcf files.
 
 [![Travis-CI Build Status](https://travis-ci.org/knausb/vcfR.png?branch=master)](https://travis-ci.org/knausb/vcfR)
 
-*vcf.R* - S4 class to contain a vcf file as well as functions to load this object.
+*vcfR* - S4 class to contain a vcf file as well as functions to load this object.
 
-*vcf_v1.R* - Non-formal functions to read in a vcf file.
+*Chrom* - S4 class to cantain a vcf file as well as sequence (fatsta) and annotation (gff) information.
 
-*chromR.r* - S4 class to contain data from a sequence file (fasta), an annotation file (gff3) and a feature file (vcf).  Includes functions for loading object and display as a genome browser.
+Provides functions to load data, subset, filter and visualize these data.
+
 
 While this project is in development it can be installed through github:
 
