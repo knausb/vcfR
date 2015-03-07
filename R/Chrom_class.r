@@ -39,6 +39,12 @@ setOldClass("DNAbin")
 #' 
 #' More descriptions can be put here.
 #' 
+#' The \strong{seq} slot contains an object of class ape::DNAbin.
+#' A DNAbin object is typically either a matrix or list of DNAbin objects.
+#' The matrix form appears to be better behaved than the list form.
+#' Because of this behavior this slot should be the matrix form.
+#' When this slot is not populated it is of class "S4" instead of "DNAbin".
+#' 
 #' The \strong{vcf.meta} slot is a list containing the meta information from the top of the vcf file.
 #' 
 #' The \strong{vcf.fix} slot is a data.frame containing the fixed data (the first eight columns) from the vcf file.
@@ -46,6 +52,7 @@ setOldClass("DNAbin")
 #' The \strong{vcf.gt} slot is a data.frame containing information about the samples.  The number of rows is the number of samples plus one, where the first row describes the format of the data in each cell.  The number of rows is equal to the numnber of variants.
 #' 
 #' The \strong{ann} slot is a data.frame containing gff format data.
+#' When this slot is not populated it has nrows equal to zero.
 #' 
 #' The \strong{var.info} slot contains a data.frame containing information about variants
 #' 
@@ -81,8 +88,8 @@ setClass(
     win.info = "data.frame",
     seq.info = "list",
     #
-    gt.m = "matrix",
-    vcf.stat = "data.frame"
+    gt.m = "matrix"
+#    vcf.stat = "data.frame"
 #    sfs = "matrix",
 #    link = "matrix",
     #
@@ -96,11 +103,11 @@ setClass(
 #                                              c('chrom','pos','id','ref','alt','qual','filter','info'))
     ),
     stringsAsFactors=FALSE),
-    vcf.stat = data.frame(matrix(ncol=11, nrow=0, 
-                                 dimnames=list(c(),
-                                               c('Allele_num','R_num','A_num','Ho','He','Ne','theta_pi','theta_w','theta_h','tajimas_d','fw_h'))
-    ),
-    stringsAsFactors=FALSE),
+#    vcf.stat = data.frame(matrix(ncol=11, nrow=0, 
+#                                 dimnames=list(c(),
+#                                               c('Allele_num','R_num','A_num','Ho','He','Ne','theta_pi','theta_w','theta_h','tajimas_d','fw_h'))
+#    ),
+#    stringsAsFactors=FALSE),
     ann = data.frame(matrix(ncol=9, nrow=0,
                             dimnames=list(c(),
                                           c("seqid", "source", "type", "start", "end", "score", "strand", "phase", "attributes"))

@@ -108,7 +108,7 @@ The create_chrom() function creates a new Chrom object and populates it with dat
 ```{r}
 library(vcfR)
 data(vcfR_example)
-pinf_mt <- create_chrom(title='pinf_mt', vcf=pinf_vcf, seq=pinf_dna, ann=pinf_gff)
+pinf_mt <- create_chrom(name='pinf_mt', vcf=pinf_vcf, seq=pinf_dna, ann=pinf_gff)
 ```
 
 

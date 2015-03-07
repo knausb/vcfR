@@ -7,7 +7,7 @@
 #' @description
 #' Creates and populates an object of class Chrom.
 #'
-#' @param title a name for the chromosome (for plotting purposes)
+#' @param name a name for the chromosome (for plotting purposes)
 #' @param seq a sequence as a DNAbin object
 #' @param ann an annotation file (gff-like)
 #' @param verbose should verbose output be printed to the console?
@@ -82,48 +82,69 @@
 # hist(tab$Ho - tab$He, col=5)
 # # Note that this example is a mitochondrion, so this is a bit silly.
 #' 
-create_chrom <- function(title="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
+create_chrom <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
   # Determine whether we received the expected classes.
-  stopifnot(class(seq)=="DNAbin")
-  if(!is.null(vcf)){stopifnot(class(vcf) == "vcfR")}
-  #
+  stopifnot(class(vcf) == "vcfR")
+
+  # Initialize Chrom object.  
   x <- new(Class="Chrom")
-  setName(x) <- title
+  setName(x) <- name
   
   # Insert vcf into Chom.
   if(length(vcf)>0){
     x <- vcf2chrom(x, vcf)
   }
+
   # Insert seq into Chrom
-  if(class(seq)=="DNAbin" | is.null(seq)){
-#    seq2chrom(x) <- seq
+  # Needs to handle lists and matrices of DNAbin
+  # Matrices are better behaved.
+  #
+  if(is.null(seq)){
+    x@len <- x@vcf.fix$POS[length(x@vcf.fix$POS)]
+  } else if (class(seq)=="DNAbin"){
     x <- seq2chrom(x, seq)
   } else {
-    # stop???
-    message("** Error: seq is not of class DNAbin** \n")
-    break
+    stopifnot(class(seq)=="DNAbin")
   }
-  #  if(length(ann)>0){
-  if(nrow(ann)>0 | is.null(ann)){
-    x <- ann2chrom(x, ann)
+
+  # Annotations.
+  if(nrow(ann) > 0){
+    stopifnot(class(ann) == "data.frame")
+    if(class(ann[,4]) == "factor"){ann[,4] <- as.character(ann[,4])}
+    if(class(ann[,5]) == "factor"){ann[,5] <- as.character(ann[,5])}
+    if(class(ann[,4]) == "character"){ann[,4] <- as.numeric(ann[,4])}
+    if(class(ann[,5]) == "character"){ann[,5] <- as.numeric(ann[,5])}
+    x@ann <- ann
   }
-  
+
+
   # Report names of objects to user.
   if(verbose == TRUE){
     # Print names of elements to see if they match.
-    message("Names of sequences:")
-    message(paste('  ', unique(names(x@seq)), sep=""))
     message("Names in vcf:")
     message(paste('  ', unique(as.character(x@vcf.fix$CHROM)), sep=""))
-#    message(unique(as.character(x@vcf.fix$CHROM)))
-    message("Names in annotation:")
-    message(paste('  ', unique(as.character(x@ann[,1])), sep=""))
-    if(unique(names(x@seq)) != unique(as.character(x@vcf.fix$CHROM)) | unique(names(x@seq)) != unique(as.character(x@ann[,1]))){
-      message("Names in sequence file, variant file or annotation file do not match perfectly.\n")
-      message("If you choose to proceed, we'll do our best to match data.\n")
-      message("But prepare yourself for unexpected results.\n")
+    
+    if(class(x@seq) == "DNAbin"){
+      message("Names of sequences:")
+      message(paste('  ', unique(labels(x@seq)), sep=""))
+      if(unique(as.character(x@vcf.fix$CHROM)) != unique(labels(x@seq))){
+        message("Names in variant file and sequence file do not match perfectly.")
+        message("If you choose to proceed, we'll do our best to match data.")
+        message("But prepare yourself for unexpected results.")
+      }
+    }
+
+    if(nrow(x@ann) > 0){
+      message("Names in annotation:")
+      message(paste('  ', unique(as.character(x@ann[,1])), sep=""))
+      if(unique(as.character(x@vcf.fix$CHROM)) != unique(as.character(x@ann[,1]))){
+        message("Names in variant file and annotation file do not match perfectly.\n")
+        message("If you choose to proceed, we'll do our best to match data.\n")
+        message("But prepare yourself for unexpected results.\n")
+      }
     }
   }
+  
   return(x)
 }
 
@@ -163,8 +184,12 @@ vcf2chrom <- function(x, vcf){
   x@vcf.meta <- vcf@meta
   #
   # Initialize var.info slot
-  x@var.info <- data.frame(matrix(ncol=3, nrow=nrow(vcf@fix)))
-  names(x@var.info) <- c('DP','MQ', 'mask')
+  x@var.info <- data.frame(matrix(ncol=4, nrow=nrow(vcf@fix)))
+  names(x@var.info) <- c('POS', 'mask', 'DP','MQ')
+#  names(x@var.info) <- c('DP','MQ', 'mask')
+  #
+  x@var.info$POS <- x@vcf.fix$POS
+  x@var.info$mask <- rep(TRUE, times=nrow(x@vcf.fix))
   #
   if(length(grep("DP=", vcf@fix[,8])) > 0){
     x@var.info$DP <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(vcf@fix[,8]), ";"), function(x){grep("^DP=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
@@ -173,31 +198,34 @@ vcf2chrom <- function(x, vcf){
     x@var.info$MQ <- unlist(lapply(strsplit(unlist(lapply(strsplit(as.character(vcf@fix[,8]), ";"), function(x){grep("^MQ=", x, value=TRUE)})),"="),function(x){as.numeric(x[2])}))
   }
   #
-  x@var.info$mask <- rep(TRUE, times=nrow(x@vcf.fix))
   # assign may be more efficient.
   return(x)
 }
 
 
-
+# Needs to handle lists and matrices of DNAbin.
+# Matrices appear better behaved.
+#
 #' @rdname create_chrom
 #' @export
 #' @aliases seq2chrom
 #' 
 seq2chrom <- function(x, seq=NULL){
-  if(is.null(seq)){
-    x@len <- x@vcf.fix$POS[nrow(x@vcf.fix)]
-  }
-  
   # A DNAbin will store in a list when the fasta contains
   # multiple sequences, but as a matrix when the fasta
   # only contains one sequence.
-  if(!is.list(class(as.character(seq)))){
-    x@seq <- as.list(seq)
-    x@len <-length(x@seq[[1]])
+  if(is.list(seq)){
+    stopifnot(length(seq)==1)
+    x@seq <- as.matrix(seq)
+    x@len <- length(x@seq)
+  } else if (is.matrix(seq)){
+    stopifnot(nrow(seq)==1)
+#    x@seq <- ape::as.DNAbin(as.character(seq)[1,])
+#    dimnames(pinf_dna)[[1]][1]
+    x@seq <- seq
+    x@len <- length(x@seq)
   } else {
-    x@seq <-seq
-    x@len <-length(x@seq[[1]])
+    stop("DNAbin is neither a list or matrix")
   }
 
   return(x)
