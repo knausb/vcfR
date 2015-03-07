@@ -108,7 +108,8 @@ create_chrom <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
   }
 
   # Annotations.
-  if(nrow(ann) > 0){
+  if(!is.null(ann)){
+#  if(nrow(ann) > 0){
     stopifnot(class(ann) == "data.frame")
     if(class(ann[,4]) == "factor"){ann[,4] <- as.character(ann[,4])}
     if(class(ann[,5]) == "factor"){ann[,5] <- as.character(ann[,5])}

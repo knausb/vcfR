@@ -37,16 +37,23 @@
 #'
 proc_chrom <- function(x, win.size = 1e3, verbose=TRUE){
   stopifnot(class(x) == "Chrom")
-  ptime <- system.time(x@seq.info$nuc.win <- regex.win(x))
-  if(verbose==TRUE){
-    message("Nucleotide regions complete.")
-    print(ptime)
+  
+  if(class(x@seq) == "DNAbin"){
+    ptime <- system.time(x@seq.info$nuc.win <- regex.win(x))
+    if(verbose==TRUE){
+      message("Nucleotide regions complete.")
+      print(ptime)
+    }
   }
-  ptime <- system.time(x@seq.info$N.win <- regex.win(x, regex="[n]"))
-  if(verbose==TRUE){
-    message("N regions complete.")
-    print(ptime)
+  
+  if(class(x@seq) == "DNAbin"){
+    ptime <- system.time(x@seq.info$N.win <- regex.win(x, regex="[n]"))
+    if(verbose==TRUE){
+      message("N regions complete.")
+      print(ptime)
+    }
   }
+  
   if(nrow(x@vcf.gt[x@var.info$mask,])>0){
     ptime <- system.time(x <- gt2popsum(x))
     if(verbose==TRUE){
@@ -54,12 +61,13 @@ proc_chrom <- function(x, win.size = 1e3, verbose=TRUE){
       print(ptime)
     }
   }
+  
   ptime <- system.time(x@win.info <- var.win(x))
   if(verbose==TRUE){
     message("Window analysis complete.")
     print(ptime)
   }
-  #
+  
   return(x)
 }
 
@@ -196,22 +204,30 @@ var.win <- function(x, win.size=1e3){
   # A DNAbin will store in a list when the fasta contains
   # multiple sequences, but as a matrix when the fasta
   # only contains one sequence.
-  if(is.matrix(as.character(x@seq))){
-    seq <- as.character(x@seq)[1:length(x@seq)]    
+  
+  # Convert DNAbin to string of chars.
+  if(class(x@seq) == "DNAbin"){
+    if(is.matrix(as.character(x@seq))){
+      seq <- as.character(x@seq)[1:length(x@seq)]    
+    } else if(is.list(as.character(x@seq))){
+      seq <- as.character(x@seq)[[1]]
+    }
   }
-  if(is.list(as.character(x@seq))){
-    seq <- as.character(x@seq)[[1]]
+
+  # Create a vector of 0 and 1 marking genic sites.
+  if(nrow(x@ann) > 0){
+    genic_sites <- rep(0, times=x@len)
+    genic_sites[unlist(apply(x@ann[, 4:5], MARGIN=1, function(x){seq(from=x[1], to=x[2], by=1)}))] <- 1
   }
-  #
-  genic_sites <- rep(0, times=x@len)
-  genic_sites[unlist(apply(x@ann[, 4:5], MARGIN=1, function(x){seq(from=x[1], to=x[2], by=1)}))] <- 1
-  #
-  win.info <- seq(1,x@len, by=win.size)
+  
+  # Initialize data.frame of windows.
+  win.info <- seq(1, x@len, by=win.size)
   win.info <- cbind(win.info, c(win.info[-1]-1, x@len))
   win.info <- cbind(1:nrow(win.info), win.info)
   win.info <- cbind(win.info, win.info[,3]-win.info[,2]+1)
   #  win.info <- cbind(win.info, matrix(ncol=7, nrow=nrow(win.info)))
-  #
+
+  # Declare a function to count nucleotide classes.
   win.proc <- function(y, seq){
     seq <- seq[y[2]:y[3]]
     a <- length(grep("[aA]", seq, perl=TRUE))
@@ -225,10 +241,14 @@ var.win <- function(x, win.size=1e3){
     #
     c(a,c,g,t,n,o, count, genic)
   }
-  #
-  win.info <- cbind(win.info, t(apply(win.info, MARGIN=1, win.proc, seq=seq)))
-  win.info <- as.data.frame(win.info)
-  names(win.info) <- c('window','start','end','length','A','C','G','T','N','other','variants', 'genic')
+  
+  # Implement function to count nucleotide classes.
+  if(class(x@seq) == "DNAbin"){
+    win.info <- cbind(win.info, t(apply(win.info, MARGIN=1, win.proc, seq=seq)))
+    win.info <- as.data.frame(win.info)
+    names(win.info) <- c('window','start','end','length','A','C','G','T','N','other','variants', 'genic')
+  }
+  
   win.info
 }
 
