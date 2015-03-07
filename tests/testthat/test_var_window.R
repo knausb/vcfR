@@ -19,7 +19,10 @@ test_that("vcfR_window_init creates ", {
   expect_equal(rowSums(win2[,5:10]), c(rep(1000, times=39), 870))
 })
 
-win3 <- .Call('vcfR_windowize_variants', PACKAGE = 'vcfR', wins=win2, pos=pinf_vcf@fix$POS)
+pinf_mt <- create_chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
+#win3 <- .Call('vcfR_windowize_variants', PACKAGE = 'vcfR', wins=win2, pos=pinf_vcf@fix$POS)
+win3 <- .Call('vcfR_windowize_variants', PACKAGE = 'vcfR', windows=win2, variants=pinf_mt@var.info[c('POS','mask')])
+
 
 win4 <- .Call('vcfR_windowize_annotations', PACKAGE = 'vcfR', wins=win3,
               ann_starts=as.numeric(as.character(pinf_gff[,4])), 

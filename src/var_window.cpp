@@ -80,9 +80,10 @@ Rcpp::DataFrame windowize_fasta(Rcpp::DataFrame wins, Rcpp::CharacterVector seq)
 // Windowize variant 
 //
 // [[Rcpp::export]]
-Rcpp::DataFrame windowize_variants(Rcpp::DataFrame wins, Rcpp::NumericVector pos) {
-  Rcpp::NumericVector ends = wins["end"];
-  Rcpp::LogicalVector mask = wins["mask"];
+Rcpp::DataFrame windowize_variants(Rcpp::DataFrame windows, Rcpp::DataFrame variants) {
+  Rcpp::NumericVector ends = windows["end"];
+  Rcpp::NumericVector pos = variants["POS"];
+  Rcpp::LogicalVector mask = variants["mask"];
   Rcpp::NumericVector var_counts(ends.size());
   int window_num = 0;
   
@@ -96,7 +97,7 @@ Rcpp::DataFrame windowize_variants(Rcpp::DataFrame wins, Rcpp::NumericVector pos
     }
   }
 
-  return DataFrame::create(wins, _["variants"]=var_counts);
+  return DataFrame::create(windows, _["variants"]=var_counts);
 }
 
 

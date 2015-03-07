@@ -121,7 +121,7 @@ proc_chrom2 <- function(x, win.size = 1e3, verbose=TRUE){
   }
     
   if(nrow(x@vcf.gt[x@var.info$mask,])>0){
-    ptime <- system.time(x@win.info <- .Call('vcfR_windowize_variants', PACKAGE = 'vcfR', wins=x@win.info, pos=x@vcf.fix$POS))
+    ptime <- system.time(x@win.info <- .Call('vcfR_windowize_variants', PACKAGE = 'vcfR', windows=x@win.info, variants=x@var.info[c('POS','mask')]))
     if(verbose==TRUE){
       message("windowize_variants complete.")
       message(paste("elapsed time: ", round(ptime[3], digits=4)))

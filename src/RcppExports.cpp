@@ -183,15 +183,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // windowize_variants
-Rcpp::DataFrame windowize_variants(Rcpp::DataFrame wins, Rcpp::NumericVector pos);
-RcppExport SEXP vcfR_windowize_variants(SEXP winsSEXP, SEXP posSEXP) {
+Rcpp::DataFrame windowize_variants(Rcpp::DataFrame windows, Rcpp::DataFrame variants);
+RcppExport SEXP vcfR_windowize_variants(SEXP windowsSEXP, SEXP variantsSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::DataFrame >::type wins(winsSEXP );
-        Rcpp::traits::input_parameter< Rcpp::NumericVector >::type pos(posSEXP );
-        Rcpp::DataFrame __result = windowize_variants(wins, pos);
+        Rcpp::traits::input_parameter< Rcpp::DataFrame >::type windows(windowsSEXP );
+        Rcpp::traits::input_parameter< Rcpp::DataFrame >::type variants(variantsSEXP );
+        Rcpp::DataFrame __result = windowize_variants(windows, variants);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
