@@ -82,25 +82,25 @@ proc_chrom2 <- function(x, win.size = 1e3, verbose=TRUE){
   ptime <- system.time(x@seq.info$nuc.win <- regex.win(x))
   if(verbose==TRUE){
     message("Nucleotide regions complete.")
-    message(paste("elapsed time: ", round(ptime[3], digits=4)))
+    message(paste("  elapsed time: ", round(ptime[3], digits=4)))
   }
   ptime <- system.time(x@seq.info$N.win <- regex.win(x, regex="[n]"))
   if(verbose==TRUE){
     message("N regions complete.")
-    message(paste("elapsed time: ", round(ptime[3], digits=4)))
+    message(paste("  elapsed time: ", round(ptime[3], digits=4)))
   }
   if(nrow(x@vcf.gt[x@var.info$mask,])>0){
     ptime <- system.time(x <- gt2popsum(x))
     if(verbose==TRUE){
       message("Population summary complete.")
-      message(paste("elapsed time: ", round(ptime[3], digits=4)))
+      message(paste("  elapsed time: ", round(ptime[3], digits=4)))
     }
   }
   if(nrow(x@vcf.gt[x@var.info$mask,])>0){
     ptime <- system.time(x@win.info <- .Call('vcfR_window_init', PACKAGE = 'vcfR', window_size=win.size, max_bp=x@len))
     if(verbose==TRUE){
       message("window_init complete.")
-      message(paste("elapsed time: ", round(ptime[3], digits=4)))
+      message(paste("  elapsed time: ", round(ptime[3], digits=4)))
     }
   }
   
@@ -112,7 +112,7 @@ proc_chrom2 <- function(x, win.size = 1e3, verbose=TRUE){
                                              ))
     if(verbose==TRUE){
       message("windowize_fasta complete.")
-      message(paste("elapsed time: ", round(ptime[3], digits=4)))
+      message(paste("  elapsed time: ", round(ptime[3], digits=4)))
     }
   }
   
@@ -124,7 +124,7 @@ proc_chrom2 <- function(x, win.size = 1e3, verbose=TRUE){
     )
     if(verbose==TRUE){
       message("windowize_annotations complete.")
-      message(paste("elapsed time: ", round(ptime[3], digits=4)))
+      message(paste("  elapsed time: ", round(ptime[3], digits=4)))
     }
   }
     
@@ -132,7 +132,7 @@ proc_chrom2 <- function(x, win.size = 1e3, verbose=TRUE){
     ptime <- system.time(x@win.info <- .Call('vcfR_windowize_variants', PACKAGE = 'vcfR', windows=x@win.info, variants=x@var.info[c('POS','mask')]))
     if(verbose==TRUE){
       message("windowize_variants complete.")
-      message(paste("elapsed time: ", round(ptime[3], digits=4)))
+      message(paste("  elapsed time: ", round(ptime[3], digits=4)))
     }
   }
   
