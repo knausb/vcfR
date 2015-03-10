@@ -96,6 +96,7 @@ proc_chrom2 <- function(x, win.size = 1e3, verbose=TRUE){
       message(paste("  elapsed time: ", round(ptime[3], digits=4)))
     }
   }
+  
   if(nrow(x@vcf.gt[x@var.info$mask,])>0){
     ptime <- system.time(x@win.info <- .Call('vcfR_window_init', PACKAGE = 'vcfR', window_size=win.size, max_bp=x@len))
     if(verbose==TRUE){

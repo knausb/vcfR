@@ -81,6 +81,19 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// rank_variants
+Rcpp::DataFrame rank_variants(Rcpp::DataFrame variants, Rcpp::NumericVector ends, Rcpp::NumericVector score);
+RcppExport SEXP vcfR_rank_variants(SEXP variantsSEXP, SEXP endsSEXP, SEXP scoreSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type variants(variantsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type ends(endsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type score(scoreSEXP);
+    __result = Rcpp::wrap(rank_variants(variants, ends, score));
+    return __result;
+END_RCPP
+}
 // readVcfHeader
 std::vector<std::string> readVcfHeader(String x);
 RcppExport SEXP vcfR_readVcfHeader(SEXP xSEXP) {

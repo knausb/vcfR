@@ -30,6 +30,10 @@ windowize_NM <- function(x, pos, starts, ends, centrality = "mean") {
     .Call('vcfR_windowize_NM', PACKAGE = 'vcfR', x, pos, starts, ends, centrality)
 }
 
+rank_variants <- function(variants, ends, score) {
+    .Call('vcfR_rank_variants', PACKAGE = 'vcfR', variants, ends, score)
+}
+
 readVcfHeader <- function(x) {
     .Call('vcfR_readVcfHeader', PACKAGE = 'vcfR', x)
 }

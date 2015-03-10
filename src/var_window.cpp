@@ -4,6 +4,12 @@ using namespace Rcpp;
 
 // [[Rcpp::export]]
 Rcpp::DataFrame window_init(int window_size, int max_bp) {
+  // Initialize windows.
+  // Input is the window size and the maximum coordinate
+  // to include in the windows.
+  // A DataFrame is returned which contains a vector of 
+  // window numbers, start, end and length of each window.
+  
   int max_window = max_bp / window_size;
   max_window++;
   Rcpp::NumericVector window(max_window);
@@ -24,6 +30,13 @@ Rcpp::DataFrame window_init(int window_size, int max_bp) {
 
 // [[Rcpp::export]]
 Rcpp::DataFrame windowize_fasta(Rcpp::DataFrame wins, Rcpp::CharacterVector seq) {
+  // Windowizes the nucleotide information from a DNA sequence.
+  // Input is a DataFrame containing a vector of end points for
+  // each window.  This could come from vcfR::window_init.
+  // The other input is a vector of chatacters from a sequence.
+  // Output is a DataFrame that includes the input DataFrame and
+  // appends to it the windowed nucleotide counts.
+  
   // The sequence must begin at position one.
 
   Rcpp::NumericVector ends = wins["end"];
@@ -77,7 +90,7 @@ Rcpp::DataFrame windowize_fasta(Rcpp::DataFrame wins, Rcpp::CharacterVector seq)
 
 
 
-// Windowize variant 
+// Windowize variants
 //
 // [[Rcpp::export]]
 Rcpp::DataFrame windowize_variants(Rcpp::DataFrame windows, Rcpp::DataFrame variants) {
@@ -113,6 +126,9 @@ Rcpp::DataFrame windowize_annotations(Rcpp::DataFrame wins,
                                       Rcpp::NumericVector ann_starts,
                                       Rcpp::NumericVector ann_ends,
                                       int chrom_length) {
+                                        
+  // Tally the number of annotated nucleotides in windows.
+  
   Rcpp::NumericVector win_ends = wins["end"];
   Rcpp::NumericVector chrom(chrom_length);
   Rcpp::NumericVector window_tally(win_ends.size());
