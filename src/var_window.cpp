@@ -55,7 +55,7 @@ Rcpp::DataFrame windowize_fasta(Rcpp::DataFrame wins, Rcpp::CharacterVector seq)
 
   // Vectors are zero based.
   // Sequences are one based.
-  for(int i; i < seq.size(); i++){
+  for(int i=0; i < seq.size(); i++){
     if(i + 1 > ends(window_num)){
       window_num++;
     }
@@ -102,7 +102,7 @@ Rcpp::DataFrame windowize_variants(Rcpp::DataFrame windows, Rcpp::DataFrame vari
   
   // Vectors are zero based.
   // Positions are one based.
-  for(int i; i < pos.size(); i++){
+  for(int i=0; i < pos.size(); i++){
 //    Rcout << "i: " << i << ", pos(i): " << pos(i) << ", ends(window_num): " << ends(window_num) <<"\n";
     while(pos(i) > ends(window_num)){
       window_num++;

@@ -1,6 +1,6 @@
 # rank_variants tests.
 
-detach(package:vcfR, unload=T)
+# detach(package:vcfR, unload=T)
 library(vcfR)
 context("rank_variants functions")
 

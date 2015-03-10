@@ -17,6 +17,10 @@ Rcpp::DataFrame rank_variants(Rcpp::DataFrame variants,
   // The variants with the greatest score are given the lowest
   // rank order.
   
+  // Sorting on pairs from:
+  // http://stackoverflow.com/a/1577627
+
+  
   Rcpp::NumericVector pos = variants["POS"];
   Rcpp::LogicalVector mask = variants["mask"];
   
@@ -24,6 +28,10 @@ Rcpp::DataFrame rank_variants(Rcpp::DataFrame variants,
   Rcpp::NumericVector win_rank(score.size()); // Vector to be returned as per window rank.
   Rcpp::NumericVector rank;   // Vector to hold information for a single 
                               // window which will be sorted.
+                              
+  //typedef 
+//  std::pair<int,int> mypair;
+  std::vector< std::vector< std::pair<int,int> > > vec_vec_pair;
   int win = 0;
   int i = 0;
   int j = 0;
@@ -35,7 +43,9 @@ Rcpp::DataFrame rank_variants(Rcpp::DataFrame variants,
   for(i=1; i<score.size(); i++){
     Rcpp::checkUserInterrupt();
     if( pos(i) < ends(win) ){
-        win_num(i) = win;
+      win_num(i) = win;
+//      vec_vec_pair[win].push_back( < score(i), j > );
+      j++;
 //      rank.push_back(score(i));
 //      rank[pos(i)] = score(i);
     } else {
@@ -44,12 +54,12 @@ Rcpp::DataFrame rank_variants(Rcpp::DataFrame variants,
 //        Rcout << rank(j) << " ";
 //      }
 //      Rcout << "\n";
-      
+
+      // Begin a new window.
+//      rank.erase();
+      j = 0;
       while(pos(i) > ends(win)){win++;}
       win_num(i) = win;
-//      win++;
-//      win = win + 1;
-
     }
 //    Rcout << "variant: " << i << ", position: " << pos(i) << ", window number: " << win_num(i) << "\n";
   }
