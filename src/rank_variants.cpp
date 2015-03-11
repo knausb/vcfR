@@ -2,6 +2,19 @@
 using namespace Rcpp;
 
 
+
+
+// Create type and function to help sort scores.
+// This funciton is used by rank_variants.
+// http://stackoverflow.com/a/1577627
+//
+typedef std::pair<int,int> mypair;
+bool comparator ( const mypair& l, const mypair& r){
+  return l.first > r.first;
+}
+
+
+
 // [[Rcpp::export]]
 Rcpp::DataFrame rank_variants(Rcpp::DataFrame variants,
                               Rcpp::NumericVector ends,
@@ -31,7 +44,10 @@ Rcpp::DataFrame rank_variants(Rcpp::DataFrame variants,
                               
   //typedef 
 //  std::pair<int,int> mypair;
-  std::vector< std::vector< std::pair<int,int> > > vec_vec_pair;
+//  typedef std::vector< std::vector< std::pair<int,int> > > vec_vec_pair;
+//  typedef std::vector< std::vector< mypair > > vec_vec_pair;
+  std::vector< std::vector< std::pair< int, int > > >  vec_vec_pair;
+
   int win = 0;
   int i = 0;
   int j = 0;
@@ -44,6 +60,8 @@ Rcpp::DataFrame rank_variants(Rcpp::DataFrame variants,
     Rcpp::checkUserInterrupt();
     if( pos(i) < ends(win) ){
       win_num(i) = win;
+//      mypair = [];
+//      vec_vec_pair(win)(0) = [< score(i), j >];
 //      vec_vec_pair[win].push_back( < score(i), j > );
       j++;
 //      rank.push_back(score(i));
