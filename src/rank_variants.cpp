@@ -55,12 +55,15 @@ Rcpp::DataFrame rank_variants(Rcpp::DataFrame variants,
   // Iterate to first window.
   while(pos(0) > ends(win)){win++;}
   win_num(0) = win;
+//  vec_vec_pair.push_back();
+//  vec_vec_pair[0][0] = [< score(i), j >];
 
   for(i=1; i<score.size(); i++){
     Rcpp::checkUserInterrupt();
     if( pos(i) < ends(win) ){
       win_num(i) = win;
 //      mypair = [];
+//      vec_vec_pair[win][0] = [< score(i), j >];
 //      vec_vec_pair(win)(0) = [< score(i), j >];
 //      vec_vec_pair[win].push_back( < score(i), j > );
       j++;
