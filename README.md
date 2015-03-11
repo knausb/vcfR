@@ -33,4 +33,11 @@ or:
 
     devtools::install_github(repo="knausb/vcfR@devel", build_vignettes=TRUE)
 
+If you've built the vignettes you can browse them with:
+
+    browseVignettes(package="vcfR")
+    
+which should open a page in your web browser.
+
+
 Enjoy!
