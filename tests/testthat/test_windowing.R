@@ -12,7 +12,26 @@ pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE)
 
 gq <- extract.gt(pinf_vcf, element="GQ", as.numeric=TRUE)
 
-gqw <- windowize_NM(gq, pos=pinf_mt@var.info$POS, starts=pinf_mt@win.info$start, ends=pinf_mt@win.info$end)
+gqw <- windowize_NM(gq, pos=pinf_mt@var.info$POS, 
+                    starts=pinf_mt@win.info$start, 
+                    ends=pinf_mt@win.info$end,
+                    centrality = "sum")
+
+gqw[19:21,]
+
+
+gq[pinf_mt@var.info$POS >= 18001 & pinf_mt@var.info$POS < 19000,]
+gq[pinf_mt@var.info$POS >= 19001 & pinf_mt@var.info$POS < 20000,]
+gq[pinf_mt@var.info$POS >= 20001 & pinf_mt@var.info$POS < 21000,]
+
+
+apply(gq[pinf_mt@var.info$POS >= 20001 & pinf_mt@var.info$POS < 21000,], MARGIN=2, sum)
+
+
+
+cbind(pinf_mt@var.info$POS, gq)[118:130,1:4]
+
+
 
 head(gqw)
 nrow(gqw)

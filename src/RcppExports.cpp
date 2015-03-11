@@ -67,16 +67,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // windowize_NM
-NumericMatrix windowize_NM(NumericMatrix x, NumericVector pos, NumericVector starts, NumericVector ends, String centrality);
+NumericMatrix windowize_NM(Rcpp::NumericMatrix x, Rcpp::NumericVector pos, Rcpp::NumericVector starts, Rcpp::NumericVector ends, Rcpp::String centrality);
 RcppExport SEXP vcfR_windowize_NM(SEXP xSEXP, SEXP posSEXP, SEXP startsSEXP, SEXP endsSEXP, SEXP centralitySEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type pos(posSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type starts(startsSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type ends(endsSEXP);
-    Rcpp::traits::input_parameter< String >::type centrality(centralitySEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type pos(posSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type starts(startsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type ends(endsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::String >::type centrality(centralitySEXP);
     __result = Rcpp::wrap(windowize_NM(x, pos, starts, ends, centrality));
     return __result;
 END_RCPP

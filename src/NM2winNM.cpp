@@ -101,6 +101,18 @@ NumericMatrix NM2winNM(NumericMatrix x, std::vector<int> pos, int maxbp, int win
 }
 
 
+double vector_sum(std::vector<double> x){
+  Rcout << "In vector_sum\n";
+  double sum = 0;
+  for(int i=0; i<x.size(); i++){
+    Rcout << x[i] << "; ";
+    sum = sum + x[i];
+  }
+  Rcout << "End vector_sum\n\n";
+  return sum;
+}
+
+
 double vector_mean(std::vector<double> x){
   double mean = 0;
   int i = 0;
@@ -130,12 +142,13 @@ double vector_median(std::vector<double> x){
 
 
 // [[Rcpp::export]]
-NumericMatrix windowize_NM(NumericMatrix x,
-                           NumericVector pos,
-                           NumericVector starts,
-                           NumericVector ends,
-                           String centrality="mean") {
+NumericMatrix windowize_NM(Rcpp::NumericMatrix x,
+                           Rcpp::NumericVector pos,
+                           Rcpp::NumericVector starts,
+                           Rcpp::NumericVector ends,
+                           Rcpp::String centrality="mean") {
                              
+
   // Declare a matrix for output.
   Rcpp::NumericMatrix outM(starts.size(), x.ncol());
   Rcpp::List dimnames = x.attr("dimnames");
@@ -151,6 +164,12 @@ NumericMatrix windowize_NM(NumericMatrix x,
   int window_num = 0;
   int i; // Variant counter
   int j; // Sample counter
+
+
+  Rcout << "centrality set to: ";
+//  Rcout << Rcpp::as<std::string>(centrality);
+  Rcout << "\n";
+
 
 //Rcout << "Made it.\n";
 //  for(i=0; i<cnames.size(); i++){Rcout << cnames(i) << "\n";}
@@ -176,8 +195,15 @@ NumericMatrix windowize_NM(NumericMatrix x,
           window_tmp[j].clear();
         }
       }
+      if(centrality == "sum"){
+        for(j=0; j<x.ncol(); j++){
+          outM(window_num, j) = vector_sum(window_tmp[j]);
+          window_tmp[j].clear();
+        }
+      }      
       window_num++;
     } else {
+      // Add values to current window.
       for(j=0; j<x.ncol(); j++){
         if(x(i,j) != NA_REAL){
           window_tmp[j].push_back(x(i,j));
@@ -198,6 +224,12 @@ NumericMatrix windowize_NM(NumericMatrix x,
       window_tmp[j].clear();
     }
   }
+  if(centrality == "sum"){
+    for(j=0; j<x.ncol(); j++){
+      outM(window_num, j) = vector_sum(window_tmp[j]);
+      window_tmp[j].clear();
+    }
+  }      
 
   return outM;
 }
