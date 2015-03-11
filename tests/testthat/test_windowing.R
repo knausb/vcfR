@@ -14,6 +14,7 @@ gq <- extract.gt(pinf_vcf, element="GQ", as.numeric=TRUE)
 
 gqw <- windowize_NM(gq, pos=pinf_mt@var.info$POS, starts=pinf_mt@win.info$start, ends=pinf_mt@win.info$end)
 
-
+head(gqw)
+nrow(gqw)
 
 

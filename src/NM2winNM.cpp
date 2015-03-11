@@ -137,31 +137,44 @@ NumericMatrix windowize_NM(NumericMatrix x,
                            String centrality="mean") {
                              
   // Declare a matrix for output.
-  NumericMatrix outM(starts.size(), x.ncol());
+  Rcpp::NumericMatrix outM(starts.size(), x.ncol());
+  Rcpp::List dimnames = x.attr("dimnames");
+  dimnames(0) = Rcpp::CharacterVector::create();
+  outM.attr("dimnames") = dimnames;
+
 
   // Declare a vector of a vector of doubles to hold each
   // window prior to summarization.
-  std::vector< std::vector<double> > window_tmp(x.ncol());
+  std::vector < std::vector < double > > window_tmp(x.ncol());
 
   // Counters
   int window_num = 0;
-  int i;
-  int j;
+  int i; // Variant counter
+  int j; // Sample counter
 
 //Rcout << "Made it.\n";
+//  for(i=0; i<cnames.size(); i++){Rcout << cnames(i) << "\n";}
 
-  // Scroll over variants and assign summaries to windows.
+  // Manage the first variant.
+  while(pos(0) > ends(window_num)){
+    window_num++;
+  }
+  
+  // Scroll over variants.
   for(i = 0; i < pos.size(); i++){
-    if(pos(i) > ends(i)){
-      // Summarize
-      for(j=0; j<x.ncol(); j++){
-        if(centrality == "mean"){
+    if(pos(i) > ends(window_num)){
+      // Summarize window.
+      if(centrality == "mean"){
+        for(j=0; j<x.ncol(); j++){
           outM(window_num, j) = vector_mean(window_tmp[j]);
+          window_tmp[j].clear();
         }
-        if(centrality == "median"){
+      }
+      if(centrality == "median"){
+        for(j=0; j<x.ncol(); j++){
           outM(window_num, j) = vector_median(window_tmp[j]);
+          window_tmp[j].clear();
         }
-        window_tmp[j].clear();
       }
       window_num++;
     } else {
@@ -173,8 +186,17 @@ NumericMatrix windowize_NM(NumericMatrix x,
     }
   }
   // Summarize the last window.
-  for(j=0; j<x.ncol(); j++){
-    outM(window_num, j) = vector_mean(window_tmp[j]);
+  if(centrality == "mean"){
+    for(j=0; j<x.ncol(); j++){
+      outM(window_num, j) = vector_mean(window_tmp[j]);
+      window_tmp[j].clear();
+    }
+  }
+  if(centrality == "median"){
+    for(j=0; j<x.ncol(); j++){
+      outM(window_num, j) = vector_median(window_tmp[j]);
+      window_tmp[j].clear();
+    }
   }
 
   return outM;

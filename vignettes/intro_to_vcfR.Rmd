@@ -300,15 +300,32 @@ When there are large numbers of variants, it may be more convenient to summarize
 
 
 ```{r}
-#gqw <- windowize_NM(gq, pos=pinf_mt@var.info$POS, starts=pinf_mt@win.info$start, ends=pinf_mt@win.info$end)
+gqw <- windowize_NM(gq, pos=pinf_mt@var.info$POS, starts=pinf_mt@win.info$start, ends=pinf_mt@win.info$end)
+gqw[1:6,1:8]
+```
 
+
+We can take z-scores to help us determine what values may be exceptional.
+
+
+```{r}
+gqwz <- z_score(gqw)
+#hist(gqwz[,1])
+```
+
+
+And create another heatmap.
+
+
+
+```{r, fig.height=6, fig.width=6}
+heatmap.bp(gqwz)
 ```
 
 
 
 
-
-These lastfunctions were recently developed and have yet to be integrated with Chrom objects.
+These last functions were recently developed and have yet to be integrated with Chrom objects.
 
 
 
