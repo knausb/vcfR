@@ -20,6 +20,7 @@
 #'
 #' @seealso
 #' \code{\link[PopGenome]{readVCF}}
+#' \code{\link[pegas]{read.vcf}}
 #' 
 #' Bioconductor: \href{www.bioconductor.org/packages/3.0/bioc/html/VariantAnnotation.html}{VariantAnnotation::readVcf}
 #'
