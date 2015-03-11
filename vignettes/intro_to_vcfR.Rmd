@@ -23,7 +23,7 @@ The other option I see is to create a set of files where the data is identical t
 This later choice results in the creation of files which are largely redundant which I feel is unnecessary.
 
 
-Reading in of the vcf file can be performed with a function in vcfR.
+Reading in of the [vcf](http://www.1000genomes.org/node/101) file can be performed with a function in vcfR.
 
 
 ```{r, eval=FALSE}
@@ -45,7 +45,7 @@ ref <- read.dna("my_reference.fasta", format="fasta")
 ```
 
 
-Annotation files, files which contain coordinates of features such as start and end points of genes, are tabular and can be read in with typical R functions.
+Annotation files (e.g., [gff](http://sequenceontology.org/resources/gff3.html)), files which contain coordinates of features such as start and end points of genes, are tabular and can be read in with typical R functions.
 
 
 ```{r, eval=FALSE}
@@ -112,29 +112,213 @@ pinf_mt <- create_chrom(name='pinf_mt', vcf=pinf_vcf, seq=pinf_dna, ann=pinf_gff
 ```
 
 
-The parameter 'title' ia a name you can assign to your object.
+Note that here the names of our three data sources are identical.
+This is not always the case.
+If these names are not identical a warning will result to make sure the user understands their data.
+
+
+
+The parameter 'name' is a name you can assign to your object.
 This information is used when plotting the Chrom object.
 The vcf object should be of class vcfR, which was most likely created with the function read.vcf().
 This object is inserted into the chrom object with the function **vcf2chrom()**.
 
 The 'seq' should be a DNAbin object with one sequence in it.
-This sequence will be inserted into the Chrom object with the function **seq2chrom**.
+This sequence will be inserted into the Chrom object with the function **seq2chrom()**.
 If a sequence is not provided, seq2chrom will infer the length of your chromosome from the maximum position in the vcf file.
 
 
-
+The 'ann' should be a [gff](http://sequenceontology.org/resources/gff3.html) type of table.  These can typically read in with base R functions such as read.table.  This table will then be inserted into the Chrom object by **ann2chrom()**.  This function will check to see if columns 4 and 5 ("start" and "end") are numeric.  If not, it will try to recast them as so.
 
 
 
 ## Processing objects
 
 
+Once the Chrom object has been created a few processing steps are made.
+First, you may want to get a quick look at some of your data.
+This can be done with the plot function.
+
+
+
+```{r, fig.height=6, fig.width=6}
+plot(pinf_mt)
+```
+
+
+
+No SNP densities are not found at this point because this data results from windowing analyses performed by **proc_chrom()** (see below).
+We can see that mapping qualities (MQ) are all fairly high.
+Because of this, if we would like to filter on this parameter we now know that we would have to employ a high threshold.
+The qualities (QUAL) appear bimodal.
+It has been my exprience that this is typical for this parameter.
+The values appear to either be 999 or something below 200.
+This bimodality suggests this to be a reasonable parameter to apply a threshold for, somewhere between 200 and 999.
+
+Note that vcf files created by different softwares may or may not have these fields.
+
+
+
+We can use the **masker()** function to try to filter out data which we do not have high confidence in.
+The masker() function uses quality, depth and mappiing quality to try to select only high quality variants.
+By default, only variants with a quality of 999 or better, a depth between the 0.25 and 0.75 percentiles and a mapping quality between 20 and 50 are used.
+Variants deemed to be of low quality are not deleted from the dataset.
+Instead, a logical vector is created to indicate which variants have or have not been filtered.
+This maintains the geometry of the data matrices throughout the analyisis and allows the user to easily undo any changes.
+
+
+
+```{r, fig.height=6, fig.width=6}
+pinf_mt <- masker(pinf_mt)
+plot(pinf_mt)
+```
+
+
+Now all of the qualities are at 999.
+(Note that the R histogram function has a little trouble when its given data of all one value.
+Its really intended for a distribution of data.)
+
+
+Once we're satisfied with which variants we want to consider to be of high quality we can process the Chrom object with **proc_chrom()**.
+This function calls several helper functions to process the variant, sequence and annotation data for visualization.
+
+
+The function **regex.win()** defines rectangles for where called sequence (A, C, G and T) occur as well as where ambiguous nucleotides occur (N) which are used later for plotting.
+This function also defines rectangles for annotated features, also for plotting.
+
+
+The function **var.win()** performs windowing analyses on the data.
+Currently it summarizes variant count per window as well as G/C content per window.
+
+
+The function **gt2popsum()** calculates some population genetic summaries.
+This function is rather experimental and some of the summaries may not be quite correct.
+
+
+
+```{r, fig.height=6, fig.width=6}
+pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE)
+plot(pinf_mt)
+```
+
+
+Now that we've processed our Chrom object, we have variant counts per window.
+We're also ready to move on to more complex plots.
+
+
 
 ## Visualizing data
+
+
+At this point we've input three types of data (variant, sequence and annotation), inserted them into a Chrom object, masked variants we feel were not of high quality and processed some summaries of these data.
+We can now move on to visualizing these data.
+
+
+The function **chromoqc()** uses the R function layout to make composite plots of the data.  These plots can include barplots as well as scatterplots which have chromosomal coordinates.
+
+
+
+```{r, fig.height=6, fig.width=6}
+chromoqc(pinf_mt)
+```
+
+
+This example uses the *Phytophthora infestans* mitochondrial genome.
+This mitochondrion has a notable A/T bias, which is in agreement with published accounts.
+
+
+Variants of this function, which are actually all wrappers for the funciton **chromo()**, create similar plots.
+
+
+
+```{r, fig.height=6, fig.width=6}
+chromohwe(pinf_mt, dot.alpha='ff')
+```
+
+
+Mitochondria are haploid, so they are expected to violate assumptions of Hardy-Weinberg equilibrium.  
+Variants inferred to be in equilibrium would have been plotted in green.
+Here, all variants are plotted in red to indicate that they significantly deviate from Hardy-Weinberg equilibrium.
+
+
+The user can also include their own data to plot.
+Here we simulate data as an example.
+
+
+
+```{r, fig.height=6, fig.width=6}
+set.seed(10)
+x1 <- as.integer(runif(n=20, min=1, max=39000))
+y1 <- runif(n=length(x1), min=1, max=100)
+chromodot(pinf_mt, x1=x1, y1=y1, label1="Simulated data", dot.alpha="ff")
+```
+
+
+
+Thus far we've been looking at per variant summaries over all samples.
+This information is typically found in the fixed portion of a vcf file (the first 8 columns of the file).
+Beyond these eight colomns are a flexible number of columns for each sample.
+Different softwares will place different types of data here.
+We can use the function **extract.gt()** to extract specified fields from the genotype region of the vcf data.
+Here we extract genotype quality (GQ) for each sample and each variant.
+
+
+
+```{r}
+gq <- extract.gt(pinf_mt, element="GQ", as.numeric=TRUE)
+gq[1:4,1:10]
+```
+
+
+
+We can then visualize this data with a heatmap.
+
+
+
+```{r, fig.height=6, fig.width=6}
+heatmap.bp(gq)
+```
+
+
+Each sample is in a column and each variant is in a row.
+The sequence begins at thte bottom of the plot and extends to the top of the plot.
+Barplots summarize column and row sums.
+We can see a few samples near the center of the plot have relatively low genotype qualities.
+These samples may be considered candidates for mitigation.
+For example, they may be excluded from subsequent analyses.
+Or they may be resequenced.
+Or they may be omitted from variant discovery steps but included in variant calling steps.
+It is up to the investigator to determine what is low quality and how to mitigate it.
+There is also a region at the bottom of the plot where most samples appear to have low genotype quality.
+A researcher may consider omitting this region from further analysis if they deem this quality to be unacceptable.
+In order to remove samples, the data may be subset using the square brackets `[]`.
+In order to omit variants, their mask elements should be set to FALSE.
+
+
+
+When there are large numbers of variants, it may be more convenient to summarize regions using a windowing analysis.  This can be done with the function **windowize_NM**.
+
+
+```{r}
+#gqw <- windowize_NM(gq, pos=pinf_mt@var.info$POS, starts=pinf_mt@win.info$start, ends=pinf_mt@win.info$end)
+
+```
+
+
+
+
+
+These lastfunctions were recently developed and have yet to be integrated with Chrom objects.
 
 
 
 ## Outputting data
 
+
+### Output to vcf file
+
+
+
+### Conversion to other R objects
 
 

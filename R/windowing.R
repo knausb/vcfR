@@ -55,7 +55,6 @@ z_score <- function(x){
 #' @export
 #' 
 windowize_NM <- function(x, pos, starts, ends, centrality="mean"){
-  
   .Call('vcfR_windowize_NM', PACKAGE = 'vcfR', x, pos, starts, ends, centrality="mean")  
 }
 

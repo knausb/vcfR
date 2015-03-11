@@ -147,7 +147,9 @@ NumericMatrix windowize_NM(NumericMatrix x,
   int window_num = 0;
   int i;
   int j;
-  
+
+//Rcout << "Made it.\n";
+
   // Scroll over variants and assign summaries to windows.
   for(i = 0; i < pos.size(); i++){
     if(pos(i) > ends(i)){
