@@ -166,6 +166,9 @@ NumericMatrix windowize_NM(Rcpp::NumericMatrix x,
   int j; // Sample counter
 
 
+
+//  std::string fname = Rcpp::as<std::string>(centrality);
+
   Rcout << "centrality set to: ";
 //  Rcout << Rcpp::as<std::string>(centrality);
   Rcout << "\n";
