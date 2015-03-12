@@ -17,8 +17,17 @@ gqw <- windowize_NM(gq, pos=pinf_mt@var.info$POS,
                     ends=pinf_mt@win.info$end,
                     summary = "count")
 
+
+
 gqw[19:21,]
 
+gqw[1:5,]
+
+pinf_mt@var.info$POS[pinf_mt@var.info$POS >= 1 & pinf_mt@var.info$POS <= 1000]
+pinf_mt@var.info$POS[pinf_mt@var.info$POS >= 1001 & pinf_mt@var.info$POS <= 2000]
+pinf_mt@var.info$POS[pinf_mt@var.info$POS >= 2001 & pinf_mt@var.info$POS <= 3000]
+
+pinf_mt@var.info$POS[pinf_mt@var.info$POS >= 19001 & pinf_mt@var.info$POS <= 20000]
 
 
 nrow(gq[pinf_mt@var.info$POS >= 1 & pinf_mt@var.info$POS <= 1000,])

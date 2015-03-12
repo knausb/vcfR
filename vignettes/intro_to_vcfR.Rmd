@@ -325,7 +325,7 @@ heatmap.bp(gqwz)
 
 
 
-These last functions were recently developed and have yet to be integrated with Chrom objects.
+When sequence depth information is included, these methods can be used to explore copy number variation.
 
 
 
