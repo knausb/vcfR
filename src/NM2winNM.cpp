@@ -176,9 +176,9 @@ NumericMatrix windowize_NM(Rcpp::NumericMatrix x, Rcpp::NumericVector pos,
 
 //  std::string fname = Rcpp::as<std::string>(centrality);
 
-  if(summary == "mean"){
-    Rcout << "Summary set to mean\n";
-  }
+//  if(summary == "mean"){
+//    Rcout << "Summary set to mean\n";
+//  }
 
 //Rcout << "Made it.\n";
 //  for(i=0; i<cnames.size(); i++){Rcout << cnames(i) << "\n";}
