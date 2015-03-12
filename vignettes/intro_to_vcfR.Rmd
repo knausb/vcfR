@@ -377,7 +377,7 @@ But thrugh the establishmet of standards these translations should be easily fac
 
 The pacage vcfR aims to input vcf type data and output filtered vcf type data.
 Windowing functions within the package aim to identify regions which may contain sub-optimal data.
-Future work in this package may try to construct genomic regioins files (e.g., *.gff or *.bed files) which annotate these regions.
+Future work in this package may try to construct genomic regioins files (e.g., \*.gff or \*.bed files) which annotate these regions.
 This output could be utilized by other software to focus variant discovery and variant calling on regions of high confidence.
 
 
