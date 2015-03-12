@@ -101,14 +101,27 @@ NumericMatrix NM2winNM(NumericMatrix x, std::vector<int> pos, int maxbp, int win
 }
 
 
+double vector_count(std::vector<double> x){
+//  Rcout << "In vector_count\n";
+//  for(int i=0; i<x.size(); i++){
+//    Rcout << x[i] << "; ";
+//    sum = sum + x[i];
+//  }
+//  Rcout << "Count: " << x.size() << "\n";
+//  Rcout << "\nEnd vector_count\n\n";
+  return x.size();
+}
+
+
 double vector_sum(std::vector<double> x){
-  Rcout << "In vector_sum\n";
+//  Rcout << "In vector_sum\n";
   double sum = 0;
   for(int i=0; i<x.size(); i++){
-    Rcout << x[i] << "; ";
+//    Rcout << x[i] << "; ";
     sum = sum + x[i];
   }
-  Rcout << "End vector_sum\n\n";
+//  Rcout << "Sum: " << sum << "\n";
+//  Rcout << "\nEnd vector_sum\n\n";
   return sum;
 }
 
@@ -146,7 +159,7 @@ NumericMatrix windowize_NM(Rcpp::NumericMatrix x,
                            Rcpp::NumericVector pos,
                            Rcpp::NumericVector starts,
                            Rcpp::NumericVector ends,
-                           Rcpp::String centrality="mean") {
+                           Rcpp::String summary="mean") {
                              
 
   // Declare a matrix for output.
@@ -169,9 +182,10 @@ NumericMatrix windowize_NM(Rcpp::NumericMatrix x,
 
 //  std::string fname = Rcpp::as<std::string>(centrality);
 
-  Rcout << "centrality set to: ";
-//  Rcout << Rcpp::as<std::string>(centrality);
-  Rcout << "\n";
+
+  if(summary == "mean"){
+    Rcout << "Summary set to mean\n";
+  }
 
 
 //Rcout << "Made it.\n";
@@ -186,24 +200,30 @@ NumericMatrix windowize_NM(Rcpp::NumericMatrix x,
   for(i = 0; i < pos.size(); i++){
     if(pos(i) > ends(window_num)){
       // Summarize window.
-      if(centrality == "mean"){
+      if(summary == "mean"){
         for(j=0; j<x.ncol(); j++){
           outM(window_num, j) = vector_mean(window_tmp[j]);
           window_tmp[j].clear();
         }
       }
-      if(centrality == "median"){
+      if(summary == "median"){
         for(j=0; j<x.ncol(); j++){
           outM(window_num, j) = vector_median(window_tmp[j]);
           window_tmp[j].clear();
         }
       }
-      if(centrality == "sum"){
+      if(summary == "sum"){
         for(j=0; j<x.ncol(); j++){
           outM(window_num, j) = vector_sum(window_tmp[j]);
           window_tmp[j].clear();
         }
-      }      
+      }
+      if(summary == "count"){
+        for(j=0; j<x.ncol(); j++){
+          outM(window_num, j) = vector_count(window_tmp[j]);
+          window_tmp[j].clear();
+        }
+      }
       window_num++;
     } else {
       // Add values to current window.
@@ -215,24 +235,30 @@ NumericMatrix windowize_NM(Rcpp::NumericMatrix x,
     }
   }
   // Summarize the last window.
-  if(centrality == "mean"){
+  if(summary == "mean"){
     for(j=0; j<x.ncol(); j++){
       outM(window_num, j) = vector_mean(window_tmp[j]);
       window_tmp[j].clear();
     }
   }
-  if(centrality == "median"){
+  if(summary == "median"){
     for(j=0; j<x.ncol(); j++){
       outM(window_num, j) = vector_median(window_tmp[j]);
       window_tmp[j].clear();
     }
   }
-  if(centrality == "sum"){
+  if(summary == "sum"){
     for(j=0; j<x.ncol(); j++){
       outM(window_num, j) = vector_sum(window_tmp[j]);
       window_tmp[j].clear();
     }
   }      
+  if(summary == "count"){
+    for(j=0; j<x.ncol(); j++){
+      outM(window_num, j) = vector_count(window_tmp[j]);
+      window_tmp[j].clear();
+    }
+  }
 
   return outM;
 }

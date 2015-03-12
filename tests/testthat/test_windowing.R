@@ -15,9 +15,22 @@ gq <- extract.gt(pinf_vcf, element="GQ", as.numeric=TRUE)
 gqw <- windowize_NM(gq, pos=pinf_mt@var.info$POS, 
                     starts=pinf_mt@win.info$start, 
                     ends=pinf_mt@win.info$end,
-                    centrality = "sum")
+                    summary = "count")
 
 gqw[19:21,]
+
+
+
+nrow(gq[pinf_mt@var.info$POS >= 1 & pinf_mt@var.info$POS <= 1000,])
+nrow(gq[pinf_mt@var.info$POS >= 1001 & pinf_mt@var.info$POS <= 2000,])
+nrow(gq[pinf_mt@var.info$POS >= 2001 & pinf_mt@var.info$POS <= 3000,])
+nrow(gq[pinf_mt@var.info$POS >= 3001 & pinf_mt@var.info$POS <= 4000,])
+nrow(gq[pinf_mt@var.info$POS >= 4001 & pinf_mt@var.info$POS <= 5000,])
+nrow(gq[pinf_mt@var.info$POS >= 5001 & pinf_mt@var.info$POS <= 6000,])
+
+
+head(gqw[,1:10])
+
 
 
 gq[pinf_mt@var.info$POS >= 18001 & pinf_mt@var.info$POS < 19000,]

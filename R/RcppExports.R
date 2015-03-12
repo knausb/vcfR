@@ -26,8 +26,8 @@ NM2winNM <- function(x, pos, maxbp, winsize = 100L) {
     .Call('vcfR_NM2winNM', PACKAGE = 'vcfR', x, pos, maxbp, winsize)
 }
 
-windowize_NM <- function(x, pos, starts, ends, centrality = "mean") {
-    .Call('vcfR_windowize_NM', PACKAGE = 'vcfR', x, pos, starts, ends, centrality)
+windowize_NM <- function(x, pos, starts, ends, summary = "mean") {
+    .Call('vcfR_windowize_NM', PACKAGE = 'vcfR', x, pos, starts, ends, summary)
 }
 
 rank_variants <- function(variants, ends, score) {

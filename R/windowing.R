@@ -22,7 +22,7 @@
 #'
 #' @param starts integer vector of starting positions for windows
 #' @param ends integer vector of ending positions for windows
-#' @param centrality string indicating measure of central tendency (mean or median)
+#' @param summary string indicating type of summary (mean, median, sum)
 #' 
 
 
@@ -54,7 +54,7 @@ z_score <- function(x){
 #' 
 #' @export
 #' 
-windowize_NM <- function(x, pos, starts, ends, centrality="mean"){
-  .Call('vcfR_windowize_NM', PACKAGE = 'vcfR', x, pos, starts, ends, centrality="mean")  
+windowize_NM <- function(x, pos, starts, ends, summary="mean"){
+  .Call('vcfR_windowize_NM', PACKAGE = 'vcfR', x, pos, starts, ends, summary=summary)  
 }
 
