@@ -10,7 +10,7 @@ vignette: >
 ---
 
 
-vcfR is a package intended to help researchers view, understand and filter data in vcf format files.
+vcfR is a package intended to help view, understand and filter data in vcf format files.
 
 
 ## Preliminaries
@@ -322,6 +322,26 @@ And create another heatmap.
 heatmap.bp(gqwz)
 ```
 
+
+Because the marginal barplots summarize z-scores, some of them are now negative.
+The first 1 kbp has no variants.
+This results in a low score.
+When zero is meaningful, this may be appropriate.
+When zero means a lack of data, it may be appropriate to set data with consisting of zeros data as NA.
+
+
+An important difference between the per variant perspective and the windowed perspective is that the variant perspective is removed from the chromosomal coordinates.
+It only has values where variants have been observed.
+Region with high variant counts become over-represented while regions lacking variants are omitted.
+Windowing returns the chomosomal coordinates.
+
+
+
+The region of low quality for windows 5, 6 and 7 correspond to the region between 4001 - 7000 bp.
+When we compare this to the chromoqc plot above, we see that this region has a low read depth as well as a region where no variants were called.
+This may represent a region with assembly or mapping issues.
+One option may be to further explore this region to attempt to address this issue.
+An alternative may be to censor this region and focus on the remainder of the chromosome.
 
 
 
