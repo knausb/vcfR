@@ -10,7 +10,7 @@ vignette: >
 ---
 
 
-vcfR is a package intended to help people view, understand and filter data in vcf format files.
+vcfR is a package intended to help researchers view, understand and filter data in vcf format files.
 
 
 ## Preliminaries
@@ -329,13 +329,36 @@ These last functions were recently developed and have yet to be integrated with 
 
 
 
-## Outputting data
+## Output of data
+
+One of the goals of the package vcfR is to help investigators understand and explore their data.
+Once they've gained an understanding of this data, they will likely want to act upon it.
+One way to act upon this understanding is to use their aquired comprehension of their data to filter it to what they feel is of adequate quality.
 
 
 ### Output to vcf file
 
+Within the framework of the package vcfR, the filtering and output of variants determined to be of adequate quality can be accomplished with the function **write.vcf**.
+This function takes a vcfR object and optionally subsets it using the mask, created in previous steps, and outputs it to a vcf format file.
+This file should be usable by all vcf format compliant softwares for downstream analyses.
 
 
 ### Conversion to other R objects
+
+Ideally, objects created in vcfR should be easily transferrable to other R object which contain similar data.
+For example, an object of class 'vcfR' should have a translator function to convert it to objects supported by other packages.
+For example, a translator function which would help convert a vcfR::vcfR object to an object supported by pegas would allow seamless translation among these identical data types.
+These functions do not currently exist.
+But thrugh the establishmet of standards these translations should be easily facilitated.
+
+
+
+## Future directions
+
+The pacage vcfR aims to input vcf type data and output filtered vcf type data.
+Windowing functions within the package aim to identify regions which may contain sub-optimal data.
+Future work in this package may try to construct genomic regioins files (e.g., *.gff or *.bed files) which annotate these regions.
+This output could be utilized by other software to focus variant discovery and variant calling on regions of high confidence.
+
 
 
