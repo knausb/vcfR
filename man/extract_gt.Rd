@@ -23,4 +23,7 @@ extract.gt(x, element = "GT", mask = logical(0), as.numeric = FALSE)
 \description{
 Extract elements from the GT section of a vcf format object
 }
+\details{
+Note that when 'as.numeric' is set to 'TRUE' but the data are not actually numeric, unexpected results will likely occur.
+}
 

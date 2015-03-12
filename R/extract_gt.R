@@ -6,6 +6,11 @@
 #' @param mask a logical vector indicating which variants (rows) to include
 #' @param as.matrix attempt to recast as a numeric matrix
 #' 
+#' 
+#' @details
+#' Note that when 'as.numeric' is set to 'TRUE' but the data are not actually numeric, unexpected results will likely occur.
+#' 
+#' 
 #' @export
 #' 
 extract.gt.allR <- function(x, element="GT", mask=logical(0), as.matrix=FALSE){
