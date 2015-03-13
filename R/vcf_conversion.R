@@ -8,6 +8,8 @@
 
 
 #' @rdname vcf_conversion
+#' @aliases gt_to_df
+#' 
 #' @export
 gt_to_df <- function(x) {
   fmat.col <- grep("FORMAT", names(x))
