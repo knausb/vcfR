@@ -85,10 +85,10 @@ Rcpp::DataFrame rank_variants(Rcpp::DataFrame variants,
 //    Rcout << "variant: " << i << ", position: " << pos(i) << ", window number: " << win_num(i) << "\n";
   }
   
-  for(i=0; i<score.size(); i++){
-    Rcout << "variant: " << i << ", position: " << pos(i) << ", window number: " << win_num(i) << "\n";
-  }
-  Rcout << "win_num is: " << win_num.size()  << " elements long\n";
+//  for(i=0; i<score.size(); i++){
+//    Rcout << "variant: " << i << ", position: " << pos(i) << ", window number: " << win_num(i) << "\n";
+//  }
+//  Rcout << "win_num is: " << win_num.size()  << " elements long\n";
   
 //  return DataFrame::create(variants, _["window_number"]=win_num, _["window_rank"]=win_rank);
   return Rcpp::DataFrame::create(variants, _["window_number"]=win_num);
