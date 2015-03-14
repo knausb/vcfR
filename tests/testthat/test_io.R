@@ -20,6 +20,8 @@ test_that("vcf file io works",{
   expect_is(test, "vcfR")
   expect_identical(names(test@fix)[1], "CHROM")
   
+  unlink("test.vcf")
+  
   setwd(original_dir)
 })
 
