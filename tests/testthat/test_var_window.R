@@ -14,7 +14,7 @@ win4 <- .Call('vcfR_windowize_annotations', PACKAGE = 'vcfR', wins=win3,
               chrom_length=length(pinf_dna))
 
 
-test_that("vcfR_window_init initializes windows ", {
+test_that("vcfR_window_init works", {
   expect_equal(ncol(win1), 4)
   expect_equal(nrow(win1), 40)
 })
