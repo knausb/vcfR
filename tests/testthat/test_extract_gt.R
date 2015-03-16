@@ -19,11 +19,25 @@ pl <- extract.gt(pinf_vcf, element="PL", as.numeric=FALSE)
 gq <- extract.gt(pinf_vcf, element="GQ", as.numeric=TRUE)
 
 
-head(gt)
-head(pl)
-head(gq)
+test_that("gt, pl ad gq are matrices",{
+  expect_is(gt, "matrix")
+  expect_is(pl, "matrix")
+  expect_is(gq, "matrix")
+})
 
-head(pinf_mt@vcf.gt)
+test_that("gq is numeric",{
+  expect_is(gq, "matrix")
+  expect_equal(is.numeric(gq), TRUE)
+})
+
+
+
+
+#head(gt)
+#head(pl)
+#head(gq)
+
+#head(pinf_mt@vcf.gt)
 
 
 #head(pinf_vcf)
@@ -31,13 +45,13 @@ head(pinf_mt@vcf.gt)
 
 #ncol(pinf_vcf@gt)
 
-outm <- .Call('vcfR_extract_GT_to_DF', PACKAGE = 'vcfR', pinf_vcf@gt, element="GQ")
-outm <- .Call('vcfR_extract_GT_to_DF', PACKAGE = 'vcfR', pinf_vcf@gt, element="GT")
-outm <- .Call('vcfR_extract_GT_to_DF', PACKAGE = 'vcfR', pinf_vcf@gt, element="PL")
-outm <- .Call('vcfR_extract_GT_to_DF', PACKAGE = 'vcfR', pinf_vcf@gt, element="DP")
+#outm <- .Call('vcfR_extract_GT_to_DF', PACKAGE = 'vcfR', pinf_vcf@gt, element="GQ")
+#outm <- .Call('vcfR_extract_GT_to_DF', PACKAGE = 'vcfR', pinf_vcf@gt, element="GT")
+#outm <- .Call('vcfR_extract_GT_to_DF', PACKAGE = 'vcfR', pinf_vcf@gt, element="PL")
+#outm <- .Call('vcfR_extract_GT_to_DF', PACKAGE = 'vcfR', pinf_vcf@gt, element="DP")
 
 
-outm <- .Call('vcfR_extract_GT_to_CM', PACKAGE = 'vcfR', pinf_vcf@gt, element="DP")
+#outm <- .Call('vcfR_extract_GT_to_CM', PACKAGE = 'vcfR', pinf_vcf@gt, element="DP")
 
 #outm <- extract.gt2(pinf_vcf, element="DP", as.numeric=F)
 #outm <- extract.gt2(pinf_vcf, element="GQ", as.numeric=T)

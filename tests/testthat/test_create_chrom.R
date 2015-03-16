@@ -7,15 +7,30 @@ context("create_chrom functions")
 data(vcfR_example)
 
 pinf_mt <- create_chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff, verbose=F)
-expect_that(pinf_mt, is_a("Chrom"))
+
+test_that("we can create a Chrom",{
+  expect_that(pinf_mt, is_a("Chrom"))  
+})
+
 
 pinf_mt <- create_chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, verbose=F)
-expect_that(pinf_mt, is_a("Chrom"))
+
+test_that("we can create a Chrom, no annotation",{
+  expect_that(pinf_mt, is_a("Chrom"))  
+})
+
 
 pinf_mt <- create_chrom('pinf_mt', vcf=pinf_vcf, ann=pinf_gff, verbose=F)
-expect_that(pinf_mt, is_a("Chrom"))
+
+test_that("we can create a Chrom, no sequence",{
+  expect_that(pinf_mt, is_a("Chrom"))
+})
+
 
 pinf_mt <- create_chrom('pinf_mt', vcf=pinf_vcf, verbose=F)
-expect_that(pinf_mt, is_a("Chrom"))
+
+test_that("we can create a Chrom, no sequence or annotation",{
+  expect_that(pinf_mt, is_a("Chrom"))
+})
 
 

@@ -11,8 +11,14 @@ pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE)
 
 gt <- extract.gt(pinf_mt, element="PL", as.numeric=TRUE)
 
-head(pinf_mt@vcf.gt)
+test_that("gt is numeric",{
+  expect_is(gt, "matrix")
+  expect_equal(is.numeric(gt), TRUE)
+})
 
-head(gt)
+
+#head(pinf_mt@vcf.gt)
+
+#head(gt)
 
 

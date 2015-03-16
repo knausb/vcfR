@@ -18,44 +18,50 @@ gqw <- windowize_NM(gq, pos=pinf_mt@var.info$POS,
                     summary = "count")
 
 
-
-gqw[19:21,]
-
-gqw[1:5,]
-
-pinf_mt@var.info$POS[pinf_mt@var.info$POS >= 1 & pinf_mt@var.info$POS <= 1000]
-pinf_mt@var.info$POS[pinf_mt@var.info$POS >= 1001 & pinf_mt@var.info$POS <= 2000]
-pinf_mt@var.info$POS[pinf_mt@var.info$POS >= 2001 & pinf_mt@var.info$POS <= 3000]
-
-pinf_mt@var.info$POS[pinf_mt@var.info$POS >= 19001 & pinf_mt@var.info$POS <= 20000]
-
-
-nrow(gq[pinf_mt@var.info$POS >= 1 & pinf_mt@var.info$POS <= 1000,])
-nrow(gq[pinf_mt@var.info$POS >= 1001 & pinf_mt@var.info$POS <= 2000,])
-nrow(gq[pinf_mt@var.info$POS >= 2001 & pinf_mt@var.info$POS <= 3000,])
-nrow(gq[pinf_mt@var.info$POS >= 3001 & pinf_mt@var.info$POS <= 4000,])
-nrow(gq[pinf_mt@var.info$POS >= 4001 & pinf_mt@var.info$POS <= 5000,])
-nrow(gq[pinf_mt@var.info$POS >= 5001 & pinf_mt@var.info$POS <= 6000,])
-
-
-head(gqw[,1:10])
+test_that("gq is windowized", {
+  expect_is(gqw, "matrix")
+  expect_equal(sum(gqw[20,]), ncol(gqw))  
+})
 
 
 
-gq[pinf_mt@var.info$POS >= 18001 & pinf_mt@var.info$POS < 19000,]
-gq[pinf_mt@var.info$POS >= 19001 & pinf_mt@var.info$POS < 20000,]
-gq[pinf_mt@var.info$POS >= 20001 & pinf_mt@var.info$POS < 21000,]
+#gqw[19:21,]
+
+#gqw[1:5,]
+
+#pinf_mt@var.info$POS[pinf_mt@var.info$POS >= 1 & pinf_mt@var.info$POS <= 1000]
+#pinf_mt@var.info$POS[pinf_mt@var.info$POS >= 1001 & pinf_mt@var.info$POS <= 2000]
+#pinf_mt@var.info$POS[pinf_mt@var.info$POS >= 2001 & pinf_mt@var.info$POS <= 3000]
+
+#pinf_mt@var.info$POS[pinf_mt@var.info$POS >= 19001 & pinf_mt@var.info$POS <= 20000]
 
 
-apply(gq[pinf_mt@var.info$POS >= 20001 & pinf_mt@var.info$POS < 21000,], MARGIN=2, sum)
+#nrow(gq[pinf_mt@var.info$POS >= 1 & pinf_mt@var.info$POS <= 1000,])
+#nrow(gq[pinf_mt@var.info$POS >= 1001 & pinf_mt@var.info$POS <= 2000,])
+#nrow(gq[pinf_mt@var.info$POS >= 2001 & pinf_mt@var.info$POS <= 3000,])
+#nrow(gq[pinf_mt@var.info$POS >= 3001 & pinf_mt@var.info$POS <= 4000,])
+#nrow(gq[pinf_mt@var.info$POS >= 4001 & pinf_mt@var.info$POS <= 5000,])
+#nrow(gq[pinf_mt@var.info$POS >= 5001 & pinf_mt@var.info$POS <= 6000,])
+
+
+#head(gqw[,1:10])
 
 
 
-cbind(pinf_mt@var.info$POS, gq)[118:130,1:4]
+#gq[pinf_mt@var.info$POS >= 18001 & pinf_mt@var.info$POS < 19000,]
+#gq[pinf_mt@var.info$POS >= 19001 & pinf_mt@var.info$POS < 20000,]
+#gq[pinf_mt@var.info$POS >= 20001 & pinf_mt@var.info$POS < 21000,]
+
+
+#apply(gq[pinf_mt@var.info$POS >= 20001 & pinf_mt@var.info$POS < 21000,], MARGIN=2, sum)
 
 
 
-head(gqw)
-nrow(gqw)
+#cbind(pinf_mt@var.info$POS, gq)[118:130,1:4]
+
+
+
+#head(gqw)
+#nrow(gqw)
 
 
