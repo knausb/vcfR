@@ -81,6 +81,16 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// pair_sort
+Rcpp::DataFrame pair_sort();
+RcppExport SEXP vcfR_pair_sort() {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    __result = Rcpp::wrap(pair_sort());
+    return __result;
+END_RCPP
+}
 // rank_variants
 Rcpp::DataFrame rank_variants(Rcpp::DataFrame variants, Rcpp::NumericVector ends, Rcpp::NumericVector score);
 RcppExport SEXP vcfR_rank_variants(SEXP variantsSEXP, SEXP endsSEXP, SEXP scoreSEXP) {

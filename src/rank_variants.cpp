@@ -1,6 +1,6 @@
 #include <Rcpp.h>
 using namespace Rcpp;
-
+//#include <algorithm>    // std::sort
 
 
 
@@ -9,11 +9,9 @@ using namespace Rcpp;
 // http://stackoverflow.com/a/1577627
 //
 typedef std::pair<int,int> mypair;
-bool comparator ( const mypair& l, const mypair& r){
-  return l.first > r.first;
-}
-
-
+bool comparator ( const mypair& l, const mypair& r)
+   { return l.first > r.first; }
+   
 
 // [[Rcpp::export]]
 Rcpp::DataFrame rank_variants(Rcpp::DataFrame variants,
@@ -32,67 +30,82 @@ Rcpp::DataFrame rank_variants(Rcpp::DataFrame variants,
   
   // Sorting on pairs from:
   // http://stackoverflow.com/a/1577627
-
   
   Rcpp::NumericVector pos = variants["POS"];
   Rcpp::LogicalVector mask = variants["mask"];
   
   Rcpp::NumericVector win_num(score.size());  // Vector of window numbers.
   Rcpp::NumericVector win_rank(score.size()); // Vector to be returned as per window rank.
-  Rcpp::NumericVector rank;   // Vector to hold information for a single 
+//  Rcpp::NumericVector rank;   // Vector to hold information for a single 
                               // window which will be sorted.
-                              
-  //typedef 
-//  std::pair<int,int> mypair;
-//  typedef std::vector< std::vector< std::pair<int,int> > > vec_vec_pair;
-//  typedef std::vector< std::vector< mypair > > vec_vec_pair;
-  std::vector< std::vector< std::pair< int, int > > >  vec_vec_pair;
 
+  // Create a vector of vectors of pairs.
+  // There will be a vector of windows,
+  // where each window will be a vector of
+  // a pair containing a variant's score and position in the window.
+//  std::vector< std::vector< std::pair< int, int > > > vec_vec_pair;
+  // or
+  std::vector< std::pair< float, int > > vec_pair;
+  std::vector< std::pair< int, int > > rank_pair;
+  std::vector < int > ranks;
+  
   int win = 0;
-  int i = 0;
-  int j = 0;
+  int i = 0;  // Variant counter.
+  int j = -1;  // Variant within window counter.
 
   // Iterate to first window.
-  while(pos(0) > ends(win)){win++;}
-  win_num(0) = win;
+  while(pos(0) > ends(win)){
+//    vec_vec_pair[win].push_back( std::make_pair( 0, 0) );
+    win++;
+    }
+//  win_num(0) = win;
 //  vec_vec_pair.push_back();
 //  vec_vec_pair[0][0] = [< score(i), j >];
 
-  for(i=1; i<score.size(); i++){
+  for(i=0; i<score.size(); i++){
+//    Rcout << "Counter: " << i << " Position: " << pos(i) << "\n";
     Rcpp::checkUserInterrupt();
     if( pos(i) < ends(win) ){
+      // Position is within current window.
       win_num(i) = win;
-//      mypair = [];
-//      vec_vec_pair[win][0] = [< score(i), j >];
-//      vec_vec_pair(win)(0) = [< score(i), j >];
-//      vec_vec_pair[win].push_back( < score(i), j > );
       j++;
-//      rank.push_back(score(i));
-//      rank[pos(i)] = score(i);
-    } else {
-//      std::sort(rank.begin(), rank.end());
-//      for(j=0; j<rank.size(); j++){
-//        Rcout << rank(j) << " ";
-//      }
-//      Rcout << "\n";
+      vec_pair.push_back( std::make_pair( score(i), j) );
+//      vec_vec_pair[win].push_back( std::make_pair( score(i), j) );
 
+    } else {
       // Begin a new window.
-//      rank.erase();
-      j = 0;
+      // Sort vector of pairs for present window.
+      std::sort(vec_pair.begin(), vec_pair.end(), comparator);
+      
+      for(int k=0; k<vec_pair.size(); k++){
+          rank_pair.push_back( std::make_pair( vec_pair[k].second, k + 1) );
+      }
+      std::sort(rank_pair.begin(), rank_pair.end(), comparator);
+      
+      for(int k=0; k<vec_pair.size(); k++){
+//        Rcout << "Window number: " << win << " Pair number: " << k;
+//        Rcout << " Rpair1: " << rank_pair[k].first << " Rpair2: " << rank_pair[k].second << "\n";
+        ranks.push_back( rank_pair[k].second );
+      }
+//      Rcout << "\n";
+      // Increment to next window.
       while(pos(i) > ends(win)){win++;}
       win_num(i) = win;
+      rank_pair.erase(rank_pair.begin(), rank_pair.end());
+      vec_pair.erase(vec_pair.begin(), vec_pair.end());
+      j = 0;
+      vec_pair.push_back( std::make_pair( score(i), j) );
     }
-//    Rcout << "variant: " << i << ", position: " << pos(i) << ", window number: " << win_num(i) << "\n";
+    Rcout << "Counter: " << i << " Window: " << win_num(i) << " Position:" << pos(i) << " Score: " << score(i);
+//    Rcout << " Rank: " << ranks(i);
+    Rcout << "\n";
   }
-  
-//  for(i=0; i<score.size(); i++){
-//    Rcout << "variant: " << i << ", position: " << pos(i) << ", window number: " << win_num(i) << "\n";
-//  }
-//  Rcout << "win_num is: " << win_num.size()  << " elements long\n";
-  
-//  return DataFrame::create(variants, _["window_number"]=win_num, _["window_rank"]=win_rank);
+
+
+
+  Rcpp::IntegerVector rank = wrap(ranks);
+//  return Rcpp::DataFrame::create(variants, _["window_number"]=win_num, _["rank"]=rank);
   return Rcpp::DataFrame::create(variants, _["window_number"]=win_num);
-//  return variants;
 }
 
 

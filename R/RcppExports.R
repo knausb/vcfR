@@ -30,6 +30,10 @@ windowize_NM <- function(x, pos, starts, ends, summary = "mean") {
     .Call('vcfR_windowize_NM', PACKAGE = 'vcfR', x, pos, starts, ends, summary)
 }
 
+pair_sort <- function() {
+    .Call('vcfR_pair_sort', PACKAGE = 'vcfR')
+}
+
 rank_variants <- function(variants, ends, score) {
     .Call('vcfR_rank_variants', PACKAGE = 'vcfR', variants, ends, score)
 }
