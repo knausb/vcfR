@@ -56,8 +56,16 @@ The meta region is at the top of the file.
 Each line of the meta region begins with a double pound sign ('##').
 The information in the meta region defines the abbreviations used elsewhere in the file.
 Below the meta region, the data are tabular.
+
+
+
 The first eight columns contain the fixed region and are titled CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO.
 This is per variant information which is 'fixed', or the same, over all samples.
+
+
+```{r}
+head(pinf_vcf)
+```
 
 
 

@@ -17,15 +17,15 @@ setMethod(
 #  definition=function(x){
   definition=function(object){
             #1234567890123456789012345678901234567890
-    message("*****   Class Chrom, method Show   *****")
-    message(paste("Name: ", object@name))
-    message(paste("Length: ", object@len))
-    message("Use head(object) for more details.")
-#    message(paste("Name: ", x@name, "\n"))
-#    message(paste("Length: ", x@len, "\n"))
-    #    message("Use head(x) for more details.\n")    
+    print("*****   Class Chrom, method Show   *****")
+    print(paste("Name: ", object@name))
+    print(paste("Length: ", object@len))
+    print("Use head(object) for more details.")
+#    print(paste("Name: ", x@name, "\n"))
+#    print(paste("Length: ", x@len, "\n"))
+    #    print("Use head(x) for more details.\n")    
             #1234567890123456789012345678901234567890
-    message("*****      End Show (Chrom)        *****")
+    print("*****      End Show (Chrom)        *****")
   }
 )
 
@@ -33,23 +33,23 @@ setMethod(
   f="print",
   signature="Chrom",
   definition=function (x,y,...){
-    message("***** Object of class 'Chrom' *****\n")
-    message(paste("Name: ", x@name, "\n"))
-    message(paste("Length: ", x@len, "\n"))
-    message("\nVCF fixed data:\n")
-    message("Last column (info) omitted.\n")
-    message("\nVCF variable data:\n")
-    message(paste("Columns: ", ncol(x@vcf.gt), "\n"))
-    message(paste("Rows: ", nrow(x@vcf.gt), "\n"))
-    message("(First column is format.)\n")
-    message("\nAnnotation data:\n")
+    print("***** Object of class 'Chrom' *****\n")
+    print(paste("Name: ", x@name, "\n"))
+    print(paste("Length: ", x@len, "\n"))
+    print("\nVCF fixed data:\n")
+    print("Last column (info) omitted.\n")
+    print("\nVCF variable data:\n")
+    print(paste("Columns: ", ncol(x@vcf.gt), "\n"))
+    print(paste("Rows: ", nrow(x@vcf.gt), "\n"))
+    print("(First column is format.)\n")
+    print("\nAnnotation data:\n")
     if(length(x@ann)>0){
       print(head(x@ann[,1:8], n=4))
-      message("Last column (attributes) omitted.\n")
+      print("Last column (attributes) omitted.\n")
     } else {
-      message("Empty slot.\n")
+      print("Empty slot.\n")
     }
-    message("***** End print (Chrom) ***** \n")
+    print("***** End print (Chrom) ***** \n")
   }
 )
 
@@ -88,48 +88,48 @@ setMethod(
   signature = "Chrom",
   definition=function(x){
             #1234567890123456789012345678901234567890
-    message("*****   Class Chrom, method head   *****")
-    message(paste("Name: ", x@name))
-    message(paste("Length: ", x@len))
-    message()
+    print("*****   Class Chrom, method head   *****")
+    print(paste("Name: ", x@name))
+    print(paste("Length: ", x@len))
+    print('', quote=FALSE)
             #1234567890123456789012345678901234567890
-    message("*****     Sample names (Chrom)     *****")
-    message(names(x@vcf.gt)[-1])
-    message()
+    print("*****     Sample names (Chrom)     *****")
+    print(names(x@vcf.gt)[-1])
+    print('', quote=FALSE)
             #1234567890123456789012345678901234567890
-    message("*****    Vcf fixed data (Chrom)    *****")
-    message(x@vcf.fix[1:6,1:7])
-    message()
-    message("First INFO record:")
-    message(unlist(strsplit(as.character(x@vcf.fix$INFO[1]), split=";")))
-    message()
+    print("*****    Vcf fixed data (Chrom)    *****")
+    print(x@vcf.fix[1:6,1:7])
+    print('', quote=FALSE)
+    print("INFO column has been suppressed, first INFO record:")
+    print(unlist(strsplit(as.character(x@vcf.fix$INFO[1]), split=";")))
+    print('', quote=FALSE)
             #1234567890123456789012345678901234567890
-    message("*****   Vcf genotype data (Chrom)  *****")
+    print("*****   Vcf genotype data (Chrom)  *****")
     if(ncol(x@vcf.gt)>=6){
               #1234567890123456789012345678901234567890
-      message("*****     First 6 columns      *********")
-      message(x@vcf.gt[1:6,1:6])
+      print("*****     First 6 columns      *********")
+      print(x@vcf.gt[1:6,1:6])
     } else {
-      message(x@vcf.gt[1:6,])
+      print(x@vcf.gt[1:6,])
     }
-    message()
+    print('', quote=FALSE)
             #1234567890123456789012345678901234567890
-    message("*****      Var info (Chrom)        *****")
+    print("*****      Var info (Chrom)        *****")
     if(ncol(x@var.info)>=6){
               #1234567890123456789012345678901234567890
-      message("*****       First 6 columns        *****")
-      message(x@var.info[1:6,1:6])
+      print("*****       First 6 columns        *****")
+      print(x@var.info[1:6,1:6])
     } else {
-      message(x@var.info[1:6,])
+      print(x@var.info[1:6,])
     }
-    message()
+    print('', quote=FALSE)
             #1234567890123456789012345678901234567890
-    message("*****      Vcf mask (Chrom)        *****")
-    message(paste("Percent unmasked:", 100*(sum(x@var.info$mask)/length(x@var.info$mask))))
-    message()
+    print("*****      Vcf mask (Chrom)        *****")
+    print(paste("Percent unmasked:", 100*(sum(x@var.info$mask)/length(x@var.info$mask))))
+    print('', quote=FALSE)
             #1234567890123456789012345678901234567890
-    message("*****      End head (Chrom)        *****")
-    message()
+    print("*****      End head (Chrom)        *****")
+    print('', quote=FALSE)
   }
 )
 
@@ -267,7 +267,7 @@ windowize <- function(x, win.size=1000, max.win=10000){
         print(paste("max i equals", max.win))
         print(paste("i equals", i))
         print(paste("j equals", j))
-        message("chrom.r error: max.win is too small.\n")
+        print("chrom.r error: max.win is too small.\n")
         break
       }
     }
