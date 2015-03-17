@@ -62,7 +62,7 @@ proc_chrom <- function(x, win.size = 1e3, verbose=TRUE){
     }
   }
   
-  ptime <- system.time(x@win.info <- var.win(x))
+  ptime <- system.time(x@win.info <- var.win(x, win.size=win.size))
   if(verbose==TRUE){
     message("Window analysis complete.")
     print(ptime)
@@ -201,6 +201,7 @@ regex.win <- function(x, max.win=1000, regex="[acgtwsmkrybdhv]"){
 #' @export
 #' @aliases var.win
 #' 
+#var.win <- function(x, win.size=1e3){
 var.win <- function(x, win.size=1e3){
   # A DNAbin will store in a list when the fasta contains
   # multiple sequences, but as a matrix when the fasta

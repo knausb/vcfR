@@ -8,7 +8,7 @@ context("rank_variants functions")
 data(vcfR_example)
 
 pinf_mt <- create_chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff, verbose=FALSE)
-pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE)
+pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE, win.size=1e3)
 
 set.seed(1)
 testv <- runif(nrow(pinf_mt@var.info), 0, 40)
@@ -34,7 +34,8 @@ vars <- .Call('vcfR_rank_variants', PACKAGE = 'vcfR', pinf_mt@var.info, pinf_mt@
 
 
 test_that("Rank variants binary is working",{
-  expect_equal(names(vars)[ncol(vars)], "window_number")
+#  expect_equal(names(vars)[ncol(vars)], "window_number")
+  expect_equal(names(vars)[ncol(vars)], "rank")
   expect_equal(length(vars$window_number), 247)
   expect_equal(length(vars$window_number[vars$window_number == 19]), 1)
 })
