@@ -11,7 +11,7 @@ vignette: >
 
 
 Most variant calling pipelines result in files containing variant information.
-The [vcf format](http//www.1000genomes.org/wiki/analysis/variant%20call%20format/vcf-variant-call-format-version-41 "vcf format at 1k genomes") is an increasingly popular format for this data.
+The [vcf format](http://samtools.github.io/hts-specs/ "vcf format at hts-specs") is an increasingly popular format for this data.
 These files are typically intended to be filtered as an attempt to remove false positives, or otherwise problematic sites.
 A first step in working with these data is to understand their contents.
 
@@ -19,7 +19,7 @@ A first step in working with these data is to understand their contents.
 ## Three sections
 
 
-A vcf file can be thought of as having three regions: a meta region, a fixed region and a genotype region.
+A vcf file can be thought of as having three regions: a **meta region**, a **fixed region** and a **genotype region**.
 The meta region is at the top of the file.
 Each line of the meta region begins with a double pound sign ('##').
 The information in the meta region defines the abbreviations used elsewhere in the file.
@@ -29,7 +29,28 @@ These data are fixed, or the same, over all samples.
 Begining at column ten is a column for every sample.
 The values in these columns are information for each sample and each variant.
 Stated differently, they contain information for each genotype.
-The format for each row of genotypes is specified in column nine, titled "FORMAT".
+
+
+The location of these three regions within a file can be represented by the cartoon below.
+
+
+```{r, fig.cap="Cartoon representation of vcf file organization", echo=FALSE, fig.height=4, fig.width=4, fig.align='center'}
+par(mar=c(0.1,0.1,0.1,0.1))
+plot(c(0,5), c(0,5), type="n", frame.plot=FALSE, axes=FALSE, xlab="", ylab="")
+rect(xleft=0, ybottom=4, xright=3, ytop=5)
+rect(xleft=0, ybottom=0, xright=2, ytop=4)
+rect(xleft=2, ybottom=0, xright=5, ytop=4)
+text(1.5, 4.5, "meta")
+text(1.0, 2.5, "fix")
+text(3.5, 2.5, "gt")
+par(mar=c(5,4,4,2))
+```
+
+
+The vcf file definition is flexible.
+This means that their are slots for certain data, but any particular software which creates a vcf file does not necessarily use them all.
+Similarly, some fields are delimited so that they can be extended to include more information.
+The result is that all vcf files do not contain the same information.
 
 
 For this vignette, we'll use the example data provided with vcfR.
@@ -38,26 +59,108 @@ For this vignette, we'll use the example data provided with vcfR.
 ```{r}
 library(vcfR)
 data(vcfR_example)
-pinf_mt <- create_chrom(name='pinf_mt', vcf=pinf_vcf, seq=pinf_dna, ann=pinf_gff)
-pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE)
 ```
 
 
 ## The meta region
 
 
+The meta region contains information about the file and its creation, as well as information to interpret abbreviations used elsewhere in the file.
+The example which comes with vcfR is shown below.
+
+
+
+```{r, echo=FALSE}
+pinf_vcf@meta
+```
+
+
+Some of these lines are long and cumbersome.
+
+
+The first line contains the version of the vcf format used in the file.
+This line is required.
+The second line specifies the software which created the vcf file.
+This is not required, so not all vcf files include it.
+When they do, the file becomes self documenting.
+Although, note that the alignment software is not included here because it was use upstream of the vcf creation (aligners typically create \*.SAM or \*.BAM format files).
+So the entire pipeline does not get documented.
+Some vcf files may contain a line for every chromosome (or supercontig or contig depending on your genome), so they may become rather long.
+Here, the remaining lines contain INFO and FORMAT specifications which define abbreviations used elsewhere in the file.
+
+
+
 
 ## The fix region
+
+
+The first eight columns contain the fixed region and are titled CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO.
+This is per variant information which is 'fixed', or the same, over all samples.
+The first two columns indicate the location of the variant by chromosome and position within that chromosome.
+Here, the ID field has not been used, so the missing data character ('.') is used.
+The REF and ALT columns indicate the reference and alternate allelic states.
+When multiple alternate allelic states are present they are delimited with commas.
+The QUAL column attempts to summarize the quality of each variant over all samples.
+The FILTER field is not used here but could contain information on whether a variant has passed some form of quality assessment. 
+
+
+```{r, echo=FALSE}
+pinf_vcf@fix[1:6, 1:7]
+```
+
+
+
+The seventh column, titled INFO, is a semicolon delimited list of information.
+Each abbreviation should be defined in the meta section.
+For example, line three from the meta region tells us that 'DP' is the raw read depth.
+The first value in our INFO example indicates that DP equals 7,405.
+This tell us that this variant was sequenced 7,405 times over all our samples.
+
+
+
+```{r, echo=FALSE}
+unlist(strsplit(as.character(pinf_vcf@fix[1, 8]), split=";"))
+```
 
 
 
 ## The genotype region
 
 
+The genotype region contains information for each variant for each sample.
+This values for each variant and each sample are colon delimited.
+Multiple types of data can be stored in this manner.
+The format of the data is specified by column nine, the FORMAT column.
+Here we see that we have information for GT, PL and GQ.
+Lines 21, 26 and 22 from the meta region tell us that this information is the genotype, phred-scaled likelihood and genotype quality.
+Every variant does not necessarily have the same information, so the rows are best treated separately.
+
+
+
+
+```{r, echo=FALSE}
+pinf_vcf@gt[1:6, 1:8]
+```
+
+
+
 
 ## vcfR
 
 
-```{r}
+Using the R package vcfR, we can read vcf format files into memory using the function `read.vcf()`.
+Once in memory we can use the `head()` method to summarize the information in the three vcf regions.
 
+
+
+```{r}
+head(pinf_vcf)
 ```
+
+
+We now have a summary of our vcf file which we can use to help understand what forms of information are contained within it.
+This information can be further explored with plotting functions and used to filter the vcf file for high quality variants.
+These topics are discussed in other vignettes.
+
+
+

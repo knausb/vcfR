@@ -54,8 +54,7 @@ chromoqc(pinf_mt)
 
 
 
-The first eight columns contain the fixed region and are titled CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO.
-This is per variant information which is 'fixed', or the same, over all samples.
+
 
 
 ```{r}
