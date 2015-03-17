@@ -21,7 +21,6 @@ A first step in working with these data is to understand their contents.
 
 A vcf file can be thought of as having three regions: a **meta region**, a **fixed region** and a **genotype region**.
 The meta region is at the top of the file.
-Each line of the meta region begins with a double pound sign ('##').
 The information in the meta region defines the abbreviations used elsewhere in the file.
 Below the meta region, the data are tabular.
 The first eight columns of this table contain information about each variant.
@@ -66,6 +65,7 @@ data(vcfR_example)
 
 
 The meta region contains information about the file and its creation, as well as information to interpret abbreviations used elsewhere in the file.
+Each line of the meta region begins with a double pound sign ('##').
 The example which comes with vcfR is shown below.
 
 
