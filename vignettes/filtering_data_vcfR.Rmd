@@ -13,8 +13,7 @@ vignette: >
 Most variant calling pipelines result in files containing variant information.
 The [vcf format](http://samtools.github.io/hts-specs/ "vcf format at hts-specs") is an increasingly popular format for this data.
 The format of these files and their content is discussed in the vignette 'vcf data'.
-
-These files are typically intended to be filtered as an attempt to remove false positives, or otherwise problematic sites.
+These files are typically intended to be post-processed (i.e., filtered) as an attempt to remove false positives or otherwise problematic sites.
 The R package vcfR provides tools to facilitate this filtering as well as to visualize the effects of choices made during this process.
 
 
@@ -37,8 +36,11 @@ For this vignette, we'll use the example data provided with vcfR.
 library(vcfR)
 data(vcfR_example)
 pinf_mt <- create_chrom(name='pinf_mt', vcf=pinf_vcf, seq=pinf_dna, ann=pinf_gff)
-pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE)
+pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE, win.size=3e3)
 ```
+
+
+The function create_chrom() reports the names of the chromosome (supercontig, contig, etc.) so that we can verify that all three data sources contain the same chromosome.
 
 
 We can now visualize this data.
@@ -49,29 +51,47 @@ chromoqc(pinf_mt)
 ```
 
 
+This plot summarizes data from our three data sources.
+Sequence data is represented on the lowest plot.
+Here called nucleotides are represented in green while uncalled nucleotides (Ns) appear in red.
+This chromosome contains all called nucleotides.
+Depending on the quality of your genome, it may include streches of uncalled nucleotides.
+Above the sequence is an annotation track.
+Features in the annotation file (e.g., gene models, exons, etc.) are represented as dark red rectangles.
+Above the annotation track is a windowing analysis of G/C content.
+This track includes marginal barplots to summarize its contents, as do the tracks above it.
+The next track summarizes the number of variants per window.
+Above that we see quality, mapping quality and read depth.
+
+
+One of the strengths of R is that it is interactively implemented.
+This means we can change things fairly rapidly.
+For example, the above example used 3 kbp windows.
+If we become concerned with how our choice of window size affects our analysis, we can change it.
+
+
+
+```{r, fig.height=7, fig.width=7}
+pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE, win.size=1e3)
+chromoqc(pinf_mt)
+```
+
+
+
+
+
+We can also use the function head() to summarize the contents of the Chrom object.
+
+
+```{r}
+head(pinf_mt)
+```
 
 ## Getting to know your vcf data
 
 
 
 
-
-
-
-
-```{r}
-head(pinf_vcf)
-```
-
-
-
-All of this information is retained in the Chrom object, as well as additional information.
-
-
-
-```{r}
-head(pinf_mt)
-```
 
 
 
