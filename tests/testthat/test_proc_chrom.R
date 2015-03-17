@@ -13,6 +13,12 @@ test_that("Created Chrom", {
   expect_is(pinf_mt, "Chrom")
 })
 
+pinf_mt2 <- proc_chrom(pinf_mt, win.size=1e4, verbose=FALSE)
+
+test_that("proc_chrom creates different window sizes", {
+  expect_equal(length(pinf_mt@win.info$end), 40)
+  expect_equal(length(pinf_mt2@win.info$end), 4)
+})
 
 # Binaries
 #wins <- .Call('vcfR_window_init', PACKAGE = 'vcfR', window_size=1e3, max_bp=length(pinf_dna))
