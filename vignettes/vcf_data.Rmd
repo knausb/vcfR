@@ -4,7 +4,7 @@ author: "Brian J. Knaus"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Filtering data with vcfR}
+  %\VignetteIndexEntry{vcf data}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
