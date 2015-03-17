@@ -11,6 +11,7 @@ vignette: >
 
 
 Most variant calling pipelines result in files containing variant information.
+The [vcf format](http//www.1000genomes.org/wiki/analysis/variant%20call%20format/vcf-variant-call-format-version-41 "vcf format at 1k genomes") is an increasingly popular format for this data.
 These files are typically intended to be filtered as an attempt to remove false positives, or otherwise problematic sites.
 The R package vcfR provides tools to facilitate this filtering as well as to visualize the effects of choices made during this process.
 
@@ -49,6 +50,21 @@ chromoqc(pinf_mt)
 
 ## Getting to know your vcf data
 
+
+A vcf file can be thought of as having three regions: a meta region, a fixed region and a genotype region.
+The meta region is at the top of the file.
+Each line of the meta region begins with a double pound sign ('##').
+The information in the meta region defines the abbreviations used elsewhere in the file.
+Below the meta region, the data are tabular.
+The first eight columns contain the fixed region and are titled CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO.
+This is per variant information which is 'fixed', or the same, over all samples.
+
+
+
+
+```{r}
+head(pinf_mt)
+```
 
 
 
