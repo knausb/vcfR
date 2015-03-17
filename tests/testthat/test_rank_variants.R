@@ -19,26 +19,19 @@ vars <- .Call('vcfR_rank_variants', PACKAGE = 'vcfR', pinf_mt@var.info, pinf_mt@
 
 #vars <- .Call('vcfR_rank_variants', PACKAGE = 'vcfR', pinf_mt@var.info, pinf_mt@win.info$end, pinf_mt@var.info$MQ)
 
-<<<<<<< HEAD
+
 set.seed(1)
 testv <- runif(nrow(pinf_mt@var.info), 0, 40)
 vars <- .Call('vcfR_rank_variants', PACKAGE = 'vcfR', pinf_mt@var.info, pinf_mt@win.info$end, testv)
-=======
->>>>>>> a97fe165f768a9765a1f125c80a7ed35ccfd2dcb
 
 #cbind(vars[,c(1:4, 24:25)], testv)[1:28,]
 
 
-<<<<<<< HEAD
-cbind(vars[,c(1:4,24:25)], testv)[1:18,]
 
+#cbind(vars[,c(1:4,24:25)], testv)[1:18,]
 
-vars <- .Call('vcfR_pair_sort', PACKAGE = 'vcfR')
-=======
-#head(vars)
 
 #vars <- .Call('vcfR_pair_sort', PACKAGE = 'vcfR')
->>>>>>> a97fe165f768a9765a1f125c80a7ed35ccfd2dcb
 
 
 

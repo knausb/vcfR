@@ -122,16 +122,6 @@ Rcpp::DataFrame rank_variants(Rcpp::DataFrame variants,
     ranks.push_back( rank_pair[k].second );
   }
   
-  // Handle the last window.
-  std::sort(vec_pair.begin(), vec_pair.end(), comparator);
-  for(int k=0; k<vec_pair.size(); k++){
-    rank_pair.push_back( std::make_pair( vec_pair[k].second, k + 1 ) );
-  }
-  std::sort(rank_pair.begin(), rank_pair.end(), comparator);
-      
-  for(int k=0; k<vec_pair.size(); k++){
-    ranks.push_back( rank_pair[k].second );
-  }
 
 
 //  for(i=0; i<ranks.size(); i++){
