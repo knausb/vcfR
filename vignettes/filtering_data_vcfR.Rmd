@@ -51,11 +51,6 @@ chromoqc(pinf_mt)
 ## Getting to know your vcf data
 
 
-A vcf file can be thought of as having three regions: a meta region, a fixed region and a genotype region.
-The meta region is at the top of the file.
-Each line of the meta region begins with a double pound sign ('##').
-The information in the meta region defines the abbreviations used elsewhere in the file.
-Below the meta region, the data are tabular.
 
 
 

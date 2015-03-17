@@ -1,0 +1,63 @@
+---
+title: "vcf data"
+author: "Brian J. Knaus"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Filtering data with vcfR}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+
+Most variant calling pipelines result in files containing variant information.
+The [vcf format](http//www.1000genomes.org/wiki/analysis/variant%20call%20format/vcf-variant-call-format-version-41 "vcf format at 1k genomes") is an increasingly popular format for this data.
+These files are typically intended to be filtered as an attempt to remove false positives, or otherwise problematic sites.
+A first step in working with these data is to understand their contents.
+
+
+## Three sections
+
+
+A vcf file can be thought of as having three regions: a meta region, a fixed region and a genotype region.
+The meta region is at the top of the file.
+Each line of the meta region begins with a double pound sign ('##').
+The information in the meta region defines the abbreviations used elsewhere in the file.
+Below the meta region, the data are tabular.
+The first eight columns of this table contain information about each variant.
+These data are fixed, or the same, over all samples.
+Begining at column ten is a column for every sample.
+The values in these columns are information for each sample and each variant.
+Stated differently, they contain information for each genotype.
+The format for each row of genotypes is specified in column nine, titled "FORMAT".
+
+
+For this vignette, we'll use the example data provided with vcfR.
+
+
+```{r}
+library(vcfR)
+data(vcfR_example)
+pinf_mt <- create_chrom(name='pinf_mt', vcf=pinf_vcf, seq=pinf_dna, ann=pinf_gff)
+pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE)
+```
+
+
+## The meta region
+
+
+
+## The fix region
+
+
+
+## The genotype region
+
+
+
+## vcfR
+
+
+```{r}
+
+```
