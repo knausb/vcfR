@@ -1,0 +1,54 @@
+---
+title: "Filtering data with vcfR"
+author: "Brian J. Knaus"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Filtering data with vcfR}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+
+Most variant calling pipelines result in files containing variant information.
+These files are typically intended to be filtered as an attempt to remove false positives, or otherwise problematic sites.
+The R package vcfR provides tools to facilitate this filtering as well as to visualize the effects of choices made during this process.
+
+
+## Data input
+
+
+The input of data was covered in the vignette 'Introduction to vcfR.
+If you haven't read this vignette, you can with:
+
+```{r, eval=FALSE}
+vignette("intro_to_vcfR", package="vcfR")
+```
+
+.
+
+For this vignette, we'll use the example data provided with vcfR.
+
+
+```{r}
+library(vcfR)
+data(vcfR_example)
+pinf_mt <- create_chrom(name='pinf_mt', vcf=pinf_vcf, seq=pinf_dna, ann=pinf_gff)
+pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE)
+```
+
+
+We can now visualize this data.
+
+
+```{r, fig.height=7, fig.width=7}
+chromoqc(pinf_mt)
+```
+
+
+
+## Getting to know your vcf data
+
+
+
+
