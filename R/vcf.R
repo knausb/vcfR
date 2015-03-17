@@ -70,20 +70,23 @@ setMethod(
   f="show",
   signature = "vcfR",
   definition=function(object){
-    cat("*** Class vcf, method Show *** \n")
+    print("*** Class vcf, method Show ***")
     if(length(object@meta)>0){
-      cat("Meta")
-      #      cat(head(object@meta))
+      print("Meta")
+      #      print(head(object@meta))
       head(object@meta)
-      cat("\n\n")
+#      print("\n\n")
+      print("", quote=FALSE)
     }
     if(length(object@fix)>0){
       print(head(object@fix)[,1:7])
-      cat("Column 8 (info) omitted.")
-      cat("\n")
+      print("Column 8 (info) omitted.")
+#      print("\n")
+      print("", quote=FALSE)
     }
-    cat("\n")
-    cat("******* End Show (vcf) ******* \n")
+    print("", quote=FALSE)
+#    print("\n")
+    print("******* End Show (vcf) *******")
   }
 )
 
@@ -93,22 +96,25 @@ setMethod(
   signature="vcfR",
   #  definition=function (x,y,...){
   definition=function (x, ...){
-    cat("***** Object of class vcf *****\n")
+    print("***** Object of class vcf *****")
     if(length(x@meta)>0){
-      cat("Meta\n")
-      cat(head(x@meta))
-      cat("\n\n")
+      print("Meta")
+      print(head(x@meta))
+      print("", quote=FALSE)
+#      print("\n\n")
     }
     if(length(x@fix)>0){
       print(head(x@fix)[,1:7])
-      cat("Column 8 (info) omitted.")
-      cat("\n")
+      print("Column 8 (info) omitted.")
+      print("", quote=FALSE)
+#      print("\n")
     }
     if(length(x@gt)>0){
       print(head(x@gt))
-      cat("\n")
+      print("", quote=FALSE)
+#      print("\n")
     }
-    cat("***** End print (vcf) ***** \n")
+    print("***** End print (vcf) *****")
   }
 )
 
@@ -125,29 +131,31 @@ setMethod(
   f="head",
   signature="vcfR",
   definition=function (x, n=6, ...){
-    cat("***** Object of class 'vcf' *****\n")
-    cat("***** Meta section *****\n")
+    print("***** Object of class 'vcf' *****")
+    print("***** Meta section *****")
     if(length(x@meta) > n){
       print(x@meta[1:n])
-      cat("First ", n, " rows.\n")
+      print(paste("First", n, "rows."))
     } else {
       print(x@meta)
     }
+    print("", quote=FALSE)
     #
-    cat("\n***** Fixed section *****\n")
+    print("***** Fixed section *****")
     if(nrow(x@fix) >= n){
       print(x@fix[1:n,1:7])
     } else {
       print(x@fix[,1:7])
     }
+    print("", quote=FALSE)
     #
-    cat("\n***** Genotype section *****\n")
+    print("***** Genotype section *****")
     if(nrow(x@gt) >= n){
       if(ncol(x@gt)<6){
         print(x@gt[1:n,])
       } else {
         print(x@gt[1:n,1:6])
-        cat("First 6 columns only.\n")
+        print("First 6 columns only.")
       }
     } else {
       if(ncol(x@gt)<6){
@@ -156,11 +164,13 @@ setMethod(
         print(x@gt[,1:6])
       }
     }
-    cat("\n")
-    cat("Unique GT formats:\n")
+    print("", quote=FALSE)
+#    print("\n")
+    print("Unique GT formats:")
     print(unique(as.character(x@gt[,1])))
-    cat("\n")
-    #    cat("***** Head not implemented *****\n")
+    print("", quote=FALSE)
+#    print("\n")
+    #    print("***** Head not implemented *****\n")
   }
 )
 
@@ -177,8 +187,8 @@ setMethod(
   f="plot",
   signature= "vcfR",
   definition=function(x, y, ...){
-    #    cat("***** Object of class 'vcf' *****\n")
-    #    cat("***** Plot not implemented *****\n")
+    #    print("***** Object of class 'vcf' *****\n")
+    #    print("***** Plot not implemented *****\n")
     hist(x@fix$QUAL, col=5, main='Histogram of qualities', xlab='QUAL')
     rug(x@fix$QUAL)
   }
