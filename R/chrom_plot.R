@@ -178,7 +178,7 @@ chromo <- function(x = x,
            col = paste("#0080ff", dot.alpha, sep=""), 
     )
     axis(side = 2, las = 2)
-    title(main = "Read depth (DP)", line = -1)
+    title(main = "Raw read depth (DP)", line = -1)
     #    boxplot(x@vcf.info[x@mask,1], axes=FALSE, frame.plot=T, col="#0080ff")
     boxplot(x@var.info$DP[x@var.info$mask], axes = FALSE, frame.plot = TRUE, col = "#0080ff")
   }

@@ -94,8 +94,27 @@ The slots of the class Chrom are defined in the package documentation.
 ## Getting to know your vcf data
 
 
+The vcf format is discussed in the vignette 'vcf data'.
+In the Chrom object, this information occurs as the slots 'vcf.meta', 'vcf.fix' and 'vcf.gt'.
+Some of this information can be rapidly explored using the plot function.
+
+
+```{r, fig.height=7, fig.width=7}
+plot(pinf_mt)
+```
 
 
 
 
 
+
+
+```{r}
+plot(pinf_mt@var.info$DP, pinf_mt@var.info$MQ, col="#0000ff66")
+```
+
+
+
+```{r}
+cor(pinf_mt@var.info$DP, pinf_mt@var.info$MQ)
+```
