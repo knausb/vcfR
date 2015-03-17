@@ -73,7 +73,7 @@ If we become concerned with how our choice of window size affects our analysis, 
 
 ```{r, fig.height=7, fig.width=7}
 pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE, win.size=1e3)
-chromoqc(pinf_mt)
+chromoqc(pinf_mt, verbose=FALSE)
 ```
 
 
@@ -86,6 +86,10 @@ We can also use the function head() to summarize the contents of the Chrom objec
 ```{r}
 head(pinf_mt)
 ```
+
+
+The slots of the class Chrom are defined in the package documentation.
+
 
 ## Getting to know your vcf data
 

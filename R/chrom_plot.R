@@ -495,7 +495,7 @@ chromo <- function(x = x,
 #'
 chromoqc <- function(x, nsum = FALSE, ...){
   chromo(x = x,
-         verbose = TRUE,
+#         verbose = TRUE,
          nsum = FALSE,
          DP = TRUE,
          QUAL = TRUE, 
