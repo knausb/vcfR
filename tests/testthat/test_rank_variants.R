@@ -16,10 +16,14 @@ pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE)
 vars <- .Call('vcfR_rank_variants', PACKAGE = 'vcfR', pinf_mt@var.info, pinf_mt@win.info$end, pinf_mt@var.info$MQ)
 
 set.seed(1)
-vars <- .Call('vcfR_rank_variants', PACKAGE = 'vcfR', pinf_mt@var.info, pinf_mt@win.info$end, runif(nrow(pinf_mt@var.info), 0, 40))
+testv <- runif(nrow(pinf_mt@var.info), 0, 40)
+vars <- .Call('vcfR_rank_variants', PACKAGE = 'vcfR', pinf_mt@var.info, pinf_mt@win.info$end, testv)
 
 
 head(vars)
+
+cbind(vars[,c(1:4,24:25)], testv)[1:18,]
+
 
 vars <- .Call('vcfR_pair_sort', PACKAGE = 'vcfR')
 

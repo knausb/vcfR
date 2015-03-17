@@ -78,13 +78,14 @@ Rcpp::DataFrame rank_variants(Rcpp::DataFrame variants,
       std::sort(vec_pair.begin(), vec_pair.end(), comparator);
       
       for(int k=0; k<vec_pair.size(); k++){
-          rank_pair.push_back( std::make_pair( vec_pair[k].second, k + 1) );
+          rank_pair.push_back( std::make_pair( vec_pair[k].second, k + 1 ) );
       }
       std::sort(rank_pair.begin(), rank_pair.end(), comparator);
       
       for(int k=0; k<vec_pair.size(); k++){
 //        Rcout << "Window number: " << win << " Pair number: " << k;
 //        Rcout << " Rpair1: " << rank_pair[k].first << " Rpair2: " << rank_pair[k].second << "\n";
+//        Rcout << "Pair: " << rank_pair[k].second << "\n";
         ranks.push_back( rank_pair[k].second );
       }
 //      Rcout << "\n";
@@ -96,16 +97,32 @@ Rcpp::DataFrame rank_variants(Rcpp::DataFrame variants,
       j = 0;
       vec_pair.push_back( std::make_pair( score(i), j) );
     }
-    Rcout << "Counter: " << i << " Window: " << win_num(i) << " Position:" << pos(i) << " Score: " << score(i);
+//    Rcout << "Counter: " << i << " Window: " << win_num(i) << " Position:" << pos(i) << " Score: " << score(i);
 //    Rcout << " Rank: " << ranks(i);
-    Rcout << "\n";
+//    Rcout << "\n";
+  }
+  
+  // Handle the last window.
+  std::sort(vec_pair.begin(), vec_pair.end(), comparator);
+  for(int k=0; k<vec_pair.size(); k++){
+    rank_pair.push_back( std::make_pair( vec_pair[k].second, k + 1 ) );
+  }
+  std::sort(rank_pair.begin(), rank_pair.end(), comparator);
+      
+  for(int k=0; k<vec_pair.size(); k++){
+    ranks.push_back( rank_pair[k].second );
   }
 
 
+//  for(i=0; i<ranks.size(); i++){
+//    Rcout << i << "\n";
+//    Rcout << "Ranks: " << ranks[i] << "\n";
+//  }
 
-  Rcpp::IntegerVector rank = wrap(ranks);
-//  return Rcpp::DataFrame::create(variants, _["window_number"]=win_num, _["rank"]=rank);
-  return Rcpp::DataFrame::create(variants, _["window_number"]=win_num);
+
+//  Rcpp::IntegerVector rank = wrap(ranks);
+  return Rcpp::DataFrame::create(variants, _["window_number"]=win_num, _["rank"]=ranks);
+//  return Rcpp::DataFrame::create(variants, _["window_number"]=win_num);
 }
 
 
