@@ -7,6 +7,7 @@ vignette: >
   %\VignetteIndexEntry{Visualization II}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
+bibliography: bibliography.bib
 ---
 
 
@@ -53,14 +54,16 @@ Recall from the vignette 'vcf data' that the genotype information begins at colu
 Column nine specifies the format of all subsequent columns.
 All columns subsequent to column nine contain information for each sample where each column corresponds to a sample.
 
-We see form the output of head() that our genotype data contains GT:PL:GQ data.
-This is the genotype, phred-scaled likelihoods for each genotype and genotype quality.
-Observation of the first few rows of genotype information shows the format as 1/1:254,255,0:99.
+We see form the output of head() that our genotype data contains GT:PL:DP:SP:GQ data.
+This is the genotype, Phred-scaled likelihoods for each genotype, number of high quality bases, Phred-scaled strand bias P-value and genotype quality.
+Observation of the first few rows of genotype information shows the format as 1/1:255,255,0:227:9:99.
 The genotypes are in the form of 0/0, 0/1 and 1/1 for homozygote for the reference allele, heterozygote and homozygote for the alternate allele.
 Because there is a forward slash we won't be able to directly treat this as numeric information.
 The phred-scaled likelihoods appear as comma delimited integers.
 Again, because there is a non-numeric character (the commas) we won't be able to treat these directly as numeric data.
-The genotype quality appears as integers which we can treat as numeric data, so we'll use that as our first example.
+The genotype quality appears as integers which we can treat as numeric data, so that would be a good example of numeric data.
+The number of high quality bases is also a good example of numeric data, and we'll use that in our example.
+
 
 
 ## Using extract.gt
@@ -78,8 +81,9 @@ It's up to the user (this means you) to make sure this is a reasonable decision.
 
 
 ```{r}
-gq <- extract.gt(pinf_mt, element="GQ", as.numeric=TRUE)
-head(gq)
+dp <- extract.gt(pinf_mt, element="DP", as.numeric=TRUE)
+rownames(dp) <- 1:nrow(dp)
+head(dp)
 ```
 
 
@@ -90,7 +94,7 @@ The function **heatmap.bp()** helps us to visualize a matrix of data.
 
 
 ```{r, fig.height=7, fig.width=7}
-heatmap.bp(gq)
+heatmap.bp(dp)
 ```
 
 
@@ -114,26 +118,34 @@ Therefore, we should re-encode zero data as NA data.
 
 
 ```{r}
-is.na(gq[gq < 5]) <- TRUE
-
+is.na(dp[dp == 0]) <- TRUE
 ```
 
 
 
 ```{r, fig.height=7, fig.width=7}
-heatmap.bp(gq)
+heatmap.bp(dp)
 ```
 
 
 
+```{r, fig.height=4, fig.width=7}
+par(mar=c(8,4,4,2))
+barplot(apply(dp, MARGIN=2, mean, na.rm=TRUE), las=3)
+par(mar=c(5,4,4,2))
+```
+
+
+The sample p9464 was eventually omitted from the author's analysis [@yoshida2013rise].
 
 
 ```{r, fig.height=7, fig.width=7}
-gqw <- windowize_NM(gq, pos=pinf_mt@var.info$POS, starts=pinf_mt@win.info$start, ends=pinf_mt@win.info$end)
-heatmap.bp(gqw)
+dpw <- windowize_NM(dp, pos=pinf_mt@var.info$POS, starts=pinf_mt@win.info$start,
+                    ends=pinf_mt@win.info$end)
+heatmap.bp(dpw)
 ```
 
 
 
-
+## References
 
