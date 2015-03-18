@@ -20,7 +20,7 @@ gqw <- windowize_NM(gq, pos=pinf_mt@var.info$POS,
 
 test_that("gq is windowized", {
   expect_is(gqw, "matrix")
-  expect_equal(sum(gqw[20,]), ncol(gqw))  
+  expect_equal(sum(gqw[20,]), 5*ncol(gqw))  
 })
 
 

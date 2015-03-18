@@ -42,8 +42,8 @@ vars <- .Call('vcfR_rank_variants', PACKAGE = 'vcfR', pinf_mt@var.info, pinf_mt@
 test_that("Rank variants binary is working",{
 #  expect_equal(names(vars)[ncol(vars)], "window_number")
   expect_equal(names(vars)[ncol(vars)], "rank")
-  expect_equal(length(vars$window_number), 247)
-  expect_equal(length(vars$window_number[vars$window_number == 19]), 1)
+  expect_equal(length(unique(vars$window_number)), 39)
+  expect_equal(length(vars$window_number[vars$window_number == 19]), 5)
 })
 
 #head(vars)
