@@ -66,6 +66,16 @@ The genotype quality appears as integers which we can treat as numeric data, so 
 ## Using extract.gt
 
 
+The genotype region of vcf data contains several values for each sample and each variant.
+We can extract one of these colon delimited values using the funciton **extract.gt()**.
+This function determines the position of the desired element in the FORMAT column and uses this information to extract the same position from all of the other samples in that row.
+This is performed on a row by row basis so that files containing heterogeneous FORMAT specifications can be processed.
+Here we've asked the function to convert the resulting matrix to a numeric matrix.
+This is because we've determined, above, that this is indeed numeric data.
+But be careful with this option!
+If the data are not numeric it will do its best to convert the data and will probably not throw an error.
+It's up to the user (this means you) to make sure this is a reasonable decision.
+
 
 ```{r}
 gq <- extract.gt(pinf_mt, element="GQ", as.numeric=TRUE)
@@ -73,16 +83,39 @@ head(gq)
 ```
 
 
+Once we've extracted the desired element, we'll want to visualize the resulting matrix of data.
+The head() statement above gives us a peak at what it looks like.
+But it doesn't allow us to view the entire matrix.
+The function **heatmap.bp()** helps us to visualize a matrix of data.
+
+
+```{r, fig.height=7, fig.width=7}
+heatmap.bp(gq)
+```
+
+
+The plot that results from heatmap.bp() shows samples in columns and variants in rows.
+The color ramp, at the right, is parameterized for continuous data.
+In the above plot green is high genotype quality, yellow is moderate genotype quality and red is low genotype quality.
+
+
+The presence of zeros in a dataset presents a conundrum.
+Sometimes, the presence of zero valued data represents the positive determination that there is no data.
+Alternatively, the presences of zero valued data indicates that there is missing data.
+In the present example, we may interpret zero dat as missing data.
+Therefore, we should re-encode zero data as NA data.
+We can use the function `table()` to query the values of gq.
 
 
 ```{r}
-heatmap.bp(gq)
+table(gq)
 ```
 
 
 
 
-```{r}
+
+```{r, fig.height=7, fig.width=7}
 gqw <- windowize_NM(gq, pos=pinf_mt@var.info$POS, starts=pinf_mt@win.info$start, ends=pinf_mt@win.info$end)
 heatmap.bp(gqw)
 ```
