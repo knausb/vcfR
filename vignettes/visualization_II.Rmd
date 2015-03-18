@@ -99,16 +99,29 @@ The color ramp, at the right, is parameterized for continuous data.
 In the above plot green is high genotype quality, yellow is moderate genotype quality and red is low genotype quality.
 
 
+
+## Interpretation of zeros
+
+
 The presence of zeros in a dataset presents a conundrum.
 Sometimes, the presence of zero valued data represents the positive determination that there is no data.
 Alternatively, the presences of zero valued data indicates that there is missing data.
 In the present example, we may interpret zero dat as missing data.
 Therefore, we should re-encode zero data as NA data.
-We can use the function `table()` to query the values of gq.
+
+
+
 
 
 ```{r}
-table(gq)
+is.na(gq[gq < 5]) <- TRUE
+
+```
+
+
+
+```{r, fig.height=7, fig.width=7}
+heatmap.bp(gq)
 ```
 
 
