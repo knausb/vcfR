@@ -12,8 +12,6 @@ rank_variants_chrom(x, scores)
 \item{x}{an object of class Crhom or a data.frame containing...}
 
 \item{scores}{a vector of scores for each variant to be used to rank the data}
-
-\item{ends}{a vector containing the position of the end of each window}
 }
 \description{
 Rank variants within windows.

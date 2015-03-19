@@ -6,7 +6,7 @@
 #' Rank variants within windows.
 #' 
 #' @param x an object of class Crhom or a data.frame containing...
-#' @param ends a vector containing the position of the end of each window
+# @param ends a vector containing the position of the end of each window
 #' @param scores a vector of scores for each variant to be used to rank the data
 #' 
 #' 

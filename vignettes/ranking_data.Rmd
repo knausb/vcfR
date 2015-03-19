@@ -27,12 +27,53 @@ pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE, win.size=1e3)
 ```
 
 
-##
+## Creating scores to rank
+
+
+Before we can rank our variants, we need to come up with some sort of metric to maximize.
+The function masker() is nice because it works on metrics which are commonly available.
+The downside is that if your file lacks some of these metrics you have less information to judge the quality.
+Also, if a new software generates a metric you really like, you won't be able to use it.
+For ranking I've let the user provide a vector of numbers that score each variant.
+This provides the flexibility to use what they would like.
+They can even combine metrics.
+Just keep in mind the scale of your metrics.
+For example, if you have a metric that ranges from 0-1 and another which ranges from 1-100 and you add them to create a composite score, the metric that ranges from 1-100 will drive the result more than the one which ranges from 0-1.
+If you re-scale the metric which ranges from 0-1, perhaps by multiplying it by 100, you'll equalize its contribution to the final score.
+Creating z-scores by subtracting the mean and dividing by the standard deviation would work as well.
+In fact, I've created a function to help with that (`?z_score`).
+
+
+In order to create our vector of scores, let's remind ourselves of what data we have.
+
+
+```{r}
+head(pinf_mt)
+```
+
+
+
+Let's use the genotype quality and sequence depth from the vcf genotype information.
+
+
+```{r}
+dp <- extract.gt(pinf_mt, element="DP", as.numeric=TRUE)
+gq <- extract.gt(pinf_mt, element="GQ", as.numeric=TRUE)
+```
 
 
 
 
+hist(dp[,1])
+hist(gq[,1])
 
+apply(dp, MARGIN=2, quantile, probs=0.6)
+
+
+```{r}
+#pinf_mt <- rank_variants_chrom(pinf_mt, scores)
+
+```
 
 
 
