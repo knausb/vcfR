@@ -1,0 +1,38 @@
+---
+title: "Ranking data"
+author: "Brian J. Knaus"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Ranking data}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+
+In the vignette 'Filtering data' we used thresholds to isolate the high quality fraction of variants from a vcf file.
+Here we assign ranks to variants within windows.
+This information used alone, or in conjunction with thresholds, can also be used to identify high quality variants.
+
+
+## Data
+
+As in other vignettes, we begin by loading the example data.
+
+```{r}
+library(vcfR)
+data(vcfR_example)
+pinf_mt <- create_chrom(name='pinf_mt', vcf=pinf_vcf, seq=pinf_dna, ann=pinf_gff, verbose=FALSE)
+pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE, win.size=1e3)
+```
+
+
+##
+
+
+
+
+
+
+
+
