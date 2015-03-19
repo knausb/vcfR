@@ -124,7 +124,21 @@ plot(pinf_mt)
 
 
 The distribution of our read depths has now become narrower and excludes low coverage variants.
+The distribution of mapping quality has also become more narrow.
+We could probably tighten it up some more by choosing a higher threshold, but will leave it for now.
+Quality is all of one value, 999.
+Note that R's histogram function has a bit of trouble dealing with this sort of data.
+Its really intended for a distribution of data.
 
+
+We can use chromoqc() to see how applying this mask affects our data.
+
+
+```{r, fig.height=7, fig.width=7}
+chromoqc(pinf_mt)
+
+
+```
 
 
 
