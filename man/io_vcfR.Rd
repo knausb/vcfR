@@ -8,14 +8,14 @@
 \usage{
 read.vcf(file)
 
-write.vcf(xvcf, file = file, mask = logical(0), APPEND = FALSE)
+write.vcf(x, file = "", mask = logical(0), APPEND = FALSE)
 
 read.vcf.devel(file)
 }
 \arguments{
 \item{file}{A filename for a variant call format (vcf) file}
 
-\item{xvcf}{A vcfR object}
+\item{x}{A vcfR object}
 
 \item{mask}{logical vector indicating rows to use}
 

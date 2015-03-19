@@ -135,11 +135,42 @@ We can use chromoqc() to see how applying this mask affects our data.
 
 
 ```{r, fig.height=7, fig.width=7}
-chromoqc(pinf_mt)
-
-
+chromoqc(pinf_mt, verbose=FALSE)
 ```
 
+
+
+The chromo plot shows us that the variants of low mapping quality are associated with a region of high variant density at about 10 kbp.
+This is accompanied by a region of low mapping quality at around 6 kbp.
+Outside of these two regions it appears that mapping quality is either 43 or 44.
+based on this information, it seems reasonable to change our threshold for masking.
+
+
+```{r, fig.height=7, fig.width=7}
+pinf_mt <- masker(pinf_mt, QUAL = 999, mindp = 0.25, maxdp = 0.99,
+                  minmq = 43, maxmq = 50)
+plot(pinf_mt)
+```
+
+
+And visualize with chromoqc().
+
+
+```{r, fig.height=7, fig.width=7}
+chromoqc(pinf_mt, verbose=FALSE)
+```
+
+
+## Output
+
+
+Once satisfactory filtering has been completed you'll want to save this high quality set of variants.
+This can be done by writing these variants to a new vcf file with the function write.vcf().
+
+
+```{r, eval=FALSE}
+write.vcf(pinf_mt, file="good_variants.vcf")
+```
 
 
 
