@@ -62,18 +62,167 @@ gq <- extract.gt(pinf_mt, element="GQ", as.numeric=TRUE)
 ```
 
 
+The genotype quality is fairly well behaved.
+We can look at it for one sample to see its distribution.
 
 
-hist(dp[,1])
+```{r, fig.align='center'}
 hist(gq[,1])
+```
 
-apply(dp, MARGIN=2, quantile, probs=0.6)
+
+This shows us that for this sample its value is either high, or rather low.
+We can use a heatmap to explore this over all samples.
+
+
+```{r, fig.height=7, fig.width=7}
+heatmap.bp(gq)
+```
+
+
+Which validates that this observation extands over all samples.
+We can also validate that the values range approximately from 1 to 99 
 
 
 ```{r}
-#pinf_mt <- rank_variants_chrom(pinf_mt, scores)
-
+apply(gq, MARGIN=2, range)
 ```
+
+
+So let's decide that we're happy with it.
+
+
+Sequence depth is a more challenging parameter to work with.
+In general we don't want low depth.
+But high depth could indicate that we're in a repetetive region which we may want to omit.
+So we really want to pick an optimal value.
+Because each sample is sequenced at a different depth, this optimal value will be different for all of them.
+Using z-scores here may work.
+
+
+```{r}
+dpz <- z_score(dp)
+dpz <- abs(dpz)
+maxes <- apply(dpz, MARGIN=2, max)
+dp2 <- abs(sweep(dpz, MARGIN = 2, STATS = maxes, FUN = "-"))
+dp2 <- 100 * sweep(dp2, MARGIN = 2, STATS = maxes, FUN = "/")
+```
+
+
+Creating z-scores centers the data around zero.
+By taking the absolule value our optimal value becomes zero and everything high than this is low quality.
+But we want to maximize on this value.
+When we subtract the maximum values we have values that can be maximized on.
+By dividing by the maximum we scale the data from 0-1.
+This is converted to 0-100 by multiplying by one hundred.
+
+
+We can validate that our ranges are from 0-100 with an apply function.
+
+
+```{r}
+apply(dp2, MARGIN=2, range)
+```
+
+
+And visualize with a heatmap.
+
+
+```{r, fig.height=7, fig.width=7}
+heatmap.bp(dp2)
+```
+
+
+And finally, combine our metrics into a composite metric.
+
+
+```{r}
+scores <- rowMeans(dp2) + rowMeans(gq)
+```
+
+
+Check their distribution with a histogram.
+
+
+```{r}
+hist(scores)
+```
+
+
+Once we have score in hand we can use them to rank our variants.
+
+
+```{r}
+pinf_mt <- rank_variants_chrom(pinf_mt, scores)
+
+head(pinf_mt@var.info)
+```
+
+
+
+This creates a vector of window numbers and rank within each window and adds them to the var.info slot.
+We can take a look at them bay calling this directly.
+
+
+```{r}
+pinf_mt@var.info[1:10, c('POS', 'mask', 'window_number', 'rank')]
+```
+
+
+We can use this information to create our mask.
+
+
+```{r}
+pinf_mt@var.info$mask[pinf_mt@var.info$rank > 1] <- FALSE
+```
+
+
+And plot.
+
+
+```{r, fig.height=7, fig.width=7}
+chromoqc(pinf_mt, dot.alpha='ff')
+```
+
+
+
+This looks pretty good.
+But there remain variants with a low quality (QUAL).
+We can manually adjust this.
+
+
+
+```{r}
+pinf_mt@var.info$mask[pinf_mt@vcf.fix$QUAL < 900] <- FALSE
+```
+
+
+Replot.
+
+
+```{r, fig.height=7, fig.width=7}
+chromoqc(pinf_mt, dot.alpha='ff')
+```
+
+
+
+## Conclusion
+
+
+This provides another tool to help filter variant files to the highest quality fraction.
+In a previous vignette we used the function masker() to filter the data.
+Here we've created a composite score which we'd like to maximize and ranked the variants based on theis score within windows.
+A strength of this method is that by using windows we're able to evenly space our variants accross a chromosome.
+Choosing the best, or several best, variants per window does not necessarily guaranty high quality variants.
+If all of the variants in a window are of low quality then the best of these may still be poor quality.
+Some some additional processing may be necessary.
+With these tools it is hoped that an individual can rapidly explore their data and determine a method to extract the highest quality variants so that downstream analyses will be of the highest quality possible.
+
+
+
+
+
+
 
 
 
