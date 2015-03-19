@@ -1,0 +1,88 @@
+---
+title: "Filtering data"
+author: "Brian J. Knaus"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to vcfR}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+
+The output of variant calling pipelines result in files containing these called variants.
+Many of these pipelines recommend further filtering of this data to ensure that only high quality variants are included in analyses.
+In this vignette I discuss strategies to focus on the high quality fraction of these variants.
+
+
+## Data
+
+As in other vignettes, we begin by loading the example data.
+
+```{r}
+library(vcfR)
+data(vcfR_example)
+pinf_mt <- create_chrom(name='pinf_mt', vcf=pinf_vcf, seq=pinf_dna, ann=pinf_gff, verbose=FALSE)
+pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE, win.size=1e3)
+```
+
+
+## Using a mask.
+
+
+Instead of removing variants, vcfR implements a mask.
+This allows changes to be easily undone and it preserves the geometry of the data matrix.
+Preserving the geometry of the matrix also allows for multiple manipulations to be made.
+When we've settled on a set of manipulations which we like we can then use this mask to subset the data.
+
+
+
+## Using masker()
+
+
+The function masker() separates variants based on several thresholds.
+A number of summaries regarding variant quality are reported in vcf files.
+These summaries may be different depended in the software used to create them, as well as what options may have been used.
+We can use the head() function to see what sort of information is contained in our data.
+
+
+```{r}
+head(pinf_mt)
+```
+
+
+The masker() function uses QUAL, sequence depth (expressed as quantiles) and mapping quality to try to filter out low quality variants.
+From the head() output we can see that the QUAL field is a defined column of the vcf file.
+Because it is a part of the vcf file definition, it is not documented in the meta region.
+
+
+```{r}
+grep("QUAL", pinf_mt@vcf.meta, value=T)
+```
+
+
+
+
+
+
+```{r, fig.height=7, fig.width=7}
+plot(pinf_mt)
+```
+
+
+
+
+```{r, fig.height=7, fig.width=7}
+dp <- extract.gt(pinf_mt, element="DP", as.numeric=TRUE)
+plot(rowSums(dp), pinf_mt@var.info$DP)
+abline(a=0, b=1)
+```
+
+
+
+```{r}
+grep("MQ", pinf_mt@vcf.meta, value=T)
+grep("DP", pinf_mt@vcf.meta, value=T)
+```
+
+
