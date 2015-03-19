@@ -61,15 +61,11 @@ grep("QUAL", pinf_mt@vcf.meta, value=T)
 ```
 
 
-
-
-
-
-```{r, fig.height=7, fig.width=7}
-plot(pinf_mt)
-```
-
-
+The summaries DP and MQ are in the slot 'var.info.'
+We can see that these values are reported in the INFO column.
+Sometimes there are subtle isues in the data.
+For example, DP is reported in the INFO column, but it also appears in the genotype region.
+We can test if these are indeed the same.
 
 
 ```{r, fig.height=7, fig.width=7}
@@ -79,10 +75,58 @@ abline(a=0, b=1)
 ```
 
 
+Because the dots do not line up on the line of unity, we cansee that they are actually different.
+We can remind ourselves what these values mean by querying the meta region.
+
 
 ```{r}
 grep("MQ", pinf_mt@vcf.meta, value=T)
-grep("DP", pinf_mt@vcf.meta, value=T)
+grep("DP,", pinf_mt@vcf.meta, value=T)
 ```
+
+
+We see that 'DP' has different definitions in the INFO column than in the genotype region.
+The discrepancy appears to be due to some variants which have a high number of raw reads but only a fraction of these have been determined to be of high quality.
+Because masker() uses the DP column in the var.info slot to judge depth, we'll change it to include only the high quality depth.
+
+
+```{r}
+pinf_mt@var.info$DP <- rowSums(dp)
+```
+
+
+We can now use the plot function to visualize this data.
+
+
+```{r, fig.height=7, fig.width=7}
+plot(pinf_mt)
+```
+
+
+
+Our summary of DP appears continuous.
+However, we do have variants which appear to have unusually low coverage which we may try to filter out.
+Sometimes we observe variants of unusually high coverage.
+These typically come from repetetive regions which have reads which map to multiple locations in the genome.
+This plot does not show this phenomenon, so filtering on high coverage may not be necessary.
+Mapping quality is largely of one value.
+But there are some lower values which we may want to remove.
+Quality is notable in that it is bimodal.
+Its either of high quality or low, and there is a clear distinction between these.
+This makes it a good candidate for filtering.
+
+
+```{r, fig.height=7, fig.width=7}
+pinf_mt <- masker(pinf_mt, QUAL = 999, mindp = 0.25, maxdp = 0.99,
+                  minmq = 30, maxmq = 50)
+plot(pinf_mt)
+```
+
+
+The distribution of our read depths has now become narrower and excludes low coverage variants.
+
+
+
+
 
 
