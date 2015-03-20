@@ -14,11 +14,7 @@ read.vcf.devel(file)
   \item{file}{A filename for a variant call format (vcf)
   file}
 
-<<<<<<< HEAD
-  \item{xvcf}{A vcfR object}
-=======
-\item{x}{A vcfR object}
->>>>>>> 4c072b5db59e6b12ee92f3c0f3b6ee2fafaff731
+  \item{x}{A vcfR object}
 
   \item{mask}{logical vector indicating rows to use}
 
