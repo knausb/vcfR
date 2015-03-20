@@ -189,6 +189,7 @@ vcf2chrom <- function(x, vcf){
   names(x@var.info) <- c('CHROM', 'POS', 'mask', 'DP','MQ')
 #  names(x@var.info) <- c('DP','MQ', 'mask')
   #
+  x@var.info$CHROM <- x@vcf.fix$CHROM
   x@var.info$POS <- x@vcf.fix$POS
   x@var.info$mask <- rep(TRUE, times=nrow(x@vcf.fix))
   #

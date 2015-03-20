@@ -41,7 +41,7 @@ proc_chrom <- function(x, win.size = 1e3, verbose=TRUE){
   if(class(x@seq) == "DNAbin"){
     ptime <- system.time(x@seq.info$nuc.win <- regex.win(x))
     if(verbose==TRUE){
-      message("Nucleotide regions complete.")
+      print("Nucleotide regions complete.")
       print(ptime)
     }
   }
@@ -49,7 +49,7 @@ proc_chrom <- function(x, win.size = 1e3, verbose=TRUE){
   if(class(x@seq) == "DNAbin"){
     ptime <- system.time(x@seq.info$N.win <- regex.win(x, regex="[n]"))
     if(verbose==TRUE){
-      message("N regions complete.")
+      print("N regions complete.")
       print(ptime)
     }
   }
@@ -57,14 +57,14 @@ proc_chrom <- function(x, win.size = 1e3, verbose=TRUE){
   if(nrow(x@vcf.gt[x@var.info$mask,])>0){
     ptime <- system.time(x <- gt2popsum(x))
     if(verbose==TRUE){
-      message("Population summary complete.")
+      print("Population summary complete.")
       print(ptime)
     }
   }
   
   ptime <- system.time(x@win.info <- var.win(x, win.size=win.size))
   if(verbose==TRUE){
-    message("Window analysis complete.")
+    print("Window analysis complete.")
     print(ptime)
   }
   
@@ -81,27 +81,27 @@ proc_chrom2 <- function(x, win.size = 1e3, verbose=TRUE){
   stopifnot(class(x) == "Chrom")
   ptime <- system.time(x@seq.info$nuc.win <- regex.win(x))
   if(verbose==TRUE){
-    message("Nucleotide regions complete.")
-    message(paste("  elapsed time: ", round(ptime[3], digits=4)))
+    print("Nucleotide regions complete.")
+    print(paste("  elapsed time: ", round(ptime[3], digits=4)))
   }
   ptime <- system.time(x@seq.info$N.win <- regex.win(x, regex="[n]"))
   if(verbose==TRUE){
-    message("N regions complete.")
-    message(paste("  elapsed time: ", round(ptime[3], digits=4)))
+    print("N regions complete.")
+    print(paste("  elapsed time: ", round(ptime[3], digits=4)))
   }
   if(nrow(x@vcf.gt[x@var.info$mask,])>0){
     ptime <- system.time(x <- gt2popsum(x))
     if(verbose==TRUE){
-      message("Population summary complete.")
-      message(paste("  elapsed time: ", round(ptime[3], digits=4)))
+      print("Population summary complete.")
+      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
     }
   }
   
   if(nrow(x@vcf.gt[x@var.info$mask,])>0){
     ptime <- system.time(x@win.info <- .Call('vcfR_window_init', PACKAGE = 'vcfR', window_size=win.size, max_bp=x@len))
     if(verbose==TRUE){
-      message("window_init complete.")
-      message(paste("  elapsed time: ", round(ptime[3], digits=4)))
+      print("window_init complete.")
+      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
     }
   }
   
@@ -112,8 +112,8 @@ proc_chrom2 <- function(x, win.size = 1e3, verbose=TRUE){
                                              seq=as.character(x@seq)[1,]
                                              ))
     if(verbose==TRUE){
-      message("windowize_fasta complete.")
-      message(paste("  elapsed time: ", round(ptime[3], digits=4)))
+      print("windowize_fasta complete.")
+      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
     }
   }
   
@@ -124,16 +124,16 @@ proc_chrom2 <- function(x, win.size = 1e3, verbose=TRUE){
                                              chrom_length=x@len)
     )
     if(verbose==TRUE){
-      message("windowize_annotations complete.")
-      message(paste("  elapsed time: ", round(ptime[3], digits=4)))
+      print("windowize_annotations complete.")
+      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
     }
   }
     
   if(nrow(x@vcf.gt[x@var.info$mask,])>0){
     ptime <- system.time(x@win.info <- .Call('vcfR_windowize_variants', PACKAGE = 'vcfR', windows=x@win.info, variants=x@var.info[c('POS','mask')]))
     if(verbose==TRUE){
-      message("windowize_variants complete.")
-      message(paste("  elapsed time: ", round(ptime[3], digits=4)))
+      print("windowize_variants complete.")
+      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
     }
   }
   
@@ -359,6 +359,24 @@ gt2popsum <- function(x){
   #  print(head(summ))
   #  x@vcf.stat <- as.data.frame(summ)
   x@var.info <- cbind(x@var.info, as.data.frame(summ))
+  return(x)
+}
+
+
+
+
+#' @rdname proc_chrom
+#' @aliases gt_to_popsum
+#' 
+#' @export
+gt_to_popsum <- function(x){
+  if(class(x) != "Chrom"){stop("Object is not of class Chrom")}
+  
+  # Extract genotypes from vcf.gt
+  gt <- extract.gt(x, element="GT")
+  
+  x@var.info <- .Call('vcfR_gt_to_popsum', PACKAGE = 'vcfR', var_info=x@var.info, gt=gt)
+
   return(x)
 }
 

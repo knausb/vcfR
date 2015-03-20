@@ -22,6 +22,10 @@ CM_to_NM <- function(x) {
     .Call('vcfR_CM_to_NM', PACKAGE = 'vcfR', x)
 }
 
+gt_to_popsum <- function(var_info, gt) {
+    .Call('vcfR_gt_to_popsum', PACKAGE = 'vcfR', var_info, gt)
+}
+
 NM2winNM <- function(x, pos, maxbp, winsize = 100L) {
     .Call('vcfR_NM2winNM', PACKAGE = 'vcfR', x, pos, maxbp, winsize)
 }

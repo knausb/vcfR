@@ -3,6 +3,7 @@
 \name{Process chrom objects}
 \alias{Process chrom objects}
 \alias{gt2popsum}
+\alias{gt_to_popsum}
 \alias{proc_chrom}
 \alias{proc_chrom2}
 \alias{regex.win}
@@ -18,6 +19,8 @@ regex.win(x, max.win = 1000, regex = "[acgtwsmkrybdhv]")
 var.win(x, win.size = 1000)
 
 gt2popsum(x)
+
+gt_to_popsum(x)
 }
 \arguments{
 \item{x}{oject of class Chrom}

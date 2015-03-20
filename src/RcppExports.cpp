@@ -52,6 +52,18 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// gt_to_popsum
+Rcpp::DataFrame gt_to_popsum(Rcpp::DataFrame var_info, Rcpp::CharacterMatrix gt);
+RcppExport SEXP vcfR_gt_to_popsum(SEXP var_infoSEXP, SEXP gtSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type var_info(var_infoSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterMatrix >::type gt(gtSEXP);
+    __result = Rcpp::wrap(gt_to_popsum(var_info, gt));
+    return __result;
+END_RCPP
+}
 // NM2winNM
 NumericMatrix NM2winNM(NumericMatrix x, std::vector<int> pos, int maxbp, int winsize);
 RcppExport SEXP vcfR_NM2winNM(SEXP xSEXP, SEXP posSEXP, SEXP maxbpSEXP, SEXP winsizeSEXP) {
