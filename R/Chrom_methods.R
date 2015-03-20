@@ -145,7 +145,7 @@ setMethod(
   definition=function (x,y,...){
     par(mfrow=c(2,2))
     if(sum(!is.na(x@var.info$DP[x@var.info$mask])) >= 1){
-      hist(x@var.info$DP[x@var.info$mask], col=3, main="Raw read depth (DP)", xlab="")
+      hist(x@var.info$DP[x@var.info$mask], col=3, main="Read depth (DP)", xlab="")
       rug(x@var.info$DP[x@var.info$mask])
     } else {
       plot(1:2,1:2, type='n')

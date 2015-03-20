@@ -8,7 +8,7 @@
 #' Read and write files in the vcf format.
 #' 
 #' @param file A filename for a variant call format (vcf) file
-#' @param xvcf A vcfR object
+#' @param x A vcfR object
 # @param vfile an output filename
 #' @param mask logical vector indicating rows to use
 #' @param APPEND logical indicating whether to append to existing vcf file or write a new file
@@ -90,46 +90,46 @@ read.vcf<-function(file){
 #' @export
 #' 
 #write.vcf<-function(xvcf, vfile, mask=logical(0), APPEND=FALSE){
-write.vcf<-function(xvcf, file=file, mask=logical(0), APPEND=FALSE){
-  if(class(xvcf) == 'Chrom'){
+write.vcf<-function(x, file="", mask=logical(0), APPEND=FALSE){
+  if(class(x) == 'Chrom'){
     # Recast as a vcfR object.
-    temp <- xvcf
-    xvcf <- new(Class="vcfR")
-    xvcf@meta <- temp@vcf.meta
-    xvcf@fix <- temp@vcf.fix
-    xvcf@gt <- temp@vcf.gt
+    temp <- x
+    x <- new(Class="vcfR")
+    x@meta <- temp@vcf.meta
+    x@fix <- temp@vcf.fix
+    x@gt <- temp@vcf.gt
     mask <- temp@var.info$mask
     rm(temp)
   }
-  if(class(xvcf) != "vcfR"){
+  if(class(x) != "vcfR"){
     stop("Unexpected class! Expecting an object of class vcfR or Chrom.")
   }
   #
   if(length(mask) == 0){
     #    mask <- 1:nrow(xvcf@fix)
-    mask <- rep(TRUE, times=nrow(xvcf@fix))
+    mask <- rep(TRUE, times=nrow(x@fix))
   }
   #
   orig_scipen <- getOption("scipen")
   options(scipen=999)
   if(APPEND == FALSE){
-    header <- c(names(xvcf@fix), names(xvcf@gt))
+    header <- c(names(x@fix), names(x@gt))
     header[1] <- paste("#",header[1],sep='')
-    write.table(xvcf@meta, file = file, append = FALSE, quote = FALSE, sep = "\t",
+    write.table(x@meta, file = file, append = FALSE, quote = FALSE, sep = "\t",
                 eol = "\n", na = "NA", dec = ".", row.names = FALSE,
                 col.names = FALSE)
     write(header, file = file,
           ncolumns=length(header),
           append = TRUE,
           sep = "\t")
-    write.table(cbind(xvcf@fix[mask,], xvcf@gt[mask,]), file = file, append = TRUE,
+    write.table(cbind(x@fix[mask,], x@gt[mask,]), file = file, append = TRUE,
                 quote = FALSE, sep = "\t",
                 eol = "\n", na = "NA", dec = ".",
                 row.names = FALSE,
                 col.names = FALSE)
     #              col.names = TRUE)
   } else if (APPEND == TRUE){
-    write.table(cbind(xvcf@fix[mask,], xvcf@gt[mask,]), file = file, append = TRUE,
+    write.table(cbind(x@fix[mask,], x@gt[mask,]), file = file, append = TRUE,
                 quote = FALSE, sep = "\t",
                 eol = "\n", na = "NA", dec = ".",
                 row.names = FALSE,

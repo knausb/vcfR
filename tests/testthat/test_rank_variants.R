@@ -46,6 +46,20 @@ test_that("Rank variants binary is working",{
   expect_equal(length(vars$window_number[vars$window_number == 19]), 5)
 })
 
+
+test_that("rank_variants_chrom is working",{
+  expect_is(pinf_mt, "Chrom")
+
+  set.seed(1)
+  scores <- runif(nrow(pinf_mt@var.info), min=1, max=10)
+  
+  tmp <- rank_variants_chrom(pinf_mt, scores)
+#  head(tmp@var.info)
+  expect_equal(length(grep("window_number", names(tmp@var.info))), 1)
+  expect_equal(length(grep("rank", names(tmp@var.info))), 1)
+})
+
+
 #head(vars)
 
 
