@@ -210,3 +210,25 @@ Rcpp::DataFrame readVcfBody2(std::string x) {
 
 
 
+// [[Rcpp::export]]
+int read_to_line(std::string x) {
+  std::string line;  // String for reading file into
+  long int i;
+
+  std::ifstream myfile;
+  myfile.open (x.c_str(), std::ios::in);
+
+  if (!myfile.is_open()){
+    Rcout << "Unable to open file";
+  }
+  
+  // Loop over the file.
+  while ( getline (myfile,line) ){
+    i++;
+  }
+
+  myfile.close();
+  return i;
+}
+
+

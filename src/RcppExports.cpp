@@ -137,6 +137,17 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// read_to_line
+int read_to_line(std::string x);
+RcppExport SEXP vcfR_read_to_line(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
+    __result = Rcpp::wrap(read_to_line(x));
+    return __result;
+END_RCPP
+}
 // window_init
 Rcpp::DataFrame window_init(int window_size, int max_bp);
 RcppExport SEXP vcfR_window_init(SEXP window_sizeSEXP, SEXP max_bpSEXP) {

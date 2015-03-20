@@ -50,6 +50,10 @@ readVcfBody2 <- function(x) {
     .Call('vcfR_readVcfBody2', PACKAGE = 'vcfR', x)
 }
 
+read_to_line <- function(x) {
+    .Call('vcfR_read_to_line', PACKAGE = 'vcfR', x)
+}
+
 window_init <- function(window_size, max_bp) {
     .Call('vcfR_window_init', PACKAGE = 'vcfR', window_size, max_bp)
 }

@@ -26,3 +26,15 @@ test_that("vcf file io works",{
 })
 
 
+# Devel
+
+setwd(test_dir)
+data(vcfR_example)
+write.vcf(pinf_vcf, "test.vcf")
+
+x <- .Call('vcfR_read_to_line', PACKAGE = 'vcfR', "test.vcf")
+
+setwd(original_dir)
+
+
+
