@@ -100,7 +100,8 @@ heatmap.bp(dp)
 
 The plot that results from heatmap.bp() shows samples in columns and variants in rows.
 The color ramp, at the right, is parameterized for continuous data.
-In the above plot green is high genotype quality, yellow is moderate genotype quality and red is low genotype quality.
+In the above plot green is high number of high quality bases, yellow is moderate number of high quality bases and red is low number of high quality bases.
+
 
 
 
