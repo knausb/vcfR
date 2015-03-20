@@ -318,26 +318,26 @@ gt2popsum <- function(x){
   #
   # Homozygous for reference allele.
   summ[mask,'RR'] <- unlist(apply(gt[mask, , drop=FALSE], MARGIN=1,
-                                  function(x){sum(x==0)}))
+                                  function(x){sum(x==0, na.rm=TRUE)}))
   # Heterozygote.
   summ[mask,'RA'] <- unlist(apply(gt[mask, , drop=FALSE], MARGIN=1,
-                                  function(x){sum(x==1)}))
+                                  function(x){sum(x==1, na.rm=TRUE)}))
   # Homozygous for alternate allele.
   summ[mask,'AA'] <- unlist(apply(gt[mask, , drop=FALSE], MARGIN=1,
-                                  function(x){sum(x==2)}))
+                                  function(x){sum(x==2, na.rm=TRUE)}))
   #
   summ[mask, 'n'] <- unlist(apply(gt[mask, , drop=FALSE], MARGIN=1,
                                   function(x){sum(!is.na(x))}))
   #
   summ[mask,'nREF'] <- unlist(apply(gt[mask, , drop=FALSE], MARGIN=1,
-                                    function(x){sum(2*length(na.omit(x))-sum(x))})
+                                    function(x){sum(2*length(na.omit(x))-sum(x), na.rm=TRUE)})
   )
-  summ[mask,'nALT'] <- rowSums(gt[mask, , drop=FALSE])
+  summ[mask,'nALT'] <- rowSums(gt[mask, , drop=FALSE], na.rm=TRUE)
   summ[,'nAllele'] <- summ[,'nREF']+summ[,'nALT']
   #
   # Observed heterozygosity
   summ[mask,'Ho'] <- unlist(apply(gt[mask, , drop=FALSE], MARGIN=1,
-                                  function(x){sum(x==1)/length(na.omit(x))}))
+                                  function(x){sum(x==1, na.rm=TRUE)/length(na.omit(x))}))
   #
   # Expected heterozygosity
   summ[,'He'] <- 1 - ((summ[,'nREF']/summ[,'nAllele'])^2 + (summ[,'nALT']/summ[,'nAllele'])^2)
