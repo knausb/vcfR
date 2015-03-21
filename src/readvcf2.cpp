@@ -59,6 +59,7 @@ std::vector<std::string> splitTab(std::string line){
 }
 
 
+
 Rcpp::CharacterVector strsplit(std::string line, std::string delimiter = "\t"){
   // Based on:
   // http://stackoverflow.com/a/14266139

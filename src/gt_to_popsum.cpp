@@ -2,6 +2,29 @@
 using namespace Rcpp;
 
 
+
+
+Rcpp::CharacterVector gtsplit(std::string line, std::string delimiter = "\t"){
+  // Based on:
+  // http://stackoverflow.com/a/14266139
+  std::string token;
+  std::vector<std::string> tempv;
+  
+  size_t pos = 0;
+  while ((pos = line.find(delimiter)) != std::string::npos) {
+    token = line.substr(0, pos);
+    tempv.push_back(token);
+    line.erase(0, pos + delimiter.length());
+  }
+  tempv.push_back(line);
+  
+  Rcpp::CharacterVector charvec(tempv.size());
+  for(int i=0; i<tempv.size(); i++){charvec[i] = tempv[i];}
+  return charvec;
+}
+
+
+
 // [[Rcpp::export]]
 Rcpp::DataFrame gt_to_popsum(Rcpp::DataFrame var_info, Rcpp::CharacterMatrix gt) {
   // Calculate popgen summaries for the sample.
@@ -22,7 +45,9 @@ Rcpp::DataFrame gt_to_popsum(Rcpp::DataFrame var_info, Rcpp::CharacterMatrix gt)
     if(mask[i] == TRUE){
       for(j=0; j < cols; j++){
         if(gt(i, j) != NA_STRING){
+          std::vector<int> allele_cnt(2,0);
           nsample[i]++;
+//          strsplit(gt(i, j), delimiter = "/")
         }
       }
     } else {
