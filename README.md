@@ -1,7 +1,7 @@
 
 ## Explore and manipulate variant call format (vcf) files
 
-VcfR, tools created to work with vcf files.
+VcfR, tools created to work with [vcf](https://github.com/samtools/hts-specs) files.
 
 [![Travis-CI Build Status](https://travis-ci.org/knausb/vcfR.png?branch=master)](https://travis-ci.org/knausb/vcfR)
 
