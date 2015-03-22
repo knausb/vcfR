@@ -4,23 +4,34 @@ using namespace Rcpp;
 
 
 
-Rcpp::CharacterVector gtsplit(std::string line, std::string delimiter = "\t"){
-  // Based on:
-  // http://stackoverflow.com/a/14266139
-  std::string token;
-  std::vector<std::string> tempv;
-  
-  size_t pos = 0;
-  while ((pos = line.find(delimiter)) != std::string::npos) {
-    token = line.substr(0, pos);
-    tempv.push_back(token);
-    line.erase(0, pos + delimiter.length());
+std::vector < int > gtsplit(std::string line){
+//Rcpp::IntegerVector gtsplit(std::string line){
+//  Rcpp::IntegerVector intv;
+  std::vector < int > intv;
+//  Rcout << "Genotype: " << line << "\n";
+
+  // Case of a single digit.
+  if(line.size() == 1){
+    intv.push_back(atoi(line.c_str()));
   }
-  tempv.push_back(line);
   
-  Rcpp::CharacterVector charvec(tempv.size());
-  for(int i=0; i<tempv.size(); i++){charvec[i] = tempv[i];}
-  return charvec;
+  int start=0;
+  for(int i=1; i<line.size(); i++){
+    if( line[i] == '/' || line[i] == '|' ){
+      std::string temp = line.substr(start, i);
+//      Rcout << "  i: " << i << ", temp: " << temp << "\n";
+      intv.push_back(atoi(temp.c_str()));
+      start = i+1;
+      i = i+2;
+    }
+  }
+
+  // Handle last element.
+  std::string temp = line.substr(start, line.size());
+//  Rcout << "  temp: " << temp << "\n";
+  intv.push_back(atoi(temp.c_str()));
+  
+  return intv;
 }
 
 
@@ -47,14 +58,15 @@ Rcpp::DataFrame gt_to_popsum(Rcpp::DataFrame var_info, Rcpp::CharacterMatrix gt)
         if(gt(i, j) != NA_STRING){
           std::vector<int> allele_cnt(2,0);
           nsample[i]++;
-//          strsplit(gt(i, j), delimiter = "/")
+//          Rcpp::IntegerVector intv = gtsplit(as<std::string>(gt(i, j)));
+          std::vector < int > intv = gtsplit(as<std::string>(gt(i, j)));
+//          string tmp_alleles = intv[0];
         }
       }
     } else {
       nsample[i] = NA_INTEGER;
     }
   }
-  
   
 //  return var_info;
   return Rcpp::DataFrame::create(var_info, _["n"]=nsample);
