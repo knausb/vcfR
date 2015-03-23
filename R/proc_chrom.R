@@ -90,7 +90,8 @@ proc_chrom2 <- function(x, win.size = 1e3, verbose=TRUE){
     print(paste("  elapsed time: ", round(ptime[3], digits=4)))
   }
   if(nrow(x@vcf.gt[x@var.info$mask,])>0){
-    ptime <- system.time(x <- gt2popsum(x))
+#    ptime <- system.time(x <- gt2popsum(x))
+    ptime <- system.time(x <- gt_to_popsum(x))
     if(verbose==TRUE){
       print("Population summary complete.")
       print(paste("  elapsed time: ", round(ptime[3], digits=4)))
