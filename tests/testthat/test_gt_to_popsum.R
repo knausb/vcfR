@@ -20,3 +20,5 @@ pinf_mt@var.info <- .Call('vcfR_gt_to_popsum', PACKAGE = 'vcfR', var_info=pinf_m
 head(pinf_mt@var.info)
 
 
+
+

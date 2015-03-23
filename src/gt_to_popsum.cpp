@@ -44,26 +44,37 @@ Rcpp::DataFrame gt_to_popsum(Rcpp::DataFrame var_info, Rcpp::CharacterMatrix gt)
   Rcpp::LogicalVector mask = var_info["mask"];
   Rcpp::IntegerVector nsample(mask.size());
   Rcpp::CharacterVector alleles(mask.size());
-  Rcpp::CharacterVector allele_counts(mask.size());
+  
+  Rcpp::StringVector allele_counts(mask.size());
   Rcpp::NumericVector Ho(mask.size());
   Rcpp::NumericVector Ne(mask.size());
   
   int i = 0;
   int j = 0;
+  int k = 0;
   int cols = gt.ncol();
   
-  for(i=0; i<mask.size(); i++){
+  for(i=0; i<mask.size(); i++){ // Iterate over variants (rows)
     if(mask[i] == TRUE){
-      for(j=0; j < cols; j++){
+      for(j=0; j < cols; j++){ // Iterate over samples (columns)
         if(gt(i, j) != NA_STRING){
-          std::vector<int> allele_cnt(2,0);
-          nsample[i]++;
+//          std::vector<int> allele_cnt(2,0);
+          nsample[i]++;  // Increment sample count.
 //          Rcpp::IntegerVector intv = gtsplit(as<std::string>(gt(i, j)));
           std::vector < int > intv = gtsplit(as<std::string>(gt(i, j)));
+//          std::string allele_string = 
+          char buffer [33];
+//          itoa(intv[0], buffer, 10);
+//          allele_counts(i) = intv[0];
+          for(k=1; k<intv.size(); k++){
+//            allele_counts(i) = strcat(allele_counts(i), ',', intv[k]);
+//            allele_counts(i) = strcat(allele_counts(i), ',', intv[k]);
+          }
+          Rcout << "Allele_counts: " << allele_counts(i) << "\n";
 //          string tmp_alleles = intv[0];
         }
       }
-    } else {
+    } else { // Missing data (NA)
       nsample[i] = NA_INTEGER;
     }
   }
