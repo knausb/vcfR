@@ -58,6 +58,14 @@ read_to_line <- function(x) {
     .Call('vcfR_read_to_line', PACKAGE = 'vcfR', x)
 }
 
+vcf_stats <- function(x) {
+    .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', x)
+}
+
+vcf_meta <- function(x, stats) {
+    .Call('vcfR_vcf_meta', PACKAGE = 'vcfR', x, stats)
+}
+
 window_init <- function(window_size, max_bp) {
     .Call('vcfR_window_init', PACKAGE = 'vcfR', window_size, max_bp)
 }

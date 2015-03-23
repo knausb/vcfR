@@ -37,4 +37,23 @@ x <- .Call('vcfR_read_to_line', PACKAGE = 'vcfR', "test.vcf")
 setwd(original_dir)
 
 
+# Devel2
+
+original_dir <- getwd()
+test_dir <- tempdir()
+setwd(test_dir)
+data(vcfR_example)
+write.vcf(pinf_vcf, "test.vcf")
+
+x1 <- .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', "test.vcf")
+x1
+x2 <- .Call('vcfR_vcf_meta', PACKAGE = 'vcfR', "test.vcf", x1)
+x2
+unlink("test.vcf")
+setwd(original_dir)
+
+
+
+
+
 
