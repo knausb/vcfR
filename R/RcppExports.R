@@ -66,6 +66,10 @@ vcf_meta <- function(x, stats) {
     .Call('vcfR_vcf_meta', PACKAGE = 'vcfR', x, stats)
 }
 
+vcf_body <- function(x, stats) {
+    .Call('vcfR_vcf_body', PACKAGE = 'vcfR', x, stats)
+}
+
 window_init <- function(window_size, max_bp) {
     .Call('vcfR_window_init', PACKAGE = 'vcfR', window_size, max_bp)
 }

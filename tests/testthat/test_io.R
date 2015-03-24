@@ -49,6 +49,10 @@ x1 <- .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', "test.vcf")
 x1
 x2 <- .Call('vcfR_vcf_meta', PACKAGE = 'vcfR', "test.vcf", x1)
 x2
+x3 <- .Call('vcfR_vcf_body', PACKAGE = 'vcfR', "test.vcf", x1)
+#x3
+
+
 unlink("test.vcf")
 setwd(original_dir)
 

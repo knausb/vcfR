@@ -140,6 +140,7 @@ write.vcf<-function(x, file="", mask=logical(0), APPEND=FALSE){
 
 
 #' @rdname io_vcfR
+#' @aliases read.vcf.devel3
 #' @export
 #' 
 read.vcf.devel <- function(file){
@@ -151,6 +152,20 @@ read.vcf.devel <- function(file){
 #  vcf@gt <- as.data.frame(temp[-1,-c(1:8)])
 #  names(vcf@gt) <- temp[1,-c(1:8)]
   temp <- .Call('vcfR_readVcfBody2', PACKAGE = 'vcfR', file)
+  vcf@fix <- temp[,1:8]
+  vcf@gt <- temp[,9:ncol(temp)]
+  return(vcf)
+}
+
+
+#' @rdname io_vcfR
+#' @export
+#' 
+read.vcf.devel3 <- function(file){
+  vcf <- new(Class="vcfR")
+  stats <- .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', file)
+  vcf@meta <- .Call('vcfR_vcf_meta', PACKAGE = 'vcfR', file, stats)
+  temp <- .Call('vcfR_vcf_body', PACKAGE = 'vcfR', file, stats)
   vcf@fix <- temp[,1:8]
   vcf@gt <- temp[,9:ncol(temp)]
   return(vcf)

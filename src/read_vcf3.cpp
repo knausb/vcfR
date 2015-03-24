@@ -60,9 +60,11 @@ Rcpp::NumericVector vcf_stats(std::string x) {
 
 
 // [[Rcpp::export]]
-Rcpp::List vcf_meta(std::string x, Rcpp::NumericVector stats) {
+Rcpp::StringVector vcf_meta(std::string x, Rcpp::NumericVector stats) {
+//Rcpp::List vcf_meta(std::string x, Rcpp::NumericVector stats) {
   // stats consists of elements ("meta", "header", "variants", "columns");
-  Rcpp::List meta(stats[0]);
+//  Rcpp::List meta(stats[0]);
+  Rcpp::StringVector meta(stats[0]);
   std::string line;  // String for reading file into
   
   std::ifstream myfile;
@@ -84,3 +86,85 @@ Rcpp::List vcf_meta(std::string x, Rcpp::NumericVector stats) {
 
   return meta;
 }
+
+
+
+std::vector < std::string > tabsplit(std::string line, int elements){
+  std::vector < std::string > stringv(elements);
+//  Rcout << "Genotype: " << line << "\n";
+
+  int start=0;
+  int j = 0;
+//  char c;
+  for(int i=1; i<line.size(); i++){
+//    c = line[i];
+    if( line[i] == '\t'){
+      std::string temp = line.substr(start, i - start);
+//      Rcout << "  i: " << i << ", temp: " << temp << "\n";
+      stringv[j] = temp;
+      j++;
+      start = i+1;
+      i = i+1;
+    }
+  }
+
+  // Handle last element.
+  std::string temp = line.substr(start, line.size());
+//  Rcout << "  temp: " << temp << "\n";
+//  stringv.push_back(temp);
+  stringv[j] = temp;
+  
+//  for(j=0; j<stringv.size(); j++){ Rcout << "j: " << j << " " << stringv[j] << "\n"; }
+  
+  return stringv;
+}
+
+
+
+// [[Rcpp::export]]
+Rcpp::DataFrame vcf_body(std::string x, Rcpp::NumericVector stats) {
+  Rcpp::StringMatrix body(stats[2], stats[3]);
+  
+  std::string line;  // String for reading file into
+  
+  std::ifstream myfile;
+  myfile.open (x.c_str(), std::ios::in);
+
+  if (!myfile.is_open()){
+    Rcout << "Unable to open file";
+  }
+
+  // Loop over the file.
+  int i = 0;
+  int j = 0;
+  while ( i < stats[0] ){
+    getline (myfile,line);
+    i++;
+  }
+  // Get header.
+  getline (myfile,line);
+  std::string header = line;
+  
+  // Get body.
+  i = 0;
+  while ( getline (myfile,line) ){
+    Rcpp::checkUserInterrupt();
+//    body(i, _) = tabsplit(header);
+    std::vector < std::string > temps = tabsplit(line, stats[3]);
+    for(j=0; j<stats[3]; j++){
+      body(i, j) = temps[j];
+    }
+    i++;
+  }
+
+  myfile.close();
+
+  Rcpp::DataFrame df1(body);
+  std::vector < std::string > temps = tabsplit(header, stats[3]);
+//  df1.names() = Rcpp::StringVector::create(temps);
+  df1.names() = temps;
+
+  return df1;
+}
+
+

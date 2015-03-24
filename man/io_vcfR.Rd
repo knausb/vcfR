@@ -3,6 +3,7 @@
 \name{read.vcf}
 \alias{read.vcf}
 \alias{read.vcf.devel}
+\alias{read.vcf.devel3}
 \alias{write.vcf}
 \title{Read and write vcf format files}
 \usage{
@@ -11,6 +12,8 @@ read.vcf(file)
 write.vcf(x, file = "", mask = logical(0), APPEND = FALSE)
 
 read.vcf.devel(file)
+
+read.vcf.devel3(file)
 }
 \arguments{
 \item{file}{A filename for a variant call format (vcf) file}
