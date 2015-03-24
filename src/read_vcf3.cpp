@@ -210,16 +210,14 @@ int read_gz_to_line(std::string x) {
 //  inbuf.push(boost::iostreams::gzip_decompressor());
 //  inbuf.push(file);
 
-    std::ifstream myfile(x.c_str(), std::ios_base::in | std::ios_base::binary);
+//    std::ifstream myfile(x.c_str(), std::ios_base::in | std::ios_base::binary);
+    std::ifstream myfile("hello.gz", std::ios_base::in | std::ios_base::binary);
     boost::iostreams::filtering_streambuf<boost::iostreams::input> in;
-//    in.push(boost::iostreams::gzip_decompressor());
+    in.push(boost::iostreams::gzip_decompressor());
 //    in.push(myfile);
 //    boost::iostreams::copy(in, Rcout);
 
 
-//  boost::iostreams::filtering_istream in;
-//  in.push(boost::iostreams::gzip_decompressor());
-//  in.push(myfile);
 
    //Read from the first command line argument, assume it's gzipped
 
