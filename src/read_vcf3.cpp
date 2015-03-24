@@ -1,6 +1,14 @@
 #include <Rcpp.h>
 #include <fstream>
+#include <iostream>
+// [[Rcpp::depends(BH)]]
+#include <boost/iostreams/filtering_streambuf.hpp>
+#include <boost/iostreams/copy.hpp>
+#include <boost/iostreams/filter/gzip.hpp>
+
 using namespace Rcpp;
+
+
 
 
 // [[Rcpp::export]]
@@ -168,3 +176,66 @@ Rcpp::DataFrame vcf_body(std::string x, Rcpp::NumericVector stats) {
 }
 
 
+
+// [[Rcpp::export]]
+int read_to_line(std::string x) {
+  std::string line;  // String for reading file into
+  long int i;
+
+  std::ifstream myfile;
+  myfile.open (x.c_str(), std::ios::in);
+
+  if (!myfile.is_open()){
+    Rcout << "Unable to open file";
+  }
+  
+  // Loop over the file.
+  while ( getline (myfile,line) ){
+    Rcout << line << "\n";
+    i++;
+  }
+
+  myfile.close();
+  return i;
+}
+
+
+// [[Rcpp::export]]
+int read_gz_to_line(std::string x) {
+  std::string line;  // String for reading file into
+  long int i;
+
+//  std::ifstream myfile(x.c_str(), std::ios_base::in | std::ios_base::binary);
+//  boost::iostreams::filtering_streambuf<boost::iostreams::input> inbuf;
+//  inbuf.push(boost::iostreams::gzip_decompressor());
+//  inbuf.push(file);
+
+    std::ifstream myfile(x.c_str(), std::ios_base::in | std::ios_base::binary);
+    boost::iostreams::filtering_streambuf<boost::iostreams::input> in;
+//    in.push(boost::iostreams::gzip_decompressor());
+//    in.push(myfile);
+//    boost::iostreams::copy(in, Rcout);
+
+
+//  boost::iostreams::filtering_istream in;
+//  in.push(boost::iostreams::gzip_decompressor());
+//  in.push(myfile);
+
+   //Read from the first command line argument, assume it's gzipped
+
+//  std::ifstream myfile;
+//  myfile.open (x.c_str(), std::ios::in);
+
+  if (!myfile.is_open()){
+    Rcout << "Unable to open file";
+  }
+  
+  // Loop over the file.
+  while ( getline (myfile,line) ){
+    Rcout << line << "\n";
+    i++;
+  }
+
+  myfile.close();
+  return i;
+}

@@ -54,10 +54,6 @@ readVcfBody2 <- function(x) {
     .Call('vcfR_readVcfBody2', PACKAGE = 'vcfR', x)
 }
 
-read_to_line <- function(x) {
-    .Call('vcfR_read_to_line', PACKAGE = 'vcfR', x)
-}
-
 vcf_stats <- function(x) {
     .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', x)
 }
@@ -68,6 +64,14 @@ vcf_meta <- function(x, stats) {
 
 vcf_body <- function(x, stats) {
     .Call('vcfR_vcf_body', PACKAGE = 'vcfR', x, stats)
+}
+
+read_to_line <- function(x) {
+    .Call('vcfR_read_to_line', PACKAGE = 'vcfR', x)
+}
+
+read_gz_to_line <- function(x) {
+    .Call('vcfR_read_gz_to_line', PACKAGE = 'vcfR', x)
 }
 
 window_init <- function(window_size, max_bp) {

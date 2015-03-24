@@ -6,7 +6,8 @@ Year: 2014
 Author: Brian Knaus <briank.lists@gmail.com>
 Maintainer: Brian Knaus <briank.lists@gmail.com>
 Depends:
-    R (>= 3.0.1)
+    R (>= 3.0.1),
+    BH
 LinkingTo: Rcpp
 Imports:
     methods,
