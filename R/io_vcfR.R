@@ -166,9 +166,18 @@ read.vcf.devel3 <- function(file){
   stats <- .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', file)
   vcf@meta <- .Call('vcfR_vcf_meta', PACKAGE = 'vcfR', file, stats)
   temp <- .Call('vcfR_vcf_body', PACKAGE = 'vcfR', file, stats)
+
+  for(i in c(1, 3:5, 7:8)){
+    temp[,i] <- as.character(temp[,i])
+  }
+  for(i in 9:ncol(temp)){
+    temp[,i] <- as.character(temp[,i])
+  }
+  
   vcf@fix <- temp[,1:8]
-  vcf@fix$POS <- as.integer(as.character(vcf@fix$POS))
+#  vcf@fix$POS <- as.integer(as.character(vcf@fix$POS))
   vcf@gt <- temp[,9:ncol(temp)]
+  
   return(vcf)
 }
 

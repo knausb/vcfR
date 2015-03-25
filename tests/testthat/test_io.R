@@ -16,13 +16,18 @@ test_that("vcf file io works",{
 
   write.vcf(pinf_vcf, "test.vcf")
   test <- read.vcf("test.vcf")
+
+  unlink("test.vcf")
+  setwd(original_dir)
   
   expect_is(test, "vcfR")
+  expect_is(test@fix$POS, "integer")
+  expect_is(test@fix$QUAL, "integer")
+  expect_is(test@fix$QUAL, "numeric")
+  
   expect_identical(names(test@fix)[1], "CHROM")
   
-  unlink("test.vcf")
   
-  setwd(original_dir)
 })
 
 
@@ -51,7 +56,8 @@ x2 <- .Call('vcfR_vcf_meta', PACKAGE = 'vcfR', "test.vcf", x1)
 x2
 x3 <- .Call('vcfR_vcf_body', PACKAGE = 'vcfR', "test.vcf", x1)
 #x3
-x4 <- .Call('vcfR_vcf_body2', PACKAGE = 'vcfR', "test.vcf", x1)
+#x4 <- .Call('vcfR_vcf_body2', PACKAGE = 'vcfR', "test.vcf", x1)
+x4 <- read.vcf.devel3("test.vcf")
 
 unlink("test.vcf")
 setwd(original_dir)
@@ -60,13 +66,10 @@ setwd(original_dir)
 names(x3)[1]
 class(x3$CHROM)
 class(x3$POS)
+class(x3$QUAL)
 
-names(x4)
-class(x4$CHROM)
-class(x4$POS)
-class(x4$QUAL)
-
-
+class(x4@fix$POS)
+class(x4@fix$QUAL)
 
 
 

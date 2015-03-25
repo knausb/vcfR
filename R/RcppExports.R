@@ -62,12 +62,12 @@ vcf_meta <- function(x, stats) {
     .Call('vcfR_vcf_meta', PACKAGE = 'vcfR', x, stats)
 }
 
-vcf_body <- function(x, stats) {
-    .Call('vcfR_vcf_body', PACKAGE = 'vcfR', x, stats)
+vcf_body_old1 <- function(x, stats) {
+    .Call('vcfR_vcf_body_old1', PACKAGE = 'vcfR', x, stats)
 }
 
-vcf_body2 <- function(x, stats) {
-    .Call('vcfR_vcf_body2', PACKAGE = 'vcfR', x, stats)
+vcf_body <- function(x, stats) {
+    .Call('vcfR_vcf_body', PACKAGE = 'vcfR', x, stats)
 }
 
 read_to_line <- function(x) {
