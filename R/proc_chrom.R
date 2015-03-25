@@ -201,14 +201,25 @@ regex.win <- function(x, max.win=1000, regex="[acgtwsmkrybdhv]"){
 
 
 #' @rdname proc_chrom
-#' @export
 #' @aliases seq_to_rects
+#' 
+#' @description
+#' Create representation of a sequence.
+#' Begining and end points are determined for stretches of nucleotides.
+#' Stretches are determined by querying each nucleotides in a sequence to determine if it is represented in the database of characters (chars).
+#' 
+#' 
+#' @param chars a vector of characters to be used as a database for inclusion in rectangles
+#' @param lower converts the sequence and database to lower case, making the search case insensitive
+#' 
+#'   
+#' @export
 #' 
 seq_to_rects <- function(x, chars="acgtwsmkrybdhv", lower=TRUE){
 
   if(is.matrix(as.character(x@seq))){
 #    seq <- as.character(x@seq)[1:length(x@seq)]
-    seq <- as.character(pinf_mt@seq)[1,]
+    seq <- as.character(x@seq)[1,]
   }
 
   if(lower == TRUE){

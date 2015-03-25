@@ -1,7 +1,6 @@
 #include <Rcpp.h>
 #include <fstream>
 #include <iostream>
-// [[Rcpp::depends(BH)]]
 #include <boost/iostreams/filtering_streambuf.hpp>
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
@@ -193,7 +192,7 @@ int read_to_line(std::string x) {
   // Loop over the file.
   while ( getline (myfile,line) ){
     Rcpp::checkUserInterrupt();
-    Rcout << line << "\n";
+//    Rcout << line << "\n";
     i++;
   }
 
@@ -203,6 +202,7 @@ int read_to_line(std::string x) {
 
 
 // Function requires boost for gz compression.
+// [[Rcpp::depends(BH)]]
 // [[Rcpp::export]]
 int read_gz_to_line(std::string x) {
   std::string line;  // String for reading file into
