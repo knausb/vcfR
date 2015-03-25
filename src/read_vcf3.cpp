@@ -200,6 +200,7 @@ int read_to_line(std::string x) {
 }
 
 
+// Function requires boost for gz compression.
 // [[Rcpp::export]]
 int read_gz_to_line(std::string x) {
   std::string line;  // String for reading file into
@@ -213,7 +214,7 @@ int read_gz_to_line(std::string x) {
 //    std::ifstream myfile(x.c_str(), std::ios_base::in | std::ios_base::binary);
     std::ifstream myfile("hello.gz", std::ios_base::in | std::ios_base::binary);
     boost::iostreams::filtering_streambuf<boost::iostreams::input> in;
-    in.push(boost::iostreams::gzip_decompressor());
+//    in.push(boost::iostreams::gzip_decompressor());
 //    in.push(myfile);
 //    boost::iostreams::copy(in, Rcout);
 
