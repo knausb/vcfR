@@ -206,6 +206,18 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// seq_to_rects
+Rcpp::IntegerMatrix seq_to_rects(Rcpp::CharacterVector seq, std::string targets);
+RcppExport SEXP vcfR_seq_to_rects(SEXP seqSEXP, SEXP targetsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type seq(seqSEXP);
+    Rcpp::traits::input_parameter< std::string >::type targets(targetsSEXP);
+    __result = Rcpp::wrap(seq_to_rects(seq, targets));
+    return __result;
+END_RCPP
+}
 // window_init
 Rcpp::DataFrame window_init(int window_size, int max_bp);
 RcppExport SEXP vcfR_window_init(SEXP window_sizeSEXP, SEXP max_bpSEXP) {

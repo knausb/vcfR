@@ -4,7 +4,7 @@
 #' @rdname proc_chrom
 #' @description Functions which process Chrom objects 
 #' 
-#' @param x oject of class Chrom
+#' @param x object of class Chrom
 #' @param win.size integer indicating size for windowing processes
 #' @param verbose logical indicating whether verbose output should be reported
 #' @param ... arguments to be passed to methods
@@ -79,16 +79,19 @@ proc_chrom <- function(x, win.size = 1e3, verbose=TRUE){
 #'
 proc_chrom2 <- function(x, win.size = 1e3, verbose=TRUE){
   stopifnot(class(x) == "Chrom")
+  
   ptime <- system.time(x@seq.info$nuc.win <- regex.win(x))
   if(verbose==TRUE){
     print("Nucleotide regions complete.")
     print(paste("  elapsed time: ", round(ptime[3], digits=4)))
   }
+  
   ptime <- system.time(x@seq.info$N.win <- regex.win(x, regex="[n]"))
   if(verbose==TRUE){
     print("N regions complete.")
     print(paste("  elapsed time: ", round(ptime[3], digits=4)))
   }
+  
   if(nrow(x@vcf.gt[x@var.info$mask,])>0){
 #    ptime <- system.time(x <- gt2popsum(x))
     ptime <- system.time(x <- gt_to_popsum(x))
@@ -196,6 +199,26 @@ regex.win <- function(x, max.win=1000, regex="[acgtwsmkrybdhv]"){
   return(bp.windows)
 }
 
+
+#' @rdname proc_chrom
+#' @export
+#' @aliases seq_to_rects
+#' 
+seq_to_rects <- function(x, chars="acgtwsmkrybdhv", lower=TRUE){
+
+  if(is.matrix(as.character(x@seq))){
+#    seq <- as.character(x@seq)[1:length(x@seq)]
+    seq <- as.character(pinf_mt@seq)[1,]
+  }
+
+  if(lower == TRUE){
+    x <- tolower(x)
+    chars <- tolower(chars)
+  }
+
+  rects <- .Call('vcfR_seq_to_rects', PACKAGE = 'vcfR', seq, targets=chars)
+  return(rects)
+}
 
 
 #' @rdname proc_chrom

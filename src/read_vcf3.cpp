@@ -192,6 +192,7 @@ int read_to_line(std::string x) {
   
   // Loop over the file.
   while ( getline (myfile,line) ){
+    Rcpp::checkUserInterrupt();
     Rcout << line << "\n";
     i++;
   }

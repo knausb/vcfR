@@ -74,6 +74,10 @@ read_gz_to_line <- function(x) {
     .Call('vcfR_read_gz_to_line', PACKAGE = 'vcfR', x)
 }
 
+seq_to_rects <- function(seq, targets) {
+    .Call('vcfR_seq_to_rects', PACKAGE = 'vcfR', seq, targets)
+}
+
 window_init <- function(window_size, max_bp) {
     .Call('vcfR_window_init', PACKAGE = 'vcfR', window_size, max_bp)
 }

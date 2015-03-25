@@ -20,6 +20,15 @@ test_that("proc_chrom creates different window sizes", {
   expect_equal(length(pinf_mt2@win.info$end), 4)
 })
 
+
+system.time(regex.win(pinf_mt))
+
+
+rects <- .Call('vcfR_seq_to_rects', PACKAGE = 'vcfR', seq=as.character(pinf_dna)[1,], targets="acgtwsmkrybdhv")
+regex.win(pinf_mt, max.win=1000, regex="[acgtwsmkrybdhv]")
+
+
+
 # Binaries
 #wins <- .Call('vcfR_window_init', PACKAGE = 'vcfR', window_size=1e3, max_bp=length(pinf_dna))
 #win2 <- .Call('vcfR_windowize_fasta', PACKAGE = 'vcfR', wins=wins, seq=as.character(pinf_dna)[1,])
