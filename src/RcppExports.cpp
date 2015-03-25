@@ -184,6 +184,18 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// vcf_body2
+Rcpp::DataFrame vcf_body2(std::string x, Rcpp::NumericVector stats);
+RcppExport SEXP vcfR_vcf_body2(SEXP xSEXP, SEXP statsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type stats(statsSEXP);
+    __result = Rcpp::wrap(vcf_body2(x, stats));
+    return __result;
+END_RCPP
+}
 // read_to_line
 int read_to_line(std::string x);
 RcppExport SEXP vcfR_read_to_line(SEXP xSEXP) {

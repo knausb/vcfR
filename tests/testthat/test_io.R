@@ -2,7 +2,7 @@
 library(vcfR)
 context("io functions")
 
-data(vcfR_example)
+#data(vcfR_example)
 
 # Manage directories.
 original_dir <- getwd()
@@ -51,10 +51,23 @@ x2 <- .Call('vcfR_vcf_meta', PACKAGE = 'vcfR', "test.vcf", x1)
 x2
 x3 <- .Call('vcfR_vcf_body', PACKAGE = 'vcfR', "test.vcf", x1)
 #x3
-names(x3)[1]
+x4 <- .Call('vcfR_vcf_body2', PACKAGE = 'vcfR', "test.vcf", x1)
 
 unlink("test.vcf")
 setwd(original_dir)
+
+
+names(x3)[1]
+class(x3$CHROM)
+class(x3$POS)
+
+names(x4)
+class(x4$CHROM)
+class(x4$POS)
+class(x4$QUAL)
+
+
+
 
 
 

@@ -80,13 +80,15 @@ proc_chrom <- function(x, win.size = 1e3, verbose=TRUE){
 proc_chrom2 <- function(x, win.size = 1e3, verbose=TRUE){
   stopifnot(class(x) == "Chrom")
   
-  ptime <- system.time(x@seq.info$nuc.win <- regex.win(x))
+#  ptime <- system.time(x@seq.info$nuc.win <- regex.win(x))
+  ptime <- system.time(x@seq.info$nuc.win <- seq_to_rects(x)) 
   if(verbose==TRUE){
     print("Nucleotide regions complete.")
     print(paste("  elapsed time: ", round(ptime[3], digits=4)))
   }
   
-  ptime <- system.time(x@seq.info$N.win <- regex.win(x, regex="[n]"))
+#  ptime <- system.time(x@seq.info$N.win <- regex.win(x, regex="[n]"))
+  ptime <- system.time(x@seq.info$N.win <- seq_to_rects(x, chars="n")) 
   if(verbose==TRUE){
     print("N regions complete.")
     print(paste("  elapsed time: ", round(ptime[3], digits=4)))
@@ -223,7 +225,7 @@ seq_to_rects <- function(x, chars="acgtwsmkrybdhv", lower=TRUE){
   }
 
   if(lower == TRUE){
-    x <- tolower(x)
+    seq <- tolower(seq)
     chars <- tolower(chars)
   }
 

@@ -66,6 +66,10 @@ vcf_body <- function(x, stats) {
     .Call('vcfR_vcf_body', PACKAGE = 'vcfR', x, stats)
 }
 
+vcf_body2 <- function(x, stats) {
+    .Call('vcfR_vcf_body2', PACKAGE = 'vcfR', x, stats)
+}
+
 read_to_line <- function(x) {
     .Call('vcfR_read_to_line', PACKAGE = 'vcfR', x)
 }
