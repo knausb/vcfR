@@ -169,6 +169,7 @@ Rcpp::DataFrame vcf_body(std::string x, Rcpp::NumericVector stats) {
 
   Rcpp::DataFrame df1(body);
   std::vector < std::string > temps = tabsplit(header, stats[3]);
+  temps[0].erase(0,1);
 //  df1.names() = Rcpp::StringVector::create(temps);
   df1.names() = temps;
 
