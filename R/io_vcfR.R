@@ -12,6 +12,7 @@
 # @param vfile an output filename
 #' @param mask logical vector indicating rows to use
 #' @param APPEND logical indicating whether to append to existing vcf file or write a new file
+#' @param limit amount of memory not to exceed when reading in a file
 #'
 #' @details
 #' Reads in a vcf file and stores it in a vcf class.  Once the number of lines the meta information contains the data is divided into three tables: meta data, fixed data and genotype data.

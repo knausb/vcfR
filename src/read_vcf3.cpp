@@ -1,9 +1,10 @@
 #include <Rcpp.h>
 #include <fstream>
 #include <iostream>
-#include <boost/iostreams/filtering_streambuf.hpp>
-#include <boost/iostreams/copy.hpp>
-#include <boost/iostreams/filter/gzip.hpp>
+
+//#include <boost/iostreams/filtering_streambuf.hpp>
+//#include <boost/iostreams/copy.hpp>
+//#include <boost/iostreams/filter/gzip.hpp>
 
 using namespace Rcpp;
 
@@ -342,7 +343,7 @@ int read_to_line(std::string x) {
 
 
 // Function requires boost for gz compression.
-// [[Rcpp::depends(BH)]]
+// // [[Rcpp::depends(BH)]]
 // [[Rcpp::export]]
 int read_gz_to_line(std::string x) {
   std::string line;  // String for reading file into

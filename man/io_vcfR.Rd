@@ -13,7 +13,7 @@ write.vcf(x, file = "", mask = logical(0), APPEND = FALSE)
 
 read.vcf.devel(file)
 
-read.vcf.devel3(file)
+read.vcf.devel3(file, limit = 1e+09)
 }
 \arguments{
 \item{file}{A filename for a variant call format (vcf) file}
@@ -23,6 +23,8 @@ read.vcf.devel3(file)
 \item{mask}{logical vector indicating rows to use}
 
 \item{APPEND}{logical indicating whether to append to existing vcf file or write a new file}
+
+\item{limit}{amount of memory not to exceed when reading in a file}
 }
 \description{
 Read and write files in the vcf format.
