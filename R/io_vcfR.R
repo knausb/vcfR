@@ -164,12 +164,13 @@ read.vcf.devel <- function(file){
 read.vcf.devel3 <- function(file, limit=1e9){
   vcf <- new(Class="vcfR")
   stats <- .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', file)
-  
-  ram_est <- stats['variants'] * stats['columns'] * 258
+  element_size <- object.size(.Call('vcfR_ram_test', PACKAGE = 'vcfR'))
+
+  ram_est <- stats['variants'] * stats['columns'] * element_size
   if(ram_est > limit){
-    message(paste("The number of variants in your file is:", stats['variants']))
-    message(paste("The number of samples in your file is:", stats['columns'] - 1))
-    message(paste("This will result in an object of approximately:", ram_est/1e9, "Gb in size"))
+    message(paste("The number of variants in your file is:", prettyNum(stats['variants'], big.mark=",")))
+    message(paste("The number of samples in your file is:", prettyNum(stats['columns'] - 1, big.mark=",")))
+    message(paste("This will result in an object of approximately:", round(ram_est/1e9, digits=3), "Gb in size"))
     stop("Object size limit exceeded")
   }
   

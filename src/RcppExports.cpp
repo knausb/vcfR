@@ -219,7 +219,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // ram_test
-Rcpp::StringMatrix ram_test();
+Rcpp::CharacterMatrix ram_test();
 RcppExport SEXP vcfR_ram_test() {
 BEGIN_RCPP
     Rcpp::RObject __result;
