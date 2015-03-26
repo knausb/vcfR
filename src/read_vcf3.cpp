@@ -7,7 +7,7 @@
 
 using namespace Rcpp;
 
-
+const int nreport = 1000;
 
 
 // [[Rcpp::export]]
@@ -27,6 +27,7 @@ Rcpp::NumericVector vcf_stats(std::string x) {
   
   // Loop over the file.
   while ( getline (myfile,line) ){
+    Rcpp::checkUserInterrupt();
     if(line[0] == '#' && line[1] == '#'){
       stats[0]++;
     } else if (line[0] == '#'){
@@ -35,8 +36,15 @@ Rcpp::NumericVector vcf_stats(std::string x) {
       stats[2]++;
     }
     i++;
+    
+    if( i % nreport == 0){
+      Rcout << "\rProcessed line: " << i;
+    }
   }
   myfile.close();
+
+  Rcout << "\rProcessed line: " << i;
+  Rcout << "\nAll lines processed.\n";
 
   // Reopen the file to count columns for first variant.
   myfile.open (x.c_str(), std::ios::in);
@@ -84,12 +92,20 @@ Rcpp::StringVector vcf_meta(std::string x, Rcpp::NumericVector stats) {
   // Loop over the file.
   int i = 0;
   while ( i < stats[0] ){
+    Rcpp::checkUserInterrupt();
 //    Rcout << i << "\n";
     getline (myfile,line);
     meta(i) = line;
     i++;
+    
+    if( i % nreport == 0){
+      Rcout << "\rProcessed meta line: " << i;
+    }
+
   }
   myfile.close();
+  Rcout << "\rProcessed meta line: " << i;
+  Rcout << "\nMeta lines processed.\n";
 
   return meta;
 }
@@ -190,10 +206,9 @@ Rcpp::DataFrame vcf_body(std::string x, Rcpp::NumericVector stats) {
   Rcpp::StringVector   filter(stats[2]);
   Rcpp::StringVector   info(stats[2]);
   
-  Rcpp::CharacterMatrix gt(stats[2], stats[3]-8);
-    
+  Rcpp::CharacterMatrix gt(stats[2], stats[3] - 8);
+  
   std::string line;  // String for reading file into
-
 
   // Open file.
   std::ifstream myfile;
@@ -268,8 +283,15 @@ Rcpp::DataFrame vcf_body(std::string x, Rcpp::NumericVector stats) {
 //      body(i, j-8) = temps[j];
     }
     i++;
-  }
+    
+    if( i % nreport == 0){
+      Rcout << "\rProcessed variant: " << i;
+    }
 
+  }
+  Rcout << "\rProcessed variant: " << i;
+  Rcout << "\nAll variants processed\n";
+      
   myfile.close();
 
   Rcpp::DataFrame df1 = Rcpp::DataFrame::create(
@@ -296,7 +318,7 @@ Rcpp::DataFrame vcf_body(std::string x, Rcpp::NumericVector stats) {
 // [[Rcpp::export]]
 int read_to_line(std::string x) {
   std::string line;  // String for reading file into
-  long int i;
+  long int i = 0;
 
   std::ifstream myfile;
   myfile.open (x.c_str(), std::ios::in);
@@ -322,7 +344,7 @@ int read_to_line(std::string x) {
 // [[Rcpp::export]]
 int read_gz_to_line(std::string x) {
   std::string line;  // String for reading file into
-  long int i;
+  long int i = 0;
 
 //  std::ifstream myfile(x.c_str(), std::ios_base::in | std::ios_base::binary);
 //  boost::iostreams::filtering_streambuf<boost::iostreams::input> inbuf;
@@ -356,3 +378,17 @@ int read_gz_to_line(std::string x) {
   myfile.close();
   return i;
 }
+
+
+
+
+// [[Rcpp::export]]
+Rcpp::StringMatrix ram_test() {
+  Rcpp::StringMatrix gt(1, 1);
+
+//Rcpp::CharacterMatrix ram_test() {
+//  Rcpp::CharacterMatrix gt(1, 1);
+  
+  return(gt);
+}
+

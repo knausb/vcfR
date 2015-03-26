@@ -161,9 +161,18 @@ read.vcf.devel <- function(file){
 #' @rdname io_vcfR
 #' @export
 #' 
-read.vcf.devel3 <- function(file){
+read.vcf.devel3 <- function(file, limit=1e9){
   vcf <- new(Class="vcfR")
   stats <- .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', file)
+  
+  ram_est <- stats['variants'] * stats['columns'] * 258
+  if(ram_est > limit){
+    message(paste("The number of variants in your file is:", stats['variants']))
+    message(paste("The number of samples in your file is:", stats['columns'] - 1))
+    message(paste("This will result in an object of approximately:", ram_est/1e9, "Gb in size"))
+    stop("Object size limit exceeded")
+  }
+  
   vcf@meta <- .Call('vcfR_vcf_meta', PACKAGE = 'vcfR', file, stats)
   temp <- .Call('vcfR_vcf_body', PACKAGE = 'vcfR', file, stats)
 

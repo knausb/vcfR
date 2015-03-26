@@ -23,7 +23,7 @@ test_that("vcf file io works",{
   expect_is(test, "vcfR")
   expect_is(test@fix$POS, "integer")
   expect_is(test@fix$QUAL, "integer")
-  expect_is(test@fix$QUAL, "numeric")
+#  expect_is(test@fix$QUAL, "numeric")
   
   expect_identical(names(test@fix)[1], "CHROM")
   
@@ -50,14 +50,17 @@ setwd(test_dir)
 data(vcfR_example)
 write.vcf(pinf_vcf, "test.vcf")
 
+
 x1 <- .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', "test.vcf")
 x1
 x2 <- .Call('vcfR_vcf_meta', PACKAGE = 'vcfR', "test.vcf", x1)
-x2
+#x2
 x3 <- .Call('vcfR_vcf_body', PACKAGE = 'vcfR', "test.vcf", x1)
 #x3
 #x4 <- .Call('vcfR_vcf_body2', PACKAGE = 'vcfR', "test.vcf", x1)
-x4 <- read.vcf.devel3("test.vcf")
+x4 <- read.vcf.devel3("test.vcf", limit=1e2)
+x4 <- read.vcf.devel3("test.vcf", limit=1e9)
+
 
 unlink("test.vcf")
 setwd(original_dir)
@@ -72,8 +75,16 @@ class(x4@fix$POS)
 class(x4@fix$QUAL)
 
 
+vcf <- "/home/likewise-open/USDA-ARS/knausb/gits/vcf_data/1kgenomes/ALL.chr22.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf"
+
+x7 <- read.vcf.devel3(vcf, limit=1e9)
 
 
+x5 <- .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', vcf)
 
+x6 <- .Call('vcfR_vcf_body', PACKAGE = 'vcfR', vcf, x5)
 
+x7 <- .Call('vcfR_ram_test', PACKAGE = 'vcfR')
 
+print(object.size(x7), units='b')
+print(object.size(x7), units='Mb')

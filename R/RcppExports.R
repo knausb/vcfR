@@ -78,6 +78,10 @@ read_gz_to_line <- function(x) {
     .Call('vcfR_read_gz_to_line', PACKAGE = 'vcfR', x)
 }
 
+ram_test <- function() {
+    .Call('vcfR_ram_test', PACKAGE = 'vcfR')
+}
+
 seq_to_rects <- function(seq, targets) {
     .Call('vcfR_seq_to_rects', PACKAGE = 'vcfR', seq, targets)
 }
