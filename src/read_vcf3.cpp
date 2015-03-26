@@ -289,11 +289,11 @@ Rcpp::DataFrame vcf_body(std::string x, Rcpp::NumericVector stats) {
     }
 
   }
+  myfile.close();
+  
   Rcout << "\rProcessed variant: " << i;
   Rcout << "\nAll variants processed\n";
-      
-  myfile.close();
-
+  
   Rcpp::DataFrame df1 = Rcpp::DataFrame::create(
     _["CHROM"]= chrom,
     _["POS"]= pos,
@@ -308,6 +308,8 @@ Rcpp::DataFrame vcf_body(std::string x, Rcpp::NumericVector stats) {
   std::vector < std::string > temps = tabsplit(header, stats[3]);
   temps[0].erase(0,1);
   df1.names() = temps;
+  
+  Rcout << "Rcpp::DataFrame created.\n";
   
   return df1;
 }

@@ -164,8 +164,9 @@ read.vcf.devel <- function(file){
 read.vcf.devel3 <- function(file, limit=1e9){
   vcf <- new(Class="vcfR")
   stats <- .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', file)
-  element_size <- object.size(.Call('vcfR_ram_test', PACKAGE = 'vcfR'))
-
+#  element_size <- object.size(.Call('vcfR_ram_test', PACKAGE = 'vcfR'))
+  element_size <- object.size(ram_test())
+  
   ram_est <- stats['variants'] * stats['columns'] * element_size
   if(ram_est > limit){
     message(paste("The number of variants in your file is:", prettyNum(stats['variants'], big.mark=",")))
