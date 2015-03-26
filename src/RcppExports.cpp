@@ -219,12 +219,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // ram_test
-Rcpp::CharacterMatrix ram_test();
-RcppExport SEXP vcfR_ram_test() {
+Rcpp::CharacterMatrix ram_test(int nrow, int ncol);
+RcppExport SEXP vcfR_ram_test(SEXP nrowSEXP, SEXP ncolSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    __result = Rcpp::wrap(ram_test());
+    Rcpp::traits::input_parameter< int >::type nrow(nrowSEXP);
+    Rcpp::traits::input_parameter< int >::type ncol(ncolSEXP);
+    __result = Rcpp::wrap(ram_test(nrow, ncol));
     return __result;
 END_RCPP
 }

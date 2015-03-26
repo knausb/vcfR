@@ -33,58 +33,65 @@ test_that("vcf file io works",{
 
 # Devel
 
-setwd(test_dir)
-data(vcfR_example)
-write.vcf(pinf_vcf, "test.vcf")
+#setwd(test_dir)
+#data(vcfR_example)
+#write.vcf(pinf_vcf, "test.vcf")
 
-x <- .Call('vcfR_read_to_line', PACKAGE = 'vcfR', "test.vcf")
+#x <- .Call('vcfR_read_to_line', PACKAGE = 'vcfR', "test.vcf")
 
-setwd(original_dir)
+#setwd(original_dir)
 
 
 # Devel2
 
-original_dir <- getwd()
-test_dir <- tempdir()
-setwd(test_dir)
-data(vcfR_example)
-write.vcf(pinf_vcf, "test.vcf")
+#original_dir <- getwd()
+#test_dir <- tempdir()
+#setwd(test_dir)
+#data(vcfR_example)
+#write.vcf(pinf_vcf, "test.vcf")
 
 
-x1 <- .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', "test.vcf")
-x1
-x2 <- .Call('vcfR_vcf_meta', PACKAGE = 'vcfR', "test.vcf", x1)
+#x1 <- .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', "test.vcf")
+#x1
+#x2 <- .Call('vcfR_vcf_meta', PACKAGE = 'vcfR', "test.vcf", x1)
 #x2
-x3 <- .Call('vcfR_vcf_body', PACKAGE = 'vcfR', "test.vcf", x1)
+#x3 <- .Call('vcfR_vcf_body', PACKAGE = 'vcfR', "test.vcf", x1)
 #x3
 #x4 <- .Call('vcfR_vcf_body2', PACKAGE = 'vcfR', "test.vcf", x1)
-x4 <- read.vcf.devel3("test.vcf", limit=1e2)
-x4 <- read.vcf.devel3("test.vcf", limit=1e9)
+#x4 <- read.vcf.devel3("test.vcf", limit=1e2)
+#x4 <- read.vcf.devel3("test.vcf", limit=1e9)
 
 
-unlink("test.vcf")
-setwd(original_dir)
+#unlink("test.vcf")
+#setwd(original_dir)
+
+#print(object.size(x4), units='Mb')
 
 
-names(x3)[1]
-class(x3$CHROM)
-class(x3$POS)
-class(x3$QUAL)
+#names(x3)[1]
+#class(x3$CHROM)
+#class(x3$POS)
+#class(x3$QUAL)
 
-class(x4@fix$POS)
-class(x4@fix$QUAL)
-
-
-vcf <- "/home/likewise-open/USDA-ARS/knausb/gits/vcf_data/1kgenomes/ALL.chr22.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf"
-
-x7 <- read.vcf.devel3(vcf, limit=1e9)
+#class(x4@fix$POS)
+#class(x4@fix$QUAL)
 
 
-x5 <- .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', vcf)
+#vcf <- "/home/likewise-open/USDA-ARS/knausb/gits/vcf_data/1kgenomes/ALL.chr22.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf"
 
-x6 <- .Call('vcfR_vcf_body', PACKAGE = 'vcfR', vcf, x5)
+#x7 <- read.vcf.devel3(vcf, limit=1e9)
 
-x7 <- .Call('vcfR_ram_test', PACKAGE = 'vcfR')
 
-print(object.size(x7), units='b')
-print(object.size(x7), units='Mb')
+#x5 <- .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', vcf)
+
+#x6 <- .Call('vcfR_vcf_body', PACKAGE = 'vcfR', vcf, x5)
+
+#x7 <- .Call('vcfR_ram_test', PACKAGE = 'vcfR')
+
+#print(object.size(x7), units='b')
+#print(object.size(x7), units='Mb')
+
+#print(object.size(.Call('vcfR_ram_test', PACKAGE = 'vcfR', nrow=1e4, ncol=2000)), units="Gb")
+#print(object.size(.Call('vcfR_ram_test', PACKAGE = 'vcfR', nrow=3e5, ncol=2000)), units="Gb")
+
+

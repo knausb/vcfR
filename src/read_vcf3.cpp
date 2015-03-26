@@ -383,8 +383,8 @@ int read_gz_to_line(std::string x) {
 
 
 // [[Rcpp::export]]
-Rcpp::CharacterMatrix ram_test() {
-  Rcpp::CharacterMatrix gt(1, 1);
+Rcpp::CharacterMatrix ram_test(int nrow=1, int ncol=1) {
+  Rcpp::CharacterMatrix gt(nrow, ncol);
 //Rcpp::StringMatrix ram_test() {
 //  Rcpp::StringMatrix gt(1, 1);
   
