@@ -344,7 +344,8 @@ chromo <- function(x = x,
          border=NA)
     axis(side = 2, las = 2)
     title(main = "Variants per site", line = -1)
-    title(main = paste(sum(x@win.info$variants), "total variants"), line = -2)
+#    title(main = paste(sum(x@win.info$variants), "total variants"), line = -2)
+    title(main = paste(sum(x@var.info$mask), "total variants"), line = -2)
     boxplot(snpden, axes = FALSE, frame.plot = TRUE, col = "#cc0000", ylim = c(0,max(snpden)))
   }
   if(length(x@win.info$A)>0 & NUC){

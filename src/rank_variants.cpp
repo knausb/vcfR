@@ -2,6 +2,7 @@
 using namespace Rcpp;
 //#include <algorithm>    // std::sort
 
+const int na_int = -9999;
 
 
 // Create type and function to help sort scores.
@@ -52,7 +53,8 @@ Rcpp::DataFrame rank_variants(Rcpp::DataFrame variants,
   // or
   std::vector< std::pair< float, int > > vec_pair;
   std::vector< std::pair< int, int > > rank_pair;
-  std::vector < int > ranks;
+//  std::vector < int > ranks;
+  Rcpp::IntegerVector ranks;
   
   int win = 0;
   int i = 0;  // Variant counter.
@@ -60,12 +62,8 @@ Rcpp::DataFrame rank_variants(Rcpp::DataFrame variants,
 
   // Iterate to first window.
   while(pos(0) > ends(win)){
-//    vec_vec_pair[win].push_back( std::make_pair( 0, 0) );
     win++;
     }
-//  win_num(0) = win;
-//  vec_vec_pair.push_back();
-//  vec_vec_pair[0][0] = [< score(i), j >];
 
   for(i=0; i<score.size(); i++){
 //    Rcout << "Counter: " << i << " Position: " << pos(i) << "\n";
@@ -74,20 +72,29 @@ Rcpp::DataFrame rank_variants(Rcpp::DataFrame variants,
       // Position is within current window.
       win_num(i) = win;
       j++;
-      vec_pair.push_back( std::make_pair( score(i), j) );
-//      vec_vec_pair[win].push_back( std::make_pair( score(i), j) );
+      // Handle missing data.
+      if(score(i) == NA_REAL || mask(i) == FALSE){
+        vec_pair.push_back( std::make_pair( na_int, j) );
+      } else {
+        vec_pair.push_back( std::make_pair( score(i), j) );
+      }
 
     } else {
       // Begin a new window.
 
       // Sort vector of pairs for present window.
+      // vec_pair contains score and position.
       std::sort(vec_pair.begin(), vec_pair.end(), comparator);
       
+      // Rank within the window.
       for(int k=0; k<vec_pair.size(); k++){
 //        Rcout << "Window number: " << win << ", pair1: " << vec_pair[k].first << ", pair2: " << vec_pair[k].second  << "\n";
           rank_pair.push_back( std::make_pair( vec_pair[k].second, k + 1 ) );
 //        Rcout << "Window number: " << win << ", Rpair1: " << rank_pair[k].first << ", Rpair2: " << rank_pair[k].second  << "\n";
       }
+      
+      // Restore original order.
+      // rank_pair contains position and rank.
       std::sort(rank_pair.begin(), rank_pair.end(), minimize);
       
       for(int k=0; k<vec_pair.size(); k++){
@@ -95,7 +102,11 @@ Rcpp::DataFrame rank_variants(Rcpp::DataFrame variants,
 //        Rcout << "Window number: " << win << " Pair number: " << k;
 //        Rcout << " Rpair1: " << rank_pair[k].first << " Rpair2: " << rank_pair[k].second << "\n";
 //        Rcout << "Pair: " << rank_pair[k].second << "\n";
-        ranks.push_back( rank_pair[k].second );
+        if( rank_pair[k].second == na_int ){
+          ranks.push_back( NA_INTEGER );
+        } else {
+          ranks.push_back( rank_pair[k].second );
+        }
       }
 //      Rcout << "\n";
       // Increment to next window.
@@ -119,11 +130,13 @@ Rcpp::DataFrame rank_variants(Rcpp::DataFrame variants,
   std::sort(rank_pair.begin(), rank_pair.end(), minimize);
       
   for(int k=0; k<vec_pair.size(); k++){
-    ranks.push_back( rank_pair[k].second );
+    if( rank_pair[k].second == na_int){
+      ranks.push_back( NA_INTEGER );
+    } else {
+      ranks.push_back( rank_pair[k].second );
+    }
   }
   
-
-
 //  for(i=0; i<ranks.size(); i++){
 //    Rcout << i << "\n";
 //    Rcout << "Ranks: " << ranks[i] << "\n";

@@ -103,7 +103,7 @@ Using z-scores here may work.
 ```{r}
 dpz <- z_score(dp)
 dpz <- abs(dpz)
-maxes <- apply(dpz, MARGIN=2, max)
+maxes <- apply(dpz, MARGIN=2, max, na.rm=TRUE)
 dp2 <- abs(sweep(dpz, MARGIN = 2, STATS = maxes, FUN = "-"))
 dp2 <- 100 * sweep(dp2, MARGIN = 2, STATS = maxes, FUN = "/")
 ```
@@ -136,15 +136,16 @@ heatmap.bp(dp2)
 And finally, combine our metrics into a composite metric.
 
 
-```{r}
+```{r, fig.align='center'}
 scores <- rowMeans(dp2) + rowMeans(gq)
+is.na(scores[c(7,10)]) <- TRUE
 ```
 
 
 Check their distribution with a histogram.
 
 
-```{r}
+```{r, fig.align='center'}
 hist(scores)
 ```
 
@@ -153,6 +154,8 @@ Once we have score in hand we can use them to rank our variants.
 
 
 ```{r}
+pinf_mt <- masker(pinf_mt)
+
 pinf_mt <- rank_variants_chrom(pinf_mt, scores)
 
 head(pinf_mt@var.info)
@@ -165,7 +168,7 @@ We can take a look at them bay calling this directly.
 
 
 ```{r}
-pinf_mt@var.info[1:10, c('POS', 'mask', 'window_number', 'rank')]
+cbind(pinf_mt@var.info[1:26, c('POS', 'mask', 'window_number', 'rank')], scores[1:26])
 ```
 
 
@@ -193,7 +196,8 @@ We can manually adjust this.
 
 
 ```{r}
-pinf_mt@var.info$mask[pinf_mt@vcf.fix$QUAL < 900] <- FALSE
+#pinf_mt@var.info$mask[pinf_mt@vcf.fix$QUAL < 900] <- FALSE
+pinf_mt@var.info$mask[pinf_mt@var.info$MQ < 42] <- FALSE
 ```
 
 
