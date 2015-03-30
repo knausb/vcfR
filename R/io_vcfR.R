@@ -200,7 +200,7 @@ read.vcf.devel3 <- function(file, limit=1e9){
 #' 
 #' @export
 #' 
-memory_plot <- function(exponent_range=2:10){
+memory_plot <- function(exponent_range=2:6){
   msize <- 10^(exponent_range)
   osize <- vector(length=length(exponent_range))
 
