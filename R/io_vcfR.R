@@ -193,3 +193,22 @@ read.vcf.devel3 <- function(file, limit=1e9){
   return(vcf)
 }
 
+#' @rdname io_vcfR
+#' @aliases memory_plot
+#' 
+#' @param exponent_range range of values to be used for object sizes (10^exponent_range)
+#' 
+#' @export
+#' 
+memory_plot <- function(exponent_range=2:10){
+  msize <- 10^(exponent_range)
+  osize <- vector(length=length(exponent_range))
+
+  for(i in 1:length(exponent_range)){
+#    osize[i] <- object.size(ram_test(nrow = msize[i], ncol = 1L))
+    osize[i] <- object.size(.Call('vcfR_ram_test', PACKAGE = 'vcfR', nrow = msize[i], ncol = 1L))
+  }
+
+#  plot(msize, osize, type='b', log='xy')
+  plot(log10(msize), log(as.numeric(osize))/1e6, type='b', log='xy')
+}

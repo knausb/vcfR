@@ -14,7 +14,7 @@
 
 
 #' @rdname ranking
-#' @aliases rank_variants
+#' @aliases rank_variants_chrom
 #' 
 #' @export
 rank_variants_chrom <- function(x, scores){
