@@ -401,6 +401,7 @@ int write_vcf_body( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filenam
 //int write_vcf_body( Rcpp::CharacterMatrix fix, Rcpp::CharacterMatrix gt, std::string filename , int mask=0 ) {
 
 //  Rcpp::CharacterMatrix gt_cm = Rcpp::as< CharacterMatrix >(gt);
+//  Rcpp::StringMatrix gt_cm = Rcpp::as< StringMatrix >(gt);
 
   std::ofstream myfile;
   
