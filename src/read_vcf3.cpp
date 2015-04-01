@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 #include <fstream>
 #include <iostream>
+#include "zlib.h"
 
 //#include <boost/iostreams/filtering_streambuf.hpp>
 //#include <boost/iostreams/copy.hpp>
@@ -16,7 +17,7 @@ Rcpp::NumericVector vcf_stats(std::string x) {
   // Scroll through file and collect the number of
   // meta lines, the line number for the header,
   // the number of variant rows and the number of 
-  // columns in teh tabular region.
+  // columns in the tabular region.
   
   Rcpp::NumericVector stats(4);
   stats.names() = Rcpp::StringVector::create("meta", "header", "variants", "columns");
