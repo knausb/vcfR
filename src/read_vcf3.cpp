@@ -3,10 +3,6 @@
 #include <iostream>
 #include "zlib.h"
 
-//#include <boost/iostreams/filtering_streambuf.hpp>
-//#include <boost/iostreams/copy.hpp>
-//#include <boost/iostreams/filter/gzip.hpp>
-
 using namespace Rcpp;
 
 const int nreport = 1000;
@@ -310,8 +306,6 @@ int read_to_line(std::string x) {
 // [[Rcpp::export]]
 Rcpp::CharacterMatrix ram_test(int nrow=1, int ncol=1) {
   Rcpp::CharacterMatrix gt(nrow, ncol);
-//Rcpp::StringMatrix ram_test() {
-//  Rcpp::StringMatrix gt(1, 1);
   
   return(gt);
 }
