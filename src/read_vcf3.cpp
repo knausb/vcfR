@@ -145,54 +145,6 @@ std::vector < std::string > tabsplit(std::string line, int elements){
 
 
 
-// [[Rcpp::export]]
-Rcpp::DataFrame vcf_body_old1(std::string x, Rcpp::NumericVector stats) {
-//  Rcpp::StringMatrix body(stats[2], stats[3]);
-  Rcpp::CharacterMatrix body(stats[2], stats[3]);
-  
-  std::string line;  // String for reading file into
-  
-  std::ifstream myfile;
-  myfile.open (x.c_str(), std::ios::in);
-
-  if (!myfile.is_open()){
-    Rcout << "Unable to open file";
-  }
-
-  // Loop over the file.
-  int i = 0;
-  int j = 0;
-  while ( i < stats[0] ){
-    getline (myfile,line);
-    i++;
-  }
-  // Get header.
-  getline (myfile,line);
-  std::string header = line;
-  
-  // Get body.
-  i = 0;
-  while ( getline (myfile,line) ){
-    Rcpp::checkUserInterrupt();
-//    body(i, _) = tabsplit(header);
-    std::vector < std::string > temps = tabsplit(line, stats[3]);
-    for(j=0; j<stats[3]; j++){
-      body(i, j) = temps[j];
-    }
-    i++;
-  }
-
-  myfile.close();
-
-  Rcpp::DataFrame df1(body);
-  std::vector < std::string > temps = tabsplit(header, stats[3]);
-  temps[0].erase(0,1);
-//  df1.names() = Rcpp::StringVector::create(temps);
-  df1.names() = temps;
-
-  return df1;
-}
-
 
 
 // [[Rcpp::export]]
