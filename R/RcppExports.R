@@ -75,7 +75,7 @@ ram_test <- function(nrow = 1L, ncol = 1L) {
 }
 
 write_vcf_body <- function(fix, gt, filename, mask = 0L) {
-    .Call('vcfR_write_vcf_body', PACKAGE = 'vcfR', fix, gt, filename, mask)
+    invisible(.Call('vcfR_write_vcf_body', PACKAGE = 'vcfR', fix, gt, filename, mask))
 }
 
 seq_to_rects <- function(seq, targets) {

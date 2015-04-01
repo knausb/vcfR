@@ -15,6 +15,7 @@ tail(pinf_mt@var.info)
 
 
 gt <- extract.gt(pinf_mt, element="GT")
+class(gt)
 is.na(gt[1,1:4]) <- TRUE
 gt[371,29] <- "2/2"
 gt[371,28] <- "3/2"

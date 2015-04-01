@@ -316,28 +316,105 @@ Rcpp::CharacterMatrix ram_test(int nrow=1, int ncol=1) {
 }
 
 
+Rcpp::StringMatrix DataFrame_to_StringMatrix( Rcpp::DataFrame df ){
+  Rcpp::StringVector sv = df(0);
+  Rcpp::StringMatrix sm(sv.size(), df.size());
+  
+  sm.attr("col.names") = df.attr("col.names");
+  sm.attr("row.names") = df.attr("row.names");
+
+  for(int i=0; i < df.size(); i++){
+    sv = df(i);
+    for(int j=0; j < sv.size(); j++){
+      sm(j, i) = sv(j);
+    }
+  }
+
+  return sm;
+}
+
 
 // [[Rcpp::export]]
-int write_vcf_body( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filename , int mask=0 ) {
-//int write_vcf_body( Rcpp::CharacterMatrix fix, Rcpp::CharacterMatrix gt, std::string filename , int mask=0 ) {
+void write_vcf_body( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filename , int mask=0 ) {
+//int write_vcf_body( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filename , int mask=0 ) {
 
-//  Rcpp::CharacterMatrix gt_cm = Rcpp::as< CharacterMatrix >(gt);
-//  Rcpp::StringMatrix gt_cm = Rcpp::as< StringMatrix >(gt);
-//  Rcpp::StringMatrix gt_cm = Rcpp::CharacterMatrix::create(gt);
-  Rcpp::StringVector chrom = fix["CHROM"];
+  // fix DataFrame
+  Rcpp::StringVector chrom  = fix["CHROM"];
+  Rcpp::StringVector pos    = fix["POS"];
+  Rcpp::StringVector id     = fix["ID"];
+  Rcpp::StringVector ref    = fix["REF"];
+  Rcpp::StringVector alt    = fix["ALT"];
+  Rcpp::StringVector qual   = fix["QUAL"];
+  Rcpp::StringVector filter = fix["FILTER"];
+  Rcpp::StringVector info   = fix["INFO"];
+
+  // gt DataFrame
+  Rcpp::StringMatrix gt_cm = DataFrame_to_StringMatrix(gt);
+  Rcpp::StringVector column_names(gt.size());
+  column_names = gt.attr("names");
+  
   int i = 0;
+  int j = 0;
 
   std::ofstream myfile;
   
   myfile.open (filename.c_str(), std::ios::out | std::ios::app | std::ios::binary);
-  
+
   for(i=0; i<chrom.size(); i++){
-    myfile << chrom(i);
-    myfile << "\n";
+    Rcpp::checkUserInterrupt();
+    if(mask == 1 && filter(i) == "PASS" ){
+      // Don't print variant.
+    } else {
+      myfile << chrom(i);
+      myfile << "\t";
+      myfile << pos(i);
+      myfile << "\t";
+      if(id(i) == NA_STRING){
+        myfile << ".";
+        myfile << "\t";
+      } else {
+        myfile << id(i);
+        myfile << "\t";
+      }
+      myfile << ref(i);
+      myfile << "\t";
+      myfile << alt(i);
+      myfile << "\t";
+      if(qual(i) == NA_STRING){
+        myfile << ".";
+        myfile << "\t";
+      } else {
+        myfile << qual(i);
+        myfile << "\t";
+      }
+      if(filter(i) == NA_STRING){
+        myfile << ".";
+        myfile << "\t";
+      } else {
+        myfile << filter(i);
+        myfile << "\t";
+      }
+      if(info(i) == NA_STRING){
+        myfile << ".";
+        myfile << "\t";
+      } else {
+        myfile << info(i);
+      }
+      
+      // gt region.
+      myfile << "\t";
+      myfile << gt_cm(i, 0);
+      for(j=1; j<column_names.size(); j++){
+        myfile << "\t";
+        myfile << gt_cm(i, j);
+      }
+
+      myfile << "\n";
+    }
   }
 
   myfile.close();
   
-  return 1;
+  return;
 }
 

@@ -193,6 +193,34 @@ read.vcf.devel3 <- function(file, limit=1e9){
   return(vcf)
 }
 
+
+#' @rdname io_vcfR
+#' @export
+#' 
+write.vcf.devel3 <- function(x, file = "", mask = FALSE, APPEND = FALSE){
+  if(class(x) != "vcfR"){
+    stop("Unexpected class! Expecting an object of class vcfR or Chrom.")
+  }
+  
+  if(APPEND == FALSE){
+    write(x@meta, file = file, append = FALSE)
+    header <- c(names(x@fix), names(x@gt))
+    header[1] <- "#CHROM"
+    header <- paste(header, collapse="\t")
+    write(header, file = file, append = TRUE)
+  }
+  
+  if(mask == FALSE){
+    test <- .Call('vcfR_write_vcf_body', PACKAGE = 'vcfR', fix = x@fix, gt = x@gt, filename = file, mask = 0)
+  } else if (mask == TRUE){
+    test <- .Call('vcfR_write_vcf_body', PACKAGE = 'vcfR', fix = x@fix, gt = x@gt, filename = file, mask = 1)
+  }
+}
+
+
+
+
+
 #' @rdname io_vcfR
 #' @aliases memory_plot
 #' 

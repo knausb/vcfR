@@ -6,6 +6,7 @@
 \alias{read.vcf.devel}
 \alias{read.vcf.devel3}
 \alias{write.vcf}
+\alias{write.vcf.devel3}
 \title{Read and write vcf format files}
 \usage{
 read.vcf(file)
@@ -15,6 +16,8 @@ write.vcf(x, file = "", mask = logical(0), APPEND = FALSE)
 read.vcf.devel(file)
 
 read.vcf.devel3(file, limit = 1e+09)
+
+write.vcf.devel3(x, file = "", mask = FALSE, APPEND = FALSE)
 
 memory_plot(exponent_range = 2:6)
 }

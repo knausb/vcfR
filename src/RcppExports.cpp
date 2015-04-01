@@ -208,17 +208,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // write_vcf_body
-int write_vcf_body(Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filename, int mask);
+void write_vcf_body(Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filename, int mask);
 RcppExport SEXP vcfR_write_vcf_body(SEXP fixSEXP, SEXP gtSEXP, SEXP filenameSEXP, SEXP maskSEXP) {
 BEGIN_RCPP
-    Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< Rcpp::DataFrame >::type fix(fixSEXP);
     Rcpp::traits::input_parameter< Rcpp::DataFrame >::type gt(gtSEXP);
     Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
     Rcpp::traits::input_parameter< int >::type mask(maskSEXP);
-    __result = Rcpp::wrap(write_vcf_body(fix, gt, filename, mask));
-    return __result;
+    write_vcf_body(fix, gt, filename, mask);
+    return R_NilValue;
 END_RCPP
 }
 // seq_to_rects

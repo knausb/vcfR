@@ -96,6 +96,11 @@ test_that("vcf file io works",{
 
 #write_vcf_body( fix = pinf_vcf@fix, gt = pinf_vcf@gt, filename = "test.vcf", mask = 0L)
 
-.Call('vcfR_write_vcf_body', PACKAGE = 'vcfR', fix = pinf_vcf@fix, gt = pinf_vcf@gt, filename = "test.vcf", mask = 0)
+
+
+#.Call('vcfR_write_vcf_body', PACKAGE = 'vcfR', fix = pinf_vcf@fix, gt = pinf_vcf@gt, filename = "test.vcf", mask = 0)
+
+#write.vcf.devel3(pinf_vcf, file = "test.vcf", mask = FALSE, APPEND = FALSE)
+
 
 
