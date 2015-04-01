@@ -323,10 +323,18 @@ int write_vcf_body( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filenam
 
 //  Rcpp::CharacterMatrix gt_cm = Rcpp::as< CharacterMatrix >(gt);
 //  Rcpp::StringMatrix gt_cm = Rcpp::as< StringMatrix >(gt);
+//  Rcpp::StringMatrix gt_cm = Rcpp::CharacterMatrix::create(gt);
+  Rcpp::StringVector chrom = fix["CHROM"];
+  int i = 0;
 
   std::ofstream myfile;
   
   myfile.open (filename.c_str(), std::ios::out | std::ios::app | std::ios::binary);
+  
+  for(i=0; i<chrom.size(); i++){
+    myfile << chrom(i);
+    myfile << "\n";
+  }
 
   myfile.close();
   
