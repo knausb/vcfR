@@ -394,3 +394,20 @@ Rcpp::CharacterMatrix ram_test(int nrow=1, int ncol=1) {
   return(gt);
 }
 
+
+
+// [[Rcpp::export]]
+int write_vcf_body( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filename , int mask=0 ) {
+//int write_vcf_body( Rcpp::CharacterMatrix fix, Rcpp::CharacterMatrix gt, std::string filename , int mask=0 ) {
+
+//  Rcpp::CharacterMatrix gt_cm = Rcpp::as< CharacterMatrix >(gt);
+
+  std::ofstream myfile;
+  
+  myfile.open (filename.c_str(), std::ios::out | std::ios::app | std::ios::binary);
+
+  myfile.close();
+  
+  return 1;
+}
+

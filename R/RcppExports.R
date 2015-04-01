@@ -82,6 +82,10 @@ ram_test <- function(nrow = 1L, ncol = 1L) {
     .Call('vcfR_ram_test', PACKAGE = 'vcfR', nrow, ncol)
 }
 
+write_vcf_body <- function(fix, gt, filename, mask = 0L) {
+    .Call('vcfR_write_vcf_body', PACKAGE = 'vcfR', fix, gt, filename, mask)
+}
+
 seq_to_rects <- function(seq, targets) {
     .Call('vcfR_seq_to_rects', PACKAGE = 'vcfR', seq, targets)
 }

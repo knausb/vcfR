@@ -94,4 +94,8 @@ test_that("vcf file io works",{
 #print(object.size(.Call('vcfR_ram_test', PACKAGE = 'vcfR', nrow=1e4, ncol=2000)), units="Gb")
 #print(object.size(.Call('vcfR_ram_test', PACKAGE = 'vcfR', nrow=3e5, ncol=2000)), units="Gb")
 
+#write_vcf_body( fix = pinf_vcf@fix, gt = pinf_vcf@gt, filename = "test.vcf", mask = 0L)
+
+.Call('vcfR_write_vcf_body', PACKAGE = 'vcfR', fix = pinf_vcf@fix, gt = pinf_vcf@gt, filename = "test.vcf", mask = 0)
+
 
