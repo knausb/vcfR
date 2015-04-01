@@ -13,6 +13,11 @@ const int nreport = 1000;
 
 // [[Rcpp::export]]
 Rcpp::NumericVector vcf_stats(std::string x) {
+  // Scroll through file and collect the number of
+  // meta lines, the line number for the header,
+  // the number of variant rows and the number of 
+  // columns in teh tabular region.
+  
   Rcpp::NumericVector stats(4);
   stats.names() = Rcpp::StringVector::create("meta", "header", "variants", "columns");
 
@@ -77,9 +82,9 @@ Rcpp::NumericVector vcf_stats(std::string x) {
 
 // [[Rcpp::export]]
 Rcpp::StringVector vcf_meta(std::string x, Rcpp::NumericVector stats) {
-//Rcpp::List vcf_meta(std::string x, Rcpp::NumericVector stats) {
+  // Read in the meta lines.
   // stats consists of elements ("meta", "header", "variants", "columns");
-//  Rcpp::List meta(stats[0]);
+  
   Rcpp::StringVector meta(stats[0]);
   std::string line;  // String for reading file into
   
@@ -114,6 +119,8 @@ Rcpp::StringVector vcf_meta(std::string x, Rcpp::NumericVector stats) {
 
 
 std::vector < std::string > tabsplit(std::string line, int elements){
+  // Split a string into tabs.
+  
   std::vector < std::string > stringv(elements);
 //  Rcout << "Genotype: " << line << "\n";
 
@@ -149,7 +156,8 @@ std::vector < std::string > tabsplit(std::string line, int elements){
 
 // [[Rcpp::export]]
 Rcpp::DataFrame vcf_body(std::string x, Rcpp::NumericVector stats) {
-//  Rcpp::StringVector   chrom(stats[2]);
+  // Read in the fixed and genotype portion of the file.
+
   Rcpp::CharacterVector   chrom(stats[2]);
   Rcpp::IntegerVector  pos(stats[2]);
   Rcpp::StringVector   id(stats[2]);
@@ -294,45 +302,6 @@ int read_to_line(std::string x) {
 }
 
 
-// Function requires boost for gz compression.
-// // [[Rcpp::depends(BH)]]
-// [[Rcpp::export]]
-int read_gz_to_line(std::string x) {
-  std::string line;  // String for reading file into
-  long int i = 0;
-
-//  std::ifstream myfile(x.c_str(), std::ios_base::in | std::ios_base::binary);
-//  boost::iostreams::filtering_streambuf<boost::iostreams::input> inbuf;
-//  inbuf.push(boost::iostreams::gzip_decompressor());
-//  inbuf.push(file);
-
-//    std::ifstream myfile(x.c_str(), std::ios_base::in | std::ios_base::binary);
-    std::ifstream myfile("hello.gz", std::ios_base::in | std::ios_base::binary);
-//    boost::iostreams::filtering_streambuf<boost::iostreams::input> in;
-//    in.push(boost::iostreams::gzip_decompressor());
-//    in.push(myfile);
-//    boost::iostreams::copy(in, Rcout);
-
-
-
-   //Read from the first command line argument, assume it's gzipped
-
-//  std::ifstream myfile;
-//  myfile.open (x.c_str(), std::ios::in);
-
-  if (!myfile.is_open()){
-    Rcout << "Unable to open file";
-  }
-  
-  // Loop over the file.
-  while ( getline (myfile,line) ){
-    Rcout << line << "\n";
-    i++;
-  }
-
-  myfile.close();
-  return i;
-}
 
 
 
