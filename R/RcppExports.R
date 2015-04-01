@@ -70,10 +70,6 @@ read_to_line <- function(x) {
     .Call('vcfR_read_to_line', PACKAGE = 'vcfR', x)
 }
 
-read_gz_to_line <- function(x) {
-    .Call('vcfR_read_gz_to_line', PACKAGE = 'vcfR', x)
-}
-
 ram_test <- function(nrow = 1L, ncol = 1L) {
     .Call('vcfR_ram_test', PACKAGE = 'vcfR', nrow, ncol)
 }

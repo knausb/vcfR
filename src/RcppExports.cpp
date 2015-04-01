@@ -195,17 +195,6 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// read_gz_to_line
-int read_gz_to_line(std::string x);
-RcppExport SEXP vcfR_read_gz_to_line(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
-    __result = Rcpp::wrap(read_gz_to_line(x));
-    return __result;
-END_RCPP
-}
 // ram_test
 Rcpp::CharacterMatrix ram_test(int nrow, int ncol);
 RcppExport SEXP vcfR_ram_test(SEXP nrowSEXP, SEXP ncolSEXP) {
