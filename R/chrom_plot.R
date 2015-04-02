@@ -454,7 +454,8 @@ chromo <- function(x = x,
          ytop = 0.7,
          col = "#00cc00",
          border = NA)
-    if(!is.na(x@seq.info$N.win[1,1])){
+#    if(!is.na(x@seq.info$N.win[1,1])){
+    if(nrow(x@seq.info$N.win) > 0){
       rect(xleft = x@seq.info$N.win[,1],
            ybottom = -0.4,
            xright = x@seq.info$N.win[,2],
