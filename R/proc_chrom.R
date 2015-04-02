@@ -33,9 +33,9 @@
 
 #' @rdname proc_chrom
 #' @export
-#' @aliases proc_chrom
+#' @aliases proc_chrom_R
 #'
-proc_chrom <- function(x, win.size = 1e3, verbose=TRUE){
+proc_chrom_R <- function(x, win.size = 1e3, verbose=TRUE){
   stopifnot(class(x) == "Chrom")
   
   if(class(x@seq) == "DNAbin"){
@@ -75,9 +75,9 @@ proc_chrom <- function(x, win.size = 1e3, verbose=TRUE){
 
 #' @rdname proc_chrom
 #' @export
-# @aliases proc_chrom
+#' @aliases proc_chrom
 #'
-proc_chrom2 <- function(x, win.size = 1e3, verbose=TRUE){
+proc_chrom <- function(x, win.size = 1e3, verbose=TRUE){
   stopifnot(class(x) == "Chrom")
   
 #  ptime <- system.time(x@seq.info$nuc.win <- regex.win(x))
