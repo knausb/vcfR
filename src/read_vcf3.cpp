@@ -347,6 +347,8 @@ void write_vcf_body( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filena
   Rcpp::StringMatrix gt_cm = DataFrame_to_StringMatrix(gt);
   Rcpp::StringVector column_names(gt.size());
   column_names = gt.attr("names");
+//  column_names = gt_cm.attr("col.names");
+//  delete gt;
   
   int i = 0;
   int j = 0;

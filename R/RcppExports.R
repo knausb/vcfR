@@ -42,18 +42,6 @@ rank_variants <- function(variants, ends, score) {
     .Call('vcfR_rank_variants', PACKAGE = 'vcfR', variants, ends, score)
 }
 
-readVcfHeader <- function(x) {
-    .Call('vcfR_readVcfHeader', PACKAGE = 'vcfR', x)
-}
-
-readVcfBody <- function(x) {
-    .Call('vcfR_readVcfBody', PACKAGE = 'vcfR', x)
-}
-
-readVcfBody2 <- function(x) {
-    .Call('vcfR_readVcfBody2', PACKAGE = 'vcfR', x)
-}
-
 vcf_stats <- function(x) {
     .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', x)
 }

@@ -116,39 +116,6 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// readVcfHeader
-std::vector<std::string> readVcfHeader(String x);
-RcppExport SEXP vcfR_readVcfHeader(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< String >::type x(xSEXP);
-    __result = Rcpp::wrap(readVcfHeader(x));
-    return __result;
-END_RCPP
-}
-// readVcfBody
-CharacterMatrix readVcfBody(String x);
-RcppExport SEXP vcfR_readVcfBody(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< String >::type x(xSEXP);
-    __result = Rcpp::wrap(readVcfBody(x));
-    return __result;
-END_RCPP
-}
-// readVcfBody2
-Rcpp::DataFrame readVcfBody2(std::string x);
-RcppExport SEXP vcfR_readVcfBody2(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
-    __result = Rcpp::wrap(readVcfBody2(x));
-    return __result;
-END_RCPP
-}
 // vcf_stats
 Rcpp::NumericVector vcf_stats(std::string x);
 RcppExport SEXP vcfR_vcf_stats(SEXP xSEXP) {
