@@ -12,7 +12,7 @@ pinf_mt <- proc_chrom(pinf_mt, win.size=1000, verbose=FALSE)
 original_dir <- getwd()
 test_dir <- tempdir()
 
-
+##### ##### ##### ##### #####
 
 test_that("read/write.vcf works for vcfR objects",{
 
@@ -52,7 +52,7 @@ test_that("read/write.vcf works for Chrom objects",{
 })
 
 
-test_that("write_var_info works for vcfR objects",{
+test_that("write_var_info works for Chrom objects",{
   
   setwd(test_dir)
   write_var_info(pinf_mt, "test.csv")
@@ -62,11 +62,28 @@ test_that("write_var_info works for vcfR objects",{
   
   expect_is(test, "data.frame")
   expect_equal(nrow(test), 371)
-#  expect_equal(ncol(test), 371)
+  expect_equal(ncol(test), 9)
+  expect_equal(length(grep("CHROM", names(test))), 1)
+  expect_equal(length(grep("POS", names(test))), 1)
+  expect_equal(length(grep("mask", names(test))), 1)
   
 })
 
 
+test_that("write_var_info works for Chrom objects",{
+  
+  setwd(test_dir)
+  write_win_info(pinf_mt, "test.csv")
+  test <- read.table("test.csv", header=TRUE, sep=",")
+  unlink("test.csv")
+  setwd(original_dir)
 
+  expect_is(test, "data.frame")
+  expect_equal(nrow(test), 40)
+  expect_equal(ncol(test), 12)
+  expect_equal(length(grep("window", names(test))), 1)
+  expect_equal(length(grep("start", names(test))), 1)
+  expect_equal(length(grep("end", names(test))), 1)
 
+})
 
