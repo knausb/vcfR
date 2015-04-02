@@ -196,8 +196,14 @@ read.vcf.devel3 <- function(file, limit=1e9){
 
 #' @rdname io_vcfR
 #' @export
+#' @aliases write.vcf.devel3
 #' 
 write.vcf.devel3 <- function(x, file = "", mask = FALSE, APPEND = FALSE){
+  if(class(x) == "Chrom"){
+    filter <- x@var.info$mask
+    x <- chrom_to_vcfR(x)
+    x@fix$FILTER[filter] <- "PASS"
+  }
   if(class(x) != "vcfR"){
     stop("Unexpected class! Expecting an object of class vcfR or Chrom.")
   }
