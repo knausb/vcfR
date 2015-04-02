@@ -1,6 +1,6 @@
 #!/bin/sh
 
 rm -f src/*.o src/*.so src/*~ \
-      */*~
+      */*~ *~
 
 

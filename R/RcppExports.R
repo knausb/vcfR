@@ -42,6 +42,10 @@ rank_variants <- function(variants, ends, score) {
     .Call('vcfR_rank_variants', PACKAGE = 'vcfR', variants, ends, score)
 }
 
+vcf_stats_gz <- function(x) {
+    .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', x)
+}
+
 vcf_stats <- function(x) {
     .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', x)
 }

@@ -1,11 +1,22 @@
 #include <Rcpp.h>
 #include <fstream>
-#include <iostream>
-// #include "zlib.h"
+#include <zlib.h>
+// #include <iostream>
 
 using namespace Rcpp;
 
 const int nreport = 1000;
+
+
+
+// [[Rcpp::export]]
+Rcpp::NumericVector vcf_stats_gz(std::string x) {
+  
+  Rcpp::NumericVector stats(4);
+  stats.names() = Rcpp::StringVector::create("meta", "header", "variants", "columns");
+  
+  return stats;
+}
 
 
 // [[Rcpp::export]]
