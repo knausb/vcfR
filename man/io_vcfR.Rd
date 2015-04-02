@@ -7,6 +7,8 @@
 \alias{read.vcf.devel3}
 \alias{write.vcf}
 \alias{write.vcf.devel3}
+\alias{write_var_info}
+\alias{write_win_info}
 \title{Read and write vcf format files}
 \usage{
 read.vcf(file)
@@ -20,11 +22,15 @@ read.vcf.devel3(file, limit = 1e+09)
 write.vcf.devel3(x, file = "", mask = FALSE, APPEND = FALSE)
 
 memory_plot(exponent_range = 2:6)
+
+write_var_info(x, file = "", mask = FALSE, APPEND = FALSE)
+
+write_win_info(x, file = "", APPEND = FALSE)
 }
 \arguments{
 \item{file}{A filename for a variant call format (vcf) file}
 
-\item{x}{A vcfR object}
+\item{x}{An object of class vcfR or Chrom}
 
 \item{mask}{logical vector indicating rows to use}
 

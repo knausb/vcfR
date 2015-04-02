@@ -8,7 +8,7 @@
 #' Read and write files in the vcf format.
 #' 
 #' @param file A filename for a variant call format (vcf) file
-#' @param x A vcfR object
+#' @param x An object of class vcfR or Chrom
 # @param vfile an output filename
 #' @param mask logical vector indicating rows to use
 #' @param APPEND logical indicating whether to append to existing vcf file or write a new file
@@ -225,8 +225,6 @@ write.vcf.devel3 <- function(x, file = "", mask = FALSE, APPEND = FALSE){
 
 
 
-
-
 #' @rdname io_vcfR
 #' @aliases memory_plot
 #' 
@@ -246,3 +244,45 @@ memory_plot <- function(exponent_range=2:6){
 #  plot(msize, osize, type='b', log='xy')
   plot(log10(msize), log(as.numeric(osize))/1e6, type='b', log='xy')
 }
+
+
+
+#' @rdname io_vcfR
+#' @aliases write_var_info
+#' 
+#' @export
+#' 
+write_var_info <- function(x, file = "", mask = FALSE, APPEND = FALSE){
+  if(class(x) == "vcfR"){
+    stop("Unexpected class! Detected class vcfR. This class does not contain variant summaries.")
+  }
+  if(class(x) != "Chrom"){
+    stop("Unexpected class! Expecting an object of class Chrom.")
+  }
+  
+  if(mask == FALSE){
+    write.table(x@var.info, file = file, append = APPEND, sep = ",", row.names = FALSE, col.names = !APPEND)
+  } else if(mask == TRUE){
+    write.table(x@var.info[x@var.info$mask,], file = file, append = APPEND, sep = ",", row.names = FALSE, col.names = !APPEND)
+  }
+}
+
+
+
+#' @rdname io_vcfR
+#' @aliases write_win_info
+#' 
+#' @export
+#' 
+write_win_info <- function(x, file = "", APPEND = FALSE){
+  if(class(x) == "vcfR"){
+    stop("Unexpected class! Detected class vcfR. This class does not contain window summaries.")
+  }
+  if(class(x) != "Chrom"){
+    stop("Unexpected class! Expecting an object of class Chrom.")
+  }
+  
+  write.table(x@win.info, file = file, append = APPEND, sep = ",", row.names = FALSE, col.names = !APPEND)
+}
+
+

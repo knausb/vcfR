@@ -1,7 +1,6 @@
 #include <Rcpp.h>
+
 using namespace Rcpp;
-
-
 
 
 std::vector < int > gtsplit(std::string line){
