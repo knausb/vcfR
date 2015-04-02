@@ -22,8 +22,8 @@ test_that("vcf file io works",{
   
   expect_is(test, "vcfR")
   expect_is(test@fix$POS, "integer")
-  expect_is(test@fix$QUAL, "integer")
-#  expect_is(test@fix$QUAL, "numeric")
+#  expect_is(test@fix$QUAL, "integer")
+  expect_is(test@fix$QUAL, "numeric")
   
   expect_identical(names(test@fix)[1], "CHROM")
   

@@ -36,7 +36,7 @@
 #' plot(pinf_vcf)
 #' pinf_vcf[1:6,]
 #' 
-read.vcf<-function(file){
+read.vcf.R<-function(file){
   vcf <- new(Class="vcfR")
   i <- -1 # Line counter.
   j <- 0 # Success?
@@ -83,7 +83,7 @@ read.vcf<-function(file){
 
 
 #' @rdname io_vcfR
-#' @aliases write.vcf
+#' @aliases write.vcf.R
 #' 
 # @usage write.vcf(xvcf, vfile)
 #' 
@@ -91,7 +91,7 @@ read.vcf<-function(file){
 #' @export
 #' 
 #write.vcf<-function(xvcf, vfile, mask=logical(0), APPEND=FALSE){
-write.vcf<-function(x, file="", mask=logical(0), APPEND=FALSE){
+write.vcf.R<-function(x, file="", mask=logical(0), APPEND=FALSE){
   if(class(x) == 'Chrom'){
     # Recast as a vcfR object.
     temp <- x
@@ -140,29 +140,13 @@ write.vcf<-function(x, file="", mask=logical(0), APPEND=FALSE){
 }
 
 
-#' @rdname io_vcfR
-#' @aliases read.vcf.devel3
-#' @export
-#' 
-read.vcf.devel <- function(file){
-  vcf <- new(Class="vcfR")
-  vcf@meta <- .Call('vcfR_readVcfHeader', PACKAGE = 'vcfR', file)
-#  temp <- .Call('vcfR_readVcfBody', PACKAGE = 'vcfR', file)
-#  vcf@fix <- as.data.frame(temp[-1,1:8])
-#  names(vcf@fix) <- temp[1,1:8]
-#  vcf@gt <- as.data.frame(temp[-1,-c(1:8)])
-#  names(vcf@gt) <- temp[1,-c(1:8)]
-  temp <- .Call('vcfR_readVcfBody2', PACKAGE = 'vcfR', file)
-  vcf@fix <- temp[,1:8]
-  vcf@gt <- temp[,9:ncol(temp)]
-  return(vcf)
-}
 
 
 #' @rdname io_vcfR
+#' @aliases read.vcf
 #' @export
 #' 
-read.vcf.devel3 <- function(file, limit=1e9){
+read.vcf <- function(file, limit=1e9){
   vcf <- new(Class="vcfR")
   stats <- .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', file)
 #  element_size <- object.size(.Call('vcfR_ram_test', PACKAGE = 'vcfR'))
@@ -196,9 +180,9 @@ read.vcf.devel3 <- function(file, limit=1e9){
 
 #' @rdname io_vcfR
 #' @export
-#' @aliases write.vcf.devel3
+#' @aliases write.vcf
 #' 
-write.vcf.devel3 <- function(x, file = "", mask = FALSE, APPEND = FALSE){
+write.vcf <- function(x, file = "", mask = FALSE, APPEND = FALSE){
   if(class(x) == "Chrom"){
     filter <- x@var.info$mask
     x <- chrom_to_vcfR(x)
