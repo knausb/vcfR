@@ -108,6 +108,7 @@ window_table <- function(x){
 
 #' @rdname Chrom_functions
 #' @aliases window_table
+#' @param return_indels logical indicating whether to return indels or not
 #' 
 #' @export
 extract_indels <- function(x, return_indels=FALSE){
@@ -115,9 +116,9 @@ extract_indels <- function(x, return_indels=FALSE){
     # Recast as a vcfR object.
     Chrom <- x
     x <- new(Class="vcfR")
-    x@meta <- temp@vcf.meta
-    x@fix <- temp@vcf.fix
-    x@gt <- temp@vcf.gt
+    x@meta <- Chrom@vcf.meta
+    x@fix  <- Chrom@vcf.fix
+    x@gt   <- Chrom@vcf.gt
   }
   if(class(x) != "vcfR"){
     stop("Unexpected class! Expecting an object of class vcfR or Chrom.")

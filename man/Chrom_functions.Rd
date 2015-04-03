@@ -2,6 +2,7 @@
 % Please edit documentation in R/Chrom_functions.R
 \name{Chrom functions}
 \alias{Chrom functions}
+\alias{extract_indels}
 \alias{masker}
 \alias{variant_table}
 \alias{window_table}
@@ -13,6 +14,8 @@ masker(x, QUAL = 999, mindp = 0.25, maxdp = 0.75, minmq = 20,
 variant_table(x)
 
 window_table(x)
+
+extract_indels(x, return_indels = FALSE)
 }
 \arguments{
 \item{x}{object of class Chrom}
@@ -28,6 +31,8 @@ window_table(x)
 \item{maxmq}{maximum mapping quality}
 
 \item{...}{arguments to be passed to methods}
+
+\item{return_indels}{logical indicating whether to return indels or not}
 }
 \description{
 Functions which act on Chrom objects
