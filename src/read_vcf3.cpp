@@ -471,6 +471,31 @@ void write_vcf_body( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filena
 
 // [[Rcpp::export]]
 void write_vcf_body_gz( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filename , int mask=0 ) {
+  // http://stackoverflow.com/a/5649224
+  
+  // fix DataFrame
+  Rcpp::StringVector chrom  = fix["CHROM"];
+  Rcpp::StringVector pos    = fix["POS"];
+  Rcpp::StringVector id     = fix["ID"];
+  Rcpp::StringVector ref    = fix["REF"];
+  Rcpp::StringVector alt    = fix["ALT"];
+  Rcpp::StringVector qual   = fix["QUAL"];
+  Rcpp::StringVector filter = fix["FILTER"];
+  Rcpp::StringVector info   = fix["INFO"];
+  
+  int i = 0;
+  
+  gzFile *fi = (gzFile *)gzopen("file.gz","wb");
+//  gzwrite(fi,"my decompressed data",strlen("my decompressed data"));
+  for(i=0; i<chrom.size(); i++){
+    gzwrite(fi,"my decompressed data",strlen("my decompressed data"));
+    gzwrite(fi,"\n",strlen("\n"));
+    std::string tmpstring = "test string\n";
+//    gzwrite(fi, tmpstring, tmpstring.size());
+//    gzwrite(fi, chrom(i), strlen(chrom(i)));
+    gzwrite(fi,"\n",strlen("\n"));
+  }
+  gzclose(fi);
   
   
   return;
