@@ -210,6 +210,44 @@ write.vcf <- function(x, file = "", mask = FALSE, APPEND = FALSE){
 
 
 #' @rdname io_vcfR
+#' @export
+#' @aliases write.vcf.gz
+#' 
+write.vcf.gz <- function(x, file = "", mask = FALSE, APPEND = FALSE){
+  if(class(x) == "Chrom"){
+    filter <- x@var.info$mask
+    x <- chrom_to_vcfR(x)
+    x@fix$FILTER[filter] <- "PASS"
+  }
+  if(class(x) != "vcfR"){
+    stop("Unexpected class! Expecting an object of class vcfR or Chrom.")
+  }
+  
+  if(APPEND == FALSE){
+    gz <- gzfile(file, "w")
+    write(x@meta, gz)
+
+    header <- c(names(x@fix), names(x@gt))
+    header[1] <- "#CHROM"
+    header <- paste(header, collapse="\t")
+    write(header, gz)
+
+    close(gz)
+  }
+  
+  if(mask == FALSE){
+    test <- .Call('vcfR_write_vcf_body_gz', PACKAGE = 'vcfR', fix = x@fix, gt = x@gt, filename = file, mask = 0)
+  } else if (mask == TRUE){
+    test <- .Call('vcfR_write_vcf_body_gz', PACKAGE = 'vcfR', fix = x@fix, gt = x@gt, filename = file, mask = 1)
+  }
+}
+
+
+
+
+
+
+#' @rdname io_vcfR
 #' @aliases memory_plot
 #' 
 #' @param exponent_range range of values to be used for object sizes (10^exponent_range)

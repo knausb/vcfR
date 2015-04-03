@@ -483,17 +483,54 @@ void write_vcf_body_gz( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string fil
   Rcpp::StringVector filter = fix["FILTER"];
   Rcpp::StringVector info   = fix["INFO"];
   
-  int i = 0;
+  // gt DataFrame
+  Rcpp::StringMatrix gt_cm = DataFrame_to_StringMatrix(gt);
+  Rcpp::StringVector column_names(gt.size());
+  column_names = gt.attr("names");
   
-  gzFile *fi = (gzFile *)gzopen("file.gz","wb");
-//  gzwrite(fi,"my decompressed data",strlen("my decompressed data"));
+  int i = 0;
+  int j = 0;
+  
+  gzFile *fi = (gzFile *)gzopen(filename.c_str(),"abw");
   for(i=0; i<chrom.size(); i++){
-    gzwrite(fi,"my decompressed data",strlen("my decompressed data"));
-    gzwrite(fi,"\n",strlen("\n"));
-    std::string tmpstring = "test string\n";
-//    gzwrite(fi, tmpstring, tmpstring.size());
-//    gzwrite(fi, chrom(i), strlen(chrom(i)));
-    gzwrite(fi,"\n",strlen("\n"));
+    Rcpp::checkUserInterrupt();
+    if(mask == 1 && filter(i) == "PASS" ){
+      // Don't print variant.
+    } else {
+      std::string tmpstring;
+      tmpstring = chrom(i);
+      tmpstring = tmpstring + "\t" + pos(i) + "\t";
+      if(id(i) == NA_STRING){
+        tmpstring = tmpstring + ".";
+      } else {
+        tmpstring = tmpstring + id(i);
+      }
+      tmpstring = tmpstring + "\t" + ref(i) + "\t" + alt(i) + "\t";
+      if(qual(i) == NA_STRING){
+        tmpstring = tmpstring + "." + "\t";
+      } else {
+        tmpstring = tmpstring + qual(i) + "\t";
+      }
+      if(filter(i) == NA_STRING){
+        tmpstring = tmpstring + "." + "\t";
+      } else {
+        tmpstring = tmpstring + filter(i) + "\t";
+      }
+      tmpstring = tmpstring + info(i);
+
+      // gt portion
+      for(j=0; j<column_names.size(); j++){
+        tmpstring = tmpstring + "\t" + gt_cm(i, j);
+      }
+
+
+//      gzwrite(fi,"my decompressed data",strlen("my decompressed data"));
+//      gzwrite(fi,"\n",strlen("\n"));
+//      std::string tmpstring = "test string\n";
+      gzwrite(fi, (char *)tmpstring.c_str(), tmpstring.size());
+      
+      gzwrite(fi,"\n",strlen("\n"));
+    }
   }
   gzclose(fi);
   

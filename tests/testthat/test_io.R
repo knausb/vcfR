@@ -52,6 +52,27 @@ test_that("read/write.vcf works for Chrom objects",{
 })
 
 
+test_that("write.vcf.gz works for Chrom objects",{
+  
+  setwd(test_dir)
+  write.vcf.gz(pinf_mt, "test.vcf.gz")
+  system("gunzip test.vcf.gz")
+  test <- read.vcf("test.vcf")
+  unlink("test.vcf")
+  setwd(original_dir)
+  
+  expect_is(test, "vcfR")
+  expect_is(test@fix$POS, "integer")
+  #  expect_is(test@fix$QUAL, "integer") # Old, pure R version.
+  expect_is(test@fix$QUAL, "numeric")
+  expect_identical(names(test@fix)[1], "CHROM")
+  expect_equal(nrow(test@gt), 371)
+  expect_equal(ncol(test@gt), 30)
+  
+})
+
+
+
 test_that("write_var_info works for Chrom objects",{
   
   setwd(test_dir)
@@ -92,7 +113,7 @@ test_that("write_var_info works for Chrom objects",{
 
 #.Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', "test.vcf")
 #.Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', "../vcf_data/gatk_hc/sc_1.100.vcf.gz")
-.Call('vcfR_write_vcf_body_gz', PACKAGE = 'vcfR', pinf_vcf@fix, pinf_vcf@gt, "test.vcf", 0)
+#.Call('vcfR_write_vcf_body_gz', PACKAGE = 'vcfR', pinf_vcf@fix, pinf_vcf@gt, "test.vcf.gz", 0)
 
 
 
