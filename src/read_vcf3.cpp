@@ -24,7 +24,7 @@ Rcpp::NumericVector vcf_stats_gz(std::string x) {
     if (! file) {
 //        fprintf (stderr, "gzopen of '%s' failed: %s.\n", x, strerror (errno));
         Rcerr << "gzopen of " << x << "failed: " << strerror (errno) << ".\n";
-            exit (EXIT_FAILURE);
+//            exit (EXIT_FAILURE);
     }
     while (1) {
         int err;                    
@@ -45,7 +45,7 @@ Rcpp::NumericVector vcf_stats_gz(std::string x) {
                 if (err) {
 //                    fprintf (stderr, "Error: %s.\n", error_string);
                     Rcerr << "Error: " << error_string << ".\n";
-                    exit (EXIT_FAILURE);
+//                    exit (EXIT_FAILURE);
                 }
             }
         }
