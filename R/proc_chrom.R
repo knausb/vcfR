@@ -103,13 +103,13 @@ proc_chrom <- function(x, win.size = 1e3, verbose=TRUE){
     }
   }
   
-  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
+#  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
     ptime <- system.time(x@win.info <- .Call('vcfR_window_init', PACKAGE = 'vcfR', window_size=win.size, max_bp=x@len))
     if(verbose==TRUE){
       print("window_init complete.")
       print(paste("  elapsed time: ", round(ptime[3], digits=4)))
     }
-  }
+#  }
   
   if(nrow(x@vcf.gt[x@var.info$mask,])>0){
     ptime <- system.time(x@win.info <- .Call('vcfR_windowize_fasta', 

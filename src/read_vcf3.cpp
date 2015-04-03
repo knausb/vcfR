@@ -494,7 +494,7 @@ void write_vcf_body_gz( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string fil
   gzFile *fi = (gzFile *)gzopen(filename.c_str(),"abw");
   for(i=0; i<chrom.size(); i++){
     Rcpp::checkUserInterrupt();
-    if(mask == 1 && filter(i) == "PASS" ){
+    if(mask == 1 && filter(i) != "PASS" ){
       // Don't print variant.
     } else {
       std::string tmpstring;

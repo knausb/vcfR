@@ -20,9 +20,9 @@
 #' \code{read.vcf.devel} is a custom C++ implementation which may be faster than read.vcf.
 #'
 #' @seealso
-#' \code{\link[PopGenome]{readVCF}}
+# \code{\link[PopGenome]{readVCF}}
 # \code{\link[pegas]{read.vcf}}
-#' \link[pegas]{read.vcf}
+# \link[pegas]{read.vcf}
 #' 
 #' Bioconductor: \href{www.bioconductor.org/packages/3.0/bioc/html/VariantAnnotation.html}{VariantAnnotation::readVcf}
 #'
