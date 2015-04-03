@@ -106,4 +106,40 @@ window_table <- function(x){
 }
 
 
+#' @rdname Chrom_functions
+#' @aliases window_table
+#' 
+#' @export
+extract_indels <- function(x, return_indels=FALSE){
+  if(class(x) == 'Chrom'){
+    # Recast as a vcfR object.
+    Chrom <- x
+    x <- new(Class="vcfR")
+    x@meta <- temp@vcf.meta
+    x@fix <- temp@vcf.fix
+    x@gt <- temp@vcf.gt
+  }
+  if(class(x) != "vcfR"){
+    stop("Unexpected class! Expecting an object of class vcfR or Chrom.")
+  }
+  
+  mask <- nchar(x@fix$REF) > 1
+  mask[unlist(lapply(strsplit(x@fix$REF, split=","), function(x){max(nchar(x))})) > 1] <- TRUE
+
+  if(return_indels == FALSE){
+    x <- x[!mask,]
+  } else {
+    x <- x[mask,]
+  }
+  
+  if(length(grep("Chrom", ls())) > 0){
+    Chrom@vcf.fix <- x@fix
+    Chrom@vcf.gt <- x@gt
+    return(Chrom)
+  } else {
+    return(x)  
+  }
+}
+
+
 # EOF.
