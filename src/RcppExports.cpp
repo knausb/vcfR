@@ -198,6 +198,19 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// write_vcf_body_gz
+void write_vcf_body_gz(Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filename, int mask);
+RcppExport SEXP vcfR_write_vcf_body_gz(SEXP fixSEXP, SEXP gtSEXP, SEXP filenameSEXP, SEXP maskSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type fix(fixSEXP);
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type gt(gtSEXP);
+    Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
+    Rcpp::traits::input_parameter< int >::type mask(maskSEXP);
+    write_vcf_body_gz(fix, gt, filename, mask);
+    return R_NilValue;
+END_RCPP
+}
 // seq_to_rects
 Rcpp::IntegerMatrix seq_to_rects(Rcpp::CharacterVector seq, std::string targets);
 RcppExport SEXP vcfR_seq_to_rects(SEXP seqSEXP, SEXP targetsSEXP) {

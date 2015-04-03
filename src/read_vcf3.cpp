@@ -5,8 +5,11 @@
 
 using namespace Rcpp;
 
+// Number of records to report progress at.
 const int nreport = 1000;
 
+/* Size of the block of memory to use for reading. */
+#define LENGTH 0x1000
 
 
 // [[Rcpp::export]]
@@ -14,6 +17,41 @@ Rcpp::NumericVector vcf_stats_gz(std::string x) {
   
   Rcpp::NumericVector stats(4);
   stats.names() = Rcpp::StringVector::create("meta", "header", "variants", "columns");
+  
+  
+    gzFile file;
+    file = gzopen (x.c_str(), "r");
+    if (! file) {
+//        fprintf (stderr, "gzopen of '%s' failed: %s.\n", x, strerror (errno));
+        Rcerr << "gzopen of " << x << "failed: " << strerror (errno) << ".\n";
+            exit (EXIT_FAILURE);
+    }
+    while (1) {
+        int err;                    
+        int bytes_read;
+        unsigned char buffer[LENGTH];
+        bytes_read = gzread (file, buffer, LENGTH - 1);
+        buffer[bytes_read] = '\0';
+//        printf ("%s", buffer);
+        Rcout << buffer;
+        Rcout << "\n\n";
+        if (bytes_read < LENGTH - 1) {
+            if (gzeof (file)) {
+                break;
+            }
+            else {
+                const char * error_string;
+                error_string = gzerror (file, & err);
+                if (err) {
+//                    fprintf (stderr, "Error: %s.\n", error_string);
+                    Rcerr << "Error: " << error_string << ".\n";
+                    exit (EXIT_FAILURE);
+                }
+            }
+        }
+    }
+    gzclose (file);
+    return 0;
   
   return stats;
 }
@@ -364,9 +402,12 @@ void write_vcf_body( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filena
   int i = 0;
   int j = 0;
 
+  // Uncompressed.
   std::ofstream myfile;
-  
   myfile.open (filename.c_str(), std::ios::out | std::ios::app | std::ios::binary);
+  
+//  gzFile *fi = (gzFile *)gzopen("file.gz","wb");
+  
 
   for(i=0; i<chrom.size(); i++){
     Rcpp::checkUserInterrupt();
@@ -426,3 +467,11 @@ void write_vcf_body( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filena
   return;
 }
 
+
+
+// [[Rcpp::export]]
+void write_vcf_body_gz( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filename , int mask=0 ) {
+  
+  
+  return;
+}

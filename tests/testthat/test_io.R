@@ -87,3 +87,10 @@ test_that("write_var_info works for Chrom objects",{
 
 })
 
+
+
+
+#.Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', "test.vcf")
+#.Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', "../vcf_data/gatk_hc/sc_1.100.vcf.gz")
+
+
