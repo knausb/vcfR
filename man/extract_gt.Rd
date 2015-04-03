@@ -3,11 +3,14 @@
 \name{extract.gt.allR}
 \alias{extract.gt}
 \alias{extract.gt.allR}
+\alias{extract_indels}
 \title{Extract elements from the GT section of a vcf format object}
 \usage{
 extract.gt.allR(x, element = "GT", mask = logical(0), as.matrix = FALSE)
 
 extract.gt(x, element = "GT", mask = logical(0), as.numeric = FALSE)
+
+extract_indels(x, return_indels = FALSE)
 }
 \arguments{
 \item{x}{An object of class Chrom, vcfR or data.frame}
@@ -19,6 +22,8 @@ extract.gt(x, element = "GT", mask = logical(0), as.numeric = FALSE)
 \item{as.matrix}{attempt to recast as a numeric matrix}
 
 \item{as.numeric}{Logical, should the matrix be converted to numerics}
+
+\item{return_indels}{logical indicating whether to return indels or not}
 }
 \description{
 Extract elements from the GT section of a vcf format object

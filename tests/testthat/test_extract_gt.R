@@ -32,6 +32,17 @@ test_that("gq is numeric",{
 
 
 
+test_that("extract_indels works",{
+  indels <- extract_indels(pinf_vcf, return_indels=TRUE)
+  expect_equal(min(nchar(indels@fix$REF)), 2)
+  expect_equal(min(nchar(indels@fix$ALT)), 2)
+  
+  indels <- extract_indels(pinf_vcf, return_indels=FALSE)
+  expect_equal(max(nchar(indels@fix$REF)), 1)
+  expect_equal(max(nchar(indels@fix$ALT)), 1)
+})
+
+
 
 #head(gt)
 #head(pl)
