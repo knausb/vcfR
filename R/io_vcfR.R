@@ -147,6 +147,15 @@ write.vcf.R<-function(x, file="", mask=logical(0), APPEND=FALSE){
 #' @export
 #' 
 read.vcf <- function(file, limit=1e9){
+    
+  if(file.access(file, mode = 0) != 0){
+    stop(paste("File:", file, "does not appear to exist!"))
+  }
+  if(file.access(file, mode = 4) != 0){
+    stop(paste("File:", file, "appears to exist but is not readable!"))
+  }
+  
+  
   vcf <- new(Class="vcfR")
   stats <- .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', file)
 #  element_size <- object.size(.Call('vcfR_ram_test', PACKAGE = 'vcfR'))
