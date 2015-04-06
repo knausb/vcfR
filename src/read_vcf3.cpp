@@ -69,6 +69,7 @@ Rcpp::NumericVector vcf_stats(std::string x) {
 
   std::string line;  // String for reading file into
   long int i = 0;
+  int j = 0;
 
   std::ifstream myfile;
   myfile.open (x.c_str(), std::ios::in);
@@ -84,6 +85,13 @@ Rcpp::NumericVector vcf_stats(std::string x) {
       stats[0]++;
     } else if (line[0] == '#'){
       stats[1] = stats[0] + 1;
+      // Count the columns in the header.
+      for(j = 0; j < line.size(); j++ ){
+        if(line[j] == '\t'){
+          stats[3]++;
+        }
+      }
+      stats[3]++;
     } else {
       stats[2]++;
     }
@@ -98,28 +106,8 @@ Rcpp::NumericVector vcf_stats(std::string x) {
   Rcout << "\rProcessed line: " << i;
   Rcout << "\nAll lines processed.\n";
 
-  // Reopen the file to count columns for first variant.
-  myfile.open (x.c_str(), std::ios::in);
-  if (!myfile.is_open()){
-    Rcout << "Unable to open file";
-  }
-
-  i = 0;
-  while(i <= stats[1]){
-    getline (myfile,line);
-    i++;
-  }
-
-  myfile.close();
 
 //  Rcout << "Line: " << line << "\n";
-  for(int j = 0; j < line.size(); j++ ){
-//    Rcout << line[j] << "\n";
-    if(line[j] == '\t'){
-      stats[3]++;
-    }
-  }
-  stats[3]++;
   
   return stats;
 }
@@ -204,6 +192,9 @@ std::vector < std::string > tabsplit(std::string line, int elements){
 Rcpp::DataFrame vcf_body(std::string x, Rcpp::NumericVector stats) {
   // Read in the fixed and genotype portion of the file.
 
+  // Stats contains:
+  // "meta", "header", "variants", "columns"
+
   Rcpp::CharacterVector   chrom(stats[2]);
   Rcpp::IntegerVector  pos(stats[2]);
   Rcpp::StringVector   id(stats[2]);
@@ -212,8 +203,13 @@ Rcpp::DataFrame vcf_body(std::string x, Rcpp::NumericVector stats) {
   Rcpp::NumericVector  qual(stats[2]);
   Rcpp::StringVector   filter(stats[2]);
   Rcpp::StringVector   info(stats[2]);
-  
+
+  Rcout << "Made it!\n";
+
+//  if(stats[3])
   Rcpp::CharacterMatrix gt(stats[2], stats[3] - 8);
+  
+  Rcout << "Made it!\n";
   
   std::string line;  // String for reading file into
 
@@ -240,6 +236,7 @@ Rcpp::DataFrame vcf_body(std::string x, Rcpp::NumericVector stats) {
   // Get body.
   i = 0;
   char buffer [50];
+
   while ( getline (myfile,line) ){
     Rcpp::checkUserInterrupt();
     std::vector < std::string > temps = tabsplit(line, stats[3]);

@@ -109,6 +109,29 @@ test_that("write_var_info works for Chrom objects",{
 })
 
 
+test_that("read.vcf works for vcf files which contain no variants",{
+  
+  
+  pinf_vcf2 <- pinf_vcf
+  pinf_vcf2@fix <- pinf_vcf2@fix[0,]
+  pinf_vcf2@gt <- pinf_vcf2@gt[0,]
+  
+  setwd(test_dir)
+  
+  write.vcf.gz(pinf_vcf2, "test.vcf.gz")
+  system("gunzip test.vcf.gz")
+  test <- read.vcf("test.vcf")
+  unlink("test.vcf")
+  
+  setwd(original_dir)
+
+  expect_equal(ncol(test@fix), 8)
+  expect_equal(ncol(test@gt), 30)
+  expect_equal(nrow(test@fix), 0)
+  expect_equal(nrow(test@gt), 0)
+  
+})
+
 
 
 #.Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', "test.vcf")
