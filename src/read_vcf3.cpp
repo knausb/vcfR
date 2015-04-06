@@ -204,12 +204,8 @@ Rcpp::DataFrame vcf_body(std::string x, Rcpp::NumericVector stats) {
   Rcpp::StringVector   filter(stats[2]);
   Rcpp::StringVector   info(stats[2]);
 
-  Rcout << "Made it!\n";
-
 //  if(stats[3])
   Rcpp::CharacterMatrix gt(stats[2], stats[3] - 8);
-  
-  Rcout << "Made it!\n";
   
   std::string line;  // String for reading file into
 
