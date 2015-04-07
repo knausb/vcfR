@@ -91,7 +91,7 @@ extract.gt <- function(x, element="GT", mask=logical(0), as.numeric=FALSE){
   }
   
   if(class(x) == "data.frame"){
-    outM <- .Call('vcfR_extractGT2NM', PACKAGE = 'vcfR', x, element)
+#    outM <- .Call('vcfR_extractGT2NM', PACKAGE = 'vcfR', x, element)
     outM <- .Call('vcfR_extract_GT_to_CM', PACKAGE = 'vcfR', x, element)
   }
 

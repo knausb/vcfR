@@ -117,50 +117,6 @@ double extractElementD(String x, int number=1){
 }
 
 
-//' Extract numeric data from genotype field of VCF
-//' 
-//' @param x A dataframe
-//' @param element A string matching the element to be retrieved, for example 'DP'
-//' @export
-// [[Rcpp::export]]
-NumericMatrix extractGT2NM(DataFrame x, std::string element="DP") {
-  int i = 0;
-  int j = 0;
-
-  Rcpp::NumericMatrix outM(x.nrows(), x.size()-1);
-  // Vector to check out DataFrame columns to
-//  StringVector format = x(0);
-  StringVector column = x(0);
-  
-  // Vector to hold position data
-//  std::vector<int> positions(format.size());
-  std::vector<int> positions(column.size());
-  //
-//  Rcpp::NumericVector outV(format.size());
-  
-  
-  // Determine the position where the query element is 
-  // located in each row (varioant)
-//  for(i=0; i<format.size(); i++){
-  for(i=0; i<column.size(); i++){
-//    positions[i] = elementNumber(format(i), element);
-    positions[i] = elementNumber(column(i), element);
-  }
-
-
-  for(i=1; i<x.size(); i++){ // Sample (column) counter
-//    StringVector sample = x(i);
-    column = x(i);
-//    for(j=0; j<format.size(); j++){ // Variant (row) counter
-    for(j=0; j<column.size(); j++){ // Variant (row) counter
-//      outM(j, i-1) = extractElementD(sample(j), positions[j]);
-      outM(j, i-1) = extractElementD(column(j), positions[j]);
-    }
-  }
-
-  return outM;
-}
-
 
 
 
