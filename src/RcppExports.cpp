@@ -17,18 +17,6 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// extract_GT_to_DF
-DataFrame extract_GT_to_DF(DataFrame x, std::string element);
-RcppExport SEXP vcfR_extract_GT_to_DF(SEXP xSEXP, SEXP elementSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< DataFrame >::type x(xSEXP);
-    Rcpp::traits::input_parameter< std::string >::type element(elementSEXP);
-    __result = Rcpp::wrap(extract_GT_to_DF(x, element));
-    return __result;
-END_RCPP
-}
 // extract_GT_to_CM
 CharacterMatrix extract_GT_to_CM(DataFrame x, std::string element);
 RcppExport SEXP vcfR_extract_GT_to_CM(SEXP xSEXP, SEXP elementSEXP) {

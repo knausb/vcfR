@@ -163,33 +163,7 @@ NumericMatrix extractGT2NM(DataFrame x, std::string element="DP") {
 
 
 
-// [[Rcpp::export]]
-DataFrame extract_GT_to_DF(DataFrame x, std::string element="DP") {
-  int i = 0;
-  int j = 0;
-//  Rcpp::DataFrame outDF(x.size()); // DataFrame for output
-  Rcpp::DataFrame outDF = clone(x); // DataFrame for output
-  
-  Rcpp::StringVector column = x(0);   // Vector to check out DataFrame columns to
-  std::vector<int> positions(column.size());  // Vector to hold position data
 
-  // Determine the position where the query element is 
-  // located in each row (varioant)
-  for(i=0; i<column.size(); i++){
-    positions[i] = elementNumber(column(i), element);
-    column(i) = element;
-  }
-  outDF(0) = column;
-  
-  for(i = 1; i < x.size(); i++){ // Sample (column) counter
-    column = x(i);
-    for(j=0; j<column.size(); j++){ // Variant (row) counter
-      column(j) = extractElementS(column(j), positions[j]);
-    }
-    outDF(i) = column;
-  }
-  return outDF;
-}
 
 
 // [[Rcpp::export]]
