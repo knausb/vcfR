@@ -83,9 +83,9 @@ masker <- function(x, QUAL=999, mindp=0.25, maxdp=0.75, minmq=20, maxmq=50, ...)
 #' 
 variant_table <- function(x){
   tab <- x@var.info[x@var.info$mask,]
-  tab <- cbind(rep(x@name, times=nrow(tab)), x@vcf.fix$QUAL[x@var.info$mask], tab)
-  names(tab)[1] <- "chrom"
-  names(tab)[2] <- "QUAL"
+#  tab <- cbind(rep(x@name, times=nrow(tab)), x@vcf.fix$QUAL[x@var.info$mask], tab)
+#  names(tab)[1] <- "chrom"
+#  names(tab)[2] <- "QUAL"
   tab
 }
 

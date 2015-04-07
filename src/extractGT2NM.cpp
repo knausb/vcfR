@@ -5,7 +5,7 @@
 using namespace Rcpp;
 
 
-int elementNumber(String x, std::string element = "DP"){
+int elementNumber(String x, std::string element = "GT"){
   //
   //  Determine the position of a query element
   //  in a colon delimited string.
@@ -45,41 +45,40 @@ int elementNumber(String x, std::string element = "DP"){
 }
 
 
-// Don't really need this here.
-// Perhaps for CharacterMatrix function?
-//std::string extractElementS(String x, int number=0){
-Rcpp::String extractElementS(Rcpp::String x, int number=0){
+Rcpp::String extractElementS(Rcpp::String x, int position=0){
   //
   // x is a colon delimited string similar to:
   // GT:GQ:DP:RO:QR:AO:QA:GL
   //
-  // number is the position in the colon delimited 
+  // position is the position in the colon delimited 
   // string which needs to be extracted.
   //
-//  int count = 0;
+
   int start = 0;
-  int pos = 1;
-  std::string istring = x;
+//  int pos = 1;
+  int current_position = 1; // One-based so that 0 means did not observe.
+  std::string istring = x; // Convert Rcpp::String to std::string
   istring.push_back(':');
   std::string teststring;
   int i;
 
   for(i=1; i <= istring.size(); i++){
     if(istring[i] == ':'){
-      if(pos == number){
+//      if(pos == number){
+//      Rcout << "Current position: " << current_position << ", Desired position: " << position << "\n";
+//      Rcout << "Test string: " << istring.substr(start, i-start) << "\n";
+      if(position == current_position){
         teststring = istring.substr(start, i-start);
         return teststring;
       } else {
         start = i+1;
-        pos++;
+        current_position++;
+//        pos++;
         i++;
       }
     }
   }
   // If we get here we did not find the element.
-//  return std::string("NA");
-//  return CharacterVector::create(NA_STRING);
-//  return Rcpp::String::create(NA_STRING);
   return NA_STRING;
 }
 
@@ -117,11 +116,6 @@ double extractElementD(String x, int number=1){
 }
 
 
-
-
-
-
-
 // [[Rcpp::export]]
 CharacterMatrix extract_GT_to_CM(DataFrame x, std::string element="DP") {
   int i = 0;
@@ -145,7 +139,9 @@ CharacterMatrix extract_GT_to_CM(DataFrame x, std::string element="DP") {
   for(i = 1; i < x.size(); i++){ // Sample (column) counter
     column = x(i);
     for(j=0; j<column.size(); j++){ // Variant (row) counter
+//      Rcout << column(j) << "\tposition: " << positions[j] << "\n";
       cm(j, i-1) = extractElementS(column(j), positions[j]);
+//      Rcout << "Returned value: " << cm(j, i-1) << "\n";
     }
   }
 
