@@ -52,6 +52,22 @@ test_that("read/write.vcf works for Chrom objects",{
 })
 
 
+test_that("vcfR_vcf_stats works",{
+  setwd(test_dir)
+  write.vcf(pinf_mt, "test.vcf")
+  x <- .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', "test.vcf")
+#  test <- read.vcf("test.vcf")
+  unlink("test.vcf")
+  setwd(original_dir)
+  
+  expect_equal(as.numeric(x["meta"]), 28)
+  expect_equal(as.numeric(x["header"]), 29)
+  expect_equal(as.numeric(x["variants"]), 371)
+  expect_equal(as.numeric(x["columns"]), 38)
+
+})
+
+
 test_that("write.vcf.gz works for Chrom objects",{
   
   setwd(test_dir)
@@ -110,7 +126,6 @@ test_that("write_var_info works for Chrom objects",{
 
 
 test_that("read.vcf works for vcf files which contain no variants",{
-  
   
   pinf_vcf2 <- pinf_vcf
   pinf_vcf2@fix <- pinf_vcf2@fix[0,]
