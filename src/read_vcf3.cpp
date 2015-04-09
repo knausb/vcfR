@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 #include <fstream>
 #include <zlib.h>
+#include "common.h"
 // #include <iostream>
 
 using namespace Rcpp;
