@@ -52,7 +52,9 @@ Rcpp::NumericVector vcf_stats_gz(std::string x) {
         }
     }
     gzclose (file);
-    return 0;
+//    return 0;
+  std::string tmp = "phrase with a tab\tto split on";
+//  std::vector < std::string > svec = common::strsplit(tmp);
   
   return stats;
 }
