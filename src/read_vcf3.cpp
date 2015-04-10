@@ -55,6 +55,26 @@ Rcpp::NumericVector vcf_stats_gz(std::string x) {
 //    return 0;
   std::string tmp = "phrase with a tab\tto split on";
 //  std::vector < std::string > svec = common::strsplit(tmp);
+//  std::vector < std::string > svec;
+//  svec = 
+//  std::string svec;
+//  common::strsplit(tmp.c_str());
+//  common::strsplit(tmp);
+//  common::foo();
+  std::vector<int> a;
+  fun(a);
+  Rcout << "Vector out: " << a[0] << ", " << a[1] << "\n";
+
+//  char myword[] = { 'H', 'e', 'l', 'l', 'o', '\0' };
+
+  std::string mystring;
+  std::vector < std::string > svec;
+  char split = '\n'; // Must be single quotes!
+
+//  common::foo2( myword, svec, mystring );
+  common::strsplit(mystring, svec, split);
+  
+  Rcout << svec[0] << "\n";
   
   return stats;
 }
