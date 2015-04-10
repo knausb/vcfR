@@ -30,12 +30,30 @@ Rcpp::NumericVector vcf_stats_gz(std::string x) {
     while (1) {
         int err;                    
         int bytes_read;
-        unsigned char buffer[LENGTH];
+//        unsigned char buffer[LENGTH];
+        char buffer[LENGTH];
         bytes_read = gzread (file, buffer, LENGTH - 1);
         buffer[bytes_read] = '\0';
 //        printf ("%s", buffer);
-        Rcout << buffer;
-        Rcout << "\n\n";
+//        Rcout << buffer;
+//        Rcout << "\n\n";
+        std::vector < std::string > svec;
+//        std::string mystring = buffer;
+//        common::strsplit(mystring, svec, '\n');
+        std::string mystring(reinterpret_cast<char*>(buffer));
+        
+//        std::string mystring = std::string(1, (char)buffer);
+//        std::string mystring = std::to_string((int)buffer);
+        
+//        std::string mystring = std::to_string((char)buffer);
+        char split = '\n'; // Must be single quotes!
+        common::strsplit(mystring, svec, split);
+//        common::strsplit(buffer, svec, '\n');
+        
+        for(int i=0; i<svec.size(); i++){
+          Rcout << svec[i] << "\n";
+        }
+
         if (bytes_read < LENGTH - 1) {
             if (gzeof (file)) {
                 break;
@@ -52,30 +70,18 @@ Rcpp::NumericVector vcf_stats_gz(std::string x) {
         }
     }
     gzclose (file);
-//    return 0;
-  std::string tmp = "phrase with a tab\tto split on";
-//  std::vector < std::string > svec = common::strsplit(tmp);
-//  std::vector < std::string > svec;
-//  svec = 
-//  std::string svec;
-//  common::strsplit(tmp.c_str());
-//  common::strsplit(tmp);
-//  common::foo();
-  std::vector<int> a;
-  fun(a);
-  Rcout << "Vector out: " << a[0] << ", " << a[1] << "\n";
 
-//  char myword[] = { 'H', 'e', 'l', 'l', 'o', '\0' };
 
+/*
   std::string mystring;
-  std::vector < std::string > svec;
+  mystring = "phrase with\nsome newlines\nto split\non";
   char split = '\n'; // Must be single quotes!
-
-//  common::foo2( myword, svec, mystring );
   common::strsplit(mystring, svec, split);
-  
-  Rcout << svec[0] << "\n";
-  
+  for(int i=0; i<svec.size(); i++){
+    Rcout << svec[i] << "\n";
+  }
+*/
+
   return stats;
 }
 
