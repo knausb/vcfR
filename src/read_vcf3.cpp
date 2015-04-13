@@ -4,7 +4,7 @@
 #include "common.h"
 // #include <iostream>
 
-using namespace Rcpp;
+//using namespace Rcpp;
 
 // Number of records to report progress at.
 const int nreport = 1000;
@@ -43,7 +43,7 @@ int read_to_line(std::string x) {
   myfile.open (x.c_str(), std::ios::in);
 
   if (!myfile.is_open()){
-    Rcout << "Unable to open file";
+    Rcpp::Rcout << "Unable to open file";
   }
   
   // Loop over the file.
@@ -107,7 +107,7 @@ Rcpp::NumericVector vcf_stats_gz(std::string x) {
   gzFile file;
   file = gzopen (x.c_str(), "r");
   if (! file) {
-    Rcerr << "gzopen of " << x << " failed: " << strerror (errno) << ".\n";
+    Rcpp::Rcerr << "gzopen of " << x << " failed: " << strerror (errno) << ".\n";
     return stats;
 //        fprintf (stderr, "gzopen of '%s' failed: %s.\n", x, strerror (errno));
 //            exit (EXIT_FAILURE);
@@ -149,7 +149,7 @@ Rcpp::NumericVector vcf_stats_gz(std::string x) {
         const char * error_string;
         error_string = gzerror (file, & err);
         if (err) {
-          Rcerr << "Error: " << error_string << ".\n";
+          Rcpp::Rcerr << "Error: " << error_string << ".\n";
           return stats;
 //                    fprintf (stderr, "Error: %s.\n", error_string);
 //                    exit (EXIT_FAILURE);
@@ -181,7 +181,7 @@ Rcpp::NumericVector vcf_stats(std::string x) {
   myfile.open (x.c_str(), std::ios::in);
 
   if (!myfile.is_open()){
-    Rcout << "Unable to open file";
+    Rcpp::Rcout << "Unable to open file";
   }
   
   // Loop over the file.
@@ -204,13 +204,13 @@ Rcpp::NumericVector vcf_stats(std::string x) {
     i++;
     
     if( i % nreport == 0){
-      Rcout << "\rProcessed line: " << i;
+      Rcpp::Rcout << "\rProcessed line: " << i;
     }
   }
   myfile.close();
 
-  Rcout << "\rProcessed line: " << i;
-  Rcout << "\nAll lines processed.\n";
+  Rcpp::Rcout << "\rProcessed line: " << i;
+  Rcpp::Rcout << "\nAll lines processed.\n";
 
 
 //  Rcout << "Line: " << line << "\n";
@@ -233,7 +233,7 @@ Rcpp::StringVector vcf_meta(std::string x, Rcpp::NumericVector stats) {
   myfile.open (x.c_str(), std::ios::in);
 
   if (!myfile.is_open()){
-    Rcout << "Unable to open file";
+    Rcpp::Rcout << "Unable to open file";
   }
   
   // Loop over the file.
@@ -246,13 +246,13 @@ Rcpp::StringVector vcf_meta(std::string x, Rcpp::NumericVector stats) {
     i++;
     
     if( i % nreport == 0){
-      Rcout << "\rProcessed meta line: " << i;
+      Rcpp::Rcout << "\rProcessed meta line: " << i;
     }
 
   }
   myfile.close();
-  Rcout << "\rProcessed meta line: " << i;
-  Rcout << "\nMeta lines processed.\n";
+  Rcpp::Rcout << "\rProcessed meta line: " << i;
+  Rcpp::Rcout << "\nMeta lines processed.\n";
 
   return meta;
 }
@@ -270,7 +270,7 @@ Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats) {
   gzFile file;
   file = gzopen (x.c_str(), "r");
   if (! file) {
-    Rcerr << "gzopen of " << x << " failed: " << strerror (errno) << ".\n";
+    Rcpp::Rcerr << "gzopen of " << x << " failed: " << strerror (errno) << ".\n";
     return Rcpp::StringVector(1);
 //        fprintf (stderr, "gzopen of '%s' failed: %s.\n", x, strerror (errno));
 //            exit (EXIT_FAILURE);
@@ -313,7 +313,7 @@ Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats) {
         const char * error_string;
         error_string = gzerror (file, & err);
         if (err) {
-          Rcerr << "Error: " << error_string << ".\n";
+          Rcpp::Rcerr << "Error: " << error_string << ".\n";
           return Rcpp::StringVector(1);
 //                    fprintf (stderr, "Error: %s.\n", error_string);
 //                    exit (EXIT_FAILURE);
@@ -357,7 +357,7 @@ Rcpp::DataFrame vcf_body(std::string x, Rcpp::NumericVector stats) {
   myfile.open (x.c_str(), std::ios::in);
 
   if (!myfile.is_open()){
-    Rcout << "Unable to open file";
+    Rcpp::Rcout << "Unable to open file";
   }
 
   // Iterate past meta.
@@ -428,31 +428,31 @@ Rcpp::DataFrame vcf_body(std::string x, Rcpp::NumericVector stats) {
     i++;
     
     if( i % nreport == 0){
-      Rcout << "\rProcessed variant: " << i;
+      Rcpp::Rcout << "\rProcessed variant: " << i;
     }
 
   }
   myfile.close();
   
-  Rcout << "\rProcessed variant: " << i;
-  Rcout << "\nAll variants processed\n";
+  Rcpp::Rcout << "\rProcessed variant: " << i;
+  Rcpp::Rcout << "\nAll variants processed\n";
   
   Rcpp::DataFrame df1 = Rcpp::DataFrame::create(
-    _["CHROM"]= chrom,
-    _["POS"]= pos,
-    _["ID"] = id,
-    _["REF"] = ref,
-    _["ALT"] = alt,
-    _["QUAL"] = qual,
-    _["FILTER"] = filter,
-    _["INFO"] = info,
+    Rcpp::_["CHROM"]= chrom,
+    Rcpp::_["POS"]= pos,
+    Rcpp::_["ID"] = id,
+    Rcpp::_["REF"] = ref,
+    Rcpp::_["ALT"] = alt,
+    Rcpp::_["QUAL"] = qual,
+    Rcpp::_["FILTER"] = filter,
+    Rcpp::_["INFO"] = info,
     gt);
 
   std::vector < std::string > temps = tabsplit(header, stats[3]);
   temps[0].erase(0,1);
   df1.names() = temps;
   
-  Rcout << "Rcpp::DataFrame created.\n";
+  Rcpp::Rcout << "Rcpp::DataFrame created.\n";
   
   return df1;
 }
