@@ -13,6 +13,7 @@ const int nreport = 1000;
 #define LENGTH 0x1000
 
 
+/*  Helper functions */
 
 void stat_line(Rcpp::NumericVector stats, std::string line){
   if(line[0] == '#' && line[1] == '#'){
@@ -31,6 +32,72 @@ void stat_line(Rcpp::NumericVector stats, std::string line){
   }
 }
 
+
+// Benchmarking for scrolling through file.
+// [[Rcpp::export]]
+int read_to_line(std::string x) {
+  std::string line;  // String for reading file into
+  long int i = 0;
+
+  std::ifstream myfile;
+  myfile.open (x.c_str(), std::ios::in);
+
+  if (!myfile.is_open()){
+    Rcout << "Unable to open file";
+  }
+  
+  // Loop over the file.
+  while ( getline (myfile,line) ){
+    Rcpp::checkUserInterrupt();
+//    Rcout << line << "\n";
+    i++;
+  }
+
+  myfile.close();
+  return i;
+}
+
+
+
+
+// This should be replaced with:
+// common::strsplit(mystring, svec, split);
+std::vector < std::string > tabsplit(std::string line, int elements){
+  // Split a string into tabs.
+  
+  std::vector < std::string > stringv(elements);
+//  Rcout << "Genotype: " << line << "\n";
+
+  int start=0;
+  int j = 0;
+//  char c;
+  for(int i=1; i<line.size(); i++){
+//    c = line[i];
+    if( line[i] == '\t'){
+      std::string temp = line.substr(start, i - start);
+//      Rcout << "  i: " << i << ", temp: " << temp << "\n";
+      stringv[j] = temp;
+      j++;
+      start = i+1;
+      i = i+1;
+    }
+  }
+
+  // Handle last element.
+  std::string temp = line.substr(start, line.size());
+//  Rcout << "  temp: " << temp << "\n";
+//  stringv.push_back(temp);
+  stringv[j] = temp;
+  
+//  for(j=0; j<stringv.size(); j++){ Rcout << "j: " << j << " " << stringv[j] << "\n"; }
+  
+  return stringv;
+}
+
+
+
+
+/*  Single pass of vcf file to get statistics */
 
 // [[Rcpp::export]]
 Rcpp::NumericVector vcf_stats_gz(std::string x) {
@@ -63,7 +130,7 @@ Rcpp::NumericVector vcf_stats_gz(std::string x) {
     char split = '\n'; // Must be single quotes!
     common::strsplit(mystring, svec, split);
         
-    svec[0] = lastline + svec[0];
+//    svec[0] = lastline + svec[0];
 
     // Scroll through lines derived from the buffer.
     for(int i=0; i < svec.size() - 1; i++){
@@ -83,6 +150,7 @@ Rcpp::NumericVector vcf_stats_gz(std::string x) {
         error_string = gzerror (file, & err);
         if (err) {
           Rcerr << "Error: " << error_string << ".\n";
+          return stats;
 //                    fprintf (stderr, "Error: %s.\n", error_string);
 //                    exit (EXIT_FAILURE);
         }
@@ -151,6 +219,7 @@ Rcpp::NumericVector vcf_stats(std::string x) {
 }
 
 
+/*  Read vcf meta region  */
 
 // [[Rcpp::export]]
 Rcpp::StringVector vcf_meta(std::string x, Rcpp::NumericVector stats) {
@@ -189,42 +258,78 @@ Rcpp::StringVector vcf_meta(std::string x, Rcpp::NumericVector stats) {
 }
 
 
-
-std::vector < std::string > tabsplit(std::string line, int elements){
-  // Split a string into tabs.
+// [[Rcpp::export]]
+Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats) {
+  // Read in the meta lines.
+  // stats consists of elements ("meta", "header", "variants", "columns");
   
-  std::vector < std::string > stringv(elements);
-//  Rcout << "Genotype: " << line << "\n";
+  Rcpp::StringVector meta(stats[0]);
+  std::string line;  // String for reading file into
+  int meta_row = 0;
 
-  int start=0;
-  int j = 0;
-//  char c;
-  for(int i=1; i<line.size(); i++){
-//    c = line[i];
-    if( line[i] == '\t'){
-      std::string temp = line.substr(start, i - start);
-//      Rcout << "  i: " << i << ", temp: " << temp << "\n";
-      stringv[j] = temp;
-      j++;
-      start = i+1;
-      i = i+1;
-    }
+  gzFile file;
+  file = gzopen (x.c_str(), "r");
+  if (! file) {
+    Rcerr << "gzopen of " << x << " failed: " << strerror (errno) << ".\n";
+    return Rcpp::StringVector(1);
+//        fprintf (stderr, "gzopen of '%s' failed: %s.\n", x, strerror (errno));
+//            exit (EXIT_FAILURE);
   }
 
-  // Handle last element.
-  std::string temp = line.substr(start, line.size());
-//  Rcout << "  temp: " << temp << "\n";
-//  stringv.push_back(temp);
-  stringv[j] = temp;
-  
-//  for(j=0; j<stringv.size(); j++){ Rcout << "j: " << j << " " << stringv[j] << "\n"; }
-  
-  return stringv;
+  // Scroll through buffers.
+  std::string lastline = "";
+  while (1) {
+    Rcpp::checkUserInterrupt();
+    int err;
+    int bytes_read;
+    char buffer[LENGTH];
+    bytes_read = gzread (file, buffer, LENGTH - 1);
+    buffer[bytes_read] = '\0';
+
+    std::string mystring(reinterpret_cast<char*>(buffer));  // Recast buffer as a string.
+    mystring = lastline + mystring;
+    std::vector < std::string > svec;  // Initialize vector of strings for parsed buffer.
+    char split = '\n'; // Must be single quotes!
+    common::strsplit(mystring, svec, split);
+//    svec[0] = lastline + svec[0];
+
+    int i = 0;
+    while(meta_row < stats(0)){
+      meta(i) = svec[i];
+      meta_row++;
+      i++;
+    }
+
+    if(meta_row == stats(0)){
+      break;
+    }
+
+    // Check for EOF or errors.
+    if (bytes_read < LENGTH - 1) {
+      if (gzeof (file)) {
+        break;
+      }
+      else {
+        const char * error_string;
+        error_string = gzerror (file, & err);
+        if (err) {
+          Rcerr << "Error: " << error_string << ".\n";
+          return Rcpp::StringVector(1);
+//                    fprintf (stderr, "Error: %s.\n", error_string);
+//                    exit (EXIT_FAILURE);
+        }
+      }
+    }
+  }
+  gzclose (file);
+
+  return meta;
 }
 
 
 
 
+/*  Read in the body of the vcf file  */
 
 // [[Rcpp::export]]
 Rcpp::DataFrame vcf_body(std::string x, Rcpp::NumericVector stats) {
@@ -233,14 +338,14 @@ Rcpp::DataFrame vcf_body(std::string x, Rcpp::NumericVector stats) {
   // Stats contains:
   // "meta", "header", "variants", "columns"
 
-  Rcpp::CharacterVector   chrom(stats[2]);
-  Rcpp::IntegerVector  pos(stats[2]);
-  Rcpp::StringVector   id(stats[2]);
-  Rcpp::StringVector   ref(stats[2]);
-  Rcpp::StringVector   alt(stats[2]);
-  Rcpp::NumericVector  qual(stats[2]);
-  Rcpp::StringVector   filter(stats[2]);
-  Rcpp::StringVector   info(stats[2]);
+  Rcpp::CharacterVector chrom(stats[2]);
+  Rcpp::IntegerVector   pos(stats[2]);
+  Rcpp::StringVector    id(stats[2]);
+  Rcpp::StringVector    ref(stats[2]);
+  Rcpp::StringVector    alt(stats[2]);
+  Rcpp::NumericVector   qual(stats[2]);
+  Rcpp::StringVector    filter(stats[2]);
+  Rcpp::StringVector    info(stats[2]);
 
 //  if(stats[3])
   Rcpp::CharacterMatrix gt(stats[2], stats[3] - 8);
@@ -354,34 +459,7 @@ Rcpp::DataFrame vcf_body(std::string x, Rcpp::NumericVector stats) {
 
 
 
-
-// [[Rcpp::export]]
-int read_to_line(std::string x) {
-  std::string line;  // String for reading file into
-  long int i = 0;
-
-  std::ifstream myfile;
-  myfile.open (x.c_str(), std::ios::in);
-
-  if (!myfile.is_open()){
-    Rcout << "Unable to open file";
-  }
-  
-  // Loop over the file.
-  while ( getline (myfile,line) ){
-    Rcpp::checkUserInterrupt();
-//    Rcout << line << "\n";
-    i++;
-  }
-
-  myfile.close();
-  return i;
-}
-
-
-
-
-
+/*  Memory test  */
 
 // [[Rcpp::export]]
 Rcpp::CharacterMatrix ram_test(int nrow=1, int ncol=1) {
@@ -408,6 +486,8 @@ Rcpp::StringMatrix DataFrame_to_StringMatrix( Rcpp::DataFrame df ){
   return sm;
 }
 
+
+/*  Write vcf body  */
 
 // [[Rcpp::export]]
 void write_vcf_body( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filename , int mask=0 ) {

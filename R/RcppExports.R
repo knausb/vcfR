@@ -29,6 +29,10 @@ rank_variants <- function(variants, ends, score) {
     .Call('vcfR_rank_variants', PACKAGE = 'vcfR', variants, ends, score)
 }
 
+read_to_line <- function(x) {
+    .Call('vcfR_read_to_line', PACKAGE = 'vcfR', x)
+}
+
 vcf_stats_gz <- function(x) {
     .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', x)
 }
@@ -41,12 +45,12 @@ vcf_meta <- function(x, stats) {
     .Call('vcfR_vcf_meta', PACKAGE = 'vcfR', x, stats)
 }
 
-vcf_body <- function(x, stats) {
-    .Call('vcfR_vcf_body', PACKAGE = 'vcfR', x, stats)
+read_meta_gz <- function(x, stats) {
+    .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', x, stats)
 }
 
-read_to_line <- function(x) {
-    .Call('vcfR_read_to_line', PACKAGE = 'vcfR', x)
+vcf_body <- function(x, stats) {
+    .Call('vcfR_vcf_body', PACKAGE = 'vcfR', x, stats)
 }
 
 ram_test <- function(nrow = 1L, ncol = 1L) {

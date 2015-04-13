@@ -44,6 +44,20 @@ test_that("vcfR_vcf_stats_gz works",{
 })
 
 
+test_that("vcfR_vcf_meta_gz works",{
+  setwd(test_dir)
+  write.vcf(pinf_mt, "test.vcf.gz")
+  stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', "test.vcf.gz")
+  x <- .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', "test.vcf.gz", stats)
+  unlink("test.vcf")
+  setwd(original_dir)
+  
+  expect_equal(length(x), 28)
+})
+
+
+
+
 test_that("read/write.vcf works for vcfR objects",{
   setwd(test_dir)
   write.vcf(pinf_vcf, "test.vcf")
