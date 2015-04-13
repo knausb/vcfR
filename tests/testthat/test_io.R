@@ -14,8 +14,37 @@ test_dir <- tempdir()
 
 ##### ##### ##### ##### #####
 
-test_that("read/write.vcf works for vcfR objects",{
+test_that("vcfR_vcf_stats works",{
+  setwd(test_dir)
+  write.vcf(pinf_mt, "test.vcf")
+  x <- .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', "test.vcf")
+  #  test <- read.vcf("test.vcf")
+  unlink("test.vcf")
+  setwd(original_dir)
+  
+  expect_equal(as.numeric(x["meta"]), 28)
+  expect_equal(as.numeric(x["header"]), 29)
+  expect_equal(as.numeric(x["variants"]), 371)
+  expect_equal(as.numeric(x["columns"]), 38)
+  
+})
 
+test_that("vcfR_vcf_stats_gz works",{
+  setwd(test_dir)
+#  write.vcf(pinf_mt, "test.vcf")
+  write.vcf(pinf_mt, "test.vcf.gz")
+  x <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', "test.vcf.gz")
+  unlink("test.vcf")
+  setwd(original_dir)
+
+  expect_equal(as.numeric(x["meta"]), 28)
+  expect_equal(as.numeric(x["header"]), 29)
+  expect_equal(as.numeric(x["variants"]), 371)
+  expect_equal(as.numeric(x["columns"]), 38)
+})
+
+
+test_that("read/write.vcf works for vcfR objects",{
   setwd(test_dir)
   write.vcf(pinf_vcf, "test.vcf")
   test <- read.vcf("test.vcf")
@@ -29,7 +58,6 @@ test_that("read/write.vcf works for vcfR objects",{
   expect_identical(names(test@fix)[1], "CHROM")
   expect_equal(nrow(test@gt), 371)
   expect_equal(ncol(test@gt), 30)
-
 })
 
 
@@ -47,24 +75,7 @@ test_that("read/write.vcf works for Chrom objects",{
   expect_is(test@fix$QUAL, "numeric")
   expect_identical(names(test@fix)[1], "CHROM")
   expect_equal(nrow(test@gt), 371)
-  expect_equal(ncol(test@gt), 30)
-  
-})
-
-
-test_that("vcfR_vcf_stats works",{
-  setwd(test_dir)
-  write.vcf(pinf_mt, "test.vcf")
-  x <- .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', "test.vcf")
-#  test <- read.vcf("test.vcf")
-  unlink("test.vcf")
-  setwd(original_dir)
-  
-  expect_equal(as.numeric(x["meta"]), 28)
-  expect_equal(as.numeric(x["header"]), 29)
-  expect_equal(as.numeric(x["variants"]), 371)
-  expect_equal(as.numeric(x["columns"]), 38)
-
+  expect_equal(ncol(test@gt), 30)  
 })
 
 
@@ -84,13 +95,10 @@ test_that("write.vcf.gz works for Chrom objects",{
   expect_identical(names(test@fix)[1], "CHROM")
   expect_equal(nrow(test@gt), 371)
   expect_equal(ncol(test@gt), 30)
-  
 })
 
 
-
 test_that("write_var_info works for Chrom objects",{
-  
   setwd(test_dir)
   write_var_info(pinf_mt, "test.csv")
   test <- read.table("test.csv", header=TRUE, sep=",")
@@ -102,13 +110,11 @@ test_that("write_var_info works for Chrom objects",{
   expect_equal(ncol(test), 9)
   expect_equal(length(grep("CHROM", names(test))), 1)
   expect_equal(length(grep("POS", names(test))), 1)
-  expect_equal(length(grep("mask", names(test))), 1)
-  
+  expect_equal(length(grep("mask", names(test))), 1)  
 })
 
 
 test_that("write_var_info works for Chrom objects",{
-  
   setwd(test_dir)
   write_win_info(pinf_mt, "test.csv")
   test <- read.table("test.csv", header=TRUE, sep=",")
@@ -121,36 +127,31 @@ test_that("write_var_info works for Chrom objects",{
   expect_equal(length(grep("window", names(test))), 1)
   expect_equal(length(grep("start", names(test))), 1)
   expect_equal(length(grep("end", names(test))), 1)
-
 })
 
 
-test_that("read.vcf works for vcf files which contain no variants",{
-  
+test_that("read.vcf works for vcf files which contain no variants",{  
   pinf_vcf2 <- pinf_vcf
   pinf_vcf2@fix <- pinf_vcf2@fix[0,]
   pinf_vcf2@gt <- pinf_vcf2@gt[0,]
   
   setwd(test_dir)
-  
   write.vcf.gz(pinf_vcf2, "test.vcf.gz")
   system("gunzip test.vcf.gz")
   test <- read.vcf("test.vcf")
   unlink("test.vcf")
-  
   setwd(original_dir)
 
   expect_equal(ncol(test@fix), 8)
   expect_equal(ncol(test@gt), 30)
   expect_equal(nrow(test@fix), 0)
   expect_equal(nrow(test@gt), 0)
-  
 })
 
 
 
-data(vcfR_example)
-write.vcf.gz(pinf_vcf, "test.vcf.gz")
+#data(vcfR_example)
+#write.vcf.gz(pinf_vcf, "test.vcf.gz")
 
 #.Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', "test.vcf.gz")
 #.Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', "../vcf_data/gatk_hc/sc_1.100.vcf.gz")

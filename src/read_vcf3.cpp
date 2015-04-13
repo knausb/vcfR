@@ -13,74 +13,83 @@ const int nreport = 1000;
 #define LENGTH 0x1000
 
 
+
+void stat_line(Rcpp::NumericVector stats, std::string line){
+  if(line[0] == '#' && line[1] == '#'){
+    // Meta
+    stats(0)++;
+  } else if (line[0] == '#' && line[1] != '#'){
+    // Header
+    stats(1) = stats(0) + 1;
+    std::vector < std::string > col_vec;
+    char col_split = '\t'; // Must be single quotes!
+    common::strsplit(line, col_vec, col_split);
+    stats(3) = col_vec.size();
+  } else {
+    // Variant
+    stats(2)++;
+  }
+}
+
+
 // [[Rcpp::export]]
 Rcpp::NumericVector vcf_stats_gz(std::string x) {
-  
-  Rcpp::NumericVector stats(4);
+  Rcpp::NumericVector stats(4);  // 4 elements, all zero.  Zero is default.
   stats.names() = Rcpp::StringVector::create("meta", "header", "variants", "columns");
   
-  
-    gzFile file;
-    file = gzopen (x.c_str(), "r");
-    if (! file) {
+  gzFile file;
+  file = gzopen (x.c_str(), "r");
+  if (! file) {
+    Rcerr << "gzopen of " << x << " failed: " << strerror (errno) << ".\n";
+    return stats;
 //        fprintf (stderr, "gzopen of '%s' failed: %s.\n", x, strerror (errno));
-        Rcerr << "gzopen of " << x << "failed: " << strerror (errno) << ".\n";
 //            exit (EXIT_FAILURE);
-    }
-    while (1) {
-        int err;                    
-        int bytes_read;
-//        unsigned char buffer[LENGTH];
-        char buffer[LENGTH];
-        bytes_read = gzread (file, buffer, LENGTH - 1);
-        buffer[bytes_read] = '\0';
-//        printf ("%s", buffer);
-//        Rcout << buffer;
-//        Rcout << "\n\n";
-        std::vector < std::string > svec;
-//        std::string mystring = buffer;
-//        common::strsplit(mystring, svec, '\n');
-        std::string mystring(reinterpret_cast<char*>(buffer));
-        
-//        std::string mystring = std::string(1, (char)buffer);
-//        std::string mystring = std::to_string((int)buffer);
-        
-//        std::string mystring = std::to_string((char)buffer);
-        char split = '\n'; // Must be single quotes!
-        common::strsplit(mystring, svec, split);
-//        common::strsplit(buffer, svec, '\n');
-        
-        for(int i=0; i<svec.size(); i++){
-          Rcout << svec[i] << "\n";
-        }
-
-        if (bytes_read < LENGTH - 1) {
-            if (gzeof (file)) {
-                break;
-            }
-            else {
-                const char * error_string;
-                error_string = gzerror (file, & err);
-                if (err) {
-//                    fprintf (stderr, "Error: %s.\n", error_string);
-                    Rcerr << "Error: " << error_string << ".\n";
-//                    exit (EXIT_FAILURE);
-                }
-            }
-        }
-    }
-    gzclose (file);
-
-
-/*
-  std::string mystring;
-  mystring = "phrase with\nsome newlines\nto split\non";
-  char split = '\n'; // Must be single quotes!
-  common::strsplit(mystring, svec, split);
-  for(int i=0; i<svec.size(); i++){
-    Rcout << svec[i] << "\n";
   }
-*/
+
+  // Scroll through buffers.
+  std::string lastline = "";
+  while (1) {
+    Rcpp::checkUserInterrupt();
+    int err;
+    int bytes_read;
+    char buffer[LENGTH];
+    bytes_read = gzread (file, buffer, LENGTH - 1);
+    buffer[bytes_read] = '\0';
+
+    std::string mystring(reinterpret_cast<char*>(buffer));  // Recast buffer as a string.
+    mystring = lastline + mystring;
+    std::vector < std::string > svec;  // Initialize vector of strings for parsed buffer.
+    
+    char split = '\n'; // Must be single quotes!
+    common::strsplit(mystring, svec, split);
+        
+    svec[0] = lastline + svec[0];
+
+    // Scroll through lines derived from the buffer.
+    for(int i=0; i < svec.size() - 1; i++){
+      stat_line(stats, svec[i]);
+    }
+    // Manage the last line.
+    lastline = "";
+    lastline = svec[svec.size() - 1];
+
+    // Check for EOF or errors.
+    if (bytes_read < LENGTH - 1) {
+      if (gzeof (file)) {
+        break;
+      }
+      else {
+        const char * error_string;
+        error_string = gzerror (file, & err);
+        if (err) {
+          Rcerr << "Error: " << error_string << ".\n";
+//                    fprintf (stderr, "Error: %s.\n", error_string);
+//                    exit (EXIT_FAILURE);
+        }
+      }
+    }
+  }
+  gzclose (file);
 
   return stats;
 }
