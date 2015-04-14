@@ -53,6 +53,10 @@ vcf_body <- function(x, stats) {
     .Call('vcfR_vcf_body', PACKAGE = 'vcfR', x, stats)
 }
 
+read_body_gz <- function(x, stats, verbose = 1L) {
+    .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', x, stats, verbose)
+}
+
 ram_test <- function(nrow = 1L, ncol = 1L) {
     .Call('vcfR_ram_test', PACKAGE = 'vcfR', nrow, ncol)
 }

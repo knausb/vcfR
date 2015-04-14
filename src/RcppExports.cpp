@@ -161,6 +161,19 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// read_body_gz
+Rcpp::DataFrame read_body_gz(std::string x, Rcpp::NumericVector stats, int verbose);
+RcppExport SEXP vcfR_read_body_gz(SEXP xSEXP, SEXP statsSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type stats(statsSEXP);
+    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
+    __result = Rcpp::wrap(read_body_gz(x, stats, verbose));
+    return __result;
+END_RCPP
+}
 // ram_test
 Rcpp::CharacterMatrix ram_test(int nrow, int ncol);
 RcppExport SEXP vcfR_ram_test(SEXP nrowSEXP, SEXP ncolSEXP) {

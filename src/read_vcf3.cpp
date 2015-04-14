@@ -137,7 +137,7 @@ Rcpp::NumericVector vcf_stats_gz(std::string x) {
       stat_line(stats, svec[i]);
     }
     // Manage the last line.
-    lastline = "";
+//    lastline = "";
     lastline = svec[svec.size() - 1];
 
     // Check for EOF or errors.
@@ -454,6 +454,117 @@ Rcpp::DataFrame vcf_body(std::string x, Rcpp::NumericVector stats) {
   
   Rcpp::Rcout << "Rcpp::DataFrame created.\n";
   
+  return df1;
+}
+
+
+
+
+void proc_body_line(Rcpp::CharacterMatrix gt, int var_num, std::string myline){
+  char split = '\t'; // Must be single quotes!
+  std::vector < std::string > data_vec;
+  
+  common::strsplit(myline, data_vec, split);
+
+  for(int i = 0; i < data_vec.size(); i++){
+    if(data_vec[i] == "."){
+      gt(var_num, i) = NA_STRING;
+    } else {
+      gt(var_num, i) = data_vec[i];
+    }
+  }
+  
+}
+
+
+// [[Rcpp::export]]
+Rcpp::DataFrame read_body_gz(std::string x, Rcpp::NumericVector stats, int verbose = 1) {
+  // Read in the fixed and genotype portion of the file.
+
+  // Stats contains:
+  // "meta", "header", "variants", "columns"
+
+  // Matrix for body data.
+  Rcpp::CharacterMatrix gt(stats[2], stats[3]);
+
+  gzFile file;
+  file = gzopen (x.c_str(), "r");
+  if (! file) {
+    Rcpp::Rcerr << "gzopen of " << x << " failed: " << strerror (errno) << ".\n";
+    return Rcpp::StringVector(1);
+  }
+
+  // Scroll through buffers.
+  std::string lastline = "";
+  std::vector<std::string> header_vec;
+  int var_num = 0;
+  while (1) {
+    Rcpp::checkUserInterrupt();
+    int err;
+    int bytes_read;
+    char buffer[LENGTH];
+    bytes_read = gzread (file, buffer, LENGTH - 1);
+    buffer[bytes_read] = '\0';
+
+    std::string mystring(reinterpret_cast<char*>(buffer));  // Recast buffer as a string.
+    mystring = lastline + mystring;
+    std::vector < std::string > svec;  // Initialize vector of strings for parsed buffer.
+    char split = '\n'; // Must be single quotes!
+    common::strsplit(mystring, svec, split);
+
+    for(int i = 0; i < svec.size() - 1; i++){
+      if(svec[i][0] == '#' && svec[i][1] == '#'){
+        // Meta line, ignore.
+      } else if(svec[i][0] == '#' && svec[i][1] != '#'){
+        // Process header
+        char header_split = '\t';
+        common::strsplit(svec[i], header_vec, header_split);
+      } else {
+        // Variant line.
+        proc_body_line(gt, var_num, svec[i]);
+        var_num++;
+      }
+    }
+    lastline = svec[svec.size() - 1];
+
+
+    // Check for EOF or errors.
+    if (bytes_read < LENGTH - 1) {
+      if (gzeof (file)) {
+        break;
+      }
+      else {
+        const char * error_string;
+        error_string = gzerror (file, & err);
+        if (err) {
+          Rcpp::Rcerr << "Error: " << error_string << ".\n";
+          return Rcpp::StringVector(1);
+        }
+      }
+    }
+  }
+  gzclose (file);
+  
+  // Handle last line.
+//  proc_body_line(gt, var_num, lastline);
+
+  
+  header_vec[0] = "CHROM";
+  gt.names() = header_vec;
+
+  if(verbose == 1){
+    Rcpp::Rcout << "\rProcessed variant: " << var_num;
+    Rcpp::Rcout << "\nAll variants processed\n";
+  }
+
+//  Rcpp::DataFrame df1 = Rcpp::DataFrame::create(gt);
+  Rcpp::DataFrame df1(gt);
+  df1.names() = header_vec;
+  if(verbose == 1){
+    Rcpp::Rcout << "Rcpp::DataFrame created.\n";
+  }
+  
+//  return gt;
   return df1;
 }
 
