@@ -138,14 +138,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // read_meta_gz
-Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats);
-RcppExport SEXP vcfR_read_meta_gz(SEXP xSEXP, SEXP statsSEXP) {
+Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats, int verbose);
+RcppExport SEXP vcfR_read_meta_gz(SEXP xSEXP, SEXP statsSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type stats(statsSEXP);
-    __result = Rcpp::wrap(read_meta_gz(x, stats));
+    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
+    __result = Rcpp::wrap(read_meta_gz(x, stats, verbose));
     return __result;
 END_RCPP
 }

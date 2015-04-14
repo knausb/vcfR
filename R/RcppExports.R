@@ -45,8 +45,8 @@ vcf_meta <- function(x, stats) {
     .Call('vcfR_vcf_meta', PACKAGE = 'vcfR', x, stats)
 }
 
-read_meta_gz <- function(x, stats) {
-    .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', x, stats)
+read_meta_gz <- function(x, stats, verbose) {
+    .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', x, stats, verbose)
 }
 
 vcf_body <- function(x, stats) {

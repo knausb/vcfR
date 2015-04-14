@@ -259,10 +259,11 @@ Rcpp::StringVector vcf_meta(std::string x, Rcpp::NumericVector stats) {
 
 
 // [[Rcpp::export]]
-Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats) {
+Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats, int verbose) {
   // Read in the meta lines.
   // stats consists of elements ("meta", "header", "variants", "columns");
-  
+//  Rcpp::Rcout << "Made it here.\n";
+    
   Rcpp::StringVector meta(stats[0]);
   std::string line;  // String for reading file into
   int meta_row = 0;
@@ -291,18 +292,19 @@ Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats) {
     std::vector < std::string > svec;  // Initialize vector of strings for parsed buffer.
     char split = '\n'; // Must be single quotes!
     common::strsplit(mystring, svec, split);
-//    svec[0] = lastline + svec[0];
+
 
     int i = 0;
-    while(meta_row < stats(0)){
-      meta(i) = svec[i];
+    while(meta_row < stats(0) && i < svec.size() - 1){
+      meta(meta_row) = svec[i];
       meta_row++;
       i++;
+      if(meta_row % nreport == 0 && verbose == 1){
+        Rcpp::Rcout << "\rMeta line " << meta_row << " read in.";
+      }
     }
+    lastline = svec[svec.size() - 1];
 
-    if(meta_row == stats(0)){
-      break;
-    }
 
     // Check for EOF or errors.
     if (bytes_read < LENGTH - 1) {
@@ -322,6 +324,11 @@ Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats) {
     }
   }
   gzclose (file);
+
+  if(verbose == 1){
+    Rcpp::Rcout << "\rMeta line " << meta_row << " read in.";
+    Rcpp::Rcout << "\nAll meta lines processed.\n";
+  }
 
   return meta;
 }
@@ -523,7 +530,12 @@ Rcpp::DataFrame read_body_gz(std::string x, Rcpp::NumericVector stats, int verbo
         // Variant line.
         proc_body_line(gt, var_num, svec[i]);
         var_num++;
-      }
+        
+        if(var_num % nreport == 0 && verbose == 1){
+          Rcpp::Rcout << "\rProcessed variant " << var_num;
+        }
+      }   
+//      }
     }
     lastline = svec[svec.size() - 1];
 

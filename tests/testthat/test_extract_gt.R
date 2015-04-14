@@ -10,10 +10,6 @@ data(vcfR_example)
 pinf_mt <- create_chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff, verbose=F)
 pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE)
 
-pinf_mt <- create_chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff, verbose=F)
-pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE)
-
-
 gt <- extract.gt(pinf_vcf, element="GT", as.numeric=FALSE)
 pl <- extract.gt(pinf_vcf, element="PL", as.numeric=FALSE)
 gq <- extract.gt(pinf_vcf, element="GQ", as.numeric=TRUE)

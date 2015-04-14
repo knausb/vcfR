@@ -33,7 +33,7 @@ test_that("vcfR_vcf_stats_gz works",{
   setwd(test_dir)
 #  write.vcf(pinf_mt, "test.vcf")
   write.vcf(pinf_mt, "test.vcf.gz")
-  x <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', "test.vcf.gz")
+  x <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', "test.vcf.gz", verbose=0)
   unlink("test.vcf")
   setwd(original_dir)
 
@@ -48,7 +48,7 @@ test_that("vcfR_vcf_meta_gz works",{
   setwd(test_dir)
   write.vcf(pinf_mt, "test.vcf.gz")
   stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', "test.vcf.gz")
-  x <- .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', "test.vcf.gz", stats)
+  x <- .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', "test.vcf.gz", stats, 0)
   unlink("test.vcf")
   setwd(original_dir)
   
