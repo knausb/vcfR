@@ -78,7 +78,7 @@ test_that("vcfR_read_body_gz works",{
 test_that("read/write.vcf works for vcfR objects",{
   setwd(test_dir)
   write.vcf(pinf_vcf, "test.vcf")
-  test <- read.vcf("test.vcf")
+  test <- read.vcf("test.vcf", verbose = FALSE)
   unlink("test.vcf")
   setwd(original_dir)
   
@@ -169,7 +169,7 @@ test_that("read.vcf works for vcf files which contain no variants",{
   setwd(test_dir)
   write.vcf.gz(pinf_vcf2, "test.vcf.gz")
   system("gunzip test.vcf.gz")
-  test <- read.vcf("test.vcf")
+  test <- read.vcf("test.vcf", verbose=FALSE)
   unlink("test.vcf")
   setwd(original_dir)
 

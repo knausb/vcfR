@@ -15,7 +15,7 @@ read.vcf.R(file)
 
 write.vcf.R(x, file = "", mask = logical(0), APPEND = FALSE)
 
-read.vcf(file, limit = 1e+09)
+read.vcf(file, limit = 1e+07, verbose = TRUE)
 
 write.vcf(x, file = "", mask = FALSE, APPEND = FALSE)
 
@@ -37,6 +37,8 @@ write_win_info(x, file = "", APPEND = FALSE)
 \item{APPEND}{logical indicating whether to append to existing vcf file or write a new file}
 
 \item{limit}{amount of memory not to exceed when reading in a file}
+
+\item{verbose}{report verbose progress}
 
 \item{exponent_range}{range of values to be used for object sizes (10^exponent_range)}
 }

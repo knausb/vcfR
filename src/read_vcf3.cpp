@@ -545,12 +545,13 @@ Rcpp::DataFrame read_body_gz(std::string x, Rcpp::NumericVector stats, int verbo
   }
   gzclose (file);
   
-  // Handle last line.
-//  proc_body_line(gt, var_num, lastline);
-
-  
   header_vec[0] = "CHROM";
-  gt.names() = header_vec;
+
+//  Rcpp::Rcout << "Length of header_vec: " << header_vec.size() << "\n";
+//  Rcpp::Rcout << "Number of columns in gt: " << gt.ncol() << "\n";
+//  Rcpp::Rcout << "Number of rows in gt: " << gt.nrow() << "\n";
+    
+  gt.attr("dimnames") = Rcpp::List::create(Rcpp::CharacterVector::create(), header_vec);
 
   if(verbose == 1){
     Rcpp::Rcout << "\rProcessed variant: " << var_num;
@@ -559,7 +560,7 @@ Rcpp::DataFrame read_body_gz(std::string x, Rcpp::NumericVector stats, int verbo
 
 //  Rcpp::DataFrame df1 = Rcpp::DataFrame::create(gt);
   Rcpp::DataFrame df1(gt);
-  df1.names() = header_vec;
+//  df1.names() = header_vec;
   if(verbose == 1){
     Rcpp::Rcout << "Rcpp::DataFrame created.\n";
   }

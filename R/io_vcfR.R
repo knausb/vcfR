@@ -13,6 +13,7 @@
 #' @param mask logical vector indicating rows to use
 #' @param APPEND logical indicating whether to append to existing vcf file or write a new file
 #' @param limit amount of memory not to exceed when reading in a file
+#' @param verbose report verbose progress
 #'
 #' @details
 #' Reads in a vcf file and stores it in a vcf class.  Once the number of lines the meta information contains the data is divided into three tables: meta data, fixed data and genotype data.
@@ -146,7 +147,7 @@ write.vcf.R<-function(x, file="", mask=logical(0), APPEND=FALSE){
 #' @aliases read.vcf
 #' @export
 #' 
-read.vcf <- function(file, limit=1e9){
+read.vcf <- function(file, limit=1e7, verbose = TRUE){
     
   if(file.access(file, mode = 0) != 0){
     stop(paste("File:", file, "does not appear to exist!"))
@@ -157,31 +158,40 @@ read.vcf <- function(file, limit=1e9){
   
   
   vcf <- new(Class="vcfR")
-  stats <- .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', file)
-#  element_size <- object.size(.Call('vcfR_ram_test', PACKAGE = 'vcfR'))
-  element_size <- object.size(ram_test())
+#  stats <- .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', file)
+  stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', file)
   
-  ram_est <- stats['variants'] * stats['columns'] * element_size
+#  element_size <- object.size(.Call('vcfR_ram_test', PACKAGE = 'vcfR'))
+#  element_size <- object.size(ram_test())
+  
+#  ram_est <- stats['variants'] * stats['columns'] * element_size
+  ram_est <- stats['variants'] * stats['columns'] * 8 + 248
+
   if(ram_est > limit){
     message(paste("The number of variants in your file is:", prettyNum(stats['variants'], big.mark=",")))
     message(paste("The number of samples in your file is:", prettyNum(stats['columns'] - 1, big.mark=",")))
     message(paste("This will result in an object of approximately:", round(ram_est/1e9, digits=3), "Gb in size"))
+    message("The function memory_plot() may help you estimate your memory needs.")
     stop("Object size limit exceeded")
   }
   
-  vcf@meta <- .Call('vcfR_vcf_meta', PACKAGE = 'vcfR', file, stats)
-  temp <- .Call('vcfR_vcf_body', PACKAGE = 'vcfR', file, stats)
+#  vcf@meta <- .Call('vcfR_vcf_meta', PACKAGE = 'vcfR', file, stats)
+#  body <- .Call('vcfR_vcf_body', PACKAGE = 'vcfR', file, stats)
+
+  vcf@meta <- .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', file, stats, as.numeric(verbose))
+  body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', file, stats, as.numeric(verbose))
 
   for(i in c(1, 3:5, 7:8)){
-    temp[,i] <- as.character(temp[,i])
+    body[,i] <- as.character(body[,i])
   }
-  for(i in 9:ncol(temp)){
-    temp[,i] <- as.character(temp[,i])
+  for(i in 9:ncol(body)){
+    body[,i] <- as.character(body[,i])
   }
   
-  vcf@fix <- temp[,1:8]
-#  vcf@fix$POS <- as.integer(as.character(vcf@fix$POS))
-  vcf@gt <- temp[,9:ncol(temp)]
+  vcf@fix <- body[,1:8]
+  vcf@fix$POS <- as.integer(as.character(vcf@fix$POS))
+  vcf@fix$QUAL <- as.numeric(as.character(vcf@fix$QUAL))
+  vcf@gt <- body[,9:ncol(body)]
   
   return(vcf)
 }
@@ -269,11 +279,20 @@ memory_plot <- function(exponent_range=2:6){
 
   for(i in 1:length(exponent_range)){
 #    osize[i] <- object.size(ram_test(nrow = msize[i], ncol = 1L))
-    osize[i] <- object.size(.Call('vcfR_ram_test', PACKAGE = 'vcfR', nrow = msize[i], ncol = 1L))
+    osize[i] <- object.size(.Call('vcfR_ram_test', PACKAGE = 'vcfR', nrow = msize[i], ncol = 1))
   }
 
 #  plot(msize, osize, type='b', log='xy')
-  plot(log10(msize), log(as.numeric(osize))/1e6, type='b', log='xy')
+  plot(log10(msize), 
+       log10(as.numeric(osize)/1e6), 
+       type='b',
+       #log='xy',
+       xlab="log10(Matrix cells)",
+       ylab="log10(object size(Mb))")
+
+  x <- cbind(msize, osize)
+  colnames(x) <- c("Matrix cells", "Memory (bytes)")
+  return(x)
 }
 
 
