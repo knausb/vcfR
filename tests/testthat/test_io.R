@@ -113,9 +113,11 @@ test_that("write.vcf.gz works for Chrom objects",{
   
   setwd(test_dir)
   write.vcf.gz(pinf_mt, "test.vcf.gz")
-  system("gunzip test.vcf.gz")
-  test <- read.vcf("test.vcf")
-  unlink("test.vcf")
+#  system("gunzip test.vcf.gz")
+#  test <- read.vcf("test.vcf")
+#  unlink("test.vcf")
+  test <- read.vcf("test.vcf.gz")
+  unlink("test.vcf.gz")
   setwd(original_dir)
   
   expect_is(test, "vcfR")
@@ -153,10 +155,14 @@ test_that("write_var_info works for Chrom objects",{
 
   expect_is(test, "data.frame")
   expect_equal(nrow(test), 40)
-  expect_equal(ncol(test), 12)
-  expect_equal(length(grep("window", names(test))), 1)
-  expect_equal(length(grep("start", names(test))), 1)
-  expect_equal(length(grep("end", names(test))), 1)
+#  expect_equal(ncol(test), 12)
+  expect_equal(grep("CHROM", names(test), value=TRUE), "CHROM")
+  expect_equal(grep("window", names(test), value=TRUE), "window")
+  expect_equal(grep("start", names(test), value=TRUE), "start")
+  expect_equal(grep("end", names(test), value=TRUE), "end")
+#  expect_equal(length(grep("window", names(test))), 1)
+#  expect_equal(length(grep("start", names(test))), 1)
+#  expect_equal(length(grep("end", names(test))), 1)
 })
 
 
@@ -167,9 +173,11 @@ test_that("read.vcf works for vcf files which contain no variants",{
   
   setwd(test_dir)
   write.vcf.gz(pinf_vcf2, "test.vcf.gz")
-  system("gunzip test.vcf.gz")
-  test <- read.vcf("test.vcf", verbose=FALSE)
-  unlink("test.vcf")
+#  system("gunzip test.vcf.gz")
+#  test <- read.vcf("test.vcf", verbose=FALSE)
+  test <- read.vcf("test.vcf.gz", verbose=FALSE)
+  unlink("test.vcf.gz")
+#  unlink("test.vcf")
   setwd(original_dir)
 
   expect_equal(ncol(test@fix), 8)
