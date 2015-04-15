@@ -81,17 +81,21 @@ proc_chrom <- function(x, win.size = 1e3, verbose=TRUE){
   stopifnot(class(x) == "Chrom")
   
 #  ptime <- system.time(x@seq.info$nuc.win <- regex.win(x))
-  ptime <- system.time(x@seq.info$nuc.win <- seq_to_rects(x)) 
-  if(verbose==TRUE){
-    print("Nucleotide regions complete.")
-    print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+  if(class(x@seq) == "DNAbin"){
+    ptime <- system.time(x@seq.info$nuc.win <- seq_to_rects(x)) 
+    if(verbose==TRUE){
+      print("Nucleotide regions complete.")
+      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+    }
   }
   
+  if(class(x@seq) == "DNAbin"){
 #  ptime <- system.time(x@seq.info$N.win <- regex.win(x, regex="[n]"))
-  ptime <- system.time(x@seq.info$N.win <- seq_to_rects(x, chars="n")) 
-  if(verbose==TRUE){
-    print("N regions complete.")
-    print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+    ptime <- system.time(x@seq.info$N.win <- seq_to_rects(x, chars="n")) 
+    if(verbose==TRUE){
+      print("N regions complete.")
+      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+    }
   }
   
   if(nrow(x@vcf.gt[x@var.info$mask,])>0){
@@ -112,16 +116,18 @@ proc_chrom <- function(x, win.size = 1e3, verbose=TRUE){
       print(paste("  elapsed time: ", round(ptime[3], digits=4)))
     }
 #  }
-  
-  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
-    ptime <- system.time(x@win.info <- .Call('vcfR_windowize_fasta', 
-                                             PACKAGE = 'vcfR',
-                                             wins=x@win.info,
-                                             seq=as.character(x@seq)[1,]
-                                             ))
-    if(verbose==TRUE){
-      print("windowize_fasta complete.")
-      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+
+  if(class(x@seq) == "DNAbin"){
+    if(nrow(x@vcf.gt[x@var.info$mask,])>0){
+      ptime <- system.time(x@win.info <- .Call('vcfR_windowize_fasta', 
+                                               PACKAGE = 'vcfR',
+                                               wins=x@win.info,
+                                               seq=as.character(x@seq)[1,]
+                                               ))
+      if(verbose==TRUE){
+        print("windowize_fasta complete.")
+        print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+      }
     }
   }
   
