@@ -41,7 +41,6 @@ Rcpp::DataFrame gt_to_popsum(Rcpp::DataFrame var_info, Rcpp::CharacterMatrix gt)
   // var_info should contain columns named 'CHROM', 'POS', 'mask' and possibly others.
   Rcpp::LogicalVector   mask = var_info["mask"];
   Rcpp::IntegerVector   nsample(mask.size());
-//  Rcpp::CharacterVector alleles(mask.size());
   Rcpp::StringVector    allele_counts(mask.size());
   Rcpp::NumericVector   Hes(mask.size());
   Rcpp::NumericVector   Nes(mask.size());
@@ -49,27 +48,16 @@ Rcpp::DataFrame gt_to_popsum(Rcpp::DataFrame var_info, Rcpp::CharacterMatrix gt)
   int i = 0;
   int j = 0;
   int k = 0;
-//  int cols = gt.ncol();
   
-//  for(i=0; i<mask.size(); i++){ // Iterate over variants (rows)
   for(i=0; i < gt.nrow(); i++){ // Iterate over variants (rows)
-//  Rcout << "Variant number: " << i << "\n";
     if(mask[i] == TRUE){
       std::vector<int> myalleles (1,0);
-//      for(j=0; j < cols; j++){ // Iterate over samples (columns)
       for(j=0; j < gt.ncol(); j++){ // Iterate over samples (columns)
         if(gt(i, j) != NA_STRING){
           nsample[i]++;  // Increment sample count.
 
           // Count alleles per sample.
           std::vector < int > intv = gtsplit(as<std::string>(gt(i, j)));
-//          while(myalleles.size() - 1 < intv[0]){
-            // We have more alleles than exist in the vector myalleles.
-//            myalleles.push_back(0);
-//          }
-          //
-//          myalleles[intv[0]]++;
-//          for(k=1; k<intv.size(); k++){
           for(k=0; k<intv.size(); k++){
             while(myalleles.size() - 1 < intv[k]){
               // We have more alleles than exist in the vector myalleles.
@@ -79,7 +67,6 @@ Rcpp::DataFrame gt_to_popsum(Rcpp::DataFrame var_info, Rcpp::CharacterMatrix gt)
           }
         }
       }
-//      Rcout << "Sample count: " << nsample[i] << "\n";
 
       // Concatenate allele counts into a comma delimited string.
       int n;
@@ -89,7 +76,6 @@ Rcpp::DataFrame gt_to_popsum(Rcpp::DataFrame var_info, Rcpp::CharacterMatrix gt)
         n=sprintf (buffer, "%s,%d", buffer, myalleles[j]);
       }
       allele_counts[i] = buffer;
-//      Rcout << "Allele_counts: " << myalleles[0] << "," << myalleles[1] << "\n";
 
       // Sum all alleles.
       int nalleles = myalleles[0];
@@ -106,12 +92,10 @@ Rcpp::DataFrame gt_to_popsum(Rcpp::DataFrame var_info, Rcpp::CharacterMatrix gt)
       Hes[i] = He;
       Nes[i] = 1/(1-He);
     } else { // Missing variant (row=NA)
-//      Rcout << "Missing variant.\n";
       nsample[i] = NA_INTEGER;     
     }
   }
 
-//  Rcout << "Creating DataFrame\n";
   return Rcpp::DataFrame::create(var_info, 
       _["n"]=nsample, 
       _["Allele_counts"]=allele_counts,

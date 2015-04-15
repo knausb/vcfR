@@ -7,8 +7,8 @@
 \alias{window_table}
 \title{Chrom_functions}
 \usage{
-masker(x, QUAL = 999, mindp = 0.25, maxdp = 0.75, minmq = 20,
-  maxmq = 50, ...)
+masker(x, min_QUAL = 999, min_DP = 0.25, max_DP = 0.75, min_MQ = 20,
+  max_MQ = 50, ...)
 
 variant_table(x)
 
@@ -17,15 +17,15 @@ window_table(x)
 \arguments{
 \item{x}{object of class Chrom}
 
-\item{QUAL}{minimum variant quality}
+\item{min_QUAL}{minimum variant quality}
 
-\item{mindp}{minimum cumulative depth}
+\item{min_DP}{minimum cumulative depth}
 
-\item{maxdp}{maximum cumulative depth}
+\item{max_DP}{maximum cumulative depth}
 
-\item{minmq}{minimum mapping quality}
+\item{min_MQ}{minimum mapping quality}
 
-\item{maxmq}{maximum mapping quality}
+\item{max_MQ}{maximum mapping quality}
 
 \item{...}{arguments to be passed to methods}
 }

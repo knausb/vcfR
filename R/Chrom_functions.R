@@ -14,11 +14,11 @@
 #' @export
 #' @aliases masker
 #' 
-#' @param QUAL minimum variant quality
-#' @param mindp minimum cumulative depth
-#' @param maxdp maximum cumulative depth
-#' @param minmq minimum mapping quality
-#' @param maxmq maximum mapping quality
+#' @param min_QUAL minimum variant quality
+#' @param min_DP minimum cumulative depth
+#' @param max_DP maximum cumulative depth
+#' @param min_MQ minimum mapping quality
+#' @param max_MQ maximum mapping quality
 #' @param ... arguments to be passed to methods
 #' 
 #' @details
@@ -33,25 +33,23 @@
 #' 
 #' This vector is stored in the var.info$mask slot of a Chrom object.
 #' 
-masker <- function(x, QUAL=999, mindp=0.25, maxdp=0.75, minmq=20, maxmq=50, ...){
+#masker <- function(x, min_QUAL=999, min_DP=0.25, max_DP=0.75, minmq=20, maxmq=50, ...){
+masker <- function(x, min_QUAL=999, min_DP=0.25, max_DP=0.75, min_MQ=20, max_MQ=50, ...){  
   quals  <- x@vcf.fix$QUAL
   info <- x@var.info[,grep("DP|MQ",names(x@var.info))]
   mask <- rep(TRUE, times=nrow(info))
-  #
+
+  # Mask on QUAL
   if(sum(is.na(quals)) < length(quals)){
-    mask[quals < QUAL] <- FALSE
+    mask[quals < min_QUAL] <- FALSE
   }
-  #  if(sum(is.na(x@vcf.info$DP)) < length(x@vcf.info$DP)){
-  #    mask[x@vcf.info$DP < quantile(x@vcf.info$DP, probs=c(mindp))] <- FALSE
-  #    mask[x@vcf.info$DP > quantile(x@vcf.info$DP, probs=c(maxdp))] <- FALSE
-  #  }
-  #  if(sum(is.na(x@vcf.info$MQ)) < length(x@vcf.info$MQ)){
-  #    mask[x@vcf.info$MQ < quantile(x@vcf.info$MQ, probs=c(minmq))] <- FALSE
-  #    mask[x@vcf.info$MQ > quantile(x@vcf.info$MQ, probs=c(maxmq))] <- FALSE
-  #  }
+
+  # Mask on DP
   if(sum(is.na(info$DP)) < length(info$DP)){
-    mask[info$DP < quantile(info$DP, probs=c(mindp))] <- FALSE
-    mask[info$DP > quantile(info$DP, probs=c(maxdp))] <- FALSE
+    mask[info$DP < min_DP] <- FALSE
+    mask[info$DP > max_DP] <- FALSE
+#    mask[info$DP < quantile(info$DP, probs=c(mindp))] <- FALSE
+#    mask[info$DP > quantile(info$DP, probs=c(maxdp))] <- FALSE
   }
   if(sum(is.na(info$MQ)) < length(info$MQ)){
     mask[info$MQ < minmq] <- FALSE
