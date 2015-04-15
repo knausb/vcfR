@@ -34,7 +34,7 @@
 #' This vector is stored in the var.info$mask slot of a Chrom object.
 #' 
 #masker <- function(x, min_QUAL=999, min_DP=0.25, max_DP=0.75, minmq=20, maxmq=50, ...){
-masker <- function(x, min_QUAL=999, min_DP=0.25, max_DP=0.75, min_MQ=20, max_MQ=50, ...){  
+masker <- function(x, min_QUAL=1, min_DP=1, max_DP=1e4, min_MQ=20, max_MQ=100, ...){  
   quals  <- x@vcf.fix$QUAL
   info <- x@var.info[,grep("DP|MQ",names(x@var.info))]
   mask <- rep(TRUE, times=nrow(info))
@@ -52,8 +52,8 @@ masker <- function(x, min_QUAL=999, min_DP=0.25, max_DP=0.75, min_MQ=20, max_MQ=
 #    mask[info$DP > quantile(info$DP, probs=c(maxdp))] <- FALSE
   }
   if(sum(is.na(info$MQ)) < length(info$MQ)){
-    mask[info$MQ < minmq] <- FALSE
-    mask[info$MQ > maxmq] <- FALSE
+    mask[info$MQ < min_MQ] <- FALSE
+    mask[info$MQ > max_MQ] <- FALSE
     #    mask[info$MQ < quantile(info$MQ, probs=c(minmq))] <- FALSE
     #    mask[info$MQ > quantile(info$MQ, probs=c(maxmq))] <- FALSE
   }

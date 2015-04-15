@@ -117,8 +117,7 @@ This makes it a good candidate for filtering.
 
 
 ```{r, fig.height=7, fig.width=7}
-pinf_mt <- masker(pinf_mt, QUAL = 999, mindp = 0.25, maxdp = 0.99,
-                  minmq = 30, maxmq = 50)
+pinf_mt <- masker(pinf_mt, min_QUAL=999, min_DP=7000, max_DP=8000, min_MQ=43, max_MQ=46)
 plot(pinf_mt)
 ```
 
@@ -147,8 +146,8 @@ based on this information, it seems reasonable to change our threshold for maski
 
 
 ```{r, fig.height=7, fig.width=7}
-pinf_mt <- masker(pinf_mt, QUAL = 999, mindp = 0.25, maxdp = 0.99,
-                  minmq = 43, maxmq = 50)
+#pinf_mt <- masker(pinf_mt, QUAL = 999, mindp = 0.25, maxdp = 0.99,
+#                  minmq = 43, maxmq = 50)
 plot(pinf_mt)
 ```
 

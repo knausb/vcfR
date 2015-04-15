@@ -7,8 +7,8 @@
 \alias{window_table}
 \title{Chrom_functions}
 \usage{
-masker(x, min_QUAL = 999, min_DP = 0.25, max_DP = 0.75, min_MQ = 20,
-  max_MQ = 50, ...)
+masker(x, min_QUAL = 1, min_DP = 1, max_DP = 10000, min_MQ = 20,
+  max_MQ = 100, ...)
 
 variant_table(x)
 
