@@ -757,7 +757,11 @@ void write_vcf_body_gz( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string fil
 
       // gt portion
       for(j=0; j<column_names.size(); j++){
-        tmpstring = tmpstring + "\t" + gt_cm(i, j);
+        if(gt_cm(i, j) == NA_STRING){
+          tmpstring = tmpstring + "\t" + "./.";
+        } else {
+          tmpstring = tmpstring + "\t" + gt_cm(i, j);
+        }
       }
 
 
