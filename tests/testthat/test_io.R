@@ -25,8 +25,7 @@ test_that("vcfR_vcf_stats works",{
   expect_equal(as.numeric(x["meta"]), 28)
   expect_equal(as.numeric(x["header"]), 29)
   expect_equal(as.numeric(x["variants"]), 371)
-  expect_equal(as.numeric(x["columns"]), 38)
-  
+  expect_equal(as.numeric(x["columns"]), 38)  
 })
 
 test_that("vcfR_vcf_stats_gz works",{
