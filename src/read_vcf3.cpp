@@ -476,11 +476,12 @@ void proc_body_line(Rcpp::CharacterMatrix gt, int var_num, std::string myline){
   for(int i = 0; i < data_vec.size(); i++){
     if(data_vec[i] == "."){
       gt(var_num, i) = NA_STRING;
+    } else if(data_vec[i] == "./."){
+      gt(var_num, i) = NA_STRING;
     } else {
       gt(var_num, i) = data_vec[i];
     }
   }
-  
 }
 
 
