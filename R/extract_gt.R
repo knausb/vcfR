@@ -149,3 +149,22 @@ extract_indels <- function(x, return_indels=FALSE){
 }
 
 
+
+#' @rdname extract_gt
+#' @aliases extract_info
+#' 
+#' @export
+extract_info <- function(x, element, as.numeric=FALSE){
+  values <- unlist(
+    lapply(strsplit(unlist(
+      lapply(strsplit(x@vcf.fix$INFO, split=";"),
+             function(x){grep(paste("^", element, "=", sep=""), x, value=TRUE)})),
+      split="="), function(x){x[2]})
+    )
+
+  if(as.numeric == TRUE){
+    values <- as.numeric(values)
+  }
+  values
+}
+
