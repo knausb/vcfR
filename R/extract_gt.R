@@ -90,6 +90,14 @@ extract.gt <- function(x, element="GT", mask=FALSE, as.numeric=FALSE){
     tmpMask <- mask
     mask <- TRUE
   }
+  
+  if(class(x) == "vcfR" | class(x) == "data.frame"){
+    if(length(mask) == 1 & mask == TRUE){
+      # This condition does not appear to make 
+      # sense and should be overridden.
+      mask <- FALSE
+    }
+  }
 
   if(class(x) == "vcfR"){
 #    outM <- .Call('vcfR_extractGT2NM', PACKAGE = 'vcfR', x@gt, element)

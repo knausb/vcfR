@@ -14,6 +14,9 @@ pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE)
 
 gt <- extract.gt(pinf_mt, element="GT", as.numeric=FALSE)
 gt2 <- extract.gt(pinf_mt, element="GT", as.numeric=FALSE, mask = TRUE)
+gt3 <- extract.gt(pinf_vcf, element="GT", mask = c(TRUE, FALSE))
+
+
 pl <- extract.gt(pinf_mt, element="PL", as.numeric=FALSE)
 gq <- extract.gt(pinf_mt, element="GQ", as.numeric=TRUE)
 
@@ -34,6 +37,7 @@ test_that("gq is numeric",{
 test_that("extract_gt mask=TRUE works", {
   expect_equal(nrow(gt), 371)
   expect_equal(nrow(gt2), 212)
+  expect_equal(nrow(gt3), 186)
 })
 
 
