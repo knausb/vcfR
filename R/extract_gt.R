@@ -81,6 +81,14 @@ extract.gt <- function(x, element="GT", mask=FALSE, as.numeric=FALSE){
     stop("Expected an object of class Chrom, vcfR or data.frame")
   }
   
+  if(class(x) == "vcfR" | class(x) == "data.frame"){
+    if(length(mask) == 1 && mask == TRUE){
+      # This condition does not appear to make 
+      # sense and should be overridden.
+      mask <- FALSE
+    }
+  }
+  
   if(class(x) == "Chrom"){
     tmpMask <- x@var.info$mask
     x <- chrom_to_vcfR(x)
@@ -89,14 +97,6 @@ extract.gt <- function(x, element="GT", mask=FALSE, as.numeric=FALSE){
   if(length(mask) > 1){
     tmpMask <- mask
     mask <- TRUE
-  }
-  
-  if(class(x) == "vcfR" | class(x) == "data.frame"){
-    if(length(mask) == 1 & mask == TRUE){
-      # This condition does not appear to make 
-      # sense and should be overridden.
-      mask <- FALSE
-    }
   }
 
   if(class(x) == "vcfR"){
