@@ -9,18 +9,18 @@
 \usage{
 extract.gt.allR(x, element = "GT", mask = logical(0), as.matrix = FALSE)
 
-extract.gt(x, element = "GT", mask = logical(0), as.numeric = FALSE)
+extract.gt(x, element = "GT", mask = FALSE, as.numeric = FALSE)
 
 extract_indels(x, return_indels = FALSE)
 
-extract_info(x, element, as.numeric = FALSE)
+extract_info(x, element, as.numeric = FALSE, mask = FALSE)
 }
 \arguments{
 \item{x}{An object of class Chrom, vcfR or data.frame}
 
 \item{element}{element to extract from vcf genotype data. Common options include "DP", "GT" and "GQ"}
 
-\item{mask}{a logical vector indicating which variants (rows) to include}
+\item{mask}{a logical indicating whether to apply the mask (TRUE) or return all variants (FALSE). Alternatively, a vector of logicals may be provided.}
 
 \item{as.matrix}{attempt to recast as a numeric matrix}
 

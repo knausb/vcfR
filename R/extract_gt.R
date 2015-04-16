@@ -3,7 +3,7 @@
 #' 
 #' @param x An object of class Chrom, vcfR or data.frame 
 #' @param element element to extract from vcf genotype data. Common options include "DP", "GT" and "GQ"
-#' @param mask a logical vector indicating which variants (rows) to include
+#' @param mask a logical indicating whether to apply the mask (TRUE) or return all variants (FALSE). Alternatively, a vector of logicals may be provided.
 #' @param as.matrix attempt to recast as a numeric matrix
 #' 
 #' 
@@ -76,15 +76,21 @@ extract.gt.allR <- function(x, element="GT", mask=logical(0), as.matrix=FALSE){
 #' 
 #' @param as.numeric Logical, should the matrix be converted to numerics
 #' @export
-extract.gt <- function(x, element="GT", mask=logical(0), as.numeric=FALSE){
+extract.gt <- function(x, element="GT", mask=FALSE, as.numeric=FALSE){
   if(class(x) != "Chrom" & class(x) != "vcfR" & class(x) != "data.frame"){
     stop("Expected an object of class Chrom, vcfR or data.frame")
   }
   
   if(class(x) == "Chrom"){
+    tmpMask <- x@var.info$mask
     x <- chrom_to_vcfR(x)
   }
   
+  if(length(mask) > 1){
+    tmpMask <- mask
+    mask <- TRUE
+  }
+
   if(class(x) == "vcfR"){
 #    outM <- .Call('vcfR_extractGT2NM', PACKAGE = 'vcfR', x@gt, element)
     if(names(x@gt)[1] != "FORMAT"){
@@ -103,6 +109,10 @@ extract.gt <- function(x, element="GT", mask=logical(0), as.numeric=FALSE){
 
   if(as.numeric == TRUE){
     outM <- .Call('vcfR_CM_to_NM', PACKAGE = 'vcfR', outM)
+  }
+
+  if(mask == TRUE){
+    outM <- outM[tmpMask,]
   }
 
   return(outM)
@@ -154,7 +164,7 @@ extract_indels <- function(x, return_indels=FALSE){
 #' @aliases extract_info
 #' 
 #' @export
-extract_info <- function(x, element, as.numeric=FALSE){
+extract_info <- function(x, element, as.numeric=FALSE, mask=FALSE){
   values <- unlist(
     lapply(strsplit(unlist(
       lapply(strsplit(x@vcf.fix$INFO, split=";"),
@@ -164,6 +174,9 @@ extract_info <- function(x, element, as.numeric=FALSE){
 
   if(as.numeric == TRUE){
     values <- as.numeric(values)
+  }
+  if(mask==TRUE){
+    values <- values[x@var.info$mask]
   }
   values
 }

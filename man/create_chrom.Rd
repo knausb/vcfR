@@ -59,7 +59,7 @@ head(pinf_mt)
 pinf_mt
 names(pinf_mt)
 plot(pinf_mt)
-pinf_mt <- masker(pinf_mt)
+pinf_mt <- masker(pinf_mt, min_QUAL = 990, min_DP = 6000, max_DP = 8000, min_MQ = 40, max_MQ = 100)
 pinf_mt <- proc_chrom(pinf_mt, win.size=1000)
 
 plot(pinf_mt)
