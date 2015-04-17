@@ -1,7 +1,8 @@
 #include <Rcpp.h>
 #include <fstream>
 #include <zlib.h>
-#include "common.h"
+#include "vcfRCommon.h"
+
 // #include <iostream>
 
 //using namespace Rcpp;
@@ -24,7 +25,7 @@ void stat_line(Rcpp::NumericVector stats, std::string line){
     stats(1) = stats(0) + 1;
     std::vector < std::string > col_vec;
     char col_split = '\t'; // Must be single quotes!
-    common::strsplit(line, col_vec, col_split);
+    vcfRCommon::strsplit(line, col_vec, col_split);
     stats(3) = col_vec.size();
   } else {
     // Variant
@@ -128,7 +129,7 @@ Rcpp::NumericVector vcf_stats_gz(std::string x) {
     std::vector < std::string > svec;  // Initialize vector of strings for parsed buffer.
     
     char split = '\n'; // Must be single quotes!
-    common::strsplit(mystring, svec, split);
+    vcfRCommon::strsplit(mystring, svec, split);
         
 //    svec[0] = lastline + svec[0];
 
@@ -291,7 +292,7 @@ Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats, int ve
     mystring = lastline + mystring;
     std::vector < std::string > svec;  // Initialize vector of strings for parsed buffer.
     char split = '\n'; // Must be single quotes!
-    common::strsplit(mystring, svec, split);
+    vcfRCommon::strsplit(mystring, svec, split);
 
 
     int i = 0;
@@ -471,7 +472,7 @@ void proc_body_line(Rcpp::CharacterMatrix gt, int var_num, std::string myline){
   char split = '\t'; // Must be single quotes!
   std::vector < std::string > data_vec;
   
-  common::strsplit(myline, data_vec, split);
+  vcfRCommon::strsplit(myline, data_vec, split);
 
   for(int i = 0; i < data_vec.size(); i++){
     if(data_vec[i] == "."){
@@ -518,7 +519,7 @@ Rcpp::DataFrame read_body_gz(std::string x, Rcpp::NumericVector stats, int verbo
     mystring = lastline + mystring;
     std::vector < std::string > svec;  // Initialize vector of strings for parsed buffer.
     char split = '\n'; // Must be single quotes!
-    common::strsplit(mystring, svec, split);
+    vcfRCommon::strsplit(mystring, svec, split);
 
     for(int i = 0; i < svec.size() - 1; i++){
       if(svec[i][0] == '#' && svec[i][1] == '#'){
@@ -526,7 +527,7 @@ Rcpp::DataFrame read_body_gz(std::string x, Rcpp::NumericVector stats, int verbo
       } else if(svec[i][0] == '#' && svec[i][1] != '#'){
         // Process header
         char header_split = '\t';
-        common::strsplit(svec[i], header_vec, header_split);
+        vcfRCommon::strsplit(svec[i], header_vec, header_split);
       } else {
         // Variant line.
         proc_body_line(gt, var_num, svec[i]);

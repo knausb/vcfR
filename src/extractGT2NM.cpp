@@ -1,6 +1,7 @@
-// [[Rcpp::plugins(cpp11)]]
 #include <Rcpp.h>
-#include <string>
+// #include <string>
+//#include "common.h"
+
 
 using namespace Rcpp;
 
@@ -171,4 +172,54 @@ NumericMatrix CM_to_NM(CharacterMatrix x) {
   }
 
   return nm;
+}
+
+
+
+// [[Rcpp::export]]
+Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
+                                Rcpp::StringVector alt,
+                                Rcpp::StringMatrix gt,
+                                int vebosity) {
+  // Vcf files are typically of one ploidy.
+  
+  std::string temp = Rcpp::as< std::string >(gt(1,1));
+  int ploidy = 1;
+  int i = 0;
+  int j = 0;
+  
+  for(i=0; i<temp.length(); i++){
+//    char allele_split = '|';
+//    if(temp[i] == allele_split){ploidy++;}
+    if(temp[i] == '|'){ploidy++;}
+  }
+
+  if(ploidy == 1){
+    // Is either haploid or is not phased.
+    return gt;
+  }
+
+  Rcpp::StringMatrix haps(gt.nrow(), gt.ncol() * ploidy);
+
+  for(i=0; i<gt.nrow(); i++){
+    std::vector<std::string> alleles;
+    alleles[0] = ref(i);
+    std::vector < std::string > alt_vec;
+    char alt_split = ','; // Must be single quotes!
+    
+//    vcfRCommon::strsplit(alt(i), alt_vec, alt_split);
+    
+    
+    for(j=0; j<gt.ncol(); i++){
+      
+    }
+  }
+/*  
+    std::vector < std::string > col_vec;
+    char col_split = '\t'; // Must be single quotes!
+    common::strsplit(line, col_vec, col_split);
+*/  
+
+
+
 }

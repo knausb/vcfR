@@ -189,3 +189,27 @@ extract_info <- function(x, element, as.numeric=FALSE, mask=FALSE){
   values
 }
 
+
+#' @rdname extract_gt
+#' @aliases extract_haps
+#' 
+#' @export
+extract_haps <- function(x, mask=FALSE, verbose=TRUE){
+  if(class(x) == "Chrom"){
+    if(length(mask) == 1 && mask==TRUE){
+      x <- chrom_to_vcfR(x, use.mask = TRUE)
+    } else {
+      x <- chrom_to_vcfR(x)
+    }
+  }
+  
+  if(length(mask) > 1){
+    x <- x[mask,]
+  }
+  
+  gt <- extract.gt(x, element="GT")
+  
+  haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', gt, x@fix$REF, x@fix$ALT, 1)
+  haps
+}
+

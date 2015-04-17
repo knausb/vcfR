@@ -3,6 +3,7 @@
 \name{extract.gt.allR}
 \alias{extract.gt}
 \alias{extract.gt.allR}
+\alias{extract_haps}
 \alias{extract_indels}
 \alias{extract_info}
 \title{Extract elements from the GT section of a vcf format object}
@@ -14,6 +15,8 @@ extract.gt(x, element = "GT", mask = FALSE, as.numeric = FALSE)
 extract_indels(x, return_indels = FALSE)
 
 extract_info(x, element, as.numeric = FALSE, mask = FALSE)
+
+extract_haps(x, mask = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{x}{An object of class Chrom, vcfR or data.frame}

@@ -28,6 +28,20 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// extract_haps
+Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref, Rcpp::StringVector alt, Rcpp::StringMatrix gt, int vebosity);
+RcppExport SEXP vcfR_extract_haps(SEXP refSEXP, SEXP altSEXP, SEXP gtSEXP, SEXP vebositySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::StringVector >::type ref(refSEXP);
+    Rcpp::traits::input_parameter< Rcpp::StringVector >::type alt(altSEXP);
+    Rcpp::traits::input_parameter< Rcpp::StringMatrix >::type gt(gtSEXP);
+    Rcpp::traits::input_parameter< int >::type vebosity(vebositySEXP);
+    __result = Rcpp::wrap(extract_haps(ref, alt, gt, vebosity));
+    return __result;
+END_RCPP
+}
 // gt_to_popsum
 Rcpp::DataFrame gt_to_popsum(Rcpp::DataFrame var_info, Rcpp::CharacterMatrix gt);
 RcppExport SEXP vcfR_gt_to_popsum(SEXP var_infoSEXP, SEXP gtSEXP) {

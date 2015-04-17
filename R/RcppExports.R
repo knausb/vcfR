@@ -9,6 +9,10 @@ CM_to_NM <- function(x) {
     .Call('vcfR_CM_to_NM', PACKAGE = 'vcfR', x)
 }
 
+extract_haps <- function(ref, alt, gt, vebosity) {
+    .Call('vcfR_extract_haps', PACKAGE = 'vcfR', ref, alt, gt, vebosity)
+}
+
 gt_to_popsum <- function(var_info, gt) {
     .Call('vcfR_gt_to_popsum', PACKAGE = 'vcfR', var_info, gt)
 }
