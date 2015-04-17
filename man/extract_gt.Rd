@@ -30,6 +30,8 @@ extract_haps(x, mask = FALSE, verbose = TRUE)
 \item{as.numeric}{Logical, should the matrix be converted to numerics}
 
 \item{return_indels}{logical indicating whether to return indels or not}
+
+\item{verbose}{should verbose output be generated}
 }
 \description{
 Extract elements from the GT section of a vcf format object

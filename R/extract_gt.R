@@ -5,7 +5,7 @@
 #' @param element element to extract from vcf genotype data. Common options include "DP", "GT" and "GQ"
 #' @param mask a logical indicating whether to apply the mask (TRUE) or return all variants (FALSE). Alternatively, a vector of logicals may be provided.
 #' @param as.matrix attempt to recast as a numeric matrix
-#' 
+#' @param verbose should verbose output be generated
 #' 
 #' @details
 #' Note that when 'as.numeric' is set to 'TRUE' but the data are not actually numeric, unexpected results will likely occur.
