@@ -1,6 +1,6 @@
 #include <Rcpp.h>
 // #include <string>
-//#include "common.h"
+#include "vcfRCommon.h"
 
 
 using namespace Rcpp;
@@ -201,25 +201,38 @@ Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
 
   Rcpp::StringMatrix haps(gt.nrow(), gt.ncol() * ploidy);
 
+  // Iterate over variants (rows of gt)
   for(i=0; i<gt.nrow(); i++){
+    // Create a vector where the reference allele is at position 0
+    // and alternate alleles are pushed on.
     std::vector<std::string> alleles;
     alleles[0] = ref(i);
+
+    // The alternate alleles.
     std::vector < std::string > alt_vec;
     char alt_split = ','; // Must be single quotes!
-    
-//    vcfRCommon::strsplit(alt(i), alt_vec, alt_split);
-    
-    
-    for(j=0; j<gt.ncol(); i++){
-      
+    std::string line = Rcpp::as< std::string >(alt(i));
+    vcfRCommon::strsplit(line, alt_vec, alt_split);
+    for(j=0; j<alt_vec.size(); j++){
+      alleles.push_back(alt_vec[i]);
+    }
+
+    // Process the genotypes (columns) into haplotypes.
+    int hap_col = 0;
+    for(j=0; j<gt.ncol(); j++){
+      std::vector < std::string > al_vec;
+      char al_split = '|'; // Must be single quotes!
+      std::string line = Rcpp::as< std::string >(gt(i, j));
+      vcfRCommon::strsplit(line, al_vec, al_split);
+      int hap_num = 0;
+      while(hap_num < ploidy){
+        int al_num = stoi(al_vec[hap_num]);
+        haps(1, hap_col) = alleles[al_num];
+        hap_num++;
+        hap_col++;
+      }
     }
   }
-/*  
-    std::vector < std::string > col_vec;
-    char col_split = '\t'; // Must be single quotes!
-    common::strsplit(line, col_vec, col_split);
-*/  
-
-
-
+  
+  return(haps);
 }
