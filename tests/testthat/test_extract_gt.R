@@ -55,7 +55,7 @@ test_that("extract_haps works",{
 #  .Call('vcfR_extract_haps', PACKAGE = 'vcfR', ref, alt, gt, vebosity)
 #  haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', pinf_vcf@fix$REF, pinf_vcf@fix$ALT, gt, 1)
   haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', pinf_vcf@fix$REF, pinf_vcf@fix$ALT, gt, '/', 1)
-  head(haps)
+#  head(haps)
 })
 
 
