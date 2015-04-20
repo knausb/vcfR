@@ -1,7 +1,7 @@
 #include <Rcpp.h>
 // #include <string>
 #include "vcfRCommon.h"
-
+//#include <vector>
 
 using namespace Rcpp;
 
@@ -140,6 +140,7 @@ CharacterMatrix extract_GT_to_CM(DataFrame x, std::string element="DP") {
   for(i = 1; i < x.size(); i++){ // Sample (column) counter
     column = x(i);
     for(j=0; j<column.size(); j++){ // Variant (row) counter
+      Rcpp::checkUserInterrupt();
 //      Rcout << column(j) << "\tposition: " << positions[j] << "\n";
       cm(j, i-1) = extractElementS(column(j), positions[j]);
 //      Rcout << "Returned value: " << cm(j, i-1) << "\n";
@@ -159,6 +160,7 @@ NumericMatrix CM_to_NM(CharacterMatrix x) {
 
   for(i=0; i<x.ncol(); i++){
     for(j=0; j<x.nrow(); j++){
+      Rcpp::checkUserInterrupt();
 //      Rcpp::String element = x(j, i);
 //      Rcout << x(j,i) << " is NA? "  << CharacterMatrix::is_na(x(j, i)) << "\n";
 //      if(CharacterMatrix::is_na(x(j, i)) == TRUE){
@@ -180,54 +182,97 @@ NumericMatrix CM_to_NM(CharacterMatrix x) {
 Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
                                 Rcpp::StringVector alt,
                                 Rcpp::StringMatrix gt,
+                                char gt_split,
                                 int vebosity) {
   // Vcf files are typically of one ploidy.
-  
+
   std::string temp = Rcpp::as< std::string >(gt(1,1));
   int ploidy = 1;
   int i = 0;
   int j = 0;
-  
+  int hap_col = 0;
+  int hap_num = 0;
+
   for(i=0; i<temp.length(); i++){
-//    char allele_split = '|';
-//    if(temp[i] == allele_split){ploidy++;}
-    if(temp[i] == '|'){ploidy++;}
+//    if( temp[i] == '/' ){ploidy++;}
+    if( temp[i] == gt_split ){ploidy++;}
   }
+//  Rcout << "Ploidy = " << ploidy << "\n";
 
   if(ploidy == 1){
     // Is either haploid or is not phased.
-    return gt;
+//    return gt;
+//    Rcout << "Ploidy = 1.\n";
+    Rcpp::StringMatrix haps(1, 1);
+    haps(0, 0) = NA_STRING;
+    return haps;
   }
 
+  // Initialize return structure
   Rcpp::StringMatrix haps(gt.nrow(), gt.ncol() * ploidy);
+
+  Rcpp::List gt_names = gt.attr("dimnames");
+  Rcpp::StringVector sample_names = gt_names(1);
+  Rcpp::StringVector haplo_names(gt.ncol() * ploidy);
+  
+  j = 0;
+  while(j < sample_names.size()){
+    hap_num = 0;
+    std::string sname = Rcpp::as< std::string >(sample_names[j]);
+    while(hap_num < ploidy){
+//      sname = sname + "_" + std::to_string(hap_num);
+//      haplo_names(hap_col) = sname;
+      haplo_names(hap_col) = sname + "_" + std::to_string(hap_num);
+//      Rcout << haplo_names(hap_col) << "\n";
+      hap_num++;
+      hap_col++;
+    }
+    j++;
+  }
+  
+  haps.attr("dimnames") = Rcpp::List::create(gt_names(0), haplo_names);
+  
+//  Rcpp::StringVector sample_names(gt.colnames());
+//  Rcpp::StringVector haplo_names(gt.ncol() * ploidy);
+//  int name_num = 0;
+
+
 
   // Iterate over variants (rows of gt)
   for(i=0; i<gt.nrow(); i++){
-    // Create a vector where the reference allele is at position 0
-    // and alternate alleles are pushed on.
-    std::vector<std::string> alleles;
-    alleles[0] = ref(i);
 
-    // The alternate alleles.
-    std::vector < std::string > alt_vec;
-    char alt_split = ','; // Must be single quotes!
+    // Split the alternate alleles string into alleles.
+    std::vector < std::string > alleles_vec;
+    char alleles_split = ','; // Must be single quotes!
     std::string line = Rcpp::as< std::string >(alt(i));
-    vcfRCommon::strsplit(line, alt_vec, alt_split);
-    for(j=0; j<alt_vec.size(); j++){
-      alleles.push_back(alt_vec[i]);
+//    Rcout << i << " line: " << line << "\n";
+    vcfRCommon::strsplit(line, alleles_vec, alleles_split);
+
+    // Insert reference allele at begining of vector.
+    std::string ref_allele = Rcpp::as< std::string >(ref(i));
+    alleles_vec.insert(alleles_vec.begin(), ref_allele);
+
+/*
+    for(j=0; j<alleles_vec.size(); j++){
+      Rcout << "alles_vec " << j << " value " << alleles_vec[j] << "\n";
     }
+    Rcout << "\n";
+    Rcout << "\n";
+*/
 
     // Process the genotypes (columns) into haplotypes.
-    int hap_col = 0;
+    hap_col = 0;
     for(j=0; j<gt.ncol(); j++){
+      Rcpp::checkUserInterrupt();
       std::vector < std::string > al_vec;
-      char al_split = '|'; // Must be single quotes!
+      char al_split = '/'; // Must be single quotes!
+      
       std::string line = Rcpp::as< std::string >(gt(i, j));
       vcfRCommon::strsplit(line, al_vec, al_split);
-      int hap_num = 0;
+      hap_num = 0;
       while(hap_num < ploidy){
         int al_num = stoi(al_vec[hap_num]);
-        haps(1, hap_col) = alleles[al_num];
+        haps(i, hap_col) = alleles_vec[al_num];
         hap_num++;
         hap_col++;
       }

@@ -6,7 +6,6 @@ context("extract_gt functions")
 
 data(vcfR_example)
 
-
 pinf_mt <- create_chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff, verbose=F)
 pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE)
 pinf_mt <- masker(pinf_mt, min_QUAL = 990, min_DP = 6000, max_DP = 8000, min_MQ = 40, max_MQ = 100)
@@ -51,6 +50,13 @@ test_that("extract_indels works",{
   expect_equal(max(nchar(indels@fix$ALT)), 1)
 })
 
+
+test_that("extract_haps works",{
+#  .Call('vcfR_extract_haps', PACKAGE = 'vcfR', ref, alt, gt, vebosity)
+#  haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', pinf_vcf@fix$REF, pinf_vcf@fix$ALT, gt, 1)
+  haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', pinf_vcf@fix$REF, pinf_vcf@fix$ALT, gt, '/', 1)
+  head(haps)
+})
 
 
 #head(gt)
