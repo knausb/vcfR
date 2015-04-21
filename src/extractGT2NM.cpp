@@ -288,5 +288,6 @@ Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
   if(verbose == 1){
     Rcout << "\rVariant " << i << " processed\n";
   }
+  
   return(haps);
 }
