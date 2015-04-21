@@ -16,7 +16,7 @@ extract_indels(x, return_indels = FALSE)
 
 extract_info(x, element, as.numeric = FALSE, mask = FALSE)
 
-extract_haps(x, mask = FALSE, verbose = TRUE)
+extract_haps(x, mask = FALSE, gt_split = "|", verbose = TRUE)
 }
 \arguments{
 \item{x}{An object of class Chrom, vcfR or data.frame}
@@ -30,6 +30,8 @@ extract_haps(x, mask = FALSE, verbose = TRUE)
 \item{as.numeric}{Logical, should the matrix be converted to numerics}
 
 \item{return_indels}{logical indicating whether to return indels or not}
+
+\item{gt_split}{character which delimits alleles in genotypes}
 
 \item{verbose}{should verbose output be generated}
 }

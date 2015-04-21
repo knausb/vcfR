@@ -47,8 +47,6 @@ Read and write files in the vcf format.
 }
 \details{
 Reads in a vcf file and stores it in a vcf class.  Once the number of lines the meta information contains the data is divided into three tables: meta data, fixed data and genotype data.
-
-\code{read.vcf.devel} is a custom C++ implementation which may be faster than read.vcf.
 }
 \examples{
 library(vcfR)
@@ -58,6 +56,12 @@ plot(pinf_vcf)
 pinf_vcf[1:6,]
 }
 \seealso{
-Bioconductor: \href{www.bioconductor.org/packages/3.0/bioc/html/VariantAnnotation.html}{VariantAnnotation::readVcf}
+CRAN:
+\href{http://cran.r-project.org/web/packages/pegas/index.html}{pegas}::read.vcf,
+\href{http://cran.r-project.org/web/packages/PopGenome/index.html}{PopGenome}::readVCF,
+\href{http://cran.r-project.org/web/packages/data.table/index.html}{data.table}::fread
+
+Bioconductor:
+\href{http://www.bioconductor.org/packages/release/bioc/html/VariantAnnotation.html}{VariantAnnotation}::readVcf
 }
 

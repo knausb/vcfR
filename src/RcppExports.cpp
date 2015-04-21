@@ -29,8 +29,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // extract_haps
-Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref, Rcpp::StringVector alt, Rcpp::StringMatrix gt, char gt_split, int vebosity);
-RcppExport SEXP vcfR_extract_haps(SEXP refSEXP, SEXP altSEXP, SEXP gtSEXP, SEXP gt_splitSEXP, SEXP vebositySEXP) {
+Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref, Rcpp::StringVector alt, Rcpp::StringMatrix gt, char gt_split, int verbose);
+RcppExport SEXP vcfR_extract_haps(SEXP refSEXP, SEXP altSEXP, SEXP gtSEXP, SEXP gt_splitSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -38,8 +38,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::StringVector >::type alt(altSEXP);
     Rcpp::traits::input_parameter< Rcpp::StringMatrix >::type gt(gtSEXP);
     Rcpp::traits::input_parameter< char >::type gt_split(gt_splitSEXP);
-    Rcpp::traits::input_parameter< int >::type vebosity(vebositySEXP);
-    __result = Rcpp::wrap(extract_haps(ref, alt, gt, gt_split, vebosity));
+    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
+    __result = Rcpp::wrap(extract_haps(ref, alt, gt, gt_split, verbose));
     return __result;
 END_RCPP
 }

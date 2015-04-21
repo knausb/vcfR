@@ -190,11 +190,14 @@ extract_info <- function(x, element, as.numeric=FALSE, mask=FALSE){
 }
 
 
+
+
 #' @rdname extract_gt
 #' @aliases extract_haps
+#' @param gt_split character which delimits alleles in genotypes
 #' 
 #' @export
-extract_haps <- function(x, mask=FALSE, verbose=TRUE){
+extract_haps <- function(x, mask=FALSE, gt_split="|",verbose=TRUE){
   if(class(x) == "Chrom"){
     if(length(mask) == 1 && mask==TRUE){
       x <- chrom_to_vcfR(x, use.mask = TRUE)
@@ -208,8 +211,15 @@ extract_haps <- function(x, mask=FALSE, verbose=TRUE){
   }
   
   gt <- extract.gt(x, element="GT")
+
+#  Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
+#                                  Rcpp::StringVector alt,
+#                                  Rcpp::StringMatrix gt,
+#                                  char gt_split,
+#                                  int vebosity) {
   
-  haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', gt, x@fix$REF, x@fix$ALT, 1)
+  
+  haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', x@fix$REF, x@fix$ALT, gt, gt_split, 1)
   haps
 }
 

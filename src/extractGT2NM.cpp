@@ -3,6 +3,9 @@
 #include "vcfRCommon.h"
 //#include <vector>
 
+// Number of records to report progress at.
+const int nreport = 1000;
+
 using namespace Rcpp;
 
 
@@ -183,7 +186,7 @@ Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
                                 Rcpp::StringVector alt,
                                 Rcpp::StringMatrix gt,
                                 char gt_split,
-                                int vebosity) {
+                                int verbose) {
   // Vcf files are typically of one ploidy.
 
   std::string temp = Rcpp::as< std::string >(gt(1,1));
@@ -265,7 +268,8 @@ Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
     for(j=0; j<gt.ncol(); j++){
       Rcpp::checkUserInterrupt();
       std::vector < std::string > al_vec;
-      char al_split = '/'; // Must be single quotes!
+      char al_split = gt_split; // Must be single quotes!
+//      char al_split = '/'; // Must be single quotes!
       
       std::string line = Rcpp::as< std::string >(gt(i, j));
       vcfRCommon::strsplit(line, al_vec, al_split);
@@ -277,7 +281,12 @@ Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
         hap_col++;
       }
     }
+    if(i % nreport == 0 && verbose == 1){
+      Rcout << "\rVariant " << i << " processed";
+    }
   }
-  
+  if(verbose == 1){
+    Rcout << "\rVariant " << i << " processed\n";
+  }
   return(haps);
 }
