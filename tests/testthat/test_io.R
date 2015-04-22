@@ -188,6 +188,16 @@ test_that("read.vcf works for vcf files which contain no variants",{
 
 
 
+test_that("write_fasta works",{  
+
+#invisible(.Call('vcfR_write_fasta', PACKAGE = 'vcfR', seq, seqname, filename, rowlength, verbose))
+#invisible(.Call('vcfR_write_fasta', PACKAGE = 'vcfR', as.character(pinf_dna)[1,], "myseq", "test.fasta", 10, 1))
+
+#  write_fasta(pinf_mt, file="pinf_mt.fasta", gt_split="/", rowlength=1141)
+})
+
+
+
 #data(vcfR_example)
 #write.vcf.gz(pinf_vcf, "test.vcf.gz")
 

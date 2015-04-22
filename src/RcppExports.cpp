@@ -228,6 +228,20 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// write_fasta
+void write_fasta(Rcpp::CharacterVector seq, std::string seqname, std::string filename, int rowlength, int verbose);
+RcppExport SEXP vcfR_write_fasta(SEXP seqSEXP, SEXP seqnameSEXP, SEXP filenameSEXP, SEXP rowlengthSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type seq(seqSEXP);
+    Rcpp::traits::input_parameter< std::string >::type seqname(seqnameSEXP);
+    Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
+    Rcpp::traits::input_parameter< int >::type rowlength(rowlengthSEXP);
+    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
+    write_fasta(seq, seqname, filename, rowlength, verbose);
+    return R_NilValue;
+END_RCPP
+}
 // seq_to_rects
 Rcpp::IntegerMatrix seq_to_rects(Rcpp::CharacterVector seq, std::string targets);
 RcppExport SEXP vcfR_seq_to_rects(SEXP seqSEXP, SEXP targetsSEXP) {

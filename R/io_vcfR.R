@@ -341,3 +341,30 @@ write_win_info <- function(x, file = "", APPEND = FALSE){
 }
 
 
+#' @rdname io_vcfR
+#' @aliases write_fasta
+#' 
+#' @export
+#' 
+write_fasta <- function(x, file = "", gt_split = "|", rowlength=80, tolower=TRUE, verbose=TRUE, APPEND = FALSE){
+  if(class(x) != "Chrom"){
+    stop("Expected object of class Chrom")
+  }
+  if(APPEND == FALSE){
+    if(file.exists(file)){
+      file.remove(file)
+    }
+  }
+  haps <- extract_haps(x, gt_split = gt_split)
+  if(tolower == TRUE){
+    haps <- apply(haps, MARGIN=2, tolower)
+  }
+  
+  for(i in 1:ncol(haps)){
+    seq <- as.character(x@seq)[1,]
+    seq[x@vcf.fix$POS] <- haps[,i]
+    invisible(.Call('vcfR_write_fasta', PACKAGE = 'vcfR', seq, colnames(haps)[i], file, rowlength, as.integer(verbose)))
+  }
+  
+  #invisible(.Call('vcfR_write_fasta', PACKAGE = 'vcfR', seq, seqname, filename, rowlength, verbose))  
+}

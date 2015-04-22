@@ -7,6 +7,7 @@
 \alias{write.vcf}
 \alias{write.vcf.R}
 \alias{write.vcf.gz}
+\alias{write_fasta}
 \alias{write_var_info}
 \alias{write_win_info}
 \title{Read and write vcf format files}
@@ -26,6 +27,9 @@ memory_plot(exponent_range = 2:6)
 write_var_info(x, file = "", mask = FALSE, APPEND = FALSE)
 
 write_win_info(x, file = "", APPEND = FALSE)
+
+write_fasta(x, file = "", gt_split = "|", rowlength = 80,
+  tolower = TRUE, verbose = TRUE, APPEND = FALSE)
 }
 \arguments{
 \item{file}{A filename for a variant call format (vcf) file}
