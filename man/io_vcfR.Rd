@@ -45,6 +45,12 @@ write_fasta(x, file = "", gt_split = "|", rowlength = 80,
 \item{verbose}{report verbose progress}
 
 \item{exponent_range}{range of values to be used for object sizes (10^exponent_range)}
+
+\item{gt_split}{character which delimits alleles in genotype}
+
+\item{rowlength}{number of characters each row should not exceed}
+
+\item{tolower}{convert all characters to lowercase (T/F)}
 }
 \description{
 Read and write files in the vcf format.

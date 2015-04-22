@@ -343,6 +343,10 @@ write_win_info <- function(x, file = "", APPEND = FALSE){
 
 #' @rdname io_vcfR
 #' @aliases write_fasta
+#' @param gt_split character which delimits alleles in genotype
+#' @param rowlength number of characters each row should not exceed
+#' @param tolower convert all characters to lowercase (T/F)
+#' 
 #' 
 #' @export
 #' 
