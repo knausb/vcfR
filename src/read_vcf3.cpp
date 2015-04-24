@@ -795,6 +795,10 @@ void write_fasta( Rcpp::CharacterVector seq,
   pFile=fopen(filename.c_str(),"at");
   int i=0;
 
+  if(verbose == 1){
+    Rcpp::Rcout << "Processing sample: " << seqname << "\n";
+  }
+
   putc ('>' , pFile);
   for(i=0; i<seqname.size(); i++){
     putc (seqname[i] , pFile);
