@@ -9,6 +9,10 @@ CM_to_NM <- function(x) {
     .Call('vcfR_CM_to_NM', PACKAGE = 'vcfR', x)
 }
 
+extract_haps <- function(ref, alt, gt, gt_split, verbose) {
+    .Call('vcfR_extract_haps', PACKAGE = 'vcfR', ref, alt, gt, gt_split, verbose)
+}
+
 gt_to_popsum <- function(var_info, gt) {
     .Call('vcfR_gt_to_popsum', PACKAGE = 'vcfR', var_info, gt)
 }
@@ -67,6 +71,10 @@ write_vcf_body <- function(fix, gt, filename, mask = 0L) {
 
 write_vcf_body_gz <- function(fix, gt, filename, mask = 0L) {
     invisible(.Call('vcfR_write_vcf_body_gz', PACKAGE = 'vcfR', fix, gt, filename, mask))
+}
+
+write_fasta <- function(seq, seqname, filename, rowlength = 80L, verbose = 1L) {
+    invisible(.Call('vcfR_write_fasta', PACKAGE = 'vcfR', seq, seqname, filename, rowlength, verbose))
 }
 
 seq_to_rects <- function(seq, targets) {

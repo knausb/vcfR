@@ -18,15 +18,20 @@
 #' @details
 #' Reads in a vcf file and stores it in a vcf class.  Once the number of lines the meta information contains the data is divided into three tables: meta data, fixed data and genotype data.
 #'
-#' \code{read.vcf.devel} is a custom C++ implementation which may be faster than read.vcf.
+# \code{read.vcf.devel} is a custom C++ implementation which may be faster than read.vcf.
 #'
 #' @seealso
 # \code{\link[PopGenome]{readVCF}}
 # \code{\link[pegas]{read.vcf}}
 # \link[pegas]{read.vcf}
-#' 
-#' Bioconductor: \href{www.bioconductor.org/packages/3.0/bioc/html/VariantAnnotation.html}{VariantAnnotation::readVcf}
 #'
+#' CRAN:
+#' \href{http://cran.r-project.org/web/packages/pegas/index.html}{pegas}::read.vcf,
+#' \href{http://cran.r-project.org/web/packages/PopGenome/index.html}{PopGenome}::readVCF,
+#' \href{http://cran.r-project.org/web/packages/data.table/index.html}{data.table}::fread
+#' 
+#' Bioconductor:
+#' \href{http://www.bioconductor.org/packages/release/bioc/html/VariantAnnotation.html}{VariantAnnotation}::readVcf
 #'
 #'
 #'
@@ -336,3 +341,34 @@ write_win_info <- function(x, file = "", APPEND = FALSE){
 }
 
 
+#' @rdname io_vcfR
+#' @aliases write_fasta
+#' @param gt_split character which delimits alleles in genotype
+#' @param rowlength number of characters each row should not exceed
+#' @param tolower convert all characters to lowercase (T/F)
+#' 
+#' 
+#' @export
+#' 
+write_fasta <- function(x, file = "", gt_split = "|", rowlength=80, tolower=TRUE, verbose=TRUE, APPEND = FALSE){
+  if(class(x) != "Chrom"){
+    stop("Expected object of class Chrom")
+  }
+  if(APPEND == FALSE){
+    if(file.exists(file)){
+      file.remove(file)
+    }
+  }
+  haps <- extract_haps(x, gt_split = gt_split)
+  if(tolower == TRUE){
+    haps <- apply(haps, MARGIN=2, tolower)
+  }
+  
+  for(i in 1:ncol(haps)){
+    seq <- as.character(x@seq)[1,]
+    seq[x@vcf.fix$POS] <- haps[,i]
+    invisible(.Call('vcfR_write_fasta', PACKAGE = 'vcfR', seq, colnames(haps)[i], file, rowlength, as.integer(verbose)))
+  }
+  
+  #invisible(.Call('vcfR_write_fasta', PACKAGE = 'vcfR', seq, seqname, filename, rowlength, verbose))  
+}

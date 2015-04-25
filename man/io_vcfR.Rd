@@ -7,6 +7,7 @@
 \alias{write.vcf}
 \alias{write.vcf.R}
 \alias{write.vcf.gz}
+\alias{write_fasta}
 \alias{write_var_info}
 \alias{write_win_info}
 \title{Read and write vcf format files}
@@ -26,6 +27,9 @@ memory_plot(exponent_range = 2:6)
 write_var_info(x, file = "", mask = FALSE, APPEND = FALSE)
 
 write_win_info(x, file = "", APPEND = FALSE)
+
+write_fasta(x, file = "", gt_split = "|", rowlength = 80,
+  tolower = TRUE, verbose = TRUE, APPEND = FALSE)
 }
 \arguments{
 \item{file}{A filename for a variant call format (vcf) file}
@@ -41,14 +45,18 @@ write_win_info(x, file = "", APPEND = FALSE)
 \item{verbose}{report verbose progress}
 
 \item{exponent_range}{range of values to be used for object sizes (10^exponent_range)}
+
+\item{gt_split}{character which delimits alleles in genotype}
+
+\item{rowlength}{number of characters each row should not exceed}
+
+\item{tolower}{convert all characters to lowercase (T/F)}
 }
 \description{
 Read and write files in the vcf format.
 }
 \details{
 Reads in a vcf file and stores it in a vcf class.  Once the number of lines the meta information contains the data is divided into three tables: meta data, fixed data and genotype data.
-
-\code{read.vcf.devel} is a custom C++ implementation which may be faster than read.vcf.
 }
 \examples{
 library(vcfR)
@@ -58,6 +66,12 @@ plot(pinf_vcf)
 pinf_vcf[1:6,]
 }
 \seealso{
-Bioconductor: \href{www.bioconductor.org/packages/3.0/bioc/html/VariantAnnotation.html}{VariantAnnotation::readVcf}
+CRAN:
+\href{http://cran.r-project.org/web/packages/pegas/index.html}{pegas}::read.vcf,
+\href{http://cran.r-project.org/web/packages/PopGenome/index.html}{PopGenome}::readVCF,
+\href{http://cran.r-project.org/web/packages/data.table/index.html}{data.table}::fread
+
+Bioconductor:
+\href{http://www.bioconductor.org/packages/release/bioc/html/VariantAnnotation.html}{VariantAnnotation}::readVcf
 }
 

@@ -36,6 +36,21 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// extract_haps
+Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref, Rcpp::StringVector alt, Rcpp::StringMatrix gt, char gt_split, int verbose);
+RcppExport SEXP vcfR_extract_haps(SEXP refSEXP, SEXP altSEXP, SEXP gtSEXP, SEXP gt_splitSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::StringVector >::type ref(refSEXP);
+    Rcpp::traits::input_parameter< Rcpp::StringVector >::type alt(altSEXP);
+    Rcpp::traits::input_parameter< Rcpp::StringMatrix >::type gt(gtSEXP);
+    Rcpp::traits::input_parameter< char >::type gt_split(gt_splitSEXP);
+    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
+    __result = Rcpp::wrap(extract_haps(ref, alt, gt, gt_split, verbose));
+    return __result;
+END_RCPP
+}
 // gt_to_popsum
 Rcpp::DataFrame gt_to_popsum(Rcpp::DataFrame var_info, Rcpp::CharacterMatrix gt);
 RcppExport SEXP vcfR_gt_to_popsum(SEXP var_infoSEXP, SEXP gtSEXP) {
@@ -274,6 +289,20 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< int >::type mask(maskSEXP );
         write_vcf_body_gz(fix, gt, filename, mask);
     }
+    return R_NilValue;
+END_RCPP
+}
+// write_fasta
+void write_fasta(Rcpp::CharacterVector seq, std::string seqname, std::string filename, int rowlength, int verbose);
+RcppExport SEXP vcfR_write_fasta(SEXP seqSEXP, SEXP seqnameSEXP, SEXP filenameSEXP, SEXP rowlengthSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type seq(seqSEXP);
+    Rcpp::traits::input_parameter< std::string >::type seqname(seqnameSEXP);
+    Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
+    Rcpp::traits::input_parameter< int >::type rowlength(rowlengthSEXP);
+    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
+    write_fasta(seq, seqname, filename, rowlength, verbose);
     return R_NilValue;
 END_RCPP
 }
