@@ -126,7 +126,8 @@ heatmap.bp <- function(x, cbarplot = TRUE, rbarplot = TRUE,
 #      text(median(rowSums(x, na.rm=na.rm), na.rm=na.rm), c(1:nrow(x))-0.5, rownames(x), adj=c(0.5,0.5), srt=0)
     }
     #
-    barplot(rep(1, times=100), space=0, border=NA, horiz = TRUE,
+#    barplot(rep(1, times=100), space=0, border=NA, horiz = TRUE,
+    barplot(rep(1, times=length(col.ramp)), space=0, border=NA, horiz = TRUE,
 #            col=colorRampPalette(c("red", "yellow", "#008000"))(100),
             col = col.ramp,
             axes=FALSE)
