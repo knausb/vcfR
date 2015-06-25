@@ -1,5 +1,5 @@
 #include <Rcpp.h>
-// #include <string>
+#include <string>
 #include "vcfRCommon.h"
 //#include <vector>
 

@@ -3,7 +3,6 @@
 using namespace Rcpp;
 
 
-
 NumericVector win_mean(std::vector< std::vector<double> > win){
   int i;
   NumericVector means(win.size());
