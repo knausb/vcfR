@@ -1,5 +1,4 @@
 #include <Rcpp.h>
-#include <string>
 #include "vcfRCommon.h"
 //#include <vector>
 
@@ -225,7 +224,12 @@ Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
     while(hap_num < ploidy){
 //      sname = sname + "_" + std::to_string(hap_num);
 //      haplo_names(hap_col) = sname;
-      haplo_names(hap_col) = sname + "_" + std::to_string(hap_num);
+//      haplo_names(hap_col) = sname + "_" + std::to_string(hap_num);
+      std::ostringstream stm;
+      stm << hap_num ;
+      haplo_names(hap_col) = sname + "_" + stm.str();
+      
+      
 //      Rcout << haplo_names(hap_col) << "\n";
       hap_num++;
       hap_col++;
