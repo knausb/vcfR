@@ -1,5 +1,6 @@
 #include <Rcpp.h>
 #include "vcfRCommon.h"
+#include <string>
 //#include <vector>
 
 // Number of records to report progress at.
