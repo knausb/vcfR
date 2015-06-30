@@ -728,7 +728,8 @@ void write_vcf_body_gz( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string fil
   int i = 0;
   int j = 0;
   
-  gzFile *fi = (gzFile *)gzopen(filename.c_str(),"ab");
+  gzFile fi = gzopen( filename.c_str(), "ab" );
+//  gzFile *fi = (gzFile *)gzopen( filename.c_str(), "ab" );
 //  gzFile *fi = (gzFile *)gzopen(filename.c_str(),"abw");
   for(i=0; i<chrom.size(); i++){
     Rcpp::checkUserInterrupt();
@@ -775,7 +776,6 @@ void write_vcf_body_gz( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string fil
     }
   }
   gzclose(fi);
-  
   
   return;
 }

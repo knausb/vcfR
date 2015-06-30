@@ -95,7 +95,7 @@ test_that("read/write.vcf works for Chrom objects",{
   
   setwd(test_dir)
   write.vcf(pinf_mt, "test.vcf")
-  test <- read.vcf("test.vcf")
+  test <- read.vcf("test.vcf", verbose = FALSE)
   unlink("test.vcf")
   setwd(original_dir)
   
