@@ -728,6 +728,7 @@ void write_vcf_body_gz( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string fil
   int i = 0;
   int j = 0;
   
+  
   gzFile fi = gzopen( filename.c_str(), "ab" );
 //  gzFile *fi = (gzFile *)gzopen( filename.c_str(), "ab" );
 //  gzFile *fi = (gzFile *)gzopen(filename.c_str(),"abw");
