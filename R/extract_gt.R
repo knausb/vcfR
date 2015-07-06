@@ -223,3 +223,42 @@ extract_haps <- function(x, mask=FALSE, gt_split="|",verbose=TRUE){
   haps
 }
 
+
+
+#' @rdname extract_gt
+#' @aliases is_polymorphic
+#' @param na.omit logical to omit missing data
+#' 
+#' @export
+is_polymorphic <- function(x, na.omit=FALSE){
+  if(class(x) != "vcfR"){
+    stop("Expected an object of class vcfR")
+  }
+  x <- extract.gt(x)
+  
+  test_poly <- function(x, na.omit=na.omit){
+    if(na.omit == TRUE){
+      x <- na.omit(x)
+    }
+    sum(x[1] == x[-1]) < (length(x) - 1)
+  }
+  apply(x, MARGIN=1, test_poly, na.omit=na.omit)
+}
+
+
+#' @rdname extract_gt
+#' @aliases is_biallelic
+#' 
+#' @export
+is_biallelic <- function(x){
+  x <- as.character(x@fix$ALT)
+  x <- strsplit(x, split=",")
+  lapply(x, length) == 1
+}
+
+
+
+
+
+
+
