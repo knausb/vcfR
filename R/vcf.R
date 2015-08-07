@@ -36,8 +36,11 @@ NULL
 #' A class for storing vcf data.
 #' 
 #' @slot meta character vector for the meta (header) information
+#' 
 #' @slot fix  data.frame for the fixed information
-#' @slot gt   data.frame for the genotype information
+#' @slot gt   data.frame for the genotype information 
+# @slot fix  data.frame for the fixed information
+# @slot gt   data.frame for the genotype information
 #'
 #' @details Defines a class for variant call format data.
 #' A vcfR object contains three slots.  The first slot
@@ -51,15 +54,20 @@ setClass(
   Class="vcfR",
   representation=representation(
     meta="character",
-    fix="data.frame",
-    gt="data.frame"
+    fix="matrix",
+    gt="matrix"
+#    fix="data.frame",
+#    gt="data.frame"
   ),
   prototype=prototype(
-    fix = data.frame(matrix(ncol=8, nrow=0, 
-                            dimnames=list(c(),
-#                                          c('chrom','pos','id','ref','alt','qual','filter','info'))),
-                                          c('CHROM','POS','ID','REF','ALT','QUAL','FILTER','INFO'))),
-                     stringsAsFactors=FALSE)
+#    fix = data.frame(matrix(ncol=8, nrow=0, 
+#                            dimnames=list(c(),
+#                                          c('CHROM','POS','ID','REF','ALT','QUAL','FILTER','INFO'))),
+#                     stringsAsFactors=FALSE)
+    fix = matrix(ncol=8, nrow=0, 
+                 dimnames=list(c(),
+                               c('CHROM','POS','ID','REF','ALT','QUAL','FILTER','INFO'))
+                 )
   )
 )
 
@@ -90,7 +98,7 @@ setMethod(
   }
 )
 
-#### Mehtod print ####
+#### Method print ####
 setMethod(
   f="print",
   signature="vcfR",
