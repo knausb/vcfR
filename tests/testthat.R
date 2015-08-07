@@ -1,3 +1,3 @@
 library("testthat")
 #library("vcfR")
-test_check("vcfR")
+#test_check("vcfR")

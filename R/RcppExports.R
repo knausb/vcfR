@@ -61,10 +61,6 @@ read_body_gz <- function(x, stats, verbose = 1L) {
     .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', x, stats, verbose)
 }
 
-ram_test <- function(nrow = 1L, ncol = 1L) {
-    .Call('vcfR_ram_test', PACKAGE = 'vcfR', nrow, ncol)
-}
-
 write_vcf_body <- function(fix, gt, filename, mask = 0L) {
     invisible(.Call('vcfR_write_vcf_body', PACKAGE = 'vcfR', fix, gt, filename, mask))
 }

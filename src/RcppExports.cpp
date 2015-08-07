@@ -190,18 +190,6 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// ram_test
-Rcpp::CharacterMatrix ram_test(int nrow, int ncol);
-RcppExport SEXP vcfR_ram_test(SEXP nrowSEXP, SEXP ncolSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< int >::type nrow(nrowSEXP);
-    Rcpp::traits::input_parameter< int >::type ncol(ncolSEXP);
-    __result = Rcpp::wrap(ram_test(nrow, ncol));
-    return __result;
-END_RCPP
-}
 // write_vcf_body
 void write_vcf_body(Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filename, int mask);
 RcppExport SEXP vcfR_write_vcf_body(SEXP fixSEXP, SEXP gtSEXP, SEXP filenameSEXP, SEXP maskSEXP) {

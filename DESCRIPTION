@@ -11,6 +11,7 @@ LinkingTo: Rcpp
 Imports:
     methods,
     ape,
+    memuse,
     Rcpp
 Suggests:
     knitr,

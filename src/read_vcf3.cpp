@@ -213,9 +213,6 @@ Rcpp::NumericVector vcf_stats(std::string x) {
   Rcpp::Rcout << "\rProcessed line: " << i;
   Rcpp::Rcout << "\nAll lines processed.\n";
 
-
-//  Rcout << "Line: " << line << "\n";
-  
   return stats;
 }
 
@@ -573,26 +570,20 @@ Rcpp::DataFrame read_body_gz(std::string x, Rcpp::NumericVector stats, int verbo
   }
 
 //  Rcpp::DataFrame df1 = Rcpp::DataFrame::create(gt);
-  Rcpp::DataFrame df1(gt);
+//  Rcpp::DataFrame df1(gt);
 //  df1.names() = header_vec;
-  if(verbose == 1){
-    Rcpp::Rcout << "Rcpp::DataFrame created.\n";
-  }
+//  if(verbose == 1){
+//    Rcpp::Rcout << "Rcpp::DataFrame created.\n";
+//  }
   
-//  return gt;
-  return df1;
+  return gt;
+//  return df1;
 }
 
 
 
 /*  Memory test  */
 
-// [[Rcpp::export]]
-Rcpp::CharacterMatrix ram_test(int nrow=1, int ncol=1) {
-  Rcpp::CharacterMatrix gt(nrow, ncol);
-  
-  return(gt);
-}
 
 
 Rcpp::StringMatrix DataFrame_to_StringMatrix( Rcpp::DataFrame df ){
