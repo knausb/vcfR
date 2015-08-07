@@ -2,7 +2,7 @@
 % Please edit documentation in R/io_vcfR.R
 \name{read.vcf}
 \alias{read.vcf}
-\alias{write.vcf.gz}
+\alias{write.vcf}
 \alias{write_fasta}
 \alias{write_var_info}
 \alias{write_win_info}
@@ -10,7 +10,7 @@
 \usage{
 read.vcf(file, limit = 1e+07, verbose = TRUE)
 
-write.vcf.gz(x, file = "", mask = FALSE, APPEND = FALSE)
+write.vcf(x, file = "", mask = FALSE, APPEND = FALSE)
 
 write_var_info(x, file = "", mask = FALSE, APPEND = FALSE)
 

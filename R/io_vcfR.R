@@ -66,23 +66,23 @@ read.vcf <- function(file, limit=1e7, verbose = TRUE){
     message(paste("The number of variants in your file is:", prettyNum(stats['variants'], big.mark=",")))
     message(paste("The number of samples in your file is:", prettyNum(stats['columns'] - 1, big.mark=",")))
     message(paste("This will result in an object of approximately:", round(ram_est/1e9, digits=3), "Gb in size"))
-    message("The function memory_plot() may help you estimate your memory needs.")
+#    message("The function memory_plot() may help you estimate your memory needs.")
     stop("Object size limit exceeded")
   }
   
   vcf@meta <- .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', file, stats, as.numeric(verbose))
   body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', file, stats, as.numeric(verbose))
 
-  for(i in c(1, 3:5, 7:8)){
-    body[,i] <- as.character(body[,i])
-  }
-  for(i in 9:ncol(body)){
-    body[,i] <- as.character(body[,i])
-  }
+#  for(i in c(1, 3:5, 7:8)){
+#    body[,i] <- as.character(body[,i])
+#  }
+#  for(i in 9:ncol(body)){
+#    body[,i] <- as.character(body[,i])
+#  }
   
   vcf@fix <- body[,1:8]
-  vcf@fix$POS <- as.integer(as.character(vcf@fix$POS))
-  vcf@fix$QUAL <- as.numeric(as.character(vcf@fix$QUAL))
+#  vcf@fix$POS <- as.integer(as.character(vcf@fix$POS))
+#  vcf@fix$QUAL <- as.numeric(as.character(vcf@fix$QUAL))
   vcf@gt <- body[,9:ncol(body)]
   
   return(vcf)
@@ -93,9 +93,9 @@ read.vcf <- function(file, limit=1e7, verbose = TRUE){
 
 #' @rdname io_vcfR
 #' @export
-#' @aliases write.vcf.gz
+#' @aliases write.vcf
 #' 
-write.vcf.gz <- function(x, file = "", mask = FALSE, APPEND = FALSE){
+write.vcf <- function(x, file = "", mask = FALSE, APPEND = FALSE){
   if(class(x) == "Chrom"){
     filter <- x@var.info$mask
     x <- chrom_to_vcfR(x)

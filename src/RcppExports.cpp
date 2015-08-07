@@ -107,17 +107,6 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// read_to_line
-int read_to_line(std::string x);
-RcppExport SEXP vcfR_read_to_line(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
-    __result = Rcpp::wrap(read_to_line(x));
-    return __result;
-END_RCPP
-}
 // vcf_stats_gz
 Rcpp::NumericVector vcf_stats_gz(std::string x);
 RcppExport SEXP vcfR_vcf_stats_gz(SEXP xSEXP) {
@@ -126,29 +115,6 @@ BEGIN_RCPP
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
     __result = Rcpp::wrap(vcf_stats_gz(x));
-    return __result;
-END_RCPP
-}
-// vcf_stats
-Rcpp::NumericVector vcf_stats(std::string x);
-RcppExport SEXP vcfR_vcf_stats(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
-    __result = Rcpp::wrap(vcf_stats(x));
-    return __result;
-END_RCPP
-}
-// vcf_meta
-Rcpp::StringVector vcf_meta(std::string x, Rcpp::NumericVector stats);
-RcppExport SEXP vcfR_vcf_meta(SEXP xSEXP, SEXP statsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type stats(statsSEXP);
-    __result = Rcpp::wrap(vcf_meta(x, stats));
     return __result;
 END_RCPP
 }
@@ -165,20 +131,8 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// vcf_body
-Rcpp::DataFrame vcf_body(std::string x, Rcpp::NumericVector stats);
-RcppExport SEXP vcfR_vcf_body(SEXP xSEXP, SEXP statsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type stats(statsSEXP);
-    __result = Rcpp::wrap(vcf_body(x, stats));
-    return __result;
-END_RCPP
-}
 // read_body_gz
-Rcpp::DataFrame read_body_gz(std::string x, Rcpp::NumericVector stats, int verbose);
+Rcpp::CharacterMatrix read_body_gz(std::string x, Rcpp::NumericVector stats, int verbose);
 RcppExport SEXP vcfR_read_body_gz(SEXP xSEXP, SEXP statsSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
