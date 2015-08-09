@@ -1,5 +1,7 @@
 
-#detach(package:vcfR, unload=TRUE)
+#library(testthat)
+#
+detach(package:vcfR, unload=TRUE)
 library(vcfR)
 context("vcf functions")
 
@@ -23,7 +25,7 @@ test_that("compiled input functions work",{
 
 
 test_that("read.vcf works",{
-  vcf <- read.vcf(ex_file)
+  vcf <- read.vcf(ex_file, verbose=FALSE)
   expect_is(vcf, "vcfR")
   expect_is(vcf@meta, "character")
   expect_is(vcf@fix, "matrix")
@@ -31,13 +33,24 @@ test_that("read.vcf works",{
 })
 
 
-vcf <- read.vcf(ex_file)
+vcf <- read.vcf(ex_file, verbose=FALSE)
 
 test_that("write.vcf works",{
-  
-  
+  orig.dir <- getwd()
+  temp.dir <- tempdir()
+  setwd(temp.dir)
+  write.vcf(vcf, file="temp.vcf.gz")  
+  unlink("temp.vcf.gz")
+  setwd(orig.dir)
 })
-  
+
+
+test_that("vcfR subsetters works",{
+  vcf2 <- vcf[1:10]
+  expect_equal(nrow(vcf2@fix), 10)
+  expect_equal(nrow(vcf2@gt), 10)
+})
+
   
 #debug(read.vcf)
 

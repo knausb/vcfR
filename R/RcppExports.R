@@ -49,10 +49,6 @@ write_vcf_body <- function(fix, gt, filename, mask = 0L) {
     invisible(.Call('vcfR_write_vcf_body', PACKAGE = 'vcfR', fix, gt, filename, mask))
 }
 
-write_vcf_body_gz <- function(fix, gt, filename, mask = 0L) {
-    invisible(.Call('vcfR_write_vcf_body_gz', PACKAGE = 'vcfR', fix, gt, filename, mask))
-}
-
 write_fasta <- function(seq, seqname, filename, rowlength = 80L, verbose = 1L) {
     invisible(.Call('vcfR_write_fasta', PACKAGE = 'vcfR', seq, seqname, filename, rowlength, verbose))
 }

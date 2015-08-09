@@ -22,7 +22,7 @@ write_fasta(x, file = "", gt_split = "|", rowlength = 80,
 \arguments{
 \item{file}{A filename for a variant call format (vcf) file}
 
-\item{limit}{amount of memory not to exceed when reading in a file}
+\item{limit}{amount of memory (in bytes) not to exceed when reading in a file}
 
 \item{verbose}{report verbose progress}
 

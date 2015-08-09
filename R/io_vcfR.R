@@ -12,7 +12,7 @@
 # @param vfile an output filename
 #' @param mask logical vector indicating rows to use
 #' @param APPEND logical indicating whether to append to existing vcf file or write a new file
-#' @param limit amount of memory not to exceed when reading in a file
+#' @param limit amount of memory (in bytes) not to exceed when reading in a file
 #' @param verbose report verbose progress
 #'
 #' @details
@@ -65,24 +65,14 @@ read.vcf <- function(file, limit=1e7, verbose = TRUE){
   if(ram_est > limit){
     message(paste("The number of variants in your file is:", prettyNum(stats['variants'], big.mark=",")))
     message(paste("The number of samples in your file is:", prettyNum(stats['columns'] - 1, big.mark=",")))
-    message(paste("This will result in an object of approximately:", round(ram_est/1e9, digits=3), "Gb in size"))
-#    message("The function memory_plot() may help you estimate your memory needs.")
+    message(paste("This will result in an object of approximately:", ram_est, "in size"))
     stop("Object size limit exceeded")
   }
   
   vcf@meta <- .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', file, stats, as.numeric(verbose))
   body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', file, stats, as.numeric(verbose))
 
-#  for(i in c(1, 3:5, 7:8)){
-#    body[,i] <- as.character(body[,i])
-#  }
-#  for(i in 9:ncol(body)){
-#    body[,i] <- as.character(body[,i])
-#  }
-  
   vcf@fix <- body[,1:8]
-#  vcf@fix$POS <- as.integer(as.character(vcf@fix$POS))
-#  vcf@fix$QUAL <- as.numeric(as.character(vcf@fix$QUAL))
   vcf@gt <- body[,9:ncol(body)]
   
   return(vcf)
@@ -109,18 +99,20 @@ write.vcf <- function(x, file = "", mask = FALSE, APPEND = FALSE){
     gz <- gzfile(file, "w")
     write(x@meta, gz)
 
-    header <- c(names(x@fix), names(x@gt))
-    header[1] <- "#CHROM"
-    header <- paste(header, collapse="\t")
-    write(header, gz)
+#    header <- c(names(x@fix), names(x@gt))
+#    header[1] <- "#CHROM"
+#    header <- paste(header, collapse="\t")
+#    write(header, gz)
 
     close(gz)
   }
   
   if(mask == FALSE){
-    test <- .Call('vcfR_write_vcf_body_gz', PACKAGE = 'vcfR', fix = x@fix, gt = x@gt, filename = file, mask = 0)
+    test <- .Call('vcfR_write_vcf_body', PACKAGE = 'vcfR', fix = x@fix, gt = x@gt, filename = file, mask = 0)
+#    test <- .Call('vcfR_write_vcf_body_gz', PACKAGE = 'vcfR', fix = x@fix, gt = x@gt, filename = file, mask = 0)
   } else if (mask == TRUE){
-    test <- .Call('vcfR_write_vcf_body_gz', PACKAGE = 'vcfR', fix = x@fix, gt = x@gt, filename = file, mask = 1)
+    test <- .Call('vcfR_write_vcf_body', PACKAGE = 'vcfR', fix = x@fix, gt = x@gt, filename = file, mask = 1)
+#    test <- .Call('vcfR_write_vcf_body_gz', PACKAGE = 'vcfR', fix = x@fix, gt = x@gt, filename = file, mask = 1)
   }
 }
 

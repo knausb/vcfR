@@ -289,8 +289,6 @@ Rcpp::CharacterMatrix read_body_gz(std::string x, Rcpp::NumericVector stats, int
 
 
 
-/*  Memory test  */
-
 
 
 Rcpp::StringMatrix DataFrame_to_StringMatrix( Rcpp::DataFrame df ){
@@ -314,163 +312,64 @@ Rcpp::StringMatrix DataFrame_to_StringMatrix( Rcpp::DataFrame df ){
 /*  Write vcf body  */
 
 // [[Rcpp::export]]
-void write_vcf_body( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filename , int mask=0 ) {
+void write_vcf_body( Rcpp::CharacterMatrix fix, Rcpp::CharacterMatrix gt, std::string filename , int mask=0 ) {
+//void write_vcf_body( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filename , int mask=0 ) {
 //int write_vcf_body( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filename , int mask=0 ) {
-
-  // fix DataFrame
-  Rcpp::StringVector chrom  = fix["CHROM"];
-  Rcpp::StringVector pos    = fix["POS"];
-  Rcpp::StringVector id     = fix["ID"];
-  Rcpp::StringVector ref    = fix["REF"];
-  Rcpp::StringVector alt    = fix["ALT"];
-  Rcpp::StringVector qual   = fix["QUAL"];
-  Rcpp::StringVector filter = fix["FILTER"];
-  Rcpp::StringVector info   = fix["INFO"];
-
-  // gt DataFrame
-  Rcpp::StringMatrix gt_cm = DataFrame_to_StringMatrix(gt);
-  Rcpp::StringVector column_names(gt.size());
-  column_names = gt.attr("names");
-//  column_names = gt_cm.attr("col.names");
-//  delete gt;
-  
-  int i = 0;
-  int j = 0;
-
-  // Uncompressed.
-  std::ofstream myfile;
-  myfile.open (filename.c_str(), std::ios::out | std::ios::app | std::ios::binary);
-  
-//  gzFile *fi = (gzFile *)gzopen("file.gz","wb");
-  
-
-  for(i=0; i<chrom.size(); i++){
-    Rcpp::checkUserInterrupt();
-    if(mask == 1 && filter(i) == "PASS" ){
-      // Don't print variant.
-    } else {
-      myfile << chrom(i);
-      myfile << "\t";
-      myfile << pos(i);
-      myfile << "\t";
-      if(id(i) == NA_STRING){
-        myfile << ".";
-        myfile << "\t";
-      } else {
-        myfile << id(i);
-        myfile << "\t";
-      }
-      myfile << ref(i);
-      myfile << "\t";
-      myfile << alt(i);
-      myfile << "\t";
-      if(qual(i) == NA_STRING){
-        myfile << ".";
-        myfile << "\t";
-      } else {
-        myfile << qual(i);
-        myfile << "\t";
-      }
-      if(filter(i) == NA_STRING){
-        myfile << ".";
-        myfile << "\t";
-      } else {
-        myfile << filter(i);
-        myfile << "\t";
-      }
-      if(info(i) == NA_STRING){
-        myfile << ".";
-        myfile << "\t";
-      } else {
-        myfile << info(i);
-      }
-      
-      // gt region.
-      myfile << "\t";
-      myfile << gt_cm(i, 0);
-      for(j=1; j<column_names.size(); j++){
-        myfile << "\t";
-        myfile << gt_cm(i, j);
-      }
-
-      myfile << "\n";
-    }
-  }
-
-  myfile.close();
-  
-  return;
-}
-
-
-
-// [[Rcpp::export]]
-void write_vcf_body_gz( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filename , int mask=0 ) {
   // http://stackoverflow.com/a/5649224
   
-  // fix DataFrame
-  Rcpp::StringVector chrom  = fix["CHROM"];
-  Rcpp::StringVector pos    = fix["POS"];
-  Rcpp::StringVector id     = fix["ID"];
-  Rcpp::StringVector ref    = fix["REF"];
-  Rcpp::StringVector alt    = fix["ALT"];
-  Rcpp::StringVector qual   = fix["QUAL"];
-  Rcpp::StringVector filter = fix["FILTER"];
-  Rcpp::StringVector info   = fix["INFO"];
-  
-  // gt DataFrame
-  Rcpp::StringMatrix gt_cm = DataFrame_to_StringMatrix(gt);
-  Rcpp::StringVector column_names(gt.size());
-  column_names = gt.attr("names");
-  
-  int i = 0;
-  int j = 0;
+  int i = 0; // Rows
+  int j = 0; // Columns
+  std::string tmpstring;  // Assemble each line before writing
   
   
   gzFile fi = gzopen( filename.c_str(), "ab" );
-//  gzFile *fi = (gzFile *)gzopen( filename.c_str(), "ab" );
-//  gzFile *fi = (gzFile *)gzopen(filename.c_str(),"abw");
-  for(i=0; i<chrom.size(); i++){
+  
+  // Manage header.
+  Rcpp::List matrix_names = fix.attr("dimnames");
+  Rcpp::StringVector head_names = matrix_names(1);
+  tmpstring = "#" + head_names(0);
+  for(i = 1; i < head_names.size(); i++){
+    tmpstring = tmpstring + "\t" + head_names(i);
+  }
+//  Rcpp::Rcout << tmpstring << "\n";
+  
+  matrix_names = gt.attr("dimnames");
+  head_names = matrix_names(1);
+  for(i = 0; i < head_names.size(); i++){
+    tmpstring = tmpstring + "\t" + head_names(i);
+  }
+//  Rcpp::Rcout << tmpstring << "\n";
+  
+  // Write header.
+  gzwrite(fi, (char *)tmpstring.c_str(), tmpstring.size());
+  gzwrite(fi,"\n",strlen("\n"));
+
+  // Manage body
+  for(i = 0; i < fix.nrow(); i++){
     Rcpp::checkUserInterrupt();
-    if(mask == 1 && filter(i) != "PASS" ){
+    if(mask == 1 && fix(i,6) != "PASS" ){
       // Don't print variant.
     } else {
-      std::string tmpstring;
-      tmpstring = chrom(i);
-      tmpstring = tmpstring + "\t" + pos(i) + "\t";
-      if(id(i) == NA_STRING){
-        tmpstring = tmpstring + ".";
-      } else {
-        tmpstring = tmpstring + id(i);
-      }
-      tmpstring = tmpstring + "\t" + ref(i) + "\t" + alt(i) + "\t";
-      if(qual(i) == NA_STRING){
-        tmpstring = tmpstring + "." + "\t";
-      } else {
-        tmpstring = tmpstring + qual(i) + "\t";
-      }
-      if(filter(i) == NA_STRING){
-        tmpstring = tmpstring + "." + "\t";
-      } else {
-        tmpstring = tmpstring + filter(i) + "\t";
-      }
-      tmpstring = tmpstring + info(i);
-
-      // gt portion
-      for(j=0; j<column_names.size(); j++){
-        if(gt_cm(i, j) == NA_STRING){
-          tmpstring = tmpstring + "\t" + "./.";
+      j = 0;
+      tmpstring = fix(i,j);
+      for(j = 1; j < fix.ncol(); j++){
+        if(fix(i,j) == NA_STRING){
+          tmpstring = tmpstring + "\t" + ".";
         } else {
-          tmpstring = tmpstring + "\t" + gt_cm(i, j);
+          tmpstring = tmpstring + "\t" + fix(i,j);
         }
       }
 
+      // gt portion
+      for(j = 0; j < gt.ncol(); j++){
+        if(gt(i, j) == NA_STRING){
+          tmpstring = tmpstring + "\t" + "./.";
+        } else {
+          tmpstring = tmpstring + "\t" + gt(i, j);
+        }
+      }
 
-//      gzwrite(fi,"my decompressed data",strlen("my decompressed data"));
-//      gzwrite(fi,"\n",strlen("\n"));
-//      std::string tmpstring = "test string\n";
       gzwrite(fi, (char *)tmpstring.c_str(), tmpstring.size());
-      
       gzwrite(fi,"\n",strlen("\n"));
     }
   }
@@ -481,6 +380,7 @@ void write_vcf_body_gz( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string fil
 
 
 
+/* Write data to fasta file */
 
 // [[Rcpp::export]]
 void write_fasta( Rcpp::CharacterVector seq,
