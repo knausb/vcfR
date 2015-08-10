@@ -10,26 +10,24 @@ A class for representing chromosomes (or contigs).
 \details{
 Defines a class for chromosomal or contig data.
 
-This object has a numbr of slots.
+This object has a number of slots.
 
 \itemize{
-  \item name name of the object (class character)
-  \item seq object of class DNAbin (ape)
-  \item len length of sequence (integer)
-  \item window_size window size for windowing analyses (integer)
-  \item vcf.meta vcf meta data
-  \item vcf.fix vcf fixed data
-  \item vcf.gt vcf genotype data
-  \item ann annotation data in a gff-like data.frame
+  \item \strong{name} name of the object (class character)
+  \item \strong{len} length of sequence (integer)
+  \item \strong{window_size} window size for windowing analyses (integer)
 
-  \item var.info a data.frame containing information on variants
-  \item win.info a data.frame containing information on windows
-  \item seq.info a list containing information on the sequence
+  \item \strong{seq} object of class DNAbin (ape)
+  \item \strong{vcf} object of class vcfR
+  \item \strong{ann} annotation data in a gff-like data.frame
+
+  \item \strong{var.info} a data.frame containing information on variants
+  \item \strong{win.info} a data.frame containing information on windows
+  \item \strong{seq.info} a list containing information on the sequence
 
   \item gt.m matrix of genotypes
 }
 
-More descriptions can be put here.
 
 The \strong{seq} slot contains an object of class ape::DNAbin.
 A DNAbin object is typically either a matrix or list of DNAbin objects.

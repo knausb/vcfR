@@ -1,7 +1,6 @@
 
 #library(testthat)
-#
-detach(package:vcfR, unload=TRUE)
+#detach(package:vcfR, unload=TRUE)
 library(vcfR)
 context("vcf functions")
 
@@ -46,9 +45,15 @@ test_that("write.vcf works",{
 
 
 test_that("vcfR subsetters works",{
-  vcf2 <- vcf[1:10]
+  # Rows
+  vcf2 <- vcf[1:10,]
   expect_equal(nrow(vcf2@fix), 10)
   expect_equal(nrow(vcf2@gt), 10)
+  
+  # Columns
+  vcf2 <- vcf[,1:4]
+  expect_equal(ncol(vcf2@fix), 8)
+  expect_equal(ncol(vcf2@gt), 4)
 })
 
   

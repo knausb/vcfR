@@ -4,7 +4,7 @@
 library(vcfR)
 context("create_chrom functions")
 
-data(vcfR_example)
+#data(vcfR_example)
 
 pinf_mt <- create_chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff, verbose=F)
 

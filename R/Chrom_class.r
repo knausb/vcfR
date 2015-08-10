@@ -1,8 +1,10 @@
 # chromR.
 
+
 #### Class definition. ####
 
 setOldClass("DNAbin")
+setOldClass("vcfR")
 
 #' @title Chrom class
 #'
@@ -14,30 +16,27 @@ setOldClass("DNAbin")
 #'
 #' @details Defines a class for chromosomal or contig data.
 #' 
-#' This object has a numbr of slots.
+#' This object has a number of slots.
 #' 
 #' \itemize{
-#'   \item name name of the object (class character)
-#'   \item seq object of class DNAbin (ape)
-#'   \item len length of sequence (integer)
-#'   \item window_size window size for windowing analyses (integer)
-#'   \item vcf.meta vcf meta data
-#'   \item vcf.fix vcf fixed data
-#'   \item vcf.gt vcf genotype data
-#'   \item ann annotation data in a gff-like data.frame
+#'   \item \strong{name} name of the object (class character)
+#'   \item \strong{len} length of sequence (integer)
+#'   \item \strong{window_size} window size for windowing analyses (integer)
+#'   
+#'   \item \strong{seq} object of class DNAbin (ape)
+#'   \item \strong{vcf} object of class vcfR
+#'   \item \strong{ann} annotation data in a gff-like data.frame
 #'
-#'   \item var.info a data.frame containing information on variants
-#'   \item win.info a data.frame containing information on windows
-#'   \item seq.info a list containing information on the sequence
+#'   \item \strong{var.info} a data.frame containing information on variants
+#'   \item \strong{win.info} a data.frame containing information on windows
+#'   \item \strong{seq.info} a list containing information on the sequence
 #'      
 #'   \item gt.m matrix of genotypes
-#   \item sfs matrix for the site frequency spectrum
-#   \item link matrix for linkages
 #   
 #   \item mask a logical vector to indicate masked variants
 #' }
 #' 
-#' More descriptions can be put here.
+# More descriptions can be put here.
 #' 
 #' The \strong{seq} slot contains an object of class ape::DNAbin.
 #' A DNAbin object is typically either a matrix or list of DNAbin objects.
@@ -76,12 +75,13 @@ setClass(
   Class="Chrom",
   representation=representation(
     name = "character",
-    seq = "DNAbin",
     len = "integer",
     window_size = "integer",
-    vcf.meta = "character",
-    vcf.fix = "data.frame",
-    vcf.gt = "data.frame",
+#    vcf.meta = "character",
+#    vcf.fix = "data.frame",
+#    vcf.gt = "data.frame",
+    vcf = "vcfR",
+    seq = "DNAbin",
     ann = "data.frame",
     #
     var.info = "data.frame",
@@ -97,15 +97,9 @@ setClass(
   ),
   prototype=prototype(
     window_size = as.integer(1e3),
-    vcf.fix = data.frame(matrix(ncol=8, nrow=0,
-                                dimnames=list(c(),
-                                              c('CHROM','POS','ID','REF','ALT','QUAL','FILTER','INFO'))
-#                                              c('chrom','pos','id','ref','alt','qual','filter','info'))
-    ),
-    stringsAsFactors=FALSE),
-#    vcf.stat = data.frame(matrix(ncol=11, nrow=0, 
-#                                 dimnames=list(c(),
-#                                               c('Allele_num','R_num','A_num','Ho','He','Ne','theta_pi','theta_w','theta_h','tajimas_d','fw_h'))
+#    vcf.fix = data.frame(matrix(ncol=8, nrow=0,
+#                                dimnames=list(c(),
+#                                              c('CHROM','POS','ID','REF','ALT','QUAL','FILTER','INFO'))
 #    ),
 #    stringsAsFactors=FALSE),
     ann = data.frame(matrix(ncol=9, nrow=0,
@@ -113,7 +107,8 @@ setClass(
                                           c("seqid", "source", "type", "start", "end", "score", "strand", "phase", "attributes"))
     ),
     stringsAsFactors=FALSE)
-  )
+  ),
+#  contains = "vcfR"
 )
 
 
