@@ -4,9 +4,22 @@
 library(vcfR)
 context("extract_gt functions")
 
-data(vcfR_example)
+#data(vcfR_example)
 
-pinf_mt <- create_chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff, verbose=F)
+vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
+seq_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
+gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
+
+vcf <- read.vcf(vcf_file, verbose = FALSE)
+dna <- ape::read.dna(seq_file, format = "fasta")
+gff <- read.table(gff_file, sep="\t")
+
+chrom <- create_chrom(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
+
+#####
+
+
+chrom <- create_chrom('Supercontig_1.100', seq=dna, vcf=vcf, ann=gff, verbose=F)
 pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE)
 pinf_mt <- masker(pinf_mt, min_QUAL = 990, min_DP = 6000, max_DP = 8000, min_MQ = 40, max_MQ = 100)
 pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE)

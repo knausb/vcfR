@@ -6,8 +6,10 @@
 \alias{chrom-methods}
 \alias{create_chrom}
 \alias{getCHROM}
+\alias{getDP}
 \alias{getFIX}
 \alias{getPOS}
+\alias{getQUAL}
 \alias{seq2chrom}
 \alias{vcf2chrom}
 \title{Create Chrom object}
@@ -26,6 +28,10 @@ getFIX(x)
 getCHROM(x)
 
 getPOS(x)
+
+getQUAL(x)
+
+getDP(x)
 }
 \arguments{
 \item{name}{a name for the chromosome (for plotting purposes)}

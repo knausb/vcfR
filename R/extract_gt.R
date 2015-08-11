@@ -45,7 +45,8 @@ extract.gt <- function(x, element="GT", mask=FALSE, as.numeric=FALSE){
 
   if(class(x) == "vcfR"){
 #    outM <- .Call('vcfR_extractGT2NM', PACKAGE = 'vcfR', x@gt, element)
-    if(names(x@gt)[1] != "FORMAT"){
+#    if(names(x@gt)[1] != "FORMAT"){
+    if(colnames(x@gt)[1] != "FORMAT"){
       stop("First column is not named 'FORMAT', this is essential information.")
     }
     outM <- .Call('vcfR_extract_GT_to_CM', PACKAGE = 'vcfR', x@gt, element)

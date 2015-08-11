@@ -34,8 +34,9 @@
 #' This vector is stored in the var.info$mask slot of a Chrom object.
 #' 
 #masker <- function(x, min_QUAL=999, min_DP=0.25, max_DP=0.75, minmq=20, maxmq=50, ...){
-masker <- function(x, min_QUAL=1, min_DP=1, max_DP=1e4, min_MQ=20, max_MQ=100, ...){  
-  quals  <- x@vcf.fix$QUAL
+masker <- function(x, min_QUAL=1, min_DP=1, max_DP=1e4, min_MQ=20, max_MQ=100, ...){
+  quals <- getQUAL(x)
+#  quals  <- x@vcf.fix$QUAL
   info <- x@var.info[,grep("DP|MQ",names(x@var.info))]
   mask <- rep(TRUE, times=nrow(info))
 

@@ -152,6 +152,10 @@ create_chrom <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
     }
   }
   
+  x@var.info <- data.frame( POS = x@vcf@fix[,"POS"] )
+  x@var.info$DP <- getDP(x)
+#  x <- setDP(x)
+  
   return(x)
 }
 
@@ -284,4 +288,22 @@ getPOS <- function(x){
 }
 
 
+#' @rdname create_chrom
+#' @export
+#' @aliases getPOS
+getQUAL <- function(x){
+  if(class(x) != "Chrom"){stop("expecting object of class Chrom")}
+  as.integer(x@vcf@fix[,"QUAL"])
+}
+
+
+#' @rdname create_chrom
+#' @export
+#' @aliases getDP
+getDP <- function(x){
+  dp <- extract.gt(x, element = "DP", as.numeric=T)
+  rowSums(dp, na.rm = TRUE)
+  x@var.info[,"DP"] <- rowSums(dp, na.rm = TRUE)
+  rowSums(dp, na.rm = TRUE)
+}
 
