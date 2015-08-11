@@ -5,6 +5,9 @@
 \alias{ann2chrom}
 \alias{chrom-methods}
 \alias{create_chrom}
+\alias{getCHROM}
+\alias{getFIX}
+\alias{getPOS}
 \alias{seq2chrom}
 \alias{vcf2chrom}
 \title{Create Chrom object}
@@ -17,6 +20,12 @@ vcf2chrom(x, vcf)
 seq2chrom(x, seq = NULL)
 
 ann2chrom(x, gff)
+
+getFIX(x)
+
+getCHROM(x)
+
+getPOS(x)
 }
 \arguments{
 \item{name}{a name for the chromosome (for plotting purposes)}

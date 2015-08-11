@@ -99,7 +99,9 @@ create_chrom <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
   # Matrices are better behaved.
   #
   if(is.null(seq)){
-    x@len <- x@vcf.fix$POS[length(x@vcf.fix$POS)]
+    POS <- getPOS(x)
+    x@len <- POS[length(POS)]
+#    x@len <- x@vcf.fix$POS[length(x@vcf.fix$POS)]
   } else if (class(seq)=="DNAbin"){
     x <- seq2chrom(x, seq)
   } else {
@@ -122,12 +124,16 @@ create_chrom <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
   if(verbose == TRUE){
     # Print names of elements to see if they match.
     message("Names in vcf:")
-    message(paste('  ', unique(as.character(x@vcf.fix$CHROM)), sep=""))
+    chr_names <- unique(getCHROM(x))
+    message(paste('  ', chr_names, sep=""))
+#    message(paste('  ', unique(as.character(x@vcf.fix$CHROM)), sep=""))
     
     if(class(x@seq) == "DNAbin"){
       message("Names of sequences:")
       message(paste('  ', unique(labels(x@seq)), sep=""))
-      if(unique(as.character(x@vcf.fix$CHROM)) != unique(labels(x@seq))){
+
+#      if(unique(as.character(x@vcf.fix$CHROM)) != unique(labels(x@seq))){
+      if(chr_names != unique(labels(x@seq))){
         message("Names in variant file and sequence file do not match perfectly.")
         message("If you choose to proceed, we'll do our best to match data.")
         message("But prepare yourself for unexpected results.")
@@ -137,7 +143,8 @@ create_chrom <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
     if(nrow(x@ann) > 0){
       message("Names in annotation:")
       message(paste('  ', unique(as.character(x@ann[,1])), sep=""))
-      if(unique(as.character(x@vcf.fix$CHROM)) != unique(as.character(x@ann[,1]))){
+#      if(unique(as.character(x@vcf.fix$CHROM)) != unique(as.character(x@ann[,1]))){
+      if(chr_names != unique(as.character(x@ann[,1]))){
         message("Names in variant file and annotation file do not match perfectly.\n")
         message("If you choose to proceed, we'll do our best to match data.\n")
         message("But prepare yourself for unexpected results.\n")
@@ -248,4 +255,33 @@ ann2chrom <- function(x, gff){
   x@ann$end   <- as.numeric(as.character(x@ann$end))
   return(x)
 }
+
+
+
+#' @rdname create_chrom
+#' @export
+#' @aliases getPOS
+getFIX <- function(x){
+  if(class(x) != "Chrom"){stop("expecting object of class Chrom")}
+  x@vcf@fix
+}
+
+#' @rdname create_chrom
+#' @export
+#' @aliases getPOS
+getCHROM <- function(x){
+  if(class(x) != "Chrom"){stop("expecting object of class Chrom")}
+  x@vcf@fix[,"CHROM"]
+}
+
+
+#' @rdname create_chrom
+#' @export
+#' @aliases getPOS
+getPOS <- function(x){
+  if(class(x) != "Chrom"){stop("expecting object of class Chrom")}
+  as.integer(x@vcf@fix[,"POS"])
+}
+
+
 

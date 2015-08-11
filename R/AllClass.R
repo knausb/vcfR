@@ -41,6 +41,16 @@ setClass(
 )
 
 
+
+
+##### ##### ##### ##### #####
+#
+# Class Chrom
+#
+##### ##### ##### ##### #####
+
+
+
 #### Class definition. ####
 
 setOldClass("DNAbin")
@@ -140,5 +150,8 @@ setClass(
     stringsAsFactors=FALSE)
   )
 )
+
+
+
 
 
