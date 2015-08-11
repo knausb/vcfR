@@ -4,12 +4,20 @@
 library(vcfR)
 context("windowing functions")
 
-data(vcfR_example)
 
-pinf_mt <- create_chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff, verbose=F)
-pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE)
+vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
+seq_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
+gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
 
-gt <- extract.gt(pinf_mt, element="PL", as.numeric=TRUE)
+vcf <- read.vcf(vcf_file, verbose = FALSE)
+dna <- ape::read.dna(seq_file, format = "fasta")
+gff <- read.table(gff_file, sep="\t")
+
+chrom <- create_chrom(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
+
+
+
+gt <- extract.gt(chrom, element="DP", as.numeric=TRUE)
 
 test_that("gt is numeric",{
   expect_is(gt, "matrix")
