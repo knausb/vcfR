@@ -90,7 +90,8 @@ create_chrom <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
   
   # Insert vcf into Chom.
   if(length(vcf)>0){
-    x <- vcf2chrom(x, vcf)
+#    x <- vcf2chrom(x, vcf)
+    x@vcf <- vcf
   }
 
   # Insert seq into Chrom

@@ -1,10 +1,49 @@
-# chromR.
+
+
+#### Class definition. ####
+
+#' @title vcfR class
+#'
+#' @name vcfR-class
+#' @rdname vcfR-class
+#'
+#' @description
+#' A class for storing vcf data.
+#' 
+#' @slot meta character vector for the meta (header) information
+#' 
+#' @slot fix  data.frame for the fixed information
+#' @slot gt   data.frame for the genotype information 
+# @slot fix  data.frame for the fixed information
+# @slot gt   data.frame for the genotype information
+#'
+#' @details Defines a class for variant call format data.
+#' A vcfR object contains three slots.  The first slot
+#' is a character vector which holds the meta data.  The
+#' second slot holds an eight column data.frame to hold the 
+#' fixed data.  The third slot is a data.frame which holds
+#' the genotype data.
+#' @export
+#' @import methods
+setClass(
+  Class="vcfR",
+  representation=representation(
+    meta="character",
+    fix="matrix",
+    gt="matrix"
+  ),
+  prototype=prototype(
+    fix = matrix(ncol=8, nrow=0, 
+                 dimnames=list(c(),
+                               c('CHROM','POS','ID','REF','ALT','QUAL','FILTER','INFO'))
+                 )
+  )
+)
 
 
 #### Class definition. ####
 
 setOldClass("DNAbin")
-setOldClass("vcfR")
 
 #' @title Chrom class
 #'
@@ -77,9 +116,6 @@ setClass(
     name = "character",
     len = "integer",
     window_size = "integer",
-#    vcf.meta = "character",
-#    vcf.fix = "data.frame",
-#    vcf.gt = "data.frame",
     vcf = "vcfR",
     seq = "DNAbin",
     ann = "data.frame",
@@ -89,28 +125,20 @@ setClass(
     seq.info = "list",
     #
     gt.m = "matrix"
-#    vcf.stat = "data.frame"
-#    sfs = "matrix",
-#    link = "matrix",
-    #
-#    mask = "logical"
   ),
   prototype=prototype(
+    name = "Chromosome",
+    len = as.integer(0),
     window_size = as.integer(1e3),
-#    vcf.fix = data.frame(matrix(ncol=8, nrow=0,
-#                                dimnames=list(c(),
-#                                              c('CHROM','POS','ID','REF','ALT','QUAL','FILTER','INFO'))
-#    ),
-#    stringsAsFactors=FALSE),
+#    vcf = new(Class="vcfR"),
+#    seq = as.DNAbin('n'),
+    seq = NULL,
     ann = data.frame(matrix(ncol=9, nrow=0,
                             dimnames=list(c(),
                                           c("seqid", "source", "type", "start", "end", "score", "strand", "phase", "attributes"))
     ),
     stringsAsFactors=FALSE)
-  ),
-#  contains = "vcfR"
+  )
 )
 
 
-
-#### EOF ####
