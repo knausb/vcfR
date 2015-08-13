@@ -15,22 +15,19 @@ dna <- ape::read.dna(seq_file, format = "fasta")
 gff <- read.table(gff_file, sep="\t")
 
 chrom <- create_chrom(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
+chrom <- masker(chrom, min_DP = 300, max_DP = 700)
 
 #####
 
 
-chrom <- create_chrom('Supercontig_1.100', seq=dna, vcf=vcf, ann=gff, verbose=F)
-pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE)
-pinf_mt <- masker(pinf_mt, min_QUAL = 990, min_DP = 6000, max_DP = 8000, min_MQ = 40, max_MQ = 100)
-pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE)
 
-gt <- extract.gt(pinf_mt, element="GT", as.numeric=FALSE)
-gt2 <- extract.gt(pinf_mt, element="GT", as.numeric=FALSE, mask = TRUE)
-gt3 <- extract.gt(pinf_vcf, element="GT", mask = c(TRUE, FALSE))
+gt <- extract.gt(chrom, element="GT", as.numeric=FALSE)
+gt2 <- extract.gt(chrom, element="GT", as.numeric=FALSE, mask = TRUE)
+gt3 <- extract.gt(chrom, element="GT", mask = c(TRUE, FALSE)) # Recycled vector
 
 
-pl <- extract.gt(pinf_mt, element="PL", as.numeric=FALSE)
-gq <- extract.gt(pinf_mt, element="GQ", as.numeric=TRUE)
+pl <- extract.gt(chrom, element="PL", as.numeric=FALSE)
+gq <- extract.gt(chrom, element="GQ", as.numeric=TRUE)
 
 
 test_that("gt, pl ad gq are matrices",{
@@ -47,28 +44,31 @@ test_that("gq is numeric",{
 
 
 test_that("extract_gt mask=TRUE works", {
-  expect_equal(nrow(gt), 371)
-  expect_equal(nrow(gt2), 212)
-  expect_equal(nrow(gt3), 186)
+  expect_equal(nrow(gt), 547)
+  expect_equal(nrow(gt2), 543)
+  expect_equal(nrow(gt3), 274)
 })
 
 
 test_that("extract_indels works",{
-  indels <- extract_indels(pinf_vcf, return_indels=TRUE)
-  expect_equal(min(nchar(indels@fix$REF)), 2)
-  expect_equal(min(nchar(indels@fix$ALT)), 2)
+  # No indels in sc100
+#  indels <- extract_indels(vcf, return_indels=TRUE)
+#  expect_equal(min(nchar(indels@fix[,'REF'])), 2)
+#  expect_equal(min(nchar(indels@fix[,'ALT'])), 2)
   
-  indels <- extract_indels(pinf_vcf, return_indels=FALSE)
-  expect_equal(max(nchar(indels@fix$REF)), 1)
-  expect_equal(max(nchar(indels@fix$ALT)), 1)
+#  indels <- extract_indels(pinf_vcf, return_indels=FALSE)
+#  expect_equal(max(nchar(indels@fix[,'REF'])), 1)
+#  expect_equal(max(nchar(indels@fix[,'ALT'])), 1)
 })
 
 
 test_that("extract_haps works",{
 #  .Call('vcfR_extract_haps', PACKAGE = 'vcfR', ref, alt, gt, vebosity)
 #  haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', pinf_vcf@fix$REF, pinf_vcf@fix$ALT, gt, 1)
-  haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', pinf_vcf@fix$REF, pinf_vcf@fix$ALT, gt, '/', 1)
-#  head(haps)
+  haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', vcf@fix[,'REF'], vcf@fix[,'ALT'], gt, '/', 0)
+  expect_is(haps, "matrix")
+  expect_equal(ncol(haps), 2 * ncol(gt))
+  expect_equal(nrow(haps), nrow(gt))
 })
 
 

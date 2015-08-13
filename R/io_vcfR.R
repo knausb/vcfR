@@ -62,7 +62,7 @@ read.vcf <- function(file, limit=1e7, verbose = TRUE){
 #  ram_est <- stats['variants'] * stats['columns'] * 8 + 248
   ram_est <- memuse::howbig(stats['variants'], stats['columns'])
   
-  if(ram_est > limit){
+  if(ram_est@size > limit){
     message(paste("The number of variants in your file is:", prettyNum(stats['variants'], big.mark=",")))
     message(paste("The number of samples in your file is:", prettyNum(stats['columns'] - 1, big.mark=",")))
     message(paste("This will result in an object of approximately:", ram_est, "in size"))
@@ -88,8 +88,10 @@ read.vcf <- function(file, limit=1e7, verbose = TRUE){
 write.vcf <- function(x, file = "", mask = FALSE, APPEND = FALSE){
   if(class(x) == "Chrom"){
     filter <- x@var.info$mask
-    x <- chrom_to_vcfR(x)
-    x@fix$FILTER[filter] <- "PASS"
+#    x <- chrom_to_vcfR(x)
+    x <- x@vcf
+#    x@fix$FILTER[filter] <- "PASS"
+    x@fix[,'FILTER'] <- "PASS"
   }
   if(class(x) != "vcfR"){
     stop("Unexpected class! Expecting an object of class vcfR or Chrom.")

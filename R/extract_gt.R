@@ -81,20 +81,17 @@ extract.gt <- function(x, element="GT", mask=FALSE, as.numeric=FALSE){
 #' @export
 extract_indels <- function(x, return_indels=FALSE){
   if(class(x) == 'Chrom'){
-    stop('extract_indels only works on vcfR objects!')
-    # Recast as a vcfR object.
-#    Chrom <- x
-#    x <- new(Class="vcfR")
-#    x@meta <- Chrom@vcf.meta
-#    x@fix  <- Chrom@vcf.fix
-#    x@gt   <- Chrom@vcf.gt
+    x <- x@vcf
   }
   if(class(x) != "vcfR"){
     stop("Unexpected class! Expecting an object of class vcfR or Chrom.")
   }
-  
-  mask <- nchar(x@fix$REF) > 1
-  mask[unlist(lapply(strsplit(x@fix$ALT, split=","), function(x){max(nchar(x))})) > 1] <- TRUE
+
+  # Check reference for indels
+  mask <- nchar(x@fix[,'REF']) > 1
+  mask[unlist(lapply(strsplit(x@fix[,'ALT'], split=","), function(x){max(nchar(x))})) > 1] <- TRUE
+#  mask <- nchar(x@fix$REF) > 1
+#  mask[unlist(lapply(strsplit(x@fix$ALT, split=","), function(x){max(nchar(x))})) > 1] <- TRUE
   
   if(return_indels == FALSE){
     x <- x[!mask,]
