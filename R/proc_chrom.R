@@ -409,6 +409,9 @@ gt_to_popsum <- function(x){
   # Extract genotypes from vcf.gt
   gt <- extract.gt(x, element="GT")
   
+  # If summaries already exist, we'll remove them.
+  x@var.info <- x@var.info[,grep("^n$|^Allele_counts$|^He$|^Ne$", colnames(x@var.info), invert = TRUE)]
+  
   x@var.info <- .Call('vcfR_gt_to_popsum', PACKAGE = 'vcfR', var_info=x@var.info, gt=gt)
 
   return(x)

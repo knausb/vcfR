@@ -7,7 +7,7 @@ context("create_chrom functions")
 #library(testthat)
 #data(vcfR_example)
 
-test_that("we can create null a Chrom",{
+test_that("Create null a Chrom",{
   chrom <- new(Class="Chrom")
   expect_is(chrom, "Chrom")
   expect_is(chrom@vcf, "vcfR")
@@ -45,9 +45,8 @@ test_that("We can create a Chrom, no sequence or annotation",{
   expect_equal(length(chrom@seq), 0)
   expect_equal(ncol(chrom@ann), 9)
   expect_equal(nrow(chrom@ann), 0)
-  expect_equal(ncol(chrom@var.info), 4)
+  expect_equal(ncol(chrom@var.info), 5)
   expect_equal(nrow(chrom@var.info)>0, TRUE)
-
 })
 
 
@@ -105,17 +104,24 @@ test_that("We can create a Chrom",{
 chrom <- create_chrom(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
 chrom <- masker(chrom, min_DP = 300, max_DP = 700)
 
-test_that("We created a mask",{
+test_that("We implemented the mask",{
   expect_true( sum(chrom@var.info[,'mask']) < nrow(chrom@var.info) )
 })
 
 
 
-#seq_to_rects(chrom)
+chrom <- proc_chrom(chrom, verbose = FALSE)
 
-chrom <- proc_chrom(chrom)
+test_that("proc_chrom works",{
+  expect_equal( ncol(chrom@var.info), 9 )
+  chrom <- proc_chrom(chrom, verbose = FALSE)
+  expect_equal( ncol(chrom@var.info), 9 )
+})
 
-plot(chrom)
+
+#head(chrom@var.info)
+
+#plot(chrom)
 
 
 

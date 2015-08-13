@@ -13,8 +13,8 @@ Defines a class for chromosomal or contig data.
 This object has a number of slots.
 
 \itemize{
-  \item \strong{name} name of the object (class character)
-  \item \strong{len} length of sequence (integer)
+  \item \strong{name} name of the object (character)
+  \item \strong{len} length of the sequence (integer)
   \item \strong{window_size} window size for windowing analyses (integer)
 
   \item \strong{seq} object of class DNAbin (ape)
@@ -25,7 +25,6 @@ This object has a number of slots.
   \item \strong{win.info} a data.frame containing information on windows
   \item \strong{seq.info} a list containing information on the sequence
 
-  \item gt.m matrix of genotypes
 }
 
 
@@ -33,13 +32,9 @@ The \strong{seq} slot contains an object of class ape::DNAbin.
 A DNAbin object is typically either a matrix or list of DNAbin objects.
 The matrix form appears to be better behaved than the list form.
 Because of this behavior this slot should be the matrix form.
-When this slot is not populated it is of class "S4" instead of "DNAbin".
+When this slot is not populated it is of class "NULL" instead of "DNAbin".
 
-The \strong{vcf.meta} slot is a list containing the meta information from the top of the vcf file.
-
-The \strong{vcf.fix} slot is a data.frame containing the fixed data (the first eight columns) from the vcf file.
-
-The \strong{vcf.gt} slot is a data.frame containing information about the samples.  The number of rows is the number of samples plus one, where the first row describes the format of the data in each cell.  The number of rows is equal to the numnber of variants.
+The \strong{vcf.meta} slot is an object of class vcfR
 
 The \strong{ann} slot is a data.frame containing gff format data.
 When this slot is not populated it has nrows equal to zero.

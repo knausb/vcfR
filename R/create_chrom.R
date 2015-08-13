@@ -167,8 +167,6 @@ create_chrom <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
 
 
 
-
-
 #### Data loading functions. ####
 
 
