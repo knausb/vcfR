@@ -1,7 +1,6 @@
 # create_chrom tests.
 
-# 
-detach(package:vcfR, unload=T)
+# detach(package:vcfR, unload=T)
 library(vcfR)
 context("create_chrom functions")
 
@@ -104,7 +103,6 @@ test_that("We can create a Chrom",{
 
 
 chrom <- create_chrom(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
-
 chrom <- masker(chrom, min_DP = 300, max_DP = 700)
 
 test_that("We created a mask",{
@@ -113,19 +111,11 @@ test_that("We created a mask",{
 
 
 
-
-seq_to_rects(chrom)
-
+#seq_to_rects(chrom)
 
 chrom <- proc_chrom(chrom)
 
+plot(chrom)
 
-
-test_that("We processed the Chrom object",{
-  expect_true( length(chrom@seq.info) > 0 )
-  
-  expect_equal(ncol(chrom@win.info), 7)
-  
-})
 
 

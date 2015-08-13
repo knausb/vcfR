@@ -147,8 +147,10 @@ setMethod(
     MQ <- x@var.info$MQ[x@var.info$mask]
     QUAL <- as.numeric(x@vcf@fix[x@var.info$mask, 'QUAL'])
 
-    if( length(DP) <0)
-    if( nrow(x@win.info ) > 0){ 
+#    if( length(DP) < 0 )
+      
+#    if( nrow(x@win.info ) > 0 ){
+    if( na.omit(x@win.info$variants) > 0 ){
       SNPS <- x@win.info$variants/x@win.info$length 
     } else {
       SNPS <- NULL

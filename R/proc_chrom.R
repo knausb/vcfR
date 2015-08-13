@@ -31,7 +31,7 @@
 proc_chrom <- function(x, win.size = 1e3, verbose=TRUE){
   stopifnot(class(x) == "Chrom")
   
-  if( is.null(x@seq )){
+  if( is.null( x@seq ) ){
     warning( "seq slot is NULL." )
   }
   if( nrow(x@ann) == 0 ){
@@ -43,18 +43,26 @@ proc_chrom <- function(x, win.size = 1e3, verbose=TRUE){
   if(class(x@seq) == "DNAbin"){
     ptime <- system.time(x@seq.info$nuc.win <- seq_to_rects(x)) 
     if(verbose==TRUE){
-      print("Nucleotide regions complete.")
-      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+#      print("Nucleotide regions complete.")
+#      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+      message("Nucleotide regions complete.")
+      message(paste("  elapsed time: ", round(ptime[3], digits=4)))
     }
+  } else if ( is.null( x@seq ) ){
+    warning( "seq slot is NULL, chromosome representation not made (seq_to_rects)." )
   }
   
   if(class(x@seq) == "DNAbin"){
 #  ptime <- system.time(x@seq.info$N.win <- regex.win(x, regex="[n]"))
     ptime <- system.time(x@seq.info$N.win <- seq_to_rects(x, chars="n")) 
     if(verbose==TRUE){
-      print("N regions complete.")
-      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+#      print("N regions complete.")
+#      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+      message("N regions complete.")
+      message(paste("  elapsed time: ", round(ptime[3], digits=4)))      
     }
+  } else if ( is.null( x@seq ) ){
+    warning( "seq slot is NULL, chromosome representation not made (seq_to_rects, chars=n)." )
   }
 
     
@@ -63,19 +71,23 @@ proc_chrom <- function(x, win.size = 1e3, verbose=TRUE){
 #    ptime <- system.time(x <- gt2popsum(x))
     ptime <- system.time(x <- gt_to_popsum(x))
     if(verbose==TRUE){
-      print("Population summary complete.")
-      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+#      print("Population summary complete.")
+#      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+      message("Population summary complete.")
+      message(paste("  elapsed time: ", round(ptime[3], digits=4)))
     }
   }
   
 #  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
-    ptime <- system.time(x@win.info <- .Call('vcfR_window_init', PACKAGE = 'vcfR', window_size=win.size, max_bp=x@len))
-    x@win.info <- cbind(rep(x@var.info$CHROM[1], times=nrow(x@win.info)), x@win.info)
-    names(x@win.info)[1] <- "CHROM"
-    if(verbose==TRUE){
-      print("window_init complete.")
-      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
-    }
+  ptime <- system.time(x@win.info <- .Call('vcfR_window_init', PACKAGE = 'vcfR', window_size=win.size, max_bp=x@len))
+  x@win.info <- cbind(rep(x@var.info$CHROM[1], times=nrow(x@win.info)), x@win.info)
+  names(x@win.info)[1] <- "CHROM"
+  if(verbose==TRUE){
+#    print("window_init complete.")
+#    print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+    message("window_init complete.")
+    message(paste("  elapsed time: ", round(ptime[3], digits=4)))
+  }
 #  }
 
   if(class(x@seq) == "DNAbin"){
@@ -86,32 +98,45 @@ proc_chrom <- function(x, win.size = 1e3, verbose=TRUE){
                                                seq=as.character(x@seq)[1,]
                                                ))
       if(verbose==TRUE){
-        print("windowize_fasta complete.")
-        print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+#        print("windowize_fasta complete.")
+#        print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+        message("windowize_fasta complete.")
+        message(paste("  elapsed time: ", round(ptime[3], digits=4)))
       }
     }
+  } else if ( is.null( x@seq ) ){
+    warning( "seq slot is NULL, windowize_fasta not run." )
   }
-  
+
 
 #  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
-  if( nrow(x@vcf@gt[x@var.info$mask,]) > 0 ){
-    ptime <- system.time(x@win.info <- .Call('vcfR_windowize_annotations', PACKAGE = 'vcfR', wins=x@win.info,
-                                             ann_starts=as.numeric(as.character(x@ann[,4])), 
-                                             ann_ends=as.numeric(as.character(x@ann[,5])),
-                                             chrom_length=x@len)
-    )
-    if(verbose==TRUE){
-      print("windowize_annotations complete.")
-      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+  if( nrow(x@ann) > 0 ){
+    if( nrow(x@vcf@gt[x@var.info$mask,]) > 0 ){
+      ptime <- system.time(x@win.info <- .Call('vcfR_windowize_annotations', PACKAGE = 'vcfR', wins=x@win.info,
+                                               ann_starts=as.numeric(as.character(x@ann[,4])), 
+                                               ann_ends=as.numeric(as.character(x@ann[,5])),
+                                               chrom_length=x@len)
+      )
+      if(verbose==TRUE){
+#        print("windowize_annotations complete.")
+#        print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+        message("windowize_annotations complete.")
+        message(paste("  elapsed time: ", round(ptime[3], digits=4)))
+      }
     }
+  } else if ( nrow(x@ann) == 0 ){
+    warning( "ann slot has zero rows, windowize_annotations not run." )
   }
+
   
 #  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
   if( nrow(x@vcf@gt[x@var.info$mask,]) > 0 ){
     ptime <- system.time(x@win.info <- .Call('vcfR_windowize_variants', PACKAGE = 'vcfR', windows=x@win.info, variants=x@var.info[c('POS','mask')]))
     if(verbose==TRUE){
-      print("windowize_variants complete.")
-      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+#      print("windowize_variants complete.")
+#      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+      message("windowize_variants complete.")
+      message(paste("  elapsed time: ", round(ptime[3], digits=4)))
     }
   }
   
