@@ -21,9 +21,18 @@ As in other vignettes, we begin by loading the example data.
 
 ```{r}
 library(vcfR)
-#data(vcfR_example)
-#pinf_mt <- create_chrom(name='pinf_mt', vcf=pinf_vcf, seq=pinf_dna, ann=pinf_gff, verbose=FALSE)
-#pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE, win.size=1e3)
+vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
+seq_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
+gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
+
+vcf <- read.vcf(vcf_file, verbose = FALSE)
+dna <- ape::read.dna(seq_file, format = "fasta")
+gff <- read.table(gff_file, sep="\t")
+
+chrom <- create_chrom(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=TRUE)
+chrom <- masker(chrom, min_DP = 300, max_DP = 700)
+chrom <- proc_chrom(chrom, verbose = TRUE)
+
 ```
 
 
@@ -48,7 +57,7 @@ In order to create our vector of scores, let's remind ourselves of what data we 
 
 
 ```{r}
-#head(pinf_mt)
+head(chrom)
 ```
 
 
@@ -57,8 +66,8 @@ Let's use the genotype quality and sequence depth from the vcf genotype informat
 
 
 ```{r}
-#dp <- extract.gt(pinf_mt, element="DP", as.numeric=TRUE)
-#gq <- extract.gt(pinf_mt, element="GQ", as.numeric=TRUE)
+dp <- extract.gt(chrom, element="DP", as.numeric=TRUE)
+gq <- extract.gt(chrom, element="GQ", as.numeric=TRUE)
 ```
 
 
@@ -67,7 +76,7 @@ We can look at it for one sample to see its distribution.
 
 
 ```{r, fig.align='center'}
-#hist(gq[,1])
+hist(gq[,1])
 ```
 
 
@@ -76,7 +85,7 @@ We can use a heatmap to explore this over all samples.
 
 
 ```{r, fig.height=7, fig.width=7}
-#heatmap.bp(gq)
+heatmap.bp(gq)
 ```
 
 
@@ -85,7 +94,7 @@ We can also validate that the values range approximately from 1 to 99
 
 
 ```{r}
-#apply(gq, MARGIN=2, range)
+apply(gq, MARGIN=2, range)
 ```
 
 
@@ -101,11 +110,11 @@ Using z-scores here may work.
 
 
 ```{r}
-#dpz <- z_score(dp)
-#dpz <- abs(dpz)
-#maxes <- apply(dpz, MARGIN=2, max, na.rm=TRUE)
-#dp2 <- abs(sweep(dpz, MARGIN = 2, STATS = maxes, FUN = "-"))
-#dp2 <- 100 * sweep(dp2, MARGIN = 2, STATS = maxes, FUN = "/")
+dpz <- z_score(dp)
+dpz <- abs(dpz)
+maxes <- apply(dpz, MARGIN=2, max, na.rm=TRUE)
+dp2 <- abs(sweep(dpz, MARGIN = 2, STATS = maxes, FUN = "-"))
+dp2 <- 100 * sweep(dp2, MARGIN = 2, STATS = maxes, FUN = "/")
 ```
 
 
@@ -121,7 +130,7 @@ We can validate that our ranges are from 0-100 with an apply function.
 
 
 ```{r}
-#apply(dp2, MARGIN=2, range)
+apply(dp2, MARGIN=2, range)
 ```
 
 
@@ -129,7 +138,7 @@ And visualize with a heatmap.
 
 
 ```{r, fig.height=7, fig.width=7}
-#heatmap.bp(dp2)
+heatmap.bp(dp2)
 ```
 
 
@@ -137,8 +146,8 @@ And finally, combine our metrics into a composite metric.
 
 
 ```{r, fig.align='center'}
-#scores <- rowMeans(dp2) + rowMeans(gq)
-#is.na(scores[c(7,10)]) <- TRUE
+scores <- rowMeans(dp2) + rowMeans(gq)
+is.na(scores[c(7,10)]) <- TRUE
 ```
 
 
@@ -146,7 +155,7 @@ Check their distribution with a histogram.
 
 
 ```{r, fig.align='center'}
-#hist(scores)
+hist(scores)
 ```
 
 
@@ -154,9 +163,9 @@ Once we have score in hand we can use them to rank our variants.
 
 
 ```{r}
-#pinf_mt <- masker(pinf_mt)
-#pinf_mt <- rank_variants_chrom(pinf_mt, scores)
-#head(pinf_mt@var.info)
+chrom <- masker(chrom)
+chrom <- rank_variants_chrom(chrom, scores)
+head(chrom@var.info)
 ```
 
 
@@ -166,7 +175,7 @@ We can take a look at them bay calling this directly.
 
 
 ```{r}
-#cbind(pinf_mt@var.info[1:26, c('POS', 'mask', 'window_number', 'rank')], scores[1:26])
+cbind(chrom@var.info[1:26, c('POS', 'mask', 'window_number', 'rank')], scores[1:26])
 ```
 
 
@@ -174,7 +183,7 @@ We can use this information to create our mask.
 
 
 ```{r}
-#pinf_mt@var.info$mask[pinf_mt@var.info$rank > 1] <- FALSE
+chrom@var.info$mask[chrom@var.info$rank > 1] <- FALSE
 ```
 
 
@@ -182,7 +191,7 @@ And plot.
 
 
 ```{r, fig.height=7, fig.width=7}
-#chromoqc(pinf_mt, dot.alpha='ff')
+chromoqc(chrom, dot.alpha='ff')
 ```
 
 
@@ -194,7 +203,7 @@ We can manually adjust this.
 
 
 ```{r}
-#pinf_mt@var.info$mask[pinf_mt@var.info$MQ < 42] <- FALSE
+chrom@var.info$mask[chrom@var.info$MQ < 42] <- FALSE
 ```
 
 
@@ -202,7 +211,7 @@ Replot.
 
 
 ```{r, fig.height=7, fig.width=7}
-#chromoqc(pinf_mt, dot.alpha='ff')
+chromoqc(chrom, dot.alpha='ff')
 ```
 
 

@@ -58,6 +58,8 @@ For this vignette, we'll use the example data provided with vcfR.
 ```{r}
 library(vcfR)
 data(vcfR_example)
+vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
+vcf <- read.vcf(vcf_file, verbose = FALSE)
 ```
 
 
@@ -71,7 +73,7 @@ The example which comes with vcfR is shown below.
 
 
 ```{r, echo=FALSE}
-pinf_vcf@meta
+vcf@meta[1:7]
 ```
 
 
@@ -105,7 +107,7 @@ The FILTER field is not used here but could contain information on whether a var
 
 
 ```{r, echo=FALSE}
-pinf_vcf@fix[1:6, 1:7]
+vcf@fix[1:6, 1:7]
 ```
 
 
@@ -119,7 +121,7 @@ This tell us that this variant was sequenced 7,405 times over all our samples.
 
 
 ```{r, echo=FALSE}
-unlist(strsplit(as.character(pinf_vcf@fix[1, 8]), split=";"))
+unlist(strsplit(as.character(vcf@fix[1, 8]), split=";"))
 ```
 
 
@@ -139,7 +141,7 @@ Every variant does not necessarily have the same information, so the rows are be
 
 
 ```{r, echo=FALSE}
-pinf_vcf@gt[1:6, 1:8]
+vcf@gt[1:6, 1:8]
 ```
 
 
@@ -154,7 +156,7 @@ Once in memory we can use the `head()` method to summarize the information in th
 
 
 ```{r}
-head(pinf_vcf)
+head(vcf)
 ```
 
 

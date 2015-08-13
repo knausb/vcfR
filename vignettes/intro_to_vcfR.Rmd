@@ -134,7 +134,7 @@ This can be done with the plot function.
 
 
 
-```{r, fig.height=6, fig.width=6}
+```{r, fig.height=6, fig.width=6, dev='Cairo_png'}
 plot(chrom)
 ```
 
@@ -161,7 +161,7 @@ This maintains the geometry of the data matrices throughout the analyisis and al
 
 
 
-```{r, fig.height=6, fig.width=6}
+```{r, fig.height=6, fig.width=6, dev='Cairo_png'}
 chrom <- masker(chrom)
 plot(chrom)
 ```
@@ -189,7 +189,7 @@ This function is rather experimental and some of the summaries may not be quite 
 
 
 
-```{r, fig.height=6, fig.width=6}
+```{r, fig.height=6, fig.width=6, dev='Cairo_png'}
 chrom <- proc_chrom(chrom, verbose=TRUE)
 plot(chrom)
 ```
@@ -211,7 +211,7 @@ The function **chromoqc()** uses the R function layout to make composite plots o
 
 
 
-```{r, fig.height=6, fig.width=6}
+```{r, fig.height=6, fig.width=6, dev='Cairo_png'}
 chromoqc(chrom)
 ```
 
@@ -224,7 +224,7 @@ Variants of this function, which are actually all wrappers for the funciton **ch
 
 
 
-```{r, fig.height=6, fig.width=6}
+```{r, fig.height=6, fig.width=6, dev='Cairo_png'}
 chromohwe(chrom, dot.alpha='ff')
 ```
 
@@ -239,7 +239,7 @@ Here we simulate data as an example.
 
 
 
-```{r, fig.height=6, fig.width=6}
+```{r, fig.height=6, fig.width=6, dev='Cairo_png'}
 set.seed(10)
 x1 <- as.integer(runif(n=20, min=1, max=chrom@len))
 y1 <- runif(n=length(x1), min=1, max=100)
@@ -268,7 +268,7 @@ We can then visualize this data with a heatmap.
 
 
 
-```{r, fig.height=6, fig.width=6}
+```{r, fig.height=6, fig.width=6, dev='Cairo_png'}
 heatmap.bp(gq)
 ```
 
@@ -311,7 +311,7 @@ And create another heatmap.
 
 
 
-```{r, fig.height=6, fig.width=6}
+```{r, fig.height=6, fig.width=6, dev='Cairo_png'}
 heatmap.bp(gqwz)
 ```
 

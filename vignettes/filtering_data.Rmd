@@ -66,7 +66,7 @@ Because it is a part of the vcf file definition, it is not documented in the met
 
 
 ```{r}
-grep("QUAL", chrom@vcf@meta, value=T)
+grep("DP", chrom@vcf@meta, value=T)
 ```
 
 
@@ -78,9 +78,9 @@ We can test if these are indeed the same.
 
 
 ```{r, fig.height=7, fig.width=7}
-#dp <- extract.gt(pinf_mt, element="DP", as.numeric=TRUE)
-#plot(rowSums(dp), pinf_mt@var.info$DP)
-#abline(a=0, b=1)
+dp <- extract.gt(chrom, element="DP", as.numeric=TRUE)
+plot(rowSums(dp), chrom@var.info$DP)
+abline(a=0, b=1)
 ```
 
 
@@ -89,8 +89,8 @@ We can remind ourselves what these values mean by querying the meta region.
 
 
 ```{r}
-#grep("MQ", pinf_mt@vcf.meta, value=T)
-#grep("DP,", pinf_mt@vcf.meta, value=T)
+grep("MQ", chrom@vcf@meta, value=T)
+grep("DP,", chrom@vcf@meta, value=T)
 ```
 
 
@@ -100,7 +100,7 @@ Because masker() uses the DP column in the var.info slot to judge depth, we'll c
 
 
 ```{r}
-#pinf_mt@var.info$DP <- rowSums(dp)
+chrom@var.info$DP <- rowSums(dp)
 ```
 
 
@@ -108,7 +108,7 @@ We can now use the plot function to visualize this data.
 
 
 ```{r, fig.height=7, fig.width=7}
-#plot(pinf_mt)
+plot(chrom)
 ```
 
 
@@ -126,8 +126,8 @@ This makes it a good candidate for filtering.
 
 
 ```{r, fig.height=7, fig.width=7}
-#pinf_mt <- masker(pinf_mt, min_QUAL=999, min_DP=7000, max_DP=8000, min_MQ=43, max_MQ=46)
-#plot(pinf_mt)
+chrom <- masker(chrom, min_QUAL=0, min_DP=300, max_DP=650, min_MQ=59, max_MQ=61)
+plot(chrom)
 ```
 
 
@@ -143,7 +143,7 @@ We can use chromoqc() to see how applying this mask affects our data.
 
 
 ```{r, fig.height=7, fig.width=7}
-#chromoqc(pinf_mt, verbose=FALSE)
+chromoqc(chrom, verbose=FALSE)
 ```
 
 
@@ -155,9 +155,9 @@ based on this information, it seems reasonable to change our threshold for maski
 
 
 ```{r, fig.height=7, fig.width=7}
-#pinf_mt <- masker(pinf_mt, QUAL = 999, mindp = 0.25, maxdp = 0.99,
+#chrom <- masker(chrom, QUAL = 999, mindp = 0.25, maxdp = 0.99,
 #                  minmq = 43, maxmq = 50)
-#plot(pinf_mt)
+#plot(chrom)
 ```
 
 
@@ -165,7 +165,7 @@ And visualize with chromoqc().
 
 
 ```{r, fig.height=7, fig.width=7}
-#chromoqc(pinf_mt, verbose=FALSE)
+#chromoqc(chrom, verbose=FALSE)
 ```
 
 
@@ -177,7 +177,7 @@ This can be done by writing these variants to a new vcf file with the function w
 
 
 ```{r, eval=FALSE}
-#write.vcf(pinf_mt, file="good_variants.vcf")
+write.vcf(chrom, file="good_variants.vcf", mask=TRUE)
 ```
 
 
