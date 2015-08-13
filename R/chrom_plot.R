@@ -56,7 +56,7 @@ chromo <- function(x = x,
   #
   if(length( x@var.info$DP[x@var.info$mask])>0 & DP  ){brows <- brows+1} # dp
   if(length( x@var.info$MQ[x@var.info$mask])>0 & MQ  ){brows <- brows+1} # mq
-  if(length(x@vcf.fix$QUAL[x@var.info$mask])>0 & QUAL){brows <- brows+1} # qual
+  if(length(x@vcf@fix[,'QUAL'][x@var.info$mask])>0 & QUAL){brows <- brows+1} # qual
   #
   if(length( x@var.info$hwe.Da[x@var.info$mask])>0 & HWE ){brows <- brows+1} # HWE
   #
@@ -142,10 +142,10 @@ chromo <- function(x = x,
          axes = FALSE,
          frame.plot = TRUE,
          ylab = "",
-         ...,
+         ...
     )
     #    plot(x = x@vcf.fix$POS[x@var.info$mask],
-    points(x = x@vcf.fix$POS[x@var.info$mask],
+    points(x = x@var.info$POS[x@var.info$mask],
            y = x@var.info$hwe.chisq[x@var.info$mask],
            pch = 20,
            col = paste(colv[x@var.info$mask], dot.alpha, sep="")
@@ -169,13 +169,13 @@ chromo <- function(x = x,
          axes = FALSE, 
          frame.plot = TRUE, 
          ylab = "",
-         ...,
+         ...
     )
-    points(x = x@vcf.fix$POS[x@var.info$mask],
+    points(x = x@var.info$POS[x@var.info$mask],
            y = x@var.info$DP[x@var.info$mask],
            pch = 20,
            #         xlim = c(1,x@len),
-           col = paste("#0080ff", dot.alpha, sep=""), 
+           col = paste("#0080ff", dot.alpha, sep="")
     )
     axis(side = 2, las = 2)
     title(main = "Read depth (DP)", line = -1)
@@ -193,12 +193,12 @@ chromo <- function(x = x,
            frame.plot = TRUE,
            ylab="",
            type='n',
-           ...,
+           ...
       )
-      points(x = x@vcf.fix$POS[x@var.info$mask],
+      points(x = x@var.info$POS[x@var.info$mask],
              y = x@var.info$MQ[x@var.info$mask],
              pch = 20, 
-             col = paste("#3CB371", dot.alpha, sep=""), 
+             col = paste("#3CB371", dot.alpha, sep="")
       )
       axis(side = 2, las = 2)
       title(main = "Mapping quality (MQ)", line = -1)
@@ -211,26 +211,26 @@ chromo <- function(x = x,
     }
   }
   #
-  if(length(x@vcf.fix$QUAL[x@var.info$mask])>0 & QUAL){ # qual
+  if(length(x@vcf@fix[x@var.info$mask, 'QUAL'])>0 & QUAL){ # qual
     #    plot(x@vcf.fix[x@mask,2], x@vcf.fix[x@mask,6], pch=20, col="#80008022", axes=F, frame.plot=T, ylab="", ...)
     plot(x = c(0, x@len),
-         y = c(min(x@vcf.fix$QUAL[x@var.info$mask], na.rm=TRUE), 
-               max(x@vcf.fix$QUAL[x@var.info$mask], na.rm=TRUE)),
+         y = c(min(x@vcf@fix[x@var.info$mask, 'QUAL'], na.rm=TRUE), 
+               max(x@vcf@fix[x@var.info$mask, 'QUAL'], na.rm=TRUE)),
          axes = FALSE,
          frame.plot = TRUE,
          ylab = "",
          type = 'n',
-         ...,
+         ...
     )
-    points(x = x@vcf.fix$POS[x@var.info$mask],
-           y = x@vcf.fix$QUAL[x@var.info$mask],
+    points(x = x@var.info$POS[x@var.info$mask],
+           y = x@vcf@fix[x@var.info$mask, 'QUAL'],
            pch = 20,
-           col = paste("#800080", dot.alpha, sep=""),  
+           col = paste("#800080", dot.alpha, sep="")
     )
     axis(side = 2, las = 2)
     title(main = "QUAL", line = -1)
     #    boxplot(as.numeric(x@vcf.fix[x@mask,6]), axes=FALSE, frame.plot=T, col="#800080")
-    boxplot(as.numeric(x@vcf.fix$QUAL[x@var.info$mask]), axes = FALSE, frame.plot = TRUE, col = "#800080")
+    boxplot(as.numeric(x@vcf@fix[x@var.info$mask, 'QUAL']), axes = FALSE, frame.plot = TRUE, col = "#800080")
   }
   #
   #
@@ -243,12 +243,12 @@ chromo <- function(x = x,
          frame.plot = TRUE,
          ylab = "",
          type = 'n',
-         ...,
+         ...
     )
-    points(x = x@vcf.fix$POS[x@var.info$mask],
+    points(x = x@var.info$POS[x@var.info$mask],
            y = x@var.info$Ne[x@var.info$mask],
            pch = 20, 
-           col = paste("#00008B", dot.alpha, sep=""),
+           col = paste("#00008B", dot.alpha, sep="")
     )
     title(main = "Ne", line = -1)
     axis(side = 2, las = 2)
@@ -264,12 +264,12 @@ chromo <- function(x = x,
          frame.plot = TRUE,
          ylab="",
          type = 'n',
-         ...,
+         ...
     )
-    points(x = x@vcf.fix$POS[x@var.info$mask],
+    points(x = x@var.info$POS[x@var.info$mask],
            y = x@var.info$theta_pi[x@var.info$mask],
            pch = 20,
-           col = paste("#FF8C00", dot.alpha, sep=""),
+           col = paste("#FF8C00", dot.alpha, sep="")
     )
     #    title(main=expression(paste(theta[pi], pi, "Theta_pi")), line=-1)
     title(main = "Theta_pi", line = -1)
@@ -287,12 +287,12 @@ chromo <- function(x = x,
          frame.plot = TRUE,
          ylab="",
          type = 'n',
-         ...,
+         ...
     )
-    points(x = x@vcf.fix$POS[x@var.info$mask],
+    points(x = x@var.info$POS[x@var.info$mask],
            y = x@var.info$tajimas_d[x@var.info$mask],
            pch = 20,
-           col = paste("#006400", dot.alpha, sep=""),
+           col = paste("#006400", dot.alpha, sep="")
     )
     abline(0, 0, lty = 2)
     title(main = "Tajima's D", line = -1)
@@ -310,12 +310,12 @@ chromo <- function(x = x,
          frame.plot = TRUE,
          ylab="",
          type = 'n',
-         ...,
+         ...
     )
-    points(x = x@vcf.fix$POS[x@var.info$mask],
+    points(x = x@var.info$POS[x@var.info$mask],
            y = x@var.info$faywu_h[x@var.info$mask],
            pch = 20, 
-           col = paste("#8B008B", dot.alpha, sep=""),
+           col = paste("#8B008B", dot.alpha, sep="")
     )
     abline(0, 0, lty = 2)
     title(main = "Fay and Wu's H", line = -1)

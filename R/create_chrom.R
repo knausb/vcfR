@@ -152,7 +152,7 @@ create_chrom <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
     }
   }
   
-  x@var.info <- data.frame( CHROM = x@vcf@fix[,"CHROM"] , POS = x@vcf@fix[,"POS"] )
+  x@var.info <- data.frame( CHROM = x@vcf@fix[,"CHROM"] , POS = as.integer(x@vcf@fix[,"POS"]) )
   mq <- getINFO(x, element="MQ")
   if( length(mq) > 0 ){ x@var.info$MQ <- mq }
   dp <- getDP(x)

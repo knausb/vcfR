@@ -39,6 +39,7 @@ test_that("We can create a Chrom, no sequence or annotation",{
   expect_is(chrom@seq, "NULL")
   expect_is(chrom@ann, "data.frame")
   expect_is(chrom@var.info, "data.frame")
+  expect_is(chrom@var.info[,'POS'], "integer")
   
   expect_equal(ncol(chrom@vcf@fix), 8)
   expect_equal(nrow(chrom@vcf@fix) > 0, TRUE)

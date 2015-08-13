@@ -107,6 +107,68 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// seq_to_rects
+Rcpp::IntegerMatrix seq_to_rects(Rcpp::CharacterVector seq, std::string targets);
+RcppExport SEXP vcfR_seq_to_rects(SEXP seqSEXP, SEXP targetsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type seq(seqSEXP);
+    Rcpp::traits::input_parameter< std::string >::type targets(targetsSEXP);
+    __result = Rcpp::wrap(seq_to_rects(seq, targets));
+    return __result;
+END_RCPP
+}
+// window_init
+Rcpp::DataFrame window_init(int window_size, int max_bp);
+RcppExport SEXP vcfR_window_init(SEXP window_sizeSEXP, SEXP max_bpSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< int >::type window_size(window_sizeSEXP);
+    Rcpp::traits::input_parameter< int >::type max_bp(max_bpSEXP);
+    __result = Rcpp::wrap(window_init(window_size, max_bp));
+    return __result;
+END_RCPP
+}
+// windowize_fasta
+Rcpp::DataFrame windowize_fasta(Rcpp::DataFrame wins, Rcpp::CharacterVector seq);
+RcppExport SEXP vcfR_windowize_fasta(SEXP winsSEXP, SEXP seqSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type wins(winsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type seq(seqSEXP);
+    __result = Rcpp::wrap(windowize_fasta(wins, seq));
+    return __result;
+END_RCPP
+}
+// windowize_variants
+Rcpp::DataFrame windowize_variants(Rcpp::DataFrame windows, Rcpp::DataFrame variants);
+RcppExport SEXP vcfR_windowize_variants(SEXP windowsSEXP, SEXP variantsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type windows(windowsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type variants(variantsSEXP);
+    __result = Rcpp::wrap(windowize_variants(windows, variants));
+    return __result;
+END_RCPP
+}
+// windowize_annotations
+Rcpp::DataFrame windowize_annotations(Rcpp::DataFrame wins, Rcpp::NumericVector ann_starts, Rcpp::NumericVector ann_ends, int chrom_length);
+RcppExport SEXP vcfR_windowize_annotations(SEXP winsSEXP, SEXP ann_startsSEXP, SEXP ann_endsSEXP, SEXP chrom_lengthSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type wins(winsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type ann_starts(ann_startsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type ann_ends(ann_endsSEXP);
+    Rcpp::traits::input_parameter< int >::type chrom_length(chrom_lengthSEXP);
+    __result = Rcpp::wrap(windowize_annotations(wins, ann_starts, ann_ends, chrom_length));
+    return __result;
+END_RCPP
+}
 // vcf_stats_gz
 Rcpp::NumericVector vcf_stats_gz(std::string x);
 RcppExport SEXP vcfR_vcf_stats_gz(SEXP xSEXP) {
@@ -169,67 +231,5 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
     write_fasta(seq, seqname, filename, rowlength, verbose);
     return R_NilValue;
-END_RCPP
-}
-// seq_to_rects
-Rcpp::IntegerMatrix seq_to_rects(Rcpp::CharacterVector seq, std::string targets);
-RcppExport SEXP vcfR_seq_to_rects(SEXP seqSEXP, SEXP targetsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type seq(seqSEXP);
-    Rcpp::traits::input_parameter< std::string >::type targets(targetsSEXP);
-    __result = Rcpp::wrap(seq_to_rects(seq, targets));
-    return __result;
-END_RCPP
-}
-// window_init
-Rcpp::DataFrame window_init(int window_size, int max_bp);
-RcppExport SEXP vcfR_window_init(SEXP window_sizeSEXP, SEXP max_bpSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< int >::type window_size(window_sizeSEXP);
-    Rcpp::traits::input_parameter< int >::type max_bp(max_bpSEXP);
-    __result = Rcpp::wrap(window_init(window_size, max_bp));
-    return __result;
-END_RCPP
-}
-// windowize_fasta
-Rcpp::DataFrame windowize_fasta(Rcpp::DataFrame wins, Rcpp::CharacterVector seq);
-RcppExport SEXP vcfR_windowize_fasta(SEXP winsSEXP, SEXP seqSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type wins(winsSEXP);
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type seq(seqSEXP);
-    __result = Rcpp::wrap(windowize_fasta(wins, seq));
-    return __result;
-END_RCPP
-}
-// windowize_variants
-Rcpp::DataFrame windowize_variants(Rcpp::DataFrame windows, Rcpp::DataFrame variants);
-RcppExport SEXP vcfR_windowize_variants(SEXP windowsSEXP, SEXP variantsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type windows(windowsSEXP);
-    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type variants(variantsSEXP);
-    __result = Rcpp::wrap(windowize_variants(windows, variants));
-    return __result;
-END_RCPP
-}
-// windowize_annotations
-Rcpp::DataFrame windowize_annotations(Rcpp::DataFrame wins, Rcpp::NumericVector ann_starts, Rcpp::NumericVector ann_ends, int chrom_length);
-RcppExport SEXP vcfR_windowize_annotations(SEXP winsSEXP, SEXP ann_startsSEXP, SEXP ann_endsSEXP, SEXP chrom_lengthSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type wins(winsSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type ann_starts(ann_startsSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type ann_ends(ann_endsSEXP);
-    Rcpp::traits::input_parameter< int >::type chrom_length(chrom_lengthSEXP);
-    __result = Rcpp::wrap(windowize_annotations(wins, ann_starts, ann_ends, chrom_length));
-    return __result;
 END_RCPP
 }

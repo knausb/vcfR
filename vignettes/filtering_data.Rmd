@@ -4,7 +4,7 @@ author: "Brian J. Knaus"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to vcfR}
+  %\VignetteIndexEntry{Filtering data}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -21,9 +21,18 @@ As in other vignettes, we begin by loading the example data.
 
 ```{r}
 library(vcfR)
-#data(vcfR_example)
-#pinf_mt <- create_chrom(name='pinf_mt', vcf=pinf_vcf, seq=pinf_dna, ann=pinf_gff, verbose=FALSE)
-#pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE, win.size=1e3)
+vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
+seq_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
+gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
+
+vcf <- read.vcf(vcf_file, verbose = FALSE)
+dna <- ape::read.dna(seq_file, format = "fasta")
+gff <- read.table(gff_file, sep="\t")
+
+chrom <- create_chrom(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=TRUE)
+chrom <- masker(chrom, min_DP = 300, max_DP = 700)
+chrom <- proc_chrom(chrom, verbose = TRUE)
+
 ```
 
 
@@ -47,7 +56,7 @@ We can use the head() function to see what sort of information is contained in o
 
 
 ```{r}
-#head(pinf_mt)
+head(chrom)
 ```
 
 
@@ -57,7 +66,7 @@ Because it is a part of the vcf file definition, it is not documented in the met
 
 
 ```{r}
-#grep("QUAL", pinf_mt@vcf.meta, value=T)
+grep("QUAL", chrom@vcf@meta, value=T)
 ```
 
 

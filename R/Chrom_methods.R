@@ -39,8 +39,8 @@ setMethod(
     print("\nVCF fixed data:\n")
     print("Last column (info) omitted.\n")
     print("\nVCF variable data:\n")
-    print(paste("Columns: ", ncol(x@vcf.gt), "\n"))
-    print(paste("Rows: ", nrow(x@vcf.gt), "\n"))
+    print(paste("Columns: ", ncol(x@vcf@gt), "\n"))
+    print(paste("Rows: ", nrow(x@vcf@gt), "\n"))
     print("(First column is format.)\n")
     print("\nAnnotation data:\n")
     if(length(x@ann)>0){
@@ -73,7 +73,7 @@ setMethod(
     #    print(as.character(x@vcf.fix[1,1]))
     #    cat("\n")
     #    cat("Sample names: \n")
-    temp <- names(x@vcf.gt)[-1]
+    temp <- names(x@vcf@gt)[-1]
     temp
   }
 )
@@ -94,23 +94,23 @@ setMethod(
     print('', quote=FALSE)
             #1234567890123456789012345678901234567890
     print("*****     Sample names (Chrom)     *****")
-    print(names(x@vcf.gt)[-1])
+    print(colnames(x@vcf@gt)[-1])
     print('', quote=FALSE)
             #1234567890123456789012345678901234567890
     print("*****    Vcf fixed data (Chrom)    *****")
-    print(x@vcf.fix[1:6,1:7])
+    print(x@vcf@fix[1:6,1:7])
     print('', quote=FALSE)
     print("INFO column has been suppressed, first INFO record:")
-    print(unlist(strsplit(as.character(x@vcf.fix$INFO[1]), split=";")))
+    print(unlist(strsplit(as.character(x@vcf@fix[1, 'INFO']), split=";")))
     print('', quote=FALSE)
             #1234567890123456789012345678901234567890
     print("*****   Vcf genotype data (Chrom)  *****")
-    if(ncol(x@vcf.gt)>=6){
+    if(ncol(x@vcf@gt)>=6){
               #1234567890123456789012345678901234567890
       print("*****     First 6 columns      *********")
-      print(x@vcf.gt[1:6,1:6])
+      print(x@vcf@gt[1:6,1:6])
     } else {
-      print(x@vcf.gt[1:6,])
+      print(x@vcf@gt[1:6,])
     }
     print('', quote=FALSE)
             #1234567890123456789012345678901234567890
@@ -149,8 +149,8 @@ setMethod(
 
 #    if( length(DP) < 0 )
       
-#    if( nrow(x@win.info ) > 0 ){
-    if( na.omit(x@win.info$variants) > 0 ){
+    if( nrow(x@win.info ) > 0 ){
+#    if( na.omit(x@win.info$variants) > 0 ){
       SNPS <- x@win.info$variants/x@win.info$length 
     } else {
       SNPS <- NULL
@@ -326,7 +326,7 @@ snp.win <- function(x){
   snp[,1] <- 1:nrow(snp)
   snp[,2] <- x@windows[,1]
   snp[,3] <- x@windows[,2]
-  vcf <- x@vcf.fix$POS[x@var.info$mask]
+  vcf <- x@var.info$POS[x@var.info$mask]
   #
   count.snps <- function(x){
     vcf2 <- vcf[vcf >= x[2] & vcf <= x[3]]
@@ -343,10 +343,10 @@ snp.win <- function(x){
 ##### ##### vcf functions #####
 
 vcf.fix2gt.m <- function(x){
-  snames <- names(x@vcf.gt)[-1]
-  pos <- paste(x@vcf.fix[,1], x@vcf.fix[,2], sep="_")
+  snames <- names(x@vcf@gt)[-1]
+  pos <- paste(x@vcf@fix[,1], x@vcf@fix[,2], sep="_")
   #  pos <- x@vcf.fix[,2]
-  x1 <- as.matrix(x@vcf.gt)
+  x1 <- as.matrix(x@vcf@gt)
   nsamp <- ncol(x1) - 1
   #
   x1 <- cbind(unlist(lapply(strsplit(x1[,1], ":"), function(x){grep("GT", x)})),x1)
