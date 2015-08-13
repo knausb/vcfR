@@ -7,8 +7,7 @@
 \usage{
 heatmap.bp(x, cbarplot = TRUE, rbarplot = TRUE, legend = TRUE,
   clabels = TRUE, rlabels = TRUE, na.rm = TRUE, scale = c("row",
-  "column", "none"), col.ramp = colorRampPalette(c("red", "yellow",
-  "#008000"))(100), ...)
+  "column", "none"), col.ramp = viridis::viridis(n = 100, alpha = 1), ...)
 }
 \arguments{
 \item{x}{a numeric matrix.}
@@ -39,8 +38,17 @@ The function heatmap.bp creates a heatmap from a numeric matrix with optional ba
 }
 \examples{
 library(vcfR)
+
+x  <- as.matrix(mtcars)
+
+heatmap.bp(x)
+heatmap.bp(x, scale="col")
+# Use an alternate color ramp
+heatmap.bp(x, col.ramp = colorRampPalette(c("red", "yellow", "#008000"))(100))
+library(viridis)
+heatmap.bp(x, col.ramp = viridis(n=10))
 }
 \seealso{
-heatmap, image, heatmap2 in library(gplots).
+\code{\link[stats]{heatmap}}, \code{\link[graphics]{image}}, heatmap2 in \href{https://cran.r-project.org/web/packages/gplots/index.html}{gplots}.
 }
 
