@@ -1,9 +1,11 @@
 # create_chrom tests.
 
-# detach(package:vcfR, unload=T)
+# 
+detach(package:vcfR, unload=T)
 library(vcfR)
 context("create_chrom functions")
 
+#library(testthat)
 #data(vcfR_example)
 
 test_that("we can create null a Chrom",{
@@ -37,14 +39,16 @@ test_that("We can create a Chrom, no sequence or annotation",{
   expect_is(chrom@vcf, "vcfR")
   expect_is(chrom@seq, "NULL")
   expect_is(chrom@ann, "data.frame")
-
+  expect_is(chrom@var.info, "data.frame")
+  
   expect_equal(ncol(chrom@vcf@fix), 8)
   expect_equal(nrow(chrom@vcf@fix) > 0, TRUE)
   expect_equal(length(chrom@seq), 0)
   expect_equal(ncol(chrom@ann), 9)
   expect_equal(nrow(chrom@ann), 0)
-  expect_equal(ncol(chrom@var.info), 2)
+  expect_equal(ncol(chrom@var.info), 4)
   expect_equal(nrow(chrom@var.info)>0, TRUE)
+
 })
 
 
@@ -54,7 +58,8 @@ test_that("We can create a Chrom, no annotation",{
   expect_is(chrom@vcf, "vcfR")
   expect_is(chrom@seq, "DNAbin")
   expect_is(chrom@ann, "data.frame")
-
+  expect_is(chrom@var.info, "data.frame")
+  
   expect_equal(ncol(chrom@vcf@fix), 8)
   expect_equal(nrow(chrom@vcf@fix) > 0, TRUE)
   expect_equal(length(chrom@seq)>0, TRUE)
@@ -69,7 +74,8 @@ test_that("We can create a Chrom, no sequence",{
   expect_is(chrom@vcf, "vcfR")
   expect_is(chrom@seq, "NULL")
   expect_is(chrom@ann, "data.frame")
-
+  expect_is(chrom@var.info, "data.frame")
+  
   expect_equal(ncol(chrom@vcf@fix), 8)
   expect_equal(nrow(chrom@vcf@fix) > 0, TRUE)
   expect_equal(length(chrom@seq), 0)
@@ -84,7 +90,8 @@ test_that("We can create a Chrom",{
   expect_is(chrom@vcf, "vcfR")
   expect_is(chrom@seq, "DNAbin")
   expect_is(chrom@ann, "data.frame")
-
+  expect_is(chrom@var.info, "data.frame")
+  
   expect_equal(ncol(chrom@vcf@fix), 8)
   expect_equal(nrow(chrom@vcf@fix) > 0, TRUE)
   expect_equal(length(chrom@seq)>0, TRUE)
@@ -96,8 +103,29 @@ test_that("We can create a Chrom",{
 ##### ##### ##### ##### #####
 
 
-chrom <- masker(chrom)
+chrom <- create_chrom(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
+
+chrom <- masker(chrom, min_DP = 300, max_DP = 700)
+
+test_that("We created a mask",{
+  expect_true( sum(chrom@var.info[,'mask']) < nrow(chrom@var.info) )
+})
 
 
+
+
+seq_to_rects(chrom)
+
+
+chrom <- proc_chrom(chrom)
+
+
+
+test_that("We processed the Chrom object",{
+  expect_true( length(chrom@seq.info) > 0 )
+  
+  expect_equal(ncol(chrom@win.info), 7)
+  
+})
 
 

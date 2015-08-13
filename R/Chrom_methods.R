@@ -143,31 +143,43 @@ setMethod(
   f= "plot",
   signature= "Chrom",
   definition=function (x,y,...){
+    DP <- x@var.info$DP[x@var.info$mask]
+    MQ <- x@var.info$MQ[x@var.info$mask]
+    QUAL <- as.numeric(x@vcf@fix[x@var.info$mask, 'QUAL'])
+
+    if( length(DP) <0)
+    if( nrow(x@win.info ) > 0){ 
+      SNPS <- x@win.info$variants/x@win.info$length 
+    } else {
+      SNPS <- NULL
+    }
+
+    
     par(mfrow=c(2,2))
-    if(sum(!is.na(x@var.info$DP[x@var.info$mask])) >= 1){
-      hist(x@var.info$DP[x@var.info$mask], col=3, main="Read depth (DP)", xlab="")
-      rug(x@var.info$DP[x@var.info$mask])
+    if( length(DP) > 0 ){
+      hist(DP, col=3, main="Read depth (DP)", xlab="")
+      rug(DP)
     } else {
       plot(1:2,1:2, type='n')
       title(main="No depths found")
     }
-    if(sum(!is.na(x@var.info$MQ[x@var.info$mask])) >= 1){
-      hist(x@var.info$MQ[x@var.info$mask], col=4, main="Mapping quality (MQ)", xlab="")
-      rug(x@var.info$MQ[x@var.info$mask])
+    if( length(MQ) > 0 ){
+      hist(MQ, col=4, main="Mapping quality (MQ)", xlab="")
+      rug(MQ)
     } else {
       plot(1:2,1:2, type='n')
       title(main="No mapping qualities found")
     }
-    if(sum(!is.na(x@vcf.fix$QUAL[x@var.info$mask])) >= 1){
-      hist(x@vcf.fix$QUAL[x@var.info$mask], col=5, main="Quality (QUAL)", xlab="")
-      rug(x@vcf.fix$QUAL[x@var.info$mask])
+    if( length(QUAL) > 0 ){
+      hist(QUAL, col=5, main="Quality (QUAL)", xlab="")
+      rug(QUAL)
     } else {
       plot(1:2,1:2, type='n')
       title(main="No qualities found")
     }
-    if(length(x@win.info$variants)>0){
-      hist(x@win.info$variants/x@win.info$length, col=6, main="Variant count (per window)", xlab="")
-      rug(x@win.info$variants/x@win.info$length)
+    if( length(SNPS) > 0 ){
+      hist( SNPS, col=6, main="Variant count (per window)", xlab="")
+      rug( SNPS )
     } else {
       plot(1:2,1:2, type='n')
       title(main="No SNP densities found")

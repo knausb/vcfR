@@ -152,10 +152,13 @@ create_chrom <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
     }
   }
   
-  x@var.info <- data.frame( POS = x@vcf@fix[,"POS"] )
-  x@var.info$DP <- getDP(x)
-#  x <- setDP(x)
-  
+  x@var.info <- data.frame( CHROM = x@vcf@fix[,"CHROM"] , POS = x@vcf@fix[,"POS"] )
+  mq <- getINFO(x, element="MQ")
+  if( length(mq) > 0 ){ x@var.info$MQ <- mq }
+  dp <- getDP(x)
+  if( length(dp) > 0 ){ x@var.info$DP <- dp }
+  x@var.info$mask <- TRUE
+
   return(x)
 }
 
@@ -306,4 +309,19 @@ getDP <- function(x){
   x@var.info[,"DP"] <- rowSums(dp, na.rm = TRUE)
   rowSums(dp, na.rm = TRUE)
 }
+
+
+#' @rdname create_chrom
+#' @export
+#' @param element element to extract from Chrom object
+#' @aliases getINFO
+getINFO <- function(x, element="MQ"){
+  regex <- paste(element, "=", sep="")
+  INFO <- strsplit(x@vcf@fix[,'INFO'], split=";")
+  INFO <- unlist(lapply(INFO, grep, pattern=regex, value=T))
+  INFO <- as.numeric(unlist(lapply(strsplit(INFO, "="), function(x){x[2]})))
+  return(INFO)
+}
+
+
 

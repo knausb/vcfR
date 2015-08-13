@@ -8,6 +8,7 @@
 \alias{getCHROM}
 \alias{getDP}
 \alias{getFIX}
+\alias{getINFO}
 \alias{getPOS}
 \alias{getQUAL}
 \alias{seq2chrom}
@@ -32,6 +33,8 @@ getPOS(x)
 getQUAL(x)
 
 getDP(x)
+
+getINFO(x, element = "MQ")
 }
 \arguments{
 \item{name}{a name for the chromosome (for plotting purposes)}
@@ -47,6 +50,8 @@ getDP(x)
 \item{x}{an object of class Chrom}
 
 \item{gff}{a data.frame containing annotation data in the gff format}
+
+\item{element}{element to extract from Chrom object}
 }
 \description{
 Creates and populates an object of class Chrom.
