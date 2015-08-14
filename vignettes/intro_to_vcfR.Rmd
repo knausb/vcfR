@@ -26,7 +26,7 @@ This later choice results in the creation of files which are largely redundant w
 Reading in of the [vcf](http://www.1000genomes.org/node/101) file can be performed with a function in vcfR.
 
 
-```{r, eval=FALSE}
+```{r}
 library(vcfR)
 vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
 vcf <- read.vcf(vcf_file, verbose = FALSE)
@@ -40,7 +40,7 @@ Genomic reference sequence files are typically in fasta format files.
 These can be read in using the package ape.
 
 
-```{r, eval=FALSE}
+```{r}
 library(ape)
 seq_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
 dna <- ape::read.dna(seq_file, format = "fasta")
@@ -50,7 +50,7 @@ dna <- ape::read.dna(seq_file, format = "fasta")
 Annotation files (e.g., [gff](http://sequenceontology.org/resources/gff3.html)), files which contain coordinates of features such as start and end points of genes, are tabular and can be read in with typical R functions.
 
 
-```{r, eval=FALSE}
+```{r}
 gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
 gff <- read.table(gff_file, sep="\t")
 ```
@@ -134,7 +134,7 @@ This can be done with the plot function.
 
 
 
-```{r, fig.height=6, fig.width=6, dev='Cairo_png'}
+```{r, fig.height=6, fig.width=6}
 plot(chrom)
 ```
 
@@ -161,7 +161,7 @@ This maintains the geometry of the data matrices throughout the analyisis and al
 
 
 
-```{r, fig.height=6, fig.width=6, dev='Cairo_png'}
+```{r, fig.height=6, fig.width=6}
 chrom <- masker(chrom)
 plot(chrom)
 ```
@@ -189,7 +189,7 @@ This function is rather experimental and some of the summaries may not be quite 
 
 
 
-```{r, fig.height=6, fig.width=6, dev='Cairo_png'}
+```{r, fig.height=6, fig.width=6}
 chrom <- proc_chrom(chrom, verbose=TRUE)
 plot(chrom)
 ```
@@ -211,7 +211,7 @@ The function **chromoqc()** uses the R function layout to make composite plots o
 
 
 
-```{r, fig.height=6, fig.width=6, dev='Cairo_png'}
+```{r, fig.height=6, fig.width=6}
 chromoqc(chrom)
 ```
 
@@ -224,7 +224,7 @@ Variants of this function, which are actually all wrappers for the funciton **ch
 
 
 
-```{r, fig.height=6, fig.width=6, dev='Cairo_png'}
+```{r, fig.height=6, fig.width=6}
 chromohwe(chrom, dot.alpha='ff')
 ```
 
@@ -239,7 +239,7 @@ Here we simulate data as an example.
 
 
 
-```{r, fig.height=6, fig.width=6, dev='Cairo_png'}
+```{r, fig.height=6, fig.width=6}
 set.seed(10)
 x1 <- as.integer(runif(n=20, min=1, max=chrom@len))
 y1 <- runif(n=length(x1), min=1, max=100)
@@ -268,7 +268,7 @@ We can then visualize this data with a heatmap.
 
 
 
-```{r, fig.height=6, fig.width=6, dev='Cairo_png'}
+```{r, fig.height=6, fig.width=6}
 heatmap.bp(gq)
 ```
 
@@ -311,7 +311,7 @@ And create another heatmap.
 
 
 
-```{r, fig.height=6, fig.width=6, dev='Cairo_png'}
+```{r, fig.height=6, fig.width=6}
 heatmap.bp(gqwz)
 ```
 
