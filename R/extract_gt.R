@@ -144,7 +144,8 @@ extract_haps <- function(x, mask=FALSE, gt_split="|",verbose=TRUE){
     if(length(mask) == 1 && mask==TRUE){
       x <- chrom_to_vcfR(x, use.mask = TRUE)
     } else {
-      x <- chrom_to_vcfR(x)
+#      x <- chrom_to_vcfR(x)
+      x <- x@vcf
     }
   }
   
@@ -161,7 +162,7 @@ extract_haps <- function(x, mask=FALSE, gt_split="|",verbose=TRUE){
 #                                  int vebosity) {
   
   
-  haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', x@fix$REF, x@fix$ALT, gt, gt_split, 1)
+  haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', x@fix[,'REF'], x@fix[,'ALT'], gt, gt_split, 1)
   haps
 }
 

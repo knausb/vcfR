@@ -62,10 +62,16 @@ test_that("extract_indels works",{
 })
 
 
-test_that("extract_haps works",{
-#  .Call('vcfR_extract_haps', PACKAGE = 'vcfR', ref, alt, gt, vebosity)
-#  haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', pinf_vcf@fix$REF, pinf_vcf@fix$ALT, gt, 1)
+test_that("extract_haps compiled code works",{
   haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', vcf@fix[,'REF'], vcf@fix[,'ALT'], gt, '/', 0)
+  expect_is(haps, "matrix")
+  expect_equal(ncol(haps), 2 * ncol(gt))
+  expect_equal(nrow(haps), nrow(gt))
+})
+
+
+test_that("extract_haps R code works",{
+  haps <- extract_haps(chrom, gt_split="/", verbose = FALSE)
   expect_is(haps, "matrix")
   expect_equal(ncol(haps), 2 * ncol(gt))
   expect_equal(nrow(haps), nrow(gt))
