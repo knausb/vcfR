@@ -189,7 +189,8 @@ write_fasta <- function(x, file = "", gt_split = "|", rowlength=80, tolower=TRUE
   
   for(i in 1:ncol(haps)){
     seq <- as.character(x@seq)[1,]
-    seq[x@vcf.fix$POS] <- haps[,i]
+#    seq[x@vcf.fix$POS] <- haps[,i]
+    seq[x@var.info$POS] <- haps[,i]
     invisible(.Call('vcfR_write_fasta', PACKAGE = 'vcfR', seq, colnames(haps)[i], file, rowlength, as.integer(verbose)))
   }
   
