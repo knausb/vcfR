@@ -37,7 +37,7 @@
 masker <- function(x, min_QUAL=1, min_DP=1, max_DP=1e4, min_MQ=20, max_MQ=100, ...){
   quals <- getQUAL(x)
 #  quals  <- x@vcf.fix$QUAL
-  info <- x@var.info[,grep("DP|MQ",names(x@var.info))]
+  info <- x@var.info[,grep("DP|MQ",names(x@var.info)), drop=FALSE]
   mask <- rep(TRUE, times=nrow(info))
 
   # Mask on QUAL
