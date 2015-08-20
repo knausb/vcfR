@@ -194,7 +194,8 @@ is_polymorphic <- function(x, na.omit=FALSE){
 #' 
 #' @export
 is_biallelic <- function(x){
-  x <- as.character(x@fix$ALT)
+#  x <- as.character(x@fix$ALT)
+  x <- as.character(x@fix[,'ALT'])
   x <- strsplit(x, split=",")
   lapply(x, length) == 1
 }
