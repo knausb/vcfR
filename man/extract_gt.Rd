@@ -5,6 +5,7 @@
 \alias{extract_haps}
 \alias{extract_indels}
 \alias{extract_info}
+\alias{get.alleles}
 \alias{is_biallelic}
 \alias{is_polymorphic}
 \title{Extract elements from the GT section of a vcf format object}
@@ -20,6 +21,8 @@ extract_haps(x, mask = FALSE, gt_split = "|", verbose = TRUE)
 is_polymorphic(x, na.omit = FALSE)
 
 is_biallelic(x)
+
+get.alleles(x, split = "/", na.rm = FALSE, as.numeric = FALSE)
 }
 \arguments{
 \item{x}{An object of class Chrom, vcfR or data.frame}
@@ -37,6 +40,10 @@ is_biallelic(x)
 \item{verbose}{should verbose output be generated}
 
 \item{na.omit}{logical to omit missing data}
+
+\item{split}{character passed to strsplit to split the genotype into alleles}
+
+\item{na.rm}{logical indicating whether to remove NAs}
 }
 \description{
 Extract elements from the GT section of a vcf format object

@@ -202,6 +202,25 @@ is_biallelic <- function(x){
 
 
 
+#' @rdname extract_gt
+#' @aliases get.alleles
+#' 
+#' @param split character passed to strsplit to split the genotype into alleles
+#' @param na.rm logical indicating whether to remove NAs
+#' 
+#' @export
+get.alleles <- function( x, split="/", na.rm = FALSE, as.numeric = FALSE ){
+  x <- unlist(strsplit(x, split))
+  if(na.rm == TRUE){
+    x <- x[ x != "NA" ]
+  }
+  if(as.numeric == TRUE){
+    x <- as.numeric(x)
+  }
+  x <- unique(x)
+  x
+}
+
 
 
 
