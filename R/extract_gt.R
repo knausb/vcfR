@@ -1,7 +1,7 @@
 #' @title Extract elements from the GT section of a vcf format object
 #' @rdname extract_gt
 #' 
-#' @param x An object of class Chrom, vcfR or data.frame 
+#' @param x An object of class Chrom or vcfR 
 #' @param element element to extract from vcf genotype data. Common options include "DP", "GT" and "GQ"
 #' @param mask a logical indicating whether to apply the mask (TRUE) or return all variants (FALSE). Alternatively, a vector of logicals may be provided.
 # @param as.matrix attempt to recast as a numeric matrix
@@ -13,18 +13,19 @@
 #' 
 # @export
 #' 
-
-
 #' @rdname extract_gt
 #' 
 #' @param as.numeric Logical, should the matrix be converted to numerics
 #' @export
 extract.gt <- function(x, element="GT", mask=FALSE, as.numeric=FALSE){
-  if(class(x) != "Chrom" & class(x) != "vcfR" & class(x) != "data.frame"){
-    stop("Expected an object of class Chrom, vcfR or data.frame")
+
+  # Validate that we have an expected data structure
+  if( class(x) != "Chrom" & class(x) != "vcfR" ){
+    stop( "Expected an object of class Chrom or vcfR" )
   }
   
-  if(class(x) == "vcfR" | class(x) == "data.frame"){
+  # Catch unreasonable mask specification.
+  if(class(x) == "vcfR"){
     if(length(mask) == 1 && mask == TRUE){
       # This condition does not appear to make 
       # sense and should be overridden.
@@ -32,38 +33,34 @@ extract.gt <- function(x, element="GT", mask=FALSE, as.numeric=FALSE){
     }
   }
   
+  # If of class Chrom, extract the vcf
   if(class(x) == "Chrom"){
     tmpMask <- x@var.info$mask
-#    x <- chrom_to_vcfR(x)
     x <- x@vcf
   }
-  
+
+  # If a mask was specified in the call,
+  # override the one from var.info
   if(length(mask) > 1){
     tmpMask <- mask
     mask <- TRUE
   }
 
+  # If of class vcfR, call compiled code to extract field.
   if(class(x) == "vcfR"){
-#    outM <- .Call('vcfR_extractGT2NM', PACKAGE = 'vcfR', x@gt, element)
-#    if(names(x@gt)[1] != "FORMAT"){
     if(colnames(x@gt)[1] != "FORMAT"){
       stop("First column is not named 'FORMAT', this is essential information.")
     }
+#    .Call('vcfR_extract_haps', PACKAGE = 'vcfR', ref, alt, gt, gt_split, verbose)
     outM <- .Call('vcfR_extract_GT_to_CM', PACKAGE = 'vcfR', x@gt, element)
   }
-  
-  if(class(x) == "data.frame"){
-    if(names(x)[1] != "FORMAT"){
-      stop("First column is not named 'FORMAT', this is essential information.")
-    }
-#    outM <- .Call('vcfR_extractGT2NM', PACKAGE = 'vcfR', x, element)
-    outM <- .Call('vcfR_extract_GT_to_CM', PACKAGE = 'vcfR', x, element)
-  }
 
+  # If as.numeric is true, convert to a numeric matrix.
   if(as.numeric == TRUE){
     outM <- .Call('vcfR_CM_to_NM', PACKAGE = 'vcfR', outM)
   }
 
+  # Apply mask.
   if(mask == TRUE){
     outM <- outM[tmpMask,]
   }

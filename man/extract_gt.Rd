@@ -25,7 +25,7 @@ is_biallelic(x)
 get.alleles(x, split = "/", na.rm = FALSE, as.numeric = FALSE)
 }
 \arguments{
-\item{x}{An object of class Chrom, vcfR or data.frame}
+\item{x}{An object of class Chrom or vcfR}
 
 \item{element}{element to extract from vcf genotype data. Common options include "DP", "GT" and "GQ"}
 
