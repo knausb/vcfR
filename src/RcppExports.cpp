@@ -6,12 +6,12 @@
 using namespace Rcpp;
 
 // extract_GT_to_CM
-CharacterMatrix extract_GT_to_CM(DataFrame x, std::string element);
+Rcpp::CharacterMatrix extract_GT_to_CM(Rcpp::DataFrame x, std::string element);
 RcppExport SEXP vcfR_extract_GT_to_CM(SEXP xSEXP, SEXP elementSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< DataFrame >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type x(xSEXP);
     Rcpp::traits::input_parameter< std::string >::type element(elementSEXP);
     __result = Rcpp::wrap(extract_GT_to_CM(x, element));
     return __result;
@@ -107,141 +107,6 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// read_to_line
-int read_to_line(std::string x);
-RcppExport SEXP vcfR_read_to_line(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
-    __result = Rcpp::wrap(read_to_line(x));
-    return __result;
-END_RCPP
-}
-// vcf_stats_gz
-Rcpp::NumericVector vcf_stats_gz(std::string x);
-RcppExport SEXP vcfR_vcf_stats_gz(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
-    __result = Rcpp::wrap(vcf_stats_gz(x));
-    return __result;
-END_RCPP
-}
-// vcf_stats
-Rcpp::NumericVector vcf_stats(std::string x);
-RcppExport SEXP vcfR_vcf_stats(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
-    __result = Rcpp::wrap(vcf_stats(x));
-    return __result;
-END_RCPP
-}
-// vcf_meta
-Rcpp::StringVector vcf_meta(std::string x, Rcpp::NumericVector stats);
-RcppExport SEXP vcfR_vcf_meta(SEXP xSEXP, SEXP statsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type stats(statsSEXP);
-    __result = Rcpp::wrap(vcf_meta(x, stats));
-    return __result;
-END_RCPP
-}
-// read_meta_gz
-Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats, int verbose);
-RcppExport SEXP vcfR_read_meta_gz(SEXP xSEXP, SEXP statsSEXP, SEXP verboseSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type stats(statsSEXP);
-    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
-    __result = Rcpp::wrap(read_meta_gz(x, stats, verbose));
-    return __result;
-END_RCPP
-}
-// vcf_body
-Rcpp::DataFrame vcf_body(std::string x, Rcpp::NumericVector stats);
-RcppExport SEXP vcfR_vcf_body(SEXP xSEXP, SEXP statsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type stats(statsSEXP);
-    __result = Rcpp::wrap(vcf_body(x, stats));
-    return __result;
-END_RCPP
-}
-// read_body_gz
-Rcpp::DataFrame read_body_gz(std::string x, Rcpp::NumericVector stats, int verbose);
-RcppExport SEXP vcfR_read_body_gz(SEXP xSEXP, SEXP statsSEXP, SEXP verboseSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type stats(statsSEXP);
-    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
-    __result = Rcpp::wrap(read_body_gz(x, stats, verbose));
-    return __result;
-END_RCPP
-}
-// ram_test
-Rcpp::CharacterMatrix ram_test(int nrow, int ncol);
-RcppExport SEXP vcfR_ram_test(SEXP nrowSEXP, SEXP ncolSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< int >::type nrow(nrowSEXP);
-    Rcpp::traits::input_parameter< int >::type ncol(ncolSEXP);
-    __result = Rcpp::wrap(ram_test(nrow, ncol));
-    return __result;
-END_RCPP
-}
-// write_vcf_body
-void write_vcf_body(Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filename, int mask);
-RcppExport SEXP vcfR_write_vcf_body(SEXP fixSEXP, SEXP gtSEXP, SEXP filenameSEXP, SEXP maskSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type fix(fixSEXP);
-    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type gt(gtSEXP);
-    Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
-    Rcpp::traits::input_parameter< int >::type mask(maskSEXP);
-    write_vcf_body(fix, gt, filename, mask);
-    return R_NilValue;
-END_RCPP
-}
-// write_vcf_body_gz
-void write_vcf_body_gz(Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filename, int mask);
-RcppExport SEXP vcfR_write_vcf_body_gz(SEXP fixSEXP, SEXP gtSEXP, SEXP filenameSEXP, SEXP maskSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type fix(fixSEXP);
-    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type gt(gtSEXP);
-    Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
-    Rcpp::traits::input_parameter< int >::type mask(maskSEXP);
-    write_vcf_body_gz(fix, gt, filename, mask);
-    return R_NilValue;
-END_RCPP
-}
-// write_fasta
-void write_fasta(Rcpp::CharacterVector seq, std::string seqname, std::string filename, int rowlength, int verbose);
-RcppExport SEXP vcfR_write_fasta(SEXP seqSEXP, SEXP seqnameSEXP, SEXP filenameSEXP, SEXP rowlengthSEXP, SEXP verboseSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type seq(seqSEXP);
-    Rcpp::traits::input_parameter< std::string >::type seqname(seqnameSEXP);
-    Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
-    Rcpp::traits::input_parameter< int >::type rowlength(rowlengthSEXP);
-    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
-    write_fasta(seq, seqname, filename, rowlength, verbose);
-    return R_NilValue;
-END_RCPP
-}
 // seq_to_rects
 Rcpp::IntegerMatrix seq_to_rects(Rcpp::CharacterVector seq, std::string targets);
 RcppExport SEXP vcfR_seq_to_rects(SEXP seqSEXP, SEXP targetsSEXP) {
@@ -302,5 +167,69 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type chrom_length(chrom_lengthSEXP);
     __result = Rcpp::wrap(windowize_annotations(wins, ann_starts, ann_ends, chrom_length));
     return __result;
+END_RCPP
+}
+// vcf_stats_gz
+Rcpp::NumericVector vcf_stats_gz(std::string x);
+RcppExport SEXP vcfR_vcf_stats_gz(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
+    __result = Rcpp::wrap(vcf_stats_gz(x));
+    return __result;
+END_RCPP
+}
+// read_meta_gz
+Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats, int verbose);
+RcppExport SEXP vcfR_read_meta_gz(SEXP xSEXP, SEXP statsSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type stats(statsSEXP);
+    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
+    __result = Rcpp::wrap(read_meta_gz(x, stats, verbose));
+    return __result;
+END_RCPP
+}
+// read_body_gz
+Rcpp::CharacterMatrix read_body_gz(std::string x, Rcpp::NumericVector stats, int verbose);
+RcppExport SEXP vcfR_read_body_gz(SEXP xSEXP, SEXP statsSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type stats(statsSEXP);
+    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
+    __result = Rcpp::wrap(read_body_gz(x, stats, verbose));
+    return __result;
+END_RCPP
+}
+// write_vcf_body
+void write_vcf_body(Rcpp::CharacterMatrix fix, Rcpp::CharacterMatrix gt, std::string filename, int mask);
+RcppExport SEXP vcfR_write_vcf_body(SEXP fixSEXP, SEXP gtSEXP, SEXP filenameSEXP, SEXP maskSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::CharacterMatrix >::type fix(fixSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterMatrix >::type gt(gtSEXP);
+    Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
+    Rcpp::traits::input_parameter< int >::type mask(maskSEXP);
+    write_vcf_body(fix, gt, filename, mask);
+    return R_NilValue;
+END_RCPP
+}
+// write_fasta
+void write_fasta(Rcpp::CharacterVector seq, std::string seqname, std::string filename, int rowlength, int verbose);
+RcppExport SEXP vcfR_write_fasta(SEXP seqSEXP, SEXP seqnameSEXP, SEXP filenameSEXP, SEXP rowlengthSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type seq(seqSEXP);
+    Rcpp::traits::input_parameter< std::string >::type seqname(seqnameSEXP);
+    Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
+    Rcpp::traits::input_parameter< int >::type rowlength(rowlengthSEXP);
+    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
+    write_fasta(seq, seqname, filename, rowlength, verbose);
+    return R_NilValue;
 END_RCPP
 }

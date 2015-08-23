@@ -34,9 +34,18 @@ For this vignette, we'll use the example data provided with vcfR.
 
 ```{r}
 library(vcfR)
-data(vcfR_example)
-pinf_mt <- create_chrom(name='pinf_mt', vcf=pinf_vcf, seq=pinf_dna, ann=pinf_gff)
-pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE, win.size=3e3)
+vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
+seq_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
+gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
+
+vcf <- read.vcf(vcf_file, verbose = FALSE)
+dna <- ape::read.dna(seq_file, format = "fasta")
+gff <- read.table(gff_file, sep="\t")
+
+chrom <- create_chrom(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=TRUE)
+chrom <- masker(chrom, min_DP = 300, max_DP = 700)
+chrom <- proc_chrom(chrom, verbose = TRUE)
+
 ```
 
 
@@ -47,7 +56,7 @@ We can now visualize this data.
 
 
 ```{r, fig.height=7, fig.width=7}
-chromoqc(pinf_mt)
+chromoqc(chrom)
 ```
 
 
@@ -73,8 +82,8 @@ If we become concerned with how our choice of window size affects our analysis, 
 
 
 ```{r, fig.height=7, fig.width=7}
-pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE, win.size=1e3)
-chromoqc(pinf_mt, verbose=FALSE)
+chrom <- proc_chrom(chrom, verbose=FALSE, win.size=1e3)
+chromoqc(chrom, verbose=FALSE)
 ```
 
 
@@ -85,7 +94,7 @@ We can also use the function head() to summarize the contents of the Chrom objec
 
 
 ```{r}
-head(pinf_mt)
+head(chrom)
 ```
 
 
@@ -101,7 +110,7 @@ Some of this information can be rapidly explored using the plot function.
 
 
 ```{r, fig.height=7, fig.width=7}
-plot(pinf_mt)
+plot(chrom)
 ```
 
 
@@ -122,7 +131,7 @@ Thsi idea can be explored with a scatterplot.
 
 
 ```{r, fig.height=7, fig.width=7}
-plot(pinf_mt@var.info$DP, pinf_mt@var.info$MQ, col="#0000ff66")
+plot(chrom@var.info$DP, chrom@var.info$MQ, col="#0000ff66")
 ```
 
 
@@ -132,7 +141,7 @@ This can be validated by calculating a correlation.
 
 
 ```{r}
-cor(pinf_mt@var.info$DP, pinf_mt@var.info$MQ)
+cor(chrom@var.info$DP, chrom@var.info$MQ)
 ```
 
 

@@ -26,9 +26,10 @@ This later choice results in the creation of files which are largely redundant w
 Reading in of the [vcf](http://www.1000genomes.org/node/101) file can be performed with a function in vcfR.
 
 
-```{r, eval=FALSE}
+```{r}
 library(vcfR)
-vcf <- read.vcf("my_file.vcf")
+vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
+vcf <- read.vcf(vcf_file, verbose = FALSE)
 ```
 
 
@@ -39,17 +40,19 @@ Genomic reference sequence files are typically in fasta format files.
 These can be read in using the package ape.
 
 
-```{r, eval=FALSE}
+```{r}
 library(ape)
-ref <- read.dna("my_reference.fasta", format="fasta")
+seq_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
+dna <- ape::read.dna(seq_file, format = "fasta")
 ```
 
 
 Annotation files (e.g., [gff](http://sequenceontology.org/resources/gff3.html)), files which contain coordinates of features such as start and end points of genes, are tabular and can be read in with typical R functions.
 
 
-```{r, eval=FALSE}
-gff <- read.table("my_annotations.gff", header=F, sep="\t")
+```{r}
+gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
+gff <- read.table(gff_file, sep="\t")
 ```
 
 
@@ -77,15 +80,6 @@ The below flowchart outlines the major steps involved with vcfR use.
 
 
 
-Note that there is also a fairly complete example of this workflow in the manual.
-
-
-```{r, eval=FALSE}
-?create_chrom
-```
-
-
-
 The green rectangles contain functions that the user will want to become familiar with.
 There are effectively three phases in the workflow: reading in data, processing the objects in memory and plotting the data graphically.
 Reading in the data frequently presents a bottleneck.
@@ -107,8 +101,7 @@ The create_chrom() function creates a new Chrom object and populates it with dat
 
 ```{r}
 library(vcfR)
-data(vcfR_example)
-pinf_mt <- create_chrom(name='pinf_mt', vcf=pinf_vcf, seq=pinf_dna, ann=pinf_gff)
+chrom <- create_chrom(name='Supercontig_1.100', vcf=vcf, seq=dna, ann=gff)
 ```
 
 
@@ -142,7 +135,7 @@ This can be done with the plot function.
 
 
 ```{r, fig.height=6, fig.width=6}
-plot(pinf_mt)
+plot(chrom)
 ```
 
 
@@ -169,8 +162,8 @@ This maintains the geometry of the data matrices throughout the analyisis and al
 
 
 ```{r, fig.height=6, fig.width=6}
-pinf_mt <- masker(pinf_mt)
-plot(pinf_mt)
+chrom <- masker(chrom)
+plot(chrom)
 ```
 
 
@@ -197,8 +190,8 @@ This function is rather experimental and some of the summaries may not be quite 
 
 
 ```{r, fig.height=6, fig.width=6}
-pinf_mt <- proc_chrom(pinf_mt, verbose=FALSE)
-plot(pinf_mt)
+chrom <- proc_chrom(chrom, verbose=TRUE)
+plot(chrom)
 ```
 
 
@@ -219,7 +212,7 @@ The function **chromoqc()** uses the R function layout to make composite plots o
 
 
 ```{r, fig.height=6, fig.width=6}
-chromoqc(pinf_mt)
+chromoqc(chrom)
 ```
 
 
@@ -232,7 +225,7 @@ Variants of this function, which are actually all wrappers for the funciton **ch
 
 
 ```{r, fig.height=6, fig.width=6}
-chromohwe(pinf_mt, dot.alpha='ff')
+chromohwe(chrom, dot.alpha='ff')
 ```
 
 
@@ -248,9 +241,9 @@ Here we simulate data as an example.
 
 ```{r, fig.height=6, fig.width=6}
 set.seed(10)
-x1 <- as.integer(runif(n=20, min=1, max=39000))
+x1 <- as.integer(runif(n=20, min=1, max=chrom@len))
 y1 <- runif(n=length(x1), min=1, max=100)
-chromodot(pinf_mt, x1=x1, y1=y1, label1="Simulated data", dot.alpha="ff")
+chromodot(chrom, x1=x1, y1=y1, label1="Simulated data", dot.alpha="ff")
 ```
 
 
@@ -265,7 +258,7 @@ Here we extract genotype quality (GQ) for each sample and each variant.
 
 
 ```{r}
-gq <- extract.gt(pinf_mt, element="GQ", as.numeric=TRUE)
+gq <- extract.gt(chrom, element="GQ", as.numeric=TRUE)
 gq[1:4,1:10]
 ```
 
@@ -300,7 +293,7 @@ When there are large numbers of variants, it may be more convenient to summarize
 
 
 ```{r}
-gqw <- windowize_NM(gq, pos=pinf_mt@var.info$POS, starts=pinf_mt@win.info$start, ends=pinf_mt@win.info$end)
+gqw <- windowize_NM(gq, pos=chrom@var.info$POS, starts=chrom@win.info$start, ends=chrom@win.info$end)
 gqw[1:6,1:8]
 ```
 
@@ -310,7 +303,7 @@ We can take z-scores to help us determine what values may be exceptional.
 
 ```{r}
 gqwz <- z_score(gqw)
-#hist(gqwz[,1])
+hist(gqwz[,1])
 ```
 
 

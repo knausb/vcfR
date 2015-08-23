@@ -1,0 +1,106 @@
+---
+title: "Converting vcfR to other types"
+author: "Brian J. Knaus"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Converting data}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+
+Once we have finished examining our data in vcfR we'll want to format it so that other softwares can utilize it.
+An straightforward path is to create a vcf.gz format file.
+One downside to this path is that it creates an intermediate file.
+When working on large datasets this intermediate file may be rather large.
+If your path remains in R it may be preferable to convert your vcfR objects to objects defined by other packages.
+Here we explore examples of these paths
+
+
+## Data import
+
+As in other vignettes, we begin by loading the example data.
+
+```{r}
+library(vcfR)
+vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
+vcf <- read.vcf(vcf_file, verbose = FALSE)
+```
+
+
+
+## Creating VCF.GZ format files.
+
+
+The function `write.vcf` can be used to create vcf.gz format files (gzipped vcf files) from vcfR objects (either objects of class vcfR or Chrom).
+
+
+```{r}
+original_dir <- getwd()
+test_dir <- tempdir()
+write.vcf(vcf, "test.vcf.gz")
+unlink("test.vcf.gz") # Clean up after our example is done.
+setwd(original_dir)
+```
+
+
+## Creating genind objects
+
+The packages **adegenet** and **poppr** use objects of class genind.
+We can create genind objects fairly easily.
+First we'll need to extract a matrix of genotypes from the vcfR object (this works on Chrom objects as well).
+Then we'll use an adegenet function to create the genind object.
+
+
+```{r, eval=FALSE}
+gt <- extract.gt(vcf)
+my_genind <- adegenet::df2genind(t(gt), sep="/")
+my_genind
+
+class(my_genind)
+```
+
+
+Note that we need to transpose the matrix of genotypes (using `t()`).
+This is because the VCF format stores samples in columns and loci in rows.
+The `genind` definition expects samples in rows and loci in columns.
+
+
+## Creating genlight objects
+
+To do.
+
+
+## Creating loci objects
+
+The package **pegas** uses objects of class loci.
+Here we create a short script to help convert our matrix of genotypes to an object of class loci.
+
+
+```{r}
+vcfR2loci <- function(x, ...)
+{
+    if(class(x) == "Chrom")
+    {
+      x <- x@vcf
+    }
+    x <- extract.gt(x)
+    # modified from pegas::as.loci.genind
+    obj <- as.data.frame(t(x))
+    icol <- 1:ncol(obj)
+    for (i in icol) obj[, i] <- factor(obj[, i] )
+    class(obj) <- c("loci", "data.frame")
+    attr(obj, "locicol") <- icol
+    obj
+}
+
+my_loci <- vcfR2loci(vcf)
+class(my_loci)
+```
+
+
+
+
+
+

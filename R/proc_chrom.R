@@ -14,63 +14,14 @@
 #' @details
 #' The function \strong{proc_chrom()} calls helper functions to process the data present in a Chrom object into summaries statistics.
 #' 
-#' 
 #' The function \strong{regex.win()} is used to generate coordinates to define rectangles to represent regions of the chromosome containing called nucleotides (acgtwsmkrybdhv).
 #' It is then called a second time to generate coordinates to define rectangles to represent regions called as uncalled nucleotides (n, but not gaps).
 #' 
 #' The function \strong{gt2popsum} is called to create summaries of the variant data.
 #' 
-#' 
-#' 
-#' 
 #' The function \strong{var.win} is called to create windowized summaries of the Chrom object.
 #' 
 #' 
-#' 
-#' 
-
-
-
-#' @rdname proc_chrom
-#' @export
-#' @aliases proc_chrom_R
-#'
-proc_chrom_R <- function(x, win.size = 1e3, verbose=TRUE){
-  stopifnot(class(x) == "Chrom")
-  
-  if(class(x@seq) == "DNAbin"){
-    ptime <- system.time(x@seq.info$nuc.win <- regex.win(x))
-    if(verbose==TRUE){
-      print("Nucleotide regions complete.")
-      print(ptime)
-    }
-  }
-  
-  if(class(x@seq) == "DNAbin"){
-    ptime <- system.time(x@seq.info$N.win <- regex.win(x, regex="[n]"))
-    if(verbose==TRUE){
-      print("N regions complete.")
-      print(ptime)
-    }
-  }
-  
-  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
-    ptime <- system.time(x <- gt2popsum(x))
-    if(verbose==TRUE){
-      print("Population summary complete.")
-      print(ptime)
-    }
-  }
-  
-  ptime <- system.time(x@win.info <- var.win(x, win.size=win.size))
-  if(verbose==TRUE){
-    print("Window analysis complete.")
-    print(ptime)
-  }
-  
-  return(x)
-}
-
 
 
 #' @rdname proc_chrom
@@ -80,74 +31,112 @@ proc_chrom_R <- function(x, win.size = 1e3, verbose=TRUE){
 proc_chrom <- function(x, win.size = 1e3, verbose=TRUE){
   stopifnot(class(x) == "Chrom")
   
+  if( is.null( x@seq ) ){
+    warning( "seq slot is NULL." )
+  }
+  if( nrow(x@ann) == 0 ){
+    warning( "annotation slot has no rows." )
+  }
+  
+  
 #  ptime <- system.time(x@seq.info$nuc.win <- regex.win(x))
   if(class(x@seq) == "DNAbin"){
     ptime <- system.time(x@seq.info$nuc.win <- seq_to_rects(x)) 
     if(verbose==TRUE){
-      print("Nucleotide regions complete.")
-      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+#      print("Nucleotide regions complete.")
+#      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+      message("Nucleotide regions complete.")
+      message(paste("  elapsed time: ", round(ptime[3], digits=4)))
     }
+  } else if ( is.null( x@seq ) ){
+    warning( "seq slot is NULL, chromosome representation not made (seq_to_rects)." )
   }
   
   if(class(x@seq) == "DNAbin"){
 #  ptime <- system.time(x@seq.info$N.win <- regex.win(x, regex="[n]"))
     ptime <- system.time(x@seq.info$N.win <- seq_to_rects(x, chars="n")) 
     if(verbose==TRUE){
-      print("N regions complete.")
-      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+#      print("N regions complete.")
+#      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+      message("N regions complete.")
+      message(paste("  elapsed time: ", round(ptime[3], digits=4)))      
     }
+  } else if ( is.null( x@seq ) ){
+    warning( "seq slot is NULL, chromosome representation not made (seq_to_rects, chars=n)." )
   }
-  
-  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
+
+    
+#  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
+  if(nrow(x@vcf@gt[x@var.info$mask,])>0){
 #    ptime <- system.time(x <- gt2popsum(x))
     ptime <- system.time(x <- gt_to_popsum(x))
     if(verbose==TRUE){
-      print("Population summary complete.")
-      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+#      print("Population summary complete.")
+#      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+      message("Population summary complete.")
+      message(paste("  elapsed time: ", round(ptime[3], digits=4)))
     }
   }
   
 #  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
-    ptime <- system.time(x@win.info <- .Call('vcfR_window_init', PACKAGE = 'vcfR', window_size=win.size, max_bp=x@len))
-    x@win.info <- cbind(rep(x@var.info$CHROM[1], times=nrow(x@win.info)), x@win.info)
-    names(x@win.info)[1] <- "CHROM"
-    if(verbose==TRUE){
-      print("window_init complete.")
-      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
-    }
+  ptime <- system.time(x@win.info <- .Call('vcfR_window_init', PACKAGE = 'vcfR', window_size=win.size, max_bp=x@len))
+  x@win.info <- cbind(rep(x@var.info$CHROM[1], times=nrow(x@win.info)), x@win.info)
+  names(x@win.info)[1] <- "CHROM"
+  if(verbose==TRUE){
+#    print("window_init complete.")
+#    print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+    message("window_init complete.")
+    message(paste("  elapsed time: ", round(ptime[3], digits=4)))
+  }
 #  }
 
   if(class(x@seq) == "DNAbin"){
-    if(nrow(x@vcf.gt[x@var.info$mask,])>0){
+    if(nrow(x@vcf@gt[x@var.info$mask,])>0){
       ptime <- system.time(x@win.info <- .Call('vcfR_windowize_fasta', 
                                                PACKAGE = 'vcfR',
                                                wins=x@win.info,
                                                seq=as.character(x@seq)[1,]
                                                ))
       if(verbose==TRUE){
-        print("windowize_fasta complete.")
-        print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+#        print("windowize_fasta complete.")
+#        print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+        message("windowize_fasta complete.")
+        message(paste("  elapsed time: ", round(ptime[3], digits=4)))
       }
     }
+  } else if ( is.null( x@seq ) ){
+    warning( "seq slot is NULL, windowize_fasta not run." )
   }
-  
-  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
-    ptime <- system.time(x@win.info <- .Call('vcfR_windowize_annotations', PACKAGE = 'vcfR', wins=x@win.info,
-                                             ann_starts=as.numeric(as.character(x@ann[,4])), 
-                                             ann_ends=as.numeric(as.character(x@ann[,5])),
-                                             chrom_length=x@len)
-    )
-    if(verbose==TRUE){
-      print("windowize_annotations complete.")
-      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+
+
+#  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
+  if( nrow(x@ann) > 0 ){
+    if( nrow(x@vcf@gt[x@var.info$mask,]) > 0 ){
+      ptime <- system.time(x@win.info <- .Call('vcfR_windowize_annotations', PACKAGE = 'vcfR', wins=x@win.info,
+                                               ann_starts=as.numeric(as.character(x@ann[,4])), 
+                                               ann_ends=as.numeric(as.character(x@ann[,5])),
+                                               chrom_length=x@len)
+      )
+      if(verbose==TRUE){
+#        print("windowize_annotations complete.")
+#        print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+        message("windowize_annotations complete.")
+        message(paste("  elapsed time: ", round(ptime[3], digits=4)))
+      }
     }
+  } else if ( nrow(x@ann) == 0 ){
+    warning( "ann slot has zero rows, windowize_annotations not run." )
   }
-    
-  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
+
+  
+#  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
+  if( nrow(x@vcf@gt[x@var.info$mask,]) > 0 ){
     ptime <- system.time(x@win.info <- .Call('vcfR_windowize_variants', PACKAGE = 'vcfR', windows=x@win.info, variants=x@var.info[c('POS','mask')]))
     if(verbose==TRUE){
-      print("windowize_variants complete.")
-      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+#      print("windowize_variants complete.")
+#      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
+      message("windowize_variants complete.")
+      message(paste("  elapsed time: ", round(ptime[3], digits=4)))
     }
   }
   
@@ -419,6 +408,9 @@ gt_to_popsum <- function(x){
   
   # Extract genotypes from vcf.gt
   gt <- extract.gt(x, element="GT")
+  
+  # If summaries already exist, we'll remove them.
+  x@var.info <- x@var.info[,grep("^n$|^Allele_counts$|^He$|^Ne$", colnames(x@var.info), invert = TRUE)]
   
   x@var.info <- .Call('vcfR_gt_to_popsum', PACKAGE = 'vcfR', var_info=x@var.info, gt=gt)
 

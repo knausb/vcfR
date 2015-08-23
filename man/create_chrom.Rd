@@ -5,6 +5,12 @@
 \alias{ann2chrom}
 \alias{chrom-methods}
 \alias{create_chrom}
+\alias{getCHROM}
+\alias{getDP}
+\alias{getFIX}
+\alias{getINFO}
+\alias{getPOS}
+\alias{getQUAL}
 \alias{seq2chrom}
 \alias{vcf2chrom}
 \title{Create Chrom object}
@@ -17,6 +23,18 @@ vcf2chrom(x, vcf)
 seq2chrom(x, seq = NULL)
 
 ann2chrom(x, gff)
+
+getFIX(x)
+
+getCHROM(x)
+
+getPOS(x)
+
+getQUAL(x)
+
+getDP(x)
+
+getINFO(x, element = "MQ")
 }
 \arguments{
 \item{name}{a name for the chromosome (for plotting purposes)}
@@ -32,6 +50,8 @@ ann2chrom(x, gff)
 \item{x}{an object of class Chrom}
 
 \item{gff}{a data.frame containing annotation data in the gff format}
+
+\item{element}{element to extract from Chrom object}
 }
 \description{
 Creates and populates an object of class Chrom.
@@ -53,38 +73,6 @@ It is not anticipated that a user would need to use this function directly, but 
 }
 \examples{
 library(vcfR)
-data(vcfR_example)
-pinf_mt <- create_chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
-head(pinf_mt)
-pinf_mt
-names(pinf_mt)
-plot(pinf_mt)
-pinf_mt <- masker(pinf_mt, min_QUAL = 990, min_DP = 6000, max_DP = 8000, min_MQ = 40, max_MQ = 100)
-pinf_mt <- proc_chrom(pinf_mt, win.size=1000)
-
-plot(pinf_mt)
-
-chromoqc(pinf_mt)
-chromoqc(pinf_mt, xlim=c(25e+03, 3e+04), dot.alpha=99)
-
-set.seed(10)
-x1 <- as.integer(runif(n=20, min=1, max=39000))
-y1 <- runif(n=length(x1), min=1, max=100)
-chromodot(pinf_mt, x1=x1, y1=y1)
-
-chromodot(pinf_mt, x1=x1, y1=y1, label1='My data',
-          x2=x1, y2=y1, label2='More of my data',
-          dot.alpha='ff')
-
-chromohwe(pinf_mt, dot.alpha='ff')
-
-chromopop(pinf_mt)
-gt <- extract.gt(pinf_mt)
-head(gt)
-tab <- variant_table(pinf_mt)
-head(tab)
-win <- window_table(pinf_mt)
-head(win)
 }
 \seealso{
 \code{\link{Chrom-class}},
