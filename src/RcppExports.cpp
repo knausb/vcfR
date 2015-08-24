@@ -17,6 +17,21 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// extract_GT_to_CM2
+Rcpp::StringMatrix extract_GT_to_CM2(Rcpp::StringMatrix fix, Rcpp::StringMatrix gt, std::string element, char allele_sep, int alleles);
+RcppExport SEXP vcfR_extract_GT_to_CM2(SEXP fixSEXP, SEXP gtSEXP, SEXP elementSEXP, SEXP allele_sepSEXP, SEXP allelesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::StringMatrix >::type fix(fixSEXP);
+    Rcpp::traits::input_parameter< Rcpp::StringMatrix >::type gt(gtSEXP);
+    Rcpp::traits::input_parameter< std::string >::type element(elementSEXP);
+    Rcpp::traits::input_parameter< char >::type allele_sep(allele_sepSEXP);
+    Rcpp::traits::input_parameter< int >::type alleles(allelesSEXP);
+    __result = Rcpp::wrap(extract_GT_to_CM2(fix, gt, element, allele_sep, alleles));
+    return __result;
+END_RCPP
+}
 // CM_to_NM
 NumericMatrix CM_to_NM(CharacterMatrix x);
 RcppExport SEXP vcfR_CM_to_NM(SEXP xSEXP) {

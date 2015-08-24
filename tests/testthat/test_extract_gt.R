@@ -78,6 +78,23 @@ test_that("extract_haps R code works",{
 })
 
 
+
+test_that("extract_GT_to_CM2 compiled code works",{
+  gt <- .Call( 'vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', vcf@fix, vcf@gt, 'GT', '/', 0 )
+#  head(gt)
+  gt <- .Call( 'vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', vcf@fix, vcf@gt, 'GT', '/', 1 )
+#  head(gt)
+  gt <- .Call( 'vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', vcf@fix, vcf@gt, 'DP', '/', 0 )
+#  head(gt)
+  
+#  expect_is(haps, "matrix")
+#  expect_equal(ncol(haps), 2 * ncol(gt))
+#  expect_equal(nrow(haps), nrow(gt))
+})
+
+
+
+
 #head(gt)
 #head(pl)
 #head(gq)

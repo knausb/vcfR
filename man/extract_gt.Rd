@@ -10,7 +10,8 @@
 \alias{is_polymorphic}
 \title{Extract elements from the GT section of a vcf format object}
 \usage{
-extract.gt(x, element = "GT", mask = FALSE, as.numeric = FALSE)
+extract.gt(x, element = "GT", mask = FALSE, as.numeric = FALSE,
+  return.alleles = FALSE, allele.sep = "/")
 
 extract_indels(x, return_indels = FALSE)
 
@@ -32,6 +33,10 @@ get.alleles(x, split = "/", na.rm = FALSE, as.numeric = FALSE)
 \item{mask}{a logical indicating whether to apply the mask (TRUE) or return all variants (FALSE). Alternatively, a vector of logicals may be provided.}
 
 \item{as.numeric}{Logical, should the matrix be converted to numerics}
+
+\item{return.alleles}{logical indicating whether to return the genotypes (0/1) or alleles (A/T)}
+
+\item{allele.sep}{character which delimits the alleles in a genotype (/ or |)}
 
 \item{return_indels}{logical indicating whether to return indels or not}
 

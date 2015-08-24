@@ -16,8 +16,11 @@
 #' @rdname extract_gt
 #' 
 #' @param as.numeric Logical, should the matrix be converted to numerics
+#' @param return.alleles logical indicating whether to return the genotypes (0/1) or alleles (A/T)
+#' @param allele.sep character which delimits the alleles in a genotype (/ or |)
+#' 
 #' @export
-extract.gt <- function(x, element="GT", mask=FALSE, as.numeric=FALSE){
+extract.gt <- function(x, element="GT", mask=FALSE, as.numeric=FALSE, return.alleles=FALSE, allele.sep="/" ){
 
   # Validate that we have an expected data structure
   if( class(x) != "Chrom" & class(x) != "vcfR" ){
@@ -46,13 +49,19 @@ extract.gt <- function(x, element="GT", mask=FALSE, as.numeric=FALSE){
     mask <- TRUE
   }
 
+  if(as.numeric == TRUE & return.alleles == TRUE ){
+    stop("Invalid parameter choice, as.numeric and return.alleles can't both be true, alleles are characters!")
+  }
+  
   # If of class vcfR, call compiled code to extract field.
   if(class(x) == "vcfR"){
     if(colnames(x@gt)[1] != "FORMAT"){
       stop("First column is not named 'FORMAT', this is essential information.")
     }
 #    .Call('vcfR_extract_haps', PACKAGE = 'vcfR', ref, alt, gt, gt_split, verbose)
-    outM <- .Call('vcfR_extract_GT_to_CM', PACKAGE = 'vcfR', x@gt, element)
+#    outM <- .Call('vcfR_extract_GT_to_CM', PACKAGE = 'vcfR', x@gt, element)
+    outM <- .Call('vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', x@fix, x@gt, element, allele.sep, return.alleles )
+    
   }
 
   # If as.numeric is true, convert to a numeric matrix.

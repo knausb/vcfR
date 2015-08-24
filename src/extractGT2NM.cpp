@@ -154,6 +154,112 @@ Rcpp::CharacterMatrix extract_GT_to_CM(Rcpp::DataFrame x, std::string element="D
 }
 
 
+std::vector < std::string > get_allele_vector( Rcpp::String ref,
+                                               Rcpp::String alt )
+{
+  std::string allele_string = alt;
+  std::vector < std::string > allele_vector;
+  char alleles_split = ','; // Must be single quotes!
+  vcfRCommon::strsplit(allele_string, allele_vector, alleles_split);
+  std::string ref2 = ref;
+  allele_vector.insert( allele_vector.begin(), ref2 );
+
+  return allele_vector;
+}
+
+
+std::string gt2alleles( Rcpp::String gt, std::vector< std::string > allele_vector, char allele_sep )
+{
+  std::string sep = std::string(1, allele_sep);
+  std::string gt2 = gt;
+  std::vector < std::string > gt_vector;
+  vcfRCommon::strsplit( gt2, gt_vector, allele_sep );
+  
+//  std::string gt3 = "A";
+  
+//  Rcpp::Rcout << "Made it.!\n";
+//  Rcpp::Rcout << "  gt_vector[0]" << gt_vector[0] << "\n";
+
+  
+  int allele_number = std::stoi( gt_vector[0] );
+  
+  std::string gt3 = allele_vector[ allele_number ];
+  
+  if( gt_vector.size() > 1 )
+  {
+    for( int i=1; i<gt_vector.size(); i++ )
+    {
+      allele_number = stoi(gt_vector[i]);
+      gt3.append( sep );
+      gt3.append( allele_vector[ allele_number ] );
+    }
+  }
+    
+  return gt3;
+}
+
+
+
+// [[Rcpp::export]]
+Rcpp::StringMatrix extract_GT_to_CM2( Rcpp::StringMatrix fix,
+                                         Rcpp::StringMatrix gt,
+                                         std::string element="DP",
+                                         char allele_sep = '/',
+                                         int alleles = 0 ) {
+  int i = 0;
+  int j = 0;
+
+  // Initialize a return matrix.
+  // The return_matrix will have one less column than in gt.
+  // We'll preserve the column names of gt in return_matrix.
+  Rcpp::StringMatrix return_matrix( gt.nrow(), gt.ncol() - 1 );
+  Rcpp::List matrix_names = gt.attr("dimnames");
+  Rcpp::StringVector colnames = matrix_names(1);
+  colnames.erase(0);
+  return_matrix.attr("dimnames") = Rcpp::List::create(matrix_names(0), colnames);
+  
+  for( i=0; i<gt.nrow(); i++) // Row (variant) counter,
+  {
+    Rcpp::checkUserInterrupt();
+    // Determine the position where the query element is located.
+    int position = elementNumber(gt(i,0), element);
+    std::vector< std::string > allele_vector;
+    
+    // If we are to return alleles, 
+    // we'll need to create an array for them.
+    if( alleles == 1 )
+    {
+      allele_vector = get_allele_vector( fix(i,3), fix(i,4) );
+    }
+    
+    // Process columns (samples).
+    for( j=1; j<gt.ncol(); j++)
+    {
+      if( gt(i, j) == NA_STRING ){
+        return_matrix(i, j-1) = NA_STRING;
+      } else {
+        return_matrix(i, j-1) = extractElementS( gt(i, j), position );
+      
+        // Convert to alleles
+        if( alleles == 1 )
+        {
+          std::string gt_string = Rcpp::as< std::string >( return_matrix(i, j-1) );
+        
+//        Rcpp::Rcout << "gt_string: " << gt_string << "\n";
+//        Rcpp::Rcout << "test ic_naC: " << gt_string == na_string << "\n";
+        
+          gt_string = gt2alleles( gt_string, allele_vector, allele_sep );
+          return_matrix(i, j-1) = gt_string;
+        }
+      }
+    }
+
+  }
+  
+  return return_matrix;
+}
+
+
 // [[Rcpp::export]]
 NumericMatrix CM_to_NM(CharacterMatrix x) {
   int i = 0;

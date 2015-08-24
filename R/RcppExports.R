@@ -5,6 +5,10 @@ extract_GT_to_CM <- function(x, element = "DP") {
     .Call('vcfR_extract_GT_to_CM', PACKAGE = 'vcfR', x, element)
 }
 
+extract_GT_to_CM2 <- function(fix, gt, element = "DP", allele_sep = '/', alleles = 0L) {
+    .Call('vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', fix, gt, element, allele_sep, alleles)
+}
+
 CM_to_NM <- function(x) {
     .Call('vcfR_CM_to_NM', PACKAGE = 'vcfR', x)
 }

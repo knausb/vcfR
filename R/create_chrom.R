@@ -154,11 +154,12 @@ create_chrom <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
   }
   
   # Check to see if annotation positions exceed seq position.
-  if( max(as.integer(as.character(x@ann[,4]))) > x@len | max(as.integer(as.character(x@ann[,5]))) > x@len ){
-    stop("Annotation positions exceed chromosome positions.  Is this the correct set of annotations?")
+  if( nrow(x@ann) > 0 ){
+    if( max(as.integer(as.character(x@ann[,4]))) > x@len | max(as.integer(as.character(x@ann[,5]))) > x@len ){
+      stop("Annotation positions exceed chromosome positions.  Is this the correct set of annotations?")
+    }
   }
-  
-  
+
   
   if( verbose == TRUE ){
     message("Initializing var.info slot.")
@@ -316,7 +317,7 @@ getQUAL <- function(x){
 #' @export
 #' @aliases getDP
 getDP <- function(x){
-  dp <- extract.gt(x, element = "DP", as.numeric=T)
+  dp <- extract.gt(x, element = "DP", as.numeric=TRUE)
   rowSums(dp, na.rm = TRUE)
   x@var.info[,"DP"] <- rowSums(dp, na.rm = TRUE)
   rowSums(dp, na.rm = TRUE)
