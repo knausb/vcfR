@@ -1,10 +1,38 @@
-#' @title Convert vcf data to other formats
+#' @title Convert vcfR objects to other formats
 #' @name Format conversion
 #' @rdname vcf_conversion
 #' @description
-#' Convert vcfR object to other formats
+#' Convert vcfR objects to objects supported by other packages
 #'  
 #' @param x an object of class Chrom or vcfR
+#' 
+#' @details 
+#' After processing vcf data in vcfR, one will likely proceed to an analysis step.
+#' Within R, three obvious choices are:
+#' \href{http://cran.r-project.org/web/packages/pegas/index.html}{pegas},
+#' \href{http://cran.r-project.org/web/packages/adegenet/index.html}{adegenet} 
+#' and \href{http://cran.r-project.org/web/packages/poppr/index.html}{poppr}.
+#' The package pegas uses objects of type loci.
+#' The function vcfR2loci calls extract.gt to create a matrix of genotypes which is then converted into an object of type loci.
+#' The packages adegenet and poppr use the genind object.
+#' The function vcfR2genind uses extract.gt to create a matrix of genotypes and uses the adegenet function df2genind to create a genind object.
+#' The package poppr additionally uses objects of class genclone.
+#' A genind object can be converted to a genclone object with the function poppr::as.genclone.
+#' 
+#' 
+#' 
+#' 
+#' 
+#' @seealso
+#' \code{\link{extract.gt}},
+#' \code{\link[adegenet]{df2genind}},
+#' \code{\link[adegenet]{genind}},
+#' \href{http://cran.r-project.org/web/packages/pegas/index.html}{pegas},
+#' \href{http://cran.r-project.org/web/packages/adegenet/index.html}{adegenet},
+#' and 
+#' \href{http://cran.r-project.org/web/packages/poppr/index.html}{poppr}.
+#'
+#'
 
 
 
