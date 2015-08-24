@@ -2,13 +2,18 @@
 % Please edit documentation in R/vcf_conversion.R
 \name{Format conversion}
 \alias{Format conversion}
-\alias{gt_to_df}
+\alias{vcfR2genind}
+\alias{vcfR2loci}
 \title{Convert vcf data to other formats}
 \usage{
-gt_to_df(x)
+vcfR2genind(x, sep = "[|/]")
+
+vcfR2loci(x)
 }
 \arguments{
-\item{x}{A matrix of genotypes}
+\item{x}{an object of class Chrom or vcfR}
+
+\item{sep}{character (to be used in a regular expression) to delimit the alleles of genotypes}
 }
 \description{
 Convert vcfR object to other formats

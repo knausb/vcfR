@@ -30,7 +30,7 @@ vcf <- read.vcf(vcf_file, verbose = FALSE)
 
 
 
-## Creating VCF.GZ format files.
+## Creating *.vcf.gz format files.
 
 
 The function `write.vcf` can be used to create vcf.gz format files (gzipped vcf files) from vcfR objects (either objects of class vcfR or Chrom).
@@ -53,7 +53,7 @@ First we'll need to extract a matrix of genotypes from the vcfR object (this wor
 Then we'll use an adegenet function to create the genind object.
 
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 gt <- extract.gt(vcf)
 my_genind <- adegenet::df2genind(t(gt), sep="/")
 my_genind
@@ -65,6 +65,22 @@ class(my_genind)
 Note that we need to transpose the matrix of genotypes (using `t()`).
 This is because the VCF format stores samples in columns and loci in rows.
 The `genind` definition expects samples in rows and loci in columns.
+
+
+## Creating genclone objects
+
+
+The package **poppr** uses objects of class genclone as well as genind.
+Once a genind object has been created it is fairly straight forward to create a genclone object.
+
+
+```{r, eval=FALSE}
+my_genclone <- poppr::as.genclone(my_genind)
+my_genclone
+class(my_genclone)
+```
+
+
 
 
 ## Creating genlight objects
