@@ -95,23 +95,17 @@ extract_indels <- function(x, return_indels=FALSE){
 
   # Check reference for indels
   mask <- nchar(x@fix[,'REF']) > 1
-  mask[unlist(lapply(strsplit(x@fix[,'ALT'], split=","), function(x){max(nchar(x))})) > 1] <- TRUE
-#  mask <- nchar(x@fix$REF) > 1
-#  mask[unlist(lapply(strsplit(x@fix$ALT, split=","), function(x){max(nchar(x))})) > 1] <- TRUE
   
+  # Check alternate for indels
+  mask[unlist(lapply(strsplit(x@fix[,'ALT'], split=","), function(x){max(nchar(x))})) > 1] <- TRUE
+
   if(return_indels == FALSE){
-    x <- x[!mask,]
+    x <- x[ !mask, , drop = FALSE ]
   } else {
-    x <- x[mask,]
+    x <- x[ mask, , drop = FALSE ]
   }
   
-#  if(length(grep("Chrom", ls())) > 0){
-#    Chrom@vcf.fix <- x@fix
-#    Chrom@vcf.gt <- x@gt
-#    return(Chrom)
-#  } else {
-    return(x)  
-#  }
+  return(x)  
 }
 
 
@@ -233,9 +227,10 @@ get.alleles <- function( x, split="/", na.rm = FALSE, as.numeric = FALSE ){
 #' 
 #' @param x2 a matrix of alleles as genotypes (e.g., A/A, C/G, etc.)
 #' @param sep a character which delimits the alleles in a genotype (/ or |)
+#' @param NA_to_n logical indicating whether NAs should be scores as n
 #' 
 #' @export
-alleles_to_consensus <- function(x2, sep="/"){
+alleles_to_consensus <- function( x2, sep = "/", NA_to_n = TRUE ){
   lookup <- cbind(paste(c('A','C','G','T', 'A','T','C','G', 'A','C','G','T', 'A','G','C','T'),
                         c('A','C','G','T', 'T','A','G','C', 'C','A','T','G', 'G','A','T','C'),
                         sep=sep),
@@ -245,6 +240,11 @@ alleles_to_consensus <- function(x2, sep="/"){
   {
     x2[ x2 == lookup[i,1] ] <- lookup[i,2]
   }
+  if( NA_to_n == TRUE )
+  {
+    x2[ is.na(x2) ] <- 'n'
+  }
+  
   x2
 }
 

@@ -26,7 +26,7 @@ is_biallelic(x)
 
 get.alleles(x, split = "/", na.rm = FALSE, as.numeric = FALSE)
 
-alleles_to_consensus(x2, sep = "/")
+alleles_to_consensus(x2, sep = "/", NA_to_n = TRUE)
 }
 \arguments{
 \item{x}{An object of class Chrom or vcfR}
@@ -56,6 +56,8 @@ alleles_to_consensus(x2, sep = "/")
 \item{x2}{a matrix of alleles as genotypes (e.g., A/A, C/G, etc.)}
 
 \item{sep}{a character which delimits the alleles in a genotype (/ or |)}
+
+\item{NA_to_n}{logical indicating whether NAs should be scores as n}
 }
 \description{
 Extract elements from the GT section of a vcf format object

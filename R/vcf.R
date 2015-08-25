@@ -189,8 +189,8 @@ setMethod(
   f= "[",
   signature="vcfR",
   definition=function(x, i, j, drop){
-    x@fix <- x@fix[i,]
-    x@gt <- x@gt[i,j]
+    x@fix <- x@fix[ i, , drop = FALSE ]
+    x@gt <- x@gt[ i, j, drop = FALSE ]
     return(x)
     #    if(i=="times"){return(x@times)}else {}
     #    if(i=="traj"){return(x@traj)}else {}
