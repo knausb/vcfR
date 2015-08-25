@@ -229,5 +229,25 @@ get.alleles <- function( x, split="/", na.rm = FALSE, as.numeric = FALSE ){
 
 
 
+alleles_to_consensus <- function(x2, sep="/"){
+  x2[ x2 == 'A/A' ] <- 'a'
+  x2[ x2 == 'C/C' ] <- 'c'
+  x2[ x2 == 'G/G' ] <- 'g'
+  x2[ x2 == 'T/T' ] <- 't'
+  
+  x2[ x2 == 'A/T' ] <- 'w'
+  x2[ x2 == 'T/A' ] <- 'w'
+  x2[ x2 == 'C/G' ] <- 's'
+  x2[ x2 == 'G/C' ] <- 's'
+  x2[ x2 == 'A/C' ] <- 'm'
+  x2[ x2 == 'C/A' ] <- 'm'
+  x2[ x2 == 'G/T' ] <- 'k'
+  x2[ x2 == 'T/G' ] <- 'k'
+  x2[ x2 == 'A/G' ] <- 'r'
+  x2[ x2 == 'G/A' ] <- 'r'  
+  x2[ x2 == 'C/T' ] <- 'y'
+  x2[ x2 == 'T/C' ] <- 'y'
+  x2
+}
 
 
