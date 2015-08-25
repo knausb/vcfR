@@ -228,25 +228,23 @@ get.alleles <- function( x, split="/", na.rm = FALSE, as.numeric = FALSE ){
 }
 
 
-
+#' @rdname extract_gt
+#' @aliases alleles_to_consensus
+#' 
+#' @param x2 a matrix of alleles as genotypes (e.g., A/A, C/G, etc.)
+#' @param sep a character which delimits the alleles in a genotype (/ or |)
+#' 
+#' @export
 alleles_to_consensus <- function(x2, sep="/"){
-  x2[ x2 == 'A/A' ] <- 'a'
-  x2[ x2 == 'C/C' ] <- 'c'
-  x2[ x2 == 'G/G' ] <- 'g'
-  x2[ x2 == 'T/T' ] <- 't'
-  
-  x2[ x2 == 'A/T' ] <- 'w'
-  x2[ x2 == 'T/A' ] <- 'w'
-  x2[ x2 == 'C/G' ] <- 's'
-  x2[ x2 == 'G/C' ] <- 's'
-  x2[ x2 == 'A/C' ] <- 'm'
-  x2[ x2 == 'C/A' ] <- 'm'
-  x2[ x2 == 'G/T' ] <- 'k'
-  x2[ x2 == 'T/G' ] <- 'k'
-  x2[ x2 == 'A/G' ] <- 'r'
-  x2[ x2 == 'G/A' ] <- 'r'  
-  x2[ x2 == 'C/T' ] <- 'y'
-  x2[ x2 == 'T/C' ] <- 'y'
+  lookup <- cbind(paste(c('A','C','G','T', 'A','T','C','G', 'A','C','G','T', 'A','G','C','T'),
+                        c('A','C','G','T', 'T','A','G','C', 'C','A','T','G', 'G','A','T','C'),
+                        sep=sep),
+                  c('a','c','g','t', 'w','w','s','s', 'm','m','k','k', 'r','r','y','y'))
+    
+  for(i in 1:nrow( lookup ))
+  {
+    x2[ x2 == lookup[i,1] ] <- lookup[i,2]
+  }
   x2
 }
 
