@@ -2,6 +2,7 @@
 % Please edit documentation in R/vcf_conversion.R
 \name{Format conversion}
 \alias{Format conversion}
+\alias{vcfR2DNAbin}
 \alias{vcfR2genind}
 \alias{vcfR2loci}
 \title{Convert vcfR objects to other formats}
@@ -9,11 +10,17 @@
 vcfR2genind(x, sep = "[|/]")
 
 vcfR2loci(x)
+
+vcfR2DNAbin(x, extract_indels = TRUE, consensus = TRUE)
 }
 \arguments{
 \item{x}{an object of class Chrom or vcfR}
 
 \item{sep}{character (to be used in a regular expression) to delimit the alleles of genotypes}
+
+\item{extract_indels}{logical, at present, the only option is TRUE}
+
+\item{consensus}{logical, at present, the only option is TRUE}
 }
 \description{
 Convert vcfR objects to objects supported by other packages

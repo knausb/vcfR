@@ -69,3 +69,30 @@ vcfR2loci <- function(x)
   x
 }
 
+
+#' @rdname vcf_conversion
+#' @aliases vcfR2DNAbin
+#' 
+#' @param extract_indels logical, at present, the only option is TRUE
+#' @param consensus logical, at present, the only option is TRUE
+#' 
+#' @export
+vcfR2DNAbin <- function( x, extract_indels = TRUE , consensus = TRUE )
+{
+  if( class(x) == 'Chrom' )
+  {
+    x <- x@vcf
+  }
+  if( class != 'vcfR' )
+  {
+    stop( "Expecting an object of class Chrom or vcfR" )
+  }
+  
+  x <- extract_indels(x)
+  x <- extract.gt(x, return.alleles=TRUE)
+  x <- alleles_to_consensus(x)
+  x <- ape::as.DNAbin(t(x))
+  x
+}
+
+
