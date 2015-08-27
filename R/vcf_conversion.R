@@ -83,7 +83,7 @@ vcfR2DNAbin <- function( x, extract_indels = TRUE , consensus = TRUE )
   {
     x <- x@vcf
   }
-  if( class != 'vcfR' )
+  if( class(x) != 'vcfR' )
   {
     stop( "Expecting an object of class Chrom or vcfR" )
   }
