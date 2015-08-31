@@ -90,7 +90,18 @@ vcfR2DNAbin <- function( x, extract_indels = TRUE , consensus = TRUE )
   
   x <- extract_indels(x)
   x <- extract.gt(x, return.alleles=TRUE)
-  x <- alleles_to_consensus(x)
+  
+  ploid <- unlist(strsplit(x[1,1], split="[|/]"))
+  if( length(ploid) == 1 )
+  {
+    # Do nothing
+  } else if ( length(ploid) == 2 )
+  {
+    x <- alleles_to_consensus(x)    
+  } else {
+    stop( "function only valid for diploid and haploid genotypes." )
+  }
+
   x <- ape::as.DNAbin(t(x))
   x
 }

@@ -157,6 +157,8 @@ setMethod(
   }
 )
 
+
+
 #### Method subset ####
 #' @rdname vcfR-methods
 #' @export
