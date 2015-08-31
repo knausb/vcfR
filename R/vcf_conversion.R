@@ -101,7 +101,10 @@ vcfR2DNAbin <- function( x, extract_indels = TRUE , consensus = TRUE )
   } else {
     stop( "function only valid for diploid and haploid genotypes." )
   }
-
+  
+  # DNAbin characters must be lower case.
+  x <- apply(x, MARGIN=2, tolower)
+  x[is.na(x)] <- 'n'
   x <- ape::as.DNAbin(t(x))
   x
 }
