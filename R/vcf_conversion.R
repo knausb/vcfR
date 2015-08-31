@@ -90,8 +90,12 @@ vcfR2DNAbin <- function( x, extract_indels = TRUE , consensus = TRUE )
   
   x <- extract_indels(x)
   x <- extract.gt(x, return.alleles=TRUE)
+  if( nrow(x) < 1 )
+  {
+    return( NA )
+  }
   
-  ploid <- unlist(strsplit(x[1,1], split="[|/]"))
+  ploid <- unlist( strsplit( x[!is.na(x)][1], split="[|/]" ) )
   if( length(ploid) == 1 )
   {
     # Do nothing
