@@ -10,6 +10,10 @@
 #' @details
 #' Note that when 'as.numeric' is set to 'TRUE' but the data are not actually numeric, unexpected results will likely occur.
 #' 
+#' The function \strong{extract.gt} isolates elements from the GT portion of vcf data.
+#' Fields available for extraction are listed in the FORMAT column of the GT portion.
+#' Because different vcf producing software produce different fields the options will vary by software.
+#' 
 #' 
 # @export
 #' 
@@ -84,6 +88,12 @@ extract.gt <- function(x, element="GT", mask=FALSE, as.numeric=FALSE, return.all
 #' @aliases extract_indels
 #' @param return_indels logical indicating whether to return indels or not
 #' 
+#' @details 
+#' The function \strong{extract_indels} is used to isolate indels from SNPs.
+#' When the parameter return_indels is FALSE only SNPs will be returned.
+#' When the parameter return_indels is TRUE only indels will be returned.
+#'
+#' 
 #' @export
 extract_indels <- function(x, return_indels=FALSE){
   if(class(x) == 'Chrom'){
@@ -113,6 +123,9 @@ extract_indels <- function(x, return_indels=FALSE){
 #' @rdname extract_gt
 #' @aliases extract_info
 #' 
+#' @details 
+#' The function \strong{extract_info} is used to isolate elements from the INFO column of vcf data.
+#' 
 #' @export
 extract_info <- function(x, element, as.numeric=FALSE, mask=FALSE){
   values <- unlist(
@@ -137,6 +150,9 @@ extract_info <- function(x, element, as.numeric=FALSE, mask=FALSE){
 #' @rdname extract_gt
 #' @aliases extract_haps
 #' @param gt_split character which delimits alleles in genotypes
+#' 
+#' @details 
+#' The function \strong{extract_haps} uses extract.gt to isolate genotypes and then uses the information in the REF and ALT columns to recode genotypes with their allelic state.
 #' 
 #' @export
 extract_haps <- function(x, mask=FALSE, gt_split="|",verbose=TRUE){
@@ -172,6 +188,12 @@ extract_haps <- function(x, mask=FALSE, gt_split="|",verbose=TRUE){
 #' @aliases is_polymorphic
 #' @param na.omit logical to omit missing data
 #' 
+#' @details 
+#' The function \strong{is_polymorphic} returns a vector of logicals indicating whether a variant is polymorphic.
+#' Variants in vcf files are always polymorphic.
+#' However, if the variants are censored somehow (set to NA) or samples are removed a variant may become invariant.
+#' 
+#' 
 #' @export
 is_polymorphic <- function(x, na.omit=FALSE){
   if(class(x) != "vcfR"){
@@ -192,6 +214,11 @@ is_polymorphic <- function(x, na.omit=FALSE){
 #' @rdname extract_gt
 #' @aliases is_biallelic
 #' 
+#' @details 
+#' The function \strong{is_bialleleic} returns a vector of logicals indicating whether a variant is biallelic.
+#' Some analyses or downstream analyses only work with biallelic loci.
+#' This function can help manage this.
+#' 
 #' @export
 is_biallelic <- function(x){
 #  x <- as.character(x@fix$ALT)
@@ -207,6 +234,9 @@ is_biallelic <- function(x){
 #' 
 #' @param split character passed to strsplit to split the genotype into alleles
 #' @param na.rm logical indicating whether to remove NAs
+#' 
+#' @details 
+#' The function \strong{get.alleles} takes a vector of genotypes and returns the unique alleles.
 #' 
 #' @export
 get.alleles <- function( x, split="/", na.rm = FALSE, as.numeric = FALSE ){
@@ -228,6 +258,10 @@ get.alleles <- function( x, split="/", na.rm = FALSE, as.numeric = FALSE ){
 #' @param x2 a matrix of alleles as genotypes (e.g., A/A, C/G, etc.)
 #' @param sep a character which delimits the alleles in a genotype (/ or |)
 #' @param NA_to_n logical indicating whether NAs should be scores as n
+#' 
+#' @details 
+#' The function \strong{alleles_to_consensus} converts genotypes to a single consensus allele using IUPAC ambiguity codes for heterozygotes. 
+#' 
 #' 
 #' @export
 alleles_to_consensus <- function( x2, sep = "/", NA_to_n = TRUE ){

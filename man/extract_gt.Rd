@@ -64,5 +64,29 @@ Extract elements from the GT section of a vcf format object
 }
 \details{
 Note that when 'as.numeric' is set to 'TRUE' but the data are not actually numeric, unexpected results will likely occur.
+
+The function \strong{extract.gt} isolates elements from the GT portion of vcf data.
+Fields available for extraction are listed in the FORMAT column of the GT portion.
+Because different vcf producing software produce different fields the options will vary by software.
+
+The function \strong{extract_indels} is used to isolate indels from SNPs.
+When the parameter return_indels is FALSE only SNPs will be returned.
+When the parameter return_indels is TRUE only indels will be returned.
+
+The function \strong{extract_info} is used to isolate elements from the INFO column of vcf data.
+
+The function \strong{extract_haps} uses extract.gt to isolate genotypes and then uses the information in the REF and ALT columns to recode genotypes with their allelic state.
+
+The function \strong{is_polymorphic} returns a vector of logicals indicating whether a variant is polymorphic.
+Variants in vcf files are always polymorphic.
+However, if the variants are censored somehow (set to NA) or samples are removed a variant may become invariant.
+
+The function \strong{is_bialleleic} returns a vector of logicals indicating whether a variant is biallelic.
+Some analyses or downstream analyses only work with biallelic loci.
+This function can help manage this.
+
+The function \strong{get.alleles} takes a vector of genotypes and returns the unique alleles.
+
+The function \strong{alleles_to_consensus} converts genotypes to a single consensus allele using IUPAC ambiguity codes for heterozygotes.
 }
 
