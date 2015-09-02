@@ -17,8 +17,7 @@ gff <- read.table(gff_file, sep="\t")
 chrom <- create_chrom(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
 chrom <- masker(chrom, min_DP = 300, max_DP = 700)
 
-#####
-
+##### ##### ##### ##### #####
 
 
 gt <- extract.gt(chrom, element="GT", as.numeric=FALSE)

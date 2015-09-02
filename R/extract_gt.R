@@ -152,7 +152,8 @@ extract_info <- function(x, element, as.numeric=FALSE, mask=FALSE){
 #' @param gt_split character which delimits alleles in genotypes
 #' 
 #' @details 
-#' The function \strong{extract_haps} uses extract.gt to isolate genotypes and then uses the information in the REF and ALT columns to recode genotypes with their allelic state.
+#' The function \strong{extract_haps} uses extract.gt to isolate genotypes.
+#' It then uses the information in the REF and ALT columns as well as an allele delimiter (gt_split) to split genotypes into their allelic state.
 #' 
 #' @export
 extract_haps <- function(x, mask=FALSE, gt_split="|",verbose=TRUE){

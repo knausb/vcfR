@@ -75,7 +75,8 @@ When the parameter return_indels is TRUE only indels will be returned.
 
 The function \strong{extract_info} is used to isolate elements from the INFO column of vcf data.
 
-The function \strong{extract_haps} uses extract.gt to isolate genotypes and then uses the information in the REF and ALT columns to recode genotypes with their allelic state.
+The function \strong{extract_haps} uses extract.gt to isolate genotypes.
+It then uses the information in the REF and ALT columns as well as an allele delimiter (gt_split) to split genotypes into their allelic state.
 
 The function \strong{is_polymorphic} returns a vector of logicals indicating whether a variant is polymorphic.
 Variants in vcf files are always polymorphic.
