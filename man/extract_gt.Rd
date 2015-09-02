@@ -77,6 +77,7 @@ The function \strong{extract_info} is used to isolate elements from the INFO col
 
 The function \strong{extract_haps} uses extract.gt to isolate genotypes.
 It then uses the information in the REF and ALT columns as well as an allele delimiter (gt_split) to split genotypes into their allelic state.
+Ploidy is determined by the first non-NA genotype in the first sample.
 
 The function \strong{is_polymorphic} returns a vector of logicals indicating whether a variant is polymorphic.
 Variants in vcf files are always polymorphic.
@@ -89,5 +90,7 @@ This function can help manage this.
 The function \strong{get.alleles} takes a vector of genotypes and returns the unique alleles.
 
 The function \strong{alleles_to_consensus} converts genotypes to a single consensus allele using IUPAC ambiguity codes for heterozygotes.
+Note that some functions, such as ape::seg.sites do not recognize ambiguity characters (other than 'n').
+This means that these functions, as well as functions that depend on them (e.g., pegas::tajima.test), will produce unexpected results.
 }
 

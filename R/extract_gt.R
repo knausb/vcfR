@@ -154,6 +154,8 @@ extract_info <- function(x, element, as.numeric=FALSE, mask=FALSE){
 #' @details 
 #' The function \strong{extract_haps} uses extract.gt to isolate genotypes.
 #' It then uses the information in the REF and ALT columns as well as an allele delimiter (gt_split) to split genotypes into their allelic state.
+#' Ploidy is determined by the first non-NA genotype in the first sample.
+#' 
 #' 
 #' @export
 extract_haps <- function(x, mask=FALSE, gt_split="|",verbose=TRUE){
@@ -172,13 +174,6 @@ extract_haps <- function(x, mask=FALSE, gt_split="|",verbose=TRUE){
   
   gt <- extract.gt(x, element="GT")
 
-#  Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
-#                                  Rcpp::StringVector alt,
-#                                  Rcpp::StringMatrix gt,
-#                                  char gt_split,
-#                                  int vebosity) {
-  
-  
   haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', x@fix[,'REF'], x@fix[,'ALT'], gt, gt_split, 1)
   haps
 }
@@ -262,6 +257,8 @@ get.alleles <- function( x, split="/", na.rm = FALSE, as.numeric = FALSE ){
 #' 
 #' @details 
 #' The function \strong{alleles_to_consensus} converts genotypes to a single consensus allele using IUPAC ambiguity codes for heterozygotes. 
+#' Note that some functions, such as ape::seg.sites do not recognize ambiguity characters (other than 'n').
+#' This means that these functions, as well as functions that depend on them (e.g., pegas::tajima.test), will produce unexpected results.
 #' 
 #' 
 #' @export

@@ -62,8 +62,11 @@ test_that("extract_indels works",{
 
 
 test_that("extract_haps compiled code works",{
+  is.na(gt[1:5,1]) <- TRUE
   haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', vcf@fix[,'REF'], vcf@fix[,'ALT'], gt, '/', 0)
   expect_is(haps, "matrix")
+  expect_true( is.na(haps[1,1]) )
+  expect_true( is.na(haps[1,2]) )
   expect_equal(ncol(haps), 2 * ncol(gt))
   expect_equal(nrow(haps), nrow(gt))
 })

@@ -293,25 +293,27 @@ Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
                                 Rcpp::StringMatrix gt,
                                 char gt_split,
                                 int verbose) {
-  // Vcf files are typically of one ploidy.
 
-  std::string temp = Rcpp::as< std::string >(gt(1,1));
   int ploidy = 1;
   int i = 0;
   int j = 0;
   int hap_col = 0;
   int hap_num = 0;
 
+  // Determine ploidy.
+  // Vcf files are typically of one ploidy.
+  while( gt(i,0) == NA_STRING ){
+    i++;
+  }
+  std::string temp = Rcpp::as< std::string >(gt(i,1));
+
+  // Count elements to determine ploidy.
   for(i=0; i<temp.length(); i++){
-//    if( temp[i] == '/' ){ploidy++;}
     if( temp[i] == gt_split ){ploidy++;}
   }
-//  Rcout << "Ploidy = " << ploidy << "\n";
 
   if(ploidy == 1){
     // Is either haploid or is not phased.
-//    return gt;
-//    Rcout << "Ploidy = 1.\n";
     Rcpp::StringMatrix haps(1, 1);
     haps(0, 0) = NA_STRING;
     return haps;
@@ -322,39 +324,30 @@ Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
 
   Rcpp::List gt_names = gt.attr("dimnames");
   Rcpp::StringVector sample_names = gt_names(1);
-  Rcpp::StringVector haplo_names(gt.ncol() * ploidy);
-  
+
+  // Manage haplotype names with postfixed number.
+  Rcpp::StringVector haplo_names(gt.ncol() * ploidy);    
   j = 0;
   while(j < sample_names.size()){
     hap_num = 0;
     std::string sname = Rcpp::as< std::string >(sample_names[j]);
     while(hap_num < ploidy){
-//      sname = sname + "_" + std::to_string(hap_num);
-//      haplo_names(hap_col) = sname;
-//      haplo_names(hap_col) = sname + "_" + std::to_string(hap_num);
       std::ostringstream stm;
       stm << hap_num ;
       haplo_names(hap_col) = sname + "_" + stm.str();
-      
-      
-//      Rcout << haplo_names(hap_col) << "\n";
       hap_num++;
       hap_col++;
     }
     j++;
   }
-  
   haps.attr("dimnames") = Rcpp::List::create(gt_names(0), haplo_names);
-  
-//  Rcpp::StringVector sample_names(gt.colnames());
-//  Rcpp::StringVector haplo_names(gt.ncol() * ploidy);
-//  int name_num = 0;
-
 
 
   // Iterate over variants (rows of gt)
+  // Each variant has a REF and ALT, so this can't be by sample.
+  // Create a vector where position zero is REF and subsequent positions are ALT.
   for(i=0; i<gt.nrow(); i++){
-
+    
     // Split the alternate alleles string into alleles.
     std::vector < std::string > alleles_vec;
     char alleles_split = ','; // Must be single quotes!
@@ -366,33 +359,34 @@ Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
     std::string ref_allele = Rcpp::as< std::string >(ref(i));
     alleles_vec.insert(alleles_vec.begin(), ref_allele);
 
-/*
-    for(j=0; j<alleles_vec.size(); j++){
-      Rcout << "alles_vec " << j << " value " << alleles_vec[j] << "\n";
-    }
-    Rcout << "\n";
-    Rcout << "\n";
-*/
-
     // Process the genotypes (columns) into haplotypes.
+    // hap_num counts haplotypes per sample.
+    // hap_col counts columns in the return matrix
     hap_col = 0;
     for(j=0; j<gt.ncol(); j++){
       Rcpp::checkUserInterrupt();
       std::vector < std::string > al_vec;
       char al_split = gt_split; // Must be single quotes!
-//      char al_split = '/'; // Must be single quotes!
-      
-      std::string line = Rcpp::as< std::string >(gt(i, j));
-      vcfRCommon::strsplit(line, al_vec, al_split);
-      hap_num = 0;
-      while(hap_num < ploidy){
-//        int al_num = std::stoi(al_vec[hap_num]);
-        int al_num = atoi(al_vec[hap_num].c_str());
 
-        haps(i, hap_col) = alleles_vec[al_num];
-        hap_num++;
-        hap_col++;
+      if( gt(i, j) == NA_STRING ){
+        hap_num = 0;
+        while(hap_num < ploidy){
+          haps(i, hap_col) = NA_STRING;
+          hap_num++;
+          hap_col++;
+        }
+      } else {
+        std::string line = Rcpp::as< std::string >(gt(i, j));
+        vcfRCommon::strsplit(line, al_vec, al_split);
+        hap_num = 0;
+        while(hap_num < ploidy){
+          int al_num = atoi(al_vec[hap_num].c_str());
+          haps(i, hap_col) = alleles_vec[al_num];
+          hap_num++;
+          hap_col++;
+        }
       }
+
     }
     if(i % nreport == 0 && verbose == 1){
       Rcout << "\rVariant " << i << " processed";
