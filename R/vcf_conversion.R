@@ -75,9 +75,23 @@ vcfR2loci <- function(x)
 #' 
 #' @param extract_indels logical, at present, the only option is TRUE
 #' @param consensus logical, at present, the only option is TRUE
+#' @param extract_haps logical specifying whether to separate genotype into alleles based on a delimiting character
+#' @param gt_split character to delimit alleles within genotypes
+#' @param verbose logical specifying whether to produce verbose output
+#' 
+#' @details
+#' The DNAbin object stores nucleotide sequence information.
+#' This means that in order to convert vcf data to a nucleotide representation.
+#' For haploid data, this is straight forward.
+#' For diploid data there is the option of converting heterozygous sites to IUPAC ambiguity codes.
+#' This results in one sequence per diploid individual.
+#' Note that functions called downstream of this choice may handle IUPAC ambiguity codes in unexpected manners.
+#' If you have phased data, an alternative is to extract the haplotypes from each genotype.
+#' This should work for diploids and higher ploids.
+#' 
 #' 
 #' @export
-vcfR2DNAbin <- function( x, extract_indels = TRUE , consensus = TRUE )
+vcfR2DNAbin <- function( x, extract_indels = TRUE , consensus = TRUE, extract_haps = FALSE, gt_split="|", verbose = TRUE )
 {
   if( class(x) == 'Chrom' )
   {
@@ -87,28 +101,45 @@ vcfR2DNAbin <- function( x, extract_indels = TRUE , consensus = TRUE )
   {
     stop( "Expecting an object of class Chrom or vcfR" )
   }
+  if( consensus == TRUE & extract_haps == TRUE){
+    stop("consensus and extract_haps both set to true. These options are incompatible. A haplotype should not be ambiguous.")
+  }
   
   x <- extract_indels(x)
-  x <- extract.gt(x, return.alleles=TRUE)
+  if( nrow(x@fix) < 1 ){
+    return( NA )
+  }
+  
+  if( extract_haps == FALSE){
+    x <- extract.gt(x, return.alleles=TRUE)
+  } else {
+    x <- extract_haps(x, gt_split="|", verbose = verbose)
+  }
+  
+  # If we have no variants (row) return NA.
   if( nrow(x) < 1 )
   {
     return( NA )
   }
-  
-  ploid <- unlist( strsplit( x[!is.na(x)][1], split="[|/]" ) )
+
+  # Strategies to convert genotypes (with a delimiter) to a nucleotide.  
+  ploid <- unlist( strsplit( x[!is.na(x)][1], split=gt_split ) )
   if( length(ploid) == 1 )
   {
-    # Do nothing
-  } else if ( length(ploid) == 2 )
+    x[is.na(x)] <- 'n'
+    x <- apply(x, MARGIN=2, tolower)
+  } else if ( length(ploid) == 2 & consensus == TRUE )
   {
-    x <- alleles_to_consensus(x)    
-  } else {
-    stop( "function only valid for diploid and haploid genotypes." )
+    x <- alleles_to_consensus( x, sep = gt_split, NA_to_n = TRUE )
+    x <- apply(x, MARGIN=2, tolower)
+  } else if (ploid == 2 & consensus == FALSE ){
+    stop( "Ploidy is 2 but consensus is set to FALSE.\nGenotypes must be converted to a nucleotide.\nConsider setting consensus to TRUE." )
+#    stop( "function only valid for diploid and haploid genotypes." )
+  } else if ( ploid > 2 & extract_haps == FALSE ){
+    stop( "Ploidy is greater than 2 but extract_haps is set to FALSE.\nGenotypes must be converted to a nucleotide.\nConsider setting extract_haps to TRUE." )
   }
   
   # DNAbin characters must be lower case.
-  x <- apply(x, MARGIN=2, tolower)
-  x[is.na(x)] <- 'n'
   x <- ape::as.DNAbin(t(x))
   x
 }

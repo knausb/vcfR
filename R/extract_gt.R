@@ -174,7 +174,7 @@ extract_haps <- function(x, mask=FALSE, gt_split="|",verbose=TRUE){
   
   gt <- extract.gt(x, element="GT")
 
-  haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', x@fix[,'REF'], x@fix[,'ALT'], gt, gt_split, 1)
+  haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', x@fix[,'REF'], x@fix[,'ALT'], gt, gt_split, as.numeric(verbose))
   haps
 }
 

@@ -11,7 +11,8 @@ vcfR2genind(x, sep = "[|/]")
 
 vcfR2loci(x)
 
-vcfR2DNAbin(x, extract_indels = TRUE, consensus = TRUE)
+vcfR2DNAbin(x, extract_indels = TRUE, consensus = TRUE,
+  extract_haps = FALSE, gt_split = "|", verbose = TRUE)
 }
 \arguments{
 \item{x}{an object of class Chrom or vcfR}
@@ -21,6 +22,12 @@ vcfR2DNAbin(x, extract_indels = TRUE, consensus = TRUE)
 \item{extract_indels}{logical, at present, the only option is TRUE}
 
 \item{consensus}{logical, at present, the only option is TRUE}
+
+\item{extract_haps}{logical specifying whether to separate genotype into alleles based on a delimiting character}
+
+\item{gt_split}{character to delimit alleles within genotypes}
+
+\item{verbose}{logical specifying whether to produce verbose output}
 }
 \description{
 Convert vcfR objects to objects supported by other packages
@@ -37,6 +44,15 @@ The packages adegenet and poppr use the genind object.
 The function vcfR2genind uses extract.gt to create a matrix of genotypes and uses the adegenet function df2genind to create a genind object.
 The package poppr additionally uses objects of class genclone.
 A genind object can be converted to a genclone object with the function poppr::as.genclone.
+
+The DNAbin object stores nucleotide sequence information.
+This means that in order to convert vcf data to a nucleotide representation.
+For haploid data, this is straight forward.
+For diploid data there is the option of converting heterozygous sites to IUPAC ambiguity codes.
+This results in one sequence per diploid individual.
+Note that functions called downstream of this choice may handle IUPAC ambiguity codes in unexpected manners.
+If you have phased data, an alternative is to extract the haplotypes from each genotype.
+This should work for diploids and higher ploids.
 }
 \seealso{
 \code{\link{extract.gt}},
