@@ -107,6 +107,7 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
                          ref.seq = NULL, start.pos = NULL,
                          verbose = TRUE )
 {
+  # Sanitize input.
   if( class(x) == 'Chrom' )
   {
     x <- x@vcf
@@ -118,14 +119,20 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
   if( consensus == TRUE & extract.haps == TRUE){
     stop("consensus and extract_haps both set to true. These options are incompatible. A haplotype should not be ambiguous.")
   }
+  if( !is.null(start.pos) & class(start.pos) == "character" ){
+    start.pos <- as.integer(start.pos)
+  }
   
+  # Extract indels.
   if( extract.indels == TRUE ){
     x <- extract_indels(x)
-    if( nrow(x@fix) < 1 ){
-      return( NA )
-    }    
   } else {
     stop("extract.indels == FALSE is not currently implemented.")
+  }
+  
+  # If we removed all variants, return NA.
+  if( nrow(x@fix) < 1 ){
+    return( NA )
   }
   
   # Save POS in case we need it.

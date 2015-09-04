@@ -302,10 +302,11 @@ Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
 
   // Determine ploidy.
   // Vcf files are typically of one ploidy.
-  while( gt(i,0) == NA_STRING ){
+  while( gt(i,1) == NA_STRING ){
     i++;
   }
   std::string temp = Rcpp::as< std::string >(gt(i,1));
+//  Rcpp:Rcout << "GT to test ploidy: " << temp << "\n";
 
   // Count elements to determine ploidy.
   for(i=0; i<temp.length(); i++){
