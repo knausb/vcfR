@@ -15,3 +15,6 @@ test_file("testthat/test_io.R")
 #test_file("testthat/test_rank_variants.R")
 #test_file("testthat/test_var_window.R")
 #test_file("testthat/test_windowing.R")
+
+#
+test_file("testthat/test_conversion.R")

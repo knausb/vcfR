@@ -128,19 +128,25 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
     stop("extract.indels == FALSE is not currently implemented.")
   }
   
-  if( extract.haps == FALSE){
+  # Save POS in case we need it.
+  pos <- as.numeric(x@fix[,'POS'])
+  
+  if( extract.haps == FALSE ){
     x <- extract.gt(x, return.alleles=TRUE)
-  } else {
+  } else if( extract.haps == TRUE ){
     x <- extract_haps(x, gt_split=gt.split, verbose = verbose)
+  } else {
+    stop( "Invalid specification of extract.haps.\nShould be a logical." )
   }
   
-  # If we have no variants (row) return NA.
+  # If we have no variants (rows) return NA.
   if( nrow(x) < 1 )
   {
     return( NA )
   }
 
-  # Strategies to convert genotypes (with a delimiter) to a nucleotide.  
+  # Strategies to convert genotypes (with a delimiter) to nucleotides.
+  # If extract.haps ws set to TRUE, then our data is effectively haploid now.
   ploid <- unlist( strsplit( x[!is.na(x)][1], split=gt.split ) )
   if( length(ploid) == 1 )
   {
@@ -158,9 +164,32 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
   }
   
   # Fill with reference sequence.
-  if( ref.seq != NULL){
+  if( !is.null(ref.seq) ){
+    if( class(ref.seq) == "list" & inherits(ref.seq, "DNAbin") ){
+      ref.seq <- as.matrix(ref.seq)
+    }
     
+    # Subset the vcf data to our region of interest.
+    end.pos <- start.pos + dim(ref.seq)[2] - 1
+    x <- x[ pos >= start.pos & pos <= end.pos,]
     
+    # Subset pos to our region of interest
+    # and set to new coordinate system.
+    pos <- pos[ pos >= start.pos & pos <= end.pos ]
+    pos <- pos - start.pos + 1
+    
+    # Create a matrix with the same number of columns as vcf data
+    # and the number of rows to match the sequence length.
+    out.seq <- matrix( as.character(ref.seq),
+                       nrow = dim(ref.seq)[2],
+                       ncol = ncol(x),
+                       byrow = FALSE
+    )
+    colnames(out.seq) <- colnames(x)
+    
+#    pos <- pos - start.pos + 1
+    out.seq[pos,] <- x
+    x <- out.seq
   }
 
   # DNAbin characters must be lower case.
