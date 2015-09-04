@@ -158,7 +158,12 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
   if( length(ploid) == 1 )
   {
     x[is.na(x)] <- 'n'
-    x <- apply(x, MARGIN=2, tolower)
+    if( nrow(x) > 1 ){
+      x <- apply(x, MARGIN=2, tolower)
+    } else if( nrow(x) == 1 ){
+      x <- apply(x, MARGIN=2, tolower)
+      x <- matrix(x, nrow=1, dimnames = list( NULL, names(x)))
+    }
   } else if ( length(ploid) == 2 & consensus == TRUE )
   {
     x <- alleles_to_consensus( x, sep = gt.split, NA_to_n = TRUE )
@@ -178,7 +183,12 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
     
     # Subset the vcf data to our region of interest.
     end.pos <- start.pos + dim(ref.seq)[2] - 1
-    x <- x[ pos >= start.pos & pos <= end.pos,]
+    if( nrow(x) > 1 ){
+      x <- x[ pos >= start.pos & pos <= end.pos,]
+    } else if( nrow(x) == 1){
+      x <- x[ pos >= start.pos & pos <= end.pos,]
+      x <- matrix(x, nrow=1, dimnames = list( NULL, names(x)))
+    }
     
     # Subset pos to our region of interest
     # and set to new coordinate system.
