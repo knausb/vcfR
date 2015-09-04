@@ -183,12 +183,12 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
     
     # Subset the vcf data to our region of interest.
     end.pos <- start.pos + dim(ref.seq)[2] - 1
-    if( nrow(x) > 1 ){
-      x <- x[ pos >= start.pos & pos <= end.pos,]
-    } else if( nrow(x) == 1){
-      x <- x[ pos >= start.pos & pos <= end.pos,]
-      x <- matrix(x, nrow=1, dimnames = list( NULL, names(x)))
-    }
+#    if( nrow(x) > 1 ){
+      x <- x[ pos >= start.pos & pos <= end.pos, , drop = FALSE ]
+#    } else if( nrow(x) == 1){
+#      x <- x[ pos >= start.pos & pos <= end.pos,]
+#      x <- matrix(x, nrow=1, dimnames = list( NULL, names(x)))
+#    }
     
     # Subset pos to our region of interest
     # and set to new coordinate system.
