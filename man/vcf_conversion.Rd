@@ -11,21 +11,26 @@ vcfR2genind(x, sep = "[|/]")
 
 vcfR2loci(x)
 
-vcfR2DNAbin(x, extract_indels = TRUE, consensus = TRUE,
-  extract_haps = FALSE, gt_split = "|", verbose = TRUE)
+vcfR2DNAbin(x, extract.indels = TRUE, consensus = TRUE,
+  extract.haps = FALSE, gt.split = "|", ref.seq = NULL,
+  start.pos = NULL, verbose = TRUE)
 }
 \arguments{
 \item{x}{an object of class Chrom or vcfR}
 
 \item{sep}{character (to be used in a regular expression) to delimit the alleles of genotypes}
 
-\item{extract_indels}{logical, at present, the only option is TRUE}
+\item{extract.indels}{logical, at present, the only option is TRUE}
 
 \item{consensus}{logical, at present, the only option is TRUE}
 
-\item{extract_haps}{logical specifying whether to separate genotype into alleles based on a delimiting character}
+\item{extract.haps}{logical specifying whether to separate genotype into alleles based on a delimiting character}
 
-\item{gt_split}{character to delimit alleles within genotypes}
+\item{gt.split}{character to delimit alleles within genotypes}
+
+\item{ref.seq}{reference sequence for the region being converted}
+
+\item{start.pos}{chromosomal position for the start of the ref.seq}
 
 \item{verbose}{logical specifying whether to produce verbose output}
 }
@@ -53,6 +58,15 @@ This results in one sequence per diploid individual.
 Note that functions called downstream of this choice may handle IUPAC ambiguity codes in unexpected manners.
 If you have phased data, an alternative is to extract the haplotypes from each genotype.
 This should work for diploids and higher ploids.
+
+A multiple sequence alignment for an entire chromosome contains a high degree of redundancy in invariant sites.
+This is why vcf files contain only information on variants.
+However, many analyses make use of invariant sites.
+For example, likelihood inference of phylogeny (and therefore Bayesian methods as well) requires invariant sites.
+By default, the function \strong{vcfR2DNAbin} by default will return an object of class DNAbin which only contains the variable positions.
+In order to fill in the invariant sites, the parameter ref.seq should be provided.
+Providing an entire chromosome may exceed available memory.
+By providing a ref.seq for a region (of class ape::DNAbin), for example a gene, and the start.pos for that sequence (the end position will be determined from the sequence length), complete sequences can be created.
 }
 \seealso{
 \code{\link{extract.gt}},

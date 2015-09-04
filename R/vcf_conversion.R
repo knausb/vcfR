@@ -73,10 +73,12 @@ vcfR2loci <- function(x)
 #' @rdname vcf_conversion
 #' @aliases vcfR2DNAbin
 #' 
-#' @param extract_indels logical, at present, the only option is TRUE
+#' @param extract.indels logical, at present, the only option is TRUE
 #' @param consensus logical, at present, the only option is TRUE
-#' @param extract_haps logical specifying whether to separate genotype into alleles based on a delimiting character
-#' @param gt_split character to delimit alleles within genotypes
+#' @param extract.haps logical specifying whether to separate genotype into alleles based on a delimiting character
+#' @param gt.split character to delimit alleles within genotypes
+#' @param ref.seq reference sequence for the region being converted
+#' @param start.pos chromosomal position for the start of the ref.seq
 #' @param verbose logical specifying whether to produce verbose output
 #' 
 #' @details
@@ -89,9 +91,21 @@ vcfR2loci <- function(x)
 #' If you have phased data, an alternative is to extract the haplotypes from each genotype.
 #' This should work for diploids and higher ploids.
 #' 
+#' A multiple sequence alignment for an entire chromosome contains a high degree of redundancy in invariant sites.
+#' This is why vcf files contain only information on variants.
+#' However, many analyses make use of invariant sites.
+#' For example, likelihood inference of phylogeny (and therefore Bayesian methods as well) requires invariant sites.
+#' By default, the function \strong{vcfR2DNAbin} by default will return an object of class DNAbin which only contains the variable positions.
+#' In order to fill in the invariant sites, the parameter ref.seq should be provided.
+#' Providing an entire chromosome may exceed available memory.
+#' By providing a ref.seq for a region (of class ape::DNAbin), for example a gene, and the start.pos for that sequence (the end position will be determined from the sequence length), complete sequences can be created.
+#' 
 #' 
 #' @export
-vcfR2DNAbin <- function( x, extract_indels = TRUE , consensus = TRUE, extract_haps = FALSE, gt_split="|", verbose = TRUE )
+vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
+                         extract.haps = FALSE, gt.split="|",
+                         ref.seq = NULL, start.pos = NULL,
+                         verbose = TRUE )
 {
   if( class(x) == 'Chrom' )
   {
@@ -101,19 +115,23 @@ vcfR2DNAbin <- function( x, extract_indels = TRUE , consensus = TRUE, extract_ha
   {
     stop( "Expecting an object of class Chrom or vcfR" )
   }
-  if( consensus == TRUE & extract_haps == TRUE){
+  if( consensus == TRUE & extract.haps == TRUE){
     stop("consensus and extract_haps both set to true. These options are incompatible. A haplotype should not be ambiguous.")
   }
   
-  x <- extract_indels(x)
-  if( nrow(x@fix) < 1 ){
-    return( NA )
+  if( extract.indels == TRUE ){
+    x <- extract_indels(x)
+    if( nrow(x@fix) < 1 ){
+      return( NA )
+    }    
+  } else {
+    stop("extract.indels == FALSE is not currently implemented.")
   }
   
-  if( extract_haps == FALSE){
+  if( extract.haps == FALSE){
     x <- extract.gt(x, return.alleles=TRUE)
   } else {
-    x <- extract_haps(x, gt_split="|", verbose = verbose)
+    x <- extract_haps(x, gt_split=gt.split, verbose = verbose)
   }
   
   # If we have no variants (row) return NA.
@@ -123,22 +141,28 @@ vcfR2DNAbin <- function( x, extract_indels = TRUE , consensus = TRUE, extract_ha
   }
 
   # Strategies to convert genotypes (with a delimiter) to a nucleotide.  
-  ploid <- unlist( strsplit( x[!is.na(x)][1], split=gt_split ) )
+  ploid <- unlist( strsplit( x[!is.na(x)][1], split=gt.split ) )
   if( length(ploid) == 1 )
   {
     x[is.na(x)] <- 'n'
     x <- apply(x, MARGIN=2, tolower)
   } else if ( length(ploid) == 2 & consensus == TRUE )
   {
-    x <- alleles_to_consensus( x, sep = gt_split, NA_to_n = TRUE )
+    x <- alleles_to_consensus( x, sep = gt.split, NA_to_n = TRUE )
     x <- apply(x, MARGIN=2, tolower)
-  } else if (ploid == 2 & consensus == FALSE ){
+  } else if ( ploid == 2 & consensus == FALSE ){
     stop( "Ploidy is 2 but consensus is set to FALSE.\nGenotypes must be converted to a nucleotide.\nConsider setting consensus to TRUE." )
 #    stop( "function only valid for diploid and haploid genotypes." )
   } else if ( ploid > 2 & extract_haps == FALSE ){
     stop( "Ploidy is greater than 2 but extract_haps is set to FALSE.\nGenotypes must be converted to a nucleotide.\nConsider setting extract_haps to TRUE." )
   }
   
+  # Fill with reference sequence.
+  if( ref.seq != NULL){
+    
+    
+  }
+
   # DNAbin characters must be lower case.
   x <- ape::as.DNAbin(t(x))
   x
