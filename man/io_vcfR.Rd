@@ -42,7 +42,25 @@ write_fasta(x, file = "", gt_split = "|", rowlength = 80,
 Read and write files in the vcf format.
 }
 \details{
-Reads in a vcf file and stores it in a vcf class.  Once the number of lines the meta information contains the data is divided into three tables: meta data, fixed data and genotype data.
+The function \strong{read.vcf} reads in files in *.vcf (text) and *.vcf.gz (gzipped text) format and returns an object of class vcfR.
+The parameter 'limit' is an attempt to keep the user from trying to read in a file which contains more data than there is memory to hold.
+Based on the dimensions of the data matrix, an estimate of how much memory needed is made.
+If this estimate exceeds the value of 'limit' an error is thrown and execution stops.
+
+
+The function \strong{write.vcf} takes an object of either class vcfR or chromR and writes the vcf data to a vcf.gz file (gzipped text).
+If the parameter 'mask' is set to FALSE, the entire object is written to file.
+If the parameter 'mask' is set to TRUE and the object is of class chromR (which has a mask slot), this maske is used to subset the data.
+If an index is supplied as 'mask', then this index is used, and recycled as necessary, to subset the data.
+
+The function \strong{write_var_info} takes the variant information table from a chromR object and writes it as a comma delimited file.
+
+The function \strong{write_win_info} takes the window information table from a chromR object and writes it as a comma delimited file.
+
+The function \strong{write_fasta} takes an object of class chromR and writes it to a fasta.gz (gzipped text) format file.
+The sequence in the seq slot of the chromR object is used to fill in the invariant sites.
+The parameter 'tolower', when set to TRUE, converts all the characters in teh sequence to lower case.
+This is important because some software, such as ape::DNAbin, requires sequences to be in lower case.
 }
 \examples{
 library(vcfR)
