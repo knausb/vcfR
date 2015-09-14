@@ -1,6 +1,7 @@
 # extractgt devel
 
-#detach(package:vcfR, unload=TRUE)
+#
+detach(package:vcfR, unload=TRUE)
 library(vcfR)
 context("extract_gt functions")
 
@@ -49,6 +50,17 @@ test_that("extract_gt mask=TRUE works", {
 })
 
 
+test_that("extract.gt extract parameter works",{
+  gt <- extract.gt(chrom, element="GT", extract=TRUE)
+  
+  
+  expect_is(gq, "matrix")
+  expect_equal(is.numeric(gq), TRUE)
+})
+
+
+
+
 test_that("extract_indels works",{
   # No indels in sc100
 #  indels <- extract_indels(vcf, return_indels=TRUE)
@@ -82,12 +94,26 @@ test_that("extract_haps R code works",{
 
 
 test_that("extract_GT_to_CM2 compiled code works",{
-  gt <- .Call( 'vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', vcf@fix, vcf@gt, 'GT', '/', 0 )
+  gt <- .Call( 'vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', vcf@fix, vcf@gt, 'GT', '/', 0, 1 )
 #  head(gt)
-  gt <- .Call( 'vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', vcf@fix, vcf@gt, 'GT', '/', 1 )
+  # Return alleles
+  gt <- .Call( 'vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', vcf@fix, vcf@gt, 'GT', '/', 1, 1 )
 #  head(gt)
-  gt <- .Call( 'vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', vcf@fix, vcf@gt, 'DP', '/', 0 )
+  gt <- .Call( 'vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', vcf@fix, vcf@gt, 'DP', '/', 0, 1 )
 #  head(gt)
+  
+
+  gt <- .Call( 'vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', vcf@fix, vcf@gt, 'GT', '/', 0, 0 )
+#  
+#  head(gt)
+#  head(vcf@gt)
+  expect_eqaul(nchar(gt[1,1]), 17)
+  
+  gt <- .Call( 'vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', vcf@fix, vcf@gt, 'AD', '/', 0, 0 )
+  expect_eqaul(nchar(gt[1,1]), 17)
+  
+  gt <- .Call( 'vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', vcf@fix, vcf@gt, 'PL', '/', 0, 0 )
+  expect_eqaul(nchar(gt[1,1]), 12)
   
 #  expect_is(haps, "matrix")
 #  expect_equal(ncol(haps), 2 * ncol(gt))

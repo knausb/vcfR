@@ -12,7 +12,7 @@
 \title{Extract elements from the GT section of a vcf format object}
 \usage{
 extract.gt(x, element = "GT", mask = FALSE, as.numeric = FALSE,
-  return.alleles = FALSE, allele.sep = "/")
+  return.alleles = FALSE, allele.sep = "/", extract = TRUE)
 
 extract_indels(x, return_indels = FALSE)
 
@@ -35,11 +35,13 @@ alleles_to_consensus(x2, sep = "/", NA_to_n = TRUE)
 
 \item{mask}{a logical indicating whether to apply the mask (TRUE) or return all variants (FALSE). Alternatively, a vector of logicals may be provided.}
 
-\item{as.numeric}{Logical, should the matrix be converted to numerics}
+\item{as.numeric}{logical, should the matrix be converted to numerics}
 
 \item{return.alleles}{logical indicating whether to return the genotypes (0/1) or alleles (A/T)}
 
 \item{allele.sep}{character which delimits the alleles in a genotype (/ or |)}
+
+\item{extract}{logical indicating whether to return the extracted element or the remaining string}
 
 \item{return_indels}{logical indicating whether to return indels or not}
 

@@ -49,7 +49,7 @@ int elementNumber(String x, std::string element = "GT"){
 }
 
 
-Rcpp::String extractElementS(Rcpp::String x, int position=0){
+Rcpp::String extractElementS(Rcpp::String x, int position=0, int extract=1){
   //
   // x is a colon delimited string similar to:
   // GT:GQ:DP:RO:QR:AO:QA:GL
@@ -72,8 +72,23 @@ Rcpp::String extractElementS(Rcpp::String x, int position=0){
 //      Rcout << "Current position: " << current_position << ", Desired position: " << position << "\n";
 //      Rcout << "Test string: " << istring.substr(start, i-start) << "\n";
       if(position == current_position){
-        teststring = istring.substr(start, i-start);
-        return teststring;
+        if(extract == 1){
+          teststring = istring.substr(start, i-start);
+          return teststring;
+        } else {
+//          Rcpp::Rcout << "istring: " << istring << ", position: " << position << "\n";
+          if(position == 1){
+//            Rcpp::Rcout << "i: " << i << ", istring: " << istring << "\n";
+            teststring = istring.substr( i + 1, istring.size() - i );
+            Rcpp::Rcout << "  teststring: " << teststring << "\n";
+            teststring = teststring.substr(0, teststring.size() - 1); // Remove terminating : added above.
+            return teststring;
+          } else {
+            teststring = istring.substr(0, start) + istring.substr( i + 1, istring.size());
+            teststring = teststring.substr(0, teststring.size() - 1); // Remove terminating : added above.
+            return teststring;
+          }
+        }
       } else {
         start = i+1;
         current_position++;
@@ -205,12 +220,14 @@ Rcpp::StringMatrix extract_GT_to_CM2( Rcpp::StringMatrix fix,
                                          Rcpp::StringMatrix gt,
                                          std::string element="DP",
                                          char allele_sep = '/',
-                                         int alleles = 0 ) {
+                                         int alleles = 0,
+                                         int extract = 1 ) {
   int i = 0;
   int j = 0;
 
   // Initialize a return matrix.
-  // The return_matrix will have one less column than in gt.
+  // The first column of gt is FORMAT, 
+  // so the return_matrix will have one less column than in gt.
   // We'll preserve the column names of gt in return_matrix.
   Rcpp::StringMatrix return_matrix( gt.nrow(), gt.ncol() - 1 );
   Rcpp::List matrix_names = gt.attr("dimnames");
@@ -238,7 +255,7 @@ Rcpp::StringMatrix extract_GT_to_CM2( Rcpp::StringMatrix fix,
       if( gt(i, j) == NA_STRING ){
         return_matrix(i, j-1) = NA_STRING;
       } else {
-        return_matrix(i, j-1) = extractElementS( gt(i, j), position );
+        return_matrix(i, j-1) = extractElementS( gt(i, j), position, extract );
       
         // Convert to alleles
         if( alleles == 1 )

@@ -19,12 +19,13 @@
 #' 
 #' @rdname extract_gt
 #' 
-#' @param as.numeric Logical, should the matrix be converted to numerics
+#' @param as.numeric logical, should the matrix be converted to numerics
 #' @param return.alleles logical indicating whether to return the genotypes (0/1) or alleles (A/T)
 #' @param allele.sep character which delimits the alleles in a genotype (/ or |)
+#' @param extract logical indicating whether to return the extracted element or the remaining string
 #' 
 #' @export
-extract.gt <- function(x, element="GT", mask=FALSE, as.numeric=FALSE, return.alleles=FALSE, allele.sep="/" ){
+extract.gt <- function(x, element="GT", mask=FALSE, as.numeric=FALSE, return.alleles=FALSE, allele.sep="/", extract = TRUE ){
 
   # Validate that we have an expected data structure
   if( class(x) != "Chrom" & class(x) != "vcfR" ){
@@ -64,7 +65,7 @@ extract.gt <- function(x, element="GT", mask=FALSE, as.numeric=FALSE, return.all
     }
 #    .Call('vcfR_extract_haps', PACKAGE = 'vcfR', ref, alt, gt, gt_split, verbose)
 #    outM <- .Call('vcfR_extract_GT_to_CM', PACKAGE = 'vcfR', x@gt, element)
-    outM <- .Call('vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', x@fix, x@gt, element, allele.sep, return.alleles )
+    outM <- .Call('vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', x@fix, x@gt, element, allele.sep, return.alleles, as.integer(extract) )
     
   }
 
