@@ -97,6 +97,7 @@ vcfR2loci <- function(x)
 #' For example, likelihood inference of phylogeny (and therefore Bayesian methods as well) requires invariant sites.
 #' By default, the function \strong{vcfR2DNAbin} by default will return an object of class DNAbin which only contains the variable positions.
 #' In order to fill in the invariant sites, the parameter ref.seq should be provided.
+#' When vcfR2DNAbin encounters missing data in the vcf data (NA) it is coded as an ambiguous nucleotide (n) in the DNAbin object.
 #' Providing an entire chromosome may exceed available memory.
 #' By providing a ref.seq for a region (of class ape::DNAbin), for example a gene, and the start.pos for that sequence (the end position will be determined from the sequence length), complete sequences can be created.
 #' 
