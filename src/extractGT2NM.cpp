@@ -80,7 +80,7 @@ Rcpp::String extractElementS(Rcpp::String x, int position=0, int extract=1){
           if(position == 1){
 //            Rcpp::Rcout << "i: " << i << ", istring: " << istring << "\n";
             teststring = istring.substr( i + 1, istring.size() - i );
-            Rcpp::Rcout << "  teststring: " << teststring << "\n";
+//            Rcpp::Rcout << "  teststring: " << teststring << "\n";
             teststring = teststring.substr(0, teststring.size() - 1); // Remove terminating : added above.
             return teststring;
           } else {
