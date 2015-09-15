@@ -9,11 +9,14 @@ Depends:
     R (>= 3.0.1)
 LinkingTo: Rcpp
 Imports:
-    methods,
     ape,
+    memuse,    
+    methods,
     Rcpp
 Suggests:
+    adegenet,
     knitr,
-    testthat
+    testthat,
+    viridis
 VignetteBuilder: knitr
 License: GPL

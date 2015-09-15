@@ -121,7 +121,7 @@ double extractElementD(String x, int number=1){
 
 
 // [[Rcpp::export]]
-CharacterMatrix extract_GT_to_CM(DataFrame x, std::string element="DP") {
+Rcpp::CharacterMatrix extract_GT_to_CM(Rcpp::DataFrame x, std::string element="DP") {
   int i = 0;
   int j = 0;
   Rcpp::StringVector column = x(0);   // Vector to check out DataFrame columns to
@@ -134,7 +134,7 @@ CharacterMatrix extract_GT_to_CM(DataFrame x, std::string element="DP") {
   cm.attr("dimnames") = Rcpp::List::create(Rcpp::CharacterVector::create(), colnames);
   
   // Determine the position where the query element is 
-  // located in each row (varioant)
+  // located in each row (variant)
   for(i=0; i<column.size(); i++){
     positions[i] = elementNumber(column(i), element);
   }

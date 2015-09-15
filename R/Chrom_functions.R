@@ -34,28 +34,31 @@
 #' This vector is stored in the var.info$mask slot of a Chrom object.
 #' 
 #masker <- function(x, min_QUAL=999, min_DP=0.25, max_DP=0.75, minmq=20, maxmq=50, ...){
-masker <- function(x, min_QUAL=1, min_DP=1, max_DP=1e4, min_MQ=20, max_MQ=100, ...){  
-  quals  <- x@vcf.fix$QUAL
-  info <- x@var.info[,grep("DP|MQ",names(x@var.info))]
-  mask <- rep(TRUE, times=nrow(info))
-
+masker <- function(x, min_QUAL=1, min_DP=1, max_DP=1e4, min_MQ=20, max_MQ=100, ...){
+  quals <- getQUAL(x)
+#  quals  <- x@vcf.fix$QUAL
+#  info <- x@var.info[,grep("DP|MQ",names(x@var.info)), drop=FALSE]
+#  mask <- rep(TRUE, times=nrow(info))
+  mask <- rep(TRUE, times=nrow(x@var.info))
+  
   # Mask on QUAL
   if(sum(is.na(quals)) < length(quals)){
     mask[quals < min_QUAL] <- FALSE
   }
 
   # Mask on DP
-  if(sum(is.na(info$DP)) < length(info$DP)){
-    mask[info$DP < min_DP] <- FALSE
-    mask[info$DP > max_DP] <- FALSE
-#    mask[info$DP < quantile(info$DP, probs=c(mindp))] <- FALSE
-#    mask[info$DP > quantile(info$DP, probs=c(maxdp))] <- FALSE
+  if( !is.null( x@var.info$DP ) ){
+    if(sum(is.na(x@var.info$DP)) < length(x@var.info$DP)){
+      mask[x@var.info$DP < min_DP] <- FALSE
+      mask[x@var.info$DP > max_DP] <- FALSE
+    }
   }
-  if(sum(is.na(info$MQ)) < length(info$MQ)){
-    mask[info$MQ < min_MQ] <- FALSE
-    mask[info$MQ > max_MQ] <- FALSE
-    #    mask[info$MQ < quantile(info$MQ, probs=c(minmq))] <- FALSE
-    #    mask[info$MQ > quantile(info$MQ, probs=c(maxmq))] <- FALSE
+  
+  if( !is.null( x@var.info$MQ ) ){
+    if(sum(is.na(x@var.info$MQ)) < length(x@var.info$MQ)){
+      mask[x@var.info$MQ < min_MQ] <- FALSE
+      mask[x@var.info$MQ > max_MQ] <- FALSE
+    }
   }
   x@var.info$mask <- mask
   return(x)

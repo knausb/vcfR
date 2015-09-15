@@ -5,14 +5,11 @@
 \alias{gt2popsum}
 \alias{gt_to_popsum}
 \alias{proc_chrom}
-\alias{proc_chrom_R}
 \alias{regex.win}
 \alias{seq_to_rects}
 \alias{var.win}
 \title{Process chrom object}
 \usage{
-proc_chrom_R(x, win.size = 1000, verbose = TRUE)
-
 proc_chrom(x, win.size = 1000, verbose = TRUE)
 
 regex.win(x, max.win = 1000, regex = "[acgtwsmkrybdhv]")
@@ -52,14 +49,10 @@ Stretches are determined by querying each nucleotides in a sequence to determine
 \details{
 The function \strong{proc_chrom()} calls helper functions to process the data present in a Chrom object into summaries statistics.
 
-
 The function \strong{regex.win()} is used to generate coordinates to define rectangles to represent regions of the chromosome containing called nucleotides (acgtwsmkrybdhv).
 It is then called a second time to generate coordinates to define rectangles to represent regions called as uncalled nucleotides (n, but not gaps).
 
 The function \strong{gt2popsum} is called to create summaries of the variant data.
-
-
-
 
 The function \strong{var.win} is called to create windowized summaries of the Chrom object.
 }

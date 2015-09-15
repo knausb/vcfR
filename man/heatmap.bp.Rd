@@ -7,8 +7,7 @@
 \usage{
 heatmap.bp(x, cbarplot = TRUE, rbarplot = TRUE, legend = TRUE,
   clabels = TRUE, rlabels = TRUE, na.rm = TRUE, scale = c("row",
-  "column", "none"), col.ramp = colorRampPalette(c("red", "yellow",
-  "#008000"))(100), ...)
+  "column", "none"), col.ramp = viridis::viridis(n = 100, alpha = 1), ...)
 }
 \arguments{
 \item{x}{a numeric matrix.}
@@ -39,16 +38,17 @@ The function heatmap.bp creates a heatmap from a numeric matrix with optional ba
 }
 \examples{
 library(vcfR)
-data(vcfR_example)
-pinf_mt <- create_chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
-pinf_mt <- masker(pinf_mt)
-pinf_gq <- extract.gt(pinf_mt, element="GQ", as.numeric=TRUE)
-heatmap.bp(pinf_gq)
-heatmap.bp(pinf_gq, scale="col")
-heatmap.bp(pinf_gq, col.ramp = colorRampPalette(c("red", "yellow", "#008000"))(100))
-heatmap.bp(pinf_gq, col.ramp = colorRampPalette(c("#D55E00", "#F0E442", "#009E73"))(100))
+
+x  <- as.matrix(mtcars)
+
+heatmap.bp(x)
+heatmap.bp(x, scale="col")
+# Use an alternate color ramp
+heatmap.bp(x, col.ramp = colorRampPalette(c("red", "yellow", "#008000"))(100))
+library(viridis)
+heatmap.bp(x, col.ramp = viridis(n=10))
 }
 \seealso{
-heatmap, image, heatmap2 in library(gplots).
+\code{\link[stats]{heatmap}}, \code{\link[graphics]{image}}, heatmap2 in \href{https://cran.r-project.org/web/packages/gplots/index.html}{gplots}.
 }
 

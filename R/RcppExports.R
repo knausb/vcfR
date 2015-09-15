@@ -33,50 +33,6 @@ rank_variants <- function(variants, ends, score) {
     .Call('vcfR_rank_variants', PACKAGE = 'vcfR', variants, ends, score)
 }
 
-read_to_line <- function(x) {
-    .Call('vcfR_read_to_line', PACKAGE = 'vcfR', x)
-}
-
-vcf_stats_gz <- function(x) {
-    .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', x)
-}
-
-vcf_stats <- function(x) {
-    .Call('vcfR_vcf_stats', PACKAGE = 'vcfR', x)
-}
-
-vcf_meta <- function(x, stats) {
-    .Call('vcfR_vcf_meta', PACKAGE = 'vcfR', x, stats)
-}
-
-read_meta_gz <- function(x, stats, verbose) {
-    .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', x, stats, verbose)
-}
-
-vcf_body <- function(x, stats) {
-    .Call('vcfR_vcf_body', PACKAGE = 'vcfR', x, stats)
-}
-
-read_body_gz <- function(x, stats, verbose = 1L) {
-    .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', x, stats, verbose)
-}
-
-ram_test <- function(nrow = 1L, ncol = 1L) {
-    .Call('vcfR_ram_test', PACKAGE = 'vcfR', nrow, ncol)
-}
-
-write_vcf_body <- function(fix, gt, filename, mask = 0L) {
-    invisible(.Call('vcfR_write_vcf_body', PACKAGE = 'vcfR', fix, gt, filename, mask))
-}
-
-write_vcf_body_gz <- function(fix, gt, filename, mask = 0L) {
-    invisible(.Call('vcfR_write_vcf_body_gz', PACKAGE = 'vcfR', fix, gt, filename, mask))
-}
-
-write_fasta <- function(seq, seqname, filename, rowlength = 80L, verbose = 1L) {
-    invisible(.Call('vcfR_write_fasta', PACKAGE = 'vcfR', seq, seqname, filename, rowlength, verbose))
-}
-
 seq_to_rects <- function(seq, targets) {
     .Call('vcfR_seq_to_rects', PACKAGE = 'vcfR', seq, targets)
 }
@@ -95,5 +51,25 @@ windowize_variants <- function(windows, variants) {
 
 windowize_annotations <- function(wins, ann_starts, ann_ends, chrom_length) {
     .Call('vcfR_windowize_annotations', PACKAGE = 'vcfR', wins, ann_starts, ann_ends, chrom_length)
+}
+
+vcf_stats_gz <- function(x) {
+    .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', x)
+}
+
+read_meta_gz <- function(x, stats, verbose) {
+    .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', x, stats, verbose)
+}
+
+read_body_gz <- function(x, stats, verbose = 1L) {
+    .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', x, stats, verbose)
+}
+
+write_vcf_body <- function(fix, gt, filename, mask = 0L) {
+    invisible(.Call('vcfR_write_vcf_body', PACKAGE = 'vcfR', fix, gt, filename, mask))
+}
+
+write_fasta <- function(seq, seqname, filename, rowlength = 80L, verbose = 1L) {
+    invisible(.Call('vcfR_write_fasta', PACKAGE = 'vcfR', seq, seqname, filename, rowlength, verbose))
 }
 

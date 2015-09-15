@@ -129,7 +129,7 @@ Rcpp::DataFrame windowize_annotations(Rcpp::DataFrame wins,
                                       int chrom_length) {
                                         
   // Tally the number of annotated nucleotides in windows.
-  
+
   Rcpp::NumericVector win_ends = wins["end"];
   Rcpp::NumericVector chrom(chrom_length);
   Rcpp::NumericVector window_tally(win_ends.size());
@@ -152,12 +152,13 @@ Rcpp::DataFrame windowize_annotations(Rcpp::DataFrame wins,
       ann_starts(i) = ann_ends(i);
       ann_ends(i) = tmp;
     }
-    
+
     // Mark genic bases.
-//    Rcout << ann_starts(i) << "\t" << ann_ends(i) << "\n";
+//    Rcpp::Rcout << ann_starts(i) << "\t" << ann_ends(i) << "\n";
     for(j = ann_starts(i); j < ann_ends(i); j++){
       chrom(j) = 1;
     }
+
   }
 
   // Now tally the number of genic positions in each window.

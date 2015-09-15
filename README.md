@@ -39,5 +39,10 @@ If you've built the vignettes you can browse them with:
     
 which should open a page in your web browser.
 
+If you've installed this package with devtools you will probably need to run:
+
+    devtools::install(build_vignettes = TRUE)
+
+In order to build the vignettes (which does not happen by default).
 
 Enjoy!

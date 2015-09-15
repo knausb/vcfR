@@ -25,43 +25,6 @@
 #' @importFrom Rcpp sourceCpp
 NULL
 
-#### Class definition. ####
-
-#' @title vcfR class
-#'
-#' @name vcfR-class
-#' @rdname vcfR-class
-#'
-#' @description
-#' A class for storing vcf data.
-#' 
-#' @slot meta character vector for the meta (header) information
-#' @slot fix  data.frame for the fixed information
-#' @slot gt   data.frame for the genotype information
-#'
-#' @details Defines a class for variant call format data.
-#' A vcfR object contains three slots.  The first slot
-#' is a character vector which holds the meta data.  The
-#' second slot holds an eight column data.frame to hold the 
-#' fixed data.  The third slot is a data.frame which holds
-#' the genotype data.
-#' @export
-#' @import methods
-setClass(
-  Class="vcfR",
-  representation=representation(
-    meta="character",
-    fix="data.frame",
-    gt="data.frame"
-  ),
-  prototype=prototype(
-    fix = data.frame(matrix(ncol=8, nrow=0, 
-                            dimnames=list(c(),
-#                                          c('chrom','pos','id','ref','alt','qual','filter','info'))),
-                                          c('CHROM','POS','ID','REF','ALT','QUAL','FILTER','INFO'))),
-                     stringsAsFactors=FALSE)
-  )
-)
 
 #### Generic methods. ####
 
@@ -90,7 +53,7 @@ setMethod(
   }
 )
 
-#### Mehtod print ####
+#### Method print ####
 setMethod(
   f="print",
   signature="vcfR",
@@ -237,3 +200,6 @@ setMethod(
 
 
 #### EOF. ####
+
+
+

@@ -43,42 +43,40 @@
 #' 
 #' @examples
 #' library(vcfR)
-#' data(vcfR_example)
-#' pinf_mt <- create_chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
-#' head(pinf_mt)
-#' pinf_mt
-#' names(pinf_mt)
-#' plot(pinf_mt)
-#' pinf_mt <- masker(pinf_mt, min_QUAL = 990, min_DP = 6000, max_DP = 8000, min_MQ = 40, max_MQ = 100)
-#' pinf_mt <- proc_chrom(pinf_mt, win.size=1000)
-# pinf_mt <- proc.chrom(pinf_mt, win.size=1000)
+# data(vcfR_example)
+# pinf_mt <- create_chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
+# head(pinf_mt)
+# pinf_mt
+# names(pinf_mt)
+# plot(pinf_mt)
+# pinf_mt <- masker(pinf_mt, min_QUAL = 990, min_DP = 6000, max_DP = 8000, min_MQ = 40, max_MQ = 100)
+# pinf_mt <- proc_chrom(pinf_mt, win.size=1000)
 #'  
-# str(pinf_mt)
-#' plot(pinf_mt)
+# plot(pinf_mt)
 #' 
-#' chromoqc(pinf_mt)
-#' chromoqc(pinf_mt, xlim=c(25e+03, 3e+04), dot.alpha=99)
+# chromoqc(pinf_mt)
+# chromoqc(pinf_mt, xlim=c(25e+03, 3e+04), dot.alpha=99)
 #' 
-#' set.seed(10)
-#' x1 <- as.integer(runif(n=20, min=1, max=39000))
-#' y1 <- runif(n=length(x1), min=1, max=100)
-#' chromodot(pinf_mt, x1=x1, y1=y1)
+# set.seed(10)
+# x1 <- as.integer(runif(n=20, min=1, max=39000))
+# y1 <- runif(n=length(x1), min=1, max=100)
+# chromodot(pinf_mt, x1=x1, y1=y1)
 #' 
 #           1         2         3         4         5
 #  12345678901234567890123456789012345678901234567890
-#' chromodot(pinf_mt, x1=x1, y1=y1, label1='My data',
-#'           x2=x1, y2=y1, label2='More of my data',
-#'           dot.alpha='ff')
+# chromodot(pinf_mt, x1=x1, y1=y1, label1='My data',
+#           x2=x1, y2=y1, label2='More of my data',
+#           dot.alpha='ff')
 #' 
-#' chromohwe(pinf_mt, dot.alpha='ff')
+# chromohwe(pinf_mt, dot.alpha='ff')
 #' 
-#' chromopop(pinf_mt)
-#' gt <- extract.gt(pinf_mt)
-#' head(gt)
-#' tab <- variant_table(pinf_mt)
-#' head(tab)
-#' win <- window_table(pinf_mt)
-#' head(win)
+# chromopop(pinf_mt)
+# gt <- extract.gt(pinf_mt)
+# head(gt)
+# tab <- variant_table(pinf_mt)
+# head(tab)
+# win <- window_table(pinf_mt)
+# head(win)
 # hist(tab$Ho - tab$He, col=5)
 # # Note that this example is a mitochondrion, so this is a bit silly.
 #' 
@@ -92,7 +90,8 @@ create_chrom <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
   
   # Insert vcf into Chom.
   if(length(vcf)>0){
-    x <- vcf2chrom(x, vcf)
+#    x <- vcf2chrom(x, vcf)
+    x@vcf <- vcf
   }
 
   # Insert seq into Chrom
@@ -100,7 +99,9 @@ create_chrom <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
   # Matrices are better behaved.
   #
   if(is.null(seq)){
-    x@len <- x@vcf.fix$POS[length(x@vcf.fix$POS)]
+    POS <- getPOS(x)
+    x@len <- POS[length(POS)]
+#    x@len <- x@vcf.fix$POS[length(x@vcf.fix$POS)]
   } else if (class(seq)=="DNAbin"){
     x <- seq2chrom(x, seq)
   } else {
@@ -115,6 +116,7 @@ create_chrom <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
     if(class(ann[,5]) == "factor"){ann[,5] <- as.character(ann[,5])}
     if(class(ann[,4]) == "character"){ann[,4] <- as.numeric(ann[,4])}
     if(class(ann[,5]) == "character"){ann[,5] <- as.numeric(ann[,5])}
+    
     x@ann <- ann
   }
 
@@ -123,12 +125,16 @@ create_chrom <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
   if(verbose == TRUE){
     # Print names of elements to see if they match.
     message("Names in vcf:")
-    message(paste('  ', unique(as.character(x@vcf.fix$CHROM)), sep=""))
+    chr_names <- unique(getCHROM(x))
+    message(paste('  ', chr_names, sep=""))
+#    message(paste('  ', unique(as.character(x@vcf.fix$CHROM)), sep=""))
     
     if(class(x@seq) == "DNAbin"){
       message("Names of sequences:")
       message(paste('  ', unique(labels(x@seq)), sep=""))
-      if(unique(as.character(x@vcf.fix$CHROM)) != unique(labels(x@seq))){
+
+#      if(unique(as.character(x@vcf.fix$CHROM)) != unique(labels(x@seq))){
+      if(chr_names != unique(labels(x@seq))){
         message("Names in variant file and sequence file do not match perfectly.")
         message("If you choose to proceed, we'll do our best to match data.")
         message("But prepare yourself for unexpected results.")
@@ -138,7 +144,8 @@ create_chrom <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
     if(nrow(x@ann) > 0){
       message("Names in annotation:")
       message(paste('  ', unique(as.character(x@ann[,1])), sep=""))
-      if(unique(as.character(x@vcf.fix$CHROM)) != unique(as.character(x@ann[,1]))){
+#      if(unique(as.character(x@vcf.fix$CHROM)) != unique(as.character(x@ann[,1]))){
+      if(chr_names != unique(as.character(x@ann[,1]))){
         message("Names in variant file and annotation file do not match perfectly.\n")
         message("If you choose to proceed, we'll do our best to match data.\n")
         message("But prepare yourself for unexpected results.\n")
@@ -146,10 +153,28 @@ create_chrom <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
     }
   }
   
+  # Check to see if annotation positions exceed seq position.
+  if( max(as.integer(as.character(x@ann[,4]))) > x@len | max(as.integer(as.character(x@ann[,5]))) > x@len ){
+    stop("Annotation positions exceed chromosome positions.  Is this the correct set of annotations?")
+  }
+  
+  
+  
+  if( verbose == TRUE ){
+    message("Initializing var.info slot.")
+  }
+  x@var.info <- data.frame( CHROM = x@vcf@fix[,"CHROM"] , POS = as.integer(x@vcf@fix[,"POS"]) )
+  mq <- getINFO(x, element="MQ")
+  if( length(mq) > 0 ){ x@var.info$MQ <- mq }
+  dp <- getDP(x)
+  if( length(dp) > 0 ){ x@var.info$DP <- dp }
+  x@var.info$mask <- TRUE
+  if( verbose == TRUE ){
+    message("var.info slot initialized.")
+  }
+
   return(x)
 }
-
-
 
 
 
@@ -249,4 +274,66 @@ ann2chrom <- function(x, gff){
   x@ann$end   <- as.numeric(as.character(x@ann$end))
   return(x)
 }
+
+
+
+#' @rdname create_chrom
+#' @export
+#' @aliases getPOS
+getFIX <- function(x){
+  if(class(x) != "Chrom"){stop("expecting object of class Chrom")}
+  x@vcf@fix
+}
+
+#' @rdname create_chrom
+#' @export
+#' @aliases getPOS
+getCHROM <- function(x){
+  if(class(x) != "Chrom"){stop("expecting object of class Chrom")}
+  x@vcf@fix[,"CHROM"]
+}
+
+
+#' @rdname create_chrom
+#' @export
+#' @aliases getPOS
+getPOS <- function(x){
+  if(class(x) != "Chrom"){stop("expecting object of class Chrom")}
+  as.integer(x@vcf@fix[,"POS"])
+}
+
+
+#' @rdname create_chrom
+#' @export
+#' @aliases getPOS
+getQUAL <- function(x){
+  if(class(x) != "Chrom"){stop("expecting object of class Chrom")}
+  as.integer(x@vcf@fix[,"QUAL"])
+}
+
+
+#' @rdname create_chrom
+#' @export
+#' @aliases getDP
+getDP <- function(x){
+  dp <- extract.gt(x, element = "DP", as.numeric=T)
+  rowSums(dp, na.rm = TRUE)
+  x@var.info[,"DP"] <- rowSums(dp, na.rm = TRUE)
+  rowSums(dp, na.rm = TRUE)
+}
+
+
+#' @rdname create_chrom
+#' @export
+#' @param element element to extract from Chrom object
+#' @aliases getINFO
+getINFO <- function(x, element="MQ"){
+  regex <- paste(element, "=", sep="")
+  INFO <- strsplit(x@vcf@fix[,'INFO'], split=";")
+  INFO <- unlist(lapply(INFO, grep, pattern=regex, value=T))
+  INFO <- as.numeric(unlist(lapply(strsplit(INFO, "="), function(x){x[2]})))
+  return(INFO)
+}
+
+
 
