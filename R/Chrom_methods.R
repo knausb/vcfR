@@ -162,28 +162,28 @@ setMethod(
       hist(DP, col=3, main="Read depth (DP)", xlab="")
       rug(DP)
     } else {
-      plot(1:2,1:2, type='n')
+      plot(1:2,1:2, type='n', xlab="", ylab="")
       title(main="No depths found")
     }
     if( length(MQ) > 0 ){
       hist(MQ, col=4, main="Mapping quality (MQ)", xlab="")
       rug(MQ)
     } else {
-      plot(1:2,1:2, type='n')
+      plot(1:2,1:2, type='n', xlab="", ylab="")
       title(main="No mapping qualities found")
     }
     if( length(QUAL) > 0 ){
       hist(QUAL, col=5, main="Quality (QUAL)", xlab="")
       rug(QUAL)
     } else {
-      plot(1:2,1:2, type='n')
+      plot(1:2,1:2, type='n', xlab="", ylab="")
       title(main="No qualities found")
     }
     if( length(SNPS) > 0 ){
       hist( SNPS, col=6, main="Variant count (per window)", xlab="")
       rug( SNPS )
     } else {
-      plot(1:2,1:2, type='n')
+      plot(1:2,1:2, type='n', xlab="", ylab="")
       title(main="No SNP densities found")
     }
     par(mfrow=c(1,1))

@@ -10,7 +10,7 @@ vignette: >
 ---
 
 
-vcfR is a package intended to help view, understand and filter data in vcf format files.
+vcfR is a package intended to help visualize, manipulate and quality filter data in vcf format files.
 
 
 ## Preliminaries
@@ -56,11 +56,11 @@ gff <- read.table(gff_file, sep="\t")
 ```
 
 
-Once the data has been read into memory and modifications can be made to chromosome names or any other inconsistencies and one can proceed.
+Once the data has been read into memory, modifications can be made to chromosome names or any other inconsistencies and one can proceed.
 
 
 vcfR was designed to work on individual chromosomes, or supercontigs or contigs, depending on the state of your genome.
-Reading an entire genome into memory may present a technical challenge when there is a lot of data, the genome is large or there are a lot of saples.
+Reading an entire genome into memory may present a technical challenge when there is a lot of data, the genome is large or there are a lot of samples.
 Working on chromosomes appears to be a natural way to decompose this problem.
 Once you have read an object into R you may therefore want to subset it to data for a single chromosome, if necessary.
 
@@ -70,13 +70,13 @@ Once you have read an object into R you may therefore want to subset it to data 
 
 
 Work begins with a variant call format file (vcf).
-A reference files (fasta) and an annotation file are also suggested.
+A reference file (fasta) and an annotation file are also suggested.
 These later two files are not necessary, but I feel they contribute substantially.
 The below flowchart outlines the major steps involved with vcfR use.
 
 
 
-![](vcfR_flowchart.png)
+![flowchart image](vcfR_flowchart.png)
 
 
 
@@ -86,7 +86,8 @@ Reading in the data frequently presents a bottleneck.
 Unfortunately, this is typically due to the time it takes to read from a drive and therefore may not be anything I can improve on.
 Once the data are in memory we can manipulate it.
 I've been rewriting a number of function in C++ to try to improve the performance of these function.
-Lastly, we visualize the objects. Visualisation relies on R's base graphics package.
+Lastly, we visualize the objects.
+Visualization relies on R's base graphics package.
 This is also something that I am not likely to be able to improve on if it becomes a bottleneck.
 By dividing the analysis into these three phases I've divided that workflow into things I may be able to improve upon through my code writing, and things which I have little control over.
 
@@ -105,16 +106,17 @@ chrom <- create_chrom(name='Supercontig_1.100', vcf=vcf, seq=dna, ann=gff)
 ```
 
 
-Note that here the names of our three data sources are identical.
-This is not always the case.
-If these names are not identical a warning will result to make sure the user understands their data.
-
+Note that here the names of our three data sources are not identical.
+This results in a warning.
+When we examine the output we seen that the name in the vcf file is Supercontig_1.100, while the name in the fasta is Supercontig_1.100 of Phytophthora infestans T30-4.
+We know that these are synonyms so we can ignore the warning and proceed.
 
 
 The parameter 'name' is a name you can assign to your object.
 This information is used when plotting the Chrom object.
 The vcf object should be of class vcfR, which was most likely created with the function read.vcf().
 This object is inserted into the chrom object with the function **vcf2chrom()**.
+
 
 The 'seq' should be a DNAbin object with one sequence in it.
 This sequence will be inserted into the Chrom object with the function **seq2chrom()**.
@@ -134,42 +136,38 @@ This can be done with the plot function.
 
 
 
-```{r, fig.height=6, fig.width=6}
+```{r, fig.height=6, fig.width=6, fig.align='center'}
 plot(chrom)
 ```
 
 
 
 No SNP densities are not found at this point because this data results from windowing analyses performed by **proc_chrom()** (see below).
-We can see that mapping qualities (MQ) are all fairly high.
-Because of this, if we would like to filter on this parameter we now know that we would have to employ a high threshold.
-The qualities (QUAL) appear bimodal.
-It has been my exprience that this is typical for this parameter.
-The values appear to either be 999 or something below 200.
-This bimodality suggests this to be a reasonable parameter to apply a threshold for, somewhere between 200 and 999.
+We can see that mapping qualities (MQ) are all rather peaked around a value of 60.
+Because of this, if we would like to filter on this parameter we now know that we would have to employ a narrow threshold.
+Interpretation of the qualities (QUAL) appear less straightforward and may be bimodal.
+Filtering on other parameters may reveal a more straight forward path.
+Alternatively, you may conclude that this is not an ideal parameter to filter on.
+
 
 Note that vcf files created by different softwares may or may not have these fields.
 
 
-
 We can use the **masker()** function to try to filter out data which we do not have high confidence in.
 The masker() function uses quality, depth and mappiing quality to try to select only high quality variants.
-By default, only variants with a quality of 999 or better, a depth between the 0.25 and 0.75 percentiles and a mapping quality between 20 and 50 are used.
-Variants deemed to be of low quality are not deleted from the dataset.
+See `?masker` for default values.
+When using masker, variants deemed to be of low quality are not deleted from the dataset.
 Instead, a logical vector is created to indicate which variants have or have not been filtered.
 This maintains the geometry of the data matrices throughout the analyisis and allows the user to easily undo any changes.
 
 
 
-```{r, fig.height=6, fig.width=6}
-chrom <- masker(chrom)
+```{r, fig.height=6, fig.width=6, fig.align='center'}
+chrom <- masker(chrom, min_QUAL = 1, min_DP = 300, max_DP = 6500, min_MQ = 59.9,  max_MQ = 60.1)
 plot(chrom)
 ```
 
 
-Now all of the qualities are at 999.
-(Note that the R histogram function has a little trouble when its given data of all one value.
-Its really intended for a distribution of data.)
 
 
 Once we're satisfied with which variants we want to consider to be of high quality we can process the Chrom object with **proc_chrom()**.

@@ -135,9 +135,13 @@ create_chrom <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
 
 #      if(unique(as.character(x@vcf.fix$CHROM)) != unique(labels(x@seq))){
       if(chr_names != unique(labels(x@seq))){
-        message("Names in variant file and sequence file do not match perfectly.")
-        message("If you choose to proceed, we'll do our best to match data.")
-        message("But prepare yourself for unexpected results.")
+        warning("
+        Names in variant file and sequence file do not match perfectly.
+        If you choose to proceed, we'll do our best to match the data.
+        But prepare yourself for unexpected results.")
+#        message("Names in variant file and sequence file do not match perfectly.")
+#        message("If you choose to proceed, we'll do our best to match data.")
+#        message("But prepare yourself for unexpected results.")
       }
     }
 
@@ -146,9 +150,13 @@ create_chrom <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
       message(paste('  ', unique(as.character(x@ann[,1])), sep=""))
 #      if(unique(as.character(x@vcf.fix$CHROM)) != unique(as.character(x@ann[,1]))){
       if(chr_names != unique(as.character(x@ann[,1]))){
-        message("Names in variant file and annotation file do not match perfectly.\n")
-        message("If you choose to proceed, we'll do our best to match data.\n")
-        message("But prepare yourself for unexpected results.\n")
+        warning("
+        Names in variant file and sequence file do not match perfectly.
+        If you choose to proceed, we'll do our best to match the data.
+        But prepare yourself for unexpected results.")
+#        message("Names in variant file and annotation file do not match perfectly.\n")
+#        message("If you choose to proceed, we'll do our best to match data.\n")
+#        message("But prepare yourself for unexpected results.\n")
       }
     }
   }
