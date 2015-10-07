@@ -15,7 +15,9 @@ Imports:
     Rcpp
 Suggests:
     adegenet,
+    ggplot2,
     knitr,
+    reshape2,
     testthat,
     viridis
 VignetteBuilder: knitr

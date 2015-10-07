@@ -1,0 +1,167 @@
+---
+title: "Sequence coverage"
+author: "Brian J. Knaus"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Sequence coverage}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+
+Once data is received from a sequencing center an initial question is whether the sequencing was successful?
+A common attempt to address this question is by asking how much sequence coverage was attained.
+For a diploid organism, one would require at least two reads per variant to infer a genotype.
+Ideally, we would like a little more so that we have redundancy.
+In this vignette well learn how to read in vcf format data, extract sequence depth information and how to plot it.
+
+
+## Reading vcf format data
+
+
+The topic of reading in vcf format data is covered in other vignettes.
+We include it here for redundancy, and that every example involving vcf data needs to start with reading in a vcf file.
+
+
+```{r}
+library(vcfR)
+vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
+vcf <- read.vcf(vcf_file, verbose = FALSE)
+```
+
+
+A quick peak at how many rows are in our genotype matrix will tell us the number of variants which resulted from varian calling.
+
+
+```{r}
+nrow(vcf@gt)
+```
+
+
+
+## Extracting sequence coverage information
+
+
+Some, but not all, variant callers will provide per variant sequence depth information.
+Some may provide this information, but only as an option.
+We can use the 'head' method to explore what sort of data exists in our file.
+
+
+```{r}
+head(vcf)
+```
+
+
+This provides a summary of the information contained in the vcf file.
+In the 'genotype section', the first column  is titled 'FORMAT' and includes fields which describe the data included with each genotype.
+Each field is defined in the meta region.
+We can use 'grep' to search the meta slot to file its definitioon.
+
+
+```{r}
+grep('DP', vcf@meta, value = TRUE)
+```
+
+
+Here 'DP' is defined for the 'INFO' column as well as in the 'FORMAT' region.
+We're interested in the later.
+This tells us that we can extract the DP information from the genoptype slot.
+
+
+```{r}
+dp <- extract.gt(vcf, element='DP', as.numeric=TRUE)
+```
+
+
+We can use this function to extract other fields by changing the value of the 'element' parameter.
+Here, we've specified to convert the data to a numeric.
+This makees sense because depth should be a number describing how many times a variant was sequenced.
+If you select a field which is non-numeric, such as the genotype, and specify as.numeric to be TRUE, you will get a numeric matrix.
+However, these numbers may not make much sense.
+Make sure to only use as.numeric=TRUE on data which actually is numeric.
+
+
+## Creating boxplots of sequence depth
+
+
+Now that we have our data we will want to visualize it.
+A good choice for this type of data is usually a box and whisker plot.
+
+
+```{r, fig.align='center', fig.width=7}
+par(mar=c(8,4,1,1))
+boxplot(dp, las=3, col=c("#C0C0C0", "#808080"), ylab="Depth")
+abline(h=seq(0,200, by=20), col="#C0C0C088")
+par(mar=c(5,4,4,2))
+```
+
+
+
+## Creating violin plots of sequence depth
+
+
+For quality control purposes, I'm frequently happy with using boxplots.
+If I want something a little more fancy, say for publication, I may use violin plots.
+This will require us to change the data from a matrix to a data.frame, and then we can plot is with ggplot2.
+
+
+```{r, fig.align='center', fig.width=7}
+
+if( require(reshape2) & require(ggplot2) ){
+  dpf <- melt(dp, varnames=c('Index', 'Sample'))
+  names(dpf)[3] <- "Depth"
+  dpf <- dpf[!is.na(dpf$Depth),]
+  p <- ggplot(dpf, aes(x=Sample, y=Depth)) + geom_violin(fill="#C0C0C0")
+  p <- p + theme(axis.title.x = element_blank(), 
+                 axis.text.x = element_text(angle = 60, hjust = 1))
+  p <- p + stat_summary(fun.data=mean_sdl, mult=1, geom="pointrange", color="black")
+  p
+} else {
+  message("The packages reshape2 and ggplot2 are required for this example but do not appear
+          to be installed.  Please use install.packages(c('reshape2', 'ggplot2')) if you would
+          like to install them.")
+}
+
+```
+
+
+
+## Filtering on sequence depth.
+
+
+A you can see from the plots, we have some samples which have exceptionally high sequence coverage.
+These may be variants from repetitive portions of the genome, and therefore may be desireable to exclude.
+In order to sequence a diploid genotype, we need at least two sequence reads.
+Ideally, we would like some redundancy to build more confidence in our genotypes.
+This means we may want a lower bound on coverage for whether we call a genotype.
+Here we pull out summary statistics for each sample and use this information to filter our data.
+The quantile function is used to build a 90% confidence interval for each sample.
+We then use this information to set variants which are outside this region to missing data (NA).
+Lastly, we set variants with coverage less than four as missing.
+
+
+```{r}
+sums <- apply(dp, MARGIN=2, quantile, probs=c(0.05, 0.95), na.rm=TRUE)
+dp2 <- sweep(dp, MARGIN=2, FUN = "-", sums[1,])
+dp[dp2 < 0] <- NA
+dp2 <- sweep(dp, MARGIN=2, FUN = "-", sums[2,])
+dp[dp2 > 0] <- NA
+dp[dp < 4] <- NA
+```
+
+
+And visualize using boxplots.
+
+
+```{r, fig.align='center', fig.width=7}
+par(mar=c(8,4,1,1))
+boxplot(dp, las=3, col=c("#C0C0C0", "#808080"), ylab="Depth")
+abline(h=seq(0,200, by=20), col="#C0C0C088")
+par(mar=c(5,4,4,2))
+```
+
+
+We can see that we've removed many of our outlier variants (circles beyond the whiskers).
+And our data appear much better behaved.
+
