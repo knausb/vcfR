@@ -152,8 +152,10 @@ setMethod(
   definition=function(x, y, ...){
     #    print("***** Object of class 'vcf' *****\n")
     #    print("***** Plot not implemented *****\n")
-    hist(x@fix$QUAL, col=5, main='Histogram of qualities', xlab='QUAL')
-    rug(x@fix$QUAL)
+#    hist(x@fix$QUAL, col=5, main='Histogram of qualities', xlab='QUAL')
+    x <- as.numeric(x@fix[,'QUAL'])
+    hist(x, col=5, main='Histogram of qualities', xlab='QUAL')
+    rug(x)
   }
 )
 
