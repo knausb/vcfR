@@ -113,6 +113,7 @@ if( require(reshape2) & require(ggplot2) ){
   names(dpf)[3] <- "Depth"
   dpf <- dpf[!is.na(dpf$Depth),]
   p <- ggplot(dpf, aes(x=Sample, y=Depth)) + geom_violin(fill="#C0C0C0")
+  p <- p + theme_bw()
   p <- p + theme(axis.title.x = element_blank(), 
                  axis.text.x = element_text(angle = 60, hjust = 1))
   p <- p + stat_summary(fun.data=mean_sdl, mult=1, geom="pointrange", color="black")
