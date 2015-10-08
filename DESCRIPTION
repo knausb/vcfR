@@ -12,13 +12,13 @@ Imports:
     ape,
     memuse,    
     methods,
-    Rcpp,
-    viridis
+    Rcpp
 Suggests:
     adegenet,
     ggplot2,
     knitr,
     reshape2,
-    testthat
+    testthat,
+    viridis
 VignetteBuilder: knitr
 License: GPL
