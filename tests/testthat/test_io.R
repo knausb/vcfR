@@ -23,10 +23,10 @@ test_dir <- tempdir()
 
 test_that("vcfR_vcf_stats_gz works",{
   setwd(test_dir)
-  write.vcf(chrom, "test.vcf")
-  x <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', "test.vcf")
+  write.vcf(chrom, "test.vcf.gz")
+  x <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', "test.vcf.gz")
   #  test <- read.vcf("test.vcf")
-  unlink("test.vcf")
+  unlink("test.vcf.gz")
   setwd(original_dir)
   
   expect_equal(as.numeric(x["meta"]), length(chrom@vcf@meta))
@@ -41,7 +41,7 @@ test_that("vcfR_vcf_meta_gz works",{
   write.vcf(chrom, "test.vcf.gz")
   stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', "test.vcf.gz")
   x <- .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', "test.vcf.gz", stats, 0)
-  unlink("test.vcf")
+  unlink("test.vcf.gz")
   setwd(original_dir)
   
   expect_equal(length(x), length(chrom@vcf@meta))
@@ -55,7 +55,7 @@ test_that("vcfR_read_body_gz works",{
   write.vcf(chrom, "test.vcf.gz")
   stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', "test.vcf.gz")
   body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', "test.vcf.gz", stats, 0)
-  unlink("test.vcf")
+  unlink("test.vcf.gz")
   setwd(original_dir)
 
   expect_equal(colnames(body)[1], "CHROM")
@@ -67,9 +67,9 @@ test_that("vcfR_read_body_gz works",{
 
 test_that("read/write.vcf works for vcfR objects",{
   setwd(test_dir)
-  write.vcf(vcf, "test.vcf")
-  test <- read.vcf("test.vcf", verbose = FALSE)
-  unlink("test.vcf")
+  write.vcf(vcf, "test.vcf.gz")
+  test <- read.vcf("test.vcf.gz", verbose = FALSE)
+  unlink("test.vcf.gz")
   setwd(original_dir)
   
   expect_is(test, "vcfR")
@@ -79,6 +79,16 @@ test_that("read/write.vcf works for vcfR objects",{
   expect_equal(ncol(test@gt), ncol(vcf@gt))
 })
 
+
+
+test_that("write.vcf APPEND=TRUE does not include header",{
+  setwd(test_dir)
+  write.vcf(vcf, "test.vcf.gz", APPEND=TRUE)
+  test <- read.vcf("test.vcf.gz", verbose = FALSE)
+  unlink("test.vcf.gz")
+  setwd(original_dir)
+
+})
 
 #test_that("read/write.vcf works for Chrom objects",{
 #  setwd(test_dir)

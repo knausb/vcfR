@@ -21,7 +21,7 @@ void stat_line(Rcpp::NumericVector stats, std::string line){
   if(line[0] == '#' && line[1] == '#'){
     // Meta
     stats(0)++;
-  } else if (line[0] == '#' && line[1] != '#'){
+  } else if (line[0] == '#' && line[1] == 'C'){
     // Header
     stats(1) = stats(0) + 1;
     std::vector < std::string > col_vec;
@@ -76,7 +76,14 @@ Rcpp::NumericVector vcf_stats_gz(std::string x) {
 
     // Check for EOF or errors.
     if (bytes_read < LENGTH - 1) {
-      if (gzeof (file)) {
+      if ( gzeof (file) ) {
+        if( stats(3) == 0 ){
+          // Count columns from last line.
+          std::vector < std::string > col_vec;
+          char col_split = '\t'; // Must be single quotes!
+          vcfRCommon::strsplit(svec[0], col_vec, col_split);
+          stats(3) = col_vec.size();
+        }
         break;
       }
       else {
@@ -174,6 +181,8 @@ Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats, int ve
 
 /*  Read in the body of the vcf file  */
 
+
+/*  Helper function to process one line  */
 void proc_body_line(Rcpp::CharacterMatrix gt, int var_num, std::string myline){
   char split = '\t'; // Must be single quotes!
   std::vector < std::string > data_vec;
@@ -211,6 +220,7 @@ Rcpp::CharacterMatrix read_body_gz(std::string x, Rcpp::NumericVector stats, int
     return Rcpp::CharacterMatrix(1);
   }
 
+  
   // Scroll through buffers.
   std::string lastline = "";
   std::vector<std::string> header_vec;
@@ -232,7 +242,7 @@ Rcpp::CharacterMatrix read_body_gz(std::string x, Rcpp::NumericVector stats, int
     for(int i = 0; i < svec.size() - 1; i++){
       if(svec[i][0] == '#' && svec[i][1] == '#'){
         // Meta line, ignore.
-      } else if(svec[i][0] == '#' && svec[i][1] != '#'){
+      } else if(svec[i][0] == '#' && svec[i][1] == 'C'){
         // Process header
         char header_split = '\t';
         vcfRCommon::strsplit(svec[i], header_vec, header_split);
@@ -266,10 +276,22 @@ Rcpp::CharacterMatrix read_body_gz(std::string x, Rcpp::NumericVector stats, int
     }
   }
   gzclose (file);
-  
-  header_vec[0] = "CHROM";
 
-  gt.attr("dimnames") = Rcpp::List::create(Rcpp::CharacterVector::create(), header_vec);
+
+  if( stats[1] == 0 ){
+    if( verbose == 1 ){
+      Rcpp::Rcout << "Warning: no header information was found! Data contains no sample names!\n";
+    }
+  } else {
+    header_vec[0] = "CHROM";
+    if( header_vec.size() == gt.ncol() ){
+      gt.attr("dimnames") = Rcpp::List::create(Rcpp::CharacterVector::create(), header_vec);
+    } else {
+      if( verbose == 1 ){
+        Rcpp::Rcout << "Warning: no header information found!\n";
+      }
+    }
+  }
 
   if(verbose == 1){
     Rcpp::Rcout << "\rProcessed variant: " << var_num;
@@ -323,27 +345,30 @@ void write_vcf_body( Rcpp::CharacterMatrix fix, Rcpp::CharacterMatrix gt, std::s
   
   
   gzFile fi = gzopen( filename.c_str(), "ab" );
-  
+
+  // In order for APPEND=TRUE to work the header
+  // should not be printed here.
+
   // Manage header.
-  Rcpp::List matrix_names = fix.attr("dimnames");
+/*  Rcpp::List matrix_names = fix.attr("dimnames");
   Rcpp::StringVector head_names = matrix_names(1);
   tmpstring = "#" + head_names(0);
   for(i = 1; i < head_names.size(); i++){
     tmpstring = tmpstring + "\t" + head_names(i);
   }
-//  Rcpp::Rcout << tmpstring << "\n";
-  
+
   matrix_names = gt.attr("dimnames");
   head_names = matrix_names(1);
   for(i = 0; i < head_names.size(); i++){
     tmpstring = tmpstring + "\t" + head_names(i);
   }
-//  Rcpp::Rcout << tmpstring << "\n";
-  
+*/
   // Write header.
-  gzwrite(fi, (char *)tmpstring.c_str(), tmpstring.size());
-  gzwrite(fi,"\n",strlen("\n"));
+//  gzwrite(fi, (char *)tmpstring.c_str(), tmpstring.size());
+//  gzwrite(fi,"\n",strlen("\n"));
 
+  
+  
   // Manage body
   for(i = 0; i < fix.nrow(); i++){
     Rcpp::checkUserInterrupt();
