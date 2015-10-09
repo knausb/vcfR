@@ -3,7 +3,7 @@
 #' @title Heatmap with barplots
 #'
 #' @name heatmap-barplots
-#' @rdname heatmap.bp
+#' @rdname heatmap_bp
 #' @aliases heatmap.bp
 #' @export
 #' 
@@ -51,8 +51,8 @@
 heatmap.bp <- function(x, cbarplot = TRUE, rbarplot = TRUE,
                        legend = TRUE, clabels = TRUE, rlabels = TRUE,
                        na.rm = TRUE, scale = c("row", "column", "none"),
-#                       col.ramp = colorRampPalette(c("red", "yellow", "#008000"))(100),
-                       col.ramp = viridis::viridis(n = 100, alpha=1),
+                       col.ramp = colorRampPalette(c("red", "yellow", "#008000"))(100),
+#                       col.ramp = viridis::viridis(n = 100, alpha=1),
                        ...){
 #  require(viridis)
   stopifnot(class(x) == 'matrix')
@@ -66,8 +66,6 @@ heatmap.bp <- function(x, cbarplot = TRUE, rbarplot = TRUE,
   if(rbarplot == TRUE){ ncols <- ncols + 1 }
   if(rbarplot == TRUE){ ncols <- ncols + 1 }
   #
-#  cat("nrows = ", nrows, "\n")
-#  cat("ncols = ", ncols, "\n")
   #
   if (scale == "row") {
     x <- sweep(x, 1L, rowMeans(x, na.rm = na.rm), check.margin = FALSE)
@@ -86,7 +84,6 @@ heatmap.bp <- function(x, cbarplot = TRUE, rbarplot = TRUE,
   if(ncols == 1 & nrows == 1){
     cat("1 and 1\n")
     image(t(x),
-#          col = colorRampPalette(c("red", "yellow", "#008000"))(100),
           col = col.ramp,          
           axes=FALSE, frame.plot=TRUE)
   }
@@ -95,52 +92,38 @@ heatmap.bp <- function(x, cbarplot = TRUE, rbarplot = TRUE,
   if(nrows == 2 & ncols == 1){}
   if(nrows == 2 & ncols == 2){}
   if(nrows == 2 & ncols == 3){
-#    cat("2 and 3\n")
     layout(matrix(1:6,nrow=nrows, ncol=ncols, byrow = TRUE),
            widths=c(4, 0.6, 0.2), heights=c(1, 4))
     par(mar=c(0,0,0,0))
     par(oma=c(1,1,1,1))
-#    barplot(colSums(x, na.rm=na.rm)/max(colSums(x, na.rm=na.rm)),
     barplot(colSums(x, na.rm=na.rm),
             space=0, border=NA, axes=FALSE,
             names.arg="",
             col=c("#808080", "#c0c0c0"), xaxs="i")
-#    text(c(1:ncol(x))-0.5, min(colSums(x)), colnames(x), srt=90)
-#    text(c(1:ncol(x))-0.5, 1, colnames(x), pos=4, srt=90)
     if(clabels == TRUE & scale == 'none'){
       text(c(1:ncol(x))-0.5, 0.0, colnames(x), adj=c(0.0,0.5), srt=90)
-#      text(c(1:ncol(x))-0.5, 0.0, colnames(x), pos=4, srt=90)
-#      text(c(1:ncol(x))-0.5, median(colSums(x)), colnames(x), adj=c(0.5,0.5), srt=90)
     } else if (clabels == TRUE & scale != 'none'){
       text(c(1:ncol(x))-0.5, min(colSums(x, na.rm=na.rm), na.rm=na.rm), colnames(x), adj=c(0.0,0.5), srt=90)
-#      text(c(1:ncol(x))-0.5, median(colSums(x, na.rm=na.rm), na.rm=na.rm), colnames(x), adj=c(0.5,0.5), srt=90)
-#      text(c(1:ncol(x))-0.5, 0, colnames(x), adj=c(0.5,0.5), srt=90)
     }
     #
     plot(1, 1, type="n", axes=FALSE, xlab="", ylab="")
     plot(1, 1, type="n", axes=FALSE, xlab="", ylab="")
     image(t(x),
-#          col = colorRampPalette(c("red", "yellow", "#008000"))(100),
           col = col.ramp,
           axes=FALSE, frame.plot=TRUE)
     #
-#    barplot(rowSums(x, na.rm=na.rm)/max(rowSums(x, na.rm=na.rm)),
     barplot(rowSums(x, na.rm=na.rm),
             space=0, border=NA,
             horiz=TRUE, axes=FALSE, names.arg="",
             col=c("#808080", "#c0c0c0"),
             yaxs="i")
     if(rlabels == TRUE & scale == 'none'){
-#      text(0, c(1:nrow(x))-0.0, rownames(x), adj=c(0.0, 0.5), srt=0)
       text(0, c(1:nrow(x))-0.5, rownames(x), adj=c(0.0, 0.5), srt=0)
       } else if(rlabels == TRUE & scale != 'none'){
       text(min(rowSums(x, na.rm=na.rm), na.rm=na.rm), c(1:nrow(x))-0.5, rownames(x), adj=c(0.0,0.5), srt=0)
-#      text(median(rowSums(x, na.rm=na.rm), na.rm=na.rm), c(1:nrow(x))-0.5, rownames(x), adj=c(0.5,0.5), srt=0)
     }
     #
-#    barplot(rep(1, times=100), space=0, border=NA, horiz = TRUE,
     barplot(rep(1, times=length(col.ramp)), space=0, border=NA, horiz = TRUE,
-#            col=colorRampPalette(c("red", "yellow", "#008000"))(100),
             col = col.ramp,
             axes=FALSE)
     text(0.5, 5, "Low", col="#FFFFFF")
@@ -155,4 +138,5 @@ heatmap.bp <- function(x, cbarplot = TRUE, rbarplot = TRUE,
 
 
 
-#### EOF ####
+##### ##### ##### ##### #####
+# EOF

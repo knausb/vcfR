@@ -3,21 +3,11 @@
 \name{read.vcf}
 \alias{read.vcf}
 \alias{write.vcf}
-\alias{write_fasta}
-\alias{write_var_info}
-\alias{write_win_info}
 \title{Read and write vcf format files}
 \usage{
 read.vcf(file, limit = 1e+07, verbose = TRUE)
 
 write.vcf(x, file = "", mask = FALSE, APPEND = FALSE)
-
-write_var_info(x, file = "", mask = FALSE, APPEND = FALSE)
-
-write_win_info(x, file = "", APPEND = FALSE)
-
-write_fasta(x, file = "", gt_split = "|", rowlength = 80,
-  tolower = TRUE, verbose = TRUE, APPEND = FALSE)
 }
 \arguments{
 \item{file}{A filename for a variant call format (vcf) file}
@@ -31,39 +21,26 @@ write_fasta(x, file = "", gt_split = "|", rowlength = 80,
 \item{mask}{logical vector indicating rows to use}
 
 \item{APPEND}{logical indicating whether to append to existing vcf file or write a new file}
-
-\item{gt_split}{character which delimits alleles in genotype}
-
-\item{rowlength}{number of characters each row should not exceed}
-
-\item{tolower}{convert all characters to lowercase (T/F)}
+}
+\value{
+read.vcf returns an object of class \code{\link{vcfR-class}}.
+See the \strong{vignette} \code{vignette('vcf_data')}
 }
 \description{
-Read and write files in the vcf format.
+Read and write files in vcf format.
 }
 \details{
 The function \strong{read.vcf} reads in files in *.vcf (text) and *.vcf.gz (gzipped text) format and returns an object of class vcfR.
 The parameter 'limit' is an attempt to keep the user from trying to read in a file which contains more data than there is memory to hold.
 Based on the dimensions of the data matrix, an estimate of how much memory needed is made.
 If this estimate exceeds the value of 'limit' an error is thrown and execution stops.
+The user may increase this limit to any value, but is encourages to compare that value to the amout of available physical memory.
 
 
 The function \strong{write.vcf} takes an object of either class vcfR or chromR and writes the vcf data to a vcf.gz file (gzipped text).
 If the parameter 'mask' is set to FALSE, the entire object is written to file.
-If the parameter 'mask' is set to TRUE and the object is of class chromR (which has a mask slot), this maske is used to subset the data.
+If the parameter 'mask' is set to TRUE and the object is of class chromR (which has a mask slot), this mask is used to subset the data.
 If an index is supplied as 'mask', then this index is used, and recycled as necessary, to subset the data.
-
-The function \strong{write_var_info} takes the variant information table from a chromR object and writes it as a comma delimited file.
-
-The function \strong{write_win_info} takes the window information table from a chromR object and writes it as a comma delimited file.
-
-The function \strong{write_fasta} takes an object of class chromR and writes it to a fasta.gz (gzipped text) format file.
-The sequence in the seq slot of the chromR object is used to fill in the invariant sites.
-The parameter 'tolower', when set to TRUE, converts all the characters in teh sequence to lower case.
-This is important because some software, such as ape::DNAbin, requires sequences to be in lower case.
-}
-\examples{
-library(vcfR)
 }
 \seealso{
 CRAN:
@@ -73,5 +50,7 @@ CRAN:
 
 Bioconductor:
 \href{http://www.bioconductor.org/packages/release/bioc/html/VariantAnnotation.html}{VariantAnnotation}::readVcf
+
+Use browseVignettes('vcfR') to find examples.
 }
 
