@@ -26,7 +26,7 @@ write_fasta(x, file = "", gt_split = "|", rowlength = 80,
 
 \item{verbose}{report verbose progress}
 
-\item{x}{An object of class vcfR or Chrom}
+\item{x}{An object of class vcfR or chromR}
 
 \item{mask}{logical vector indicating rows to use}
 

@@ -11,8 +11,8 @@ vcf <- read.vcf(vcf_file, verbose = FALSE)
 dna <- ape::read.dna(seq_file, format = "fasta")
 gff <- read.table(gff_file, sep="\t")
 
-chrom <- create_chrom(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
-chrom <- proc_chrom(chrom, verbose = FALSE)
+chrom <- create_chromR(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
+chrom <- proc_chromR(chrom, verbose = FALSE)
 
 
 # Manage directories.

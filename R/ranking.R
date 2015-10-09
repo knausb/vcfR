@@ -14,12 +14,12 @@
 
 
 #' @rdname ranking
-#' @aliases rank_variants_chrom
+#' @aliases rank_variants_chromR
 #' 
 #' @export
-rank_variants_chrom <- function(x, scores){
-  if( class(x) != "Chrom" ){
-    stop("expecting object of class Chrom or data.fram")
+rank_variants_chromR <- function(x, scores){
+  if( class(x) != "chromR" ){
+    stop("expecting object of class chromR or data.frame")
   }
   stopifnot(class(x@var.info) == 'data.frame')
   stopifnot(is.vector(x@win.info$end))

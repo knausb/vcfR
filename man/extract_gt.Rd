@@ -29,7 +29,7 @@ get.alleles(x, split = "/", na.rm = FALSE, as.numeric = FALSE)
 alleles_to_consensus(x2, sep = "/", NA_to_n = TRUE)
 }
 \arguments{
-\item{x}{An object of class Chrom or vcfR}
+\item{x}{An object of class chromR or vcfR}
 
 \item{element}{element to extract from vcf genotype data. Common options include "DP", "GT" and "GQ"}
 

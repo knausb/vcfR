@@ -1,7 +1,7 @@
 #' @title Extract elements from the GT section of a vcf format object
 #' @rdname extract_gt
 #' 
-#' @param x An object of class Chrom or vcfR 
+#' @param x An object of class chromR or vcfR 
 #' @param element element to extract from vcf genotype data. Common options include "DP", "GT" and "GQ"
 #' @param mask a logical indicating whether to apply the mask (TRUE) or return all variants (FALSE). Alternatively, a vector of logicals may be provided.
 # @param as.matrix attempt to recast as a numeric matrix
@@ -28,8 +28,8 @@
 extract.gt <- function(x, element="GT", mask=FALSE, as.numeric=FALSE, return.alleles=FALSE, allele.sep="/", extract = TRUE ){
 
   # Validate that we have an expected data structure
-  if( class(x) != "Chrom" & class(x) != "vcfR" ){
-    stop( "Expected an object of class Chrom or vcfR" )
+  if( class(x) != "chromR" & class(x) != "vcfR" ){
+    stop( "Expected an object of class chromR or vcfR" )
   }
   
   # Catch unreasonable mask specification.
@@ -41,8 +41,8 @@ extract.gt <- function(x, element="GT", mask=FALSE, as.numeric=FALSE, return.all
     }
   }
   
-  # If of class Chrom, extract the vcf
-  if(class(x) == "Chrom"){
+  # If of class chromR, extract the vcf
+  if(class(x) == "chromR"){
     tmpMask <- x@var.info$mask
     x <- x@vcf
   }
@@ -97,11 +97,11 @@ extract.gt <- function(x, element="GT", mask=FALSE, as.numeric=FALSE, return.all
 #' 
 #' @export
 extract_indels <- function(x, return_indels=FALSE){
-  if(class(x) == 'Chrom'){
+  if(class(x) == 'chromR'){
     x <- x@vcf
   }
   if(class(x) != "vcfR"){
-    stop("Unexpected class! Expecting an object of class vcfR or Chrom.")
+    stop("Unexpected class! Expecting an object of class vcfR or chromR.")
   }
 
   # Check reference for indels
@@ -160,9 +160,9 @@ extract_info <- function(x, element, as.numeric=FALSE, mask=FALSE){
 #' 
 #' @export
 extract_haps <- function(x, mask=FALSE, gt_split="|",verbose=TRUE){
-  if(class(x) == "Chrom"){
+  if(class(x) == "chromR"){
     if(length(mask) == 1 && mask==TRUE){
-      x <- chrom_to_vcfR(x, use.mask = TRUE)
+      x <- chromR_to_vcfR(x, use.mask = TRUE)
     } else {
 #      x <- chrom_to_vcfR(x)
       x <- x@vcf

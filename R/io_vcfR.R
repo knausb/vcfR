@@ -8,7 +8,7 @@
 #' Read and write files in the vcf format.
 #' 
 #' @param file A filename for a variant call format (vcf) file
-#' @param x An object of class vcfR or Chrom
+#' @param x An object of class vcfR or chromR
 # @param vfile an output filename
 #' @param mask logical vector indicating rows to use
 #' @param APPEND logical indicating whether to append to existing vcf file or write a new file
@@ -104,7 +104,7 @@ read.vcf <- function(file, limit=1e7, verbose = TRUE){
 #' @aliases write.vcf
 #' 
 write.vcf <- function(x, file = "", mask = FALSE, APPEND = FALSE){
-  if(class(x) == "Chrom"){
+  if(class(x) == "chromR"){
     filter <- x@var.info$mask
 #    x <- chrom_to_vcfR(x)
     x <- x@vcf
@@ -112,7 +112,7 @@ write.vcf <- function(x, file = "", mask = FALSE, APPEND = FALSE){
     x@fix[,'FILTER'] <- "PASS"
   }
   if(class(x) != "vcfR"){
-    stop("Unexpected class! Expecting an object of class vcfR or Chrom.")
+    stop("Unexpected class! Expecting an object of class vcfR or chromR.")
   }
   
   if(APPEND == FALSE){
@@ -150,8 +150,8 @@ write_var_info <- function(x, file = "", mask = FALSE, APPEND = FALSE){
   if(class(x) == "vcfR"){
     stop("Unexpected class! Detected class vcfR. This class does not contain variant summaries.")
   }
-  if(class(x) != "Chrom"){
-    stop("Unexpected class! Expecting an object of class Chrom.")
+  if(class(x) != "chromR"){
+    stop("Unexpected class! Expecting an object of class chromR.")
   }
   
   if(mask == FALSE){
@@ -172,8 +172,8 @@ write_win_info <- function(x, file = "", APPEND = FALSE){
   if(class(x) == "vcfR"){
     stop("Unexpected class! Detected class vcfR. This class does not contain window summaries.")
   }
-  if(class(x) != "Chrom"){
-    stop("Unexpected class! Expecting an object of class Chrom.")
+  if(class(x) != "chromR"){
+    stop("Unexpected class! Expecting an object of class chromR.")
   }
   
   write.table(x@win.info, file = file, append = APPEND, sep = ",", row.names = FALSE, col.names = !APPEND)
@@ -190,8 +190,8 @@ write_win_info <- function(x, file = "", APPEND = FALSE){
 #' @export
 #' 
 write_fasta <- function(x, file = "", gt_split = "|", rowlength=80, tolower=TRUE, verbose=TRUE, APPEND = FALSE){
-  if(class(x) != "Chrom"){
-    stop("Expected object of class Chrom")
+  if(class(x) != "chromR"){
+    stop("Expected object of class chromR")
   }
   if(APPEND == FALSE){
     if(file.exists(file)){

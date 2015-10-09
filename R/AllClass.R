@@ -45,7 +45,7 @@ setClass(
 
 ##### ##### ##### ##### #####
 #
-# Class Chrom
+# Class chromR
 #
 ##### ##### ##### ##### #####
 
@@ -55,10 +55,10 @@ setClass(
 
 setOldClass("DNAbin")
 
-#' @title Chrom class
+#' @title chromR class
 #'
-#' @name Chrom-class
-#' @rdname Chrom-class
+#' @name chromR-class
+#' @rdname chromR-class
 #'
 #' @description
 #' A class for representing chromosomes (or contigs).
@@ -123,7 +123,7 @@ setOldClass("DNAbin")
 #' @export
 #' @import methods
 setClass(
-  Class="Chrom",
+  Class="chromR",
   representation=representation(
     name = "character",
     len = "integer",
