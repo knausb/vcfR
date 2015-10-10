@@ -9,7 +9,7 @@
 \alias{get.alleles}
 \alias{is_biallelic}
 \alias{is_polymorphic}
-\title{Extract elements from the GT section of a vcf format object}
+\title{Extract elements from the 'gt' slot for objects of class vcfR or chromR}
 \usage{
 extract.gt(x, element = "GT", mask = FALSE, as.numeric = FALSE,
   return.alleles = FALSE, allele.sep = "/", extract = TRUE)
@@ -29,7 +29,7 @@ get.alleles(x, split = "/", na.rm = FALSE, as.numeric = FALSE)
 alleles_to_consensus(x2, sep = "/", NA_to_n = TRUE)
 }
 \arguments{
-\item{x}{An object of class Chrom or vcfR}
+\item{x}{An object of class chromR or vcfR}
 
 \item{element}{element to extract from vcf genotype data. Common options include "DP", "GT" and "GQ"}
 
@@ -39,7 +39,7 @@ alleles_to_consensus(x2, sep = "/", NA_to_n = TRUE)
 
 \item{return.alleles}{logical indicating whether to return the genotypes (0/1) or alleles (A/T)}
 
-\item{allele.sep}{character which delimits the alleles in a genotype (/ or |)}
+\item{allele.sep}{character which delimits the alleles in a genotype (/ or |), here this is not used for a regex (as it is in other functions)}
 
 \item{extract}{logical indicating whether to return the extracted element or the remaining string}
 
@@ -47,7 +47,8 @@ alleles_to_consensus(x2, sep = "/", NA_to_n = TRUE)
 
 \item{gt_split}{character which delimits alleles in genotypes}
 
-\item{verbose}{should verbose output be generated}
+\item{verbose}{should verbose output be generated
+#'}
 
 \item{na.omit}{logical to omit missing data}
 
@@ -62,14 +63,23 @@ alleles_to_consensus(x2, sep = "/", NA_to_n = TRUE)
 \item{NA_to_n}{logical indicating whether NAs should be scores as n}
 }
 \description{
-Extract elements from the GT section of a vcf format object
+Extract elements from the gt slot of vcfR objects, or query their properties
 }
 \details{
+
+
 Note that when 'as.numeric' is set to 'TRUE' but the data are not actually numeric, unexpected results will likely occur.
 
-The function \strong{extract.gt} isolates elements from the GT portion of vcf data.
-Fields available for extraction are listed in the FORMAT column of the GT portion.
+The function \strong{extract.gt} isolates elements from the 'gt' portion of vcf data.
+Fields available for extraction are listed in the FORMAT column of the 'gt' slot.
 Because different vcf producing software produce different fields the options will vary by software.
+The mask parameter allows the mask to be implemented when using a chromR object.
+The 'as.numeric' option will convert the results from a character to a numeric.
+Note that if the data is not actually numeric, it will result in a numeric result which may not be interpretable.
+The 'return.alleles' option allows the default behavior of numerically encoded genotypes (e.g., 0/1) to be converted to their nucleic acid representation (e.g., A/T).
+The allele.sep parameter allows the genotype delimiter to be specified.
+Note that this is not used for a regular expression as similar parameters are used in other functions.
+Extract allows the user to extract just the specified element (TRUE) or every element except the one specified.
 
 The function \strong{extract_indels} is used to isolate indels from SNPs.
 When the parameter return_indels is FALSE only SNPs will be returned.

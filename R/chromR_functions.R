@@ -1,16 +1,16 @@
 
 
-#' @title Chrom_functions
-#' @name Chrom functions
-# @aliases Chrom functions
-#' @rdname Chrom_functions
-#' @description Functions which act on Chrom objects 
+#' @title chromR_functions
+#' @name chromR functions
+# @aliases chromR functions
+#' @rdname chromR_functions
+#' @description Functions which act on chromR objects 
 
 
 
 ##### Set a mask #####
 
-#' @rdname Chrom_functions
+#' @rdname chromR_functions
 #' @export
 #' @aliases masker
 #' 
@@ -31,7 +31,7 @@
 #' The minimum and maximum mapping qualities (minmq, maxmq) can also be used.
 #' 
 #' 
-#' This vector is stored in the var.info$mask slot of a Chrom object.
+#' This vector is stored in the var.info$mask slot of a chromR object.
 #' 
 #masker <- function(x, min_QUAL=999, min_DP=0.25, max_DP=0.75, minmq=20, maxmq=50, ...){
 masker <- function(x, min_QUAL=1, min_DP=1, max_DP=1e4, min_MQ=20, max_MQ=100, ...){
@@ -72,9 +72,9 @@ masker <- function(x, min_QUAL=1, min_DP=1, max_DP=1e4, min_MQ=20, max_MQ=100, .
 
 
 
-#' @rdname Chrom_functions
+#' @rdname chromR_functions
 #' 
-#' @param x object of class Chrom
+#' @param x object of class chromR
 #' 
 #' @export
 #' @aliases variant_table
@@ -93,7 +93,7 @@ variant_table <- function(x){
 
 
 
-#' @rdname Chrom_functions
+#' @rdname chromR_functions
 #' @export
 #' @aliases window_table
 #' @details

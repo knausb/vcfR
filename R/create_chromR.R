@@ -1,41 +1,41 @@
-#' @title Create Chrom object
-#' @name Create Chrom object
-#' @rdname create_chrom
+#' @title Create chromR object
+#' @name Create chromR object
+#' @rdname create_chromR
 #' @export
-#' @aliases create_chrom
+#' @aliases create_chromR
 #'
 #' @description
-#' Creates and populates an object of class Chrom.
+#' Creates and populates an object of class chromR.
 #'
 #' @param name a name for the chromosome (for plotting purposes)
 #' @param seq a sequence as a DNAbin object
 #' @param ann an annotation file (gff-like)
 #' @param verbose should verbose output be printed to the console?
-#' @param x an object of class Chrom
+#' @param x an object of class chromR
 #' @param vcf an object of class vcfR
 #' @param gff a data.frame containing annotation data in the gff format
 # @param ... arguments
 #'
 #' @details
-#' Creates and names a chrom object from a name, a chromosome (an ape::DNAbin object), variant data (a vcfR object) and annotation data (gff-like).
-#' The function \strong{create_chrom} is a wrapper which calls functions to populate the slots of the Chrom object.
+#' Creates and names a chromR object from a name, a chromosome (an ape::DNAbin object), variant data (a vcfR object) and annotation data (gff-like).
+#' The function \strong{create_chromR} is a wrapper which calls functions to populate the slots of the chromR object.
 #' 
-#' The function \strong{vcf2chrom} is called by create_chrome and transfers the data from the slots of a vcfR object to the slots of a Chrom object.
+#' The function \strong{vcf2chromR} is called by create_chromR and transfers the data from the slots of a vcfR object to the slots of a chromR object.
 #' It also tries to extract the 'DP' and 'MQ' fileds (when present) from teh fix region's INFO column.
 #' It is not anticipated that a user would need to use this function directly, but its placed here in case they do.
 #' 
-#' The function \strong{seq2chrom} is currently defined as a generic function.
+#' The function \strong{seq2chromR} is currently defined as a generic function.
 #' This may change in the future.
-#' This function takes an object of class DNAbin and assigns it to the 'seq' slot of a Chrom object.
+#' This function takes an object of class DNAbin and assigns it to the 'seq' slot of a chromR object.
 #' 
-#' The function \strong{ann2chrom} is called by create_chrome and transfers the information from a gff-like object to the 'ann' slot of a Chrom object.
+#' The function \strong{ann2chromR} is called by create_chromR and transfers the information from a gff-like object to the 'ann' slot of a chromR object.
 #' It is not anticipated that a user would need to use this function directly, but its placed here in case they do.
 #' 
 #' 
 #' @seealso 
-# \code{\link{seq2chrome}},
-# \code{\link{vcf2chrome}},
-#' \code{\link{Chrom-class}},
+# \code{\link{seq2chromR}},
+# \code{\link{vcf2chromR}},
+#' \code{\link{chromR-class}},
 #' \code{\link{vcfR-class}},
 #' \code{\link[ape]{DNAbin}},
 #' \href{http://www.1000genomes.org/wiki/analysis/variant\%20call\%20format/vcf-variant-call-format-version-41}{vcf format}, 
@@ -44,13 +44,13 @@
 #' @examples
 #' library(vcfR)
 # data(vcfR_example)
-# pinf_mt <- create_chrom('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
+# pinf_mt <- create_chromR('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
 # head(pinf_mt)
 # pinf_mt
 # names(pinf_mt)
 # plot(pinf_mt)
 # pinf_mt <- masker(pinf_mt, min_QUAL = 990, min_DP = 6000, max_DP = 8000, min_MQ = 40, max_MQ = 100)
-# pinf_mt <- proc_chrom(pinf_mt, win.size=1000)
+# pinf_mt <- proc_chromR(pinf_mt, win.size=1000)
 #'  
 # plot(pinf_mt)
 #' 
@@ -80,21 +80,21 @@
 # hist(tab$Ho - tab$He, col=5)
 # # Note that this example is a mitochondrion, so this is a bit silly.
 #' 
-create_chrom <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
+create_chromR <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
   # Determine whether we received the expected classes.
   stopifnot(class(vcf) == "vcfR")
 
-  # Initialize Chrom object.  
-  x <- new(Class="Chrom")
+  # Initialize chromR object.  
+  x <- new(Class="chromR")
   setName(x) <- name
   
   # Insert vcf into Chom.
   if(length(vcf)>0){
-#    x <- vcf2chrom(x, vcf)
+#    x <- vcf2chromR(x, vcf)
     x@vcf <- vcf
   }
 
-  # Insert seq into Chrom
+  # Insert seq into chromR
   # Needs to handle lists and matrices of DNAbin
   # Matrices are better behaved.
   #
@@ -103,7 +103,7 @@ create_chrom <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
     x@len <- POS[length(POS)]
 #    x@len <- x@vcf.fix$POS[length(x@vcf.fix$POS)]
   } else if (class(seq)=="DNAbin"){
-    x <- seq2chrom(x, seq)
+    x <- seq2chromR(x, seq)
   } else {
     stopifnot(class(seq)=="DNAbin")
   }
@@ -194,18 +194,18 @@ create_chrom <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
 
 
 
-#' @rdname create_chrom
+#' @rdname create_chromR
 #' @export
-#' @aliases chrom-methods vcf2chrom
+#' @aliases chromR-methods vcf2chromR
 #'
 # @description
-# Methods to work with objects of the chrom class
+# Methods to work with objects of the chromR class
 # Reads in a vcf file and stores it in a vcf class.
 #'
-# @param x an object of class chrom
+# @param x an object of class chromR
 #'
 #'
-vcf2chrom <- function(x, vcf){
+vcf2chromR <- function(x, vcf){
   x@vcf.fix <- as.data.frame(vcf@fix)
 #  colnames(x@vcf.fix) <- c('CHROM','POS','ID','REF','ALT','QUAL','FILTER','INFO')
 #  x@vcf.fix[,2] <- as.numeric(x@vcf.fix[,2])
@@ -242,11 +242,11 @@ vcf2chrom <- function(x, vcf){
 # Needs to handle lists and matrices of DNAbin.
 # Matrices appear better behaved.
 #
-#' @rdname create_chrom
+#' @rdname create_chromR
 #' @export
-#' @aliases seq2chrom
+#' @aliases seq2chromR
 #' 
-seq2chrom <- function(x, seq=NULL){
+seq2chromR <- function(x, seq=NULL){
   # A DNAbin will store in a list when the fasta contains
   # multiple sequences, but as a matrix when the fasta
   # only contains one sequence.
@@ -272,11 +272,11 @@ seq2chrom <- function(x, seq=NULL){
 
 
 
-#' @rdname create_chrom
+#' @rdname create_chromR
 #' @export
-#' @aliases ann2chrom
+#' @aliases ann2chromR
 #'
-ann2chrom <- function(x, gff){
+ann2chromR <- function(x, gff){
   x@ann <- as.data.frame(gff)
   colnames(x@ann) <- c('seqid','source','type','start','end','score','strand','phase','attributes')
   x@ann$start <- as.numeric(as.character(x@ann$start))
@@ -286,42 +286,42 @@ ann2chrom <- function(x, gff){
 
 
 
-#' @rdname create_chrom
+#' @rdname create_chromR
 #' @export
 #' @aliases getPOS
 getFIX <- function(x){
-  if(class(x) != "Chrom"){stop("expecting object of class Chrom")}
+  if(class(x) != "chromR"){stop("expecting object of class chromR")}
   x@vcf@fix
 }
 
-#' @rdname create_chrom
+#' @rdname create_chromR
 #' @export
 #' @aliases getPOS
 getCHROM <- function(x){
-  if(class(x) != "Chrom"){stop("expecting object of class Chrom")}
+  if(class(x) != "chromR"){stop("expecting object of class chromR")}
   x@vcf@fix[,"CHROM"]
 }
 
 
-#' @rdname create_chrom
+#' @rdname create_chromR
 #' @export
 #' @aliases getPOS
 getPOS <- function(x){
-  if(class(x) != "Chrom"){stop("expecting object of class Chrom")}
+  if(class(x) != "chromR"){stop("expecting object of class chromR")}
   as.integer(x@vcf@fix[,"POS"])
 }
 
 
-#' @rdname create_chrom
+#' @rdname create_chromR
 #' @export
 #' @aliases getPOS
 getQUAL <- function(x){
-  if(class(x) != "Chrom"){stop("expecting object of class Chrom")}
+  if(class(x) != "chromR"){stop("expecting object of class chromR")}
   as.integer(x@vcf@fix[,"QUAL"])
 }
 
 
-#' @rdname create_chrom
+#' @rdname create_chromR
 #' @export
 #' @aliases getDP
 getDP <- function(x){
@@ -332,9 +332,9 @@ getDP <- function(x){
 }
 
 
-#' @rdname create_chrom
+#' @rdname create_chromR
 #' @export
-#' @param element element to extract from Chrom object
+#' @param element element to extract from chromR object
 #' @aliases getINFO
 getINFO <- function(x, element="MQ"){
   regex <- paste(element, "=", sep="")

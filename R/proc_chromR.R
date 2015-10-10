@@ -1,10 +1,10 @@
 
-#' @title Process chrom object
-#' @name Process chrom objects
-#' @rdname proc_chrom
-#' @description Functions which process Chrom objects 
+#' @title Process chromR object
+#' @name Process chromR objects
+#' @rdname proc_chromR
+#' @description Functions which process chromR objects 
 #' 
-#' @param x object of class Chrom
+#' @param x object of class chromR
 #' @param win.size integer indicating size for windowing processes
 #' @param verbose logical indicating whether verbose output should be reported
 #' @param ... arguments to be passed to methods
@@ -12,24 +12,24 @@
 #' @param regex a regular expression to indicate nucleotides to be searched for
 #' 
 #' @details
-#' The function \strong{proc_chrom()} calls helper functions to process the data present in a Chrom object into summaries statistics.
+#' The function \strong{proc_chromR()} calls helper functions to process the data present in a chromR object into summaries statistics.
 #' 
 #' The function \strong{regex.win()} is used to generate coordinates to define rectangles to represent regions of the chromosome containing called nucleotides (acgtwsmkrybdhv).
 #' It is then called a second time to generate coordinates to define rectangles to represent regions called as uncalled nucleotides (n, but not gaps).
 #' 
 #' The function \strong{gt2popsum} is called to create summaries of the variant data.
 #' 
-#' The function \strong{var.win} is called to create windowized summaries of the Chrom object.
+#' The function \strong{var.win} is called to create windowized summaries of the chromR object.
 #' 
 #' 
 
 
-#' @rdname proc_chrom
+#' @rdname proc_chromR
 #' @export
-#' @aliases proc_chrom
+#' @aliases proc_chromR
 #'
-proc_chrom <- function(x, win.size = 1e3, verbose=TRUE){
-  stopifnot(class(x) == "Chrom")
+proc_chromR <- function(x, win.size = 1e3, verbose=TRUE){
+  stopifnot(class(x) == "chromR")
   
   if( is.null( x@seq ) ){
     warning( "seq slot is NULL." )
@@ -147,7 +147,7 @@ proc_chrom <- function(x, win.size = 1e3, verbose=TRUE){
 
 ##### ##### seq.info functions #####
 
-#' @rdname proc_chrom
+#' @rdname proc_chromR
 #' @export
 #' @aliases regex.win
 #' 
@@ -199,7 +199,7 @@ regex.win <- function(x, max.win=1000, regex="[acgtwsmkrybdhv]"){
 }
 
 
-#' @rdname proc_chrom
+#' @rdname proc_chromR
 #' @aliases seq_to_rects
 #' 
 #' @description
@@ -231,7 +231,7 @@ seq_to_rects <- function(x, chars="acgtwsmkrybdhv", lower=TRUE){
 }
 
 
-#' @rdname proc_chrom
+#' @rdname proc_chromR
 #' @export
 #' @aliases var.win
 #' 
@@ -293,13 +293,13 @@ var.win <- function(x, win.size=1e3){
 
 
 
-#' @rdname proc_chrom
+#' @rdname proc_chromR
 #' @export
 #' @aliases gt2popsum
 #' 
 gt2popsum <- function(x){
-  if(class(x) != "Chrom"){stop("Object is not of class Chrom")}
-  #  stopifnot(class(x) == "Chrom")
+  if(class(x) != "chromR"){stop("Object is not of class chromR")}
+  #  stopifnot(class(x) == "chromR")
   #  gt <- extract.gt(x, element = "GT", mask = x@var.info$mask)
   #  stopifnot(length(grep("(1/1|0/0|0/1)", unique(as.vector(gt)))) == 3)
   #  gt <- x@gt.m
@@ -399,12 +399,12 @@ gt2popsum <- function(x){
 
 
 
-#' @rdname proc_chrom
+#' @rdname proc_chromR
 #' @aliases gt_to_popsum
 #' 
 #' @export
 gt_to_popsum <- function(x){
-  if(class(x) != "Chrom"){stop("Object is not of class Chrom")}
+  if(class(x) != "chromR"){stop("Object is not of class chromR")}
   
   # Extract genotypes from vcf.gt
   gt <- extract.gt(x, element="GT")

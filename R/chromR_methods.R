@@ -1,23 +1,23 @@
 
-#' @title Chrom methods
+#' @title chromR methods
 #' 
-#' @param x an object of class Chrom
-#' @param object an object of class Chrom
+#' @param x an object of class chromR
+#' @param object an object of class chromR
 #' @param y some sort of object???
 #' @param ... Arguments to be passed to methods
 #' 
-#' @rdname Chrom_methods
+#' @rdname chromR_methods
 #
 
 ##### ##### Generic methods. #####
 
 setMethod(
   f="show",
-  signature = "Chrom",
+  signature = "chromR",
 #  definition=function(x){
   definition=function(object){
             #1234567890123456789012345678901234567890
-    print("*****   Class Chrom, method Show   *****")
+    print("*****   Class chromR, method Show   *****")
     print(paste("Name: ", object@name))
     print(paste("Length: ", object@len))
     print("Use head(object) for more details.")
@@ -25,15 +25,15 @@ setMethod(
 #    print(paste("Length: ", x@len, "\n"))
     #    print("Use head(x) for more details.\n")    
             #1234567890123456789012345678901234567890
-    print("*****      End Show (Chrom)        *****")
+    print("*****      End Show (chromR)        *****")
   }
 )
 
 setMethod(
   f="print",
-  signature="Chrom",
+  signature="chromR",
   definition=function (x,y,...){
-    print("***** Object of class 'Chrom' *****\n")
+    print("***** Object of class 'chromR' *****\n")
     print(paste("Name: ", x@name, "\n"))
     print(paste("Length: ", x@len, "\n"))
     print("\nVCF fixed data:\n")
@@ -49,7 +49,7 @@ setMethod(
     } else {
       print("Empty slot.\n")
     }
-    print("***** End print (Chrom) ***** \n")
+    print("***** End print (chromR) ***** \n")
   }
 )
 
@@ -57,15 +57,15 @@ setMethod(
 
 ##### Basic methods (definitions) #####
 
-#' @rdname Chrom_methods
+#' @rdname chromR_methods
 #' @export
-#' @aliases names.chrom
+#' @aliases names.chromR
 #' 
 setMethod(
   f="names",
-  signature = "Chrom",
+  signature = "chromR",
   definition=function(x){
-    #    cat("**** Class Chrom, method names **** \n")
+    #    cat("**** Class chromR, method names **** \n")
     #    cat("Sequence name: ", as.character(names(x@seq)), "\n")
     #    cat("First annotation name: ")
     #    print(as.character(x@ann[1,1]))
@@ -79,32 +79,32 @@ setMethod(
 )
 
 
-#' @rdname Chrom_methods
+#' @rdname chromR_methods
 #' @export
-#' @aliases head.chrom
+#' @aliases head.chromR
 #' 
 setMethod(
   f="head",
-  signature = "Chrom",
+  signature = "chromR",
   definition=function(x){
             #1234567890123456789012345678901234567890
-    print("*****   Class Chrom, method head   *****")
+    print("*****   Class chromR, method head   *****")
     print(paste("Name: ", x@name))
     print(paste("Length: ", x@len))
     print('', quote=FALSE)
             #1234567890123456789012345678901234567890
-    print("*****     Sample names (Chrom)     *****")
+    print("*****     Sample names (chromR)     *****")
     print(colnames(x@vcf@gt)[-1])
     print('', quote=FALSE)
             #1234567890123456789012345678901234567890
-    print("*****    Vcf fixed data (Chrom)    *****")
+    print("*****    Vcf fixed data (chromR)    *****")
     print(x@vcf@fix[1:6,1:7])
     print('', quote=FALSE)
     print("INFO column has been suppressed, first INFO record:")
     print(unlist(strsplit(as.character(x@vcf@fix[1, 'INFO']), split=";")))
     print('', quote=FALSE)
             #1234567890123456789012345678901234567890
-    print("*****   Vcf genotype data (Chrom)  *****")
+    print("*****   Vcf genotype data (chromR)  *****")
     if(ncol(x@vcf@gt)>=6){
               #1234567890123456789012345678901234567890
       print("*****     First 6 columns      *********")
@@ -114,7 +114,7 @@ setMethod(
     }
     print('', quote=FALSE)
             #1234567890123456789012345678901234567890
-    print("*****      Var info (Chrom)        *****")
+    print("*****      Var info (chromR)        *****")
     if(ncol(x@var.info)>=6){
               #1234567890123456789012345678901234567890
       print("*****       First 6 columns        *****")
@@ -124,24 +124,24 @@ setMethod(
     }
     print('', quote=FALSE)
             #1234567890123456789012345678901234567890
-    print("*****      Vcf mask (Chrom)        *****")
+    print("*****      Vcf mask (chromR)        *****")
     print(paste("Percent unmasked:", 100*(sum(x@var.info$mask)/length(x@var.info$mask))))
     print('', quote=FALSE)
             #1234567890123456789012345678901234567890
-    print("*****      End head (Chrom)        *****")
+    print("*****      End head (chromR)        *****")
     print('', quote=FALSE)
   }
 )
 
 
 
-#' @rdname Chrom_methods
+#' @rdname chromR_methods
 #' @export
-#' @aliases plot.chrom
+#' @aliases plot.chromR
 #' 
 setMethod(
   f= "plot",
-  signature= "Chrom",
+  signature= "chromR",
   definition=function (x,y,...){
     DP <- x@var.info$DP[x@var.info$mask]
     MQ <- x@var.info$MQ[x@var.info$mask]
@@ -196,7 +196,7 @@ setMethod(
 #### Getter for "names" ####
 setGeneric("getName",function(object){standardGeneric ("getName")})
 
-setMethod("getName","Chrom",
+setMethod("getName","chromR",
           function(object){
             return(object@name)
           }
@@ -208,7 +208,7 @@ setGeneric("setName<-",function(object,value){standardGeneric("setName<-")})
 
 setReplaceMethod(
   f="setName",
-  signature="Chrom",
+  signature="chromR",
   definition=function(object,value){
     object@name <-value
     return (object)
@@ -219,40 +219,11 @@ setReplaceMethod(
 
 
 
-# Setter for seq. ####
-
-#setGeneric("seq2chrom<-",function(object,value){standardGeneric("seq2chrom<-")})
-
-#setReplaceMethod(
-#  f="seq2chrom",
-#  signature="Chrom",
-#  definition=function(object,value){
-#    # A DNAbin will store in a list when the fasta contains
-#    # multiple sequences, but as a matrix when the fasta
-#    # only contains one sequence.
-#    if(!is.list(class(as.character(value)))){
-#      object@seq <- as.list(value)
-#    } else {
-#      object@seq <-value      
-#    }
-#    object@len <-length(object@seq[[1]])
-#    return (object)
-#  }
-#)
-
-##### ##### ##### ##### #####
-
-
-
-
-
-
-
 
 
 ##### ##### win.info functions #####
 
-#' @rdname Chrom_methods
+#' @rdname chromR_methods
 #' @export
 #' @aliases windowize
 #'
@@ -263,7 +234,7 @@ setReplaceMethod(
 #' @param max.win maximum window size
 #'
 #' @details
-#' Reads in a vcf file and stores it in a Chrom class.
+#' Reads in a vcf file and stores it in a chromR class.
 #' 
 #'
 windowize <- function(x, win.size=1000, max.win=10000){
@@ -281,7 +252,7 @@ windowize <- function(x, win.size=1000, max.win=10000){
         print(paste("max i equals", max.win))
         print(paste("i equals", i))
         print(paste("j equals", j))
-        print("chrom.r error: max.win is too small.\n")
+        print("chromR error: max.win is too small.\n")
         break
       }
     }

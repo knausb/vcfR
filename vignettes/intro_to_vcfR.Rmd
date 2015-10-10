@@ -102,7 +102,7 @@ The create_chrom() function creates a new Chrom object and populates it with dat
 
 ```{r}
 library(vcfR)
-chrom <- create_chrom(name='Supercontig_1.100', vcf=vcf, seq=dna, ann=gff)
+chrom <- create_chromR(name='Supercontig_1.100', vcf=vcf, seq=dna, ann=gff)
 ```
 
 
@@ -188,7 +188,7 @@ This function is rather experimental and some of the summaries may not be quite 
 
 
 ```{r, fig.height=6, fig.width=6}
-chrom <- proc_chrom(chrom, verbose=TRUE)
+chrom <- proc_chromR(chrom, verbose=TRUE)
 plot(chrom)
 ```
 

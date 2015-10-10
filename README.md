@@ -43,6 +43,6 @@ If you've installed this package with devtools you will probably need to run:
 
     devtools::install(build_vignettes = TRUE)
 
-In order to build the vignettes (which does not happen by default).
+in order to build the vignettes, which does not happen by default.
 
 Enjoy!

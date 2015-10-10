@@ -1,15 +1,17 @@
 # create_chrom tests.
 
 # detach(package:vcfR, unload=T)
+#
+library(testthat)
 library(vcfR)
-context("create_chrom functions")
+context("create_chromR functions")
 
 #library(testthat)
 #data(vcfR_example)
 
-test_that("Create null a Chrom",{
-  chrom <- new(Class="Chrom")
-  expect_is(chrom, "Chrom")
+test_that("Create null a chromR",{
+  chrom <- new(Class="chromR")
+  expect_is(chrom, "chromR")
   expect_is(chrom@vcf, "vcfR")
   expect_is(chrom@seq, "NULL")
   expect_is(chrom@ann, "data.frame")
@@ -22,10 +24,10 @@ test_that("Create null a Chrom",{
 })
 
 
-
 vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
 seq_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
 gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
+
 
 vcf <- read.vcf(vcf_file, verbose = FALSE)
 dna <- ape::read.dna(seq_file, format = "fasta")
@@ -33,8 +35,8 @@ gff <- read.table(gff_file, sep="\t")
 
 
 test_that("We can create a Chrom, no sequence or annotation",{
-  chrom <- create_chrom(name="Supercontig_1.100", vcf=vcf, verbose=FALSE)
-  expect_is(chrom, "Chrom")
+  chrom <- create_chromR(name="Supercontig_1.100", vcf=vcf, verbose=FALSE)
+  expect_is(chrom, "chromR")
   expect_is(chrom@vcf, "vcfR")
   expect_is(chrom@seq, "NULL")
   expect_is(chrom@ann, "data.frame")
@@ -51,9 +53,9 @@ test_that("We can create a Chrom, no sequence or annotation",{
 })
 
 
-test_that("We can create a Chrom, no annotation",{
-  chrom <- create_chrom(name="Supercontig_1.100", vcf=vcf, seq=dna, verbose=FALSE)
-  expect_is(chrom, "Chrom")
+test_that("We can create a chromR, no annotation",{
+  chrom <- create_chromR(name="Supercontig_1.100", vcf=vcf, seq=dna, verbose=FALSE)
+  expect_is(chrom, "chromR")
   expect_is(chrom@vcf, "vcfR")
   expect_is(chrom@seq, "DNAbin")
   expect_is(chrom@ann, "data.frame")
@@ -67,9 +69,9 @@ test_that("We can create a Chrom, no annotation",{
 })
 
 
-test_that("We can create a Chrom, no sequence",{
-  chrom <- create_chrom(name="Supercontig_1.100", vcf=vcf, ann=gff, verbose=FALSE)
-  expect_is(chrom, "Chrom")
+test_that("We can create a chromR, no sequence",{
+  chrom <- create_chromR(name="Supercontig_1.100", vcf=vcf, ann=gff, verbose=FALSE)
+  expect_is(chrom, "chromR")
   expect_is(chrom@vcf, "vcfR")
   expect_is(chrom@seq, "NULL")
   expect_is(chrom@ann, "data.frame")
@@ -83,9 +85,9 @@ test_that("We can create a Chrom, no sequence",{
 })
 
 
-test_that("We can create a Chrom",{
-  chrom <- create_chrom(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
-  expect_is(chrom, "Chrom")
+test_that("We can create a chromR",{
+  chrom <- create_chromR(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
+  expect_is(chrom, "chromR")
   expect_is(chrom@vcf, "vcfR")
   expect_is(chrom@seq, "DNAbin")
   expect_is(chrom@ann, "data.frame")
@@ -102,7 +104,7 @@ test_that("We can create a Chrom",{
 ##### ##### ##### ##### #####
 
 
-chrom <- create_chrom(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
+chrom <- create_chromR(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
 chrom <- masker(chrom, min_DP = 300, max_DP = 700)
 
 test_that("We implemented the mask",{
@@ -111,18 +113,15 @@ test_that("We implemented the mask",{
 
 
 
-chrom <- proc_chrom(chrom, verbose = FALSE)
+chrom <- proc_chromR(chrom, verbose = FALSE)
 
-test_that("proc_chrom works",{
+test_that("proc_chromR works",{
   expect_equal( ncol(chrom@var.info), 9 )
-  chrom <- proc_chrom(chrom, verbose = FALSE)
+  chrom <- proc_chromR(chrom, verbose = FALSE)
   expect_equal( ncol(chrom@var.info), 9 )
 })
 
 
-#head(chrom@var.info)
-
-#plot(chrom)
 
 ##### ##### ##### ##### #####
 # EOF.

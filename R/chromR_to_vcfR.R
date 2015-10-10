@@ -18,24 +18,24 @@
 #' @return Returns an object of class vcfR. 
 #' 
 #'
-chrom_to_vcfR <- function(x, use.mask=FALSE){
-  if(class(x) != "Chrom"){
-    stop("Unexpected class! Expecting an object of class Chrom.")
+chromR_to_vcfR <- function(x, use.mask=FALSE){
+  if(class(x) != "chromR"){
+    stop("Unexpected class! Expecting an object of class chromR.")
   }
 
-  vcf <- new(Class = "vcfR")
-  vcf@meta <- x@vcf.meta
+#  vcf <- new(Class = "vcfR")
+#  vcf@meta <- x@vcf.meta
 
-  if(use.mask == TRUE){
+#  if(use.mask == TRUE){
 #    vcf@fix  <- x@vcf.fix[x@mask,]
 #    vcf@gt   <- x@vcf.gt[x@mask,]
-    vcf@fix  <- x@vcf.fix[x@var.info$mask,]
-    vcf@gt   <- x@vcf.gt[x@var.info$mask,]
-  } else {
-    vcf@fix  <- x@vcf.fix
-    vcf@gt   <- x@vcf.gt
-  }
-
+#    vcf@fix  <- x@vcf.fix[x@var.info$mask,]
+#    vcf@gt   <- x@vcf.gt[x@var.info$mask,]
+#  } else {
+#    vcf@fix  <- x@vcf.fix
+#    vcf@gt   <- x@vcf.gt
+#  }
+  vcf <- x@vcf
   return(vcf)
 }
 
