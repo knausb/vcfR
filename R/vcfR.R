@@ -9,10 +9,9 @@
 #' 
 #' \strong{File input and output} is facilitated with the functions \code{\link{read.vcf}} and \code{\link{write.vcf}}.
 #' Input of vcf format data results in an S4 object of class \code{\link{vcfR-class}}.
-#' Objects of class vcfR can be subset using square brackets (\code{\link{[]}}).
-#' Elements from the genotype region of the file (e.g., the genotype, depth, genotype likelihood) can be extracted with \code{\link{extract.gt}}.
+#' Objects of class vcfR can be manipulated with \code{\link{vcfR-methods}} and \code{\link{extract.gt}}.
 #' Contents of the vcfR object can be visualized with the \code{\link{plot.vcfR}} method.
-#' More complex visualization can be accomplished by using several tools.
+#' More complex visualization can be accomplished by converting a vcfR object to an object of class \code{\link{chromR-class}}.
 #' See \code{vignette(topic="sequence_coverage")} for an example.
 #' Once manipulations are complete the object may be written to a *.vcf.gz format file using \code{\link{write.vcf}} or exported to objects supported by other R packages with \code{\link{vcfR2genind}} or \code{\link{vcfR2loci}}.
 #' 

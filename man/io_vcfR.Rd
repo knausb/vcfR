@@ -24,10 +24,11 @@ write.vcf(x, file = "", mask = FALSE, APPEND = FALSE)
 }
 \value{
 read.vcf returns an object of class \code{\link{vcfR-class}}.
-See the \strong{vignette} \code{vignette('vcf_data')}
+See the \strong{vignette:} \code{vignette('vcf_data')}
 }
 \description{
-Read and write files in vcf format.
+Read and files in the *.vcf structured text format, as well as the compressed *.vcf.gz format.
+Write objects of class vcfR to *.vcf.gz.
 }
 \details{
 The function \strong{read.vcf} reads in files in *.vcf (text) and *.vcf.gz (gzipped text) format and returns an object of class vcfR.
@@ -51,6 +52,6 @@ CRAN:
 Bioconductor:
 \href{http://www.bioconductor.org/packages/release/bioc/html/VariantAnnotation.html}{VariantAnnotation}::readVcf
 
-Use browseVignettes('vcfR') to find examples.
+Use: browseVignettes('vcfR') to find examples.
 }
 

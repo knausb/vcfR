@@ -126,7 +126,7 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
   
   # Extract indels.
   if( extract.indels == TRUE ){
-    x <- extract_indels(x)
+    x <- extract.indels(x)
   } else {
     stop("extract.indels == FALSE is not currently implemented.")
   }

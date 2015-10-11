@@ -4,7 +4,8 @@
 #' @export
 #'
 #' @description
-#' Read and write files in vcf format.
+#' Read and files in the *.vcf structured text format, as well as the compressed *.vcf.gz format.
+#' Write objects of class vcfR to *.vcf.gz.
 #' 
 #' @param file A filename for a variant call format (vcf) file
 #' @param x An object of class vcfR or chromR
@@ -28,7 +29,7 @@
 #' If an index is supplied as 'mask', then this index is used, and recycled as necessary, to subset the data.
 #' 
 #' @return read.vcf returns an object of class \code{\link{vcfR-class}}.
-#' See the \strong{vignette} \code{vignette('vcf_data')}
+#' See the \strong{vignette:} \code{vignette('vcf_data')}
 #'
 #' @seealso
 # \code{\link[PopGenome]{readVCF}}
@@ -43,7 +44,7 @@
 #' Bioconductor:
 #' \href{http://www.bioconductor.org/packages/release/bioc/html/VariantAnnotation.html}{VariantAnnotation}::readVcf
 #'
-#' Use browseVignettes('vcfR') to find examples.
+#' Use: browseVignettes('vcfR') to find examples.
 #'
 #' 
 #' 

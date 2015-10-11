@@ -1,8 +1,11 @@
 #' 
-#' @title Extract elements from the 'gt' slot for objects of class vcfR or chromR
+#' @title Extract elements from vcfR objects
+#' 
+#'  
 #' @rdname extract_gt
 #' 
-#' @description Extract elements from the 'gt' slot of vcfR objects, or query their properties
+#' @description 
+#' Extract elements from the 'gt' slot, convert extracted genotypes to their allelic state, extract indels from the data structure or extract elements from the INFO column of the 'fix' slot.
 #' 
 #' @param x An object of class chromR or vcfR 
 #' @param element element to extract from vcf genotype data. Common options include "DP", "GT" and "GQ"
@@ -97,19 +100,55 @@ extract.gt <- function(x, element="GT", mask=FALSE, as.numeric=FALSE, return.all
 
 
 
-
 #' @rdname extract_gt
-#' @aliases extract_indels
-#' @param return_indels logical indicating whether to return indels or not
+#' @aliases extract.haps
+#' @param gt.split character which delimits alleles in genotypes
 #' 
 #' @details 
-#' The function \strong{extract_indels} is used to isolate indels from SNPs.
+#' The function \strong{extract.haps} uses extract.gt to isolate genotypes.
+#' It then uses the information in the REF and ALT columns as well as an allele delimiter (gt_split) to split genotypes into their allelic state.
+#' Ploidy is determined by the first non-NA genotype in the first sample.
+#' 
+#' 
+#' @export
+extract.haps <- function(x, mask=FALSE, gt.split="|",verbose=TRUE){
+  if(class(x) == "chromR"){
+    if(length(mask) == 1 && mask==TRUE){
+      x <- chromR_to_vcfR(x, use.mask = TRUE)
+    } else {
+      #      x <- chrom_to_vcfR(x)
+      x <- x@vcf
+    }
+  }
+  
+  if(length(mask) > 1){
+    x <- x[mask,]
+  }
+  
+  gt <- extract.gt(x, element="GT")
+  
+  haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', x@fix[,'REF'], x@fix[,'ALT'], gt, gt.split, as.numeric(verbose))
+  haps
+}
+
+
+
+
+#' @rdname extract_gt
+#' 
+#' @aliases extract.indels
+#' 
+#' @param return.indels logical indicating whether to return indels or not
+#' 
+#' @details 
+#' The function \strong{extract.indels} is used to remove indels from SNPs.
+#' The function queries the 'REF' and 'ALT' columns of the 'fix' slot to see if any alleles are greater than one character in length.
 #' When the parameter return_indels is FALSE only SNPs will be returned.
 #' When the parameter return_indels is TRUE only indels will be returned.
 #'
 #' 
 #' @export
-extract_indels <- function(x, return_indels=FALSE){
+extract.indels <- function(x, return.indels=FALSE){
   if(class(x) == 'chromR'){
     x <- x@vcf
   }
@@ -123,7 +162,7 @@ extract_indels <- function(x, return_indels=FALSE){
   # Check alternate for indels
   mask[unlist(lapply(strsplit(x@fix[,'ALT'], split=","), function(x){max(nchar(x))})) > 1] <- TRUE
 
-  if(return_indels == FALSE){
+  if(return.indels == FALSE){
     x <- x[ !mask, , drop = FALSE ]
   } else {
     x <- x[ mask, , drop = FALSE ]
@@ -135,13 +174,13 @@ extract_indels <- function(x, return_indels=FALSE){
 
 
 #' @rdname extract_gt
-#' @aliases extract_info
+#' @aliases extract.info
 #' 
 #' @details 
-#' The function \strong{extract_info} is used to isolate elements from the INFO column of vcf data.
+#' The function \strong{extract.info} is used to isolate elements from the INFO column of vcf data.
 #' 
 #' @export
-extract_info <- function(x, element, as.numeric=FALSE, mask=FALSE){
+extract.info <- function(x, element, as.numeric=FALSE, mask=FALSE){
   values <- unlist(
     lapply(strsplit(unlist(
       lapply(strsplit(x@vcf.fix$INFO, split=";"),
@@ -161,137 +200,6 @@ extract_info <- function(x, element, as.numeric=FALSE, mask=FALSE){
 
 
 
-#' @rdname extract_gt
-#' @aliases extract_haps
-#' @param gt_split character which delimits alleles in genotypes
-#' 
-#' @details 
-#' The function \strong{extract_haps} uses extract.gt to isolate genotypes.
-#' It then uses the information in the REF and ALT columns as well as an allele delimiter (gt_split) to split genotypes into their allelic state.
-#' Ploidy is determined by the first non-NA genotype in the first sample.
-#' 
-#' 
-#' @export
-extract_haps <- function(x, mask=FALSE, gt_split="|",verbose=TRUE){
-  if(class(x) == "chromR"){
-    if(length(mask) == 1 && mask==TRUE){
-      x <- chromR_to_vcfR(x, use.mask = TRUE)
-    } else {
-#      x <- chrom_to_vcfR(x)
-      x <- x@vcf
-    }
-  }
-  
-  if(length(mask) > 1){
-    x <- x[mask,]
-  }
-  
-  gt <- extract.gt(x, element="GT")
 
-  haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', x@fix[,'REF'], x@fix[,'ALT'], gt, gt_split, as.numeric(verbose))
-  haps
-}
-
-
-
-#' @rdname extract_gt
-#' @aliases is_polymorphic
-#' @param na.omit logical to omit missing data
-#' 
-#' @details 
-#' The function \strong{is_polymorphic} returns a vector of logicals indicating whether a variant is polymorphic.
-#' Variants in vcf files are always polymorphic.
-#' However, if the variants are censored somehow (set to NA) or samples are removed a variant may become invariant.
-#' 
-#' 
-#' @export
-is_polymorphic <- function(x, na.omit=FALSE){
-  if(class(x) != "vcfR"){
-    stop("Expected an object of class vcfR")
-  }
-  x <- extract.gt(x)
-  
-  test_poly <- function(x, na.omit=na.omit){
-    if(na.omit == TRUE){
-      x <- na.omit(x)
-    }
-    sum(x[1] == x[-1]) < (length(x) - 1)
-  }
-  apply(x, MARGIN=1, test_poly, na.omit=na.omit)
-}
-
-
-#' @rdname extract_gt
-#' @aliases is_biallelic
-#' 
-#' @details 
-#' The function \strong{is_bialleleic} returns a vector of logicals indicating whether a variant is biallelic.
-#' Some analyses or downstream analyses only work with biallelic loci.
-#' This function can help manage this.
-#' 
-#' @export
-is_biallelic <- function(x){
-#  x <- as.character(x@fix$ALT)
-  x <- as.character(x@fix[,'ALT'])
-  x <- strsplit(x, split=",")
-  lapply(x, length) == 1
-}
-
-
-
-#' @rdname extract_gt
-#' @aliases get.alleles
-#' 
-#' @param split character passed to strsplit to split the genotype into alleles
-#' @param na.rm logical indicating whether to remove NAs
-#' 
-#' @details 
-#' The function \strong{get.alleles} takes a vector of genotypes and returns the unique alleles.
-#' 
-#' @export
-get.alleles <- function( x, split="/", na.rm = FALSE, as.numeric = FALSE ){
-  x <- unlist(strsplit(x, split))
-  if(na.rm == TRUE){
-    x <- x[ x != "NA" ]
-  }
-  if(as.numeric == TRUE){
-    x <- as.numeric(x)
-  }
-  x <- unique(x)
-  x
-}
-
-
-#' @rdname extract_gt
-#' @aliases alleles_to_consensus
-#' 
-#' @param x2 a matrix of alleles as genotypes (e.g., A/A, C/G, etc.)
-#' @param sep a character which delimits the alleles in a genotype (/ or |)
-#' @param NA_to_n logical indicating whether NAs should be scores as n
-#' 
-#' @details 
-#' The function \strong{alleles_to_consensus} converts genotypes to a single consensus allele using IUPAC ambiguity codes for heterozygotes. 
-#' Note that some functions, such as ape::seg.sites do not recognize ambiguity characters (other than 'n').
-#' This means that these functions, as well as functions that depend on them (e.g., pegas::tajima.test), will produce unexpected results.
-#' 
-#' 
-#' @export
-alleles_to_consensus <- function( x2, sep = "/", NA_to_n = TRUE ){
-  lookup <- cbind(paste(c('A','C','G','T', 'A','T','C','G', 'A','C','G','T', 'A','G','C','T'),
-                        c('A','C','G','T', 'T','A','G','C', 'C','A','T','G', 'G','A','T','C'),
-                        sep=sep),
-                  c('a','c','g','t', 'w','w','s','s', 'm','m','k','k', 'r','r','y','y'))
-    
-  for(i in 1:nrow( lookup ))
-  {
-    x2[ x2 == lookup[i,1] ] <- lookup[i,2]
-  }
-  if( NA_to_n == TRUE )
-  {
-    x2[ is.na(x2) ] <- 'n'
-  }
-  
-  x2
-}
-
-
+##### ##### ##### ##### #####
+# EOF.
