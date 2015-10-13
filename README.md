@@ -7,7 +7,7 @@ VcfR, tools created to work with [vcf](https://github.com/samtools/hts-specs) fi
 
 *vcfR* - S4 class to contain a vcf file as well as functions to load this object.
 
-*Chrom* - S4 class to cantain variant information (vcf) as well as sequence (fasta) and annotation (gff) information.
+*chromR* - S4 class to contain variant information (vcf) as well as sequence (fasta) and annotation (gff) information.
 
 Provides functions to load data, subset, filter and visualize these data.
 
@@ -33,7 +33,7 @@ or:
 
     devtools::install_github(repo="knausb/vcfR@devel", build_vignettes=TRUE)
 
-If you've built the vignettes you can browse them with:
+If you've built the vignettes, you can browse them with:
 
     browseVignettes(package="vcfR")
     

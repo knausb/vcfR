@@ -17,6 +17,9 @@
 #' 
 #' More complex visualizations can be made by creating an object of class \code{\link{chromR-class}}.
 #' 
+#' 
+#' 
+#' 
 #' The \strong{complete list of functions} can be displayed with: library(help = vcfR) or by clicking on the 'index' link at the bottom of the page.
 #'
 #' \strong{Vignettes} can be listed with: \code{browseVignettes('vcfR')}.

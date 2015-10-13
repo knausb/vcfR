@@ -142,7 +142,8 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
   if( extract.haps == FALSE ){
     x <- extract.gt(x, return.alleles=TRUE)
   } else if( extract.haps == TRUE ){
-    x <- extract_haps(x, gt_split=gt.split, verbose = verbose)
+#    x <- extract_haps(x, gt_split=gt.split, verbose = verbose)
+    x <- extract.haps(x, gt.split =gt.split, verbose = verbose)
   } else {
     stop( "Invalid specification of extract.haps.\nShould be a logical." )
   }
