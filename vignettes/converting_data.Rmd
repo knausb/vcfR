@@ -130,6 +130,7 @@ ape::image.DNAbin(my_dnabin1[,ape::seg.sites(my_dnabin1)])
 par(mar=c(5,4,4,2))
 ```
 
+
 While the DNAbin object can include the ambiguity codes, not all downstream software can.
 Here, the ambiguous sites are visualized as 'other.'
 
