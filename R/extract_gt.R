@@ -69,6 +69,11 @@ extract.gt <- function(x, element="GT", mask=FALSE, as.numeric=FALSE, return.all
     tmpMask <- mask
     mask <- TRUE
   }
+  
+  # Validat that the gt slot is a matrix
+  if( class(x@gt) != "matrix" ){
+    stop( paste("gt slot expected to be of class matrix. Instead found class", class(x@gt)) )
+  }
 
   if(as.numeric == TRUE & return.alleles == TRUE ){
     stop("Invalid parameter choice, as.numeric and return.alleles can't both be true, alleles are characters!")
@@ -183,7 +188,8 @@ extract.indels <- function(x, return.indels=FALSE){
 extract.info <- function(x, element, as.numeric=FALSE, mask=FALSE){
   values <- unlist(
     lapply(strsplit(unlist(
-      lapply(strsplit(x@vcf.fix$INFO, split=";"),
+#      lapply(strsplit(x@vcf.fix$INFO, split=";"),
+      lapply(strsplit(x@vcf@fix[,'INFO'], split=";"),             
              function(x){grep(paste("^", element, "=", sep=""), x, value=TRUE)})),
       split="="), function(x){x[2]})
     )

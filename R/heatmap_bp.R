@@ -2,7 +2,7 @@
 
 #' @title Heatmap with barplots
 #'
-#' @name heatmap-barplots
+#' @name heatmap.bp
 #' @rdname heatmap_bp
 #' @aliases heatmap.bp
 #' @export

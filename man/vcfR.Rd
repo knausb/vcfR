@@ -19,6 +19,10 @@ Once manipulations are complete the object may be written to a *.vcf.gz format f
 
 More complex visualizations can be made by creating an object of class \code{\link{chromR-class}}.
 
+An example exists on the \code{\link{create.chromR}} man page.
+
+
+
 The \strong{complete list of functions} can be displayed with: library(help = vcfR) or by clicking on the 'index' link at the bottom of the page.
 
 \strong{Vignettes} can be listed with: \code{browseVignettes('vcfR')}.

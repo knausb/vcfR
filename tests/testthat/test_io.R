@@ -11,8 +11,8 @@ vcf <- read.vcf(vcf_file, verbose = FALSE)
 dna <- ape::read.dna(seq_file, format = "fasta")
 gff <- read.table(gff_file, sep="\t")
 
-chrom <- create_chromR(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
-chrom <- proc_chromR(chrom, verbose = FALSE)
+chrom <- create.chromR(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
+chrom <- proc.chromR(chrom, verbose = FALSE)
 
 
 # Manage directories.
@@ -119,9 +119,9 @@ test_that("write.vcf.gz works for Chrom objects",{
 })
 
 
-test_that("write_var_info works for Chrom objects",{
+test_that("write.var.info works for Chrom objects",{
   setwd(test_dir)
-  write_var_info(chrom, "test.csv")
+  write.var.info(chrom, "test.csv")
   test <- read.table("test.csv", header=TRUE, sep=",")
   unlink("test.csv")
   setwd(original_dir)
@@ -134,9 +134,9 @@ test_that("write_var_info works for Chrom objects",{
 })
 
 
-test_that("write_win_info works for Chrom objects",{
+test_that("write.win.info works for Chrom objects",{
   setwd(test_dir)
-  write_win_info(chrom, "test.csv")
+  write.win.info(chrom, "test.csv")
   test <- read.table("test.csv", header=TRUE, sep=",")
   unlink("test.csv")
   setwd(original_dir)

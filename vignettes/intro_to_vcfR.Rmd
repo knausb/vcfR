@@ -96,13 +96,13 @@ By dividing the analysis into these three phases I've divided that workflow into
 ## Creating objects from data
 
 
-Once the data are in memory we can use it to create a **Chrom** object with the function **create_chrom()**.
-The create_chrom() function creates a new Chrom object and populates it with data you provided it.  
+Once the data are in memory we can use it to create a **Chrom** object with the function **create.chromR()**.
+The create.chromR() function creates a new Chrom object and populates it with data you provided it.
 
 
 ```{r}
 library(vcfR)
-chrom <- create_chromR(name='Supercontig_1.100', vcf=vcf, seq=dna, ann=gff)
+chrom <- create.chromR(name='Supercontig_1.100', vcf=vcf, seq=dna, ann=gff)
 ```
 
 
@@ -170,7 +170,7 @@ plot(chrom)
 
 
 
-Once we're satisfied with which variants we want to consider to be of high quality we can process the Chrom object with **proc_chrom()**.
+Once we're satisfied with which variants we want to consider to be of high quality we can process the Chrom object with **proc.chromR()**.
 This function calls several helper functions to process the variant, sequence and annotation data for visualization.
 
 
@@ -188,7 +188,7 @@ This function is rather experimental and some of the summaries may not be quite 
 
 
 ```{r, fig.height=6, fig.width=6}
-chrom <- proc_chromR(chrom, verbose=TRUE)
+chrom <- proc.chromR(chrom, verbose=TRUE)
 plot(chrom)
 ```
 

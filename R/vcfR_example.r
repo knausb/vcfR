@@ -18,6 +18,9 @@
 #' @examples
 #' data(vcfR_example)
 #' 
+#' 
+#' 
+#' 
 #' @docType data
 #' @keywords datasets
 #' @format A DNAbin object, a data.frame and a vcfR object

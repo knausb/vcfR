@@ -73,7 +73,7 @@ setOldClass("DNAbin")
 #'   \item \strong{len} length of the sequence (integer)
 #'   \item \strong{window_size} window size for windowing analyses (integer)
 #'   
-#'   \item \strong{seq} object of class DNAbin (ape)
+#'   \item \strong{seq} object of class ape::DNAbin
 #'   \item \strong{vcf} object of class vcfR
 #'   \item \strong{ann} annotation data in a gff-like data.frame
 #'
@@ -93,21 +93,21 @@ setOldClass("DNAbin")
 #' The matrix form appears to be better behaved than the list form.
 #' Because of this behavior this slot should be the matrix form.
 #' When this slot is not populated it is of class "NULL" instead of "DNAbin".
+#' Note that characters need to be lower case when inserted into an object of class DNAbin.
+#' The function \code{\link[base]{tolower}} can facilitate this.
 #' 
-#' The \strong{vcf.meta} slot is an object of class vcfR
-# 
-# The \strong{vcf.meta} slot is a list containing the meta information from the top of the vcf file.
-# 
-# The \strong{vcf.fix} slot is a data.frame containing the fixed data (the first eight columns) from the vcf file.
-# 
-# The \strong{vcf.gt} slot is a data.frame containing information about the samples.  The number of rows is the number of samples plus one, where the first row describes the format of the data in each cell.  The number of rows is equal to the numnber of variants.
 #' 
-#' The \strong{ann} slot is a data.frame containing gff format data.
+#' The \strong{vcf} slot is an object of class vcfR \code{\link{vcfR-class}}.
+#' 
+#' The \strong{ann} slot is a data.frame containing \href{http://www.sequenceontology.org/gff3.shtml}{gff format} data.
 #' When this slot is not populated it has nrows equal to zero.
 #' 
-#' The \strong{var.info} slot contains a data.frame containing information about variants
+#' The \strong{var.info} slot contains a data.frame containing information about variants.
+#' Every row of this data.frame is a variant.
+#' Columns will typically contain the chromosome name, the position of the variant (POS), the mask as well as any other per variant information.
 #' 
-#' The \strong{win.info} slot contains a data.frame containing information about windows.  For example, window, start, end, length, A, C, G, T, N, other, variants and genic fields are stored here.
+#' The \strong{win.info} slot contains a data.frame containing information about windows.
+#' For example, window, start, end, length, A, C, G, T, N, other, variants and genic fields are stored here.
 #' 
 #' The \strong{seq.info} slot is a list containing two matrices.
 #' The first describes rectangles for called nucleotides and the second describes rectangles for 'N' calls.

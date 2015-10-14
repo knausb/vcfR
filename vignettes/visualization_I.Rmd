@@ -42,14 +42,14 @@ vcf <- read.vcf(vcf_file, verbose = FALSE)
 dna <- ape::read.dna(seq_file, format = "fasta")
 gff <- read.table(gff_file, sep="\t")
 
-chrom <- create_chromR(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=TRUE)
+chrom <- create.chromR(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=TRUE)
 chrom <- masker(chrom, min_DP = 300, max_DP = 700)
-chrom <- proc_chromR(chrom, verbose = TRUE)
+chrom <- proc.chromR(chrom, verbose = TRUE)
 
 ```
 
 
-The function create_chrom() reports the names of the chromosome (supercontig, contig, etc.) so that we can verify that all three data sources contain the same chromosome.
+The function create.chromR() reports the names of the chromosome (supercontig, contig, etc.) so that we can verify that all three data sources contain the same chromosome.
 
 
 We can now visualize this data.
@@ -82,7 +82,7 @@ If we become concerned with how our choice of window size affects our analysis, 
 
 
 ```{r, fig.height=7, fig.width=7}
-chrom <- proc_chromR(chrom, verbose=FALSE, win.size=1e3)
+chrom <- proc.chromR(chrom, verbose=FALSE, win.size=1e3)
 chromoqc(chrom, verbose=FALSE)
 ```
 
@@ -117,7 +117,7 @@ plot(chrom)
 Here we see the distribution of some quality metrics.
 The raw read depth and mapping quality have been extracted from the INFO column of the vcf data.
 The quality is from the QUAL column of the vcf data.
-And the variant count per window was summarized during the windowing analysis performed by proc_chrom().
+And the variant count per window was summarized during the windowing analysis performed by proc.chromR().
 The raw read depth appears fairly continuous, an observation which appears consistent with the above chromo plots.
 Mapping quality appears to be predominantly one value (about 45), this may not have been apparent in teh chromo plots.
 The quality jumps out as bimodal, suggesting it may be a good candidate for filtering.

@@ -139,6 +139,8 @@ Here, the ambiguous sites are visualized as 'other.'
 ```{r, fig.align='center', fig.width=7, fig.height=7}
 par(mar=c(5,8,4,2))
 ape::image.DNAbin(my_dnabin2[,ape::seg.sites(my_dnabin2)])
+#ape::image.DNAbin(my_dnabin2[seq(1,37,by=2),ape::seg.sites(my_dnabin2)])
+#ape::image.DNAbin(my_dnabin2[seq(2,38,by=2),ape::seg.sites(my_dnabin2)])
 par(mar=c(5,4,4,2))
 ```
 

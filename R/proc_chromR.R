@@ -26,9 +26,9 @@
 
 #' @rdname proc_chromR
 #' @export
-#' @aliases proc_chromR
+#' @aliases proc.chromR
 #'
-proc_chromR <- function(x, win.size = 1e3, verbose=TRUE){
+proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
   stopifnot(class(x) == "chromR")
   
   if( is.null( x@seq ) ){

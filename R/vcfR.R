@@ -17,6 +17,7 @@
 #' 
 #' More complex visualizations can be made by creating an object of class \code{\link{chromR-class}}.
 #' 
+#' An example exists on the \code{\link{create.chromR}} man page.
 #' 
 #' 
 #' 
