@@ -4,7 +4,7 @@
 #' @description
 #' Convert vcfR objects to objects supported by other packages
 #'  
-#' @param x an object of class Chrom or vcfR
+#' @param x an object of class chromR or vcfR
 #' 
 #' @details 
 #' After processing vcf data in vcfR, one will likely proceed to an analysis step.
@@ -55,7 +55,7 @@ vcfR2genind <- function(x, sep="[|/]") {
 #' @export
 vcfR2loci <- function(x)
 {
-#  if(class(x) == "Chrom")
+#  if(class(x) == "chromR")
 #  {
 #    x <- x@vcf
 #  }
@@ -109,19 +109,27 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
                          verbose = TRUE )
 {
   # Sanitize input.
-  if( class(x) == 'Chrom' )
+  if( class(x) == 'chromR' )
   {
     x <- x@vcf
   }
   if( class(x) != 'vcfR' )
   {
-    stop( "Expecting an object of class Chrom or vcfR" )
+    stop( "Expecting an object of class chromR or vcfR" )
   }
   if( consensus == TRUE & extract.haps == TRUE){
     stop("consensus and extract_haps both set to true. These options are incompatible. A haplotype should not be ambiguous.")
   }
   if( !is.null(start.pos) & class(start.pos) == "character" ){
     start.pos <- as.integer(start.pos)
+  }
+  
+  # Check and sanitize ref.seq.
+  if( class(ref.seq) != 'DNAbin' ){
+    stop( paste("expecting ref.seq to be of class DNAbin but it is of class", class(ref.seq)) )
+  }
+  if( is.list(ref.seq) ){
+    ref.seq <- as.matrix(ref.seq)
   }
   
   # Extract indels.

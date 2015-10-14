@@ -16,7 +16,7 @@ vcfR2DNAbin(x, extract.indels = TRUE, consensus = TRUE,
   start.pos = NULL, verbose = TRUE)
 }
 \arguments{
-\item{x}{an object of class Chrom or vcfR}
+\item{x}{an object of class chromR or vcfR}
 
 \item{sep}{character (to be used in a regular expression) to delimit the alleles of genotypes}
 

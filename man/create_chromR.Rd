@@ -5,7 +5,6 @@
 \alias{chromR-methods}
 \alias{create.chromR}
 \alias{getCHROM}
-\alias{getDP}
 \alias{getFIX}
 \alias{getINFO}
 \alias{getPOS}
@@ -31,8 +30,6 @@ getPOS(x)
 
 getQUAL(x)
 
-getDP(x)
-
 getINFO(x, element = "MQ")
 }
 \arguments{
@@ -57,17 +54,17 @@ Creates and populates an object of class chromR.
 }
 \details{
 Creates and names a chromR object from a name, a chromosome (an ape::DNAbin object), variant data (a vcfR object) and annotation data (gff-like).
-The function \strong{create_chromR} is a wrapper which calls functions to populate the slots of the chromR object.
+The function \strong{create.chromR} is a wrapper which calls functions to populate the slots of the chromR object.
 
-The function \strong{vcf2chromR} is called by create_chromR and transfers the data from the slots of a vcfR object to the slots of a chromR object.
-It also tries to extract the 'DP' and 'MQ' fileds (when present) from teh fix region's INFO column.
+The function \strong{vcf2chromR} is called by create.chromR and transfers the data from the slots of a vcfR object to the slots of a chromR object.
+It also tries to extract the 'DP' and 'MQ' fileds (when present) from the fix slot's INFO column.
 It is not anticipated that a user would need to use this function directly, but its placed here in case they do.
 
 The function \strong{seq2chromR} is currently defined as a generic function.
 This may change in the future.
 This function takes an object of class DNAbin and assigns it to the 'seq' slot of a chromR object.
 
-The function \strong{ann2chromR} is called by create_chromR and transfers the information from a gff-like object to the 'ann' slot of a chromR object.
+The function \strong{ann2chromR} is called by create.chromR and transfers the information from a gff-like object to the 'ann' slot of a chromR object.
 It is not anticipated that a user would need to use this function directly, but its placed here in case they do.
 }
 \examples{
