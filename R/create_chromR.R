@@ -116,10 +116,8 @@ create.chromR <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
     if(class(ann[,5]) == "factor"){ann[,5] <- as.character(ann[,5])}
     if(class(ann[,4]) == "character"){ann[,4] <- as.numeric(ann[,4])}
     if(class(ann[,5]) == "character"){ann[,5] <- as.numeric(ann[,5])}
-    
     x@ann <- ann
   }
-
 
   # Report names of objects to user.
   if(verbose == TRUE){
@@ -167,7 +165,6 @@ create.chromR <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
       stop("Annotation positions exceed chromosome positions.  Is this the correct set of annotations?")
     }
   }
-
   
   if( verbose == TRUE ){
     message("Initializing var.info slot.")
@@ -183,18 +180,16 @@ create.chromR <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
   if( verbose == TRUE ){
     message("var.info slot initialized.")
   }
-
   return(x)
 }
 
 
 
-
-
-
-#### Data loading functions. ####
-
-
+##### ##### ##### ##### #####
+#
+# chromR data loading functions
+#
+##### ##### ##### ##### #####
 
 #' @rdname create_chromR
 #' @export
@@ -265,13 +260,8 @@ seq2chromR <- function(x, seq=NULL){
   } else {
     stop("DNAbin is neither a list or matrix")
   }
-
   return(x)
 }
-
-
-
-
 
 
 #' @rdname create_chromR
@@ -287,6 +277,12 @@ ann2chromR <- function(x, gff){
 }
 
 
+
+##### ##### ##### ##### #####
+#
+# Getters.
+#
+##### ##### ##### ##### #####
 
 #' @rdname create_chromR
 #' @export
@@ -323,28 +319,6 @@ getQUAL <- function(x){
 }
 
 
-# @rdname create_chromR
-# @export
-# @aliases getDP
-#getDP <- function(x){
-#  dp <- extract.gt(x, element = "DP", as.numeric=TRUE)
-#  rowSums(dp, na.rm = TRUE)
-#  x@var.info[,"DP"] <- rowSums(dp, na.rm = TRUE)
-#  rowSums(dp, na.rm = TRUE)
-#}
 
-
-#' @rdname create_chromR
-#' @export
-#' @param element element to extract from chromR object
-#' @aliases getINFO
-getINFO <- function(x, element="MQ"){
-  regex <- paste(element, "=", sep="")
-  INFO <- strsplit(x@vcf@fix[,'INFO'], split=";")
-  INFO <- unlist(lapply(INFO, grep, pattern=regex, value=T))
-  INFO <- as.numeric(unlist(lapply(strsplit(INFO, "="), function(x){x[2]})))
-  return(INFO)
-}
-
-
-
+##### ##### ##### ##### #####
+# EOF.

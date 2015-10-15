@@ -6,7 +6,6 @@
 \alias{create.chromR}
 \alias{getCHROM}
 \alias{getFIX}
-\alias{getINFO}
 \alias{getPOS}
 \alias{getQUAL}
 \alias{seq2chromR}
@@ -29,8 +28,6 @@ getCHROM(x)
 getPOS(x)
 
 getQUAL(x)
-
-getINFO(x, element = "MQ")
 }
 \arguments{
 \item{name}{a name for the chromosome (for plotting purposes)}
@@ -46,8 +43,6 @@ getINFO(x, element = "MQ")
 \item{x}{an object of class chromR}
 
 \item{gff}{a data.frame containing annotation data in the gff format}
-
-\item{element}{element to extract from chromR object}
 }
 \description{
 Creates and populates an object of class chromR.
