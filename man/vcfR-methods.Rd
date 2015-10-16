@@ -40,7 +40,7 @@
 \item{...}{Arguments to be passed to methods}
 }
 \description{
-Methods to use on objects of class vcfR.
+Methods to show, subset or plot data from objects of class vcfR.
 
 
 

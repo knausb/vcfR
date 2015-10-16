@@ -26,7 +26,7 @@ get.alleles(x2, split = "/", na.rm = FALSE, as.numeric = FALSE)
 \item{as.numeric}{logical specifying whether to convert to a numeric}
 }
 \description{
-Genotype matrix functions
+Functions which modify a matrix or vector of genotypes.
 }
 \details{
 The function \strong{alleles_to_consensus} converts genotypes to a single consensus allele using IUPAC ambiguity codes for heterozygotes.

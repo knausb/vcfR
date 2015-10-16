@@ -3,6 +3,8 @@
 #' @title Genotype matrix functions
 #' @name Genotype matrix functions
 #' 
+#' @description Functions which modify a matrix or vector of genotypes.
+#' 
 #' @rdname genotype_matrix
 #' @aliases alleles_to_consensus
 #' 
