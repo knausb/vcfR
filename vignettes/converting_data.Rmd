@@ -84,6 +84,75 @@ class(my_genclone)
 To do.
 
 
+
+## Creating DNAbin objects
+
+The package **ape** handles sequence data using objects of class DNAbin.
+Converting vcf data to sequence data presents a challenge in that sequence data typically includes numerous invariant sites.
+This means that these objects can easily occupy large amounts of memory, and may exceed the physical memory when long sequences with many samples are included.
+In order to accomodate these issues, we've taken an approach which attempts to create DNAbin objects from portions of a chomosome, such as a gene.
+This means we'll need a little more information than we've needed for other conversions.
+First, we'll need to locate and read in our vcf file, a reference sequence and a gff file which has the coordinates for a gene.
+
+
+```{r}
+
+vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
+dna_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
+gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
+
+vcf <- read.vcf(vcf_file, verbose = FALSE)
+dna <- ape::read.dna(dna_file, format="fasta")
+gff <- read.table(gff_file)
+
+```
+
+
+We know from other examples that there is a variable region at around 150-175 kbp.
+We should be able to create a DNAbin object for this region.
+There are two ways we can go about this.
+We can use IUPAC ambiguity codes to convert heterozygous sites into a one character encoding.
+This results in a single sequence per individual.
+Alternatively, we can create two haplotypes for each diploid sample, resulting in two sequences per individual.
+
+
+```{r}
+my_dnabin1 <- vcfR2DNAbin(vcf, gt.split="/", ref.seq=dna[,150e3:175e3], start.pos=150e3)
+my_dnabin1
+my_dnabin2 <- vcfR2DNAbin(vcf, gt.split="/", extract.haps = TRUE, ref.seq=dna[,150e3:175e3], start.pos=150e3, consensus=FALSE)
+my_dnabin2
+```
+
+
+```{r, fig.align='center', fig.width=7, fig.height=5}
+par(mar=c(5,8,4,2))
+ape::image.DNAbin(my_dnabin1[,ape::seg.sites(my_dnabin1)])
+par(mar=c(5,4,4,2))
+```
+
+
+While the DNAbin object can include the ambiguity codes, not all downstream software can.
+Here, the ambiguous sites are visualized as 'other.'
+
+
+
+```{r, fig.align='center', fig.width=7, fig.height=7}
+par(mar=c(5,8,4,2))
+ape::image.DNAbin(my_dnabin2[,ape::seg.sites(my_dnabin2)])
+#ape::image.DNAbin(my_dnabin2[seq(1,37,by=2),ape::seg.sites(my_dnabin2)])
+#ape::image.DNAbin(my_dnabin2[seq(2,38,by=2),ape::seg.sites(my_dnabin2)])
+par(mar=c(5,4,4,2))
+```
+
+
+By creating two haplotypes for each diploid sample, we result in a DNAbin object which includes only A, C,  G and T.
+However, we've cheated here to make an example.
+By using gt.split="/" we have used unphased data.
+This is unrecommended for real data.
+For real data I would suggest phasing your data (e.g., using beagle4) which will result in phased genotypes (which will be delimited with a "|").
+
+
+
 ## Creating loci objects
 
 The package **pegas** uses objects of class loci.

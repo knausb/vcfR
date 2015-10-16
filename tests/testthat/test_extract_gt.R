@@ -2,7 +2,7 @@
 
 #detach(package:vcfR, unload=TRUE)
 library(vcfR)
-context("extract_gt functions")
+context("extract.gt functions")
 
 #data(vcfR_example)
 
@@ -14,8 +14,8 @@ vcf <- read.vcf(vcf_file, verbose = FALSE)
 dna <- ape::read.dna(seq_file, format = "fasta")
 gff <- read.table(gff_file, sep="\t")
 
-chrom <- create_chromR(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
-chrom <- masker(chrom, min_DP = 300, max_DP = 700)
+chrom <- create.chromR(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
+chrom <- masker(chrom, min_DP = 1e3, max_DP = 2e3)
 
 ##### ##### ##### ##### #####
 
@@ -42,17 +42,15 @@ test_that("gq is numeric",{
 })
 
 
-test_that("extract_gt mask=TRUE works", {
-  expect_equal(nrow(gt), 547)
-  expect_equal(nrow(gt2), 543)
-  expect_equal(nrow(gt3), 274)
+test_that("extract.gt mask=TRUE works", {
+  expect_equal(nrow(gt), nrow(vcf@gt))
+  expect_equal(nrow(gt2), sum(chrom@var.info$mask))
+  expect_equal(nrow(gt3), nrow(gt[c(TRUE, FALSE),]))
 })
 
 
 test_that("extract.gt extract parameter works",{
   gt <- extract.gt(chrom, element="GT", extract=TRUE)
-  
-  
   expect_is(gq, "matrix")
   expect_equal(is.numeric(gq), TRUE)
 })
@@ -84,7 +82,7 @@ test_that("extract_haps compiled code works",{
 
 
 test_that("extract_haps R code works",{
-  haps <- extract_haps(chrom, gt_split="/", verbose = FALSE)
+  haps <- extract.haps(chrom, gt.split="/", verbose = FALSE)
   expect_is(haps, "matrix")
   expect_equal(ncol(haps), 2 * ncol(gt))
   expect_equal(nrow(haps), nrow(gt))
@@ -92,7 +90,7 @@ test_that("extract_haps R code works",{
 
 
 
-test_that("extract_GT_to_CM2 compiled code works",{
+test_that("extract_gt_to_CM2 compiled code works",{
   gt <- .Call( 'vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', vcf@fix, vcf@gt, 'GT', '/', 0, 1 )
 #  head(gt)
   # Return alleles

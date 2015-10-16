@@ -1,8 +1,8 @@
 #' @title Create chromR object
-#' @name Create chromR object
+#' @name create.chromR
 #' @rdname create_chromR
 #' @export
-#' @aliases create_chromR
+#' @aliases create.chromR
 #'
 #' @description
 #' Creates and populates an object of class chromR.
@@ -18,17 +18,17 @@
 #'
 #' @details
 #' Creates and names a chromR object from a name, a chromosome (an ape::DNAbin object), variant data (a vcfR object) and annotation data (gff-like).
-#' The function \strong{create_chromR} is a wrapper which calls functions to populate the slots of the chromR object.
+#' The function \strong{create.chromR} is a wrapper which calls functions to populate the slots of the chromR object.
 #' 
-#' The function \strong{vcf2chromR} is called by create_chromR and transfers the data from the slots of a vcfR object to the slots of a chromR object.
-#' It also tries to extract the 'DP' and 'MQ' fileds (when present) from teh fix region's INFO column.
+#' The function \strong{vcf2chromR} is called by create.chromR and transfers the data from the slots of a vcfR object to the slots of a chromR object.
+#' It also tries to extract the 'DP' and 'MQ' fileds (when present) from the fix slot's INFO column.
 #' It is not anticipated that a user would need to use this function directly, but its placed here in case they do.
 #' 
 #' The function \strong{seq2chromR} is currently defined as a generic function.
 #' This may change in the future.
 #' This function takes an object of class DNAbin and assigns it to the 'seq' slot of a chromR object.
 #' 
-#' The function \strong{ann2chromR} is called by create_chromR and transfers the information from a gff-like object to the 'ann' slot of a chromR object.
+#' The function \strong{ann2chromR} is called by create.chromR and transfers the information from a gff-like object to the 'ann' slot of a chromR object.
 #' It is not anticipated that a user would need to use this function directly, but its placed here in case they do.
 #' 
 #' 
@@ -43,19 +43,19 @@
 #' 
 #' @examples
 #' library(vcfR)
-# data(vcfR_example)
-# pinf_mt <- create_chromR('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
-# head(pinf_mt)
-# pinf_mt
-# names(pinf_mt)
-# plot(pinf_mt)
-# pinf_mt <- masker(pinf_mt, min_QUAL = 990, min_DP = 6000, max_DP = 8000, min_MQ = 40, max_MQ = 100)
-# pinf_mt <- proc_chromR(pinf_mt, win.size=1000)
+#' data(vcfR_example)
+#' pinf_mt <- create.chromR('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
+#' head(pinf_mt)
+#' pinf_mt
+#' names(pinf_mt)
+#' plot(pinf_mt)
+#' pinf_mt <- masker(pinf_mt, min_QUAL = 990, min_DP = 6000, max_DP = 8000, min_MQ = 40, max_MQ = 100)
+#' pinf_mt <- proc.chromR(pinf_mt, win.size=1000)
 #'  
-# plot(pinf_mt)
+#' plot(pinf_mt)
 #' 
-# chromoqc(pinf_mt)
-# chromoqc(pinf_mt, xlim=c(25e+03, 3e+04), dot.alpha=99)
+#' chromoqc(pinf_mt)
+#' chromoqc(pinf_mt, xlim=c(25e+03, 3e+04), dot.alpha=99)
 #' 
 # set.seed(10)
 # x1 <- as.integer(runif(n=20, min=1, max=39000))
@@ -80,7 +80,7 @@
 # hist(tab$Ho - tab$He, col=5)
 # # Note that this example is a mitochondrion, so this is a bit silly.
 #' 
-create_chromR <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
+create.chromR <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
   # Determine whether we received the expected classes.
   stopifnot(class(vcf) == "vcfR")
 
@@ -116,10 +116,8 @@ create_chromR <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
     if(class(ann[,5]) == "factor"){ann[,5] <- as.character(ann[,5])}
     if(class(ann[,4]) == "character"){ann[,4] <- as.numeric(ann[,4])}
     if(class(ann[,5]) == "character"){ann[,5] <- as.numeric(ann[,5])}
-    
     x@ann <- ann
   }
-
 
   # Report names of objects to user.
   if(verbose == TRUE){
@@ -167,32 +165,31 @@ create_chromR <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
       stop("Annotation positions exceed chromosome positions.  Is this the correct set of annotations?")
     }
   }
-
   
   if( verbose == TRUE ){
     message("Initializing var.info slot.")
   }
   x@var.info <- data.frame( CHROM = x@vcf@fix[,"CHROM"] , POS = as.integer(x@vcf@fix[,"POS"]) )
-  mq <- getINFO(x, element="MQ")
+#  mq <- getINFO(x, element="MQ")
+  mq <- extract.info(x, element = 'MQ', as.numeric = TRUE)
   if( length(mq) > 0 ){ x@var.info$MQ <- mq }
-  dp <- getDP(x)
+#  dp <- getDP(x)
+  dp <- extract.info(x, element = 'DP', as.numeric = TRUE)
   if( length(dp) > 0 ){ x@var.info$DP <- dp }
   x@var.info$mask <- TRUE
   if( verbose == TRUE ){
     message("var.info slot initialized.")
   }
-
   return(x)
 }
 
 
 
-
-
-
-#### Data loading functions. ####
-
-
+##### ##### ##### ##### #####
+#
+# chromR data loading functions
+#
+##### ##### ##### ##### #####
 
 #' @rdname create_chromR
 #' @export
@@ -263,13 +260,8 @@ seq2chromR <- function(x, seq=NULL){
   } else {
     stop("DNAbin is neither a list or matrix")
   }
-
   return(x)
 }
-
-
-
-
 
 
 #' @rdname create_chromR
@@ -285,6 +277,12 @@ ann2chromR <- function(x, gff){
 }
 
 
+
+##### ##### ##### ##### #####
+#
+# Getters.
+#
+##### ##### ##### ##### #####
 
 #' @rdname create_chromR
 #' @export
@@ -321,28 +319,6 @@ getQUAL <- function(x){
 }
 
 
-#' @rdname create_chromR
-#' @export
-#' @aliases getDP
-getDP <- function(x){
-  dp <- extract.gt(x, element = "DP", as.numeric=TRUE)
-  rowSums(dp, na.rm = TRUE)
-  x@var.info[,"DP"] <- rowSums(dp, na.rm = TRUE)
-  rowSums(dp, na.rm = TRUE)
-}
 
-
-#' @rdname create_chromR
-#' @export
-#' @param element element to extract from chromR object
-#' @aliases getINFO
-getINFO <- function(x, element="MQ"){
-  regex <- paste(element, "=", sep="")
-  INFO <- strsplit(x@vcf@fix[,'INFO'], split=";")
-  INFO <- unlist(lapply(INFO, grep, pattern=regex, value=T))
-  INFO <- as.numeric(unlist(lapply(strsplit(INFO, "="), function(x){x[2]})))
-  return(INFO)
-}
-
-
-
+##### ##### ##### ##### #####
+# EOF.

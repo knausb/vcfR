@@ -4,13 +4,13 @@
 \alias{Process chromR objects}
 \alias{gt2popsum}
 \alias{gt_to_popsum}
-\alias{proc_chromR}
+\alias{proc.chromR}
 \alias{regex.win}
 \alias{seq_to_rects}
 \alias{var.win}
 \title{Process chromR object}
 \usage{
-proc_chromR(x, win.size = 1000, verbose = TRUE)
+proc.chromR(x, win.size = 1000, verbose = TRUE)
 
 regex.win(x, max.win = 1000, regex = "[acgtwsmkrybdhv]")
 
