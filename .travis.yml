@@ -11,7 +11,8 @@ before_install:
 
 install:
   - ./travis-tool.sh install_deps
-
+  - ./travis-tool.sh install_github sjmgarnier/viridisLite
+ 
 script: ./travis-tool.sh run_tests
 
 after_failure:

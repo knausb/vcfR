@@ -6,8 +6,7 @@
 \usage{
 heatmap.bp(x, cbarplot = TRUE, rbarplot = TRUE, legend = TRUE,
   clabels = TRUE, rlabels = TRUE, na.rm = TRUE, scale = c("row",
-  "column", "none"), col.ramp = colorRampPalette(c("red", "yellow",
-  "#008000"))(100), ...)
+  "column", "none"), col.ramp = viridisLite::viridis(n = 100, alpha = 1), ...)
 }
 \arguments{
 \item{x}{a numeric matrix.}
