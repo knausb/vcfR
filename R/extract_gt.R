@@ -12,13 +12,12 @@
 #' @param mask a logical indicating whether to apply the mask (TRUE) or return all variants (FALSE). Alternatively, a vector of logicals may be provided.
 # @param as.matrix attempt to recast as a numeric matrix
 #' @param verbose should verbose output be generated
-#' #' @param as.numeric logical, should the matrix be converted to numerics
+#' @param as.numeric logical, should the matrix be converted to numerics
 #' @param return.alleles logical indicating whether to return the genotypes (0/1) or alleles (A/T)
 #' @param allele.sep character which delimits the alleles in a genotype (/ or |), here this is not used for a regex (as it is in other functions)
 #' @param extract logical indicating whether to return the extracted element or the remaining string
 #' 
 #' @details
-#' Note that when 'as.numeric' is set to 'TRUE' but the data are not actually numeric, unexpected results will likely occur.
 #' 
 #' The function \strong{extract.gt} isolates elements from the 'gt' portion of vcf data.
 #' Fields available for extraction are listed in the FORMAT column of the 'gt' slot.
@@ -31,6 +30,7 @@
 #' Note that this is not used for a regular expression as similar parameters are used in other functions.
 #' Extract allows the user to extract just the specified element (TRUE) or every element except the one specified.
 #' 
+#' Note that when 'as.numeric' is set to 'TRUE' but the data are not actually numeric, unexpected results will likely occur.
 #' 
 # @export
 #' 

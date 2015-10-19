@@ -6,7 +6,7 @@
 #' @aliases vcfR-methods
 #' @title vcfR methods
 #' 
-#' @description Methods to use on objects of class vcfR.
+#' @description Methods to show, subset or plot data from objects of class vcfR.
 #' 
 #' 
 #' @param x object of class vcfR

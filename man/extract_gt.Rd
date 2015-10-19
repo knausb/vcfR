@@ -33,8 +33,7 @@ extract.info(x, element, as.numeric = FALSE, mask = FALSE)
 
 \item{gt.split}{character which delimits alleles in genotypes}
 
-\item{verbose}{should verbose output be generated
-#'}
+\item{verbose}{should verbose output be generated}
 
 \item{return.indels}{logical indicating whether to return indels or not}
 }
@@ -43,8 +42,6 @@ Extract elements from the 'gt' slot, convert extracted genotypes to their alleli
 }
 \details{
 
-
-Note that when 'as.numeric' is set to 'TRUE' but the data are not actually numeric, unexpected results will likely occur.
 
 The function \strong{extract.gt} isolates elements from the 'gt' portion of vcf data.
 Fields available for extraction are listed in the FORMAT column of the 'gt' slot.
@@ -56,6 +53,8 @@ The 'return.alleles' option allows the default behavior of numerically encoded g
 The allele.sep parameter allows the genotype delimiter to be specified.
 Note that this is not used for a regular expression as similar parameters are used in other functions.
 Extract allows the user to extract just the specified element (TRUE) or every element except the one specified.
+
+Note that when 'as.numeric' is set to 'TRUE' but the data are not actually numeric, unexpected results will likely occur.
 
 The function \strong{extract.haps} uses extract.gt to isolate genotypes.
 It then uses the information in the REF and ALT columns as well as an allele delimiter (gt_split) to split genotypes into their allelic state.
