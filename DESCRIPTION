@@ -19,6 +19,6 @@ Suggests:
     knitr,
     reshape2,
     testthat,
-    viridis
+    viridisLite
 VignetteBuilder: knitr
 License: GPL

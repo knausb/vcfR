@@ -35,8 +35,8 @@
 #' heatmap.bp(x, scale="col")
 #' # Use an alternate color ramp
 #' heatmap.bp(x, col.ramp = colorRampPalette(c("red", "yellow", "#008000"))(100))
-#' library(viridis)
-#' heatmap.bp(x, col.ramp = viridis(n=10))
+# library(viridis)
+#' heatmap.bp(x)
 #'
 #'  
 # data(vcfR_example)

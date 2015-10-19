@@ -44,8 +44,7 @@ heatmap.bp(x)
 heatmap.bp(x, scale="col")
 # Use an alternate color ramp
 heatmap.bp(x, col.ramp = colorRampPalette(c("red", "yellow", "#008000"))(100))
-library(viridis)
-heatmap.bp(x, col.ramp = viridis(n=10))
+heatmap.bp(x)
 }
 \seealso{
 \code{\link[stats]{heatmap}}, \code{\link[graphics]{image}}, heatmap2 in \href{https://cran.r-project.org/web/packages/gplots/index.html}{gplots}.
