@@ -6,7 +6,7 @@
 #' @description Query the 'gt' slot of objects of class vcfR
 #' 
 #' 
-#' @aliases is_polymorphic
+#' @aliases is.polymorphic
 #' 
 #' @param x an object of class
 #' @param na.omit logical to omit missing data
@@ -20,19 +20,19 @@
 #' 
 #' 
 #' @export
-is_polymorphic <- function(x, na.omit=FALSE){
+is.polymorphic <- function(x, na.omit=FALSE){
   if(class(x) != "vcfR"){
     stop("Expected an object of class vcfR")
   }
   x <- extract.gt(x)
   
-  test_poly <- function(x, na.omit=na.omit){
+  test.poly <- function(x, na.omit=na.omit){
     if(na.omit == TRUE){
       x <- na.omit(x)
     }
     sum(x[1] == x[-1]) < (length(x) - 1)
   }
-  apply(x, MARGIN=1, test_poly, na.omit=na.omit)
+  apply(x, MARGIN=1, test.poly, na.omit=na.omit)
 }
 
 
@@ -45,7 +45,7 @@ is_polymorphic <- function(x, na.omit=FALSE){
 #' This function can help manage this.
 #' 
 #' @export
-is_biallelic <- function(x){
+is.biallelic <- function(x){
   #  x <- as.character(x@fix$ALT)
   x <- as.character(x@fix[,'ALT'])
   x <- strsplit(x, split=",")

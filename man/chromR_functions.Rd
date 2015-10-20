@@ -3,14 +3,14 @@
 \name{chromR functions}
 \alias{chromR functions}
 \alias{masker}
-\alias{variant_table}
+\alias{variant.table}
 \alias{window_table}
 \title{chromR_functions}
 \usage{
 masker(x, min_QUAL = 1, min_DP = 1, max_DP = 10000, min_MQ = 20,
   max_MQ = 100, ...)
 
-variant_table(x)
+variant.table(x)
 
 window_table(x)
 }
@@ -44,7 +44,7 @@ The minimum and maximum mapping qualities (minmq, maxmq) can also be used.
 
 This vector is stored in the var.info$mask slot of a chromR object.
 
-The function \strong{variant_table} creates a data.frame containing information about variants.
+The function \strong{variant.table} creates a data.frame containing information about variants.
 
 The funciton \strong{window_table}
 }

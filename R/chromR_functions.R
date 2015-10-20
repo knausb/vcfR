@@ -77,12 +77,12 @@ masker <- function(x, min_QUAL=1, min_DP=1, max_DP=1e4, min_MQ=20, max_MQ=100, .
 #' @param x object of class chromR
 #' 
 #' @export
-#' @aliases variant_table
+#' @aliases variant.table
 #' 
 #' @details
-#' The function \strong{variant_table} creates a data.frame containing information about variants.
+#' The function \strong{variant.table} creates a data.frame containing information about variants.
 #' 
-variant_table <- function(x){
+variant.table <- function(x){
   tab <- x@var.info[x@var.info$mask,]
 #  tab <- cbind(rep(x@name, times=nrow(tab)), x@vcf.fix$QUAL[x@var.info$mask], tab)
 #  names(tab)[1] <- "chrom"

@@ -18,7 +18,7 @@
 #' @return Returns an object of class vcfR. 
 #' 
 #'
-chromR_to_vcfR <- function(x, use.mask=FALSE){
+chromR2vcfR <- function(x, use.mask=FALSE){
   if(class(x) != "chromR"){
     stop("Unexpected class! Expecting an object of class chromR.")
   }

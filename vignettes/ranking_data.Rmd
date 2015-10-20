@@ -50,7 +50,7 @@ Just keep in mind the scale of your metrics.
 For example, if you have a metric that ranges from 0-1 and another which ranges from 1-100 and you add them to create a composite score, the metric that ranges from 1-100 will drive the result more than the one which ranges from 0-1.
 If you re-scale the metric which ranges from 0-1, perhaps by multiplying it by 100, you'll equalize its contribution to the final score.
 Creating z-scores by subtracting the mean and dividing by the standard deviation would work as well.
-In fact, I've created a function to help with that (`?z_score`).
+In fact, I've created a function to help with that (`?z.score`).
 
 
 In order to create our vector of scores, let's remind ourselves of what data we have.
@@ -110,7 +110,7 @@ Using z-scores here may work.
 
 
 ```{r}
-dpz <- z_score(dp)
+dpz <- z.score(dp)
 dpz <- abs(dpz)
 maxes <- apply(dpz, MARGIN=2, max, na.rm=TRUE)
 dp2 <- abs(sweep(dpz, MARGIN = 2, STATS = maxes, FUN = "-"))
@@ -164,7 +164,7 @@ Once we have score in hand we can use them to rank our variants.
 
 ```{r}
 chrom <- masker(chrom)
-chrom <- rank_variants_chromR(chrom, scores)
+chrom <- rank.variants.chromR(chrom, scores)
 head(chrom@var.info)
 ```
 

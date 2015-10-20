@@ -14,10 +14,10 @@
 
 
 #' @rdname ranking
-#' @aliases rank_variants_chromR
+#' @aliases rank.variants.chromR
 #' 
 #' @export
-rank_variants_chromR <- function(x, scores){
+rank.variants.chromR <- function(x, scores){
   if( class(x) != "chromR" ){
     stop("expecting object of class chromR or data.frame")
   }

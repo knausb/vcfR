@@ -2,10 +2,10 @@
 % Please edit documentation in R/ranking.R
 \name{Ranking}
 \alias{Ranking}
-\alias{rank_variants_chromR}
+\alias{rank.variants.chromR}
 \title{Ranking variants within windows}
 \usage{
-rank_variants_chromR(x, scores)
+rank.variants.chromR(x, scores)
 }
 \arguments{
 \item{x}{an object of class Crhom or a data.frame containing...}

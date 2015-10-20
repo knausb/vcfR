@@ -73,7 +73,7 @@
 # chromopop(pinf_mt)
 # gt <- extract.gt(pinf_mt)
 # head(gt)
-# tab <- variant_table(pinf_mt)
+# tab <- variant.table(pinf_mt)
 # head(tab)
 # win <- window_table(pinf_mt)
 # head(win)

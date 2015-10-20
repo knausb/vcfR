@@ -41,7 +41,7 @@ proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
   
 #  ptime <- system.time(x@seq.info$nuc.win <- regex.win(x))
   if(class(x@seq) == "DNAbin"){
-    ptime <- system.time(x@seq.info$nuc.win <- seq_to_rects(x)) 
+    ptime <- system.time(x@seq.info$nuc.win <- seq2rects(x)) 
     if(verbose==TRUE){
 #      print("Nucleotide regions complete.")
 #      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
@@ -49,12 +49,12 @@ proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
       message(paste("  elapsed time: ", round(ptime[3], digits=4)))
     }
   } else if ( is.null( x@seq ) ){
-    warning( "seq slot is NULL, chromosome representation not made (seq_to_rects)." )
+    warning( "seq slot is NULL, chromosome representation not made (seq2rects)." )
   }
   
   if(class(x@seq) == "DNAbin"){
 #  ptime <- system.time(x@seq.info$N.win <- regex.win(x, regex="[n]"))
-    ptime <- system.time(x@seq.info$N.win <- seq_to_rects(x, chars="n")) 
+    ptime <- system.time(x@seq.info$N.win <- seq2rects(x, chars="n")) 
     if(verbose==TRUE){
 #      print("N regions complete.")
 #      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
@@ -62,14 +62,14 @@ proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
       message(paste("  elapsed time: ", round(ptime[3], digits=4)))      
     }
   } else if ( is.null( x@seq ) ){
-    warning( "seq slot is NULL, chromosome representation not made (seq_to_rects, chars=n)." )
+    warning( "seq slot is NULL, chromosome representation not made (seq2rects, chars=n)." )
   }
 
     
 #  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
   if(nrow(x@vcf@gt[x@var.info$mask,])>0){
 #    ptime <- system.time(x <- gt2popsum(x))
-    ptime <- system.time(x <- gt_to_popsum(x))
+    ptime <- system.time(x <- gt.to.popsum(x))
     if(verbose==TRUE){
 #      print("Population summary complete.")
 #      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
@@ -200,7 +200,7 @@ regex.win <- function(x, max.win=1000, regex="[acgtwsmkrybdhv]"){
 
 
 #' @rdname proc_chromR
-#' @aliases seq_to_rects
+#' @aliases seq2rects
 #' 
 #' @description
 #' Create representation of a sequence.
@@ -214,7 +214,7 @@ regex.win <- function(x, max.win=1000, regex="[acgtwsmkrybdhv]"){
 #'   
 #' @export
 #' 
-seq_to_rects <- function(x, chars="acgtwsmkrybdhv", lower=TRUE){
+seq2rects <- function(x, chars="acgtwsmkrybdhv", lower=TRUE){
 
   if(is.matrix(as.character(x@seq))){
 #    seq <- as.character(x@seq)[1:length(x@seq)]
@@ -400,10 +400,10 @@ gt2popsum <- function(x){
 
 
 #' @rdname proc_chromR
-#' @aliases gt_to_popsum
+#' @aliases gt.to.popsum
 #' 
 #' @export
-gt_to_popsum <- function(x){
+gt.to.popsum <- function(x){
   if(class(x) != "chromR"){stop("Object is not of class chromR")}
   
   # Extract genotypes from vcf.gt

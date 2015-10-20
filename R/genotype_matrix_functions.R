@@ -6,20 +6,20 @@
 #' @description Functions which modify a matrix or vector of genotypes.
 #' 
 #' @rdname genotype_matrix
-#' @aliases alleles_to_consensus
+#' @aliases alleles2consensus
 #' 
 #' @param x a matrix of alleles as genotypes (e.g., A/A, C/G, etc.)
 #' @param sep a character which delimits the alleles in a genotype (/ or |)
 #' @param NA_to_n logical indicating whether NAs should be scores as n
 #' 
 #' @details 
-#' The function \strong{alleles_to_consensus} converts genotypes to a single consensus allele using IUPAC ambiguity codes for heterozygotes. 
+#' The function \strong{alleles2consensus} converts genotypes to a single consensus allele using IUPAC ambiguity codes for heterozygotes. 
 #' Note that some functions, such as ape::seg.sites do not recognize ambiguity characters (other than 'n').
 #' This means that these functions, as well as functions that depend on them (e.g., pegas::tajima.test), will produce unexpected results.
 #' 
 #' 
 #' @export
-alleles_to_consensus <- function( x, sep = "/", NA_to_n = TRUE ){
+alleles2consensus <- function( x, sep = "/", NA_to_n = TRUE ){
   lookup <- cbind(paste(c('A','C','G','T', 'A','T','C','G', 'A','C','G','T', 'A','G','C','T'),
                         c('A','C','G','T', 'T','A','G','C', 'C','A','T','G', 'G','A','T','C'),
                         sep=sep),

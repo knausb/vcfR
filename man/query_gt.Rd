@@ -2,13 +2,14 @@
 % Please edit documentation in R/query_gt.R
 \name{Query_gt}
 \alias{Query_gt}
+\alias{is.biallelic}
+\alias{is.polymorphic}
 \alias{is_biallelic}
-\alias{is_polymorphic}
 \title{Query the gt slot}
 \usage{
-is_polymorphic(x, na.omit = FALSE)
+is.polymorphic(x, na.omit = FALSE)
 
-is_biallelic(x)
+is.biallelic(x)
 }
 \arguments{
 \item{x}{an object of class}

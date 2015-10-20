@@ -2,11 +2,11 @@
 % Please edit documentation in R/proc_chromR.R
 \name{Process chromR objects}
 \alias{Process chromR objects}
+\alias{gt.to.popsum}
 \alias{gt2popsum}
-\alias{gt_to_popsum}
 \alias{proc.chromR}
 \alias{regex.win}
-\alias{seq_to_rects}
+\alias{seq2rects}
 \alias{var.win}
 \title{Process chromR object}
 \usage{
@@ -14,13 +14,13 @@ proc.chromR(x, win.size = 1000, verbose = TRUE)
 
 regex.win(x, max.win = 1000, regex = "[acgtwsmkrybdhv]")
 
-seq_to_rects(x, chars = "acgtwsmkrybdhv", lower = TRUE)
+seq2rects(x, chars = "acgtwsmkrybdhv", lower = TRUE)
 
 var.win(x, win.size = 1000)
 
 gt2popsum(x)
 
-gt_to_popsum(x)
+gt.to.popsum(x)
 }
 \arguments{
 \item{x}{object of class chromR}

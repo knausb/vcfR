@@ -119,7 +119,7 @@ extract.gt <- function(x, element="GT", mask=FALSE, as.numeric=FALSE, return.all
 extract.haps <- function(x, mask=FALSE, gt.split="|",verbose=TRUE){
   if(class(x) == "chromR"){
     if(length(mask) == 1 && mask==TRUE){
-      x <- chromR_to_vcfR(x, use.mask = TRUE)
+      x <- chromR2vcfR(x, use.mask = TRUE)
     } else {
       #      x <- chrom_to_vcfR(x)
       x <- x@vcf

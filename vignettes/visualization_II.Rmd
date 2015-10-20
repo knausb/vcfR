@@ -177,13 +177,13 @@ While it is low relative to the other samples, it actually is a very high covera
 
 As the number of variants increases, visualizing each of them become problematic.
 One way of addressing this is by summarizing the data with a windowing algorithm.
-We can use the function windowize_NM to windowize our data and perform several forms of summary for each of these windows.
+We can use the function windowize.NM to windowize our data and perform several forms of summary for each of these windows.
 Here we summarize each window with its mean, the default summary.
 
 
 
 ```{r, fig.height=7, fig.width=7}
-dpw <- windowize_NM(dp, pos=chrom@var.info$POS, starts=chrom@win.info$start,
+dpw <- windowize.NM(dp, pos=chrom@var.info$POS, starts=chrom@win.info$start,
                     ends=chrom@win.info$end)
 dpw[is.na(dpw)] <- 0
 is.na(dpw[dpw==0]) <- TRUE

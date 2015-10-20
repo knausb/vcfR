@@ -176,7 +176,7 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
     }
   } else if ( length(ploid) == 2 & consensus == TRUE )
   {
-    x <- alleles_to_consensus( x, sep = gt.split, NA_to_n = TRUE )
+    x <- alleles2consensus( x, sep = gt.split, NA_to_n = TRUE )
     x <- apply(x, MARGIN=2, tolower)
   } else if ( ploid == 2 & consensus == FALSE ){
     stop( "Ploidy is 2 but consensus is set to FALSE.\nGenotypes must be converted to a nucleotide.\nConsider setting consensus to TRUE." )

@@ -287,11 +287,11 @@ In order to omit variants, their mask elements should be set to FALSE.
 
 
 
-When there are large numbers of variants, it may be more convenient to summarize regions using a windowing analysis.  This can be done with the function **windowize_NM**.
+When there are large numbers of variants, it may be more convenient to summarize regions using a windowing analysis.  This can be done with the function **windowize.NM**.
 
 
 ```{r}
-gqw <- windowize_NM(gq, pos=chrom@var.info$POS, starts=chrom@win.info$start, ends=chrom@win.info$end)
+gqw <- windowize.NM(gq, pos=chrom@var.info$POS, starts=chrom@win.info$start, ends=chrom@win.info$end)
 gqw[1:6,1:8]
 ```
 
@@ -300,7 +300,7 @@ We can take z-scores to help us determine what values may be exceptional.
 
 
 ```{r}
-gqwz <- z_score(gqw)
+gqwz <- z.score(gqw)
 hist(gqwz[,1])
 ```
 

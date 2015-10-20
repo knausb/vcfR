@@ -5,15 +5,15 @@
 \alias{Windowing}
 \alias{alias}
 \alias{windowing}
-\alias{windowize_NM}
-\alias{z_score}
+\alias{windowize.NM}
+\alias{z.score}
 \title{Create window summaries of data}
 \usage{
 NM2winNM(x, pos, maxbp, winsize = 100L)
 
-z_score(x)
+z.score(x)
 
-windowize_NM(x, pos, starts, ends, summary = "mean")
+windowize.NM(x, pos, starts, ends, summary = "mean")
 }
 \arguments{
 \item{x}{A NumericMatrix}

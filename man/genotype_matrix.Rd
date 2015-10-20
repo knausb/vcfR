@@ -2,11 +2,11 @@
 % Please edit documentation in R/genotype_matrix_functions.R
 \name{Genotype matrix functions}
 \alias{Genotype matrix functions}
-\alias{alleles_to_consensus}
+\alias{alleles2consensus}
 \alias{get.alleles}
 \title{Genotype matrix functions}
 \usage{
-alleles_to_consensus(x, sep = "/", NA_to_n = TRUE)
+alleles2consensus(x, sep = "/", NA_to_n = TRUE)
 
 get.alleles(x2, split = "/", na.rm = FALSE, as.numeric = FALSE)
 }
@@ -29,7 +29,7 @@ get.alleles(x2, split = "/", na.rm = FALSE, as.numeric = FALSE)
 Functions which modify a matrix or vector of genotypes.
 }
 \details{
-The function \strong{alleles_to_consensus} converts genotypes to a single consensus allele using IUPAC ambiguity codes for heterozygotes.
+The function \strong{alleles2consensus} converts genotypes to a single consensus allele using IUPAC ambiguity codes for heterozygotes.
 Note that some functions, such as ape::seg.sites do not recognize ambiguity characters (other than 'n').
 This means that these functions, as well as functions that depend on them (e.g., pegas::tajima.test), will produce unexpected results.
 
