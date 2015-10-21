@@ -25,7 +25,7 @@ pos <- as.numeric(vcf@fix[,'POS'])
 
 ##### ##### ##### ##### #####
 
-test_that("vcfR2DANbin with consensus works",{
+test_that("vcfR2DNAbin with consensus works",{
   my_DNAbin <- vcfR2DNAbin( vcf, consensus = TRUE, gt.split = "/" )
   
   expect_true( inherits(my_DNAbin, "DNAbin") )

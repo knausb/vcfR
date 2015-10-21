@@ -95,11 +95,11 @@ variant.table <- function(x){
 
 #' @rdname chromR_functions
 #' @export
-#' @aliases window_table
+#' @aliases win.table
 #' @details
-#' The funciton \strong{window_table}
+#' The funciton \strong{win.table}
 #' 
-window_table <- function(x){
+win.table <- function(x){
   tab <- x@win.info
   tab <- cbind(rep(x@name, times=nrow(tab)), tab)
   names(tab)[1] <- "chrom"

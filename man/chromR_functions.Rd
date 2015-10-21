@@ -4,7 +4,7 @@
 \alias{chromR functions}
 \alias{masker}
 \alias{variant.table}
-\alias{window_table}
+\alias{win.table}
 \title{chromR_functions}
 \usage{
 masker(x, min_QUAL = 1, min_DP = 1, max_DP = 10000, min_MQ = 20,
@@ -12,7 +12,7 @@ masker(x, min_QUAL = 1, min_DP = 1, max_DP = 10000, min_MQ = 20,
 
 variant.table(x)
 
-window_table(x)
+win.table(x)
 }
 \arguments{
 \item{x}{object of class chromR}
@@ -46,6 +46,6 @@ This vector is stored in the var.info$mask slot of a chromR object.
 
 The function \strong{variant.table} creates a data.frame containing information about variants.
 
-The funciton \strong{window_table}
+The funciton \strong{win.table}
 }
 

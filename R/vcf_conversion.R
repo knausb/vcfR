@@ -125,7 +125,7 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
   }
   
   # Check and sanitize ref.seq.
-  if( class(ref.seq) != 'DNAbin' ){
+  if( class(ref.seq) != 'DNAbin' & !is.null(ref.seq) ){
     stop( paste("expecting ref.seq to be of class DNAbin but it is of class", class(ref.seq)) )
   }
   if( is.list(ref.seq) ){
@@ -163,7 +163,7 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
   }
 
   # Strategies to convert genotypes (with a delimiter) to nucleotides.
-  # If extract.haps ws set to TRUE, then our data is effectively haploid now.
+  # If extract.haps was set to TRUE, then our data is effectively haploid now.
   ploid <- unlist( strsplit( x[!is.na(x)][1], split=gt.split ) )
   if( length(ploid) == 1 )
   {
