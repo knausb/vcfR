@@ -1,6 +1,6 @@
 #' 
 #' @title Query the gt slot
-#' @name Query_gt
+#' @name query.gt
 #' @rdname query_gt
 #' 
 #' @description Query the 'gt' slot of objects of class vcfR

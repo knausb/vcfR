@@ -3,7 +3,6 @@
 \docType{methods}
 \name{show,vcfR-method}
 \alias{[,vcfR-method}
-\alias{[]}
 \alias{head,vcfR-method}
 \alias{plot,vcfR-method}
 \alias{plot.vcfR}

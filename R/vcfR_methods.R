@@ -130,7 +130,7 @@ setMethod(
 #' @rdname vcfR-methods
 #' 
 # @export
-#' @aliases []
+# @aliases []
 #'
 #' @param i vector of rows (variants) to include
 #' @param j vector of columns (samples) to include

@@ -3,8 +3,6 @@
 \name{Windowing}
 \alias{NM2winNM}
 \alias{Windowing}
-\alias{alias}
-\alias{windowing}
 \alias{windowize.NM}
 \alias{z.score}
 \title{Create window summaries of data}
