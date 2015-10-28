@@ -19,8 +19,7 @@
 \S4method{plot}{vcfR}(x, y, ...)
 }
 \arguments{
-\item{object}{object of class vcfR
-#}
+\item{object}{object of class vcfR}
 
 \item{x}{object of class vcfR}
 
@@ -64,6 +63,6 @@ The columns in the fix slot will not be subset by j.
 The parameter j is a vector used to subset the columns of the gt slot.
 Note that it is essential to include the first column here (FORMAT) or downsream processes will encounter trouble.
 
-The \strong{plot} method generates a histogram from teh 'QUAL' column from the 'fix' slot.
+The \strong{plot} method generates a histogram from data found in the 'QUAL' column from the 'fix' slot.
 }
 

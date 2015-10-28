@@ -1,14 +1,14 @@
 #'
 #' @rdname vcfR-methods
 #' 
-#' @param object object of class vcfR
-# #' @export
+# @export
 #' @aliases vcfR-methods
 #' @title vcfR methods
 #' 
 #' @description Methods to show, subset or plot data from objects of class vcfR.
 #' 
 #' 
+#' @param object object of class vcfR
 #' @param x object of class vcfR
 #' @param n number of rows to print
 #' @param maxchar maximum number of characters to print per line
@@ -30,7 +30,7 @@
 #' The parameter j is a vector used to subset the columns of the gt slot.
 #' Note that it is essential to include the first column here (FORMAT) or downsream processes will encounter trouble.
 #' 
-#' The \strong{plot} method generates a histogram from teh 'QUAL' column from the 'fix' slot.
+#' The \strong{plot} method generates a histogram from data found in the 'QUAL' column from the 'fix' slot.
 #' 
 #' 
 

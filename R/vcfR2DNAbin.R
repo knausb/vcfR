@@ -1,106 +1,83 @@
-#' @title Convert vcfR objects to other formats
-#' @name Format conversion
-#' @rdname vcf_conversion
-#' @description
-#' Convert vcfR objects to objects supported by other packages
-#'  
-#' @param x an object of class chromR or vcfR
-#' 
-#' @details 
-#' After processing vcf data in vcfR, one will likely proceed to an analysis step.
-#' Within R, three obvious choices are:
-#' \href{http://cran.r-project.org/web/packages/pegas/index.html}{pegas},
-#' \href{http://cran.r-project.org/web/packages/adegenet/index.html}{adegenet} 
-#' and \href{http://cran.r-project.org/web/packages/poppr/index.html}{poppr}.
-#' The package pegas uses objects of type loci.
-#' The function vcfR2loci calls extract.gt to create a matrix of genotypes which is then converted into an object of type loci.
-#' The packages adegenet and poppr use the genind object.
-#' The function vcfR2genind uses extract.gt to create a matrix of genotypes and uses the adegenet function df2genind to create a genind object.
-#' The package poppr additionally uses objects of class genclone.
-#' A genind object can be converted to a genclone object with the function poppr::as.genclone.
-#' 
-#' 
-#' 
-#' 
-#' 
-#' @seealso
-#' \code{\link{extract.gt}},
-#' \code{\link[adegenet]{df2genind}},
-#' \code{\link[adegenet]{genind}},
-#' \href{http://cran.r-project.org/web/packages/pegas/index.html}{pegas},
-#' \href{http://cran.r-project.org/web/packages/adegenet/index.html}{adegenet},
-#' and 
-#' \href{http://cran.r-project.org/web/packages/poppr/index.html}{poppr}.
-#'
-#'
 
 
-
-#' @rdname vcf_conversion
-#' @aliases vcfR2genind
+#' @title Convert vcfR to DNAbin
+#' @name vcfR2DNAbin
 #' 
-#' @param sep character (to be used in a regular expression) to delimit the alleles of genotypes
-#' 
-#' @export
-vcfR2genind <- function(x, sep="[|/]") {
-  x <- extract.gt(x)
-  x <- adegenet::df2genind(t(x), sep=sep)
-  x
-}
-
-
-#' @rdname vcf_conversion
-#' @aliases vcfR2loci
-#' 
-#' @export
-vcfR2loci <- function(x)
-{
-#  if(class(x) == "chromR")
-#  {
-#    x <- x@vcf
-#  }
-  x <- extract.gt(x)
-  # modified from pegas::as.loci.genind
-  x <- as.data.frame(t(x))
-  icol <- 1:ncol(x)
-  for (i in icol) x[, i] <- factor(x[, i] )
-  class(x) <- c("loci", "data.frame")
-  attr(x, "locicol") <- icol
-  x
-}
-
-
-#' @rdname vcf_conversion
+#' @rdname vcfR2DNAbin
 #' @aliases vcfR2DNAbin
 #' 
+#' @description 
+#' Convert objects of class vcfR to objects of class ape::DNAbin
+#' 
+#' @param x an object of class chromR or vcfR
 #' @param extract.indels logical, at present, the only option is TRUE
 #' @param consensus logical, at present, the only option is TRUE
-#' @param extract.haps logical specifying whether to separate genotype into alleles based on a delimiting character
+#' @param extract.haps logical specifying whether to separate each genotype into alleles based on a delimiting character
 #' @param gt.split character to delimit alleles within genotypes
 #' @param ref.seq reference sequence for the region being converted
 #' @param start.pos chromosomal position for the start of the ref.seq
 #' @param verbose logical specifying whether to produce verbose output
 #' 
 #' @details
-#' The DNAbin object stores nucleotide sequence information.
-#' This means that in order to convert vcf data to a nucleotide representation.
-#' For haploid data, this is straight forward.
-#' For diploid data there is the option of converting heterozygous sites to IUPAC ambiguity codes.
-#' This results in one sequence per diploid individual.
-#' Note that functions called downstream of this choice may handle IUPAC ambiguity codes in unexpected manners.
-#' If you have phased data, an alternative is to extract the haplotypes from each genotype.
-#' This should work for diploids and higher ploids.
+#' Objects of class \strong{DNAbin}, from the package ape, store nucleotide sequence information.
+#' Typically, nucleotide sequence information contains all the nucleotides within a region, for example, a gene.
+#' Because most sites are typically invariant, this results in a large amount of redundant data.
+#' This is why files in the vcf format only contain information on variant sites, it results in a smaller file.
+#' Nucleotide sequences can be generated which only contain variant sites.
+#' However, some applications require the invariant sites.
+#' For example, inference of phylogeny based on maximum likelihood or Bayesian methods requires invariant sites.
+#' The function vcfR2DNAbin therefore includes a number of options in attempt to accomodate various scenarios.
 #' 
-#' A multiple sequence alignment for an entire chromosome contains a high degree of redundancy in invariant sites.
-#' This is why vcf files contain only information on variants.
-#' However, many analyses make use of invariant sites.
-#' For example, likelihood inference of phylogeny (and therefore Bayesian methods as well) requires invariant sites.
-#' By default, the function \strong{vcfR2DNAbin} by default will return an object of class DNAbin which only contains the variable positions.
-#' In order to fill in the invariant sites, the parameter ref.seq should be provided.
+#' 
+#' The presence of indels (insertions or deletions)in a sequence typically presents a data analysis problem.
+#' Mutation models typically do not accomodate this data well.
+#' For now, the only option is for indels to be omitted from the conversion of vcfR to DNAbin objects.
+#' The option \strong{extract.indels} was included to remind us of this, and to provide a placeholder in case we wish to address this in the future.
+#' 
+#' 
+#' The \strong{ploidy} of the samples is inferred from the first non-missing genotype.
+#' The option \code{gt.split} is used to split this genotype into alleles and these are counted.
+#' Values for \code{gt.split} are typically '|' for phased data or '/' for unphased data.
+#' Note that this option is an exact match and not used in a regular expression, as the 'sep' parameter in \code{\link{vcfR2genind}} is used.
+#' All samples and all variants within each sample are assumed to be of the same ploid.
+#' 
+#' 
+#' Conversion of \strong{haploid data} is fairly straight forward.
+#' The options \code{consensus}, \code{extract.haps} and \code{gt.split} are not relevant here.
 #' When vcfR2DNAbin encounters missing data in the vcf data (NA) it is coded as an ambiguous nucleotide (n) in the DNAbin object.
-#' Providing an entire chromosome may exceed available memory.
-#' By providing a ref.seq for a region (of class ape::DNAbin), for example a gene, and the start.pos for that sequence (the end position will be determined from the sequence length), complete sequences can be created.
+#' When no reference sequence is provided (option \code{ref.seq}), a DNAbin object consisting only of variant sites is created.
+#' When a reference sequence and a starting position are provided the entire sequence, including invariant sites, is returned.
+#' The reference sequence is used as a starting point and variable sitees are added to this.
+#' Because the data in the vcfR object will be using a chromosomal coordinate system, we need to tell the function where on this chromosome the reference sequence begins.
 #' 
+#' 
+#' Conversion of \strong{diploid data} presents a number of scenarios.
+#' When the option \code{consensus} is TRUE, each genotype is split into two alleles using gt.split and the two alleles are converted into their IUPAC ambiguity code.
+#' This results in one sequence for each diploid sample.
+#' This may be an appropriate path when you have unphased data.
+#' Note that functions called downstream of this choice may handle IUPAC ambiguity codes in unexpected manners.
+#' When extract.haps is set to TRUE, each genotype is split into two alleles using gt.split.
+#' These alleles are inserted into two sequences.
+#' Thsi results in two sequences per diploid sample.
+#' Note that this really only makes sense if you have phased data.
+#' The options ref.seq and start.pos are used as in halpoid data.
+#' 
+#' 
+#' 
+#' Conversion of \strong{polyploid data} is currently not supported.
+#' However, I have made some attempts at accomodating polyploid data.
+#' If you have polyploid data and are interested in giving this a try, feel free.
+#' But be prepared to scrutinize the output to make sure it appears reasonable.
+#' 
+#' 
+#' Creation of DNAbin objects from large chromosomal regions may result in objects which occupy large amounts of memory.
+#' If in doubt, begin by subsetting your data and the scale up to ensure you do not run out of memory.
+#' 
+#' 
+#' 
+#' 
+#' @seealso 
+#' \href{http://cran.r-project.org/web/packages/ape/index.html}{ape}
 #' 
 #' @export
 vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
@@ -223,5 +200,7 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
   x <- ape::as.DNAbin(t(x))
   x
 }
+
+
 
 

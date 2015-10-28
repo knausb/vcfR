@@ -14,12 +14,13 @@ The first slot is a character vector which holds the meta data.
 The second slot holds an eight column matrix to hold the fixed data.
 The third slot is a matrix which holds the genotype data.
 
-See the \strong{vignette} \code{vignette('vcf_data')} for more information.
+See \code{vignette('vcf_data')} for more information.
+See the \href{http://samtools.github.io/hts-specs/}{vcf specification} for the file specification.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{meta}}{character vector for the meta (header) information}
+\item{\code{meta}}{character vector for the meta information}
 
 \item{\code{fix}}{matrix for the fixed information}
 

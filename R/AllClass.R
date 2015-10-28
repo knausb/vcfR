@@ -11,7 +11,7 @@
 #' An S4 class for storing vcf data.
 #' 
 #' 
-#' @slot meta character vector for the meta (header) information
+#' @slot meta character vector for the meta information
 #' @slot fix  matrix for the fixed information
 #' @slot gt   matrix for the genotype information 
 #'
@@ -22,7 +22,8 @@
 #' The second slot holds an eight column matrix to hold the fixed data.
 #' The third slot is a matrix which holds the genotype data.
 #' 
-#' See the \strong{vignette} \code{vignette('vcf_data')} for more information.
+#' See \code{vignette('vcf_data')} for more information.
+#' See the \href{http://samtools.github.io/hts-specs/}{vcf specification} for the file specification.
 #' 
 #' @export
 #' @import methods
