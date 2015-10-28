@@ -16,10 +16,10 @@ write.win.info(x, file = "", APPEND = FALSE)
 
 \item{mask}{logical vector indicating rows to use}
 
-\item{APPEND}{logical indicating whether to append to existing vcf file or write a new file}
+\item{APPEND}{logical indicating whether to append to existing file (omitting the header) or write a new file}
 }
 \description{
-Write summary tables from chromR objectst.
+Write summary tables from chromR objects.
 }
 \details{
 
@@ -30,13 +30,5 @@ The function \strong{write.win.info} takes the window information table from a c
 }
 \seealso{
 \code{\link{write.vcf}}
-
-CRAN:
-\href{http://cran.r-project.org/web/packages/pegas/index.html}{pegas}::read.vcf,
-\href{http://cran.r-project.org/web/packages/PopGenome/index.html}{PopGenome}::readVCF,
-\href{http://cran.r-project.org/web/packages/data.table/index.html}{data.table}::fread
-
-Bioconductor:
-\href{http://www.bioconductor.org/packages/release/bioc/html/VariantAnnotation.html}{VariantAnnotation}::readVcf
 }
 

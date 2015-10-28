@@ -29,7 +29,7 @@ The function \strong{vcfR2loci} calls extract.gt to create a matrix of genotypes
 
 The packages adegenet and poppr use the genind object.
 The function \strong{vcfR2genind} uses extract.gt to create a matrix of genotypes and uses the adegenet function df2genind to create a genind object.
-The package poppr additionally uses objects of class genclone.
+The package poppr additionally uses objects of class genclone which can be created from genind objects using poppr::as.genclone.
 A genind object can be converted to a genclone object with the function poppr::as.genclone.
 }
 \seealso{

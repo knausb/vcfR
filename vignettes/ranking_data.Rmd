@@ -30,7 +30,7 @@ dna <- ape::read.dna(seq_file, format = "fasta")
 gff <- read.table(gff_file, sep="\t")
 
 chrom <- create.chromR(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=TRUE)
-chrom <- masker(chrom, min_DP = 300, max_DP = 700)
+chrom <- masker(chrom, min_DP = 900, max_DP = 1500)
 chrom <- proc.chromR(chrom, verbose = TRUE)
 
 ```
@@ -94,7 +94,7 @@ We can also validate that the values range approximately from 1 to 99
 
 
 ```{r}
-apply(gq, MARGIN=2, range)
+apply(gq, MARGIN=2, range, na.rm=TRUE)
 ```
 
 
