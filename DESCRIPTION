@@ -2,7 +2,7 @@ Package: vcfR
 Title: Tools for working with variant call format (vcf) files
 Description: Tools for working with variant call format (vcf) files. Reads in vcf, gff and fasta data for visualization.  Includes tools for filtering and writing to vcf format.
 Version: 0.1
-Year: 2014
+Year: 2015
 Author: Brian Knaus <briank.lists@gmail.com>
 Maintainer: Brian Knaus <briank.lists@gmail.com>
 Depends:

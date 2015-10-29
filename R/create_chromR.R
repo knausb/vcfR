@@ -44,19 +44,19 @@
 #' @examples
 #' library(vcfR)
 #' data(vcfR_example)
-#' pinf_mt <- create.chromR('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
-#' head(pinf_mt)
-#' pinf_mt
-#' names(pinf_mt)
-#' plot(pinf_mt)
-#' pinf_mt <- masker(pinf_mt, min_QUAL = 990, min_DP = 6000, max_DP = 8000, min_MQ = 40, max_MQ = 100)
-#' pinf_mt <- proc.chromR(pinf_mt, win.size=1000)
-#'  
-#' plot(pinf_mt)
-#' 
-#' chromoqc(pinf_mt)
-#' chromoqc(pinf_mt, xlim=c(25e+03, 3e+04), dot.alpha=99)
-#' 
+# pinf_mt <- create.chromR('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
+# head(pinf_mt)
+# pinf_mt
+# names(pinf_mt)
+# plot(pinf_mt)
+# pinf_mt <- masker(pinf_mt, min_QUAL = 990, min_DP = 6000, max_DP = 8000, min_MQ = 40, max_MQ = 100)
+# pinf_mt <- proc.chromR(pinf_mt, win.size=1000)
+#  
+# plot(pinf_mt)
+# 
+# chromoqc(pinf_mt)
+# chromoqc(pinf_mt, xlim=c(25e+03, 3e+04), dot.alpha=99)
+# 
 # set.seed(10)
 # x1 <- as.integer(runif(n=20, min=1, max=39000))
 # y1 <- runif(n=length(x1), min=1, max=100)

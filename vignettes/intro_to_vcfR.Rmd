@@ -27,8 +27,25 @@ Reading in of the [vcf](http://www.1000genomes.org/node/101) file can be perform
 
 
 ```{r}
+#
+pkg <- "vcfR"
+#vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = pkg)
+#
+seq_file <- system.file("extdata", "pinf_sc100.fasta", package = pkg)
+seq_file <- system.file("extdata", "pinf_sc100.fasta.gz", package = pkg)
+#gff_file <- system.file("extdata", "pinf_sc100.gff", package = pkg)
+pkg <- "pinfsc50"
+vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = pkg)
+seq_file <- system.file("extdata", "pinf_sc50.fasta", package = pkg)
+gff_file <- system.file("extdata", "pinf_sc50.gff", package = pkg)
+```
+
+
+
+
+
+```{r}
 library(vcfR)
-vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
 vcf <- read.vcf(vcf_file, verbose = FALSE)
 ```
 
@@ -41,8 +58,7 @@ These can be read in using the package ape.
 
 
 ```{r}
-library(ape)
-seq_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
+#library(ape)
 dna <- ape::read.dna(seq_file, format = "fasta")
 ```
 
@@ -51,9 +67,12 @@ Annotation files (e.g., [gff](http://sequenceontology.org/resources/gff3.html)),
 
 
 ```{r}
-gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
-gff <- read.table(gff_file, sep="\t")
+gff <- read.table(gff_file, sep="\t", quote="")
 ```
+
+
+In my experience, gff files typically to not surround text with quotes.
+Disabling quotes in the call to `read.table` typically helps handle this.
 
 
 Once the data has been read into memory, modifications can be made to chromosome names or any other inconsistencies and one can proceed.
@@ -102,7 +121,7 @@ The create.chromR() function creates a new Chrom object and populates it with da
 
 ```{r}
 library(vcfR)
-chrom <- create.chromR(name='Supercontig_1.100', vcf=vcf, seq=dna, ann=gff)
+chrom <- create.chromR(name='Supercontig_1.50', vcf=vcf, seq=dna, ann=gff)
 ```
 
 
@@ -163,7 +182,7 @@ This maintains the geometry of the data matrices throughout the analyisis and al
 
 
 ```{r, fig.height=6, fig.width=6, fig.align='center'}
-chrom <- masker(chrom, min_QUAL = 1, min_DP = 300, max_DP = 6500, min_MQ = 59.9,  max_MQ = 60.1)
+chrom <- masker(chrom, min_QUAL = 1, min_DP = 300, max_DP = 700, min_MQ = 59.9,  max_MQ = 60.1)
 plot(chrom)
 ```
 
@@ -211,6 +230,7 @@ The function **chromoqc()** uses the R function layout to make composite plots o
 
 ```{r, fig.height=6, fig.width=6}
 chromoqc(chrom)
+chromoqc(chrom, xlim=c(5e+05, 6e+05))
 ```
 
 
