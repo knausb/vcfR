@@ -4,17 +4,18 @@
 library(vcfR)
 context("extract.gt functions")
 
-#data(vcfR_example)
+#
+data(vcfR_example)
 
-vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
-seq_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
-gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
+#vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
+#seq_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
+#gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
 
-vcf <- read.vcf(vcf_file, verbose = FALSE)
-dna <- ape::read.dna(seq_file, format = "fasta")
-gff <- read.table(gff_file, sep="\t")
+#vcf <- read.vcf(vcf_file, verbose = FALSE)
+#dna <- ape::read.dna(seq_file, format = "fasta")
+#gff <- read.table(gff_file, sep="\t")
 
-chrom <- create.chromR(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
+chrom <- create.chromR(name="Supercontig_1.50", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
 chrom <- masker(chrom, min_DP = 1e3, max_DP = 2e3)
 
 ##### ##### ##### ##### #####
@@ -72,7 +73,7 @@ test_that("extract_indels works",{
 
 test_that("extract_haps compiled code works",{
   is.na(gt[1:5,1]) <- TRUE
-  haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', vcf@fix[,'REF'], vcf@fix[,'ALT'], gt, '/', 0)
+  haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', vcf@fix[,'REF'], vcf@fix[,'ALT'], gt, '|', 0)
   expect_is(haps, "matrix")
   expect_true( is.na(haps[1,1]) )
   expect_true( is.na(haps[1,2]) )
@@ -82,7 +83,7 @@ test_that("extract_haps compiled code works",{
 
 
 test_that("extract_haps R code works",{
-  haps <- extract.haps(chrom, gt.split="/", verbose = FALSE)
+  haps <- extract.haps(chrom, gt.split="|", verbose = FALSE)
   expect_is(haps, "matrix")
   expect_equal(ncol(haps), 2 * ncol(gt))
   expect_equal(nrow(haps), nrow(gt))
@@ -91,12 +92,12 @@ test_that("extract_haps R code works",{
 
 
 test_that("extract_gt_to_CM2 compiled code works",{
-  gt <- .Call( 'vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', vcf@fix, vcf@gt, 'GT', '/', 0, 1 )
+  gt <- .Call( 'vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', vcf@fix, vcf@gt, 'GT', '|', 0, 1 )
 #  head(gt)
   # Return alleles
-  gt <- .Call( 'vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', vcf@fix, vcf@gt, 'GT', '/', 1, 1 )
+  gt <- .Call( 'vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', vcf@fix, vcf@gt, 'GT', '|', 1, 1 )
 #  head(gt)
-  gt <- .Call( 'vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', vcf@fix, vcf@gt, 'DP', '/', 0, 1 )
+  gt <- .Call( 'vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', vcf@fix, vcf@gt, 'DP', '|', 0, 1 )
 #  head(gt)
   
 

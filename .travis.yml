@@ -12,6 +12,7 @@ before_install:
 install:
   - ./travis-tool.sh install_deps
   - ./travis-tool.sh install_github sjmgarnier/viridisLite
+  - ./travis-tool.sh install_github knausb/pinfsc50
  
 script: ./travis-tool.sh run_tests
 

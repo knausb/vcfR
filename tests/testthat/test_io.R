@@ -3,15 +3,18 @@ library(vcfR)
 context("io functions")
 
 # Load data
-vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
-seq_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
-gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
 
-vcf <- read.vcf(vcf_file, verbose = FALSE)
-dna <- ape::read.dna(seq_file, format = "fasta")
-gff <- read.table(gff_file, sep="\t")
+data(vcfR_example)
 
-chrom <- create.chromR(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
+#vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
+#seq_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
+#gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
+
+#vcf <- read.vcf(vcf_file, verbose = FALSE)
+#dna <- ape::read.dna(seq_file, format = "fasta")
+#gff <- read.table(gff_file, sep="\t")
+
+chrom <- create.chromR(name="Supercontig_1.50", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
 chrom <- proc.chromR(chrom, verbose = FALSE)
 
 

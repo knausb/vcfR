@@ -125,10 +125,10 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
   pos <- as.numeric(x@fix[,'POS'])
   
   if( extract.haps == FALSE ){
-    x <- extract.gt(x, return.alleles=TRUE)
+    x <- extract.gt( x, return.alleles = TRUE, allele.sep = gt.split )
   } else if( extract.haps == TRUE ){
 #    x <- extract_haps(x, gt_split=gt.split, verbose = verbose)
-    x <- extract.haps(x, gt.split =gt.split, verbose = verbose)
+    x <- extract.haps( x, gt.split = gt.split, verbose = verbose )
   } else {
     stop( "Invalid specification of extract.haps.\nShould be a logical." )
   }
@@ -141,9 +141,14 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
 
   # Strategies to convert genotypes (with a delimiter) to nucleotides.
   # If extract.haps was set to TRUE, then our data is effectively haploid now.
-  ploid <- unlist( strsplit( x[!is.na(x)][1], split=gt.split ) )
-  if( length(ploid) == 1 )
-  {
+  ploid <- length(unlist( strsplit( x[!is.na(x)][1], split=gt.split, fixed=TRUE ) ))
+  
+  if( verbose == TRUE ){
+    message( paste("Ploidy detected to be:", ploid) )
+  }
+  
+  if( length(ploid) == 1 ){
+    # Haploid case
     x[is.na(x)] <- 'n'
     if( nrow(x) > 1 ){
       x <- apply(x, MARGIN=2, tolower)
@@ -151,8 +156,8 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
       x <- apply(x, MARGIN=2, tolower)
       x <- matrix(x, nrow=1, dimnames = list( NULL, names(x)))
     }
-  } else if ( length(ploid) == 2 & consensus == TRUE )
-  {
+  } else if ( length(ploid) == 2 & consensus == TRUE ){
+    # Diploid case
     x <- alleles2consensus( x, sep = gt.split, NA_to_n = TRUE )
     x <- apply(x, MARGIN=2, tolower)
   } else if ( ploid == 2 & consensus == FALSE ){
@@ -170,12 +175,7 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
     
     # Subset the vcf data to our region of interest.
     end.pos <- start.pos + dim(ref.seq)[2] - 1
-#    if( nrow(x) > 1 ){
-      x <- x[ pos >= start.pos & pos <= end.pos, , drop = FALSE ]
-#    } else if( nrow(x) == 1){
-#      x <- x[ pos >= start.pos & pos <= end.pos,]
-#      x <- matrix(x, nrow=1, dimnames = list( NULL, names(x)))
-#    }
+    x <- x[ pos >= start.pos & pos <= end.pos, , drop = FALSE ]
     
     # Subset pos to our region of interest
     # and set to new coordinate system.

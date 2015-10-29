@@ -44,17 +44,18 @@
 #' @examples
 #' library(vcfR)
 #' data(vcfR_example)
-# pinf_mt <- create.chromR('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff)
-# head(pinf_mt)
-# pinf_mt
-# names(pinf_mt)
-# plot(pinf_mt)
-# pinf_mt <- masker(pinf_mt, min_QUAL = 990, min_DP = 6000, max_DP = 8000, min_MQ = 40, max_MQ = 100)
-# pinf_mt <- proc.chromR(pinf_mt, win.size=1000)
-#  
-# plot(pinf_mt)
+#' chrom <- create.chromR('sc50', seq=dna, vcf=vcf, ann=gff)
+#' head(chrom)
+#' chrom
+# colnames(chrom)
+#' plot(chrom)
+#' 
+#' chrom <- masker(chrom, min_QUAL = 1, min_DP = 300, max_DP = 700, min_MQ = 59, max_MQ = 61)
+#' chrom <- proc.chromR(chrom, win.size=1000)
+#'
+#' plot(chrom)
 # 
-# chromoqc(pinf_mt)
+#' chromoqc(chrom)
 # chromoqc(pinf_mt, xlim=c(25e+03, 3e+04), dot.alpha=99)
 # 
 # set.seed(10)

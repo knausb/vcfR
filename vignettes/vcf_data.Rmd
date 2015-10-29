@@ -58,7 +58,8 @@ For this vignette, we'll use the example data provided with vcfR.
 ```{r}
 library(vcfR)
 data(vcfR_example)
-vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
+#vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
+vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
 vcf <- read.vcf(vcf_file, verbose = FALSE)
 ```
 

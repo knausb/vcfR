@@ -65,6 +65,16 @@ It is not anticipated that a user would need to use this function directly, but 
 \examples{
 library(vcfR)
 data(vcfR_example)
+chrom <- create.chromR('sc50', seq=dna, vcf=vcf, ann=gff)
+head(chrom)
+chrom
+plot(chrom)
+
+chrom <- masker(chrom, min_QUAL = 1, min_DP = 300, max_DP = 700, min_MQ = 59, max_MQ = 61)
+chrom <- proc.chromR(chrom, win.size=1000)
+
+plot(chrom)
+chromoqc(chrom)
 }
 \seealso{
 \code{\link{chromR-class}},

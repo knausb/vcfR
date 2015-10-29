@@ -4,8 +4,22 @@
 library(vcfR)
 context("vcf functions")
 
-ex_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
+#ex_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
 
+data("vcfR_example")
+
+##### ##### ##### ##### #####
+# Manage directories.
+
+#original_dir <- getwd()
+test_dir <- tempdir()
+
+ex_file <- paste(test_dir, "/test.vcf.gz", sep="")
+
+write.vcf(vcf, file=ex_file)
+
+
+##### ##### ##### ##### #####
 
 test_that("compiled input functions work",{
   stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', ex_file)
@@ -59,4 +73,7 @@ test_that("vcfR subsetters works",{
   
 #debug(read.vcf)
 
+unlink(ex_file)
 
+##### ##### ##### ##### #####
+# EOF.

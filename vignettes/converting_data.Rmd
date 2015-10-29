@@ -24,7 +24,8 @@ As in other vignettes, we begin by loading the example data.
 
 ```{r}
 library(vcfR)
-vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
+#vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
+vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
 vcf <- read.vcf(vcf_file, verbose = FALSE)
 ```
 
@@ -51,11 +52,11 @@ The packages **adegenet** and **poppr** use objects of class genind.
 We can create genind objects with the function vcfR2genind.
 
 
-```{r, eval=TRUE}
-my_genind <- vcfR2genind(vcf)
-my_genind
-adegenet::genind2df(my_genind, sep="/")[1:6, 1:8]
-class(my_genind)
+```{r genind, eval=FALSE}
+#my_genind <- vcfR2genind(vcf)
+#my_genind
+#adegenet::genind2df(my_genind, sep="/")[1:6, 1:8]
+#class(my_genind)
 ```
 
 
@@ -71,9 +72,9 @@ Once a genind object has been created it is fairly straight forward to create a 
 
 
 ```{r, eval=FALSE}
-my_genclone <- poppr::as.genclone(my_genind)
-my_genclone
-class(my_genclone)
+#my_genclone <- poppr::as.genclone(my_genind)
+#my_genclone
+#class(my_genclone)
 ```
 
 
@@ -97,13 +98,17 @@ First, we'll need to locate and read in our vcf file, a reference sequence and a
 
 ```{r}
 
-vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
-dna_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
-gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
+#vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
+#dna_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
+#gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
+
+vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
+dna_file <- system.file("extdata", "pinf_sc50.fasta", package = "pinfsc50")
+gff_file <- system.file("extdata", "pinf_sc50.gff", package = "pinfsc50")
 
 vcf <- read.vcf(vcf_file, verbose = FALSE)
 dna <- ape::read.dna(dna_file, format="fasta")
-gff <- read.table(gff_file)
+gff <- read.table(gff_file, sep="\t", quote = "")
 
 ```
 
@@ -117,16 +122,16 @@ Alternatively, we can create two haplotypes for each diploid sample, resulting i
 
 
 ```{r}
-my_dnabin1 <- vcfR2DNAbin(vcf, gt.split="/", ref.seq=dna[,150e3:175e3], start.pos=150e3)
-my_dnabin1
-my_dnabin2 <- vcfR2DNAbin(vcf, gt.split="/", extract.haps = TRUE, ref.seq=dna[,150e3:175e3], start.pos=150e3, consensus=FALSE)
-my_dnabin2
+#my_dnabin1 <- vcfR2DNAbin(vcf, gt.split="/", ref.seq=dna[,150e3:175e3], start.pos=150e3)
+#my_dnabin1
+#my_dnabin2 <- vcfR2DNAbin(vcf, gt.split="/", extract.haps = TRUE, ref.seq=dna[,150e3:175e3], start.pos=150e3, consensus=FALSE)
+#my_dnabin2
 ```
 
 
 ```{r, fig.align='center', fig.width=7, fig.height=5}
 par(mar=c(5,8,4,2))
-ape::image.DNAbin(my_dnabin1[,ape::seg.sites(my_dnabin1)])
+#ape::image.DNAbin(my_dnabin1[,ape::seg.sites(my_dnabin1)])
 par(mar=c(5,4,4,2))
 ```
 
@@ -138,9 +143,7 @@ Here, the ambiguous sites are visualized as 'other.'
 
 ```{r, fig.align='center', fig.width=7, fig.height=7}
 par(mar=c(5,8,4,2))
-ape::image.DNAbin(my_dnabin2[,ape::seg.sites(my_dnabin2)])
-#ape::image.DNAbin(my_dnabin2[seq(1,37,by=2),ape::seg.sites(my_dnabin2)])
-#ape::image.DNAbin(my_dnabin2[seq(2,38,by=2),ape::seg.sites(my_dnabin2)])
+#ape::image.DNAbin(my_dnabin2[,ape::seg.sites(my_dnabin2)])
 par(mar=c(5,4,4,2))
 ```
 
@@ -159,8 +162,8 @@ The package **pegas** uses objects of class loci.
 We can use the function vcfR2loci to convert our vcfR object to one of class loci.
 
 
-```{r}
-my_loci <- vcfR2loci(vcf)
+```{ r vcfR2loci }
+system.time( my_loci <- vcfR2loci(vcf) )
 class(my_loci)
 ```
 
