@@ -203,7 +203,7 @@ create.chromR <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
 # @param x an object of class chromR
 #'
 #'
-vcf2chromR <- function(x, vcf){
+vcfR2chromR <- function(x, vcf){
   x@vcf.fix <- as.data.frame(vcf@fix)
 #  colnames(x@vcf.fix) <- c('CHROM','POS','ID','REF','ALT','QUAL','FILTER','INFO')
 #  x@vcf.fix[,2] <- as.numeric(x@vcf.fix[,2])

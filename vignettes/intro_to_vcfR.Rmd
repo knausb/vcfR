@@ -27,16 +27,14 @@ Reading in of the [vcf](http://www.1000genomes.org/node/101) file can be perform
 
 
 ```{r}
-#
-pkg <- "vcfR"
+#pkg <- "vcfR"
 #vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = pkg)
-#
-seq_file <- system.file("extdata", "pinf_sc100.fasta", package = pkg)
-seq_file <- system.file("extdata", "pinf_sc100.fasta.gz", package = pkg)
+#seq_file <- system.file("extdata", "pinf_sc100.fasta", package = pkg)
+#seq_file <- system.file("extdata", "pinf_sc100.fasta.gz", package = pkg)
 #gff_file <- system.file("extdata", "pinf_sc100.gff", package = pkg)
 pkg <- "pinfsc50"
 vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = pkg)
-seq_file <- system.file("extdata", "pinf_sc50.fasta", package = pkg)
+dna_file <- system.file("extdata", "pinf_sc50.fasta", package = pkg)
 gff_file <- system.file("extdata", "pinf_sc50.gff", package = pkg)
 ```
 
@@ -59,7 +57,7 @@ These can be read in using the package ape.
 
 ```{r}
 #library(ape)
-dna <- ape::read.dna(seq_file, format = "fasta")
+dna <- ape::read.dna(dna_file, format = "fasta")
 ```
 
 
@@ -78,8 +76,9 @@ Disabling quotes in the call to `read.table` typically helps handle this.
 Once the data has been read into memory, modifications can be made to chromosome names or any other inconsistencies and one can proceed.
 
 
-vcfR was designed to work on individual chromosomes, or supercontigs or contigs, depending on the state of your genome.
-Reading an entire genome into memory may present a technical challenge when there is a lot of data, the genome is large or there are a lot of samples.
+vcfR was designed to work on individual chromosomes, supercontigs or contigs, depending on the state of your genome.
+Reading an entire genome into memory may present a technical challenge when there is a lot of data.
+For example, when the genome is large or there are a lot of samples.
 Working on chromosomes appears to be a natural way to decompose this problem.
 Once you have read an object into R you may therefore want to subset it to data for a single chromosome, if necessary.
 
@@ -104,7 +103,7 @@ There are effectively three phases in the workflow: reading in data, processing 
 Reading in the data frequently presents a bottleneck.
 Unfortunately, this is typically due to the time it takes to read from a drive and therefore may not be anything I can improve on.
 Once the data are in memory we can manipulate it.
-I've been rewriting a number of function in C++ to try to improve the performance of these function.
+VcfR uses Rcpp to implement functions written in C++ to try to improve the performance of these functions.
 Lastly, we visualize the objects.
 Visualization relies on R's base graphics package.
 This is also something that I am not likely to be able to improve on if it becomes a bottleneck.
@@ -115,56 +114,59 @@ By dividing the analysis into these three phases I've divided that workflow into
 ## Creating objects from data
 
 
-Once the data are in memory we can use it to create a **Chrom** object with the function **create.chromR()**.
+Once the data are in memory we can use it to create a **chromR** object with the function **create.chromR()**.
 The create.chromR() function creates a new Chrom object and populates it with data you provided it.
 
 
 ```{r}
 library(vcfR)
-chrom <- create.chromR(name='Supercontig_1.50', vcf=vcf, seq=dna, ann=gff)
+chrom <- create.chromR(name='Supercontig', vcf=vcf, seq=dna, ann=gff)
 ```
 
 
 Note that here the names of our three data sources are not identical.
 This results in a warning.
-When we examine the output we seen that the name in the vcf file is Supercontig_1.100, while the name in the fasta is Supercontig_1.100 of Phytophthora infestans T30-4.
+When we examine the output we seen that the name in the vcf file is 'Supercontig_1.50,' while the name in the fasta is 'Supercontig_1.50 of Phytophthora infestans T30-4.'
 We know that these are synonyms so we can ignore the warning and proceed.
 
 
 The parameter 'name' is a name you can assign to your object.
-This information is used when plotting the Chrom object.
-The vcf object should be of class vcfR, which was most likely created with the function read.vcf().
-This object is inserted into the chrom object with the function **vcf2chrom()**.
+This information is used when plotting the chromR object.
+The vcfR object should be of class vcfR, which was most likely created with the function read.vcf().
+This object is inserted into the chrom object with the function **vcfR2chromR()**.
 
 
 The 'seq' should be a DNAbin object with one sequence in it.
-This sequence will be inserted into the Chrom object with the function **seq2chrom()**.
-If a sequence is not provided, seq2chrom will infer the length of your chromosome from the maximum position in the vcf file.
+This sequence will be inserted into the Chrom object with the function **seq2chromR()**.
+If a sequence is not provided, seq2chromR will infer the length of your chromosome from the maximum position in the vcfR object.
 
 
-The 'ann' should be a [gff](http://sequenceontology.org/resources/gff3.html) type of table.  These can typically read in with base R functions such as read.table.  This table will then be inserted into the Chrom object by **ann2chrom()**.  This function will check to see if columns 4 and 5 ("start" and "end") are numeric.  If not, it will try to recast them as so.
+The 'ann' should be a [gff](http://sequenceontology.org/resources/gff3.html) type of table.
+These can typically read in with base R functions such as read.table.
+This table will then be inserted into the Chrom object by **ann2chromR()**.
+This function will check to see if columns 4 and 5 ("start" and "end") are numeric.
+If not, it will try to recast them as so.
 
 
 
 ## Processing objects
 
 
-Once the Chrom object has been created a few processing steps are made.
+Once the chromR object has been created a few processing steps are needed.
 First, you may want to get a quick look at some of your data.
 This can be done with the plot function.
 
 
 
-```{r, fig.height=6, fig.width=6, fig.align='center'}
+```{r, fig.align='center', fig.height=7, fig.width=7}
 plot(chrom)
 ```
 
 
-
-No SNP densities are not found at this point because this data results from windowing analyses performed by **proc_chrom()** (see below).
+No SNP densities are not found at this point because this data results from windowing analyses performed by **proc_chromR()** (see below).
 We can see that mapping qualities (MQ) are all rather peaked around a value of 60.
 Because of this, if we would like to filter on this parameter we now know that we would have to employ a narrow threshold.
-Interpretation of the qualities (QUAL) appear less straightforward and may be bimodal.
+Interpretation of the qualities (QUAL) appear less straightforward and may be clinal from a value of zero.
 Filtering on other parameters may reveal a more straight forward path.
 Alternatively, you may conclude that this is not an ideal parameter to filter on.
 
@@ -181,7 +183,7 @@ This maintains the geometry of the data matrices throughout the analyisis and al
 
 
 
-```{r, fig.height=6, fig.width=6, fig.align='center'}
+```{r, fig.align='center', fig.height=7, fig.width=7}
 chrom <- masker(chrom, min_QUAL = 1, min_DP = 300, max_DP = 700, min_MQ = 59.9,  max_MQ = 60.1)
 plot(chrom)
 ```
@@ -189,12 +191,12 @@ plot(chrom)
 
 
 
-Once we're satisfied with which variants we want to consider to be of high quality we can process the Chrom object with **proc.chromR()**.
+Once we're satisfied with which variants we want to consider to be of high quality we can process the chromR object with **proc.chromR()**.
 This function calls several helper functions to process the variant, sequence and annotation data for visualization.
 
 
 The function **regex.win()** defines rectangles for where called sequence (A, C, G and T) occur as well as where ambiguous nucleotides occur (N) which are used later for plotting.
-This function also defines rectangles for annotated features, also for plotting.
+This function also defines rectangles for annotated features, which are also for plotting.
 
 
 The function **var.win()** performs windowing analyses on the data.
@@ -206,7 +208,7 @@ This function is rather experimental and some of the summaries may not be quite 
 
 
 
-```{r, fig.height=6, fig.width=6}
+```{r, fig.align='center', fig.height=7, fig.width=7}
 chrom <- proc.chromR(chrom, verbose=TRUE)
 plot(chrom)
 ```
@@ -220,7 +222,7 @@ We're also ready to move on to more complex plots.
 ## Visualizing data
 
 
-At this point we've input three types of data (variant, sequence and annotation), inserted them into a Chrom object, masked variants we feel were not of high quality and processed some summaries of these data.
+At this point we've input three types of data (variant, sequence and annotation), inserted them into a chromR object, masked variants we feel were not of high quality and processed some summaries of these data.
 We can now move on to visualizing these data.
 
 
@@ -228,36 +230,57 @@ The function **chromoqc()** uses the R function layout to make composite plots o
 
 
 
-```{r, fig.height=6, fig.width=6}
+```{r, fig.align='center', fig.height=7, fig.width=7}
 chromoqc(chrom)
+```
+
+
+We can compare this to the raw data by resetting the mask.
+
+
+
+```{r, fig.align='center', fig.height=7, fig.width=7}
+chrom@var.info$mask <- TRUE
+chromoqc(chrom)
+chrom <- masker(chrom, min_QUAL = 1, min_DP = 300, max_DP = 700, min_MQ = 59.9,  max_MQ = 60.1)
+```
+
+(We'll reimplement our mask after we're done with the masker function.)
+By applying our mask we retain `r sum(chrom@var.info$mask)` of the `r length(chrom@var.info$mask)` varants, or `r round(100*sum(chrom@var.info$mask)/length(chrom@var.info$mask), digits=1)` percent of the variants.
+This is a rather severe mask in terms of attrition rate.
+However, if we have effectively identified the high quality fraction of the variants, it may improve our downstream analyses.
+
+
+
+We can also zoom in on a feature of interest by using the `xlim` parameter.
+
+
+```{r, fig.align='center', fig.height=7, fig.width=7}
+
 chromoqc(chrom, xlim=c(5e+05, 6e+05))
 ```
 
 
-This example uses the *Phytophthora infestans* mitochondrial genome.
-This mitochondrion has a notable A/T bias, which is in agreement with published accounts.
-
-
-Variants of this function, which are actually all wrappers for the funciton **chromo()**, create similar plots.
+Or use the annotation file to zoom in on a gene.
 
 
 
-```{r, fig.height=6, fig.width=6}
-chromohwe(chrom, dot.alpha='ff')
+```{r, fig.align='center', fig.height=7, fig.width=7}
+record <- 130
+buffer=1e3
+chromoqc(chrom, xlim=c( gff[record,4]-buffer, gff[record,5]+buffer ))
 ```
 
 
-Mitochondria are haploid, so they are expected to violate assumptions of Hardy-Weinberg equilibrium.  
-Variants inferred to be in equilibrium would have been plotted in green.
-Here, all variants are plotted in red to indicate that they significantly deviate from Hardy-Weinberg equilibrium.
 
 
+Variants of this function, which are actually all wrappers for the function **chromo()**, create similar plots.
 The user can also include their own data to plot.
 Here we simulate data as an example.
 
 
 
-```{r, fig.height=6, fig.width=6}
+```{r, fig.align='center', fig.height=7, fig.width=7}
 set.seed(10)
 x1 <- as.integer(runif(n=20, min=1, max=chrom@len))
 y1 <- runif(n=length(x1), min=1, max=100)
@@ -286,7 +309,7 @@ We can then visualize this data with a heatmap.
 
 
 
-```{r, fig.height=6, fig.width=6}
+```{r, fig.align='center', fig.height=7, fig.width=7}
 heatmap.bp(gq)
 ```
 
@@ -300,8 +323,6 @@ For example, they may be excluded from subsequent analyses.
 Or they may be resequenced.
 Or they may be omitted from variant discovery steps but included in variant calling steps.
 It is up to the investigator to determine what is low quality and how to mitigate it.
-There is also a region at the bottom of the plot where most samples appear to have low genotype quality.
-A researcher may consider omitting this region from further analysis if they deem this quality to be unacceptable.
 In order to remove samples, the data may be subset using the square brackets `[]`.
 In order to omit variants, their mask elements should be set to FALSE.
 
@@ -319,17 +340,16 @@ gqw[1:6,1:8]
 We can take z-scores to help us determine what values may be exceptional.
 
 
-```{r}
+```{r, fig.align='center'}
 gqwz <- z.score(gqw)
-hist(gqwz[,1])
+hist(gqwz[,1], col=2)
 ```
 
 
 And create another heatmap.
 
 
-
-```{r, fig.height=6, fig.width=6}
+```{r, fig.align='center', fig.height=7, fig.width=7}
 heatmap.bp(gqwz)
 ```
 

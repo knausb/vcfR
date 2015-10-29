@@ -15,12 +15,14 @@ An straightforward path is to create a vcf.gz format file.
 One downside to this path is that it creates an intermediate file.
 When working on large datasets this intermediate file may be rather large.
 If your path remains in R it may be preferable to convert your vcfR objects to objects defined by other packages.
-Here we explore examples of these paths
+Here we explore examples of these paths.
 
 
 ## Data import
 
-As in other vignettes, we begin by loading the example data.
+
+We begin by loading the example data from the pinfsc50 package.
+
 
 ```{r}
 library(vcfR)
@@ -34,15 +36,12 @@ vcf <- read.vcf(vcf_file, verbose = FALSE)
 ## Creating *.vcf.gz format files.
 
 
-The function `write.vcf` can be used to create vcf.gz format files (gzipped vcf files) from vcfR objects (either objects of class vcfR or Chrom).
+The function `write.vcf` can be used to create *.vcf.gz format files (gzipped vcf files) from vcfR objects (either objects of class vcfR or chromR).
 
 
-```{r}
-original_dir <- getwd()
-test_dir <- tempdir()
+```{r, eval=FALSE}
 write.vcf(vcf, "test.vcf.gz")
 unlink("test.vcf.gz") # Clean up after our example is done.
-setwd(original_dir)
 ```
 
 
@@ -53,15 +52,17 @@ We can create genind objects with the function vcfR2genind.
 
 
 ```{r genind, eval=FALSE}
-#my_genind <- vcfR2genind(vcf)
-#my_genind
-#adegenet::genind2df(my_genind, sep="/")[1:6, 1:8]
-#class(my_genind)
+my_genind <- vcfR2genind(vcf)
+class(my_genind)
 ```
 
 
 The function vcfR2genind calls extract.gt to create a matrix of genotypes.
 This matrix is converted into a genind object with the adegenet function df2genind.
+
+
+Currently, this function does not scale well to large quantities of data (adegenet was produced prior to high throughput sequencing).
+This appears to be due to the function adegenet::df2genind and will hopefully be addressed in the future.
 
 
 ## Creating genclone objects
@@ -72,9 +73,9 @@ Once a genind object has been created it is fairly straight forward to create a 
 
 
 ```{r, eval=FALSE}
-#my_genclone <- poppr::as.genclone(my_genind)
-#my_genclone
-#class(my_genclone)
+my_genclone <- poppr::as.genclone(my_genind)
+my_genclone
+class(my_genclone)
 ```
 
 
@@ -93,7 +94,7 @@ Converting vcf data to sequence data presents a challenge in that sequence data 
 This means that these objects can easily occupy large amounts of memory, and may exceed the physical memory when long sequences with many samples are included.
 In order to accomodate these issues, we've taken an approach which attempts to create DNAbin objects from portions of a chomosome, such as a gene.
 This means we'll need a little more information than we've needed for other conversions.
-First, we'll need to locate and read in our vcf file, a reference sequence and a gff file which has the coordinates for a gene.
+First, we'll need to locate and read in our vcf file, a reference sequence and a gff file that has the coordinates for a gene.
 
 
 ```{r}
@@ -116,43 +117,50 @@ gff <- read.table(gff_file, sep="\t", quote = "")
 We know from other examples that there is a variable region at around 150-175 kbp.
 We should be able to create a DNAbin object for this region.
 There are two ways we can go about this.
+
+
+We can use information from the annotation file (gff) to extract a gene.
+(Here we specifically select one which has variants.)
 We can use IUPAC ambiguity codes to convert heterozygous sites into a one character encoding.
 This results in a single sequence per individual.
 Alternatively, we can create two haplotypes for each diploid sample, resulting in two sequences per individual.
 
 
-```{r}
-#my_dnabin1 <- vcfR2DNAbin(vcf, gt.split="/", ref.seq=dna[,150e3:175e3], start.pos=150e3)
-#my_dnabin1
-#my_dnabin2 <- vcfR2DNAbin(vcf, gt.split="/", extract.haps = TRUE, ref.seq=dna[,150e3:175e3], start.pos=150e3, consensus=FALSE)
-#my_dnabin2
+```{r, tidy=TRUE}
+record <- 130
+my_dnabin1 <- vcfR2DNAbin(vcf, gt.split="|", ref.seq=dna[,gff[record,4]:gff[record,5]], start.pos=gff[record,4], verbose=FALSE)
+my_dnabin1
 ```
+
 
 
 ```{r, fig.align='center', fig.width=7, fig.height=5}
 par(mar=c(5,8,4,2))
-#ape::image.DNAbin(my_dnabin1[,ape::seg.sites(my_dnabin1)])
+ape::image.DNAbin(my_dnabin1[,ape::seg.sites(my_dnabin1)])
 par(mar=c(5,4,4,2))
 ```
 
 
-While the DNAbin object can include the ambiguity codes, not all downstream software can.
 Here, the ambiguous sites are visualized as 'other.'
+While the DNAbin object can include the ambiguity codes, not all downstream software handle these codes well.
+So the user should excercise prudence when using this option.
 
+
+If we instead create two haplotypes for each diploid sample, we result in a DNAbin object which includes only A, C,  G and T.
+This typically requires the data to be phased.
+In vcf files this is typically indicated by delimiting the alleles of the genotype with a pipe ('|') for phased data, while unphased data are delimited with a forward slash ('/').
+
+
+```{r, tidy=TRUE}
+my_dnabin1 <- vcfR2DNAbin(vcf, consensus=FALSE, extract.haps=TRUE, gt.split="|", ref.seq=dna[,gff[record,4]:gff[record,5]], start.pos=gff[record,4], verbose=FALSE)
+```
 
 
 ```{r, fig.align='center', fig.width=7, fig.height=7}
 par(mar=c(5,8,4,2))
-#ape::image.DNAbin(my_dnabin2[,ape::seg.sites(my_dnabin2)])
+ape::image.DNAbin(my_dnabin1[,ape::seg.sites(my_dnabin1)])
 par(mar=c(5,4,4,2))
 ```
-
-
-By creating two haplotypes for each diploid sample, we result in a DNAbin object which includes only A, C,  G and T.
-However, we've cheated here to make an example.
-By using gt.split="/" we have used unphased data.
-This is unrecommended for real data.
-For real data I would suggest phasing your data (e.g., using beagle4) which will result in phased genotypes (which will be delimited with a "|").
 
 
 
@@ -162,7 +170,7 @@ The package **pegas** uses objects of class loci.
 We can use the function vcfR2loci to convert our vcfR object to one of class loci.
 
 
-```{ r vcfR2loci }
+```{r vcfR2loci}
 system.time( my_loci <- vcfR2loci(vcf) )
 class(my_loci)
 ```

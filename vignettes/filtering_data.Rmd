@@ -84,7 +84,11 @@ We can test if these are indeed the same.
 
 ```{r, fig.height=7, fig.width=7}
 dp <- extract.gt(chrom, element="DP", as.numeric=TRUE)
+gq <- extract.gt(chrom, element="GQ", as.numeric=TRUE)
 plot(rowSums(dp), chrom@var.info$DP)
+plot(rowSums(dp), rowSums(gq))
+
+
 abline(a=0, b=1)
 ```
 

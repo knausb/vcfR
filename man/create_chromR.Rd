@@ -10,12 +10,13 @@
 \alias{getQUAL}
 \alias{seq2chromR}
 \alias{vcf2chromR}
+\alias{vcfR2chromR}
 \title{Create chromR object}
 \usage{
 create.chromR(name = "CHROM1", vcf, seq = NULL, ann = NULL,
   verbose = TRUE)
 
-vcf2chromR(x, vcf)
+vcfR2chromR(x, vcf)
 
 seq2chromR(x, seq = NULL)
 

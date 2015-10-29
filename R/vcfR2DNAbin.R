@@ -147,7 +147,7 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
     message( paste("Ploidy detected to be:", ploid) )
   }
   
-  if( length(ploid) == 1 ){
+  if( ploid == 1 ){
     # Haploid case
     x[is.na(x)] <- 'n'
     if( nrow(x) > 1 ){
@@ -156,7 +156,7 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
       x <- apply(x, MARGIN=2, tolower)
       x <- matrix(x, nrow=1, dimnames = list( NULL, names(x)))
     }
-  } else if ( length(ploid) == 2 & consensus == TRUE ){
+  } else if ( ploid == 2 & consensus == TRUE ){
     # Diploid case
     x <- alleles2consensus( x, sep = gt.split, NA_to_n = TRUE )
     x <- apply(x, MARGIN=2, tolower)
