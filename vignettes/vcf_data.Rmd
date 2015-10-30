@@ -25,7 +25,7 @@ The information in the meta region defines the abbreviations used elsewhere in t
 Below the meta region, the data are tabular.
 The first eight columns of this table contain information about each variant.
 These data are fixed, or the same, over all samples.
-Begining at column ten is a column for every sample.
+Beginning at column ten is a column for every sample.
 The values in these columns are information for each sample and each variant.
 Stated differently, they contain information for each genotype.
 
@@ -47,8 +47,8 @@ par(mar=c(5,4,4,2))
 
 
 The vcf file definition is flexible.
-This means that their are slots for certain data, but any particular software which creates a vcf file does not necessarily use them all.
-Similarly, some fields are delimited so that they can be extended to include more information.
+This means that there are slots for certain data, but any particular software which creates a vcf file does not necessarily use them all.
+Similarly, authors have the opportunity to include new forms of data, forms which may not have been foreseen by the authors of the vcf definition.
 The result is that all vcf files do not contain the same information.
 
 
@@ -58,9 +58,6 @@ For this vignette, we'll use the example data provided with vcfR.
 ```{r}
 library(vcfR)
 data(vcfR_example)
-#vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
-vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
-vcf <- read.vcf(vcf_file, verbose = FALSE)
 ```
 
 
@@ -74,7 +71,7 @@ The example which comes with vcfR is shown below.
 
 
 ```{r, echo=FALSE}
-vcf@meta[1:7]
+strwrap(vcf@meta[1:7])
 ```
 
 
@@ -86,11 +83,10 @@ This line is required.
 The second line specifies the software which created the vcf file.
 This is not required, so not all vcf files include it.
 When they do, the file becomes self documenting.
-Although, note that the alignment software is not included here because it was use upstream of the vcf creation (aligners typically create \*.SAM or \*.BAM format files).
+Although, note that the alignment software is not included here because it was used upstream of the vcf creation (aligners typically create \*.SAM or \*.BAM format files).
 So the entire pipeline does not get documented.
 Some vcf files may contain a line for every chromosome (or supercontig or contig depending on your genome), so they may become rather long.
-Here, the remaining lines contain INFO and FORMAT specifications which define abbreviations used elsewhere in the file.
-
+Here, the remaining lines contain INFO and FORMAT specifications which define abbreviations used in the fix and gt portioins of the file.
 
 
 
@@ -100,7 +96,7 @@ Here, the remaining lines contain INFO and FORMAT specifications which define ab
 The first eight columns contain the fixed region and are titled CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO.
 This is per variant information which is 'fixed', or the same, over all samples.
 The first two columns indicate the location of the variant by chromosome and position within that chromosome.
-Here, the ID field has not been used, so the missing data character ('.') is used.
+Here, the ID field has not been used, so it consists of missing data.
 The REF and ALT columns indicate the reference and alternate allelic states.
 When multiple alternate allelic states are present they are delimited with commas.
 The QUAL column attempts to summarize the quality of each variant over all samples.
@@ -114,11 +110,22 @@ vcf@fix[1:6, 1:7]
 
 
 The seventh column, titled INFO, is a semicolon delimited list of information.
-Each abbreviation should be defined in the meta section.
+It can be rather long and cumbersome.
+Each abbreviation in the INFO column should be defined in the meta section.
 For example, line three from the meta region tells us that 'DP' is the raw read depth.
-The first value in our INFO example indicates that DP equals 7,405.
-This tell us that this variant was sequenced 7,405 times over all our samples.
+We can validate this by querying the meta portion.
 
+
+```{r}
+strwrap(grep('DP', vcf@meta, value = TRUE))
+```
+
+We see that 'DP' is defined both for the INFO column and for the GT portion.
+
+
+Returning to the INFO column, we see that the value of DP equals 197.
+This tell us that this variant was sequenced 197 times over all our samples.
+A number of other parameters are also included in this column which be explored by querying their definition in the meta region.
 
 
 ```{r, echo=FALSE}
