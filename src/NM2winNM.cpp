@@ -128,11 +128,16 @@ double vector_sum(std::vector<double> x){
 
 double vector_mean(std::vector<double> x){
   double mean = 0;
+  double count = 0;
   int i = 0;
-  for(i=0; i<x.size(); i++){
-    mean = mean + x[i];
+  for( i=0; i<x.size(); i++ ){
+    if( x[i] != NA_REAL | x[i] != NA_INTEGER ){
+      mean = mean + x[i];
+      count++;
+    }
   }
-  mean = mean / x.size();
+//  mean = mean / x.size();
+  mean = mean / count;
   return mean;
 }
 
@@ -173,15 +178,6 @@ NumericMatrix windowize_NM(Rcpp::NumericMatrix x, Rcpp::NumericVector pos,
   int window_num = 0;
   int i; // Variant counter
   int j; // Sample counter
-
-//  std::string fname = Rcpp::as<std::string>(centrality);
-
-//  if(summary == "mean"){
-//    Rcout << "Summary set to mean\n";
-//  }
-
-//Rcout << "Made it.\n";
-//  for(i=0; i<cnames.size(); i++){Rcout << cnames(i) << "\n";}
 
   // Manage the first variant.
   while(pos(0) > ends(window_num)){
