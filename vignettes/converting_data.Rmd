@@ -11,7 +11,7 @@ vignette: >
 
 
 Once we have finished examining our data in vcfR we'll want to format it so that other softwares can utilize it.
-An straightforward path is to create a vcf.gz format file.
+A straightforward path is to create a *.vcf.gz format file.
 One downside to this path is that it creates an intermediate file.
 When working on large datasets this intermediate file may be rather large.
 If your path remains in R it may be preferable to convert your vcfR objects to objects defined by other packages.
@@ -26,7 +26,6 @@ We begin by loading the example data from the pinfsc50 package.
 
 ```{r}
 library(vcfR)
-#vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
 vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
 vcf <- read.vcf(vcf_file, verbose = FALSE)
 ```
@@ -36,7 +35,7 @@ vcf <- read.vcf(vcf_file, verbose = FALSE)
 ## Creating *.vcf.gz format files.
 
 
-The function `write.vcf` can be used to create *.vcf.gz format files (gzipped vcf files) from vcfR objects (either objects of class vcfR or chromR).
+The function **write.vcf()** can be used to create *.vcf.gz format files (gzipped vcf files) from vcfR objects (either objects of class vcfR or chromR).
 
 
 ```{r, eval=FALSE}
@@ -48,7 +47,7 @@ unlink("test.vcf.gz") # Clean up after our example is done.
 ## Creating genind objects
 
 The packages **adegenet** and **poppr** use objects of class genind.
-We can create genind objects with the function vcfR2genind.
+We can create genind objects with the function **vcfR2genind()**.
 
 
 ```{r genind, eval=FALSE}
@@ -83,7 +82,12 @@ class(my_genclone)
 
 ## Creating genlight objects
 
-To do.
+THe genlight object is used by adegenet.
+It was designed specifically to handle high-throughput genotype data.
+At present it appears to only support two alleles at a locus.
+This may be appropriate for closely related populations.
+Variant callers such as FreeBayes and the GATK's haplotype caller currently support more than two alleles per locus, making the genlight object a suboptimal container.
+I presently I have no plans to support genlight objects until they support all the data I expect from a vcf file.
 
 
 
@@ -114,13 +118,9 @@ gff <- read.table(gff_file, sep="\t", quote = "")
 ```
 
 
-We know from other examples that there is a variable region at around 150-175 kbp.
-We should be able to create a DNAbin object for this region.
-There are two ways we can go about this.
-
 
 We can use information from the annotation file (gff) to extract a gene.
-(Here we specifically select one which has variants.)
+Here we have specifically chosen one which has variants.
 We can use IUPAC ambiguity codes to convert heterozygous sites into a one character encoding.
 This results in a single sequence per individual.
 Alternatively, we can create two haplotypes for each diploid sample, resulting in two sequences per individual.
@@ -163,6 +163,15 @@ par(mar=c(5,4,4,2))
 ```
 
 
+Once we have a DNAbin object, it can be analysed in a number of R packages, such as ape and pegas.
+We can also output a fasta file for other softwares to use.
+
+```{r, eval=FALSE}
+write.dna( my_dnabin1, file = 'my_gene.fasta', format = 'fasta' )
+unlink('my_gene.fasta') # Clean up after we're done
+```
+
+
 
 ## Creating loci objects
 
@@ -176,7 +185,8 @@ class(my_loci)
 ```
 
 
-
-
+This takes a noticable amount of time to execute.
+But appears to work satisfactorily.
+And we can now proceed to downstream analyses.
 
 

@@ -61,7 +61,7 @@ We can use 'grep' to search the meta slot to file its definitioon.
 
 
 ```{r}
-grep('DP', vcf@meta, value = TRUE)
+strwrap(grep('DP', vcf@meta, value = TRUE))
 ```
 
 

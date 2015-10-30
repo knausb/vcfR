@@ -10,7 +10,7 @@ vignette: >
 ---
 
 
-The output of variant calling pipelines result in files containing these called variants.
+The output of variant calling pipelines result in files containing called variants.
 Many of these pipelines recommend further filtering of this data to ensure that only high quality variants are included in analyses.
 In this vignette I discuss strategies to focus on the high quality fraction of these variants.
 
@@ -21,21 +21,17 @@ As in other vignettes, we begin by loading the example data.
 
 ```{r}
 library(vcfR)
-#vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
-#seq_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
-#gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
 
 vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
 dna_file <- system.file("extdata", "pinf_sc50.fasta", package = "pinfsc50")
 gff_file <- system.file("extdata", "pinf_sc50.gff", package = "pinfsc50")
 
-
 vcf <- read.vcf(vcf_file, verbose = FALSE)
 dna <- ape::read.dna(dna_file, format = "fasta")
-gff <- read.table(gff_file, sep="\t")
+gff <- read.table(gff_file, sep="\t", quote="")
 
-chrom <- create.chromR(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=TRUE)
-chrom <- masker(chrom, min_DP = 300, max_DP = 700)
+chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, ann=gff, verbose=TRUE)
+chrom <- masker(chrom, min_QUAL = 1, min_DP = 300, max_DP = 700, min_MQ = 59.9,  max_MQ = 60.1)
 chrom <- proc.chromR(chrom, verbose = TRUE)
 
 ```
@@ -54,9 +50,9 @@ When we've settled on a set of manipulations which we like we can then use this 
 ## Using masker()
 
 
-The function masker() separates variants based on several thresholds.
+The function masker() censors variants based on several thresholds.
 A number of summaries regarding variant quality are reported in vcf files.
-These summaries may be different depended in the software used to create them, as well as what options may have been used.
+These summaries may be differ depending on what software was used to create them, as well as what options may have been used.
 We can use the head() function to see what sort of information is contained in our data.
 
 
@@ -70,8 +66,8 @@ From the head() output we can see that the QUAL field is a defined column of the
 Because it is a part of the vcf file definition, it is not documented in the meta region.
 
 
-```{r}
-grep("DP", chrom@vcf@meta, value=T)
+```{r, tidy=TRUE}
+strwrap(grep("DP", chrom@vcf@meta, value=T))
 ```
 
 
@@ -89,23 +85,42 @@ abline(a=0, b=1)
 ```
 
 
-Because the dots do not line up on the line of unity, we cansee that they are actually different.
-We can remind ourselves what these values mean by querying the meta region.
+Because the dots do not line up on the line of unity, we can see that they are actually different.
+We can remind ourselves what these values mean by querying the meta region (see above).
+
+
+Some parameters reported in the vcf file may seem straight forward.
+For example, DP is the sequence depth at each variant.
+Some parameters may seem a little more ambiguous.
+An example of the later is genotype quality (GQ).
+Everyone want their genotype qualities to be high.
+But what exactly are we measuring with this parameter?
+We can explore the relationship among parameters by plotting them.
 
 
 ```{r, fig.height=7, fig.width=7}
 gq <- extract.gt(chrom, element="GQ", as.numeric=TRUE)
-plot(rowSums(dp), rowSums(gq))
+plot(rowSums(dp), rowSums(gq), pch=20, col="#0000ff22")
+#plot(rowSums(dp[chrom@var.info$mask,]), rowSums(gq[chrom@var.info$mask,]), pch=20, col="#0000ff22")
 abline(a=0, b=1)
+abline(v=700, lty=2)
 ```
+
+
+Here we see there is a fairly linear relationship among genotype quality and depth.
+The slope of this relationship is greater than one, as seen by the data dots above the black line of unity.
+This relationship continues to a genotype quality of around 1500, where the relationship degrades.
+If we recall from our implemetation of our mask (above) we filtered the data at a maximum depth of 700 because this appeared to be where our base ploid was.
+A dashed vertical line marks a depth of 700.
+This suggests that filtering on depth helps select the fraction of variants where there is a strong relationship among GQ and DP.
+
 
 
 
 
 ```{r}
-
-grep("MQ", chrom@vcf@meta, value=T)
-grep("DP,", chrom@vcf@meta, value=T)
+strwrap(grep("MQ", chrom@vcf@meta, value=T))
+strwrap(grep("DP,", chrom@vcf@meta, value=T))
 ```
 
 

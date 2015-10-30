@@ -125,7 +125,7 @@ setMethod(
     print('', quote=FALSE)
             #1234567890123456789012345678901234567890
     print("*****      Vcf mask (chromR)        *****")
-    print(paste("Percent unmasked:", 100*(sum(x@var.info$mask)/length(x@var.info$mask))))
+    print( paste("Percent unmasked:", round(100*(sum(x@var.info$mask)/length(x@var.info$mask)), digits=2 ) ) )
     print('', quote=FALSE)
             #1234567890123456789012345678901234567890
     print("*****      End head (chromR)        *****")
