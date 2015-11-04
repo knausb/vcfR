@@ -82,12 +82,18 @@ class(my_genclone)
 
 ## Creating genlight objects
 
-THe genlight object is used by adegenet.
+The genlight object is used by adegenet.
 It was designed specifically to handle high-throughput genotype data.
 At present it appears to only support two alleles at a locus.
-This may be appropriate for closely related populations.
 Variant callers such as FreeBayes and the GATK's haplotype caller currently support more than two alleles per locus, making the genlight object a suboptimal container.
-I presently I have no plans to support genlight objects until they support all the data I expect from a vcf file.
+The function vcfR2genlight will throw a warning (when verbose = TRUE) if it encounters loci with more than two alleles.
+Loci with more than two alleles will be omitted from the genlight object.
+
+
+```{r}
+x <- vcfR2genlight(vcf)
+```
+
 
 
 

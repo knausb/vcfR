@@ -12,7 +12,7 @@ is.polymorphic(x, na.omit = FALSE)
 is.biallelic(x)
 }
 \arguments{
-\item{x}{an object of class}
+\item{x}{an object of class vcfR}
 
 \item{na.omit}{logical to omit missing data}
 }

@@ -8,7 +8,7 @@
 #' 
 #' @aliases is.polymorphic
 #' 
-#' @param x an object of class
+#' @param x an object of class vcfR
 #' @param na.omit logical to omit missing data
 #' 
 #' @details 

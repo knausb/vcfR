@@ -3,12 +3,15 @@
 \name{Format conversion}
 \alias{Format conversion}
 \alias{vcfR2genind}
+\alias{vcfR2genlight}
 \alias{vcfR2loci}
 \title{Convert vcfR objects to other formats}
 \usage{
 vcfR2genind(x, sep = "[|/]")
 
 vcfR2loci(x)
+
+vcfR2genlight(x)
 }
 \arguments{
 \item{x}{an object of class chromR or vcfR}
