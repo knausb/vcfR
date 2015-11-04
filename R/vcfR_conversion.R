@@ -87,14 +87,20 @@ vcfR2genlight <- function(x){
     msg <- paste("Found", sum(!bi), "loci with more than two alleles.")
     msg <- c(msg, "\n", paste("Objects of class genlight only support loci with two alleles."))
     msg <- c(msg, "\n", paste(sum(!bi), 'loci will be omitted from the genlight object.'))
-
     warning(msg)
-
     x <- x[bi,]
   }
   
   x <- extract.gt(x)
-  dim(x)
+  x[x=="0|0"] <- 0
+  x[x=="0|1"] <- 1
+  x[x=="1|0"] <- 1
+  x[x=="1|1"] <- 2
+  x[x=="0/0"] <- 0
+  x[x=="0/1"] <- 1
+  x[x=="1/1"] <- 2
+
+  #  dim(x)
   x <- adegenet::as.genlight(t(x))
   x
 }
