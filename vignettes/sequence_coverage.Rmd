@@ -113,11 +113,13 @@ if( require(reshape2) & require(ggplot2) ){
   dpf <- melt(dp, varnames=c('Index', 'Sample'))
   names(dpf)[3] <- "Depth"
   dpf <- dpf[!is.na(dpf$Depth),]
-  p <- ggplot(dpf, aes(x=Sample, y=Depth)) + geom_violin(fill="#C0C0C0")
+  p <- ggplot(dpf, aes(x=Sample, y=Depth)) + geom_violin(fill="#C0C0C0", adjust=1.0,
+                                                         scale = "count", trim=TRUE)
   p <- p + theme_bw()
   p <- p + theme(axis.title.x = element_blank(), 
                  axis.text.x = element_text(angle = 60, hjust = 1))
   p <- p + stat_summary(fun.data=mean_sdl, mult=1, geom="pointrange", color="black")
+  p <- p + coord_trans(y="log2")
   p
 } else {
   message("The packages reshape2 and ggplot2 are required for this example but do not appear
