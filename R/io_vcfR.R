@@ -78,8 +78,8 @@ read.vcf <- function(file, limit=1e7, verbose = TRUE){
   vcf@meta <- .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', file, stats, as.numeric(verbose))
   body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', file, stats, as.numeric(verbose))
 
-  vcf@fix <- body[,1:8]
-  vcf@gt <- body[,9:ncol(body)]
+  vcf@fix <- body[ ,1:8, drop=FALSE ]
+  vcf@gt <- body[ ,9:ncol(body), drop=FALSE ]
   
   return(vcf)
 }
