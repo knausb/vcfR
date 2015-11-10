@@ -143,9 +143,9 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
   # If extract.haps was set to TRUE, then our data is effectively haploid now.
   ploid <- length(unlist( strsplit( x[!is.na(x)][1], split=gt.split, fixed=TRUE ) ))
   
-  if( verbose == TRUE ){
-    message( paste("Ploidy detected to be:", ploid) )
-  }
+#  if( verbose == TRUE ){
+#    message( paste("Ploidy detected to be:", ploid) )
+#  }
   
   if( ploid == 1 ){
     # Haploid case
