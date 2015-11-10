@@ -116,9 +116,10 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
     stop("extract.indels == FALSE is not currently implemented.")
   }
   
-  # If we removed all variants, return NA.
-  if( nrow(x@fix) < 1 ){
-    return( NA )
+  # If we removed all variants, return.
+  if( nrow(x@fix) < 1 & is.null(ref.seq) ){
+    return( x )
+#    return( NA )
   }
   
   # Save POS in case we need it.
@@ -126,18 +127,28 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = TRUE,
   
   if( extract.haps == FALSE ){
     x <- extract.gt( x, return.alleles = TRUE, allele.sep = gt.split )
-  } else if( extract.haps == TRUE ){
+  } else if( extract.haps == TRUE & nrow(x@gt) > 0 ){
 #    x <- extract_haps(x, gt_split=gt.split, verbose = verbose)
     x <- extract.haps( x, gt.split = gt.split, verbose = verbose )
+  } else if( extract.haps == TRUE & nrow(x@gt) == 0 ){
+#    ref.seq <- as.matrix(ref.seq)
+    out.seq <- matrix( as.character(ref.seq),
+                       nrow = dim(ref.seq)[2],
+                       ncol = ncol(x) * 2,
+                       byrow = FALSE
+    )
+    colnames(out.seq) <- paste(rep(colnames(x@gt)[-1], each=2), rep(c(0,1), times=ncol(x@gt[,-1]), sep="_"))
+    out.seq <- ape::as.DNAbin(t(out.seq))
+    return( out.seq )
   } else {
     stop( "Invalid specification of extract.haps.\nShould be a logical." )
   }
   
   # If we have no variants (rows) return NA.
-  if( nrow(x) < 1 )
-  {
-    return( NA )
-  }
+#  if( nrow(x) < 1 )
+#  {
+#    return( NA )
+#  }
 
   # Strategies to convert genotypes (with a delimiter) to nucleotides.
   # If extract.haps was set to TRUE, then our data is effectively haploid now.
