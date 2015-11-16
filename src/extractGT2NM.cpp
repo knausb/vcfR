@@ -206,7 +206,8 @@ std::string gt2alleles( Rcpp::String gt, std::vector< std::string > allele_vecto
   {
     for( int i=1; i<gt_vector.size(); i++ )
     {
-      allele_number = stoi(gt_vector[i]);
+//      allele_number = stoi(gt_vector[i]);
+      if ( ! (std::istringstream(gt_vector[i]) >> allele_number) ) allele_number = 0;
       gt3.append( sep );
       gt3.append( allele_vector[ allele_number ] );
     }
