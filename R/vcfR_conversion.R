@@ -91,6 +91,10 @@ vcfR2genlight <- function(x){
     x <- x[bi,]
   }
   
+  CHROM <- x@fix[,'CHROM']
+  POS   <- x@fix[,'POS']
+  ID    <- x@fix[,'ID']
+  
   x <- extract.gt(x)
   x[x=="0|0"] <- 0
   x[x=="0|1"] <- 1
@@ -102,6 +106,10 @@ vcfR2genlight <- function(x){
 
   #  dim(x)
   x <- adegenet::as.genlight(t(x))
+  adegenet::chromosome(x) <- CHROM
+  adegenet::position(x)   <- POS
+  adegenet::locNames(x)   <- ID
+  
   x
 }
 
