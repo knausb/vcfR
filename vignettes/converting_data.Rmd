@@ -134,15 +134,15 @@ Alternatively, we can create two haplotypes for each diploid sample, resulting i
 
 ```{r, tidy=TRUE}
 record <- 130
-#my_dnabin1 <- vcfR2DNAbin(vcf, gt.split="|", ref.seq=dna[,gff[record,4]:gff[record,5]], start.pos=gff[record,4], verbose=FALSE)
-#my_dnabin1
+my_dnabin1 <- vcfR2DNAbin(vcf, gt.split="|", ref.seq=dna[,gff[record,4]:gff[record,5]], start.pos=gff[record,4], verbose=FALSE)
+my_dnabin1
 ```
 
 
 
-```{r, fig.align='center', fig.width=7, fig.height=5}
+```{r, fig.align='center', fig.width=7, fig.height=7}
 par(mar=c(5,8,4,2))
-#ape::image.DNAbin(my_dnabin1[,ape::seg.sites(my_dnabin1)])
+ape::image.DNAbin(my_dnabin1[,ape::seg.sites(my_dnabin1)])
 par(mar=c(5,4,4,2))
 ```
 

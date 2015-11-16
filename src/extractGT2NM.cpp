@@ -195,9 +195,11 @@ std::string gt2alleles( Rcpp::String gt, std::vector< std::string > allele_vecto
 //  Rcpp::Rcout << "Made it.!\n";
 //  Rcpp::Rcout << "  gt_vector[0]" << gt_vector[0] << "\n";
 
-  
-  int allele_number = std::stoi( gt_vector[0] );
-  
+  // stoi is not supported in MinGW so should not be used.  
+//  int allele_number = std::stoi( gt_vector[0] );
+  int allele_number;
+  if ( ! (std::istringstream(gt_vector[0]) >> allele_number) ) allele_number = 0;
+
   std::string gt3 = allele_vector[ allele_number ];
   
   if( gt_vector.size() > 1 )
