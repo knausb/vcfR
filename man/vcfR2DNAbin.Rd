@@ -4,9 +4,9 @@
 \alias{vcfR2DNAbin}
 \title{Convert vcfR to DNAbin}
 \usage{
-vcfR2DNAbin(x, extract.indels = TRUE, consensus = TRUE,
-  extract.haps = FALSE, gt.split = "|", ref.seq = NULL,
-  start.pos = NULL, verbose = TRUE)
+vcfR2DNAbin(x, extract.indels = TRUE, consensus = FALSE,
+  extract.haps = TRUE, gt.split = "|", ref.seq = NULL, start.pos = NULL,
+  verbose = TRUE)
 }
 \arguments{
 \item{x}{an object of class chromR or vcfR}
@@ -19,7 +19,7 @@ vcfR2DNAbin(x, extract.indels = TRUE, consensus = TRUE,
 
 \item{gt.split}{character to delimit alleles within genotypes}
 
-\item{ref.seq}{reference sequence for the region being converted}
+\item{ref.seq}{reference sequence (DNAbin) for the region being converted}
 
 \item{start.pos}{chromosomal position for the start of the ref.seq}
 

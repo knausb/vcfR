@@ -18,6 +18,9 @@
 #' For example, if a sample is removed it may result in a site becoming invariant.
 #' This function queries the sites in a vcfR object and returns a vector of logicals (TRUE/FALSE) to indicate if they are actually variable.
 #' 
+#' @seealso
+#' \code{\link{extract.gt}}
+#' 
 #' 
 #' @export
 is.polymorphic <- function(x, na.omit=FALSE){

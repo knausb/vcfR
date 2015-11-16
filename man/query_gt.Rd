@@ -32,4 +32,7 @@ The function \strong{is_bialleleic} returns a vector of logicals indicating whet
 Some analyses or downstream analyses only work with biallelic loci.
 This function can help manage this.
 }
+\seealso{
+\code{\link{extract.gt}}
+}
 

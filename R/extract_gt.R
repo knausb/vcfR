@@ -32,6 +32,10 @@
 #' 
 #' Note that when 'as.numeric' is set to 'TRUE' but the data are not actually numeric, unexpected results will likely occur.
 #' 
+#' 
+#' @seealso
+#' \code{\link{is.polymorphic}}
+#' 
 # @export
 #' 
 # @rdname extract_gt
@@ -129,10 +133,28 @@ extract.haps <- function(x, mask=FALSE, gt.split="|",verbose=TRUE){
   if(length(mask) > 1){
     x <- x[mask,]
   }
-  
-  gt <- extract.gt(x, element="GT")
-  
-  haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', x@fix[,'REF'], x@fix[,'ALT'], gt, gt.split, as.numeric(verbose))
+
+  # Determine ploidy  
+#  first.gt <- gt[!is.na(gt)][1]
+  first.gt <- unlist(strsplit(x@gt[,-1][!is.na(x@gt[,-1])][1], ":"))[1]
+  ploidy <- length(unlist(strsplit(first.gt, split = gt.split, fixed = TRUE )))
+#  gt <- extract.gt(x, element="GT", return.alleles = TRUE)
+
+
+  if( nrow( x@fix ) == 0 ){
+    # No variants, return empty matrix.
+    haps <- x@gt[ 0, -1 ]
+  } else if ( ploidy == 1 ){
+    haps <- extract.gt( x )
+  } else if ( ploidy > 1 ) {
+    gt <- extract.gt( x )
+    haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', 
+                  x@fix[,'REF'], x@fix[,'ALT'], 
+                  gt, gt.split, as.numeric(verbose))
+  } else {
+    stop('Oops, we should never arrive here!')
+  }
+
   haps
 }
 

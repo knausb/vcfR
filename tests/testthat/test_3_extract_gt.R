@@ -1,5 +1,6 @@
 # extractgt devel
 
+#library(testthat)
 #detach(package:vcfR, unload=TRUE)
 library(vcfR)
 context("extract.gt functions")
@@ -15,7 +16,7 @@ data(vcfR_example)
 #dna <- ape::read.dna(seq_file, format = "fasta")
 #gff <- read.table(gff_file, sep="\t")
 
-chrom <- create.chromR(name="Supercontig_1.50", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
+chrom <- create.chromR(name="Chrom", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
 chrom <- masker(chrom, min_DP = 1e3, max_DP = 2e3)
 
 ##### ##### ##### ##### #####
@@ -28,6 +29,13 @@ gt3 <- extract.gt(chrom, element="GT", mask = c(TRUE, FALSE)) # Recycled vector
 
 pl <- extract.gt(chrom, element="PL", as.numeric=FALSE)
 gq <- extract.gt(chrom, element="GQ", as.numeric=TRUE)
+
+
+##### ##### ##### ##### #####
+#
+# extract.gt tests
+#
+##### ##### ##### ##### #####
 
 
 test_that("gt, pl ad gq are matrices",{
@@ -57,18 +65,11 @@ test_that("extract.gt extract parameter works",{
 })
 
 
-
-
-test_that("extract_indels works",{
-  # No indels in sc100
-#  indels <- extract_indels(vcf, return_indels=TRUE)
-#  expect_equal(min(nchar(indels@fix[,'REF'])), 2)
-#  expect_equal(min(nchar(indels@fix[,'ALT'])), 2)
-  
-#  indels <- extract_indels(pinf_vcf, return_indels=FALSE)
-#  expect_equal(max(nchar(indels@fix[,'REF'])), 1)
-#  expect_equal(max(nchar(indels@fix[,'ALT'])), 1)
-})
+##### ##### ##### ##### #####
+#
+# extract.haps tests
+#
+##### ##### ##### ##### #####
 
 
 test_that("extract_haps compiled code works",{
@@ -88,6 +89,28 @@ test_that("extract_haps R code works",{
   expect_equal(ncol(haps), 2 * ncol(gt))
   expect_equal(nrow(haps), nrow(gt))
 })
+
+
+
+
+##### ##### ##### ##### #####
+#
+# extract.indels tests
+#
+##### ##### ##### ##### #####
+
+
+test_that("extract.indels works",{
+  indels <- extract.indels(vcf, return.indels=TRUE)
+  expect_equal(nrow(indels@fix), 328)
+})
+
+
+##### ##### ##### ##### #####
+#
+#
+#
+##### ##### ##### ##### #####
 
 
 
@@ -119,41 +142,10 @@ test_that("extract_gt_to_CM2 compiled code works",{
 })
 
 
-
-
-#head(gt)
-#head(pl)
-#head(gq)
-
-#head(pinf_mt@vcf.gt)
-
-
-#head(pinf_vcf)
-
-
-#ncol(pinf_vcf@gt)
-
-#outm <- .Call('vcfR_extract_GT_to_DF', PACKAGE = 'vcfR', pinf_vcf@gt, element="GQ")
-#outm <- .Call('vcfR_extract_GT_to_DF', PACKAGE = 'vcfR', pinf_vcf@gt, element="GT")
-#outm <- .Call('vcfR_extract_GT_to_DF', PACKAGE = 'vcfR', pinf_vcf@gt, element="PL")
-#outm <- .Call('vcfR_extract_GT_to_DF', PACKAGE = 'vcfR', pinf_vcf@gt, element="DP")
-
-
-#outm <- .Call('vcfR_extract_GT_to_CM', PACKAGE = 'vcfR', pinf_vcf@gt, element="DP")
-
-#outm <- extract.gt2(pinf_vcf, element="DP", as.numeric=F)
-#outm <- extract.gt2(pinf_vcf, element="GQ", as.numeric=T)
-
-#head(pinf_vcf@gt)
-#head(outm)
+##### ##### ##### ##### #####
 
 
 
-#outm <- .Call('vcfR_extract_GT_to_CM', PACKAGE = 'vcfR', pinf_vcf@gt, element="GQ")
 
-#head(outm)
-
-
-#outm2 <- .Call('vcfR_CM_to_NM', PACKAGE = 'vcfR', outm)
-#head(outm2)
-
+##### ##### ##### ##### #####
+# EOF.

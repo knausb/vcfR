@@ -67,4 +67,7 @@ When the parameter return_indels is TRUE only indels will be returned.
 
 The function \strong{extract.info} is used to isolate elements from the INFO column of vcf data.
 }
+\seealso{
+\code{\link{is.polymorphic}}
+}
 
