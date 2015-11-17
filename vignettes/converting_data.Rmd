@@ -1,5 +1,5 @@
 ---
-title: "Converting vcfR to other types"
+title: "Converting vcfR to other forms"
 author: "Brian J. Knaus"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -92,6 +92,7 @@ Loci with more than two alleles will be omitted from the genlight object.
 
 ```{r}
 x <- vcfR2genlight(vcf)
+x
 ```
 
 
