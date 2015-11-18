@@ -10,26 +10,28 @@ vignette: >
 ---
 
 
-Once we have finished examining our data in vcfR we'll want to format it so that other softwares can utilize it.
+Once we have finished examining our data in vcfR, we'll want to format it so that other softwares can utilize it.
 A straightforward path is to create a *.vcf.gz format file.
 One downside to this path is that it creates an intermediate file.
 When working on large datasets this intermediate file may be rather large.
-If your path remains in R it may be preferable to convert your vcfR objects to objects defined by other packages.
+If your path remains in R, it may be preferable to convert your vcfR objects to objects defined by other packages.
 Here we explore examples of these paths.
 
 
 ## Data import
 
-
-We begin by loading the example data from the pinfsc50 package.
+We'll use two datasets to illustrate data conversion.
+The function vcfR2genind calls adegenet::df2genind, a function which predates high throughput sequencing.
+This path currently doesn't scale well to large dataset.
+So we'll begin with the vcfR example dataset.
+This dataset consists of 19 samples with 2,533 variants.
+Later we'll use the example dataset from the package pinfsc50 which includes the same samples but with 22,0331 variants.
 
 
 ```{r}
 library(vcfR)
-vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
-vcf <- read.vcf(vcf_file, verbose = FALSE)
+data(vcfR_example)
 ```
-
 
 
 ## Creating *.vcf.gz format files.
@@ -50,33 +52,37 @@ The packages **adegenet** and **poppr** use objects of class genind.
 We can create genind objects with the function **vcfR2genind()**.
 
 
-```{r genind, eval=FALSE}
+```{r genind, eval=TRUE}
 my_genind <- vcfR2genind(vcf)
 class(my_genind)
+my_genind
 ```
 
+
+The warning is because our example dataset has uninteresting locus names.
+Adegenet replaces these names with slightly more interesting, unique names.
 
 The function vcfR2genind calls extract.gt to create a matrix of genotypes.
 This matrix is converted into a genind object with the adegenet function df2genind.
 
 
 Currently, this function does not scale well to large quantities of data.
-This appears to be due  a call to the function adegenet::df2genind and will hopefully be addressed by its authors in the future (adegenet was produced prior to high throughput sequencing).
+This appears to be due  a call to the function adegenet::df2genind (this function was produced prior to high throughput sequencing).
+
 
 
 ## Creating genclone objects
 
 
 The package **poppr** uses objects of class genclone as well as genind.
-Once a genind object has been created it is fairly straight forward to create a genclone object.
+Once a genind object has been created, it is fairly straight forward to create a genclone object.
 
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 my_genclone <- poppr::as.genclone(my_genind)
-my_genclone
 class(my_genclone)
+my_genclone
 ```
-
 
 
 
@@ -84,16 +90,18 @@ class(my_genclone)
 
 The genlight object is used by adegenet and poppr.
 It was designed specifically to handle high-throughput genotype data.
-At present it appears to only support two alleles at a locus.
-Variant callers such as FreeBayes and the GATK's haplotype caller currently support more than two alleles per locus, making the genlight object a suboptimal container than the genind object.
-However, the trade off is that the genlight object is much more efficient to use than the genind object.
-These loci with more than two alleles will be omitted from the genlight object.
+At present it appears to only support two alleles at a locus, but varying levels of ploidy.
+Variant callers such as FreeBayes and the GATK's haplotype caller currently support more than two alleles per locus, so vcfR2genelight currently omits loci which include more than two alleles.
+However, the genlight object is much more efficient to use than the genind object as it was designed with high throughput sequencing in mind.
 When verbose is set to TRUE the function vcfR2genlight will throw a warning and report how many loci it has omitted.
 When verbose is set to FALSE the loci will be omitted silently.
 
 
 
 ```{r}
+vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
+vcf <- read.vcf(vcf_file, verbose = FALSE)
+
 x <- vcfR2genlight(vcf)
 x
 ```
@@ -138,10 +146,13 @@ Alternatively, we can create two haplotypes for each diploid sample, resulting i
 
 ```{r, tidy=TRUE}
 record <- 130
-my_dnabin1 <- vcfR2DNAbin(vcf, gt.split="|", ref.seq=dna[,gff[record,4]:gff[record,5]], start.pos=gff[record,4], verbose=FALSE)
+#my_dnabin1 <- vcfR2DNAbin(vcf, gt.split="|", ref.seq=dna[,gff[record,4]:gff[record,5]], start.pos=gff[record,4], verbose=FALSE)
+my_dnabin1 <- vcfR2DNAbin(vcf, consensus = TRUE, extract.haps = FALSE, gt.split="|", ref.seq=dna[,gff[record,4]:gff[record,5]], start.pos=gff[record,4], verbose=FALSE)
 my_dnabin1
 ```
 
+
+We can visualize the variable sites using tools from the package 'ape.'
 
 
 ```{r, fig.align='center', fig.width=7, fig.height=7}
@@ -162,13 +173,13 @@ In vcf files this is typically indicated by delimiting the alleles of the genoty
 
 
 ```{r, tidy=TRUE}
-#my_dnabin1 <- vcfR2DNAbin(vcf, consensus=FALSE, extract.haps=TRUE, gt.split="|", ref.seq=dna[,gff[record,4]:gff[record,5]], start.pos=gff[record,4], verbose=FALSE)
+my_dnabin1 <- vcfR2DNAbin(vcf, consensus=FALSE, extract.haps=TRUE, gt.split="|", ref.seq=dna[,gff[record,4]:gff[record,5]], start.pos=gff[record,4], verbose=FALSE)
 ```
 
 
 ```{r, fig.align='center', fig.width=7, fig.height=7}
 par(mar=c(5,8,4,2))
-#ape::image.DNAbin(my_dnabin1[,ape::seg.sites(my_dnabin1)])
+ape::image.DNAbin(my_dnabin1[,ape::seg.sites(my_dnabin1)])
 par(mar=c(5,4,4,2))
 ```
 
