@@ -60,8 +60,8 @@ The function vcfR2genind calls extract.gt to create a matrix of genotypes.
 This matrix is converted into a genind object with the adegenet function df2genind.
 
 
-Currently, this function does not scale well to large quantities of data (adegenet was produced prior to high throughput sequencing).
-This appears to be due to the function adegenet::df2genind and will hopefully be addressed in the future.
+Currently, this function does not scale well to large quantities of data.
+This appears to be due  a call to the function adegenet::df2genind and will hopefully be addressed by its authors in the future (adegenet was produced prior to high throughput sequencing).
 
 
 ## Creating genclone objects
@@ -82,12 +82,15 @@ class(my_genclone)
 
 ## Creating genlight objects
 
-The genlight object is used by adegenet.
+The genlight object is used by adegenet and poppr.
 It was designed specifically to handle high-throughput genotype data.
 At present it appears to only support two alleles at a locus.
-Variant callers such as FreeBayes and the GATK's haplotype caller currently support more than two alleles per locus, making the genlight object a suboptimal container.
-The function vcfR2genlight will throw a warning (when verbose = TRUE) if it encounters loci with more than two alleles.
-Loci with more than two alleles will be omitted from the genlight object.
+Variant callers such as FreeBayes and the GATK's haplotype caller currently support more than two alleles per locus, making the genlight object a suboptimal container than the genind object.
+However, the trade off is that the genlight object is much more efficient to use than the genind object.
+These loci with more than two alleles will be omitted from the genlight object.
+When verbose is set to TRUE the function vcfR2genlight will throw a warning and report how many loci it has omitted.
+When verbose is set to FALSE the loci will be omitted silently.
+
 
 
 ```{r}
