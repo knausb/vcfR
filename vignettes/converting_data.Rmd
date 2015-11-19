@@ -1,5 +1,5 @@
 ---
-title: "Converting vcfR to other forms"
+title: "Converting vcfR objects to other forms"
 author: "Brian J. Knaus"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -25,7 +25,7 @@ The function vcfR2genind calls adegenet::df2genind, a function which predates hi
 This path currently doesn't scale well to large dataset.
 So we'll begin with the vcfR example dataset.
 This dataset consists of 19 samples with 2,533 variants.
-Later we'll use the example dataset from the package pinfsc50 which includes the same samples but with 22,0331 variants.
+Later we'll use the example dataset from the package pinfsc50 which includes the same samples, but with 22,0331 variants.
 
 
 ```{r}
@@ -37,7 +37,8 @@ data(vcfR_example)
 ## Creating *.vcf.gz format files.
 
 
-The function **write.vcf()** can be used to create *.vcf.gz format files (gzipped vcf files) from vcfR objects (either objects of class vcfR or chromR).
+The function **write.vcf()** can be used to create *.vcf.gz format files (gzipped vcf files) from objects of class vcfR or chromR.
+These vcf format files can be used for any downstream analysis which uses vcf format files as input.
 
 
 ```{r, eval=FALSE}
@@ -48,7 +49,7 @@ unlink("test.vcf.gz") # Clean up after our example is done.
 
 ## Creating genind objects
 
-The packages **adegenet** and **poppr** use objects of class genind.
+The packages **adegenet** and **poppr** use objects of class **genind**.
 We can create genind objects with the function **vcfR2genind()**.
 
 
@@ -59,7 +60,7 @@ my_genind
 ```
 
 
-The warning is because our example dataset has uninteresting locus names.
+The warning is because our example dataset has uninteresting locus names (they're all NULL).
 Adegenet replaces these names with slightly more interesting, unique names.
 
 The function vcfR2genind calls extract.gt to create a matrix of genotypes.
@@ -88,11 +89,12 @@ my_genclone
 
 ## Creating genlight objects
 
-The genlight object is used by adegenet and poppr.
+The **genlight** object is used by **adegenet** and **poppr**.
 It was designed specifically to handle high-throughput genotype data.
 At present it appears to only support two alleles at a locus, but varying levels of ploidy.
-Variant callers such as FreeBayes and the GATK's haplotype caller currently support more than two alleles per locus, so vcfR2genelight currently omits loci which include more than two alleles.
-However, the genlight object is much more efficient to use than the genind object as it was designed with high throughput sequencing in mind.
+Variant callers such as FreeBayes and the GATK's haplotype caller currently support more than two alleles per locus.
+To address this incompatibility, vcfR2genelight omits loci which include more than two alleles.
+The benefit of the genlight object is that the genlight object is much more efficient to use than the genind object as it was designed with high throughput sequencing in mind.
 When verbose is set to TRUE the function vcfR2genlight will throw a warning and report how many loci it has omitted.
 When verbose is set to FALSE the loci will be omitted silently.
 
@@ -111,8 +113,10 @@ x
 
 ## Creating DNAbin objects
 
-The package **ape** handles sequence data using objects of class DNAbin.
-Converting vcf data to sequence data presents a challenge in that sequence data typically includes numerous invariant sites.
+The package **ape** handles sequence data using objects of class **DNAbin**.
+The vcf format only contains information on variant positions.
+Omitting invariant data provides for a more efficient representation of the data than including the invariant sites.
+Converting vcf data to sequence data presents a challenge in that these invariant sites may need to be included.
 This means that these objects can easily occupy large amounts of memory, and may exceed the physical memory when long sequences with many samples are included.
 In order to accomodate these issues, we've taken an approach which attempts to create DNAbin objects from portions of a chomosome, such as a gene.
 This means we'll need a little more information than we've needed for other conversions.
@@ -120,7 +124,6 @@ First, we'll need to locate and read in our vcf file, a reference sequence and a
 
 
 ```{r}
-
 #vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
 #dna_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
 #gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
@@ -167,7 +170,7 @@ While the DNAbin object can include the ambiguity codes, not all downstream soft
 So the user should excercise prudence when using this option.
 
 
-If we instead create two haplotypes for each diploid sample, we result in a DNAbin object which includes only A, C,  G and T.
+If we instead create two haplotypes for each diploid sample, it results in a DNAbin object which includes only unambiguous nucleotides(A, C,  G and T).
 This typically requires the data to be phased.
 In vcf files this is typically indicated by delimiting the alleles of the genotype with a pipe ('|') for phased data, while unphased data are delimited with a forward slash ('/').
 
@@ -189,14 +192,14 @@ We can also output a fasta file for other softwares to use.
 
 ```{r, eval=FALSE}
 write.dna( my_dnabin1, file = 'my_gene.fasta', format = 'fasta' )
-unlink('my_gene.fasta') # Clean up after we're done
+unlink('my_gene.fasta') # Clean up after we're done with the example.
 ```
 
 
 
 ## Creating loci objects
 
-The package **pegas** uses objects of class loci.
+The package **pegas** uses objects of class **loci**.
 We can use the function vcfR2loci to convert our vcfR object to one of class loci.
 
 
@@ -206,8 +209,15 @@ class(my_loci)
 ```
 
 
-This takes a noticable amount of time to execute.
-But appears to work satisfactorily.
-And we can now proceed to downstream analyses.
+This takes a noticable amount of time to execute but is effective.
+We can now proceed to downstream analyses.
+
+
+## Conclusion
+
+The use of vcfR is an intermediary point in an analysis.
+Once vcf format data are obtained, vcfR provides an interactive way to scrutinize and filter the data.
+A number of paths have been provided that take the results of vcf format data from exploration and filtering to downstream analyses.
+
 
 
