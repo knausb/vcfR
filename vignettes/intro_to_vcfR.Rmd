@@ -23,7 +23,12 @@ The other option I see is to create a set of files where the data is identical t
 This later choice results in the creation of files which are largely redundant which I feel is unnecessary.
 
 
-Reading in of the [vcf](http://www.1000genomes.org/node/101) file can be performed with a function in vcfR.
+## Data input
+
+
+The vcfR package is designed to work primarily with [vcf format](http://www.1000genomes.org/node/101) files.
+The use of a sequence file ([fasta format](https://en.wikipedia.org/wiki/FASTA_format)) and an annotation file ([gff format](http://www.sequenceontology.org/gff3.shtml)) can provide helpful context, but are not required.
+Reading in of the vcf format file can be performed with a function in vcfR.
 First we'll locate the example data from the package 'pinfsc50.'
 
 
@@ -35,7 +40,7 @@ gff_file <- system.file("extdata", "pinf_sc50.gff", package = pkg)
 ```
 
 
-Then read it in the vcf file with vcfR.
+Then read in the vcf file with vcfR.
 
 
 ```{r}
@@ -68,6 +73,7 @@ gff <- read.table(gff_file, sep="\t", quote="")
 
 
 In my experience, gff files typically to not surround text with quotes.
+Thsi can present a challenge to reading these files into R.
 Disabling quotes in the call to `read.table` typically helps handle this.
 
 
@@ -79,7 +85,7 @@ Reading an entire genome into memory may present a technical challenge when ther
 For example, when the genome is large or there are a lot of samples.
 Attempting to read in lage datasets to memory may exhaust all available memory and result in an unresponsive computer.
 Working on chromosomes appears to be a natural way to decompose this problem.
-Once you have read an object into R you may therefore want to subset it to data for a single chromosome, if necessary.
+Once you have read an object into R (e.g., an annotation or sequence file) you may need to subset it to data for a single chromosome, if necessary.
 
 
 
@@ -123,7 +129,7 @@ chrom <- create.chromR(name='Supercontig', vcf=vcf, seq=dna, ann=gff)
 ```
 
 
-Note that here the names of our three data sources are not identical.
+Note that the names of our three data sources are not identical.
 This results in a warning.
 When we examine the output we seen that the name in the vcf file is 'Supercontig_1.50,' while the name in the fasta is 'Supercontig_1.50 of Phytophthora infestans T30-4.'
 We know that these are synonyms so we can ignore the warning and proceed.
@@ -141,7 +147,7 @@ If a sequence is not provided, seq2chromR will infer the length of your chromoso
 
 
 The 'ann' should be a [gff](http://sequenceontology.org/resources/gff3.html) type of table.
-These can typically read in with base R functions such as read.table().
+These can typically be read in with base R functions such as read.table().
 This table will then be inserted into the chromR object by **ann2chromR()**.
 This function will check to see if columns 4 and 5 ("start" and "end") are numeric.
 If not, it will try to recast them as so.
@@ -162,11 +168,15 @@ plot(chrom)
 ```
 
 
-No SNP densities are not found at this point because this data results from windowing analyses performed by **proc_chromR()** (see below).
+The distribution of read depth (DP) stands out.
+Presumably, there is some base ploid level at which most of teh genome is sequenced at.
+Here we see a peak, which may represent that base ploid region, but we also see a long tail which may represent copy number variants.
+Because genotypers typically expect a constant level of ploidy, variant calls in copy number variants may be suspect.
 We can see that mapping qualities (MQ) are all rather peaked around a value of 60.
 Because of this, if we would like to filter on this parameter we now know that we would have to employ a narrow threshold.
 Interpretation of the qualities (QUAL) appears less straightforward and may be clinal from a value of zero.
 You may conclude that this is not an ideal parameter to filter on.
+No SNP densities are found at this point because this data results from windowing analyses performed by **proc_chromR()** (see below).
 Filtering on other parameters may reveal a more straight forward path.
 
 
@@ -290,10 +300,10 @@ chromodot(chrom, x1=x1, y1=y1, label1="Simulated data", dot.alpha="ff")
 
 
 
-Thus far we've been looking at per variant summaries over all samples.
+Thus far we've only looked at per variant summaries over all samples.
 This information is typically found in the fixed portion of a vcf file (the first 8 columns of the file).
-Beyond these eight colomns are a flexible number of columns for each sample.
-Different softwares will place different types of data here.
+Beyond these eight colomns are a flexible number of columns, one for each sample.
+Different softwares will place different types of data to accompany each gentype.
 We can use the function **extract.gt()** to extract specified fields from the genotype region of the vcf data.
 Here we extract genotype quality (GQ) for each sample and each variant.
 

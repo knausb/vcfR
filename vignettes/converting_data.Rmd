@@ -124,18 +124,14 @@ First, we'll need to locate and read in our vcf file, a reference sequence and a
 
 
 ```{r}
-#vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
-#dna_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
-#gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
-
+# Find the files.
 vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
 dna_file <- system.file("extdata", "pinf_sc50.fasta", package = "pinfsc50")
 gff_file <- system.file("extdata", "pinf_sc50.gff", package = "pinfsc50")
-
+# Read in data.
 vcf <- read.vcf(vcf_file, verbose = FALSE)
 dna <- ape::read.dna(dna_file, format="fasta")
 gff <- read.table(gff_file, sep="\t", quote = "")
-
 ```
 
 

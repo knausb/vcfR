@@ -22,18 +22,20 @@ A first step in working with these data is to understand their contents.
 A vcf file can be thought of as having three regions: a **meta region**, a **fixed region** and a **genotype region**.
 The meta region is at the top of the file.
 The information in the meta region defines the abbreviations used elsewhere in the file.
+It may also document software used to create the file as well as parameters used by this software.
 Below the meta region, the data are tabular.
 The first eight columns of this table contain information about each variant.
 These data are fixed, or the same, over all samples.
 Beginning at column ten is a column for every sample.
 The values in these columns are information for each sample and each variant.
+The organization of each cell containing a genotype and associated information is specified in colum nine.
 Stated differently, they contain information for each genotype.
 
 
 The location of these three regions within a file can be represented by the cartoon below.
 
 
-```{r, fig.cap="Cartoon representation of vcf file organization", echo=FALSE, fig.height=4, fig.width=4, fig.align='center'}
+```{r, fig.cap="Cartoon representation of vcf file organization", echo=FALSE, fig.height=4, fig.width=4, fig.align='center', }
 par(mar=c(0.1,0.1,0.1,0.1))
 plot(c(0,5), c(0,5), type="n", frame.plot=FALSE, axes=FALSE, xlab="", ylab="")
 rect(xleft=0, ybottom=4, xright=3, ytop=5)
@@ -92,8 +94,8 @@ Here, the remaining lines contain INFO and FORMAT specifications which define ab
 
 ## The fix region
 
-
-The first eight columns contain the fixed region and are titled CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO.
+The fix region contains information for each variant which is sometimes summarized over all samples.
+The first eight columns of the fixed region and are titled CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO.
 This is per variant information which is 'fixed', or the same, over all samples.
 The first two columns indicate the location of the variant by chromosome and position within that chromosome.
 Here, the ID field has not been used, so it consists of missing data.
@@ -134,10 +136,10 @@ unlist(strsplit(as.character(vcf@fix[1, 8]), split=";"))
 
 
 
-## The genotype region
+## The gt region
 
 
-The genotype region contains information for each variant for each sample.
+The gt (genotype) region contains information for each variant for each sample.
 This values for each variant and each sample are colon delimited.
 Multiple types of data can be stored in this manner.
 The format of the data is specified by column nine, the FORMAT column.
