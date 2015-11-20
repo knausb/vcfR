@@ -4,7 +4,7 @@ author: "Brian J. Knaus"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{vcf data}
+  %\VignetteIndexEntry{vcf format data}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -12,14 +12,14 @@ vignette: >
 
 Most variant calling pipelines result in files containing variant information.
 The [vcf format](http://samtools.github.io/hts-specs/ "vcf format at hts-specs") is an increasingly popular format for this data.
-These files are typically intended to be filtered as an attempt to remove false positives, or otherwise problematic sites.
-A first step in working with these data is to understand their contents.
+The genotypes in these files are typically intended to be filtered as an attempt to remove false positives or other problematic variants.
+A first step in working with this data is to understand their contents.
 
 
 ## Three sections
 
 
-A vcf file can be thought of as having three regions: a **meta region**, a **fixed region** and a **genotype region**.
+A vcf file can be thought of as having three sections: a **meta region**, a **fix region** and a **gt region**.
 The meta region is at the top of the file.
 The information in the meta region defines the abbreviations used elsewhere in the file.
 It may also document software used to create the file as well as parameters used by this software.
@@ -28,10 +28,7 @@ The first eight columns of this table contain information about each variant.
 These data are fixed, or the same, over all samples.
 Beginning at column ten is a column for every sample.
 The values in these columns are information for each sample and each variant.
-The organization of each cell containing a genotype and associated information is specified in colum nine.
-Stated differently, they contain information for each genotype.
-
-
+The organization of each cell containing a genotype and associated information is specified in column nine.
 The location of these three regions within a file can be represented by the cartoon below.
 
 
@@ -49,7 +46,7 @@ par(mar=c(5,4,4,2))
 
 
 The vcf file definition is flexible.
-This means that there are slots for certain data, but any particular software which creates a vcf file does not necessarily use them all.
+This means that there are slots for certain types of data, but any particular software which creates a vcf file does not necessarily use them all.
 Similarly, authors have the opportunity to include new forms of data, forms which may not have been foreseen by the authors of the vcf definition.
 The result is that all vcf files do not contain the same information.
 
@@ -69,6 +66,7 @@ data(vcfR_example)
 The meta region contains information about the file and its creation, as well as information to interpret abbreviations used elsewhere in the file.
 Each line of the meta region begins with a double pound sign ('##').
 The example which comes with vcfR is shown below.
+(Only the first 10 lines are shown for brevity.)
 
 
 
@@ -77,18 +75,15 @@ strwrap(vcf@meta[1:7])
 ```
 
 
-Some of these lines are long and cumbersome.
-
-
 The first line contains the version of the vcf format used in the file.
 This line is required.
 The second line specifies the software which created the vcf file.
 This is not required, so not all vcf files include it.
 When they do, the file becomes self documenting.
-Although, note that the alignment software is not included here because it was used upstream of the vcf creation (aligners typically create \*.SAM or \*.BAM format files).
-So the entire pipeline does not get documented.
+Note that the alignment software is not included here because it was used upstream of the vcf file's creation (aligners typically create \*.SAM or \*.BAM format files).
+Because the file can only include information about the software that created it, the entire pipeline does not get documented.
 Some vcf files may contain a line for every chromosome (or supercontig or contig depending on your genome), so they may become rather long.
-Here, the remaining lines contain INFO and FORMAT specifications which define abbreviations used in the fix and gt portioins of the file.
+Here, the remaining lines contain INFO and FORMAT specifications which define abbreviations used in the fix and gt portions of the file.
 
 
 
@@ -98,7 +93,7 @@ The fix region contains information for each variant which is sometimes summariz
 The first eight columns of the fixed region and are titled CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO.
 This is per variant information which is 'fixed', or the same, over all samples.
 The first two columns indicate the location of the variant by chromosome and position within that chromosome.
-Here, the ID field has not been used, so it consists of missing data.
+Here, the ID field has not been used, so it consists of missing data (NA).
 The REF and ALT columns indicate the reference and alternate allelic states.
 When multiple alternate allelic states are present they are delimited with commas.
 The QUAL column attempts to summarize the quality of each variant over all samples.
@@ -122,15 +117,14 @@ We can validate this by querying the meta portion.
 strwrap(grep('DP', vcf@meta, value = TRUE))
 ```
 
-We see that 'DP' is defined both for the INFO column and for the GT portion.
-
-
-Returning to the INFO column, we see that the value of DP equals 197.
-This tell us that this variant was sequenced 197 times over all our samples.
+We see that 'DP' is defined both for the INFO column and for the gt portion of the file (FORMAT).
+Returning to the INFO column, we see that the value of DP equals 197 for this variant (note the caveats in the meta line).
+This tells us that this variant was sequenced 197 times over all our samples.
 A number of other parameters are also included in this column which be explored by querying their definition in the meta region.
+Here we just look at what is present for the first variant.
 
 
-```{r, echo=FALSE}
+```{r, echo=TRUE}
 unlist(strsplit(as.character(vcf@fix[1, 8]), split=";"))
 ```
 
@@ -141,12 +135,11 @@ unlist(strsplit(as.character(vcf@fix[1, 8]), split=";"))
 
 The gt (genotype) region contains information for each variant for each sample.
 The values for each variant and each sample are colon delimited.
-Multiple types of data can be stored in this manner.
+Multiple types of data for eact genotype may be stored in this manner.
 The format of the data is specified by column nine, the FORMAT column.
-Here we see that we have information for GT, PL and GQ.
-Lines 21, 26 and 22 from the meta region tell us that this information is the genotype, phred-scaled likelihood and genotype quality.
-Every variant does not necessarily have the same information, so the rows are best treated separately.
-
+Here we see that we have information for GT, AD, DP, GQ and PL.
+The definition of these acronyms can be referenced by querying the the meta region, as demonstrated previously.
+Every variant does not necessarily have the same information (e.g., SNPs and indels may be handled differently), so the rows are best treated separately.
 
 
 
