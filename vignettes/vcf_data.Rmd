@@ -111,7 +111,7 @@ vcf@fix[1:6, 1:7]
 
 
 
-The seventh column, titled INFO, is a semicolon delimited list of information.
+The eigth column, titled INFO, is a semicolon delimited list of information.
 It can be rather long and cumbersome.
 Each abbreviation in the INFO column should be defined in the meta section.
 For example, line three from the meta region tells us that 'DP' is the raw read depth.
@@ -140,7 +140,7 @@ unlist(strsplit(as.character(vcf@fix[1, 8]), split=";"))
 
 
 The gt (genotype) region contains information for each variant for each sample.
-This values for each variant and each sample are colon delimited.
+The values for each variant and each sample are colon delimited.
 Multiple types of data can be stored in this manner.
 The format of the data is specified by column nine, the FORMAT column.
 Here we see that we have information for GT, PL and GQ.
