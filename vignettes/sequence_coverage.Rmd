@@ -10,7 +10,7 @@ vignette: >
 ---
 
 
-Once data is received from a sequencing center an initial question is whether the sequencing was successful?
+Once data is received from a sequencing center, an initial question is whether the sequencing was successful?
 A common attempt to address this question is by asking how much sequence coverage was attained.
 For a diploid organism, one would require at least two reads per variant to infer a genotype.
 Ideally, we would like a little more so that we have redundancy.
@@ -21,18 +21,17 @@ In this vignette well learn how to read in vcf format data, extract sequence dep
 
 
 The topic of reading in vcf format data is covered in other vignettes.
-We include it here for redundancy, and that every example involving vcf data needs to start with reading in a vcf file.
+We include it here for redundancy, and because every example involving vcf data needs to start with some data.
 
 
 ```{r}
 library(vcfR)
-#vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
 vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
 vcf <- read.vcf(vcf_file, verbose = FALSE)
 ```
 
 
-A quick peak at how many rows are in our genotype matrix will tell us the number of variants which resulted from varian calling.
+A quick peak at how many rows are in our genotype matrix will tell us the number of variants which resulted from variant calling.
 
 
 ```{r}
@@ -54,10 +53,12 @@ head(vcf)
 ```
 
 
-This provides a summary of the information contained in the vcf file.
-In the 'genotype section', the first column  is titled 'FORMAT' and includes fields which describe the data included with each genotype.
+This provides a summary of the information contained in the vcf data.
+In the gt section, the first column  is titled 'FORMAT' and includes fields which describe the data included with each genotype.
+According to the vcf definition the first element must be the genotype.
+All subsequent data is optional.
 Each field is defined in the meta region.
-We can use 'grep' to search the meta slot to file its definitioon.
+We can use 'grep' to search the meta slot to file its definitoon.
 
 
 ```{r}
@@ -65,9 +66,9 @@ strwrap(grep('DP', vcf@meta, value = TRUE))
 ```
 
 
-Here 'DP' is defined for the 'INFO' column as well as in the 'FORMAT' region.
-We're interested in the later.
-This tells us that we can extract the DP information from the genoptype slot.
+Here 'DP' is defined for the 'FORMAT' region (gt) as well as in the 'INFO' column.
+We're interested in the former.
+This tells us that data for depth (DP) exists, so we can extract the DP information from the genoptype slot.
 
 
 ```{r}
@@ -80,17 +81,17 @@ Here, we've specified to convert the data to a numeric.
 This makees sense because depth should be a number describing how many times a variant was sequenced.
 If you select a field which is non-numeric, such as the genotype, and specify as.numeric to be TRUE, you will get a numeric matrix.
 However, these numbers may not make much sense.
-Make sure to only use as.numeric=TRUE on data which actually is numeric.
+Make sure to only use as.numeric=TRUE on data that actually are numeric.
 
 
 ## Creating boxplots of sequence depth
 
 
-Now that we have our data we will want to visualize it.
-A good choice for this type of data is usually a box and whisker plot.
+Now that we have our data, we will want to visualize it.
+A good choice for this type of data is a box and whisker plot.
 
 
-```{r, fig.align='center', fig.width=7}
+```{r, fig.align='center', fig.width=7, fig.height=7}
 par(mar=c(8,4,1,1))
 boxplot(dp, las=3, col=c("#C0C0C0", "#808080"), ylab="Depth")
 abline(h=seq(0,1e4, by=100), col="#C0C0C088")
@@ -104,7 +105,7 @@ par(mar=c(5,4,4,2))
 
 For quality control purposes, I'm frequently happy with using boxplots.
 If I want something a little more fancy, say for publication, I may use violin plots.
-This will require us to change the data from a matrix to a data.frame, and then we can plot is with ggplot2.
+This will require us to change the data from a matrix to a data.frame, and then we can plot it with ggplot2.
 
 
 ```{r, fig.align='center', fig.width=7}
@@ -141,7 +142,7 @@ This means we may want a lower bound on coverage for whether we call a genotype.
 Here we pull out summary statistics for each sample and use this information to filter our data.
 The quantile function is used to build a 90% confidence interval for each sample.
 We then use this information to set variants which are outside this region to missing data (NA).
-Lastly, we set variants with coverage less than four as missing.
+Lastly, we apply a minimum threshold by setting variants with coverage less than four as missing.
 
 
 ```{r}
@@ -157,7 +158,7 @@ dp[dp < 4] <- NA
 And visualize using boxplots.
 
 
-```{r, fig.align='center', fig.width=7}
+```{r, fig.align='center', fig.width=7, fig.height=7}
 par(mar=c(8,4,1,1))
 boxplot(dp, las=3, col=c("#C0C0C0", "#808080"), ylab="Depth")
 abline(h=seq(0,200, by=20), col="#C0C0C088")
