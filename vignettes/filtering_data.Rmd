@@ -18,6 +18,8 @@ In this vignette I discuss strategies to focus on the high quality fraction of t
 ## Data
 
 As in other vignettes, we begin by loading the example data.
+Here we'll use this data to create a chromR object directly after inputting the data.
+
 
 ```{r}
 library(vcfR)
@@ -52,7 +54,7 @@ When we've settled on a set of manipulations which we like we can then use this 
 
 The function masker() censors variants based on several thresholds.
 A number of summaries regarding variant quality are reported in vcf files.
-These summaries may be differ depending on what software was used to create them, as well as what options may have been used.
+These summaries may differ in content depending on what software was used to create them, as well as what options may have been used.
 We can use the head() function to see what sort of information is contained in our data.
 
 
@@ -62,19 +64,18 @@ head(chrom)
 
 
 The masker() function uses QUAL, sequence depth (expressed as quantiles) and mapping quality to try to filter out low quality variants.
-From the head() output we can see that the QUAL field is a defined column of the vcf file.
-Because it is a part of the vcf file definition, it is not documented in the meta region.
-
+Because QUAL is a part of the vcf file definition, it is not documented in the meta region.
+The parameter DP is not a required field, so it is defined in the meta region.
 
 ```{r, tidy=TRUE}
 strwrap(grep("DP", chrom@vcf@meta, value=T))
 ```
 
 
-The summaries DP and MQ are in the slot 'var.info.'
+The summaries DP and MQ are in the slot 'var.info' of the chromR object.
 We can see that these values are reported in the INFO column.
 Sometimes there are subtle isues in the data.
-For example, DP is reported in the INFO column, but it also appears in the genotype region.
+For example, DP is reported in the INFO column, but it also appears in the gt region.
 We can test if these are indeed the same.
 
 
@@ -93,7 +94,7 @@ Some parameters reported in the vcf file may seem straight forward.
 For example, DP is the sequence depth at each variant.
 Some parameters may seem a little more ambiguous.
 An example of the later is genotype quality (GQ).
-Everyone want their genotype qualities to be high.
+Everyone wants their genotype qualities to be high.
 But what exactly are we measuring with this parameter?
 We can explore the relationship among parameters by plotting them.
 

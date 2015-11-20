@@ -44,6 +44,7 @@
 #' 
 #' @export
 vcfR2genind <- function(x, sep="[|/]") {
+  locNames <- x@fix[,'ID']
   x <- extract.gt(x)
   x <- adegenet::df2genind(t(x), sep=sep)
   x
