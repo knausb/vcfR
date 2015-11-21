@@ -145,6 +145,17 @@ test_that("extract_gt_to_CM2 compiled code works",{
 ##### ##### ##### ##### #####
 
 
+##### ##### ##### ##### #####
+#
+# extract.info tests
+#
+##### ##### ##### ##### #####
+
+
+test_that("extract.info works",{
+  
+
+})
 
 
 ##### ##### ##### ##### #####

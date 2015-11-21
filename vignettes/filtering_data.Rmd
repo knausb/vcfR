@@ -39,7 +39,21 @@ chrom <- proc.chromR(chrom, verbose = TRUE)
 ```
 
 
-## Using a mask.
+## Exploring parameters
+
+
+
+
+```{r}
+head(chrom)
+```
+
+
+
+
+
+
+## Using a mask
 
 
 Instead of removing variants, vcfR implements a mask.
@@ -58,9 +72,6 @@ These summaries may differ in content depending on what software was used to cre
 We can use the head() function to see what sort of information is contained in our data.
 
 
-```{r}
-head(chrom)
-```
 
 
 The masker() function uses QUAL, sequence depth (expressed as quantiles) and mapping quality to try to filter out low quality variants.

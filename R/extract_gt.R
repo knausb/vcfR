@@ -208,19 +208,29 @@ extract.indels <- function(x, return.indels=FALSE){
 #' 
 #' @export
 extract.info <- function(x, element, as.numeric=FALSE, mask=FALSE){
+  
+  if( class(x) == 'chromR' ){
+    mask <- x@var.info$mask
+    x <- x@vcf
+  }
+  if( class(x) != 'vcfR' ){
+    stop("Expecting an object of class vcfR or chromR.")
+  }
+  
   values <- unlist(
     lapply(strsplit(unlist(
 #      lapply(strsplit(x@vcf.fix$INFO, split=";"),
-      lapply(strsplit(x@vcf@fix[,'INFO'], split=";"),             
+      lapply(strsplit(x@fix[,'INFO'], split=";"),             
              function(x){grep(paste("^", element, "=", sep=""), x, value=TRUE)})),
       split="="), function(x){x[2]})
-    )
+  )
 
   if(as.numeric == TRUE){
     values <- as.numeric(values)
   }
   if(mask==TRUE){
-    values <- values[x@var.info$mask]
+#    values <- values[x@var.info$mask]
+    values <- values[mask]
   }
   values
 }
