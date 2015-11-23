@@ -11,11 +11,11 @@ vignette: >
 
 
 The output of variant calling pipelines result in files containing called variants.
-Many of these pipelines recommend further filtering of this data to ensure that only high quality variants are included in analyses.
+Many of these pipelines recommend further filtering of this data to ensure that only high quality variants are included in downstream analyses.
 In this vignette I discuss strategies to focus on the high quality fraction of these variants.
 
 
-## Data
+## Data input
 
 As in other vignettes, we begin by loading the example data.
 Here we'll use this data to create a chromR object directly after inputting the data.
@@ -33,23 +33,9 @@ dna <- ape::read.dna(dna_file, format = "fasta")
 gff <- read.table(gff_file, sep="\t", quote="")
 
 chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, ann=gff, verbose=TRUE)
-chrom <- masker(chrom, min_QUAL = 1, min_DP = 300, max_DP = 700, min_MQ = 59.9,  max_MQ = 60.1)
 chrom <- proc.chromR(chrom, verbose = TRUE)
 
 ```
-
-
-## Exploring parameters
-
-
-
-
-```{r}
-head(chrom)
-```
-
-
-
 
 
 
@@ -62,77 +48,32 @@ Preserving the geometry of the matrix also allows for multiple manipulations to 
 When we've settled on a set of manipulations which we like we can then use this mask to subset the data.
 
 
-
-## Using masker()
-
-
-The function masker() censors variants based on several thresholds.
+The function masker() censors variants (i.e., sets the mask) based on several thresholds.
 A number of summaries regarding variant quality are reported in vcf files.
 These summaries may differ in content depending on what software was used to create them, as well as what options may have been used.
 We can use the head() function to see what sort of information is contained in our data.
 
 
+```{r}
+head(chrom)
+```
 
 
-The masker() function uses QUAL, sequence depth (expressed as quantiles) and mapping quality to try to filter out low quality variants.
-Because QUAL is a part of the vcf file definition, it is not documented in the meta region.
+The masker() function uses QUAL, sequence depth and mapping quality to try to filter out low quality variants.
+The parameter QUAL is a part of the vcf file definition.
+Because of this, it is not documented in the meta region.
+This parameter should always be present.
+However, it may be set to missing ('.') or populated with a constant, both of which render this metric as unuseful.
+The parameters DP and MQ are in the INFO column an are not part of the vcf definition.
 The parameter DP is not a required field, so it is defined in the meta region.
 
+
+We can remind ourselves how these parameters are defined by querying the meta region.
+
+
 ```{r, tidy=TRUE}
-strwrap(grep("DP", chrom@vcf@meta, value=T))
-```
-
-
-The summaries DP and MQ are in the slot 'var.info' of the chromR object.
-We can see that these values are reported in the INFO column.
-Sometimes there are subtle isues in the data.
-For example, DP is reported in the INFO column, but it also appears in the gt region.
-We can test if these are indeed the same.
-
-
-```{r, fig.height=7, fig.width=7}
-dp <- extract.gt(chrom, element="DP", as.numeric=TRUE)
-plot(rowSums(dp), chrom@var.info$DP)
-abline(a=0, b=1)
-```
-
-
-Because the dots do not line up on the line of unity, we can see that they are actually different.
-We can remind ourselves what these values mean by querying the meta region (see above).
-
-
-Some parameters reported in the vcf file may seem straight forward.
-For example, DP is the sequence depth at each variant.
-Some parameters may seem a little more ambiguous.
-An example of the later is genotype quality (GQ).
-Everyone wants their genotype qualities to be high.
-But what exactly are we measuring with this parameter?
-We can explore the relationship among parameters by plotting them.
-
-
-```{r, fig.height=7, fig.width=7}
-gq <- extract.gt(chrom, element="GQ", as.numeric=TRUE)
-plot(rowSums(dp), rowSums(gq), pch=20, col="#0000ff22")
-#plot(rowSums(dp[chrom@var.info$mask,]), rowSums(gq[chrom@var.info$mask,]), pch=20, col="#0000ff22")
-abline(a=0, b=1)
-abline(v=700, lty=2)
-```
-
-
-Here we see there is a fairly linear relationship among genotype quality and depth.
-The slope of this relationship is greater than one, as seen by the data dots above the black line of unity.
-This relationship continues to a genotype quality of around 1500, where the relationship degrades.
-If we recall from our implemetation of our mask (above) we filtered the data at a maximum depth of 700 because this appeared to be where our base ploid was.
-A dashed vertical line marks a depth of 700.
-This suggests that filtering on depth helps select the fraction of variants where there is a strong relationship among GQ and DP.
-
-
-
-
-
-```{r}
 strwrap(grep("MQ", chrom@vcf@meta, value=T))
-strwrap(grep("DP,", chrom@vcf@meta, value=T))
+strwrap(grep("DP", chrom@vcf@meta, value=T))
 ```
 
 
@@ -140,10 +81,6 @@ We see that 'DP' has different definitions in the INFO column than in the genoty
 The discrepancy appears to be due to some variants which have a high number of raw reads but only a fraction of these have been determined to be of high quality.
 Because masker() uses the DP column in the var.info slot to judge depth, we'll change it to include only the high quality depth.
 
-
-```{r}
-chrom@var.info$DP <- rowSums(dp)
-```
 
 
 We can now use the plot function to visualize this data.
@@ -154,31 +91,39 @@ plot(chrom)
 ```
 
 
-
 Our summary of DP appears continuous.
 However, we do have variants which appear to have unusually low coverage which we may try to filter out.
-Sometimes we observe variants of unusually high coverage.
+We also see that Dp is very long tailed in that it has a number of variants with exceptionally high coverage.
 These typically come from repetetive regions which have reads which map to multiple locations in the genome.
-This plot does not show this phenomenon, so filtering on high coverage may not be necessary.
-Mapping quality is largely of one value.
+Mapping quality is largely of one value (60).
 But there are some lower values which we may want to remove.
-Quality is notable in that it is bimodal.
-Its either of high quality or low, and there is a clear distinction between these.
-This makes it a good candidate for filtering.
+Quality is notable in that it is fairly clinal and may not be useful for filtering.
+
+
+We can also use the chromoqc function to see how the data are distributed along the chromosome.
 
 
 ```{r, fig.height=7, fig.width=7}
-chrom <- masker(chrom, min_QUAL=0, min_DP=300, max_DP=650, min_MQ=59, max_MQ=61)
+chromoqc(chrom, verbose=FALSE)
+```
+
+
+
+
+Now that we have our first peek at the data, we can try to parameterize the masker function to isolate variants we feel to be of high quality.
+
+
+```{r, fig.height=7, fig.width=7}
+chrom <- masker(chrom, min_QUAL=0, min_DP=350, max_DP=650, min_MQ=59.5, max_MQ=60.5)
 plot(chrom)
 ```
 
 
-The distribution of our read depths has now become narrower and excludes low coverage variants.
+The distribution of our read depths has now become narrower and excludes low coverage variants, it is also fairly symmetric.
 The distribution of mapping quality has also become more narrow.
-We could probably tighten it up some more by choosing a higher threshold, but will leave it for now.
-Quality is all of one value, 999.
-Note that R's histogram function has a bit of trouble dealing with this sort of data.
-Its really intended for a distribution of data.
+Note that while in this example we were able to rapidly pick relatively good thresholds, this process may actually take a few attempts.
+
+
 
 
 We can use chromoqc() to see how applying this mask affects our data.
@@ -196,19 +141,6 @@ Outside of these two regions it appears that mapping quality is either 43 or 44.
 based on this information, it seems reasonable to change our threshold for masking.
 
 
-```{r, fig.height=7, fig.width=7}
-#chrom <- masker(chrom, QUAL = 999, mindp = 0.25, maxdp = 0.99,
-#                  minmq = 43, maxmq = 50)
-#plot(chrom)
-```
-
-
-And visualize with chromoqc().
-
-
-```{r, fig.height=7, fig.width=7}
-#chromoqc(chrom, verbose=FALSE)
-```
 
 
 ## Output
@@ -219,7 +151,7 @@ This can be done by writing these variants to a new vcf file with the function w
 
 
 ```{r, eval=FALSE}
-write.vcf(chrom, file="good_variants.vcf", mask=TRUE)
+write.vcf(chrom, file="good_variants.vcf.gz", mask=TRUE)
 ```
 
 
