@@ -194,8 +194,8 @@ We'll first call masker, which will reset our mask, and then censor this mask ba
 
 ```{r}
 #chrom@var.info$mask[chrom@var.info$MQ < 42] <- FALSE
-chrom <- masker(chrom, min_QUAL=0, min_DP=350, max_DP=650, min_MQ=59.5, max_MQ=60.5)
-chrom@var.info$mask[chrom@var.info$rank > 1] <- FALSE
+chrom <- masker( chrom, min_QUAL=0, min_DP=350, max_DP=650, min_MQ=59.5, max_MQ=60.5 )
+chrom@var.info$mask[ chrom@var.info$rank > 1 ] <- FALSE
 ```
 
 
