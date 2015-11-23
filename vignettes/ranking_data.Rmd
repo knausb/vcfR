@@ -10,9 +10,9 @@ vignette: >
 ---
 
 
-In the vignette 'Filtering data' we used thresholds to isolate the high quality fraction of variants from a vcf file.
+In the vignette 'Filtering data' we used thresholds as an attempt to isolate the high quality fraction of variants from a vcf file.
 Here we assign ranks to variants within windows.
-This information used alone, or in conjunction with thresholds, can also be used to identify high quality variants.
+This information used alone, or in conjunction with thresholds, may be an effective strategy to identify high quality variants.
 
 
 ## Data
@@ -21,9 +21,6 @@ As in other vignettes, we begin by loading the example data.
 
 ```{r}
 library(vcfR)
-#vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
-#seq_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
-#gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
 
 vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
 dna_file <- system.file("extdata", "pinf_sc50.fasta", package = "pinfsc50")
@@ -33,8 +30,8 @@ vcf <- read.vcf(vcf_file, verbose = FALSE)
 dna <- ape::read.dna(dna_file, format = "fasta")
 gff <- read.table(gff_file, sep="\t", quote = "")
 
-chrom <- create.chromR(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=TRUE)
-chrom <- masker(chrom, min_DP = 900, max_DP = 1500)
+chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, ann=gff, verbose=TRUE)
+#chrom <- masker(chrom, min_DP = 900, max_DP = 1500)
 chrom <- proc.chromR(chrom, verbose = TRUE)
 
 ```
@@ -43,20 +40,8 @@ chrom <- proc.chromR(chrom, verbose = TRUE)
 ## Creating scores to rank
 
 
-Before we can rank our variants, we need to come up with some sort of metric to maximize.
-The function masker() is nice because it works on metrics which are commonly available.
-The downside is that if your file lacks some of these metrics you have less information to judge the quality.
-Also, if a new software generates a metric you really like, you won't be able to use it.
-For ranking I've let the user provide a vector of numbers that score each variant.
-This provides the flexibility to use what they would like.
-They can even combine metrics.
-Just keep in mind the scale of your metrics.
-For example, if you have a metric that ranges from 0-1 and another which ranges from 1-100 and you add them to create a composite score, the metric that ranges from 1-100 will drive the result more than the one which ranges from 0-1.
-If you re-scale the metric which ranges from 0-1, perhaps by multiplying it by 100, you'll equalize its contribution to the final score.
-Creating z-scores by subtracting the mean and dividing by the standard deviation would work as well.
-In fact, I've created a function to help with that (`?z.score`).
-
-
+Before we can rank our variants, we need to come up with some sort of criteria to help us determine if a variant is high or low quality.
+Once we have this score we can select the variant with the highest score from each window.
 In order to create our vector of scores, let's remind ourselves of what data we have.
 
 
@@ -65,93 +50,92 @@ head(chrom)
 ```
 
 
-
-Let's use the genotype quality and sequence depth from the vcf genotype information.
+Let's use the genotype quality (GQ) and sequence depth (DP) from the vcf genotype information.
+We can isolate matrices of genotype quality and sequence depth with the extract.gt function.
 
 
 ```{r}
-dp <- extract.gt(chrom, element="DP", as.numeric=TRUE)
 gq <- extract.gt(chrom, element="GQ", as.numeric=TRUE)
+dp <- extract.gt(chrom, element="DP", as.numeric=TRUE)
 ```
 
 
-The genotype quality is fairly well behaved.
-We can look at it for one sample to see its distribution.
+We can visualize these data with box and whisker plots.
+
+
+```{r, fig.align='center', fig.width=7, fig.height=5}
+#hist(gq[,1])
+par( mar = c(8,4,4,2) )
+boxplot(gq, las=2, col=2:5, main="Genotype Quality (GQ)")
+
+dp2 <- dp
+dp2[ dp2 == 0 ] <- NA
+boxplot(dp2, las=2, col=2:5, main="Sequence Depth (DP)", log="y")
+abline(h=10^c(0:4), lty=3, col="#808080")
+par( mar = c(5,4,4,2) )
+```
+
+
+The values for genotype qualioty appears to range from 0 to 100 with among sample variability.
+For example, sample P13626 consists of variants which are predominantly near 100 while sample P1362 consists of variants with qualities mostly just below 20.
+The values for sequence depth (DP) appear to have a correlation to the genotype qualities.
+Their values range from zero (zero has been omitted from the plot in order to log transform the y-axis) to almost 1,000.
+
+
+Unlike genotype quality, we don't necessarily want to maximize on sequence depth.
+Low depth variants may make obvious poor choices, but excessive coverage may represent variants from repetitive regions of the genome.
+What we really want to optimize on is mean depth, or some other measure of central tendency.
+This will require a little mathematical gymnastics.
+If we substract from each library its mean (or other measure of central tendency) it will center the data around zero.
+We can then take an absolute value which will cause the data to range from zero to some infinite number with zero being our optimal value (the measure of central tendency).
+The algorithm we're going ot use looks for an optimum and not a minimum, so if we multiply by negative one our data will range from negative infinity to zero with zero being optimal.
+We now have a measure of depth where the greatest value is the optimal value.
+
+
+```{r}
+mids <- apply(dp, MARGIN=2, median, na.rm=TRUE)
+dp2 <- sweep(dp, MARGIN=2, mids, FUN="-")
+dp2 <- abs(dp2)
+dp2 <- -1 * dp2
+```
+
+
+```{r, fig.align='center', fig.width=7, fig.height=5}
+par( mar = c(8,4,4,2) )
+boxplot(dp2, las=2, col=2:5, main="Sequence Depth (DP)")
+par( mar = c(5,4,4,2) )
+```
+
+
+Before we combine these data we have one more issue we need to address.
+In their current state, sequence depth's range is much greater than genotype quality.
+This means that the data are effectively weighted, if we simply add them together the sequence depth will have a greater impact on the final metric than will genotype quality.
+If we are happy with that then we can proceed.
+If we would like to equalize each metric's contribution to our final measure of quality we'll want to normalize the data.
+The genotype quality data is fairly straight forward.
+If we divide each library by 100 (their theoretical maximum) they will scale from 0 to 1 instead of 0 to 100.
+For the sequence depth we can add the absolute value of the minimum value to each library, this will make all of the data positive.
+Then we can divide by this value and our data should then scale from 0 to 1.
+
+
+```{r}
+gq2 <- gq/100
+range(gq2, na.rm=TRUE)
+
+amins <- abs(apply(dp2, MARGIN=2, min, na.rm = TRUE))
+dp2 <- sweep(dp2, MARGIN=2, STATS = amins, FUN="+")
+dp2 <- sweep(dp2, MARGIN=2, STATS = amins, FUN="/")
+range(dp2, na.rm=TRUE)
+```
+
+
+We now have metrics which are fairly equal.
+We can add them together and summarize over variants.
 
 
 ```{r, fig.align='center'}
-hist(gq[,1])
-```
-
-
-This shows us that for this sample its value is either high, or rather low.
-We can use a heatmap to explore this over all samples.
-
-
-```{r, fig.height=7, fig.width=7}
-heatmap.bp(gq)
-```
-
-
-Which validates that this observation extands over all samples.
-We can also validate that the values range approximately from 1 to 99 
-
-
-```{r}
-apply(gq, MARGIN=2, range, na.rm=TRUE)
-```
-
-
-So let's decide that we're happy with it.
-
-
-Sequence depth is a more challenging parameter to work with.
-In general we don't want low depth.
-But high depth could indicate that we're in a repetetive region which we may want to omit.
-So we really want to pick an optimal value.
-Because each sample is sequenced at a different depth, this optimal value will be different for all of them.
-Using z-scores here may work.
-
-
-```{r}
-dpz <- z.score(dp)
-dpz <- abs(dpz)
-maxes <- apply(dpz, MARGIN=2, max, na.rm=TRUE)
-dp2 <- abs(sweep(dpz, MARGIN = 2, STATS = maxes, FUN = "-"))
-dp2 <- 100 * sweep(dp2, MARGIN = 2, STATS = maxes, FUN = "/")
-```
-
-
-Creating z-scores centers the data around zero.
-By taking the absolule value our optimal value becomes zero and everything high than this is low quality.
-But we want to maximize on this value.
-When we subtract the maximum values we have values that can be maximized on.
-By dividing by the maximum we scale the data from 0-1.
-This is converted to 0-100 by multiplying by one hundred.
-
-
-We can validate that our ranges are from 0-100 with an apply function.
-
-
-```{r}
-apply(dp2, MARGIN=2, range)
-```
-
-
-And visualize with a heatmap.
-
-
-```{r, fig.height=7, fig.width=7}
-heatmap.bp(dp2)
-```
-
-
-And finally, combine our metrics into a composite metric.
-
-
-```{r, fig.align='center'}
-scores <- rowMeans(dp2) + rowMeans(gq)
-is.na(scores[c(7,10)]) <- TRUE
+scores <- dp2 + gq2
+scores <- rowSums(scores, na.rm = TRUE)
 ```
 
 
@@ -159,7 +143,7 @@ Check their distribution with a histogram.
 
 
 ```{r, fig.align='center'}
-hist(scores)
+hist(scores, col=4)
 ```
 
 
@@ -167,19 +151,20 @@ Once we have score in hand we can use them to rank our variants.
 
 
 ```{r}
-chrom <- masker(chrom)
+#chrom <- masker(chrom)
 chrom <- rank.variants.chromR(chrom, scores)
 head(chrom@var.info)
 ```
 
 
 
-This creates a vector of window numbers and rank within each window and adds them to the var.info slot.
+This creates a vector of window numbers and rank within each window and adds them to the var.info slot of the chromR object.
 We can take a look at them bay calling this directly.
 
 
 ```{r}
-cbind(chrom@var.info[1:26, c('POS', 'mask', 'window_number', 'rank')], scores[1:26])
+#cbind(chrom@var.info[1:26, c('POS', 'mask', 'window_number', 'rank')], scores[1:26])
+head(chrom@var.info[,c('POS', 'MQ', 'DP', 'window_number', 'rank')])
 ```
 
 
@@ -195,19 +180,22 @@ And plot.
 
 
 ```{r, fig.height=7, fig.width=7}
-chromoqc(chrom, dot.alpha='ff')
+chromoqc(chrom, dot.alpha='66')
 ```
 
 
 
 This looks pretty good.
-But there remain variants with a low quality (QUAL).
-We can manually adjust this.
+But we still have variants with rather high or low depth.
+We can combine the use of masker, which we explored in the vignette 'Filtering data' with our ranks.
+We'll first call masker, which will reset our mask, and then censor this mask based on rank.
 
 
 
 ```{r}
-chrom@var.info$mask[chrom@var.info$MQ < 42] <- FALSE
+#chrom@var.info$mask[chrom@var.info$MQ < 42] <- FALSE
+chrom <- masker(chrom, min_QUAL=0, min_DP=350, max_DP=650, min_MQ=59.5, max_MQ=60.5)
+chrom@var.info$mask[chrom@var.info$rank > 1] <- FALSE
 ```
 
 
@@ -215,8 +203,10 @@ Replot.
 
 
 ```{r, fig.height=7, fig.width=7}
-chromoqc(chrom, dot.alpha='ff')
+chromoqc(chrom, dot.alpha='66')
 ```
+
+
 
 
 
