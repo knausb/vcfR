@@ -228,10 +228,10 @@ extract.info <- function(x, element, as.numeric=FALSE, mask=FALSE){
   if(as.numeric == TRUE){
     values <- as.numeric(values)
   }
-  if(mask==TRUE){
+#  if( mask != FALSE & !is.null(mask) ){
 #    values <- values[x@var.info$mask]
-    values <- values[mask]
-  }
+#    values <- values[mask]
+#  }
   values
 }
 
