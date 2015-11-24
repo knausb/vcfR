@@ -10,7 +10,7 @@ vignette: >
 ---
 
 
-Most variant calling pipelines result in files containing variant information.
+Most variant calling pipelines result in files containing large quantities of variant information.
 The [vcf format](http://samtools.github.io/hts-specs/ "vcf format at hts-specs") is an increasingly popular format for this data.
 The format of these files and their content is discussed in the vignette 'vcf data'.
 These files are typically intended to be post-processed (i.e., filtered) as an attempt to remove false positives or otherwise problematic sites.
@@ -34,23 +34,17 @@ For this vignette, we'll use the example data provided with vcfR.
 
 ```{r}
 library(vcfR)
-#vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
-#seq_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
-#gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
-
 vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
 dna_file <- system.file("extdata", "pinf_sc50.fasta", package = "pinfsc50")
 gff_file <- system.file("extdata", "pinf_sc50.gff", package = "pinfsc50")
 
-
 vcf <- read.vcf(vcf_file, verbose = FALSE)
 dna <- ape::read.dna(dna_file, format = "fasta")
-gff <- read.table(gff_file, sep="\t")
+gff <- read.table(gff_file, sep="\t", quote="")
 
-chrom <- create.chromR(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=TRUE)
-chrom <- masker(chrom, min_DP = 300, max_DP = 700)
+chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, ann=gff, verbose=TRUE)
+chrom <- masker(chrom, min_QUAL=0, min_DP=350, max_DP=650, min_MQ=59.5, max_MQ=60.5)
 chrom <- proc.chromR(chrom, verbose = TRUE)
-
 ```
 
 
