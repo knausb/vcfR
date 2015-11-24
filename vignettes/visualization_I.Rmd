@@ -20,7 +20,7 @@ The R package vcfR provides tools to facilitate this filtering as well as to vis
 ## Data input
 
 
-The input of data was covered in the vignette 'Introduction to vcfR.
+The input of data was covered in the vignette 'Introduction to vcfR.'
 If you haven't read this vignette, you can with:
 
 ```{r, eval=FALSE}
@@ -29,7 +29,7 @@ vignette("intro_to_vcfR", package="vcfR")
 
 
 
-For this vignette, we'll use the example data provided with vcfR.
+For this vignette, we'll use the example data provided in the package pinfsc50.
 
 
 ```{r}
@@ -48,7 +48,9 @@ chrom <- proc.chromR(chrom, verbose = TRUE)
 ```
 
 
-The function create.chromR() reports the names of the chromosome (supercontig, contig, etc.) so that we can verify that all three data sources contain the same chromosome.
+The function create.chromR() reports the name of the chromosome (supercontig, contig, etc.) so that we can verify that all three data sources contain the same chromosome.
+We receive a warning because the names are not identical.
+Upon visual examination we determine that the names are synonyms and we can proceed.
 
 
 We can now visualize this data.
@@ -63,33 +65,37 @@ In vcfR we refer to this form of plot as a **chromo plot**.
 This plot summarizes data from our three data sources.
 Sequence data is represented on the lowest plot.
 Here called nucleotides are represented in green while uncalled nucleotides (Ns) appear in red.
-This chromosome contains all called nucleotides.
 Depending on the quality of your genome, it may include streches of uncalled nucleotides.
 Above the sequence is an annotation track.
 Features in the annotation file (e.g., gene models, exons, etc.) are represented as dark red rectangles.
 Above the annotation track is a windowing analysis of G/C content.
 This track includes marginal barplots to summarize its contents, as do the tracks above it.
 The next track summarizes the number of variants per window.
-Above that we see quality, mapping quality and read depth.
+Above that we see dot plots for quality, mapping quality and read depth.
 
 
 One of the strengths of R is that it is interactively implemented.
 This means we can change things fairly rapidly.
-For example, the above example used 3 kbp windows.
-If we become concerned with how our choice of window size affects our analysis, we can change it.
+For example, we can repeat the above the above example using 10 kbp windows instead of the default 1 kbp window.
+If we become concerned with how our choice of window size affects our analysis, we can visualize it and change it.
 
 
 
 ```{r, fig.height=7, fig.width=7}
-chrom <- proc.chromR(chrom, verbose=FALSE, win.size=1e3)
+chrom <- proc.chromR(chrom, verbose=FALSE, win.size=1e4)
 chromoqc(chrom, verbose=FALSE)
 ```
 
 
+We'll set the window size back to 1 kbp for the subsequent analyses.
 
 
+```{r}
+chrom <- proc.chromR(chrom, verbose=FALSE, win.size=1e3)
+```
 
-We can also use the function head() to summarize the contents of the Chrom object.
+
+We can also use the function head() to summarize the contents of the chromR object.
 
 
 ```{r}
@@ -97,14 +103,14 @@ head(chrom)
 ```
 
 
-The slots of the class Chrom are defined in the package documentation.
+The slots of the class chromR are defined in the package documentation.
 
 
 ## Getting to know your vcf data
 
 
 The vcf format is discussed in the vignette 'vcf data'.
-In the Chrom object, this information occurs as the slots 'vcf.meta', 'vcf.fix' and 'vcf.gt'.
+In the chromR object, this information occurs as the slots '\@vcf\@meta', '\@vcf\@fix' and '\@vcf\@gt'.
 Some of this information can be rapidly explored using the plot function.
 
 
@@ -118,10 +124,10 @@ The raw read depth and mapping quality have been extracted from the INFO column 
 The quality is from the QUAL column of the vcf data.
 And the variant count per window was summarized during the windowing analysis performed by proc.chromR().
 The raw read depth appears fairly continuous, an observation which appears consistent with the above chromo plots.
-Mapping quality appears to be predominantly one value (about 45), this may not have been apparent in teh chromo plots.
-The quality jumps out as bimodal, suggesting it may be a good candidate for filtering.
-And the varaint count per window summarizes the degree of variability we've observed along our chromosome, and suggest we may have some highly variable regions.
-
+Mapping quality appears to be predominantly one value (about 60), this may not have been apparent in the chromo plots.
+The varaint count per window summarizes the degree of variability we've observed along our chromosome.
+This indicated that many windows lack variants.
+Among the windows which have variants, they typically have around 3 variants per window or about 0.003 substitutions per site.
 
 
 Comparing the chomo plots with the histograms we may wonder if mapping quality is really being driven by raw read depth.
@@ -130,7 +136,8 @@ Thsi idea can be explored with a scatterplot.
 
 
 ```{r, fig.height=7, fig.width=7}
-plot(chrom@var.info$DP, chrom@var.info$MQ, col="#0000ff66")
+plot(chrom@var.info$DP, chrom@var.info$MQ, pch=20, col="#0000ff22", log='xy')
+abline(a=0,b=1)
 ```
 
 

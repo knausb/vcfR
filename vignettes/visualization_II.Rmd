@@ -7,7 +7,6 @@ vignette: >
   %\VignetteIndexEntry{Visualization II}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
-bibliography: bibliography.bib
 ---
 
 
@@ -32,7 +31,7 @@ gff_file <- system.file("extdata", "pinf_sc50.gff", package = "pinfsc50")
 
 vcf <- read.vcf(vcf_file, verbose = FALSE)
 dna <- ape::read.dna(dna_file, format = "fasta")
-gff <- read.table(gff_file, sep="\t")
+gff <- read.table(gff_file, sep="\t", quote="")
 
 chrom <- create.chromR(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=TRUE)
 chrom <- masker(chrom, min_DP = 300, max_DP = 700)
@@ -65,32 +64,26 @@ Recall from the vignette 'vcf data' that the genotype information begins at colu
 Column nine specifies the format of all subsequent columns.
 All columns subsequent to column nine contain information for each sample where each column corresponds to a sample.
 
-We see form the output of head() that our genotype data contains GT:PL:DP:SP:GQ data.
+We see form the output of head() that our genotype data contains `r chrom@vcf@gt[1,1]` data.
 These abbreviations are defined in the meta portion of the file.
-These fields are the genotype, Phred-scaled likelihoods for each genotype, number of high quality bases, Phred-scaled strand bias P-value and genotype quality.
-Observation of the first few rows of genotype information shows the format as 1/1:255,255,0:227:9:99.
-These are colon delimited values.
-The genotypes are in the form of 0/0, 0/1 and 1/1 for homozygote for the reference allele, heterozygote and homozygote for the alternate allele.
-Because there is a forward slash we won't be able to directly treat this as numeric information.
-The phred-scaled likelihoods appear as comma delimited integers.
-Again, because there is a non-numeric character (the commas) we won't be able to treat these directly as numeric data.
-The genotype quality appears as integers which we can treat as numeric data, so that would be a good example of numeric data.
-The number of high quality bases is also a good example of numeric data, and we'll use that in our example.
-
+Observation of the first few rows of genotype information shows the format as `r chrom@vcf@gt[1,2]`.
+These are colon delimited values, as in the format column.
+Because the genotypes are not strictly numeric (they contain a slash to delimit unphased data and a pipe to delimit phased data) we won't be able to treat this as numeric information.
+Read depth (DP) is numeric, and we'll use that in subsequent examples.
 
 
 ## Using extract.gt
 
 
 The genotype region of vcf data contains several values for each sample and each variant.
-We can extract one of these colon delimited values using the funciton **extract.gt()**.
+We can extract one of these colon delimited values using the function **extract.gt()**.
 This function determines the position of the desired element in the FORMAT column and uses this information to extract the same position from all of the other samples in that row.
 This is performed on a row by row basis so that files containing heterogeneous FORMAT specifications can be processed.
 Here we've asked the function to convert the resulting matrix to a numeric matrix.
 This is because we've determined, above, that this is indeed numeric data.
 But be careful with this option!
 If the data are not numeric it will do its best to convert the data and will probably not throw an error.
-It's up to the user (this means you) to make sure this is a reasonable decision.
+It's up to the user (*this means you*) to make sure this is a reasonable decision.
 
 
 ```{r}
@@ -107,16 +100,13 @@ The function **heatmap.bp()** helps us to visualize a matrix of data.
 
 
 ```{r, fig.height=7, fig.width=7}
-heatmap.bp(dp)
+heatmap.bp(dp[1001:1500,])
 ```
 
 
 The plot that results from heatmap.bp() shows samples in columns and variants in rows.
 The color ramp, at the right, is parameterized for continuous data.
-In the above plot green is high number of high quality bases, yellow is moderate number of high quality bases genotype quality and red is low number of high quality bases.
-
-
-
+In the above plot, yellow is a high number of high quality bases violet is a low number of high quality bases.
 
 
 ## Interpretation of zeros
@@ -124,15 +114,13 @@ In the above plot green is high number of high quality bases, yellow is moderate
 
 The presence of zeros in a dataset presents a conundrum.
 Sometimes, the presence of zero valued data represents the positive determination that there is zero valued data.
-For example, if we went to the grocery store and at the checkout counter we could count that we have three bananas, two oranges but zero apples.
+For example, if we went to the grocery store and at the checkout counter we could count that we have three bananas, two oranges but zero apples when we know the store has apples.
+This means that we know that we did not want any apples as opposed to the store not having apples, or perhaps we just forgot to look, or a number of other scenarios.
 Alternatively, the presences of zero valued data indicates that there is missing data.
 This would be similar to counting how many bananas and oranges are in our basket, but not reporting on the number of apples.
 We do not know if there are zero apples, or we just didn't count the apples.
 In the present example, we may interpret zero data as missing data.
 Therefore, we should re-encode zero data as NA data.
-
-
-
 
 
 ```{r}
@@ -144,19 +132,16 @@ And re-visualize.
 
 
 ```{r, fig.height=7, fig.width=7}
-heatmap.bp(dp)
+heatmap.bp(dp[1001:1500,])
 ```
 
 
-There are some important differences among the above plot which contains missing data and the plot above it which does not contain missing data.
-The plot which contains missing data includes cells which are white.
-We can see from our color ramp, at the right of the plot, that white is not part of the ramp.
-This tells us that the white values are the missing data.
-When we compare this plot to the plot which lacks missing data we see that the plot which lacked missing data codes these cells as low.
-The plot which contians missing data lets us know that these are not just low values, but that they are missing.
+There are some important differences among the two above plots.
+In the first plot there are missing data, but there are also sites where there is a read depth of zero.
+The difference is that in the first plot, zero data are coded as dark violet while missing data are coded as white (a color that is not present in the color ramp).
+In the second plot, the zero data were recoded as missing so they now stand out better.
 One of the downsides of the heatmap is that it tells up what is high valued or low, but it does not tell us the actual values.
 We can use a barplot to inform us of this information.
-
 
 
 ```{r, fig.height=4, fig.width=7}
@@ -166,14 +151,10 @@ par(mar=c(5,4,4,2))
 ```
 
 
-Here we see that the mean number of high quality bases per variant is quite high.
-The sample p9464 appears to have an abundance of missing data in the heatmap.
+Here we see that the mean number of high quality bases per variant is quite high for most samples.
+The sample p1362 appears to have an abundance of missing data in the heatmap.
 In the barplot we've validated that this sample lacks information.
-The sample p9464 was eventually omitted from the author's analysis [@yoshida2013rise].
-Conversely, sample p1362 appears to have a low number of high quality bases in the heatmap.
-In the barplot we see that its mean coverage is almost 100.
-While it is low relative to the other samples, it actually is a very high coverage.
-
+At the other end of the spectrum, the sample NL07434 has a high average coverage as seen in the heatmap, and in the barplot we can see that this value is just over 40.
 
 
 As the number of variants increases, visualizing each of them become problematic.
@@ -188,7 +169,7 @@ dpw <- windowize.NM(dp, pos=chrom@var.info$POS, starts=chrom@win.info$start,
                     ends=chrom@win.info$end)
 dpw[is.na(dpw)] <- 0
 is.na(dpw[dpw==0]) <- TRUE
-heatmap.bp(dpw)
+heatmap.bp(dpw[201:300,])
 ```
 
 
@@ -199,30 +180,14 @@ If there are no variants, a region is omitted.
 In the windowed plot we have a window for each region of the chromosome, regardless of whether any variants were called in that region.
 
 
-Windows 5, 6 and 7 appear absent in many of the samples, however they appear well represented in the samples which have data.
-This appears to be a large indel which has previously been characterized as polymorphic within this group [@avila2006mitochondrial].
-Window 1 appears absent in all samples.
-This could be because there is a deletion here.
-Alternatively, there may not be any variants here.
-Recall that the vcf files only contain information on variants.
-Before we conclude there is a deletion here it would be prudent to check the sequence coverage to the non-variable sites in this region.
-This could be down with SAMtools mpileup.
-
-
 ## Conclusion
 
 
 Now that we know our way around our chromosome it may be time to make some decisions.
 Regions which do not meet our expectations may need extra work to make sure they are of high quality.
-Alternatively, we may simply wish to censor these regions and focus on teh high quality fraction of the data.
-These are topics addressed in other vignettes.
+Alternatively, we may simply wish to censor these regions and focus on the high quality fraction of the data.
 
 
 
 
-
-
-
-
-## References
 
