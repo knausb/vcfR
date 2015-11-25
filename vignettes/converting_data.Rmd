@@ -79,7 +79,7 @@ The package **poppr** uses objects of class genclone as well as genind.
 Once a genind object has been created, it is fairly straight forward to create a genclone object.
 
 
-```{r, eval=TRUE}
+```{r, eval=FALSE}
 my_genclone <- poppr::as.genclone(my_genind)
 class(my_genclone)
 my_genclone
