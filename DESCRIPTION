@@ -12,7 +12,8 @@ Imports:
     ape,
     memuse,    
     methods,
-    Rcpp
+    Rcpp,
+    rmarkdown
 Suggests:
     adegenet,
     ggplot2,
