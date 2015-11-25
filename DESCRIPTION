@@ -12,13 +12,14 @@ Imports:
     ape,
     memuse,    
     methods,
-    Rcpp,
-    rmarkdown
+    Rcpp
 Suggests:
     adegenet,
     ggplot2,
     knitr,
     reshape2,
+    rmarkdown,
+    scales,
     testthat,
     viridisLite
 VignetteBuilder: knitr
