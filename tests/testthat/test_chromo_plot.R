@@ -34,11 +34,37 @@ bar.plot( wmat, title="MyBar" )
 bar.plot( wmat, title="MyBar", scale=T )
 
 ##### ##### ##### ##### #####
+# rect.plot
+
+mylist <- list(as.matrix(chrom@ann[,4:5]))
+mylist[[2]] <- chrom@ann[seq(from=0, to=nrow(chrom@ann), by=2),4:5]
+
+rect.plot( lst = mylist, xmax=1e5, heights = c(0.5,1))
+
+rect.plot(chrom@seq.info, xmax=1e5, heights = c(1, 0.5), col=c('green', 'red'))
+
+
+
+##### ##### ##### ##### #####
+
+
 
 mwidth <- 4
 layout( matrix( 1:4, nrow=2, ncol=2, byrow = TRUE ), widths = c(mwidth,1) )
 dot.plot( as.matrix( chrom@var.info[,c(2,3,4)] ), title="MyChrom", hline=seq(0,2000,by=500), mwidth=6, layout=F )
 bar.plot( wmat, title="MyBar", layout = FALSE )
+
+
+mwidth <- 5
+layout( matrix( 1:6, nrow=3, ncol=2, byrow = TRUE ), widths = c(mwidth,1), heights = c(1,1,0.25) )
+par(oma=c(2.1,0.1,0.1,0.1))
+dot.plot( as.matrix( chrom@var.info[,c(2,3,4)] ), title="MyChrom", hline=seq(0,2000,by=500), mwidth=6, layout=F )
+bar.plot( wmat, title="MyBar", layout = FALSE, scale = FALSE )
+rect.plot(chrom@seq.info, xmax=1e5, title="Nucleotides", heights = c(1, 0.5), col=c('green', 'red'))
+axis(side=1)
+null.plot()
+par(oma=c(0,0,0,0))
+
 
 ##### ##### ##### ##### #####
 # EOF.

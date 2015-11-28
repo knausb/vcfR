@@ -7,15 +7,19 @@
 #'
 #' @description Plot chromR objects and their components
 #' 
-#' @param mat a numeric matrix where column one represents the chromosomal position (POS) and subsequent columns represent y-values
-#' @param title a title for the plot
-#' @param scale logical specifying whether to scale bars to one
-#' @param col a vector of colors for each column of y-values, recycled as necessary
-#' @param hist logical specifying whether marginal histograms should be plotted
-#' @param layout logical specifying whether to call layout or not
-#' @param mwidth numeric specifying the relative width of the main panel when using layout
-#' @param hline numeric vector specifying positions for horizontal lines to be drawn
-#' @param ... arguments to be passed to/from other methods
+#' @param mat a numeric matrix where column one represents the chromosomal position (POS) and subsequent columns represent y-values.
+#' @param lst a list containing numeric matrices where each first column is the start and each second column is the end coordinates for rectangles.
+#' @param title a title for the plot.
+#' @param scale logical specifying whether to scale bars to one.
+#' @param col a vector of colors for each column of y-values, recycled as necessary.
+#' @param hist logical specifying whether marginal histograms should be plotted.
+#' @param layout logical specifying whether to call layout or not.
+#' @param mwidth numeric specifying the relative width of the main panel when using layout.
+#' @param hline numeric vector specifying positions for horizontal lines to be drawn.
+#' @param heights a numeric vector of heights for rectangles, recycled as necessary.
+#' @param xmin minimum value for rectangle plots.
+#' @param xmax maximum value for rectangle plots.
+#' @param ... arguments to be passed to/from other methods.
 #' 
 #' 
 #' @details Plot chromR objects and their components.
@@ -103,7 +107,10 @@ bar.plot <- function( mat, scale = FALSE, title = NULL, col = NULL, hist = TRUE,
   org.mar <- par("mar")
   par( mar=c(0,4,0,0) )
 
-  barplot( t(mat[,-1]), xlim=c(0,nrow(mat)), space=0, col=c(col+1), border=NA, las=2, pty="m" )
+  barplot( t(mat[,-1]), xlim=c(0,nrow(mat)), 
+           space=0, col=c(col+1), border=NA,
+           las=2,
+           pty="m" )
   title( main = title, line = -1)
   
   if( hist == TRUE ){
@@ -122,9 +129,56 @@ bar.plot <- function( mat, scale = FALSE, title = NULL, col = NULL, hist = TRUE,
 #' 
 #' 
 #' @export
-rect.plot <- function( mat, ... ){
+rect.plot <- function( lst, heights = 1, xmin = 0, 
+                       xmax = NULL, title = NULL, 
+                       col = NULL,
+                       ... ){
   
+  if( is.null(xmax) ){
+    stop("xmax not specified.")
+  }
+  if( is.null(col) ){
+    col <- 1:8
+  }
+
+  ymax <- max(heights)
+  ymin <- -1 * ymax
+  
+  org.mar <- par("mar")
+  par( mar=c(0,4,0,0) )
+  
+  plot( x=c(xmin, xmax), y=c(ymin, ymax),
+        type = "n", xlab="", xaxt="n",
+        ylab="", yaxt="n", las=2, frame.plot = FALSE )
+
+  lines( x = c(xmin, xmax), y = c(0,0))
+  
+  for( i in 1:length(lst) ){
+    rect( xleft=lst[[i]][,1], 
+          ybottom= c(-1 * heights[i]), 
+          xright=lst[[i]][,2], 
+          ytop=heights[i],
+          col = col[i],
+          border = NA )
+  }
+  
+  title( main = title, line = -1)
+  
+  par( mar=org.mar)
 }
 
+
+#' @rdname chromo_plot2
+#' 
+#' 
+#' @export
+null.plot <- function(){
+  org.mar <- par("mar")
+  par( mar=c(0,4,0,0) )
+  
+  plot( 1:10, 1:10, type = "n", axes = FALSE, frame.plot = FALSE, xlab="", ylab="" )
+  
+  par( mar=org.mar)
+}
 
 # EOF.

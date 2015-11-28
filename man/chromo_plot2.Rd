@@ -4,6 +4,7 @@
 \alias{bar.plot}
 \alias{chromo plot v2}
 \alias{dot.plot}
+\alias{null.plot}
 \alias{rect.plot}
 \title{chromo plot v2}
 \usage{
@@ -13,26 +14,37 @@ dot.plot(mat, title = NULL, hline = NULL, col = NULL, hist = TRUE,
 bar.plot(mat, scale = FALSE, title = NULL, col = NULL, hist = TRUE,
   layout = TRUE, mwidth = 4, ...)
 
-rect.plot(mat, ...)
+rect.plot(lst, heights = 1, xmin = 0, xmax = NULL, title = NULL,
+  col = NULL, ...)
+
+null.plot()
 }
 \arguments{
-\item{mat}{a numeric matrix where column one represents the chromosomal position (POS) and subsequent columns represent y-values}
+\item{mat}{a numeric matrix where column one represents the chromosomal position (POS) and subsequent columns represent y-values.}
 
-\item{title}{a title for the plot}
+\item{title}{a title for the plot.}
 
-\item{hline}{numeric vector specifying positions for horizontal lines to be drawn}
+\item{hline}{numeric vector specifying positions for horizontal lines to be drawn.}
 
-\item{col}{a vector of colors for each column of y-values, recycled as necessary}
+\item{col}{a vector of colors for each column of y-values, recycled as necessary.}
 
-\item{hist}{logical specifying whether marginal histograms should be plotted}
+\item{hist}{logical specifying whether marginal histograms should be plotted.}
 
-\item{layout}{logical specifying whether to call layout or not}
+\item{layout}{logical specifying whether to call layout or not.}
 
-\item{mwidth}{numeric specifying the relative width of the main panel when using layout}
+\item{mwidth}{numeric specifying the relative width of the main panel when using layout.}
 
-\item{...}{arguments to be passed to/from other methods}
+\item{...}{arguments to be passed to/from other methods.}
 
-\item{scale}{logical specifying whether to scale bars to one}
+\item{scale}{logical specifying whether to scale bars to one.}
+
+\item{lst}{a list containing numeric matrices where each first column is the start and each second column is the end coordinates for rectangles.}
+
+\item{heights}{a numeric vector of heights for rectangles, recycled as necessary.}
+
+\item{xmin}{minimum value for rectangle plots.}
+
+\item{xmax}{maximum value for rectangle plots.}
 }
 \description{
 Plot chromR objects and their components
