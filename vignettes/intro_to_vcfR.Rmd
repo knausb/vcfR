@@ -240,7 +240,7 @@ The function **chromoqc()** uses the R function ```layout()``` to make composite
 
 
 ```{r, fig.align='center', fig.height=7, fig.width=7}
-chromoqc(chrom)
+chromoqc(chrom, alpha=10)
 ```
 
 

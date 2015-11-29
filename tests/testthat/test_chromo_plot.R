@@ -16,6 +16,13 @@ head(chrom@var.info)
 
 par(oma=c(1,1,1,1))
 dot.plot( as.matrix( chrom@var.info[,c(2,3,4)] ), title="MyChrom", hline=seq(0,2000,by=500), mwidth=6, layout=T )
+
+dot.plot( as.matrix( chrom@var.info[,c(2,3,4)] ), title="MyChrom",
+          hline=seq(0,2000,by=500), 
+          col=c( rgb(34,139,34,10,maxColorValue=255), 
+                 rgb(64,224,208,10,maxColorValue=255) ),
+          mwidth=6, layout=T )
+
 par(oma=c(0,0,0,0))
 
 
