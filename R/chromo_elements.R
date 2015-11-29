@@ -74,7 +74,12 @@ dot.plot <- function( mat, title = NULL, hline = NULL, col = NULL, boxp = TRUE, 
   
   if( boxp == TRUE ){
     par( mar=c(0,0,0,0) )
-    col2 <- substr( col, start = 1, stop = 7)
+    col2 <- col
+    rgbs <- grep( "^#", col2 )
+    # Handle alpha.
+    if( length(rgbs) > 0 ){
+      col2[rgbs] <- substr( col2[rgbs], start = 1, stop = 7)
+    }
     boxplot( mat, xlab="", xaxt="n", ylab="", yaxt="n", col= col2 )
   }
 
