@@ -45,7 +45,7 @@ Then read in the vcf file with vcfR.
 
 ```{r}
 library(vcfR)
-vcf <- read.vcf(vcf_file, verbose = FALSE)
+vcf <- read.vcf( vcf_file, verbose = FALSE)
 ```
 
 

@@ -61,23 +61,23 @@ chromoqc <- function( chrom, boxp = TRUE, alpha = 255, ...){
   dot.plot( dmat,
             title="Read Depth (DP)", mwidth=mwidth,
             layout = FALSE, boxp = boxp,
-            col=rgb( red=30, green=144, blue=255, alpha=alpha, maxColorValue = 255)
-  )
+            col=rgb( red=30, green=144, blue=255, alpha=alpha, maxColorValue = 255),
+            ... )
   dmat <- as.matrix( cbind(chrom@var.info[,"POS"], chrom@var.info[,"MQ"]) )
   dmat <- dmat[ chrom@var.info[,"mask"], , drop = FALSE]
   dot.plot( dmat,
             title="Mapping Quality (MQ)", mwidth=mwidth,
             layout=F, boxp = boxp,
-            col=rgb( red=46, green=139, blue=87, alpha=alpha, maxColorValue = 255)
-  )
+            col=rgb( red=46, green=139, blue=87, alpha=alpha, maxColorValue = 255),
+            ... )
   dmat <- as.matrix( cbind(chrom@var.info[,"POS"], 
                            as.numeric( chrom@vcf@fix[,"QUAL"] ) ) )
   dmat <- dmat[ chrom@var.info[,"mask"], , drop = FALSE]
   dot.plot( dmat,
             title="Phred-Scaled Quality (QUAL)", mwidth=mwidth,
             layout=F, boxp = boxp,
-            col=rgb( red=139, green=0, blue=139, alpha=alpha, maxColorValue = 255)
-  )
+            col=rgb( red=139, green=0, blue=139, alpha=alpha, maxColorValue = 255),
+            ... )
   if( !is.null(chrom@win.info$variants) ){
     bmat <- cbind( chrom@win.info[,"window"], 
                    chrom@win.info[,"variants"]/c(chrom@win.info[,"end"]-chrom@win.info[,"start"]+1) )
@@ -85,10 +85,11 @@ chromoqc <- function( chrom, boxp = TRUE, alpha = 255, ...){
               title="Variants", hline = seq(0,0.1,by=0.02),
               layout = FALSE, scale = FALSE,
               col=rgb( red=178, green=34, blue=34, alpha=255, maxColorValue = 255),
-              boxp = boxp
-              )
+              boxp = boxp,
+              ... )
   }
-  if( !is.null(chrom@win.info[,"A"]) ){
+#  if( !is.null(chrom@win.info[,"A"]) ){
+  if( length( grep("^A$", colnames(chrom@win.info)) ) == 1 ){  
     bmat <- cbind( chrom@win.info[,"window"], 
                    chrom@win.info[,"A"] + chrom@win.info[,"T"],
                    chrom@win.info[,"C"] + chrom@win.info[,"G"])
@@ -100,12 +101,13 @@ chromoqc <- function( chrom, boxp = TRUE, alpha = 255, ...){
               col=c(rgb( red=000, green=034, blue=205, alpha=255, maxColorValue = 255),
                     rgb( red=255, green=235, blue=000, alpha=255, maxColorValue = 255)
                     ),
-              boxp = boxp
-    )
+              boxp = boxp,
+              ... )
     rect.plot(chrom@seq.info, xmax=chrom@len,
               title="Nucleotides", 
               heights = c(1, 0.5), 
-              col=c('green', 'red'))
+              col=c('green', 'red'),
+              ... )
     if( boxp == TRUE){
       null.plot()
     }
@@ -114,8 +116,8 @@ chromoqc <- function( chrom, boxp = TRUE, alpha = 255, ...){
     rect.plot( list(chrom@ann[,4:5]),
                xmax=chrom@len,
                title = "Annotations",
-               col = rgb( red=178, green=34, blue=34, alpha=255, maxColorValue = 255)
-    )
+               col = rgb( red=178, green=34, blue=34, alpha=255, maxColorValue = 255),
+               ... )
   }
 
 #  axis( side = 1, line = 5.2 )

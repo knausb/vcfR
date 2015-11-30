@@ -36,7 +36,10 @@
 #' 
 #' 
 #' @export
-dot.plot <- function( mat, title = NULL, hline = NULL, col = NULL, boxp = TRUE, layout = TRUE, mwidth = 4, ... ){
+dot.plot <- function( mat, title = NULL,
+                      hline = NULL, col = NULL, 
+                      boxp = TRUE, layout = TRUE, 
+                      mwidth = 4, ... ){
 #  org.par <- par( no.readonly = TRUE )
   org.mar <- par("mar")
   
@@ -61,7 +64,7 @@ dot.plot <- function( mat, title = NULL, hline = NULL, col = NULL, boxp = TRUE, 
   plot( x=c(xmin, xmax), 
         y=c(ymin, ymax), 
         type = "n", xlab="",
-        xaxt="n", ylab="", las=2)
+        xaxt="n", ylab="", las=2, ...)
 
   if( !is.null(hline) ){
     abline( h = hline, lty=2, col="#808080" )
@@ -124,10 +127,12 @@ bar.plot <- function( mat, scale = FALSE, title = NULL,
 
   par( mar=c(0,4,0,0) )
 
-  barplot( t(mat), xlim=c(0,nrow(mat)), 
+  barplot( t(mat), 
+           #xlim=c(0,nrow(mat)), 
            space=0, col=col, border=NA,
            las=2,
-           pty="m" )
+#           pty="m",
+           ... )
   title( main = title, line = -1)
   if( !is.null(hline) ){
     abline( h = hline, lty=2, col="#808080" )
@@ -170,7 +175,9 @@ rect.plot <- function( lst, heights = 1, xmin = 0,
   
   plot( x=c(xmin, xmax), y=c(ymin, ymax),
         type = "n", xlab="", xaxt="n",
-        ylab="", yaxt="n", las=2, frame.plot = FALSE )
+        ylab="", yaxt="n", las=2, 
+        frame.plot = FALSE,
+        ... )
 
   lines( x = c(xmin, xmax), y = c(0,0))
   

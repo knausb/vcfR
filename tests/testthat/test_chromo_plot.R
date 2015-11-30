@@ -2,6 +2,8 @@
 
 library(vcfR)
 data("vcfR_example")
+chrom <- create.chromR(name="Supercontig", vcf=vcf, verbose=FALSE)
+
 chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
 chrom <- masker(chrom, min_QUAL=0, min_DP=350, max_DP=650, min_MQ=59.5, max_MQ=60.5)
 chrom <- proc.chromR(chrom, verbose = FALSE)
