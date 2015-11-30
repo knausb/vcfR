@@ -58,7 +58,7 @@ rect.plot(chrom@seq.info, xmax=1e5, heights = c(1, 0.5), col=c('green', 'red'))
 
 
 
-mwidth <- 4
+mwidth <- 8
 layout( matrix( 1:4, nrow=2, ncol=2, byrow = TRUE ), widths = c(mwidth,1) )
 dot.plot( as.matrix( chrom@var.info[,c(2,3,4)] ), title="MyChrom", hline=seq(0,2000,by=500), mwidth=6, layout=F )
 bar.plot( wmat, title="MyBar", layout = FALSE )

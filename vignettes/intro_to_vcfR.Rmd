@@ -279,7 +279,7 @@ Or use the annotation file to zoom in on a gene.
 ```{r, fig.align='center', fig.height=7, fig.width=7}
 record <- 130
 buffer=1e3
-chromoqc(chrom, xlim=c( gff[record,4]-buffer, gff[record,5]+buffer ), dot.alpha = 99)
+chromoqc(chrom, xlim=c( gff[record,4]-buffer, gff[record,5]+buffer ))
 ```
 
 
