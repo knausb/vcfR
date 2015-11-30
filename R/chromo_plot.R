@@ -121,8 +121,8 @@ chromoqc <- function( chrom, boxp = TRUE, alpha = 255, ...){
   }
 
 #  axis( side = 1, line = 5.2 )
-  axis( side = 1, line = 0 )
-  title( xlab = "Base pairs", line = 1.6, outer = TRUE )
+#  axis( side = 1, line = 0 )
+#  title( xlab = "Base pairs", line = 1.6, outer = TRUE )
 
   title( main = chrom@name, line = 0.2, outer = TRUE )
   # identify, locator
