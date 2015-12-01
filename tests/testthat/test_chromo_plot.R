@@ -10,6 +10,47 @@ chrom <- proc.chromR(chrom, verbose = FALSE)
 
 
 
+##### ##### ##### ##### #####
+# dr.plot
+
+dr.plot( chrom.e = 100001 )
+
+
+head(chrom@win.info)
+
+mat1 <- cbind(chrom@win.info[,'start'],
+              0, 
+              chrom@win.info[,'end'], 
+              chrom@win.info[,'variants']
+              )
+
+mat2 <- cbind(chrom@win.info[,'start'],
+              0, 
+              chrom@win.info[,'end'],
+              rowSums(chrom@win.info[,c('A', 'T')])
+)
+
+mat3 <- cbind(chrom@win.info[,'start'],
+              rowSums(chrom@win.info[,c('A', 'T')]),
+              chrom@win.info[,'end'],
+              rowSums(chrom@win.info[,c('A', 'C', 'G', 'T')])
+)
+
+
+dr.plot( rlst = list(mat1), chrom.e = 100001 )
+
+dr.plot( rlst = list(mat2, mat3), chrom.e = 100001 )
+
+dr.plot( dmat = as.matrix( chrom@var.info[,c(2,3,4)] ), chrom.e = 100001 )
+
+dr.plot( dmat = as.matrix( chrom@var.info[,c(2,3,4)] ),
+         rlst = list(mat2, mat3), chrom.e = 100001 )
+axis(side=1)
+
+dr.plot( dmat = as.matrix( chrom@var.info[,c(2,3,4)] ),
+         rlst = list(mat2, mat3), chrom.e = 100001, xlim=c(1e4,3e4) )
+axis(side=1)
+
 
 ##### ##### ##### ##### #####
 # dot.plot
