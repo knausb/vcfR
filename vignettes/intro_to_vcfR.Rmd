@@ -240,7 +240,7 @@ The function **chromoqc()** uses the R function ```layout()``` to make composite
 
 
 ```{r, fig.align='center', fig.height=7, fig.width=7}
-chromoqc(chrom, alpha=10)
+chromoqc(chrom, dp.alpha=20)
 ```
 
 
@@ -250,7 +250,7 @@ We can compare this to the raw data by resetting the mask.
 
 ```{r, fig.align='center', fig.height=7, fig.width=7}
 chrom@var.info$mask <- TRUE
-chromoqc(chrom)
+chromoqc(chrom, dp.alpha=20)
 chrom <- masker(chrom, min_QUAL = 1, min_DP = 300, max_DP = 700, min_MQ = 59.9,  max_MQ = 60.1)
 ```
 
