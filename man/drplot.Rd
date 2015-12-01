@@ -3,10 +3,14 @@
 \name{dr plot elements}
 \alias{dr plot elements}
 \alias{dr.plot}
+\alias{null.plot}
 \title{dr plot elements}
 \usage{
 dr.plot(dmat = NULL, rlst = NULL, chrom.s = 1, chrom.e = NULL,
-  title = NULL, hline = NULL, dcol = NULL, rcol = NULL, ...)
+  title = NULL, hline = NULL, dcol = NULL, rcol = NULL, rbcol = NULL,
+  ...)
+
+null.plot()
 }
 \arguments{
 \item{dmat}{a numeric matrix for dot plots where the first column is position (POS) and subsequent columns are y-values.}
@@ -25,6 +29,8 @@ dr.plot(dmat = NULL, rlst = NULL, chrom.s = 1, chrom.e = NULL,
 
 \item{rcol}{vector of colors to be used for rectangle plots.}
 
+\item{rbcol}{vector of colors to be used for rectangle borders.}
+
 \item{...}{arguments to be passed to other methods.}
 }
 \value{
@@ -37,5 +43,8 @@ Plot chromR objects and their components
 Plot details
 The parameter \strong{rlist} is list of numeric matrices containing rectangle coordinates.
 The first column of each matrix is the left positions, the second column is the bottom coordinates, the third column is the right coordinates and the fourth column is the top coordinates.
+}
+\seealso{
+\code{\link[graphics]{rect}}
 }
 

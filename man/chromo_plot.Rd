@@ -11,7 +11,7 @@
 \usage{
 chromo(chrom, ...)
 
-chromoqc(chrom, boxp = TRUE, alpha = 255, ...)
+chromoqc(chrom, boxp = TRUE, dp.alpha = 255, ...)
 
 chromohwe(chrom, ...)
 
@@ -26,7 +26,7 @@ chromopop(chrom, ...)
 
 \item{boxp}{logical specifying whether marginal boxplots should be plotted.}
 
-\item{alpha}{degree of transparency applied to points in dot plots.}
+\item{dp.alpha}{degree of transparency applied to points in dot plots.}
 }
 \description{
 Plot chromR object

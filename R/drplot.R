@@ -13,6 +13,7 @@
 #' @param hline vector of positions to be used for horizontal lines.
 #' @param dcol vector of colors to be used for dot plots.
 #' @param rcol vector of colors to be used for rectangle plots.
+#' @param rbcol vector of colors to be used for rectangle borders.
 #' @param ... arguments to be passed to other methods.
 #' 
 #' 
@@ -22,11 +23,16 @@
 #' 
 #' @return Returns the y-axis minimum and maximum values invisibly.
 #' 
+#' @seealso 
+#' \code{\link[graphics]{rect}}
+#' 
+#' 
 #' @export
 dr.plot <- function( dmat = NULL, rlst = NULL,
                      chrom.s = 1, chrom.e = NULL,
                      title = NULL, hline = NULL,
-                     dcol = NULL, rcol = NULL,
+                     dcol = NULL, 
+                     rcol = NULL, rbcol = NULL,
                      ... ){
   
   # Determine x max.
@@ -39,8 +45,8 @@ dr.plot <- function( dmat = NULL, rlst = NULL,
     ymin <- min( dmat[,-1], na.rm = TRUE )
     ymax <- max( dmat[,-1], na.rm = TRUE )
   } else {
-    ymin <- 0
-    ymax <- 0
+    ymin <-  0.0
+    ymax <-  0.1
   }
   if( !is.null(rlst) ){
     rmin <- min( unlist( lapply( rlst, function(x){ min(x[,c(2,4)], na.rm = TRUE) } ) ) )
@@ -59,26 +65,42 @@ dr.plot <- function( dmat = NULL, rlst = NULL,
   if( is.null(rcol) ){
     rcol <- 1:8
   }
+  if( is.null(rbcol) ){
+    rbcol <- 1:8
+  }
   
   # Initialize the plot.
-  plot( c(chrom.s, chrom.e), c(1,1), type="l",
+  plot( c(chrom.s, chrom.e), c(0,0), type="n",
         xaxt = "n", xlab="", 
         ylab="", ylim = c(ymin, ymax),
         las=1,
         ... )
   
+  # Horizontal lines
+  if( !is.null(hline) ){
+    abline( h = hline, lty = 2, col = "#808080" )
+  }
+  
   # Rect plot.
+  if( length(rlst) > 1 ){
+    rcol  <- rep( rcol, times=length(rlst))
+    rbcol <- rep(rbcol, times=length(rlst))
+  }
   if( !is.null(rlst) ){
     for( i in 1:length(rlst) ){
       rmat <- rlst[[i]]
       rect( xleft = rmat[,1], ybottom = rmat[,2], 
             xright = rmat[,3], ytop = rmat[,4],
-            col = rcol[i],
+            col = rcol[i], border = rbcol[i],
             ... )
     }
   }
+#  palette("default")
   
   # Dot plot.
+  if( !is.null(ncol(dmat)) ){
+    dcol  <- rep( dcol, times=ncol(dmat) )
+  }
   if( !is.null(dmat) ){
     POS <- dmat[ ,1 ]
     dmat <- dmat[ ,-1 , drop=FALSE ]
@@ -87,7 +109,25 @@ dr.plot <- function( dmat = NULL, rlst = NULL,
     }
   }
   
+  title( main = title, line = -1.2 )
+  
   return( invisible( c(ymin, ymax) ) )
 }
 
 
+#' @rdname drplot
+#' 
+#' 
+#' @export
+null.plot <- function(){
+  org.mar <- par("mar")
+  par( mar=c(0,4,0,0) )
+  
+  plot( 1:10, 1:10, type = "n", axes = FALSE, frame.plot = FALSE, xlab="", ylab="" )
+  
+  par( mar=org.mar)
+}
+
+
+##### ##### ##### ##### #####
+# EOF.
