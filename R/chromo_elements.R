@@ -71,6 +71,7 @@ dot.plot <- function( mat, title = NULL,
   if( !is.null(hline) ){
     abline( h = hline, lty=2, col="#808080" )
   }
+  abline( v = seq(0, 1e6, by=5e3) )
   
   for( i  in 1:ncol(mat) ){
     points( POS, mat[,i], pch=20, col=col[i])
@@ -139,6 +140,7 @@ bar.plot <- function( mat, scale = FALSE, title = NULL,
   if( !is.null(hline) ){
     abline( h = hline, lty=2, col="#808080" )
   }
+  abline( v = seq(0, 1e6, by=5e3) )
   
   if( boxp == TRUE ){
     par( mar=c(0,0,0,0) )
@@ -182,6 +184,7 @@ rect.plot <- function( lst, heights = 1, xmin = 0,
         ... )
 
   lines( x = c(xmin, xmax), y = c(0,0))
+  abline( v = seq(0, 1e6, by=5e3) )
   
   for( i in 1:length(lst) ){
     rect( xleft=lst[[i]][,1], 

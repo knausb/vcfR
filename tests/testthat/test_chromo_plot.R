@@ -55,7 +55,7 @@ rect.plot(chrom@seq.info, xmax=1e5, heights = c(1, 0.5), col=c('green', 'red'))
 
 
 ##### ##### ##### ##### #####
-
+# Combo plot
 
 
 mwidth <- 8
@@ -73,6 +73,14 @@ rect.plot(chrom@seq.info, xmax=1e5, title="Nucleotides", heights = c(1, 0.5), co
 axis(side=1)
 null.plot()
 par(oma=c(0,0,0,0))
+
+
+##### ##### ##### ##### #####
+# chromoqc
+
+chromoqc(chrom)
+
+
 
 
 ##### ##### ##### ##### #####
