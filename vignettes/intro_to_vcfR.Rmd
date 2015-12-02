@@ -250,12 +250,14 @@ We can compare this to the raw data by resetting the mask.
 
 ```{r, fig.align='center', fig.height=7, fig.width=7}
 chrom@var.info$mask <- TRUE
+chrom <- proc.chromR(chrom, verbose=FALSE)
 chromoqc(chrom, dp.alpha=20)
 chrom <- masker(chrom, min_QUAL = 1, min_DP = 300, max_DP = 700, min_MQ = 59.9,  max_MQ = 60.1)
+chrom <- proc.chromR(chrom, verbose=FALSE)
 ```
 
 
-The last line reimplements our mask after we're done, by using the masker function.
+The last two lines reimplements our mask after we're done, by using the masker function and reprocessing the object.
 
 
 By applying our mask, we retain `r sum(chrom@var.info$mask)` of the `r length(chrom@var.info$mask)` varants, or `r round(100*sum(chrom@var.info$mask)/length(chrom@var.info$mask), digits=1)` percent of the variants.

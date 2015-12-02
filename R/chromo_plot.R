@@ -49,7 +49,8 @@ chromoqc <- function( chrom, boxp = TRUE, dp.alpha = 255,
     nrows <- nrows + 1
     heights <- c( heights, 1)
   }
-  if( !is.null(chrom@seq) ){
+#  if( !is.null(chrom@seq) ){
+  if( length( grep("^A$", colnames(chrom@win.info) ) ) == 1 ){
     # Add nucleotide content and sequence plots.
     nrows <- nrows + 2
     heights <- c( heights, 1, mheight)
@@ -112,6 +113,13 @@ chromoqc <- function( chrom, boxp = TRUE, dp.alpha = 255,
                    dcol = rgb(red=139, green=0, blue=139, alpha=dp.alpha, maxColorValue = 255),
                    rcol = NULL, rbcol = NULL,
                    ... )
+  if( length( grep("variants", colnames(chrom@win.info)) ) == 0 &
+      length( grep("^A$", colnames(chrom@win.info))      ) == 0 &
+      nrow( chrom@ann ) == 0 ){
+    
+    axis( side = 1, line = 0 )
+  }
+
   par( mar = c(5,4,4,2) + 0.1 )
   
   if( boxp == TRUE ){
@@ -120,6 +128,7 @@ chromoqc <- function( chrom, boxp = TRUE, dp.alpha = 255,
              col = rgb(red=139, green=0, blue=139, maxColorValue = 255) )
     par( mar = c(5,4,4,2) + 0.1 )
   }
+  
   
   # Variant plot
   if( !is.null(chrom@win.info$variants) ){

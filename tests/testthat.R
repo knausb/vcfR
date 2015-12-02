@@ -16,6 +16,8 @@ test_file("testthat/test_4_vcfR2DNAbin.R")
 test_file("testthat/test_io.R")
 #
 test_file("testthat/test_conversion.R")
+#
+#test_file("testthat/test_chromo_plot.R")
 
 
 #test_file("testthat/test_rank_variants.R")

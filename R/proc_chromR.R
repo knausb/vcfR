@@ -31,10 +31,10 @@
 proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
   stopifnot(class(x) == "chromR")
   
-  if( is.null( x@seq ) ){
+  if( is.null( x@seq ) & verbose == TRUE ){
     warning( "seq slot is NULL." )
   }
-  if( nrow(x@ann) == 0 ){
+  if( nrow(x@ann) == 0 & verbose == TRUE ){
     warning( "annotation slot has no rows." )
   }
   
@@ -48,7 +48,7 @@ proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
       message("Nucleotide regions complete.")
       message(paste("  elapsed time: ", round(ptime[3], digits=4)))
     }
-  } else if ( is.null( x@seq ) ){
+  } else if ( is.null( x@seq ) & verbose == TRUE ){
     warning( "seq slot is NULL, chromosome representation not made (seq2rects)." )
   }
   
@@ -61,7 +61,7 @@ proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
       message("N regions complete.")
       message(paste("  elapsed time: ", round(ptime[3], digits=4)))      
     }
-  } else if ( is.null( x@seq ) ){
+  } else if ( is.null( x@seq ) & verbose == TRUE ){
     warning( "seq slot is NULL, chromosome representation not made (seq2rects, chars=n)." )
   }
 
@@ -104,7 +104,7 @@ proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
         message(paste("  elapsed time: ", round(ptime[3], digits=4)))
       }
     }
-  } else if ( is.null( x@seq ) ){
+  } else if ( is.null( x@seq ) & verbose == TRUE ){
     warning( "seq slot is NULL, windowize_fasta not run." )
   }
 
@@ -124,7 +124,7 @@ proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
         message(paste("  elapsed time: ", round(ptime[3], digits=4)))
       }
     }
-  } else if ( nrow(x@ann) == 0 ){
+  } else if ( nrow(x@ann) == 0 & verbose == TRUE ){
     warning( "ann slot has zero rows, windowize_annotations not run." )
   }
 
