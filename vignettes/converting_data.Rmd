@@ -167,7 +167,7 @@ So the user should excercise prudence when using this option.
 
 
 If we instead create two haplotypes for each diploid sample, it results in a DNAbin object which includes only unambiguous nucleotides(A, C,  G and T).
-This typically requires the data to be phased.
+This typically requires the data to be phased (I use [beagle4](https://faculty.washington.edu/browning/beagle/beagle.html)).
 In vcf files this is typically indicated by delimiting the alleles of the genotype with a pipe ('|') for phased data, while unphased data are delimited with a forward slash ('/').
 
 
@@ -191,6 +191,11 @@ write.dna( my_dnabin1, file = 'my_gene.fasta', format = 'fasta' )
 unlink('my_gene.fasta') # Clean up after we're done with the example.
 ```
 
+
+Also see:
+
+- Heng Li's [seqtk](https://github.com/lh3/seqtk)
+- GATK's [FastaAlternateReferenceMaker](https://www.broadinstitute.org/gatk/gatkdocs/org_broadinstitute_gatk_tools_walkers_fasta_FastaAlternateReferenceMaker.php)
 
 
 ## Creating loci objects
