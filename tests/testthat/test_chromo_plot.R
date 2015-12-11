@@ -46,6 +46,14 @@ dr.plot( rlst = list(mat2, mat3), chrom.e = 100001 )
 
 dr.plot( rlst = list(mat2, mat3), chrom.e = 100001, xaxt = "n", yaxt = "n") #, frame.plot = TRUE )
 
+
+dr.plot( dmat = as.matrix( chrom@var.info[,c(2,3)] ), chrom.e = 100001, 
+         dcol=c(rgb(34,139,34, maxColorValue = 255), rgb(0,206,209, maxColorValue = 255)) )
+
+dr.plot( dmat = as.matrix( chrom@var.info[chrom@var.info[,3] > 59,c(2,3)] ), chrom.e = 100001, 
+         dcol=c(rgb(34,139,34, maxColorValue = 255), rgb(0,206,209, maxColorValue = 255)) )
+
+
 dr.plot( dmat = as.matrix( chrom@var.info[,c(2,3,4)] ), chrom.e = 100001, 
          dcol=c(rgb(34,139,34, maxColorValue = 255), rgb(0,206,209, maxColorValue = 255)) )
 

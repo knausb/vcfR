@@ -41,28 +41,18 @@ setMethod(
   f="show",
   signature = "vcfR",
   definition=function(object){
-    print("*** Class vcf, method Show ***")
     
-    if(length(object@meta)>0){
-      print("Meta")
-      for( i in 1:4 ){
-        if( nchar(object@meta[i]) <= 80 ){
-          print(object@meta[i])
-        } else {
-          print( paste( substr(object@meta[i], 1, 80-12 ), "[Truncated]" ) )
-        }
-      }
-      print("", quote=FALSE)
-    }
-    
-    if(length(object@fix)>0){
-      print(head(object@fix)[,1:6])
-      print("Column 8 (info) omitted.")
-      print("", quote=FALSE)
-    }
-    
-    print("", quote=FALSE)
-    print("******* End Show (vcf) *******")
+    nsamp <- ncol(object@gt) - 1
+    nvar <- nrow(object@gt)
+    nna <- sum( is.na(object@gt[,-1]) )
+    pna <- nna / c( nsamp * nvar )
+
+    message("***** Object of Class vcfR *****")
+    message( paste( nsamp, "samples") )
+    message( paste( format(nvar, big.mark=","), "variants") )
+    message( paste( format(pna * 100, digits = 4), "percent missing data") )
+    message("*****        *****         *****")
+#    message("*****        --*--         *****")
   }
 )
 
