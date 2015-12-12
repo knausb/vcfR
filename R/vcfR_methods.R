@@ -137,7 +137,6 @@ setMethod(
 )
 
 
-
 setGeneric("plot")
 #### Method plot ####
 #'
