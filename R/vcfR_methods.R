@@ -165,7 +165,8 @@ setMethod(
 ##### ##### ##### ##### #####
 
 
-setGeneric("rbind", signature="...")
+#setGeneric("rbind", signature="...")
+setGeneric("rbind")
 #'
 #' @rdname vcfR-methods
 #' @aliases rbind.vcfR, rbind
@@ -178,7 +179,7 @@ setGeneric("rbind", signature="...")
 setMethod(
   f = "rbind",
   signature = "vcfR", 
-  definition = function( ... )
+  definition = function( ..., deparse.level=1 )
   {
     ## store arguments
     dots <- list(...)
