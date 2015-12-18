@@ -19,6 +19,8 @@ test_file("testthat/test_conversion.R")
 #
 #test_file("testthat/test_chromo_plot.R")
 
+test_file("testthat/test_vcfR_methods.R")
+
 
 #test_file("testthat/test_rank_variants.R")
 #test_file("testthat/test_var_window.R")

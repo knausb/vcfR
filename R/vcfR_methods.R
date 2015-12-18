@@ -159,4 +159,48 @@ setMethod(
 
 
 ##### ##### ##### ##### #####
+#
+# rbind
+#
+##### ##### ##### ##### #####
+
+
+setGeneric("rbind", signature="...")
+#'
+#' @rdname vcfR-methods
+#' @aliases rbind.vcfR, rbind
+#' 
+#' @param deparse.level integer controlling the construction of labels. see ?rbind.
+# @param ... objects of class vcfR passed to rbind
+#' 
+#' @export
+#'
+setMethod(
+  f = "rbind",
+  signature = "vcfR", 
+  definition = function( ... )
+  {
+    ## store arguments
+    dots <- list(...)
+
+    ## extract arguments which are vcfR objects
+    myList <- dots[sapply(dots, inherits, "vcfR")]
+    if(!all(sapply(myList, class)=="vcfR")) stop("some objects are not vcfR objects")
+    
+    ## keep the rest in 'dots'
+    dots <- dots[!sapply(dots, inherits, "vcfR")]
+    
+    # Initialize
+    x <- myList[[1]]
+    
+    # Implement
+    x@fix <- do.call( rbind, lapply( myList, function(x){ x@fix } ) )
+    x@gt  <- do.call( rbind, lapply( myList, function(x){ x@gt  } ) )
+
+    return(x)
+  }
+)
+
+
+##### ##### ##### ##### #####
 # EOF.
