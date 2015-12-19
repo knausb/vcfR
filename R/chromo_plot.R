@@ -78,6 +78,22 @@ chromo <- function( chrom,
     mwidth <- c(mwidth, 1)
   }
 
+  # drlist1
+  if( !is.null(drlist1) ){
+    nrows <- nrows + 1
+    heights <- c( heights, 1)
+  }
+  # drlist2
+  if( !is.null(drlist2) ){
+    nrows <- nrows + 1
+    heights <- c( heights, 1)
+  }
+  # drlist3
+  if( !is.null(drlist3) ){
+    nrows <- nrows + 1
+    heights <- c( heights, 1)
+  }
+
   # Variant plot.
   if( !is.null(chrom@win.info$variants) ){
     nrows <- nrows + 1
@@ -96,21 +112,6 @@ chromo <- function( chrom,
     heights <- c( heights, mheight)
   }
   
-  # drlist1
-  if( !is.null(drlist1) ){
-    nrows <- nrows + 1
-    heights <- c( heights, 1)
-  }
-  # drlist2
-  if( !is.null(drlist2) ){
-    nrows <- nrows + 1
-    heights <- c( heights, 1)
-  }
-  # drlist3
-  if( !is.null(drlist3) ){
-    nrows <- nrows + 1
-    heights <- c( heights, 1)
-  }
 
   if( nrows == 0 ){
     stop("no data has been included!")

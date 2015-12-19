@@ -78,6 +78,8 @@ myList1 <- list(title = "Track1",
 
 
 chrom <- create.chromR(name="Supercontig", vcf=vcf, verbose=FALSE)
+chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
+
 chromo( chrom, boxp = FALSE , chrom.e = chrom@len, drlist1 = myList1 )
 
 chrom <- proc.chromR(chrom, verbose = FALSE)
@@ -85,6 +87,8 @@ chrom <- proc.chromR(chrom, verbose = FALSE)
 chromo( chrom, boxp = FALSE , chrom.e = chrom@len, drlist1 = myList1 )
 chromo( chrom, boxp = TRUE , chrom.e = chrom@len, drlist1 = myList1  )
 
+chromo( chrom, boxp = TRUE , chrom.e = chrom@len, drlist1 = myList1, drlist2 = myList1  )
+chromo( chrom, boxp = TRUE , chrom.e = chrom@len, drlist1 = myList1, drlist2 = myList1, drlist3 = myList1  )
 
 
 ##### ##### ##### ##### #####
