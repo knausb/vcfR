@@ -297,7 +297,7 @@ Here we simulate data as an example.
 set.seed(10)
 x1 <- as.integer(runif(n=20, min=1, max=chrom@len))
 y1 <- runif(n=length(x1), min=1, max=100)
-chromodot(chrom, x1=x1, y1=y1, label1="Simulated data", dot.alpha="ff")
+#chromodot(chrom, x1=x1, y1=y1, label1="Simulated data", dot.alpha="ff")
 ```
 
 

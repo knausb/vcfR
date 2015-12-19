@@ -104,7 +104,7 @@ We can also use the chromoqc function to see how the data are distributed along 
 
 
 ```{r, fig.height=7, fig.width=7}
-chromoqc(chrom, verbose=FALSE)
+#chromoqc(chrom, verbose=FALSE)
 ```
 
 
@@ -130,7 +130,7 @@ We can use chromoqc() to see how applying this mask affects our data.
 
 
 ```{r, fig.height=7, fig.width=7}
-chromoqc(chrom, verbose=FALSE)
+#chromoqc(chrom, verbose=FALSE)
 ```
 
 

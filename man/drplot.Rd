@@ -46,5 +46,6 @@ The first column of each matrix is the left positions, the second column is the 
 }
 \seealso{
 \code{\link[graphics]{rect}}
+\code{\link{chromo}}
 }
 

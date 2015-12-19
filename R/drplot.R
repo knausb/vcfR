@@ -25,7 +25,7 @@
 #' 
 #' @seealso 
 #' \code{\link[graphics]{rect}}
-#' 
+#' \code{\link{chromo}}
 #' 
 #' @export
 dr.plot <- function( dmat = NULL, rlst = NULL,
@@ -34,6 +34,15 @@ dr.plot <- function( dmat = NULL, rlst = NULL,
                      dcol = NULL, 
                      rcol = NULL, rbcol = NULL,
                      ... ){
+  
+  # Attempt to handle rlst
+  if( class(rlst) != "list" & class(rlst) == "matrix" ){
+    rlst <- list( rlst )
+  }
+  if( class(rlst) != "list" & !is.null(rlst) ){
+    stop( paste("parameter rlst is of type", class(rlst), "instead of type list.") )
+  }
+  
   
   # Determine x max.
   if( is.null(chrom.e) ){
