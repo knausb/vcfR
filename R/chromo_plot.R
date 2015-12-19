@@ -364,15 +364,82 @@ chromo <- function( chrom,
   par( mfrow = c(1,1) )
 }
 
+##### ##### ##### ##### #####
+#  
+# End chromo
+#
+##### ##### ##### ##### #####
 
-
-
+##### ##### ##### ##### #####
+#  
+# Begin chromoqc
+#
+##### ##### ##### ##### #####
 
 #' @rdname chromo_plot
 #' @export
 #' @aliases chromoqc
 #'
-chromoqc <- function( chrom, boxp = TRUE, dp.alpha = 255,
+chromoqc <- function( chrom, 
+                      boxp = TRUE, 
+                      dp.alpha = 255,
+                      ...){
+  
+  if( class(chrom) != "chromR" ){
+    stop( paste("expecting an object of class chromR, got", class(chrom), "instead.") )
+  }
+  
+  # Read depth
+  myList1 <- list(title = "Read Depth (DP)",
+                  dmat  = chrom@var.info[ chrom@var.info[,"mask"] , c("POS","DP") ],
+                  dcol  = rgb( red=30, green=144, blue=255, alpha=dp.alpha, maxColorValue = 255),
+                  bwcol = rgb( red=30, green=144, blue=255, maxColorValue = 255)
+  )
+
+  # Mapping Quality (MQ)
+  myList2 <- list(title = "Mapping Quality (MQ)",
+                  dmat  = chrom@var.info[ chrom@var.info[,"mask"] , c("POS","MQ") ],
+                  dcol  = rgb( red=46, green=139, blue=87, alpha=dp.alpha, maxColorValue = 255),
+                  bwcol = rgb( red=46, green=139, blue=87, maxColorValue = 255)
+  )
+  
+  # Phred-Scaled Quality (QUAL)
+  dmat <- as.matrix( cbind(chrom@var.info[,"POS"], 
+                           as.numeric( chrom@vcf@fix[,"QUAL"] ) ) )
+  dmat <- dmat[ chrom@var.info[,"mask"], , drop = FALSE]
+  myList3 <- list(title = "Phred-Scaled Quality (QUAL)",
+                  dmat  = dmat,
+                  dcol  = rgb(red=139, green=0, blue=139, alpha=dp.alpha, maxColorValue = 255),
+                  bwcol = rgb(red=139, green=0, blue=139, maxColorValue = 255)
+  )
+  
+  chromo( chrom, boxp = boxp, 
+          chrom.e = chrom@len, 
+          drlist1 = myList1,
+          drlist2 = myList2,
+          drlist3 = myList3
+  )
+}
+
+
+##### ##### ##### ##### #####
+#  
+# End chromoqc
+#
+##### ##### ##### ##### #####
+
+
+##### ##### ##### ##### #####
+#  
+# Begin chromoqc2
+#
+##### ##### ##### ##### #####
+
+#' @rdname chromo_plot
+#' @export
+#' @aliases chromoqc
+#'
+chromoqc2 <- function( chrom, boxp = TRUE, dp.alpha = 255,
                       ...){
 
   # Set parameters.
