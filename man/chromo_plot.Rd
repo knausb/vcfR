@@ -4,15 +4,12 @@
 \alias{chromo}
 \alias{chromo_plot}
 \alias{chromoqc}
-\alias{chromoqc2}
 \title{Plot chromR object}
 \usage{
 chromo(chrom, boxp = TRUE, dp.alpha = TRUE, chrom.s = 1, chrom.e = NULL,
   drlist1 = NULL, drlist2 = NULL, drlist3 = NULL, ...)
 
 chromoqc(chrom, boxp = TRUE, dp.alpha = 255, ...)
-
-chromoqc2(chrom, boxp = TRUE, dp.alpha = 255, ...)
 }
 \arguments{
 \item{chrom}{an object of class chrom.}
