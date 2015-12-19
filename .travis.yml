@@ -8,7 +8,6 @@ before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
-  - apt-get install pandoc-citeproc 
 
 install:
   - ./travis-tool.sh install_deps
