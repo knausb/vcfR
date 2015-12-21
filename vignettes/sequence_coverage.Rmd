@@ -118,7 +118,7 @@ if( require(reshape2) & require(ggplot2) ){
   p <- p + theme_bw()
   p <- p + theme(axis.title.x = element_blank(), 
                  axis.text.x = element_text(angle = 60, hjust = 1))
-  p <- p + stat_summary(fun.data=mean_sdl, mult=1, geom="pointrange", color="black")
+#  p <- p + stat_summary(fun.data=mean_sdl, mult=1, geom="pointrange", color="black")
   p <- p + scale_y_continuous(trans=scales::log2_trans(), breaks=c(1, 10, 100, 800))
   p
 } else {
