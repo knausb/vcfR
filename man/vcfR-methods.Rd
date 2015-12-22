@@ -4,11 +4,14 @@
 \name{show,vcfR-method}
 \alias{[,vcfR-method}
 \alias{head,vcfR-method}
+\alias{nrow,vcfR-method}
+\alias{nrow.vcfR}
 \alias{plot,vcfR-method}
 \alias{plot.vcfR}
-\alias{rbind}
-\alias{rbind,vcfR-method}
-\alias{rbind.vcfR,}
+\alias{rbind2,vcfR,ANY-method}
+\alias{rbind2,vcfR,missing-method}
+\alias{rbind2,vcfR,vcfR-method}
+\alias{rbind2.vcfR}
 \alias{show,vcfR-method}
 \alias{vcfR-methods}
 \title{vcfR methods}
@@ -21,7 +24,13 @@
 
 \S4method{plot}{vcfR}(x, y, ...)
 
-\S4method{rbind}{vcfR}(..., deparse.level = 1)
+\S4method{rbind2}{vcfR,missing}(x, y, ...)
+
+\S4method{rbind2}{vcfR,ANY}(x, y, ...)
+
+\S4method{rbind2}{vcfR,vcfR}(x, y, ...)
+
+\S4method{nrow}{vcfR}(x)
 }
 \arguments{
 \item{object}{object of class vcfR}
@@ -41,13 +50,9 @@
 \item{y}{not used}
 
 \item{...}{Arguments to be passed to methods}
-
-\item{deparse.level}{integer controlling the construction of labels. see ?rbind.}
 }
 \description{
 Methods to show, subset or plot data from objects of class vcfR.
-
-
 
 
 

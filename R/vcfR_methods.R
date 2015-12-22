@@ -166,24 +166,51 @@ setMethod(
 
 
 #setGeneric("rbind", signature="...")
-setGeneric("rbind")
-#'
-#' @rdname vcfR-methods
-#' @aliases rbind.vcfR, rbind
-#' 
-#' @param deparse.level integer controlling the construction of labels. see ?rbind.
-# @param ... objects of class vcfR passed to rbind
-#' 
-#' @export
-#'
-setMethod(
-  f = "rbind",
-  signature = "vcfR", 
-  definition = function( ..., deparse.level=1 )
+#setGeneric("rbind")
+# '
+# ' @rdname vcfR-methods
+# ' @aliases rbind.vcfR, rbind
+# ' 
+# ' @param deparse.level integer controlling the construction of labels. see ?rbind.
+#  @param ... objects of class vcfR passed to rbind
+# ' 
+# ' @export
+# '
+#setMethod(
+#  f = "rbind",
+#  signature = "vcfR", 
+#  definition = function( ..., deparse.level=1 )
+#  {
+    ## store arguments
+#    dots <- list(...)
+
+    ## extract arguments which are vcfR objects
+#    myList <- dots[sapply(dots, inherits, "vcfR")]
+#    if(!all(sapply(myList, class)=="vcfR")) stop("some objects are not vcfR objects")
+    
+    ## keep the rest in 'dots'
+#    dots <- dots[!sapply(dots, inherits, "vcfR")]
+    
+    # Initialize
+#    x <- myList[[1]]
+    
+    # Implement
+#    x@fix <- do.call( rbind, lapply( myList, function(x){ x@fix } ) )
+#    x@gt  <- do.call( rbind, lapply( myList, function(x){ x@gt  } ) )
+
+#    return(x)
+#  }
+#)
+
+
+
+setMethod("rbind",
+  signature( "vcfR" ),
+  function (..., deparse.level = 0) 
   {
     ## store arguments
     dots <- list(...)
-
+    
     ## extract arguments which are vcfR objects
     myList <- dots[sapply(dots, inherits, "vcfR")]
     if(!all(sapply(myList, class)=="vcfR")) stop("some objects are not vcfR objects")
@@ -194,11 +221,77 @@ setMethod(
     # Initialize
     x <- myList[[1]]
     
+    browser()
     # Implement
     x@fix <- do.call( rbind, lapply( myList, function(x){ x@fix } ) )
     x@gt  <- do.call( rbind, lapply( myList, function(x){ x@gt  } ) )
-
+    
     return(x)
+  }
+)
+
+
+#' @rdname vcfR-methods
+#' @aliases rbind2.vcfR
+#' 
+setMethod("rbind2",
+  signature(x = "vcfR", y = "missing"),
+  function (x, y, ...) 
+  {
+#    message("y is missing.")
+    return(x)
+  }
+)
+
+#' @rdname vcfR-methods
+#' @aliases rbind2.vcfR
+#' 
+setMethod("rbind2",
+  signature(x = "vcfR", y = "ANY"),
+  function (x, y, ...) 
+  {
+#    message("y is ANY.")
+    return(x)
+  }
+)
+
+#setGeneric("rbind2")
+#' @rdname vcfR-methods
+#' @aliases rbind2.vcfR
+#' @export
+#' 
+setMethod("rbind2",
+  signature( x="vcfR", y="vcfR" ),
+  function (x, y, ...)
+  {
+#    message("rbind2.vcfR")
+#    browser()
+    x@fix <- rbind( x@fix, y@fix )
+    x@gt  <- rbind( x@gt,  y@gt  )
+    return(x)
+  }
+)
+
+
+##### ##### ##### ##### #####
+#
+# nrow
+#
+##### ##### ##### ##### #####
+
+
+#setGeneric("nrow")
+
+#' @rdname vcfR-methods
+#' @aliases nrow.vcfR
+#' @export
+#' 
+setMethod("nrow",
+  signature(x = "vcfR"),
+  function (x) 
+  {
+    rows <- nrow(x@fix)
+    return(rows)
   }
 )
 
