@@ -280,7 +280,20 @@ setMethod("rbind2",
 ##### ##### ##### ##### #####
 
 
-#setGeneric("nrow")
+#' @rdname vcfR-methods
+#' @aliases dim.vcfR
+#' @export
+#' 
+setMethod("dim",
+  signature(x = "vcfR"),
+  function (x) 
+  {
+    x <- c( nrow(x@fix), ncol(x@fix), ncol(x@gt) )
+    names(x) <- c( 'variants', 'fix_cols', 'gt_cols')
+    return(x)
+  }
+)
+
 
 #' @rdname vcfR-methods
 #' @aliases nrow.vcfR

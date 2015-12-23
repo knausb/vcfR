@@ -135,7 +135,7 @@ create.chromR <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
 #      if(unique(as.character(x@vcf.fix$CHROM)) != unique(labels(x@seq))){
       if(chr_names != unique(labels(x@seq))){
         warning("
-        Names in variant file and sequence file do not match perfectly.
+        Names in variant data and sequence data do not match perfectly.
         If you choose to proceed, we'll do our best to match the data.
         But prepare yourself for unexpected results.")
 #        message("Names in variant file and sequence file do not match perfectly.")
@@ -150,7 +150,7 @@ create.chromR <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
 #      if(unique(as.character(x@vcf.fix$CHROM)) != unique(as.character(x@ann[,1]))){
       if(chr_names != unique(as.character(x@ann[,1]))){
         warning("
-        Names in variant file and sequence file do not match perfectly.
+        Names in variant data and annotation data do not match perfectly.
         If you choose to proceed, we'll do our best to match the data.
         But prepare yourself for unexpected results.")
 #        message("Names in variant file and annotation file do not match perfectly.\n")

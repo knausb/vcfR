@@ -417,7 +417,8 @@ chromoqc <- function( chrom,
           chrom.e = chrom@len, 
           drlist1 = myList1,
           drlist2 = myList2,
-          drlist3 = myList3
+          drlist3 = myList3,
+          ...
   )
 }
 

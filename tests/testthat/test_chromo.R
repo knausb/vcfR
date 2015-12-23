@@ -25,7 +25,7 @@ chromo( chrom, boxp = TRUE )
 # chromo, vcf and seq
 
 chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, verbose=FALSE)
-chromo( chrom )
+chromo( chrom ) # Should error!
 chrom <- proc.chromR(chrom, verbose = FALSE)
 
 chromo( chrom, boxp = FALSE )
@@ -89,6 +89,12 @@ chromo( chrom, boxp = TRUE , chrom.e = chrom@len, drlist1 = myList1  )
 
 chromo( chrom, boxp = TRUE , chrom.e = chrom@len, drlist1 = myList1, drlist2 = myList1  )
 chromo( chrom, boxp = TRUE , chrom.e = chrom@len, drlist1 = myList1, drlist2 = myList1, drlist3 = myList1  )
+
+##### ##### ##### ##### #####
+# xlim
+
+chromo( chrom, boxp = TRUE , chrom.e = chrom@len, drlist1 = myList1, drlist2 = myList1, xlim=c(2e4, 5e4) )
+
 
 
 ##### ##### ##### ##### #####
