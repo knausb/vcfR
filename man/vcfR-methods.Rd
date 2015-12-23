@@ -3,6 +3,8 @@
 \docType{methods}
 \name{show,vcfR-method}
 \alias{[,vcfR-method}
+\alias{dim,vcfR-method}
+\alias{dim.vcfR}
 \alias{head,vcfR-method}
 \alias{nrow,vcfR-method}
 \alias{nrow.vcfR}
@@ -29,6 +31,8 @@
 \S4method{rbind2}{vcfR,ANY}(x, y, ...)
 
 \S4method{rbind2}{vcfR,vcfR}(x, y, ...)
+
+\S4method{dim}{vcfR}(x)
 
 \S4method{nrow}{vcfR}(x)
 }
