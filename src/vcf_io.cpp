@@ -17,6 +17,11 @@ const int nreport = 1000;
 
 /*  Helper functions */
 
+/* 
+Called by vcf_stats_gz.
+Processes lines from vcf files.
+Counts meta (^##), header (^#C), columns in the header and remaining lines.
+*/
 void stat_line(Rcpp::NumericVector stats, std::string line){
   if(line[0] == '#' && line[1] == '#'){
     // Meta
@@ -205,14 +210,23 @@ void proc_body_line(Rcpp::CharacterMatrix gt, int var_num, std::string myline){
 // [[Rcpp::export]]
 Rcpp::CharacterMatrix read_body_gz(std::string x, Rcpp::NumericVector stats, int verbose = 1) {
 //Rcpp::DataFrame read_body_gz(std::string x, Rcpp::NumericVector stats, int verbose = 1) {
-  // Read in the fixed and genotype portion of the file.
+  /* 
+  Read in the fixed and genotype portion of the file.
+  x is the file name.
+  Stats is a vector containing information about the file contents (see below).
+  varbose indicates whether verbose output should be generated.
+   
+  */
 
-  // Stats contains:
-  // "meta", "header", "variants", "columns"
+  /* 
+  Stats contains:
+  "meta", "header", "variants", "columns"
+  */
 
   // Matrix for body data.
   Rcpp::CharacterMatrix gt(stats[2], stats[3]);
 
+  // Create filehandle and open.
   gzFile file;
   file = gzopen (x.c_str(), "r");
   if (! file) {
@@ -222,7 +236,9 @@ Rcpp::CharacterMatrix read_body_gz(std::string x, Rcpp::NumericVector stats, int
   }
 
   
-  // Scroll through buffers.
+  // Input buffers
+  // delimit into lines with \n
+  // and scroll through buffers.
   std::string lastline = "";
   std::vector<std::string> header_vec;
   int var_num = 0;
@@ -239,6 +255,13 @@ Rcpp::CharacterMatrix read_body_gz(std::string x, Rcpp::NumericVector stats, int
     std::vector < std::string > svec;  // Initialize vector of strings for parsed buffer.
     char split = '\n'; // Must be single quotes!
     vcfRCommon::strsplit(mystring, svec, split);
+    
+    /* 
+    svec should now contain a vector of strings,
+    one string for each line
+    where the last line may be incomplete.
+    We can now process each line except the last.
+    */
 
     for(int i = 0; i < svec.size() - 1; i++){
       if(svec[i][0] == '#' && svec[i][1] == '#'){
@@ -257,6 +280,8 @@ Rcpp::CharacterMatrix read_body_gz(std::string x, Rcpp::NumericVector stats, int
         }
       }   
     }
+    // Keep the last line so we can append it to 
+    //the beginning of the next buffer
     lastline = svec[svec.size() - 1];
 
 
@@ -275,7 +300,11 @@ Rcpp::CharacterMatrix read_body_gz(std::string x, Rcpp::NumericVector stats, int
         }
       }
     }
+    
+  // Return to top of loop and process another buffer.
   }
+  
+  // Close filehandle.
   gzclose (file);
 
 
@@ -307,7 +336,6 @@ Rcpp::CharacterMatrix read_body_gz(std::string x, Rcpp::NumericVector stats, int
 //  }
   
   return gt;
-//  return df1;
 }
 
 
