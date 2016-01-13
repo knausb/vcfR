@@ -7,13 +7,15 @@
 #' Read and files in the *.vcf structured text format, as well as the compressed *.vcf.gz format.
 #' Write objects of class vcfR to *.vcf.gz.
 #' 
-#' @param file A filename for a variant call format (vcf) file
-#' @param x An object of class vcfR or chromR
-# @param vfile an output filename
-#' @param mask logical vector indicating rows to use
-#' @param APPEND logical indicating whether to append to existing vcf file or write a new file
-#' @param limit amount of memory (in bytes) not to exceed when reading in a file
-#' @param verbose report verbose progress
+#' @param file A filename for a variant call format (vcf) file.
+#' @param limit amount of memory (in bytes) not to exceed when reading in a file.
+#' @param cols vector of column numbers to extract from file.
+#' @param x An object of class vcfR or chromR.
+# @param vfile an output filename.
+#' @param mask logical vector indicating rows to use.
+#' @param APPEND logical indicating whether to append to existing vcf file or write a new file.
+#' 
+#' @param verbose report verbose progress.
 #'
 #' @details
 #' The function \strong{read.vcf} reads in files in *.vcf (text) and *.vcf.gz (gzipped text) format and returns an object of class vcfR.
@@ -52,7 +54,7 @@
 #' @aliases read.vcf
 #' @export
 #' 
-read.vcf <- function(file, limit=1e7, verbose = TRUE){
+read.vcf <- function(file, limit=1e7, cols = NULL, verbose = TRUE){
 #  require(memuse)
   
   if(file.access(file, mode = 0) != 0){
@@ -65,6 +67,10 @@ read.vcf <- function(file, limit=1e7, verbose = TRUE){
   vcf <- new(Class="vcfR")
   stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', file)
   
+  if( is.null(cols) ){
+    cols <- 1:stats['columns']
+  }
+  
 #  ram_est <- stats['variants'] * stats['columns'] * 8 + 248
   ram_est <- memuse::howbig(stats['variants'], stats['columns'])
   
@@ -76,7 +82,7 @@ read.vcf <- function(file, limit=1e7, verbose = TRUE){
   }
   
   vcf@meta <- .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', file, stats, as.numeric(verbose))
-  body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', file, stats, as.numeric(verbose))
+  body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', file = file, stats = stats, cols = cols, as.numeric(verbose))
 
   vcf@fix <- body[ ,1:8, drop=FALSE ]
   vcf@gt <- body[ ,9:ncol(body), drop=FALSE ]

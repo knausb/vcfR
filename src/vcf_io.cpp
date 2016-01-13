@@ -3,10 +3,6 @@
 #include <zlib.h>
 #include "vcfRCommon.h"
 
-// #include <iostream>
-//using namespace Rcpp;
-
-
 
 // Number of records to report progress at.
 const int nreport = 1000;
@@ -183,12 +179,13 @@ Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats, int ve
 
 
 
-
 /*  Read in the body of the vcf file  */
 
-
 /*  Helper function to process one line  */
-void proc_body_line(Rcpp::CharacterMatrix gt, int var_num, std::string myline){
+void proc_body_line(Rcpp::CharacterMatrix gt,
+                    int var_num,
+                    std::string myline){
+  
   char split = '\t'; // Must be single quotes!
   std::vector < std::string > data_vec;
   
@@ -206,24 +203,35 @@ void proc_body_line(Rcpp::CharacterMatrix gt, int var_num, std::string myline){
   }
 }
 
-
+/* 
+ Read in the fixed and genotype portion of the file.
+ x is the file name.
+ Stats is a vector containing information about the file contents (see below).
+ varbose indicates whether verbose output should be generated.
+ 
+ Stats contains:
+ "meta", "header", "variants", "columns"
+ 
+*/
 // [[Rcpp::export]]
-Rcpp::CharacterMatrix read_body_gz(std::string x, Rcpp::NumericVector stats, int verbose = 1) {
-//Rcpp::DataFrame read_body_gz(std::string x, Rcpp::NumericVector stats, int verbose = 1) {
-  /* 
-  Read in the fixed and genotype portion of the file.
-  x is the file name.
-  Stats is a vector containing information about the file contents (see below).
-  varbose indicates whether verbose output should be generated.
-   
-  */
+Rcpp::CharacterMatrix read_body_gz(std::string x,
+                                   Rcpp::NumericVector stats,
+                                   Rcpp::IntegerVector cols = 0,
+                                   int verbose = 1) {
 
-  /* 
-  Stats contains:
-  "meta", "header", "variants", "columns"
-  */
-
-  // Matrix for body data.
+  // Sort the column numbers.
+  cols.sort();
+  
+  // Validate that column numbers have been specified.
+  if(cols[0] == 0){
+    Rcpp::Rcerr << "User must specify which (positive integer) columns to extract from the file.\n";
+    Rcpp::StringMatrix mymatrix(1,1);
+    mymatrix(0,0) = NA_STRING;
+    return mymatrix;
+  }
+  cols = cols - 1; // R is 1-based
+  
+  // Initialize matrix for body data.
   Rcpp::CharacterMatrix gt(stats[2], stats[3]);
 
   // Create filehandle and open.
@@ -231,27 +239,37 @@ Rcpp::CharacterMatrix read_body_gz(std::string x, Rcpp::NumericVector stats, int
   file = gzopen (x.c_str(), "r");
   if (! file) {
     Rcpp::Rcerr << "gzopen of " << x << " failed: " << strerror (errno) << ".\n";
-//    return Rcpp::StringVector(1);
     return Rcpp::CharacterMatrix(1);
   }
 
-  
-  // Input buffers
-  // delimit into lines with \n
-  // and scroll through buffers.
+
+  // Because the last line may be incomplete,
+  // We'll typically omit it from processing and
+  // concatenate it to the first line.
+  // But first we'll have to initialize it.
   std::string lastline = "";
+  
+  // String vector to store the header (^#CHROM...).
   std::vector<std::string> header_vec;
+  
+  // variant counter.  
   int var_num = 0;
+
+  // Scroll through buffers.
   while (1) {
     Rcpp::checkUserInterrupt();
     int err;
+
+    // Slurp in a buffer.
     int bytes_read;
     char buffer[LENGTH];
     bytes_read = gzread (file, buffer, LENGTH - 1);
-    buffer[bytes_read] = '\0';
+    buffer[bytes_read] = '\0'; // Terminate the buffer.
 
     std::string mystring(reinterpret_cast<char*>(buffer));  // Recast buffer as a string.
-    mystring = lastline + mystring;
+    mystring = lastline + mystring; // Concatenate last line to the buffer
+    
+    // Delimit into lines.
     std::vector < std::string > svec;  // Initialize vector of strings for parsed buffer.
     char split = '\n'; // Must be single quotes!
     vcfRCommon::strsplit(mystring, svec, split);
@@ -263,6 +281,7 @@ Rcpp::CharacterMatrix read_body_gz(std::string x, Rcpp::NumericVector stats, int
     We can now process each line except the last.
     */
 
+    // Scroll through lines.
     for(int i = 0; i < svec.size() - 1; i++){
       if(svec[i][0] == '#' && svec[i][1] == '#'){
         // Meta line, ignore.

@@ -30,7 +30,7 @@ test_that("compiled input functions work",{
   expect_equal(length(meta), as.numeric(stats["meta"]))
   expect_is(meta, "character")
   
-  body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', ex_file, stats, 0)
+  body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', ex_file, stats, cols=1:stats['columns'], 0)
   expect_is(body, "matrix")
   expect_equal(nrow(body), as.numeric(stats["variants"]))
   expect_equal(ncol(body), as.numeric(stats["columns"]))

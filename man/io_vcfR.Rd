@@ -5,22 +5,24 @@
 \alias{write.vcf}
 \title{Read and write vcf format files}
 \usage{
-read.vcf(file, limit = 1e+07, verbose = TRUE)
+read.vcf(file, limit = 1e+07, cols = NULL, verbose = TRUE)
 
 write.vcf(x, file = "", mask = FALSE, APPEND = FALSE)
 }
 \arguments{
-\item{file}{A filename for a variant call format (vcf) file}
+\item{file}{A filename for a variant call format (vcf) file.}
 
-\item{limit}{amount of memory (in bytes) not to exceed when reading in a file}
+\item{limit}{amount of memory (in bytes) not to exceed when reading in a file.}
 
-\item{verbose}{report verbose progress}
+\item{cols}{vector of column numbers to extract from file.}
 
-\item{x}{An object of class vcfR or chromR}
+\item{verbose}{report verbose progress.}
 
-\item{mask}{logical vector indicating rows to use}
+\item{x}{An object of class vcfR or chromR.}
 
-\item{APPEND}{logical indicating whether to append to existing vcf file or write a new file}
+\item{mask}{logical vector indicating rows to use.}
+
+\item{APPEND}{logical indicating whether to append to existing vcf file or write a new file.}
 }
 \value{
 read.vcf returns an object of class \code{\link{vcfR-class}}.
