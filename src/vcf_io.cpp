@@ -216,6 +216,8 @@ void proc_body_line(Rcpp::CharacterMatrix gt,
 // [[Rcpp::export]]
 Rcpp::CharacterMatrix read_body_gz(std::string x,
                                    Rcpp::NumericVector stats,
+                                   int nrows = -1,
+                                   int skip = 0,
                                    Rcpp::IntegerVector cols = 0,
                                    int verbose = 1) {
 
@@ -232,7 +234,8 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
   cols = cols - 1; // R is 1-based
   
   // Initialize matrix for body data.
-  Rcpp::CharacterMatrix gt(stats[2], stats[3]);
+//  Rcpp::CharacterMatrix gt(stats[2], stats[3]);
+  Rcpp::CharacterMatrix gt( stats[2], cols.size() );
 
   // Create filehandle and open.
   gzFile file;

@@ -57,7 +57,8 @@ test_that("vcfR_read_body_gz works",{
   setwd(test_dir)
   write.vcf(chrom, "test.vcf.gz")
   stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', "test.vcf.gz")
-  body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', "test.vcf.gz", stats, cols=1:stats['columns'], 0)
+  body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', "test.vcf.gz", stats,
+                nrows = -1, skip = 0, cols=1:stats['columns'], 0)
   unlink("test.vcf.gz")
   setwd(original_dir)
 

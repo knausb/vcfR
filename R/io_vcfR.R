@@ -9,6 +9,8 @@
 #' 
 #' @param file A filename for a variant call format (vcf) file.
 #' @param limit amount of memory (in bytes) not to exceed when reading in a file.
+#' @param nrows integer specifying the maximum number of rows (variants) to read in.
+#' @param skip integer specifying the number of rows (varisnts) to skip before beginning to read data.
 #' @param cols vector of column numbers to extract from file.
 #' @param x An object of class vcfR or chromR.
 # @param vfile an output filename.
@@ -54,7 +56,7 @@
 #' @aliases read.vcf
 #' @export
 #' 
-read.vcf <- function(file, limit=1e7, cols = NULL, verbose = TRUE){
+read.vcf <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, verbose = TRUE){
 #  require(memuse)
   
   if(file.access(file, mode = 0) != 0){
@@ -82,7 +84,8 @@ read.vcf <- function(file, limit=1e7, cols = NULL, verbose = TRUE){
   }
   
   vcf@meta <- .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', file, stats, as.numeric(verbose))
-  body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', file = file, stats = stats, cols = cols, as.numeric(verbose))
+  body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', file = file, stats = stats, 
+                nrows = nrows, skip = skip, cols = cols, as.numeric(verbose))
 
   vcf@fix <- body[ ,1:8, drop=FALSE ]
   vcf@gt <- body[ ,9:ncol(body), drop=FALSE ]

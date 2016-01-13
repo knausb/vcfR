@@ -5,7 +5,8 @@
 \alias{write.vcf}
 \title{Read and write vcf format files}
 \usage{
-read.vcf(file, limit = 1e+07, cols = NULL, verbose = TRUE)
+read.vcf(file, limit = 1e+07, nrows = -1, skip = 0, cols = NULL,
+  verbose = TRUE)
 
 write.vcf(x, file = "", mask = FALSE, APPEND = FALSE)
 }
@@ -13,6 +14,10 @@ write.vcf(x, file = "", mask = FALSE, APPEND = FALSE)
 \item{file}{A filename for a variant call format (vcf) file.}
 
 \item{limit}{amount of memory (in bytes) not to exceed when reading in a file.}
+
+\item{nrows}{integer specifying the maximum number of rows (variants) to read in.}
+
+\item{skip}{integer specifying the number of rows (varisnts) to skip before beginning to read data.}
 
 \item{cols}{vector of column numbers to extract from file.}
 
