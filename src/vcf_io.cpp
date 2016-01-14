@@ -181,7 +181,13 @@ Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats, int ve
 
 /*  Read in the body of the vcf file  */
 
-/*  Helper function to process one line  */
+/*  
+Helper function to process one line.
+gt is a pointer to the data matrix output by read_vcf.
+var_num
+myline is a tab delimited string row from the orriginal vcf file.
+cols is a vector indicating which columns to select from the file data.
+*/
 void proc_body_line(Rcpp::CharacterMatrix gt,
                     int var_num,
                     std::string myline,
