@@ -57,7 +57,10 @@ test_that("read.vcf skip works",{
 
 
 test_that("read.vcf column selection works",{
-
+  vcf <- read.vcf(ex_file, verbose=FALSE, cols=11:12)
+  expect_is(vcf@gt, "matrix")
+  expect_equal(ncol(vcf@fix), 8)
+  expect_equal(ncol(vcf@gt), 3)
 })
 
 

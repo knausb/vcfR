@@ -184,21 +184,25 @@ Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats, int ve
 /*  Helper function to process one line  */
 void proc_body_line(Rcpp::CharacterMatrix gt,
                     int var_num,
-                    std::string myline){
+                    std::string myline,
+                    Rcpp::IntegerVector cols){
   
   char split = '\t'; // Must be single quotes!
   std::vector < std::string > data_vec;
   
   vcfRCommon::strsplit(myline, data_vec, split);
 
-  for(int i = 0; i < data_vec.size(); i++){
-    if(data_vec[i] == "."){
+//  for(int i = 0; i < data_vec.size(); i++){
+  for(int i = 0; i < cols.size(); i++){
+//    if(data_vec[i] == "."){
+    if(data_vec[ cols[i] ] == "."){
       gt(var_num, i) = NA_STRING;
 //    } else if(data_vec[i] == "./."){
-    } else if( data_vec[i][0] == '.' & data_vec[i][2] == '.' ){
+//    } else if( data_vec[ i ][0] == '.' & data_vec[ i ][2] == '.' ){
+    } else if( data_vec[ cols[i] ][0] == '.' & data_vec[ cols[i] ][2] == '.' & data_vec[ cols[i] ].size() == 3 ){
       gt(var_num, i) = NA_STRING;
     } else {
-      gt(var_num, i) = data_vec[i];
+      gt(var_num, i) = data_vec[ cols[i] ];
     }
   }
 }
@@ -216,9 +220,9 @@ void proc_body_line(Rcpp::CharacterMatrix gt,
 // [[Rcpp::export]]
 Rcpp::CharacterMatrix read_body_gz(std::string x,
                                    Rcpp::NumericVector stats,
-                                   int nrows = -1,
-                                   int skip = 0,
-                                   Rcpp::IntegerVector cols = 0,
+                                   int nrows,
+                                   int skip,
+                                   Rcpp::IntegerVector cols,
                                    int verbose = 1) {
 
   // Sort the column numbers.
@@ -236,6 +240,7 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
   // Initialize matrix for body data.
 //  Rcpp::CharacterMatrix gt(stats[2], stats[3]);
   Rcpp::CharacterMatrix gt( stats[2], cols.size() );
+
 
   // Create filehandle and open.
   gzFile file;
@@ -289,14 +294,27 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
       if(svec[i][0] == '#' && svec[i][1] == '#'){
         // Meta line, ignore.
       } else if(svec[i][0] == '#' && svec[i][1] == 'C'){
-        // Process header
+        // Process header.
         char header_split = '\t';
         vcfRCommon::strsplit(svec[i], header_vec, header_split);
+        
+        // Subset the header to select columns.
+        std::vector<std::string> header_vec2( cols.size() );
+        for(int j=0; j<cols.size(); j++){
+          header_vec2[j] = header_vec[ cols[j] ];
+        }
+        header_vec = header_vec2;
+        
       } else {
         // Variant line.
-        proc_body_line(gt, var_num, svec[i]);
-        var_num++;
-        
+
+//        Rcpp::Rcout << "var_num: " << var_num << "\n";
+//        Rcpp::Rcout << "skip: " << skip << "\n";
+        if( var_num >= skip ){
+          proc_body_line(gt, var_num, svec[i], cols);
+        }
+        var_num++;        
+
         if(var_num % nreport == 0 && verbose == 1){
           Rcpp::Rcout << "\rProcessed variant " << var_num;
         }

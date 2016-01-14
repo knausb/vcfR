@@ -72,6 +72,9 @@ read.vcf <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, verbose
   if( is.null(cols) ){
     cols <- 1:stats['columns']
   }
+  # Make sure we include the first nine columns.
+  cols <- sort( unique( c(1:9, cols) ) )
+
   
 #  ram_est <- stats['variants'] * stats['columns'] * 8 + 248
   ram_est <- memuse::howbig(stats['variants'], stats['columns'])
