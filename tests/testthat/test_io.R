@@ -158,22 +158,6 @@ test_that("write.win.info works for Chrom objects",{
 })
 
 
-test_that("read.vcf works for vcf files which contain no variants",{  
-  vcf2 <- vcf
-  vcf2@fix <- vcf2@fix[0,]
-  vcf2@gt <- vcf2@gt[0,]
-  
-  setwd(test_dir)
-  write.vcf(vcf2, "test.vcf.gz")
-  test <- read.vcf("test.vcf.gz", verbose=FALSE)
-  unlink("test.vcf.gz")
-  setwd(original_dir)
-
-  expect_equal(ncol(test@fix), ncol(vcf2@fix))
-  expect_equal(ncol(test@gt), ncol(vcf2@gt))
-  expect_equal(nrow(test@fix), nrow(vcf2@fix))
-  expect_equal(nrow(test@gt), nrow(vcf2@gt))
-})
 
 
 

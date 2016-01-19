@@ -226,10 +226,11 @@ void proc_body_line(Rcpp::CharacterMatrix gt,
 // [[Rcpp::export]]
 Rcpp::CharacterMatrix read_body_gz(std::string x,
                                    Rcpp::NumericVector stats,
-                                   int nrows,
-                                   int skip,
-                                   Rcpp::IntegerVector cols,
+                                   int nrows = -1,
+                                   int skip = 0,
+                                   Rcpp::IntegerVector cols = 0,
                                    int verbose = 1) {
+
 
   // Sort the column numbers.
   cols.sort();
@@ -244,10 +245,58 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
   cols = cols - 1; // R is 1-based
   
   // Initialize matrix for body data.
-//  Rcpp::CharacterMatrix gt(stats[2], stats[3]);
-  Rcpp::CharacterMatrix gt( stats[2], cols.size() );
+  // old: Rcpp::CharacterMatrix gt(stats[2], stats[3]);
+  int row_num = 0;
+  
+  /*
+  If the user specifies nrows greater than
+  what exists in the file, we need to reduce nrows.
+  This should also handle isues when the file 
+  contains no variants.
+  */
+  if( nrows > stats[2] ){
+    nrows = stats[2];
+  }
+  
+  if( nrows == -1 & skip == 0 ){
+    nrows = stats[2];
+  } else if ( nrows != -1 & skip == 0 ){
+    // nrows = nrows;
+  } else if ( nrows == -1 & skip > 0){
+    nrows = stats[2] - skip;
+  } else if ( nrows != -1 & skip > 0){
+    // nrows = nrows;
+  } else {
+    Rcpp::Rcerr << "failed to calculate return matrix geometry.";
+  }
+  Rcpp::CharacterMatrix gt( nrows, cols.size() );
+  
+//  if ( nrows > -1 & skip == 0 ){
+//    row_num = nrows;
+//  } else if ( nrows == -1 & skip > 0 ){
+//    row_num = stats[2] - skip;
+//  } else {
+//    row_num = stats[2];    
+//  }
+//  Rcpp::CharacterMatrix gt( row_num, cols.size() );
 
-
+  row_num = 0;
+  
+  if( verbose == 1 ){
+    Rcpp::Rcout << "Character matrix gt created.\n";
+    Rcpp::Rcout << "Character matrix gt rows: ";  Rcpp::Rcout << gt.rows();
+    Rcpp::Rcout << "\n";
+    Rcpp::Rcout << "Character matrix gt cols: ";  Rcpp::Rcout << gt.cols();
+    Rcpp::Rcout << "\n";
+    Rcpp::Rcout << "skip: ";  Rcpp::Rcout << skip;
+    Rcpp::Rcout << "\n";
+    Rcpp::Rcout << "nrows: ";  Rcpp::Rcout << nrows;
+    Rcpp::Rcout << "\n";
+    Rcpp::Rcout << "row_num: ";  Rcpp::Rcout << row_num;
+    Rcpp::Rcout << "\n";
+    Rcpp::Rcout << "\n";
+  }
+  
   // Create filehandle and open.
   gzFile file;
   file = gzopen (x.c_str(), "r");
@@ -255,7 +304,6 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
     Rcpp::Rcerr << "gzopen of " << x << " failed: " << strerror (errno) << ".\n";
     return Rcpp::CharacterMatrix(1);
   }
-
 
   // Because the last line may be incomplete,
   // We'll typically omit it from processing and
@@ -297,6 +345,7 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
 
     // Scroll through lines.
     for(int i = 0; i < svec.size() - 1; i++){
+      
       if(svec[i][0] == '#' && svec[i][1] == '#'){
         // Meta line, ignore.
       } else if(svec[i][0] == '#' && svec[i][1] == 'C'){
@@ -310,24 +359,50 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
           header_vec2[j] = header_vec[ cols[j] ];
         }
         header_vec = header_vec2;
-        
       } else {
         // Variant line.
 
 //        Rcpp::Rcout << "var_num: " << var_num << "\n";
 //        Rcpp::Rcout << "skip: " << skip << "\n";
-        if( var_num >= skip ){
-          proc_body_line(gt, var_num, svec[i], cols);
+//        if( var_num >= skip ){
+//          proc_body_line(gt, var_num, svec[i], cols);
+//        }
+//        var_num++;        
+
+
+        /* 
+        We'll want to screen on nrows first so we can 
+        bail out when we rech it.
+        This is different than skip where we'll just want to
+        omit, but still need to pass.
+        Try row_num break first! 
+        */
+
+//        Rcpp::Rcout << row_num << " ";
+//        Rcpp::Rcout << row_num << "|" << var_num << " ";
+//        Rcpp::Rcout << "  row_num: " << row_num << "\n";
+//        Rcpp::Rcout << "  var_num: " << var_num << "\n";        
+//        Rcpp::Rcout << "\n";
+        
+        if ( var_num >= skip & row_num < nrows ){
+//          proc_body_line(gt, row_num, svec[i], cols);
+          row_num++; // Return matrix row number.
         }
-        var_num++;        
+        var_num++; // Input row number.
+
 
         if(var_num % nreport == 0 && verbose == 1){
           Rcpp::Rcout << "\rProcessed variant " << var_num;
         }
       }   
     }
+    if( nrows != -1 & row_num >= nrows ){
+      break;
+    }
+    
+    // Processed all lines of current buffer.
     // Keep the last line so we can append it to 
-    //the beginning of the next buffer
+    //the beginning of the next buffer.
     lastline = svec[svec.size() - 1];
 
 
@@ -348,7 +423,7 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
     }
     
   // Return to top of loop and process another buffer.
-  }
+  } // Close while.
   
   // Close filehandle.
   gzclose (file);

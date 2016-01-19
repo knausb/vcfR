@@ -7,6 +7,7 @@ context("vcf functions")
 #ex_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
 
 data("vcfR_example")
+tot_var <- nrow(vcf@gt)
 
 ##### ##### ##### ##### #####
 # Manage directories.
@@ -37,6 +38,31 @@ test_that("compiled input functions work",{
 })
 
 
+test_that("compiled vcfR_read_body works when file contains no variants",{
+  vcf2 <- vcf
+  vcf2@fix <- vcf2@fix[0,]
+  vcf2@gt <- vcf2@gt[0,]
+  
+  setwd(test_dir)
+  write.vcf(vcf2, "test.vcf.gz")
+  stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', ex_file)
+  meta <- .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', ex_file, stats, 0)
+  body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', ex_file, stats, nrows = -1, skip = 0, cols=1:stats['columns'], 0)
+
+
+  unlink("test.vcf.gz")
+  setwd(original_dir)
+  
+})
+
+
+##### ##### ##### ##### #####
+
+
+data("vcfR_example")
+write.vcf(vcf, file=ex_file)
+
+
 test_that("read.vcf works",{
   vcf <- read.vcf(ex_file, verbose=FALSE)
   expect_is(vcf, "vcfR")
@@ -47,12 +73,12 @@ test_that("read.vcf works",{
 
 
 test_that("read.vcf nrows works",{
-  
+  vcf <- read.vcf(ex_file, verbose=FALSE, nrows=100)
 })
 
 
 test_that("read.vcf skip works",{
-  
+  vcf <- read.vcf(ex_file, verbose=FALSE, skip=100)
 })
 
 
@@ -64,7 +90,25 @@ test_that("read.vcf column selection works",{
 })
 
 
+test_that("read.vcf works for vcf files which contain no variants",{  
+  vcf2 <- vcf
+  vcf2@fix <- vcf2@fix[0,]
+  vcf2@gt <- vcf2@gt[0,]
+  
+  setwd(test_dir)
+  write.vcf(vcf2, "test.vcf.gz")
+  test <- read.vcf("test.vcf.gz", verbose=FALSE)
+  unlink("test.vcf.gz")
+  setwd(original_dir)
+  
+  expect_equal(ncol(test@fix), ncol(vcf2@fix))
+  expect_equal(ncol(test@gt), ncol(vcf2@gt))
+  expect_equal(nrow(test@fix), nrow(vcf2@fix))
+  expect_equal(nrow(test@gt), nrow(vcf2@gt))
+})
 
+
+##### ##### ##### ##### #####
 
 vcf <- read.vcf(ex_file, verbose=FALSE)
 
