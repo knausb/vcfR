@@ -8,7 +8,7 @@
 const int nreport = 1000;
 
 /* Size of the block of memory to use for reading. */
-#define LENGTH 0x1000
+#define LENGTH 0x1000 // hexadecimel for 4096.
 
 
 /*  Helper functions */
@@ -254,9 +254,9 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
   This should also handle isues when the file 
   contains no variants.
   */
-  if( nrows > stats[2] ){
-    nrows = stats[2];
-  }
+//  if( nrows > stats[2] ){
+//    nrows = stats[2];
+//  }
   
   if( nrows == -1 & skip == 0 ){
     nrows = stats[2];
@@ -385,7 +385,7 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
 //        Rcpp::Rcout << "\n";
         
         if ( var_num >= skip & row_num < nrows ){
-//          proc_body_line(gt, row_num, svec[i], cols);
+          proc_body_line(gt, row_num, svec[i], cols);
           row_num++; // Return matrix row number.
         }
         var_num++; // Input row number.
