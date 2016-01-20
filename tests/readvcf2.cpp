@@ -1,7 +1,10 @@
 #include <Rcpp.h>
 #include <fstream>
-#include <zlib.h>
 #include <cerrno>
+#include <zlib.h>
+
+#include "../src/vcfRCommon.h"
+
 
 // Number of records to report progress at.
 const int nreport = 1000;
@@ -72,33 +75,82 @@ Rcpp::CharacterMatrix read_body_gz2(std::string x,
   int var_num = 0;
 
   
-  
-  
+  // Scroll through buffers.
+  while (1) {
+    Rcpp::checkUserInterrupt();
+    int err;
+    
+    // Slurp in a buffer.
+    int bytes_read;
+    char buffer[LENGTH];
+    bytes_read = gzread (file, buffer, LENGTH - 1);
+    buffer[bytes_read] = '\0'; // Terminate the buffer.
+    
+    std::string mystring(reinterpret_cast<char*>(buffer));  // Recast buffer as a string.
+    mystring = lastline + mystring; // Concatenate last line to the buffer
+    
+    // Delimit into lines.
+    std::vector < std::string > svec;  // Initialize vector of strings for parsed buffer.
+    char split = '\n'; // Must be single quotes!
+    vcfRCommon::strsplit(mystring, svec, split);
+
+    
+    // Scroll through lines of buffer.
+    for(int i = 0; i < svec.size() - 1; i++){
+      
+      if(svec[i][0] == '#' && svec[i][1] == '#'){
+        // Meta line, ignore.
+      } else if(svec[i][0] == '#' && svec[i][1] == 'C'){
+        // Process header.
+        char header_split = '\t';
+        vcfRCommon::strsplit(svec[i], header_vec, header_split);
+        
+        // Subset the header to select columns.
+        std::vector<std::string> header_vec2( cols.size() );
+        for(int j=0; j<cols.size(); j++){
+          header_vec2[j] = header_vec[ cols[j] ];
+        }
+        header_vec = header_vec2;
+      } else {
+        // Variant line.
+        
+        var_num++; // Input row number.
+      }
+    }
+    
+    
+    
+    
+        
+    // Check for EOF or errors.
+    if (bytes_read < LENGTH - 1) {
+      if (gzeof (file)) {
+        break;
+      }
+      else {
+        const char * error_string;
+        error_string = gzerror (file, & err);
+        if (err) {
+          Rcpp::Rcerr << "Error: " << error_string << ".\n";
+//          return Rcpp::StringVector(1);
+          return Rcpp::CharacterMatrix(1);
+        }
+      }
+    }
+
+  }
   
   
   
   // Close filehandle.
   gzclose (file);
 
-  if( stats[1] == 0 ){
-    if( verbose == 1 ){
-      Rcpp::Rcout << "Warning: no header information was found! Data contains no sample names!\n";
-    }
-  } else {
-    header_vec[0] = "CHROM";
-    if( header_vec.size() == gt.ncol() ){
-      gt.attr("dimnames") = Rcpp::List::create(Rcpp::CharacterVector::create(), header_vec);
-    } else {
-      if( verbose == 1 ){
-        Rcpp::Rcout << "Warning: no header information found!\n";
-      }
-    }
-  }
 
   if(verbose == 1){
     Rcpp::Rcout << "\rProcessed variant: " << var_num;
     Rcpp::Rcout << "\nAll variants processed\n";
   }
-  
+ 
+//  Rcpp::CharacterMatrix gt( 2, 4 ); 
   return gt;
 }

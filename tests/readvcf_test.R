@@ -29,8 +29,8 @@ stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', ex_file)
 read_body_gz2(ex_file, stats, nrows = -1, skip = 0, cols = 1:stats['columns'], verbose = 1)
 
 read_body_gz2(ex_file, stats, nrows = 10, skip = 0, cols = 1:stats['columns'], verbose = 1)
-read_body_gz2(ex_file, stats, nrows = 1, skip = 0, cols = 1:stats['columns'], verbose = 1)
-read_body_gz2(ex_file, stats, nrows = 0, skip = 0, cols = 1:stats['columns'], verbose = 1)
+read_body_gz2(ex_file, stats, nrows =  1, skip = 0, cols = 1:stats['columns'], verbose = 1)
+read_body_gz2(ex_file, stats, nrows =  0, skip = 0, cols = 1:stats['columns'], verbose = 1)
 
 
 
