@@ -13,6 +13,35 @@ const int nreport = 1000;
 #define LENGTH 0x1000 // hexadecimel for 4096.
 
 
+void proc_body_line(Rcpp::CharacterMatrix gt,
+                    int var_num,
+                    std::string myline,
+                    Rcpp::IntegerVector cols){
+  
+  char split = '\t'; // Must be single quotes!
+  std::vector < std::string > data_vec;
+  
+  vcfRCommon::strsplit(myline, data_vec, split);
+  
+  Rcpp::Rcout << "\n";
+  Rcpp::Rcout << "    Inside proc_body_line" << "\n";
+  Rcpp::Rcout << "    proc_body_line::var_num: " << var_num << "\n";
+  Rcpp::Rcout << "    cols.size(): " << cols.size() << "\n";
+  Rcpp::Rcout << "\n";
+  
+  for(int i = 0; i < cols.size(); i++){
+//    if( data_vec[ cols[i] ] == "." ){
+//      gt(var_num, i) = NA_STRING;
+//    }
+//    } else if( data_vec[ cols[i] ][0] == '.' & data_vec[ cols[i] ][2] == '.' & data_vec[ cols[i] ].size() == 3 ){
+//      gt(var_num, i) = NA_STRING;
+//    } else {
+//      gt(var_num, i) = data_vec[ cols[i] ];
+//    }
+  }
+  
+}
+
 
 
 // [[Rcpp::export]]
@@ -23,15 +52,17 @@ Rcpp::CharacterMatrix read_body_gz2(std::string x,
                                    Rcpp::IntegerVector cols = 0,
                                    int verbose = 1) {
 
+  // NA matrix for unexpected results.
+  Rcpp::StringMatrix na_matrix(1,1);
+  na_matrix(0,0) = NA_STRING;
+  
   // Sort the column numbers.
   cols.sort();
-  
+
   // Validate that column numbers have been specified.
   if(cols[0] == 0){
     Rcpp::Rcerr << "User must specify which (positive integer) columns to extract from the file.\n";
-    Rcpp::StringMatrix mymatrix(1,1);
-    mymatrix(0,0) = NA_STRING;
-    return mymatrix;
+    return na_matrix;
   }
   cols = cols - 1; // R is 1-based
 
@@ -49,17 +80,13 @@ Rcpp::CharacterMatrix read_body_gz2(std::string x,
     Rcpp::Rcerr << "failed to calculate return matrix geometry.";
   }
   Rcpp::CharacterMatrix gt( nrows, cols.size() );
-  
 
-  int row_num = 0;
-  
-  
   // Create filehandle and open.
   gzFile file;
   file = gzopen (x.c_str(), "r");
   if (! file) {
     Rcpp::Rcerr << "gzopen of " << x << " failed: " << strerror (errno) << ".\n";
-    return Rcpp::CharacterMatrix(1);
+    return na_matrix;
   }
 
   // Because the last line may be incomplete,
@@ -70,16 +97,32 @@ Rcpp::CharacterMatrix read_body_gz2(std::string x,
   
   // String vector to store the header (^#CHROM...).
   std::vector<std::string> header_vec;
-  
-  // variant counter.  
-  int var_num = 0;
 
+  int var_num = 0; // input variant counter.
+  int row_num = 0; // Retained variant counter.
+  int err;
+  
+  
+  if( verbose == 1 ){
+    Rcpp::Rcout << "Character matrix gt created.\n";
+    Rcpp::Rcout << "Character matrix gt rows: ";  Rcpp::Rcout << gt.rows();
+    Rcpp::Rcout << "\n";
+    Rcpp::Rcout << "Character matrix gt cols: ";  Rcpp::Rcout << gt.cols();
+    Rcpp::Rcout << "\n";
+    Rcpp::Rcout << "skip: ";  Rcpp::Rcout << skip;
+    Rcpp::Rcout << "\n";
+    Rcpp::Rcout << "nrows: ";  Rcpp::Rcout << nrows;
+    Rcpp::Rcout << "\n";
+    Rcpp::Rcout << "row_num: ";  Rcpp::Rcout << row_num;
+    Rcpp::Rcout << "\n";
+    Rcpp::Rcout << "\n";
+  }
+  
   
   // Scroll through buffers.
   while (1) {
     Rcpp::checkUserInterrupt();
-    int err;
-    
+
     // Slurp in a buffer.
     int bytes_read;
     char buffer[LENGTH];
@@ -113,11 +156,19 @@ Rcpp::CharacterMatrix read_body_gz2(std::string x,
         header_vec = header_vec2;
       } else {
         // Variant line.
+        Rcpp::Rcout << row_num << "|" << var_num << " ";
         
+        if ( var_num >= skip & row_num < nrows ){
+          proc_body_line(gt, row_num, svec[i], cols);
+          row_num++; // Return matrix row number.
+        }
         var_num++; // Input row number.
       }
     }
     
+    if( nrows != -1 & row_num >= nrows ){
+      break;
+    }
     
     
     
@@ -133,7 +184,8 @@ Rcpp::CharacterMatrix read_body_gz2(std::string x,
         if (err) {
           Rcpp::Rcerr << "Error: " << error_string << ".\n";
 //          return Rcpp::StringVector(1);
-          return Rcpp::CharacterMatrix(1);
+//          return Rcpp::CharacterMatrix(1);
+          return na_matrix;
         }
       }
     }
@@ -147,8 +199,8 @@ Rcpp::CharacterMatrix read_body_gz2(std::string x,
 
 
   if(verbose == 1){
-    Rcpp::Rcout << "\rProcessed variant: " << var_num;
-    Rcpp::Rcout << "\nAll variants processed\n";
+//    Rcpp::Rcout << "\rProcessed variant: " << var_num;
+//    Rcpp::Rcout << "\nAll variants processed\n";
   }
  
 //  Rcpp::CharacterMatrix gt( 2, 4 ); 
