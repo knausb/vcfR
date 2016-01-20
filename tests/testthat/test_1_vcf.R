@@ -44,16 +44,14 @@ test_that("compiled vcfR_read_body works when file contains no variants",{
   vcf2@fix <- vcf2@fix[0,]
   vcf2@gt <- vcf2@gt[0,]
   
-  setwd(test_dir)
-  write.vcf(vcf2, "test.vcf.gz")
+  write.vcf(vcf2, ex_file)
   stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', ex_file)
   meta <- .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', ex_file, stats, 0)
 #  body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', ex_file, stats, nrows = -1, skip = 0, cols=1:stats['columns'], 0)
   body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', ex_file, stats, nrows = 0, skip = 0, cols=1:stats['columns'], 0)
 
-  unlink("test.vcf.gz")
-  setwd(original_dir)
-  
+  unlink(ex_file)
+
 })
 
 
@@ -96,12 +94,11 @@ test_that("read.vcf works for vcf files which contain no variants",{
   vcf2@fix <- vcf2@fix[0,]
   vcf2@gt <- vcf2@gt[0,]
   
-  setwd(test_dir)
-  write.vcf(vcf2, "test.vcf.gz")
-  test <- read.vcf("test.vcf.gz", verbose=FALSE)
-  unlink("test.vcf.gz")
-  setwd(original_dir)
-  
+  write.vcf(vcf2, ex_file)
+  test <- read.vcf(ex_file, verbose=FALSE)
+  unlink(ex_file)
+
+
   expect_equal(ncol(test@fix), ncol(vcf2@fix))
   expect_equal(ncol(test@gt), ncol(vcf2@gt))
   expect_equal(nrow(test@fix), nrow(vcf2@fix))
@@ -111,15 +108,11 @@ test_that("read.vcf works for vcf files which contain no variants",{
 
 ##### ##### ##### ##### #####
 
-vcf <- read.vcf(ex_file, verbose=FALSE)
+#vcf <- read.vcf(ex_file, verbose=FALSE)
 
 test_that("write.vcf works",{
-  orig.dir <- getwd()
-  temp.dir <- tempdir()
-  setwd(temp.dir)
-  write.vcf(vcf, file="temp.vcf.gz")  
-  unlink("temp.vcf.gz")
-  setwd(orig.dir)
+  write.vcf(vcf, file=ex_file)  
+  unlink(ex_file)
 })
 
 
@@ -141,7 +134,7 @@ test_that("vcfR subsetters works",{
   
 #debug(read.vcf)
 
-unlink(ex_file)
+#unlink(ex_file)
 
 ##### ##### ##### ##### #####
 # EOF.

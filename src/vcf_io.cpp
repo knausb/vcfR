@@ -396,14 +396,22 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
         }
       }   
     }
-    if( nrows != -1 & row_num >= nrows ){
-      break;
-    }
+
     
     // Processed all lines of current buffer.
     // Keep the last line so we can append it to 
     //the beginning of the next buffer.
     lastline = svec[svec.size() - 1];
+    
+    /*
+     * If we have read in all of nrows
+     * and we have processed teh header
+     * (important when nrows is small)
+     * we can bail out.
+     */
+    if( row_num >= nrows & lastline[0] != '#' ){
+        break;
+    }
 
 
     // Check for EOF or errors.
