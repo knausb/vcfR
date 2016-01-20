@@ -1,6 +1,5 @@
 
-#
-library(testthat)
+#library(testthat)
 #detach(package:vcfR, unload=TRUE)
 library(vcfR)
 context("vcf functions")
@@ -72,12 +71,16 @@ test_that("read.vcf works",{
 
 
 test_that("read.vcf nrows works",{
-  vcf <- read.vcf(ex_file, verbose=FALSE, nrows=100)
+  count <- 100
+  vcf <- read.vcf(ex_file, verbose=FALSE, nrows=count)
+  expect_equal(nrow(vcf), count)
 })
 
 
 test_that("read.vcf skip works",{
-  vcf <- read.vcf(ex_file, verbose=FALSE, skip=100)
+  count <- 100
+  vcf <- read.vcf(ex_file, verbose=FALSE, skip=count)
+  expect_equal(nrow(vcf), tot_var - count)
 })
 
 

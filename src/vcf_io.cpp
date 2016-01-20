@@ -231,33 +231,29 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
                                    Rcpp::IntegerVector cols = 0,
                                    int verbose = 1) {
 
-
-  // Sort the column numbers.
-  cols.sort();
-  
-  // Validate that column numbers have been specified.
-  if(cols[0] == 0){
-    Rcpp::Rcerr << "User must specify which (positive integer) columns to extract from the file.\n";
-    Rcpp::StringMatrix mymatrix(1,1);
-    mymatrix(0,0) = NA_STRING;
-    return mymatrix;
+  /*
+   * Manage cols vector.
+   * The first nine (1-based) columns are mandatory.
+   * We can ensure they are there by adding them,
+   * sorting and removing adjacent non-identical values.
+   */
+  for( int i=9; i >= 1; i-- ){
+    cols.push_front(i);
   }
-  cols = cols - 1; // R is 1-based
-  
+  cols.sort();
+  for( int i=0; i < cols.size(); i++ ){
+    while( cols[i] == cols[i+1] ){
+      cols.erase(i+1);
+    }
+  }
+  cols = cols - 1; // R is 1-based, C is 0-based.
+
+
   // Initialize matrix for body data.
   // old: Rcpp::CharacterMatrix gt(stats[2], stats[3]);
   int row_num = 0;
   
-  /*
-  If the user specifies nrows greater than
-  what exists in the file, we need to reduce nrows.
-  This should also handle isues when the file 
-  contains no variants.
-  */
-//  if( nrows > stats[2] ){
-//    nrows = stats[2];
-//  }
-  
+
   if( nrows == -1 & skip == 0 ){
     nrows = stats[2];
   } else if ( nrows != -1 & skip == 0 ){
