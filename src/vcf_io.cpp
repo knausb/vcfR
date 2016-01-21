@@ -246,16 +246,14 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
     cols.push_front(i);
   }
   cols.sort();
-  
-  
-  for( int i=0; i < cols.size(); i++ ){
-    while( cols[i] == cols[i+1] ){
-      cols.erase(i+1);
-    }
-  }
+
+  // Remove duplicate values using a set.
+  std::set<int> s( cols.begin(), cols.end() );
+  cols.assign( s.begin(), s.end() );
+
   cols = cols - 1; // R is 1-based, C is 0-based.
 
-
+  
   // Initialize matrix for body data.
   // old: Rcpp::CharacterMatrix gt(stats[2], stats[3]);
   int row_num = 0;

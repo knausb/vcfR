@@ -10,7 +10,7 @@
 #' @param file A filename for a variant call format (vcf) file.
 #' @param limit amount of memory (in bytes) not to exceed when reading in a file.
 #' @param nrows integer specifying the maximum number of rows (variants) to read in.
-#' @param skip integer specifying the number of rows (varisnts) to skip before beginning to read data.
+#' @param skip integer specifying the number of rows (variants) to skip before beginning to read data.
 #' @param cols vector of column numbers to extract from file.
 #' @param x An object of class vcfR or chromR.
 # @param vfile an output filename.

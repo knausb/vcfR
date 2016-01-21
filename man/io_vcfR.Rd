@@ -17,7 +17,7 @@ write.vcf(x, file = "", mask = FALSE, APPEND = FALSE)
 
 \item{nrows}{integer specifying the maximum number of rows (variants) to read in.}
 
-\item{skip}{integer specifying the number of rows (varisnts) to skip before beginning to read data.}
+\item{skip}{integer specifying the number of rows (variants) to skip before beginning to read data.}
 
 \item{cols}{vector of column numbers to extract from file.}
 
