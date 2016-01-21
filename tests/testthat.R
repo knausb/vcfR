@@ -57,7 +57,7 @@ test_file("testthat/test_vcfR_methods.R")
 # http://kevinushey.github.io/blog/2015/04/05/debugging-with-valgrind/
 
 # R -d "valgrind --db-attach=yes" -f test_1_vcf.R
-
+# R -d "valgrind --track-origins=yes" -f test_1_vcf.R
 
 
 ##### ##### ##### ##### #####
