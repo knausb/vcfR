@@ -103,8 +103,9 @@ Quality is notable in that it is fairly clinal and may not be useful for filteri
 We can also use the chromoqc function to see how the data are distributed along the chromosome.
 
 
+
 ```{r, fig.height=7, fig.width=7}
-chromoqc(chrom, verbose=FALSE)
+chromoqc(chrom)
 ```
 
 
@@ -130,7 +131,7 @@ We can use chromoqc() to see how applying this mask affects our data.
 
 
 ```{r, fig.height=7, fig.width=7}
-chromoqc(chrom, verbose=FALSE)
+chromoqc(chrom)
 ```
 
 

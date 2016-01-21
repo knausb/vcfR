@@ -180,7 +180,7 @@ And plot.
 
 
 ```{r, fig.height=7, fig.width=7}
-chromoqc(chrom, dot.alpha='66')
+chromoqc(chrom, dp.alpha='66')
 ```
 
 
@@ -203,7 +203,7 @@ Replot.
 
 
 ```{r, fig.height=7, fig.width=7}
-chromoqc(chrom, dot.alpha='66')
+chromoqc(chrom, dp.alpha='66')
 ```
 
 
