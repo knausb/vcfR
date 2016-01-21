@@ -153,7 +153,7 @@ vcf@gt[1:6, 1:8]
 ## vcfR
 
 
-Using the R package vcfR, we can read vcf format files into memory using the function `read.vcf()`.
+Using the R package vcfR, we can read vcf format files into memory using the function `read.vcfR()`.
 Once in memory we can use the `head()` method to summarize the information in the three vcf regions.
 
 

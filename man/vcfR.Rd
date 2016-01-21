@@ -9,7 +9,7 @@
 vcfR provides a suite of tools for input and output of vcf format files, manipulation of their content and visualization.
 }
 \details{
-\strong{File input and output} is facilitated with the functions \code{\link{read.vcf}} and \code{\link{write.vcf}}.
+\strong{File input and output} is facilitated with the functions \code{\link{read.vcfR}} and \code{\link{write.vcf}}.
 Input of vcf format data results in an S4 object of class \code{\link{vcfR-class}}.
 Objects of class vcfR can be manipulated with \code{\link{vcfR-methods}} and \code{\link{extract.gt}}.
 Contents of the vcfR object can be visualized with the \code{\link{plot.vcfR}} method.

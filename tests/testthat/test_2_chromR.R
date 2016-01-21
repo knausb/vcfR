@@ -28,7 +28,7 @@ data("vcfR_example")
 #seq_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
 #gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
 
-#vcf <- read.vcf(vcf_file, verbose = FALSE)
+#vcf <- read.vcfR(vcf_file, verbose = FALSE)
 #dna <- ape::read.dna(seq_file, format = "fasta")
 #gff <- read.table(gff_file, sep="\t")
 

@@ -27,7 +27,7 @@ We include it here for redundancy, and because every example involving vcf data 
 ```{r}
 library(vcfR)
 vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
-vcf <- read.vcf(vcf_file, verbose = FALSE)
+vcf <- read.vcfR(vcf_file, verbose = FALSE)
 ```
 
 

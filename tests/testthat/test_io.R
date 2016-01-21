@@ -10,7 +10,7 @@ data(vcfR_example)
 #seq_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
 #gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
 
-#vcf <- read.vcf(vcf_file, verbose = FALSE)
+#vcf <- read.vcfR(vcf_file, verbose = FALSE)
 #dna <- ape::read.dna(seq_file, format = "fasta")
 #gff <- read.table(gff_file, sep="\t")
 
@@ -28,7 +28,7 @@ test_that("vcfR_vcf_stats_gz works",{
   setwd(test_dir)
   write.vcf(chrom, "test.vcf.gz")
   x <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', "test.vcf.gz")
-  #  test <- read.vcf("test.vcf")
+  #  test <- read.vcfR("test.vcf")
   unlink("test.vcf.gz")
   setwd(original_dir)
   
@@ -72,7 +72,7 @@ test_that("vcfR_read_body_gz works",{
 test_that("read/write.vcf works for vcfR objects",{
   setwd(test_dir)
   write.vcf(vcf, "test.vcf.gz")
-  test <- read.vcf("test.vcf.gz", verbose = FALSE)
+  test <- read.vcfR("test.vcf.gz", verbose = FALSE)
   unlink("test.vcf.gz")
   setwd(original_dir)
   
@@ -88,7 +88,7 @@ test_that("read/write.vcf works for vcfR objects",{
 test_that("write.vcf APPEND=TRUE does not include header",{
   setwd(test_dir)
   write.vcf(vcf, "test.vcf.gz", APPEND=TRUE)
-  test <- read.vcf("test.vcf.gz", verbose = FALSE)
+  test <- read.vcfR("test.vcf.gz", verbose = FALSE)
   unlink("test.vcf.gz")
   setwd(original_dir)
 
@@ -97,7 +97,7 @@ test_that("write.vcf APPEND=TRUE does not include header",{
 #test_that("read/write.vcf works for Chrom objects",{
 #  setwd(test_dir)
 #  write.vcf(chrom, "test.vcf")
-#  test <- read.vcf("test.vcf", verbose = FALSE)
+#  test <- read.vcfR("test.vcf", verbose = FALSE)
 #  unlink("test.vcf")
 #  setwd(original_dir)
   
@@ -112,7 +112,7 @@ test_that("write.vcf.gz works for Chrom objects",{
   
   setwd(test_dir)
   write.vcf(chrom, "test.vcf.gz")
-  test <- read.vcf("test.vcf.gz", verbose = FALSE)
+  test <- read.vcfR("test.vcf.gz", verbose = FALSE)
   unlink("test.vcf.gz")
   setwd(original_dir)
   

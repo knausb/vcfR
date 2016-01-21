@@ -20,7 +20,7 @@
 #' @param verbose report verbose progress.
 #'
 #' @details
-#' The function \strong{read.vcf} reads in files in *.vcf (text) and *.vcf.gz (gzipped text) format and returns an object of class vcfR.
+#' The function \strong{read.vcfR} reads in files in *.vcf (text) and *.vcf.gz (gzipped text) format and returns an object of class vcfR.
 #' The parameter 'limit' is an attempt to keep the user from trying to read in a file which contains more data than there is memory to hold.
 #' Based on the dimensions of the data matrix, an estimate of how much memory needed is made.
 #' If this estimate exceeds the value of 'limit' an error is thrown and execution stops.
@@ -32,7 +32,7 @@
 #' If the parameter 'mask' is set to TRUE and the object is of class chromR (which has a mask slot), this mask is used to subset the data.
 #' If an index is supplied as 'mask', then this index is used, and recycled as necessary, to subset the data.
 #' 
-#' @return read.vcf returns an object of class \code{\link{vcfR-class}}.
+#' @return read.vcfR returns an object of class \code{\link{vcfR-class}}.
 #' See the \strong{vignette:} \code{vignette('vcf_data')}
 #'
 #' @seealso
@@ -53,10 +53,10 @@
 #' 
 #' 
 #' @rdname io_vcfR
-#' @aliases read.vcf
+#' @aliases read.vcfR
 #' @export
 #' 
-read.vcf <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, verbose = TRUE){
+read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, verbose = TRUE){
 #  require(memuse)
   
   if(file.access(file, mode = 0) != 0){

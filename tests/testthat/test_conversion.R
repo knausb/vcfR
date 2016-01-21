@@ -17,7 +17,7 @@ gene <- dna[,gff[1,4]:gff[1,5]]
 #ex_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
 #seq_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
 
-#vcf <- read.vcf(ex_file, verbose=FALSE)
+#vcf <- read.vcfR(ex_file, verbose=FALSE)
 #dna <- ape::read.dna(seq_file, format = "fasta")
 
 #gene <- dna[,159730:160890]

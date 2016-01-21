@@ -45,11 +45,11 @@ Then read in the vcf file with vcfR.
 
 ```{r}
 library(vcfR)
-vcf <- read.vcf( vcf_file, verbose = FALSE)
+vcf <- read.vcfR( vcf_file, verbose = FALSE)
 ```
 
 
-The function **read.vcf()** takes the filename you specify and uses it to read the file into a **vcfR** object.
+The function **read.vcfR()** takes the filename you specify and uses it to read the file into a **vcfR** object.
 The **vcfR** object is an S4 class object with three slots containing the metadata, the fixed data and the genotype data.
 More information on vcf data can be found in the vignette 'vcf data.'
 This object provides a known organization for the data so that downstream functions can easily access it.
@@ -137,7 +137,7 @@ We know that these are synonyms so we can ignore the warning and proceed.
 
 The parameter 'name' is a name you can assign to your object.
 This information is used when plotting the chromR object.
-The vcfR object should be of class vcfR, which was most likely created with the function read.vcf().
+The vcfR object should be of class vcfR, which was most likely created with the function read.vcfR().
 This object is inserted into the chrom object with the function **vcfR2chromR()**.
 
 

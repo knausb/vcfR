@@ -102,7 +102,7 @@ When verbose is set to FALSE the loci will be omitted silently.
 
 ```{r}
 vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
-vcf <- read.vcf(vcf_file, verbose = FALSE)
+vcf <- read.vcfR(vcf_file, verbose = FALSE)
 
 x <- vcfR2genlight(vcf)
 x
@@ -129,7 +129,7 @@ vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
 dna_file <- system.file("extdata", "pinf_sc50.fasta", package = "pinfsc50")
 gff_file <- system.file("extdata", "pinf_sc50.gff", package = "pinfsc50")
 # Read in data.
-vcf <- read.vcf(vcf_file, verbose = FALSE)
+vcf <- read.vcfR(vcf_file, verbose = FALSE)
 dna <- ape::read.dna(dna_file, format="fasta")
 gff <- read.table(gff_file, sep="\t", quote = "")
 ```

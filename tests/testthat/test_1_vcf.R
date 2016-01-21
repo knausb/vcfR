@@ -61,8 +61,8 @@ data("vcfR_example")
 write.vcf(vcf, file=ex_file)
 
 
-test_that("read.vcf works",{
-  vcf <- read.vcf(ex_file, verbose=FALSE)
+test_that("read.vcfR works",{
+  vcf <- read.vcfR(ex_file, verbose=FALSE)
   expect_is(vcf, "vcfR")
   expect_is(vcf@meta, "character")
   expect_is(vcf@fix, "matrix")
@@ -70,35 +70,35 @@ test_that("read.vcf works",{
 })
 
 
-test_that("read.vcf nrows works",{
+test_that("read.vcfR nrows works",{
   count <- 100
-  vcf <- read.vcf(ex_file, verbose=FALSE, nrows=count)
+  vcf <- read.vcfR(ex_file, verbose=FALSE, nrows=count)
   expect_equal(nrow(vcf), count)
 })
 
 
-test_that("read.vcf skip works",{
+test_that("read.vcfR skip works",{
   count <- 100
-  vcf <- read.vcf(ex_file, verbose=FALSE, skip=count)
+  vcf <- read.vcfR(ex_file, verbose=FALSE, skip=count)
   expect_equal(nrow(vcf), tot_var - count)
 })
 
 
-test_that("read.vcf column selection works",{
-  vcf <- read.vcf(ex_file, verbose=FALSE, cols=11:12)
+test_that("read.vcfR column selection works",{
+  vcf <- read.vcfR(ex_file, verbose=FALSE, cols=11:12)
   expect_is(vcf@gt, "matrix")
   expect_equal(ncol(vcf@fix), 8)
   expect_equal(ncol(vcf@gt), 3)
 })
 
 
-test_that("read.vcf works for vcf files which contain no variants",{  
+test_that("read.vcfR works for vcf files which contain no variants",{  
   vcf2 <- vcf
   vcf2@fix <- vcf2@fix[0,]
   vcf2@gt <- vcf2@gt[0,]
   
   write.vcf(vcf2, ex_file)
-  test <- read.vcf(ex_file, verbose=FALSE)
+  test <- read.vcfR(ex_file, verbose=FALSE)
   unlink(ex_file)
 
 
@@ -111,7 +111,7 @@ test_that("read.vcf works for vcf files which contain no variants",{
 
 ##### ##### ##### ##### #####
 
-#vcf <- read.vcf(ex_file, verbose=FALSE)
+#vcf <- read.vcfR(ex_file, verbose=FALSE)
 
 test_that("write.vcf works",{
   write.vcf(vcf, file=ex_file)  
@@ -135,7 +135,7 @@ test_that("vcfR subsetters works",{
 })
 
   
-#debug(read.vcf)
+#debug(read.vcfR)
 
 #unlink(ex_file)
 
