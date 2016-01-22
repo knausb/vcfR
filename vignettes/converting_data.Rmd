@@ -22,7 +22,7 @@ Here we explore examples of these paths.
 
 We'll use two datasets to illustrate data conversion.
 The function vcfR2genind calls adegenet::df2genind, a function which predates high throughput sequencing.
-This path currently doesn't scale well to large dataset.
+This path currently doesn't scale well to large datasets.
 So we'll begin with the vcfR example dataset.
 This dataset consists of 19 samples with 2,533 variants.
 Later we'll use the example dataset from the package pinfsc50 which includes the same samples, but with 22,0331 variants.
@@ -37,8 +37,8 @@ data(vcfR_example)
 ## Creating *.vcf.gz format files.
 
 
-The function **write.vcf()** can be used to create *.vcf.gz format files (gzipped vcf files) from objects of class vcfR or chromR.
-These vcf format files can be used for any downstream analysis which uses vcf format files as input.
+The function **write.vcf()** can be used to create *.vcf.gz files (gzipped vcf files) from objects of class vcfR or chromR.
+These vcf files can be used for any downstream analysis which uses vcf files as input.
 
 
 ```{r, eval=FALSE}
@@ -79,7 +79,7 @@ The package **poppr** uses objects of class genclone as well as genind.
 Once a genind object has been created, it is fairly straight forward to create a genclone object.
 
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 my_genclone <- poppr::as.genclone(my_genind)
 class(my_genclone)
 my_genclone
@@ -93,7 +93,7 @@ The **genlight** object is used by **adegenet** and **poppr**.
 It was designed specifically to handle high-throughput genotype data.
 At present it appears to only support two alleles at a locus, but varying levels of ploidy.
 Variant callers such as FreeBayes and the GATK's haplotype caller currently support more than two alleles per locus.
-To address this incompatibility, vcfR2genelight omits loci which include more than two alleles.
+To address this incompatibility, vcfR2genelight omits loci that include more than two alleles.
 The benefit of the genlight object is that the genlight object is much more efficient to use than the genind object as it was designed with high throughput sequencing in mind.
 When verbose is set to TRUE the function vcfR2genlight will throw a warning and report how many loci it has omitted.
 When verbose is set to FALSE the loci will be omitted silently.
@@ -103,7 +103,6 @@ When verbose is set to FALSE the loci will be omitted silently.
 ```{r}
 vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
 vcf <- read.vcfR(vcf_file, verbose = FALSE)
-
 x <- vcfR2genlight(vcf)
 x
 ```
@@ -114,7 +113,7 @@ x
 ## Creating DNAbin objects
 
 The package **ape** handles sequence data using objects of class **DNAbin**.
-The vcf format only contains information on variant positions.
+The vcf file only contains information on variant positions.
 Omitting invariant data provides for a more efficient representation of the data than including the invariant sites.
 Converting vcf data to sequence data presents a challenge in that these invariant sites may need to be included.
 This means that these objects can easily occupy large amounts of memory, and may exceed the physical memory when long sequences with many samples are included.
@@ -145,7 +144,6 @@ Alternatively, we can create two haplotypes for each diploid sample, resulting i
 
 ```{r, tidy=TRUE}
 record <- 130
-#my_dnabin1 <- vcfR2DNAbin(vcf, gt.split="|", ref.seq=dna[,gff[record,4]:gff[record,5]], start.pos=gff[record,4], verbose=FALSE)
 my_dnabin1 <- vcfR2DNAbin(vcf, consensus = TRUE, extract.haps = FALSE, gt.split="|", ref.seq=dna[,gff[record,4]:gff[record,5]], start.pos=gff[record,4], verbose=FALSE)
 my_dnabin1
 ```
@@ -168,7 +166,7 @@ So the user should excercise prudence when using this option.
 
 If we instead create two haplotypes for each diploid sample, it results in a DNAbin object which includes only unambiguous nucleotides(A, C,  G and T).
 This typically requires the data to be phased (I use [beagle4](https://faculty.washington.edu/browning/beagle/beagle.html)).
-In vcf files this is typically indicated by delimiting the alleles of the genotype with a pipe ('|') for phased data, while unphased data are delimited with a forward slash ('/').
+In vcf files this is indicated by delimiting the alleles of the genotype with a pipe ('|') for phased data, while unphased data are delimited with a forward slash ('/').
 
 
 ```{r, tidy=TRUE}
@@ -217,8 +215,8 @@ We can now proceed to downstream analyses.
 ## Conclusion
 
 The use of vcfR is an intermediary point in an analysis.
-Once vcf format data are obtained, vcfR provides an interactive way to scrutinize and filter the data.
-A number of paths have been provided that take the results of vcf format data from exploration and filtering to downstream analyses.
+Once vcf data are obtained, vcfR provides an interactive way to scrutinize and filter the data.
+A number of paths have been provided that take the results of vcf format data from exploration and filtering to downstream analyses by other software that uses vcf files as input or several R packages.
 
 
 

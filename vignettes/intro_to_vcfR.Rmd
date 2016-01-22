@@ -10,7 +10,7 @@ vignette: >
 ---
 
 
-vcfR is a package intended to help visualize, manipulate and quality filter data in vcf format files.
+vcfR is a package intended to help visualize, manipulate and quality filter data in vcf files.
 
 
 ## Preliminaries
