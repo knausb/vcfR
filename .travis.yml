@@ -15,6 +15,12 @@ install:
 #  - ./travis-tool.sh InstallPandoc
 #  - travis_retry cabal install pandoc pandoc-citeproc  # Pandoc install using haskell (markdown parser)
 #  - ./travis-tool.sh install_github sjmgarnier/viridisLite
+
+r_github_packages:
+  - jimhester/covr
+
+after_success:
+  - Rscript -e 'covr::coveralls()'
  
 script: ./travis-tool.sh run_tests
 
@@ -31,8 +37,3 @@ notifications:
     on_success: change
     on_failure: change
 
-r_github_packages:
-  - jimhester/covr
-
-after_success:
-  - Rscript -e 'covr::coveralls()'
