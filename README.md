@@ -5,6 +5,8 @@ VcfR, tools created to work with [vcf](https://github.com/samtools/hts-specs) fi
 
 [![Travis-CI Build Status](https://travis-ci.org/knausb/vcfR.png?branch=master)](https://travis-ci.org/knausb/vcfR)
 
+[![Coverage Status](https://coveralls.io/repos/github/knausb/vcfR/badge.svg?branch=master)](https://coveralls.io/github/knausb/vcfR?branch=master)
+
 *vcfR* - S4 class to contain a vcf file as well as functions to load this object.
 
 *chromR* - S4 class to contain variant information (vcf) as well as sequence (fasta) and annotation (gff) information.

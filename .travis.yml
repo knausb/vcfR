@@ -31,3 +31,8 @@ notifications:
     on_success: change
     on_failure: change
 
+r_github_packages:
+  - jimhester/covr
+
+after_success:
+  - Rscript -e 'covr::coveralls()'

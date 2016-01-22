@@ -83,7 +83,7 @@ If we become concerned with how our choice of window size affects our analysis, 
 
 ```{r, fig.height=7, fig.width=7}
 chrom <- proc.chromR(chrom, verbose=FALSE, win.size=1e4)
-chromoqc(chrom, verbose=FALSE)
+chromoqc(chrom)
 ```
 
 
