@@ -32,7 +32,7 @@ vcf <- read.vcfR(vcf_file, verbose = FALSE)
 dna <- ape::read.dna(dna_file, format = "fasta")
 gff <- read.table(gff_file, sep="\t", quote="")
 
-chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, ann=gff, verbose=TRUE)
+chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
 chrom <- proc.chromR(chrom, verbose = TRUE)
 
 ```
@@ -44,13 +44,16 @@ chrom <- proc.chromR(chrom, verbose = TRUE)
 
 Instead of removing variants, vcfR implements a mask.
 This allows changes to be easily undone and it preserves the geometry of the data matrix.
-Preserving the geometry of the matrix also allows for multiple manipulations to be made.
+Preserving the geometry of the matrix also allows for multiple manipulations to be made easily.
 When we've settled on a set of manipulations which we like we can then use this mask to subset the data.
 
 
 The function masker() censors variants (i.e., sets the mask) based on several thresholds.
 A number of summaries regarding variant quality are reported in vcf files.
 These summaries may differ in content depending on what software was used to create them, as well as what options may have been used.
+For example, a quality metric may range from 0 to 20 or 0 to 100 depending on choices made by the developer (i.e., are they raw probabilities or phred converted, etc.).
+Because of this, the default values for masker() are not likely to be very useful.
+The user will need to explore their data to identify useful thresholds.
 We can use the head() function to see what sort of information is contained in our data.
 
 
@@ -63,7 +66,7 @@ The masker() function uses QUAL, sequence depth and mapping quality to try to fi
 The parameter QUAL is a part of the vcf file definition.
 Because of this, it is not documented in the meta region.
 This parameter should always be present.
-However, it may be set to missing ('.') or populated with a constant, both of which render this metric as unuseful.
+However, it may be set to missing ('.' in the file, NA as read in by vcfR) or populated with a constant, both of which render this metric as unuseful.
 The parameters DP and MQ are in the INFO column an are not part of the vcf definition.
 The parameter DP is not a required field, so it is defined in the meta region.
 
@@ -72,8 +75,8 @@ We can remind ourselves how these parameters are defined by querying the meta re
 
 
 ```{r, tidy=TRUE}
-strwrap(grep("MQ", chrom@vcf@meta, value=T))
-strwrap(grep("DP", chrom@vcf@meta, value=T))
+strwrap(grep("ID=MQ,", chrom@vcf@meta, value=T))
+strwrap(grep("ID=DP,", chrom@vcf@meta, value=T))
 ```
 
 
@@ -93,8 +96,8 @@ plot(chrom)
 
 Our summary of DP appears continuous.
 However, we do have variants which appear to have unusually low coverage which we may try to filter out.
-We also see that Dp is very long tailed in that it has a number of variants with exceptionally high coverage.
-These typically come from repetetive regions which have reads which map to multiple locations in the genome.
+We also see that DP is very long tailed in that it has a number of variants with exceptionally high coverage.
+These typically come from repetetive regions that have reads which map to multiple locations in the genome.
 Mapping quality is largely of one value (60).
 But there are some lower values which we may want to remove.
 Quality is notable in that it is fairly clinal and may not be useful for filtering.
@@ -105,7 +108,7 @@ We can also use the chromoqc function to see how the data are distributed along 
 
 
 ```{r, fig.height=7, fig.width=7}
-chromoqc(chrom)
+chromoqc(chrom, dp.alpha = 22)
 ```
 
 
@@ -116,13 +119,20 @@ Now that we have our first peek at the data, we can try to parameterize the mask
 
 ```{r, fig.height=7, fig.width=7}
 chrom <- masker(chrom, min_QUAL=0, min_DP=350, max_DP=650, min_MQ=59.5, max_MQ=60.5)
+chrom <- proc.chromR(chrom, verbose = FALSE)
 plot(chrom)
 ```
 
 
+Note that we need to run proc.chrom() again.
+This will update the variant count per window.
+
+
 The distribution of our read depths has now become narrower and excludes low coverage variants, it is also fairly symmetric.
 The distribution of mapping quality has also become more narrow.
-Note that while in this example we were able to rapidly pick relatively good thresholds, this process may actually take a few attempts.
+Note that while in this example we were able to rapidly pick relatively good thresholds.
+This was the result of some trial and error.
+The user should expect this process to take a few attempts.
 
 
 
@@ -131,16 +141,14 @@ We can use chromoqc() to see how applying this mask affects our data.
 
 
 ```{r, fig.height=7, fig.width=7}
-chromoqc(chrom)
+chromoqc(chrom, dp.alpha = 22)
 ```
 
 
-
-The chromo plot shows us that the variants of low mapping quality are associated with a region of high variant density at about 10 kbp.
-This is accompanied by a region of low mapping quality at around 6 kbp.
-Outside of these two regions it appears that mapping quality is either 43 or 44.
-based on this information, it seems reasonable to change our threshold for masking.
-
+The chromo plot shows us that the variants of low quality populated the 3' end of the supercontig.
+Filtering has removed all of the variants from this region.
+Use of stringent filtering may be used to build a conservative set of variants.
+This conservative set may be used for analysis or it may be used as a training set for subsequent rounds of variant discovery.
 
 
 

@@ -30,7 +30,7 @@ vcf <- read.vcfR(vcf_file, verbose = FALSE)
 dna <- ape::read.dna(dna_file, format = "fasta")
 gff <- read.table(gff_file, sep="\t", quote = "")
 
-chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, ann=gff, verbose=TRUE)
+chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
 #chrom <- masker(chrom, min_DP = 900, max_DP = 1500)
 chrom <- proc.chromR(chrom, verbose = TRUE)
 
@@ -76,10 +76,9 @@ par( mar = c(5,4,4,2) )
 ```
 
 
-The values for genotype qualioty appears to range from 0 to 100 with among sample variability.
+The values for genotype quality appear to range from 0 to 100 with among sample variability.
 For example, sample P13626 consists of variants which are predominantly near 100 while sample P1362 consists of variants with qualities mostly just below 20.
-The values for sequence depth (DP) appear to have a correlation to the genotype qualities.
-Their values range from zero (zero has been omitted from the plot in order to log transform the y-axis) to almost 1,000.
+Comparison of the plots suggests that there is a correlation among sequence depth (DP) and genotype qualities (GQ) where samples with variants of high sequence depth have variants of high genotype quality.
 
 
 Unlike genotype quality, we don't necessarily want to maximize on sequence depth.
@@ -88,7 +87,7 @@ What we really want to optimize on is mean depth, or some other measure of centr
 This will require a little mathematical gymnastics.
 If we substract from each library its mean (or other measure of central tendency) it will center the data around zero.
 We can then take an absolute value which will cause the data to range from zero to some infinite number with zero being our optimal value (the measure of central tendency).
-The algorithm we're going ot use looks for an optimum and not a minimum, so if we multiply by negative one our data will range from negative infinity to zero with zero being optimal.
+The algorithm we're going to use looks for an optimum and not a minimum, so if we multiply by negative one our data will range from negative infinity to zero with zero being optimal.
 We now have a measure of depth where the greatest value is the optimal value.
 
 
@@ -147,11 +146,10 @@ hist(scores, col=4)
 ```
 
 
-Once we have score in hand we can use them to rank our variants.
+Once we have scores in hand we can use them to rank our variants.
 
 
 ```{r}
-#chrom <- masker(chrom)
 chrom <- rank.variants.chromR(chrom, scores)
 head(chrom@var.info)
 ```
@@ -163,7 +161,6 @@ We can take a look at them bay calling this directly.
 
 
 ```{r}
-#cbind(chrom@var.info[1:26, c('POS', 'mask', 'window_number', 'rank')], scores[1:26])
 head(chrom@var.info[,c('POS', 'MQ', 'DP', 'window_number', 'rank')])
 ```
 
@@ -193,13 +190,12 @@ We'll first call masker, which will reset our mask, and then censor this mask ba
 
 
 ```{r}
-#chrom@var.info$mask[chrom@var.info$MQ < 42] <- FALSE
 chrom <- masker( chrom, min_QUAL=0, min_DP=350, max_DP=650, min_MQ=59.5, max_MQ=60.5 )
 chrom@var.info$mask[ chrom@var.info$rank > 1 ] <- FALSE
 ```
 
 
-Replot.
+Then replot.
 
 
 ```{r, fig.height=7, fig.width=7}

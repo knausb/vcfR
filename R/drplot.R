@@ -66,6 +66,9 @@ dr.plot <- function( dmat = NULL, rlst = NULL,
   }
   ymin <- min( c(ymin, rmin), na.rm = TRUE )
   ymax <- max( c(ymax, rmax), na.rm = TRUE )
+  ymin <-  ymin * 1.1
+  ymax <-  ymax * 1.1
+#  if( ymin == 0 ){ ymin <- -0.9 }
   
   # Color palettes.
   if( is.null(dcol) ){
