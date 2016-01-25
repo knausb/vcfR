@@ -10,8 +10,8 @@ vignette: >
 ---
 
 
-In the vignette 'Visualizing vcf data I' we began to explore how to plot information contained in vcf format data.
-This first view looked at summaries over all samples for each variant.
+In the vignette 'Visualizing vcf data I' we began to explore how to plot information contained in [variant call format (vcf)](http://samtools.github.io/hts-specs/ "vcf format at hts-specs") files.
+This perspective was mostly one of summaries over all samples for each variant.
 Here we build on this by exploring data based on each sample's genotype information.
 
 
@@ -33,9 +33,9 @@ vcf <- read.vcfR(vcf_file, verbose = FALSE)
 dna <- ape::read.dna(dna_file, format = "fasta")
 gff <- read.table(gff_file, sep="\t", quote="")
 
-chrom <- create.chromR(name="Supercontig_1.100", vcf=vcf, seq=dna, ann=gff, verbose=TRUE)
+chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
 chrom <- masker(chrom, min_DP = 300, max_DP = 700)
-chrom <- proc.chromR(chrom, verbose = TRUE)
+chrom <- proc.chromR(chrom, verbose = FALSE)
 
 ```
 
@@ -43,7 +43,7 @@ chrom <- proc.chromR(chrom, verbose = TRUE)
 
 ## Genotype data
 
-In the vignette Visualizing vcf data I we explored summaries of variants made across all samples.
+In the vignette 'Visualizing vcf data I' we explored summaries of variants made across all samples.
 If all samples are fairly homogenous in the qualities of these metrics, than a summary across all samples may be appropriate.
 However, if a few samples have very low quality, or some samples are exceptional, this may be masked by looking at summaries across all samples.
 By looking at the individual samples, these differences may be discovered.
@@ -60,10 +60,9 @@ head(chrom)
 
 
 
-Recall from the vignette 'vcf data' that the genotype information begins at column nine.
-Column nine specifies the format of all subsequent columns.
-All columns subsequent to column nine contain information for each sample where each column corresponds to a sample.
-
+Recall from the vignette 'vcf data' that the genotype information begins at column nine from the file.
+This column specifies the format of all subsequent columns.
+All columns subsequent to this column contain information for each sample where each column corresponds to a sample.
 We see form the output of head() that our genotype data contains `r chrom@vcf@gt[1,1]` data.
 These abbreviations are defined in the meta portion of the file.
 Observation of the first few rows of genotype information shows the format as `r chrom@vcf@gt[1,2]`.
@@ -105,8 +104,12 @@ heatmap.bp(dp[1001:1500,])
 
 
 The plot that results from heatmap.bp() shows samples in columns and variants in rows.
+MArginal barplots summarize sums of the rows and columns.
 The color ramp, at the right, is parameterized for continuous data.
 In the above plot, yellow is a high number of high quality bases violet is a low number of high quality bases.
+If you ask the function to visualize more values than the screen has pixels, some form of interpolation is performed.
+Because of this I suggest using this function for no more than about 1,000 variants.
+
 
 
 ## Interpretation of zeros
@@ -114,11 +117,13 @@ In the above plot, yellow is a high number of high quality bases violet is a low
 
 The presence of zeros in a dataset presents a conundrum.
 Sometimes, the presence of zero valued data represents the positive determination that there is zero valued data.
-For example, if we went to the grocery store and at the checkout counter we could count that we have three bananas, two oranges but zero apples when we know the store has apples.
+For example, if we went to the grocery store and at the checkout counter we could count that we have three bananas, two oranges but zero apples when we know the store had apples.
 This means that we know that we did not want any apples as opposed to the store not having apples, or perhaps we just forgot to look, or a number of other scenarios.
 Alternatively, the presences of zero valued data indicates that there is missing data.
 This would be similar to counting how many bananas and oranges are in our basket, but not reporting on the number of apples.
 We do not know if there are zero apples, or we just didn't count the apples.
+For our sequence depth, a zero value may indicate that the nucleotide exists in the reference sequence but not in the resequenced sample.
+Alternatively, it may mean that the resequenced sample was not sequenced at sufficient depth to detect its presence.
 In the present example, we may interpret zero data as missing data.
 Therefore, we should re-encode zero data as NA data.
 
@@ -157,28 +162,6 @@ In the barplot we've validated that this sample lacks information.
 At the other end of the spectrum, the sample NL07434 has a high average coverage as seen in the heatmap, and in the barplot we can see that this value is just over 40.
 
 
-As the number of variants increases, visualizing each of them become problematic.
-One way of addressing this is by summarizing the data with a windowing algorithm.
-We can use the function windowize.NM to windowize our data and perform several forms of summary for each of these windows.
-Here we summarize each window with its mean, the default summary.
-
-
-
-```{r, fig.height=7, fig.width=7}
-dpw <- windowize.NM(dp, pos=chrom@var.info$POS, starts=chrom@win.info$start,
-                    ends=chrom@win.info$end)
-dpw[is.na(dpw)] <- 0
-is.na(dpw[dpw==0]) <- TRUE
-heatmap.bp(dpw[201:300,])
-```
-
-
-An important difference between the windowed heatmap and the per variant heatmap is that the windowed heatmap has restored the chromosomal coordinate system of the plot.
-The per variant heat map only shows cells for where there are variants.
-If there are many variants, then this region becomes over represented.
-If there are no variants, a region is omitted.
-In the windowed plot we have a window for each region of the chromosome, regardless of whether any variants were called in that region.
-
 
 ## Conclusion
 
@@ -186,7 +169,7 @@ In the windowed plot we have a window for each region of the chromosome, regardl
 Now that we know our way around our chromosome it may be time to make some decisions.
 Regions which do not meet our expectations may need extra work to make sure they are of high quality.
 Alternatively, we may simply wish to censor these regions and focus on the high quality fraction of the data.
-
+Once we've gained a familiarity witht he data contained in our vcf file we can make informed decisions on how best to process it.
 
 
 
