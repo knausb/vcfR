@@ -11,7 +11,7 @@ vignette: >
 
 
 Most variant calling pipelines result in files containing large quantities of variant information.
-The [vcf format](http://samtools.github.io/hts-specs/ "vcf format at hts-specs") is an increasingly popular format for this data.
+The [variant call format (vcf)](http://samtools.github.io/hts-specs/ "vcf format at hts-specs") is an increasingly popular format for this data.
 The format of these files and their content is discussed in the vignette 'vcf data'.
 These files are typically intended to be post-processed (i.e., filtered) as an attempt to remove false positives or otherwise problematic sites.
 The R package vcfR provides tools to facilitate this filtering as well as to visualize the effects of choices made during this process.
@@ -42,7 +42,7 @@ vcf <- read.vcfR(vcf_file, verbose = FALSE)
 dna <- ape::read.dna(dna_file, format = "fasta")
 gff <- read.table(gff_file, sep="\t", quote="")
 
-chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, ann=gff, verbose=TRUE)
+chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
 chrom <- masker(chrom, min_QUAL=0, min_DP=350, max_DP=650, min_MQ=59.5, max_MQ=60.5)
 chrom <- proc.chromR(chrom, verbose = TRUE)
 ```
