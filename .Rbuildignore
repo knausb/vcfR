@@ -4,3 +4,7 @@
 ^\.o$
 ^\.so$
 ^\.dll$
+cran-comments.md
+NEWS.md
+
+
