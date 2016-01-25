@@ -11,7 +11,7 @@ vignette: >
 
 
 Most variant calling pipelines result in files containing variant information.
-The [vcf format](http://samtools.github.io/hts-specs/ "vcf format at hts-specs") is an increasingly popular format for this data.
+The [variant call format (vcf)](http://samtools.github.io/hts-specs/ "vcf format at hts-specs") is an increasingly popular format for this data.
 The genotypes in these files are typically intended to be filtered as an attempt to remove false positives or other problematic variants.
 A first step in working with this data is to understand their contents.
 
@@ -25,6 +25,7 @@ The information in the meta region defines the abbreviations used elsewhere in t
 It may also document software used to create the file as well as parameters used by this software.
 Below the meta region, the data are tabular.
 The first eight columns of this table contain information about each variant.
+This data may be common over all variants, such as its chromosomal position, or a summary over all samples, such as quality metrics.
 These data are fixed, or the same, over all samples.
 Beginning at column ten is a column for every sample.
 The values in these columns are information for each sample and each variant.
@@ -107,7 +108,7 @@ vcf@fix[1:6, 1:7]
 
 
 The eigth column, titled INFO, is a semicolon delimited list of information.
-It can be rather long and cumbersome.
+It can be rather long and cumbersome, which is why its not presented in its entirety here.
 Each abbreviation in the INFO column should be defined in the meta section.
 For example, line three from the meta region tells us that 'DP' is the raw read depth.
 We can validate this by querying the meta portion.
@@ -135,7 +136,7 @@ unlist(strsplit(as.character(vcf@fix[1, 8]), split=";"))
 
 The gt (genotype) region contains information for each variant for each sample.
 The values for each variant and each sample are colon delimited.
-Multiple types of data for eact genotype may be stored in this manner.
+Multiple types of data for each genotype may be stored in this manner.
 The format of the data is specified by column nine, the FORMAT column.
 Here we see that we have information for GT, AD, DP, GQ and PL.
 The definition of these acronyms can be referenced by querying the the meta region, as demonstrated previously.

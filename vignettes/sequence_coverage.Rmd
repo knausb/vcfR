@@ -14,10 +14,11 @@ Once data is received from a sequencing center, an initial question is whether t
 A common attempt to address this question is by asking how much sequence coverage was attained.
 For a diploid organism, one would require at least two reads per variant to infer a genotype.
 Ideally, we would like a little more so that we have redundancy.
-In this vignette well learn how to read in vcf format data, extract sequence depth information and how to plot it.
+How much redundancy is necessary may be a question the researchers need to address themselves.
+In this vignette we'll learn how to read in vcf data, extract sequence depth information from it and how to visualize this data.
 
 
-## Reading vcf format data
+## Reading vcf data
 
 
 The topic of reading in vcf format data is covered in other vignettes.
@@ -31,21 +32,20 @@ vcf <- read.vcfR(vcf_file, verbose = FALSE)
 ```
 
 
-A quick peak at how many rows are in our genotype matrix will tell us the number of variants which resulted from variant calling.
+Calling the object by name, with no options (the show method), provides a summary of the data.
 
 
 ```{r}
-nrow(vcf@gt)
+vcf
 ```
 
 
+## Querying vcf information
 
-## Extracting sequence coverage information
 
-
-Some, but not all, variant callers will provide per variant sequence depth information.
-Some may provide this information, but only as an option.
-We can use the 'head' method to explore what sort of data exists in our file.
+Some, but not all, variant callers will provide per variant and per sample sequence depth information.
+Some variant callers may provide this information only as an option (see relevant documentation).
+We can use the 'head' method to explore what sort of information exists in our data.
 
 
 ```{r}
@@ -54,11 +54,11 @@ head(vcf)
 
 
 This provides a summary of the information contained in the vcf data.
-In the gt section, the first column  is titled 'FORMAT' and includes fields which describe the data included with each genotype.
+In the genotype section, the first column  is titled 'FORMAT' and includes fields that describe the genotype data included with each genotype.
 According to the vcf definition the first element must be the genotype.
-All subsequent data is optional.
+All subsequent data is optional according to the vcf definition.
 Each field is defined in the meta region.
-We can use 'grep' to search the meta slot to file its definitoon.
+We can use 'grep' to search the meta slot for the definition of these fields.
 
 
 ```{r}
@@ -66,9 +66,9 @@ strwrap(grep('DP', vcf@meta, value = TRUE))
 ```
 
 
-Here 'DP' is defined for the 'FORMAT' region (gt) as well as in the 'INFO' column.
+Here 'DP' is defined as a 'FORMAT' (the genotype region) as well as in the 'INFO' column.
 We're interested in the former.
-This tells us that data for depth (DP) exists, so we can extract the DP information from the genoptype slot.
+This tells us that data for depth (DP) exists, so we can extract the DP information from the genotype slot.
 
 
 ```{r}
@@ -78,7 +78,9 @@ dp <- extract.gt(vcf, element='DP', as.numeric=TRUE)
 
 We can use this function to extract other fields by changing the value of the 'element' parameter.
 Here, we've specified to convert the data to a numeric.
-This makees sense because depth should be a number describing how many times a variant was sequenced.
+This makes sense because depth should be a number describing how many times a variant was sequenced.
+Some fields, such as the genotype (GT), may not be easily converted to a numeric because they contain non-numeric characters.
+For example, the genotype field will contain a pipe ('|') for phased data or a forward slash ('/') for unphased data.
 If you select a field which is non-numeric, such as the genotype, and specify as.numeric to be TRUE, you will get a numeric matrix.
 However, these numbers may not make much sense.
 Make sure to only use as.numeric=TRUE on data that actually are numeric.
@@ -93,19 +95,28 @@ A good choice for this type of data is a box and whisker plot.
 
 ```{r, fig.align='center', fig.width=7, fig.height=7}
 par(mar=c(8,4,1,1))
-boxplot(dp, las=3, col=c("#C0C0C0", "#808080"), ylab="Depth")
+#boxplot(dp, las=3, col=c("#C0C0C0", "#808080"), ylab="Depth", log='y', las=2)
+boxplot(dp, las=3, col=c("#C0C0C0", "#808080"), ylab="Depth", las=2)
 abline(h=seq(0,1e4, by=100), col="#C0C0C088")
 par(mar=c(5,4,4,2))
 ```
 
+
+This is a reasonable representation of the data.
+The boxplots contain 50% of the data within each box (the first and third quartiles).
+The majority of data beyond the first and third quartiles are contained in the whiskers.
+Outlying data is represented by characters, here open circles.
+A shortcoming of this plot is that there is a great amount of large values.
+This compresses the plot so that the boxes are small and the plot is dominated by outliers.
 
 
 ## Creating violin plots of sequence depth
 
 
 For quality control purposes, I'm frequently happy with using boxplots.
+They are quick and easy to produce.
 If I want something a little more fancy, say for publication, I may use violin plots.
-This will require us to change the data from a matrix to a data.frame, and then we can plot it with ggplot2.
+This will require us to recast the data from a matrix to a data.frame, and then we can plot it with ggplot2.
 
 
 ```{r, fig.align='center', fig.width=7}
@@ -130,15 +141,22 @@ if( require(reshape2) & require(ggplot2) ){
 ```
 
 
+The violin plot presents the distribution of the data throughout its range.
+They also provide an easy way to apply a logarithmic transformation (here base 10) that effectively compresses large values and stretches out small values.
+Here we observe a large density of per variant sequence depths that are greater than ten (for the most part).
+This may be interpreted as having attained sufficient sequence depth for a diploid organism.
+
 
 ## Filtering on sequence depth.
 
 
-A you can see from the plots, we have some samples which have exceptionally high sequence coverage.
-These may be variants from repetitive portions of the genome, and therefore may be desireable to exclude.
+
+
 In order to sequence a diploid genotype, we need at least two sequence reads.
 Ideally, we would like some redundancy to build more confidence in our genotypes.
 This means we may want a lower bound on coverage for whether we call a genotype.
+You can also see from the plots that we have some samples that have exceptionally high sequence coverage (greater than 100).
+These may be variants from repetitive portions of the genome, and therefore may be desireable to exclude.
 Here we pull out summary statistics for each sample and use this information to filter our data.
 The quantile function is used to build a 90% confidence interval for each sample.
 We then use this information to set variants which are outside this region to missing data (NA).
@@ -155,7 +173,8 @@ dp[dp < 4] <- NA
 ```
 
 
-And visualize using boxplots.
+Now that we've accomplished these manipulations, we can visualize the data using boxplots.
+
 
 
 ```{r, fig.align='center', fig.width=7, fig.height=7}
