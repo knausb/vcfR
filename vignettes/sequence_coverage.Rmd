@@ -142,7 +142,7 @@ if( require(reshape2) & require(ggplot2) ){
 
 
 The violin plot presents the distribution of the data throughout its range.
-They also provide an easy way to apply a logarithmic transformation (here base 10) that effectively compresses large values and stretches out small values.
+They also provide an easy way to apply a logarithmic transformation (here base 2) that effectively compresses large values and stretches out small values.
 Here we observe a large density of per variant sequence depths that are greater than ten (for the most part).
 This may be interpreted as having attained sufficient sequence depth for a diploid organism.
 
