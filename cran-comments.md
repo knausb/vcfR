@@ -1,5 +1,5 @@
 ## Test environments
-* local ubuntu 12.04, R 3.2.2
+* local ubuntu 12.04, R 3.2.3
 * ubuntu 12.04 (on travis-ci), R 3.2.3
 * local OS X install, R 3.2.2
 * win-builder (devel and release)
