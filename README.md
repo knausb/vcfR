@@ -16,8 +16,7 @@ Provides functions to load data, subset, filter and visualize these data.
 
 While this project is in development it can be installed through github:
 
-    library(devtools)
-    install_github(repo="knausb/vcfR")
+    devtools::install_github(repo="knausb/vcfR")
     library(vcfR)
 
 
