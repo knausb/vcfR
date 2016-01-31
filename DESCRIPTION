@@ -12,8 +12,9 @@ Depends:
 LinkingTo: Rcpp
 Imports:
     ape,
-    memuse,    
+    memuse,
     methods,
+    pinfsc50,
     Rcpp
 Suggests:
     adegenet,
@@ -24,5 +25,5 @@ Suggests:
     scales,
     testthat,
     viridisLite
-VignetteBuilder: rmarkdown
+VignetteBuilder: knitr
 License: GPL
