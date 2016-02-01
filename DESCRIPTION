@@ -14,12 +14,12 @@ Imports:
     ape,
     memuse,
     methods,
-    pinfsc50,
     Rcpp
 Suggests:
     adegenet,
     ggplot2,
     knitr,
+    pinfsc50,
     reshape2,
     rmarkdown,
     scales,
