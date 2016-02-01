@@ -5,8 +5,8 @@ date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{vcf data}
-  %\VignetteEngine{rmarkdown::render}
-  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 
