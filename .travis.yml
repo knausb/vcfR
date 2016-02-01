@@ -12,6 +12,7 @@ before_install:
 install:
   - ./travis-tool.sh install_deps
   - ./travis-tool.sh install_github jimhester/covr
+  - ./travis-tool.sh aptget_install pandoc-citeproc
 #  - ./travis-tool.sh install_github knausb/pinfsc50
 #  - ./travis-tool.sh InstallPandoc
 #  - travis_retry cabal install pandoc pandoc-citeproc  # Pandoc install using haskell (markdown parser)
