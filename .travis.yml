@@ -5,8 +5,8 @@ warnings_are_errors: true
 sudo: required
 
 r_github_packages:
-  - ./travis-tool.sh install_github knausb/vcfR
   - jimhester/covr
+#  - ./travis-tool.sh install_github knausb/vcfR
 
 after_success:
   - Rscript -e 'library(covr);coveralls()'
