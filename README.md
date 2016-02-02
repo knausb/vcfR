@@ -1,14 +1,14 @@
 
-## Explore and manipulate variant call format (vcf) files
+## Explore and manipulate variant call format (vcf) data
 
-VcfR, tools created to work with [vcf](https://github.com/samtools/hts-specs) files.
+VcfR, tools created to work with [vcf](https://github.com/samtools/hts-specs) data.
 
 [![Travis-CI Build Status](https://travis-ci.org/knausb/vcfR.png?branch=master)](https://travis-ci.org/knausb/vcfR)
 [![Coverage Status](https://coveralls.io/repos/github/knausb/vcfR/badge.svg?branch=master)](https://coveralls.io/github/knausb/vcfR?branch=master)
 
 
 vcfR is an R package intended to allow easy manipulation and visualization of variant call format (vcf) data.
-Functions are provided to rapidly read and write vcf files.
+Functions are provided to rapidly read from and write to vcf files.
 Once data are read into memory they can be stored in either of two data structures.
 
 *vcfR* - S4 class to contain a vcf file as well as functions to load this object.
