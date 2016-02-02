@@ -13,11 +13,30 @@ VcfR, tools created to work with [vcf](https://github.com/samtools/hts-specs) fi
 Provides functions to load data, subset, filter and visualize these data.
 
 
+## Download
+
 While this project is in development it can be installed through github:
 
     devtools::install_github(repo="knausb/vcfR")
     library(vcfR)
 
+
+If you would like the vignettes use:
+
+    devtools::install_github(repo="knausb/vcfR", build_vignettes=TRUE)
+
+
+If you've built the vignettes, you can browse them with:
+
+    browseVignettes(package="vcfR")
+
+
+If you've installed this package with devtools you will probably need to run:
+
+    devtools::install(build_vignettes = TRUE)
+    
+
+## Development version
 
 The development version (which may not be stable) can also be installed:
 
@@ -25,24 +44,9 @@ The development version (which may not be stable) can also be installed:
     library(vcfR)
 
 
-If you would like the vignettes use:
-
-    devtools::install_github(repo="knausb/vcfR", build_vignettes=TRUE)
-    
-or:
+And to build the vignettes:
 
     devtools::install_github(repo="knausb/vcfR@devel", build_vignettes=TRUE)
 
-If you've built the vignettes, you can browse them with:
-
-    browseVignettes(package="vcfR")
-    
-which should open a page in your web browser.
-
-If you've installed this package with devtools you will probably need to run:
-
-    devtools::install(build_vignettes = TRUE)
-
-in order to build the vignettes, which does not happen by default.
 
 Enjoy!
