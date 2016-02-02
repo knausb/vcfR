@@ -9,10 +9,21 @@
 ## R CMD check results
 There were no ERRORs or WARNINGs. 
 
-There was 1 NOTE:
+There were 2 NOTEs:
 
 Maintainer: ‘Brian Knaus <briank.lists@gmail.com>’
 New submission
+
+* checking installed package size ... NOTE
+  installed size is  7.7Mb
+  sub-directories of 1Mb or more:
+    doc    2.8Mb
+    libs   4.3Mb
+
+There are 8 vignettes which contribute to the 2.8Mb in doc.
+These could be migrated to a separate package.
+This could reduce this package's size to 4.9Mb.
+Because this is a NOTE and not a ERROR or WARNING I have left it as one package for now.
 
 
 Possibly mis-spelled words in DESCRIPTION:

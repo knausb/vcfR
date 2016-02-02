@@ -18,4 +18,8 @@ notifications:
 
 env:
   global:
-    - CRAN: http://cran.at.r-project.org
+    - CRAN=http://cran.rstudio.com
+    - NOT_CRAN=true
+ #   - CRAN: http://cran.at.r-project.org
+
+
