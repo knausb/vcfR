@@ -47,6 +47,6 @@ heatmap.bp(x, col.ramp = colorRampPalette(c("red", "yellow", "#008000"))(100))
 heatmap.bp(x)
 }
 \seealso{
-\code{\link[stats]{heatmap}}, \code{\link[graphics]{image}}, heatmap2 in \href{https://cran.r-project.org/web/packages/gplots/index.html}{gplots}.
+\code{\link[stats]{heatmap}}, \code{\link[graphics]{image}}, heatmap2 in \href{https://cran.r-project.org/package=gplots}{gplots}.
 }
 

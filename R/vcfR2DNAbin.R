@@ -77,7 +77,7 @@
 #' 
 #' 
 #' @seealso 
-#' \href{http://cran.r-project.org/web/packages/ape/index.html}{ape}
+#' \href{http://cran.r-project.org/package=ape}{ape}
 #' 
 #' @export
 vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = FALSE,

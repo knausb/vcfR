@@ -84,6 +84,6 @@ Creation of DNAbin objects from large chromosomal regions may result in objects 
 If in doubt, begin by subsetting your data and the scale up to ensure you do not run out of memory.
 }
 \seealso{
-\href{http://cran.r-project.org/web/packages/ape/index.html}{ape}
+\href{http://cran.r-project.org/package=ape}{ape}
 }
 
