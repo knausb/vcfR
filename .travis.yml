@@ -4,9 +4,6 @@ language: r
 warnings_are_errors: true
 sudo: required
 
-r_packages:
-
-
 r_github_packages:
   - ./travis-tool.sh install_github knausb/vcfR
   - jimhester/covr
