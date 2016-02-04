@@ -157,36 +157,36 @@ setMethod(
     }
 
     
-    par(mfrow=c(2,2))
+    graphics::par(mfrow=c(2,2))
     if( length(DP) > 0 ){
-      hist(DP, col=3, main="Read depth (DP)", xlab="")
-      rug(DP)
+      graphics::hist(DP, col=3, main="Read depth (DP)", xlab="")
+      graphics::rug(DP)
     } else {
       plot(1:2,1:2, type='n', xlab="", ylab="")
-      title(main="No depths found")
+      graphics::title(main="No depths found")
     }
     if( length(MQ) > 0 ){
-      hist(MQ, col=4, main="Mapping quality (MQ)", xlab="")
-      rug(MQ)
+      graphics::hist(MQ, col=4, main="Mapping quality (MQ)", xlab="")
+      graphics::rug(MQ)
     } else {
       plot(1:2,1:2, type='n', xlab="", ylab="")
-      title(main="No mapping qualities found")
+      graphics::title(main="No mapping qualities found")
     }
     if( length(QUAL) > 0 ){
-      hist(QUAL, col=5, main="Quality (QUAL)", xlab="")
-      rug(QUAL)
+      graphics::hist(QUAL, col=5, main="Quality (QUAL)", xlab="")
+      graphics::rug(QUAL)
     } else {
       plot(1:2,1:2, type='n', xlab="", ylab="")
-      title(main="No qualities found")
+      graphics::title(main="No qualities found")
     }
     if( length(SNPS) > 0 ){
-      hist( SNPS, col=6, main="Variant count (per window)", xlab="")
-      rug( SNPS )
+      graphics::hist( SNPS, col=6, main="Variant count (per window)", xlab="")
+      graphics::rug( SNPS )
     } else {
       plot(1:2,1:2, type='n', xlab="", ylab="")
-      title(main="No SNP densities found")
+      graphics::title(main="No SNP densities found")
     }
-    par(mfrow=c(1,1))
+    graphics::par(mfrow=c(1,1))
   }
 )
 

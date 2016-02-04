@@ -92,30 +92,30 @@ plot.sfs <- function(x, log10=TRUE, ...){
   sfs <- x@sfs
   if(log10){sfs <- log10(sfs)}
   #
-  layout(matrix(c(1,2), nrow=1), widths=c(4,1))
-  image(t(sfs)[,nrow(sfs):1], col=rainbow(100, end=0.85),
+  graphics::layout(matrix(c(1,2), nrow=1), widths=c(4,1))
+  graphics::image(t(sfs)[,nrow(sfs):1], col=grDevices::rainbow(100, end=0.85),
         axes=FALSE, frame.plot=TRUE)
   #  axis(side=1, at=seq(1,ncol(sfs), by=1)/ncol(sfs), labels=NA)
-  axis(side=1, at=seq(0, ncol(sfs)-1, by=1)/(ncol(sfs)-1), labels=NA)
-  axis(side=1, at=seq(0, ncol(sfs)-1, by=5)/(ncol(sfs)-1), labels=seq(0, ncol(sfs)-1, by=5), las=1, tcl=-0.7)
-  axis(side=3, at=seq(0, ncol(sfs)-1, by=1)/(ncol(sfs)-1), labels=NA)
-  axis(side=2, at=seq(0, nrow(sfs)-1, by=1)/(nrow(sfs)-1), labels=NA)
-  axis(side=2, at=seq(0, nrow(sfs)-1, by=5)/(nrow(sfs)-1), labels=seq(0, nrow(sfs)-1, by=5), las=1, tcl=-0.7)
-  axis(side=4, at=seq(0, nrow(sfs)-1, by=1)/(nrow(sfs)-1), labels=NA)
-  abline(a=0, b=1)
-  title(main=paste("SFS for", x@name))
+  graphics::axis(side=1, at=seq(0, ncol(sfs)-1, by=1)/(ncol(sfs)-1), labels=NA)
+  graphics::axis(side=1, at=seq(0, ncol(sfs)-1, by=5)/(ncol(sfs)-1), labels=seq(0, ncol(sfs)-1, by=5), las=1, tcl=-0.7)
+  graphics::axis(side=3, at=seq(0, ncol(sfs)-1, by=1)/(ncol(sfs)-1), labels=NA)
+  graphics::axis(side=2, at=seq(0, nrow(sfs)-1, by=1)/(nrow(sfs)-1), labels=NA)
+  graphics::axis(side=2, at=seq(0, nrow(sfs)-1, by=5)/(nrow(sfs)-1), labels=seq(0, nrow(sfs)-1, by=5), las=1, tcl=-0.7)
+  graphics::axis(side=4, at=seq(0, nrow(sfs)-1, by=1)/(nrow(sfs)-1), labels=NA)
+  graphics::abline(a=0, b=1)
+  graphics::title(main=paste("SFS for", x@name))
   #
-  par(mar=c(5,0,4,3))
-  barplot(height=rep(1, times=100), width=1, space=0,
-          col=rainbow(100, start=0, end=0.85), border=NA, horiz=TRUE, axes=FALSE)
-  axis(side=4, at=seq(0,100, length.out=2),
+  graphics::par(mar=c(5,0,4,3))
+  graphics::barplot(height=rep(1, times=100), width=1, space=0,
+          col=grDevices::rainbow(100, start=0, end=0.85), border=NA, horiz=TRUE, axes=FALSE)
+  graphics::axis(side=4, at=seq(0,100, length.out=2),
        labels=format(seq(0, 10^max(sfs, na.rm=TRUE), length.out=2), digits=3),
        las=1)
-  axis(side=4, at=seq(1, max(sfs, na.rm=TRUE), by=1)*(100/max(sfs, na.rm=TRUE)),
+  graphics::axis(side=4, at=seq(1, max(sfs, na.rm=TRUE), by=1)*(100/max(sfs, na.rm=TRUE)),
        labels=10^seq(1, max(sfs, na.rm=TRUE), by=1), las=1
   )
   #
-  par(mar=c(5,4,4,2), mfrow=c(1,1))
+  graphics::par(mar=c(5,4,4,2), mfrow=c(1,1))
 }
 
 

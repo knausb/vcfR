@@ -90,7 +90,7 @@ dr.plot <- function( dmat = NULL, rlst = NULL,
   
   # Horizontal lines
   if( !is.null(hline) ){
-    abline( h = hline, lty = 2, col = "#808080" )
+    graphics::abline( h = hline, lty = 2, col = "#808080" )
   }
   
   # Rect plot.
@@ -101,7 +101,7 @@ dr.plot <- function( dmat = NULL, rlst = NULL,
   if( !is.null(rlst) ){
     for( i in 1:length(rlst) ){
       rmat <- rlst[[i]]
-      rect( xleft = rmat[,1], ybottom = rmat[,2], 
+      graphics::rect( xleft = rmat[,1], ybottom = rmat[,2], 
             xright = rmat[,3], ytop = rmat[,4],
             col = rcol[i], border = rbcol[i],
             ... )
@@ -117,11 +117,11 @@ dr.plot <- function( dmat = NULL, rlst = NULL,
     POS <- dmat[ ,1 ]
     dmat <- dmat[ ,-1 , drop=FALSE ]
     for( i in 1:ncol(dmat) ){
-      points( POS, dmat[,i], pch = 20, col = dcol[i] )
+      graphics::points( POS, dmat[,i], pch = 20, col = dcol[i] )
     }
   }
   
-  title( main = title, line = -1.2 )
+  graphics::title( main = title, line = -1.2 )
   
   return( invisible( c(ymin, ymax) ) )
 }
@@ -132,12 +132,12 @@ dr.plot <- function( dmat = NULL, rlst = NULL,
 #' 
 #' @export
 null.plot <- function(){
-  org.mar <- par("mar")
-  par( mar=c(0,4,0,0) )
+  org.mar <- graphics::par("mar")
+  graphics::par( mar=c(0,4,0,0) )
   
   plot( 1:10, 1:10, type = "n", axes = FALSE, frame.plot = FALSE, xlab="", ylab="" )
   
-  par( mar=org.mar)
+  graphics::par( mar=org.mar)
 }
 
 

@@ -45,9 +45,9 @@ write.var.info <- function(x, file = "", mask = FALSE, APPEND = FALSE){
   }
   
   if(mask == FALSE){
-    write.table(x@var.info, file = file, append = APPEND, sep = ",", row.names = FALSE, col.names = !APPEND)
+    utils::write.table(x@var.info, file = file, append = APPEND, sep = ",", row.names = FALSE, col.names = !APPEND)
   } else if(mask == TRUE){
-    write.table(x@var.info[x@var.info$mask,], file = file, append = APPEND, sep = ",", row.names = FALSE, col.names = !APPEND)
+    utils::write.table(x@var.info[x@var.info$mask,], file = file, append = APPEND, sep = ",", row.names = FALSE, col.names = !APPEND)
   }
 }
 
@@ -66,6 +66,6 @@ write.win.info <- function(x, file = "", APPEND = FALSE){
     stop("Unexpected class! Expecting an object of class chromR.")
   }
   
-  write.table(x@win.info, file = file, append = APPEND, sep = ",", row.names = FALSE, col.names = !APPEND)
+  utils::write.table(x@win.info, file = file, append = APPEND, sep = ",", row.names = FALSE, col.names = !APPEND)
 }
 

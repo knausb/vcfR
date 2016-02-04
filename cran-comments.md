@@ -12,8 +12,8 @@ There were no ERRORs or WARNINGs.
 There were 3 NOTEs:
 
 * checking CRAN incoming feasibility ... NOTE
-Maintainer: ‘Brian Knaus <briank.lists@gmail.com>’
-New submission
+  Maintainer: ‘Brian Knaus <briank.lists@gmail.com>’
+  New submission
 
 * checking package dependencies ... NOTE
   No repository set, so cyclic dependency check skipped

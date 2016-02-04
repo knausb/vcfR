@@ -12,9 +12,13 @@ Depends:
 LinkingTo: Rcpp
 Imports:
     ape,
+    graphics,
+    grDevices,
     memuse,
     methods,
-    Rcpp
+    Rcpp,
+    stats,
+    utils
 Suggests:
     adegenet,
     ggplot2,

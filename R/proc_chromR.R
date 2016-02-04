@@ -324,7 +324,7 @@ gt2popsum <- function(x){
     Da <- n11/n - (n1/(2*n))^2
     # Chi-square
     chisq <- ((n*Da)^2)/(n*p1^2) + ((-2*n*Da)^2)/(2*n*p1*(1-p1)) + ((n*Da)^2)/(n*(1-p1)^2)
-    p <- 1 - pchisq(chisq, df=1)
+    p <- 1 - stats::pchisq(chisq, df=1)
     return(c(prob, Da, chisq, p))
   }
   #  tmp[gt == "0/0"] <- 0
@@ -364,14 +364,14 @@ gt2popsum <- function(x){
                                   function(x){sum(!is.na(x))}))
   #
   summ[mask,'nREF'] <- unlist(apply(gt[mask, , drop=FALSE], MARGIN=1,
-                                    function(x){sum(2*length(na.omit(x))-sum(x), na.rm=TRUE)})
+                                    function(x){sum(2*length(stats::na.omit(x))-sum(x), na.rm=TRUE)})
   )
   summ[mask,'nALT'] <- rowSums(gt[mask, , drop=FALSE], na.rm=TRUE)
   summ[,'nAllele'] <- summ[,'nREF']+summ[,'nALT']
   #
   # Observed heterozygosity
   summ[mask,'Ho'] <- unlist(apply(gt[mask, , drop=FALSE], MARGIN=1,
-                                  function(x){sum(x==1, na.rm=TRUE)/length(na.omit(x))}))
+                                  function(x){sum(x==1, na.rm=TRUE)/length(stats::na.omit(x))}))
   #
   # Expected heterozygosity
   summ[,'He'] <- 1 - ((summ[,'nREF']/summ[,'nAllele'])^2 + (summ[,'nALT']/summ[,'nAllele'])^2)
