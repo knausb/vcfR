@@ -18,7 +18,7 @@ There were 3 NOTEs:
 * checking package dependencies ... NOTE
   No repository set, so cyclic dependency check skipped
   
-Only occurs on travis-ci.
+Occurs on travis-ci because no CRAN repository is set (e.g., in ~/.Rprofile)
 Link of relevance = https://github.com/travis-ci/travis-ci/issues/4125.
 
 * checking installed package size ... NOTE
@@ -34,9 +34,10 @@ Because this is a NOTE and not a ERROR or WARNING I have left it as one package 
 
 
 Possibly mis-spelled words in DESCRIPTION:
-  fasta (3:92)
-  gff (3:84)
-  vcf (2:52, 3:58, 3:79, 3:167)
+  Vcf (2:52)
+  fasta (3:95)
+  gff (3:86)
+  vcf (3:58, 3:80, 3:171)
   
 The words fasta, gff and vcf are data file formats and are correctly spelled.
 
