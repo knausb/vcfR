@@ -42,7 +42,7 @@ NM2winNM <- function(x, pos, maxbp, winsize = 100L) {
 #' 
 z.score <- function(x){
   winave <- apply(x, MARGIN=2, mean, na.rm=TRUE)
-  winsd  <- apply(x, MARGIN=2, sd, na.rm=TRUE)
+  winsd  <- apply(x, MARGIN=2, stats::sd, na.rm=TRUE)
   zsc <- sweep(x, MARGIN=2, STATS=winave, FUN="-")
   zsc <- sweep(zsc, MARGIN=2, STATS=winsd, FUN="/")
   zsc

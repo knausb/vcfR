@@ -5,8 +5,8 @@ date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Converting data}
-  %\VignetteEngine{rmarkdown::render}
-  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 
@@ -103,8 +103,8 @@ When verbose is set to FALSE the loci will be omitted silently.
 ```{r}
 vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
 vcf <- read.vcfR(vcf_file, verbose = FALSE)
-x <- vcfR2genlight(vcf)
-x
+#x <- vcfR2genlight(vcf)
+#x
 ```
 
 
@@ -193,7 +193,7 @@ unlink('my_gene.fasta') # Clean up after we're done with the example.
 Also see:
 
 - Heng Li's [seqtk](https://github.com/lh3/seqtk)
-- GATK's [FastaAlternateReferenceMaker](https://www.broadinstitute.org/gatk/gatkdocs/org_broadinstitute_gatk_tools_walkers_fasta_FastaAlternateReferenceMaker.php)
+- [GATK's](https://www.broadinstitute.org/gatk/) FastaAlternateReferenceMaker
 
 
 ## Creating loci objects

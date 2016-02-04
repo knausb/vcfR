@@ -24,7 +24,7 @@
 #' 
 #' @details The function heatmap.bp creates a heatmap from a numeric matrix with optional barplots to summarize the rows and columns.
 #' 
-#' @seealso \code{\link[stats]{heatmap}}, \code{\link[graphics]{image}}, heatmap2 in \href{https://cran.r-project.org/web/packages/gplots/index.html}{gplots}.
+#' @seealso \code{\link[stats]{heatmap}}, \code{\link[graphics]{image}}, heatmap2 in \href{https://cran.r-project.org/package=gplots}{gplots}.
 #' 
 #' @examples
 #' library(vcfR)
@@ -70,12 +70,12 @@ heatmap.bp <- function(x, cbarplot = TRUE, rbarplot = TRUE,
   #
   if (scale == "row") {
     x <- sweep(x, 1L, rowMeans(x, na.rm = na.rm), check.margin = FALSE)
-    sx <- apply(x, 1L, sd, na.rm = na.rm)
+    sx <- apply(x, 1L, stats::sd, na.rm = na.rm)
     x <- sweep(x, 1L, sx, "/", check.margin = FALSE)
   }
   else if (scale == "column") {
     x <- sweep(x, 2L, colMeans(x, na.rm = na.rm), check.margin = FALSE)
-    sx <- apply(x, 2L, sd, na.rm = na.rm)
+    sx <- apply(x, 2L, stats::sd, na.rm = na.rm)
     x <- sweep(x, 2L, sx, "/", check.margin = FALSE)
   }
   #
@@ -84,7 +84,7 @@ heatmap.bp <- function(x, cbarplot = TRUE, rbarplot = TRUE,
   #
   if(ncols == 1 & nrows == 1){
     cat("1 and 1\n")
-    image(t(x),
+    graphics::image(t(x),
           col = col.ramp,          
           axes=FALSE, frame.plot=TRUE)
   }
@@ -93,45 +93,45 @@ heatmap.bp <- function(x, cbarplot = TRUE, rbarplot = TRUE,
   if(nrows == 2 & ncols == 1){}
   if(nrows == 2 & ncols == 2){}
   if(nrows == 2 & ncols == 3){
-    layout(matrix(1:6,nrow=nrows, ncol=ncols, byrow = TRUE),
+    graphics::layout(matrix(1:6,nrow=nrows, ncol=ncols, byrow = TRUE),
            widths=c(4, 0.6, 0.2), heights=c(1, 4))
-    par(mar=c(0,0,0,0))
-    par(oma=c(1,1,1,1))
-    barplot(colSums(x, na.rm=na.rm),
+    graphics::par(mar=c(0,0,0,0))
+    graphics::par(oma=c(1,1,1,1))
+    graphics::barplot(colSums(x, na.rm=na.rm),
             space=0, border=NA, axes=FALSE,
             names.arg="",
             col=c("#808080", "#c0c0c0"), xaxs="i")
     if(clabels == TRUE & scale == 'none'){
-      text(c(1:ncol(x))-0.5, 0.0, colnames(x), adj=c(0.0,0.5), srt=90)
+      graphics::text(c(1:ncol(x))-0.5, 0.0, colnames(x), adj=c(0.0,0.5), srt=90)
     } else if (clabels == TRUE & scale != 'none'){
-      text(c(1:ncol(x))-0.5, min(colSums(x, na.rm=na.rm), na.rm=na.rm), colnames(x), adj=c(0.0,0.5), srt=90)
+      graphics::text(c(1:ncol(x))-0.5, min(colSums(x, na.rm=na.rm), na.rm=na.rm), colnames(x), adj=c(0.0,0.5), srt=90)
     }
     #
     plot(1, 1, type="n", axes=FALSE, xlab="", ylab="")
     plot(1, 1, type="n", axes=FALSE, xlab="", ylab="")
-    image(t(x),
+    graphics::image(t(x),
           col = col.ramp,
           axes=FALSE, frame.plot=TRUE)
     #
-    barplot(rowSums(x, na.rm=na.rm),
+    graphics::barplot(rowSums(x, na.rm=na.rm),
             space=0, border=NA,
             horiz=TRUE, axes=FALSE, names.arg="",
             col=c("#808080", "#c0c0c0"),
             yaxs="i")
     if(rlabels == TRUE & scale == 'none'){
-      text(0, c(1:nrow(x))-0.5, rownames(x), adj=c(0.0, 0.5), srt=0)
+      graphics::text(0, c(1:nrow(x))-0.5, rownames(x), adj=c(0.0, 0.5), srt=0)
       } else if(rlabels == TRUE & scale != 'none'){
-      text(min(rowSums(x, na.rm=na.rm), na.rm=na.rm), c(1:nrow(x))-0.5, rownames(x), adj=c(0.0,0.5), srt=0)
+      graphics::text(min(rowSums(x, na.rm=na.rm), na.rm=na.rm), c(1:nrow(x))-0.5, rownames(x), adj=c(0.0,0.5), srt=0)
     }
     #
-    barplot(rep(1, times=length(col.ramp)), space=0, border=NA, horiz = TRUE,
+    graphics::barplot(rep(1, times=length(col.ramp)), space=0, border=NA, horiz = TRUE,
             col = col.ramp,
             axes=FALSE)
-    text(0.5, 5, "Low", col="#FFFFFF")
-    text(0.5, 95, "High", col="#FFFFFF")
+    graphics::text(0.5, 5, "Low", col="#FFFFFF")
+    graphics::text(0.5, 95, "High", col="#FFFFFF")
   }
-  par(mfrow=c(1,1))
-  par(mar=c(5,4,4,2))
+  graphics::par(mfrow=c(1,1))
+  graphics::par(mar=c(5,4,4,2))
   #
 }
 

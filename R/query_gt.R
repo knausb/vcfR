@@ -31,7 +31,7 @@ is.polymorphic <- function(x, na.omit=FALSE){
   
   test.poly <- function(x, na.omit=na.omit){
     if(na.omit == TRUE){
-      x <- na.omit(x)
+      x <- stats::na.omit(x)
     }
     sum(x[1] == x[-1]) < (length(x) - 1)
   }

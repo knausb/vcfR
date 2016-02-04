@@ -152,8 +152,8 @@ setMethod(
   signature= "vcfR",
   definition=function(x, y, ...){
     x <- as.numeric(x@fix[,'QUAL'])
-    hist(x, col=5, main='Histogram of qualities', xlab='QUAL')
-    rug(x)
+    graphics::hist(x, col=5, main='Histogram of qualities', xlab='QUAL')
+    graphics::rug(x)
   }
 )
 

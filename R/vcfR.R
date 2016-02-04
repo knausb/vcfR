@@ -28,9 +28,9 @@
 #' \strong{Vignettes} can be listed with: \code{browseVignettes('vcfR')}.
 #'
 #'
-#' @references Brian J Knaus (2015). Variant call format files processed 
-#' with vcfR. Journal TBA, NN(N),
-#'   N-NN. \url{http://www.someurl.org/v40/i03/}.
+# @references Brian J Knaus (2015). Variant call format files processed 
+# with vcfR. Journal TBA, NN(N),
+#   N-NN. \url{http://www.someurl.org/v40/i03/}.
 #' 
 #' 
 #' @import ape

@@ -49,8 +49,8 @@ chromo <- function( chrom,
   }
   
   # Save original parameters.
-  orig.oma <- par('oma')
-  orig.mar <- par('mar')
+  orig.oma <- graphics::par('oma')
+  orig.mar <- graphics::par('mar')
     
   # Initialize parameters.
   mwidth <- 8
@@ -67,9 +67,9 @@ chromo <- function( chrom,
   
   # Plot title
   if( length(chrom@name) > 0 ){
-    par( oma = c(3,0,1,0) )
+    graphics::par( oma = c(3,0,1,0) )
   } else {
-    par( oma = c(3,0,0,0) )
+    graphics::par( oma = c(3,0,0,0) )
   }
   
   # Marginal boxplots.
@@ -124,7 +124,7 @@ chromo <- function( chrom,
   #
   ##### ##### ##### ##### #####
   
-  layout( matrix( 1:c( ncols * nrows ),
+  graphics::layout( matrix( 1:c( ncols * nrows ),
                   nrow=nrows, 
                   ncol=ncols, 
                   byrow = TRUE ),
@@ -147,7 +147,7 @@ chromo <- function( chrom,
 
   # drplot1
   if( !is.null(drlist1) ){
-    par( mar = c(0,4,0,0) )
+    graphics::par( mar = c(0,4,0,0) )
   
     bdim <- dr.plot( dmat    = drlist1$dmat,
                      rlst    = drlist1$rlst,
@@ -158,25 +158,25 @@ chromo <- function( chrom,
                      rcol    = drlist1$rcol,
                      rbcol   = drlist1$rbcol,
                      ... )
-    par( mar = orig.mar )
+    graphics::par( mar = orig.mar )
   
     if( boxp == TRUE ){
-      par( mar = c(0,0,0,0) )
+      graphics::par( mar = c(0,0,0,0) )
       if( is.null(drlist1$bwcol) ){
         drlist1$bwcol <- drlist1$dcol
       }
-      boxplot( x    = drlist1$dmat[,-1],
+      graphics::boxplot( x    = drlist1$dmat[,-1],
                ylim = bdim,
                yaxt = "n",
                col  = drlist1$bwcol
               )
-      par( mar = orig.mar )
+      graphics::par( mar = orig.mar )
     }
   }
   
   # drplot2
   if( !is.null(drlist2) ){
-    par( mar = c(0,4,0,0) )
+    graphics::par( mar = c(0,4,0,0) )
   
     bdim <- dr.plot( dmat    = drlist2$dmat,
                      rlst    = drlist2$rlst,
@@ -187,25 +187,25 @@ chromo <- function( chrom,
                      rcol    = drlist2$rcol,
                      rbcol   = drlist2$rbcol,
                      ... )
-    par( mar = orig.mar )
+    graphics::par( mar = orig.mar )
   
     if( boxp == TRUE ){
-      par( mar = c(0,0,0,0) )
+      graphics::par( mar = c(0,0,0,0) )
       if( is.null(drlist2$bwcol) ){
         drlist2$bwcol <- drlist2$dcol
       }
-      boxplot( x    = drlist2$dmat[,-1],
+      graphics::boxplot( x    = drlist2$dmat[,-1],
                ylim = bdim,
                yaxt = "n",
                col  = drlist2$bwcol
               )
-      par( mar = orig.mar )
+      graphics::par( mar = orig.mar )
     }
   }
 
   # drplot3
   if( !is.null(drlist3) ){
-    par( mar = c(0,4,0,0) )
+    graphics::par( mar = c(0,4,0,0) )
   
     bdim <- dr.plot( dmat    = drlist3$dmat,
                      rlst    = drlist3$rlst,
@@ -216,19 +216,19 @@ chromo <- function( chrom,
                      rcol    = drlist3$rcol,
                      rbcol   = drlist3$rbcol,
                      ... )
-    par( mar = orig.mar )
+    graphics::par( mar = orig.mar )
   
     if( boxp == TRUE ){
-      par( mar = c(0,0,0,0) )
+      graphics::par( mar = c(0,0,0,0) )
       if( is.null(drlist3$bwcol) ){
         drlist3$bwcol <- drlist3$dcol
       }
-      boxplot( x    = drlist3$dmat[,-1],
+      graphics::boxplot( x    = drlist3$dmat[,-1],
                ylim = bdim,
                yaxt = "n",
                col  = drlist3$bwcol
               )
-      par( mar = orig.mar )
+      graphics::par( mar = orig.mar )
     }
   }
 
@@ -246,23 +246,23 @@ chromo <- function( chrom,
                   chrom@win.info[,'variants'] / c(chrom@win.info[,'end'] - chrom@win.info[,'start'])
     )
     
-    par( mar = c(0,4,0,0) )
+    graphics::par( mar = c(0,4,0,0) )
     bdim <- dr.plot( dmat = NULL, rlst = list( rmat ), chrom.s = 1, chrom.e = chrom@len,
                      title = "Variants per Site", hline = NULL,
                      dcol = NULL,
-                     rcol  = rgb( red=178, green=34, blue=34, alpha=255, maxColorValue = 255 ), 
-                     rbcol = rgb( red=178, green=34, blue=34, alpha=255, maxColorValue = 255 ),
+                     rcol  = grDevices::rgb( red=178, green=34, blue=34, alpha=255, maxColorValue = 255 ), 
+                     rbcol = grDevices::rgb( red=178, green=34, blue=34, alpha=255, maxColorValue = 255 ),
                      ... )
     if( length( grep("^A$", colnames(chrom@win.info)) ) == 0 & nrow(chrom@ann) == 0 ){
-      axis( side = 1, line = 0 )      
+      graphics::axis( side = 1, line = 0 )      
     }
-    par( mar = c(5,4,4,2) + 0.1 )
+    graphics::par( mar = c(5,4,4,2) + 0.1 )
     
     if( boxp == TRUE ){
-      par( mar = c(0,0,0,0) )
-      boxplot( rmat[,4], ylim=bdim, yaxt = "n",
-               col = rgb( red=178, green=34, blue=34, alpha=255, maxColorValue = 255 ) )
-      par( mar = c(5,4,4,2) + 0.1 )
+      graphics::par( mar = c(0,0,0,0) )
+      graphics::boxplot( rmat[,4], ylim=bdim, yaxt = "n",
+               col = grDevices::rgb( red=178, green=34, blue=34, alpha=255, maxColorValue = 255 ) )
+      graphics::par( mar = c(5,4,4,2) + 0.1 )
     }
   }
   
@@ -279,37 +279,37 @@ chromo <- function( chrom,
                    rmat1[,4] + rowSums(chrom@win.info[,c('C', 'G')]) / c(chrom@win.info[,'end'] - chrom@win.info[,'start'] )
     )
     
-    par( mar = c(0,4,0,0) )
+    graphics::par( mar = c(0,4,0,0) )
     bdim <- dr.plot( dmat = NULL, rlst = list(rmat1, rmat2), chrom.s = 1, chrom.e = chrom@len,
                      title = "Nucleotide Content", hline = NULL,
                      dcol = NULL,
-                     rcol = c(rgb( red=000, green=034, blue=205, maxColorValue = 255), 
-                              rgb( red=255, green=235, blue=000, maxColorValue = 255)),
-                     rbcol = c(rgb( red=000, green=034, blue=205, maxColorValue = 255), 
-                              rgb( red=255, green=235, blue=000, maxColorValue = 255)),
+                     rcol = c(grDevices::rgb( red=000, green=034, blue=205, maxColorValue = 255), 
+                              grDevices::rgb( red=255, green=235, blue=000, maxColorValue = 255)),
+                     rbcol = c(grDevices::rgb( red=000, green=034, blue=205, maxColorValue = 255), 
+                              grDevices::rgb( red=255, green=235, blue=000, maxColorValue = 255)),
                      ... )
-    par( mar = c(5,4,4,2) + 0.1 )
+    graphics::par( mar = c(5,4,4,2) + 0.1 )
 
     if( boxp == TRUE ){
-      par( mar = c(0,0,0,0) )
+      graphics::par( mar = c(0,0,0,0) )
       rmat1 <- cbind(rmat1[,4], rmat2[,4])
       rmat1[,2] <- rmat1[,2] - rmat1[,1]
-      boxplot( rmat1, ylim=bdim, yaxt = "n",
-               col = c(rgb( red=000, green=034, blue=205, maxColorValue = 255),
-                       rgb( red=255, green=235, blue=000, maxColorValue = 255)
+      graphics::boxplot( rmat1, ylim=bdim, yaxt = "n",
+               col = c(grDevices::rgb( red=000, green=034, blue=205, maxColorValue = 255),
+                       grDevices::rgb( red=255, green=235, blue=000, maxColorValue = 255)
                       ),
-               border = c(rgb( red=000, green=034, blue=205, maxColorValue = 255),
-                          rgb( red=255, green=235, blue=000, maxColorValue = 255)
+               border = c(grDevices::rgb( red=000, green=034, blue=205, maxColorValue = 255),
+                          grDevices::rgb( red=255, green=235, blue=000, maxColorValue = 255)
                           ),
                xaxt = "n"
       )
-      par( mar = c(5,4,4,2) + 0.1 )
+      graphics::par( mar = c(5,4,4,2) + 0.1 )
     }
     
     # Sequence plot.
     rmat1 <- cbind(chrom@seq.info$nuc.win[,1], -1, chrom@seq.info$nuc.win[,2], 1)
     rmat2 <- cbind(chrom@seq.info$N.win[,1], -0.5, chrom@seq.info$N.win[,2], 0.5)
-    par( mar = c(0,4,0,0) )
+    graphics::par( mar = c(0,4,0,0) )
     dr.plot( rlst = list( rmat1, rmat2 ), chrom.s = 1, chrom.e = chrom@len,
                     title = "Nucleotides", hline = NULL,
                     dcol = NULL,
@@ -320,9 +320,9 @@ chromo <- function( chrom,
                     ... )
     
     if( nrow(chrom@ann) == 0 ){
-      axis( side = 1, line = 0 )
+      graphics::axis( side = 1, line = 0 )
     }
-    par( mar = c(5,4,4,2) + 0.1 )
+    graphics::par( mar = c(5,4,4,2) + 0.1 )
     
     if( boxp == TRUE){
       null.plot()
@@ -332,24 +332,24 @@ chromo <- function( chrom,
   # Annotation plot.
   if( nrow(chrom@ann) > 0 ){
     rmat <- cbind( chrom@ann[,4], -1, chrom@ann[,5], 1)
-    par( mar=c(0,4,0,0) )
+    graphics::par( mar=c(0,4,0,0) )
     dr.plot( rlst = list( rmat ), chrom.e = chrom@len, title = "Annotations",
-             rcol = rgb(178,34,34, maxColorValue = 255),
-             rbcol = rgb(178,34,34, maxColorValue = 255),
+             rcol = grDevices::rgb(178,34,34, maxColorValue = 255),
+             rbcol = grDevices::rgb(178,34,34, maxColorValue = 255),
              hline = 0,
              yaxt = "n",
              ...)
-    axis( side = 1, line = 0 )
-    par( mar = c(5,4,4,2) + 0.1 )
+    graphics::axis( side = 1, line = 0 )
+    graphics::par( mar = c(5,4,4,2) + 0.1 )
 
     if( boxp == TRUE){
       null.plot()
     }
   }
 
-  title( xlab = "Base pairs", line = 1.6, outer = TRUE )
+  graphics::title( xlab = "Base pairs", line = 1.6, outer = TRUE )
   if( length(chrom@name) > 0 ){
-    title( main = chrom@name, line = 0.2, outer = TRUE )
+    graphics::title( main = chrom@name, line = 0.2, outer = TRUE )
   }
 
   
@@ -359,9 +359,9 @@ chromo <- function( chrom,
   #
   ##### ##### ##### ##### #####
 
-  par( mar = orig.mar )
-  par( oma = orig.oma )
-  par( mfrow = c(1,1) )
+  graphics::par( mar = orig.mar )
+  graphics::par( oma = orig.oma )
+  graphics::par( mfrow = c(1,1) )
 }
 
 ##### ##### ##### ##### #####
@@ -392,15 +392,15 @@ chromoqc <- function( chrom,
   # Read depth
   myList1 <- list(title = "Read Depth (DP)",
                   dmat  = chrom@var.info[ chrom@var.info[,"mask"] , c("POS","DP") ],
-                  dcol  = rgb( red=30, green=144, blue=255, alpha=dp.alpha, maxColorValue = 255),
-                  bwcol = rgb( red=30, green=144, blue=255, maxColorValue = 255)
+                  dcol  = grDevices::rgb( red=30, green=144, blue=255, alpha=dp.alpha, maxColorValue = 255),
+                  bwcol = grDevices::rgb( red=30, green=144, blue=255, maxColorValue = 255)
   )
 
   # Mapping Quality (MQ)
   myList2 <- list(title = "Mapping Quality (MQ)",
                   dmat  = chrom@var.info[ chrom@var.info[,"mask"] , c("POS","MQ") ],
-                  dcol  = rgb( red=46, green=139, blue=87, alpha=dp.alpha, maxColorValue = 255),
-                  bwcol = rgb( red=46, green=139, blue=87, maxColorValue = 255)
+                  dcol  = grDevices::rgb( red=46, green=139, blue=87, alpha=dp.alpha, maxColorValue = 255),
+                  bwcol = grDevices::rgb( red=46, green=139, blue=87, maxColorValue = 255)
   )
   
   # Phred-Scaled Quality (QUAL)
@@ -409,8 +409,8 @@ chromoqc <- function( chrom,
   dmat <- dmat[ chrom@var.info[,"mask"], , drop = FALSE]
   myList3 <- list(title = "Phred-Scaled Quality (QUAL)",
                   dmat  = dmat,
-                  dcol  = rgb(red=139, green=0, blue=139, alpha=dp.alpha, maxColorValue = 255),
-                  bwcol = rgb(red=139, green=0, blue=139, maxColorValue = 255)
+                  dcol  = grDevices::rgb(red=139, green=0, blue=139, alpha=dp.alpha, maxColorValue = 255),
+                  bwcol = grDevices::rgb(red=139, green=0, blue=139, maxColorValue = 255)
   )
   
   chromo( chrom, boxp = boxp, 
