@@ -1,7 +1,7 @@
 
-## Explore and manipulate variant call format (vcf) data
+## Manipulate and visualize variant call format (vcf) data
 
-VcfR, tools created to work with [vcf](https://github.com/samtools/hts-specs) data.
+VcfR: tools to read, write, parse and visualize [vcf](https://github.com/samtools/hts-specs) data.
 
 [![Travis-CI Build Status](https://travis-ci.org/knausb/vcfR.png?branch=master)](https://travis-ci.org/knausb/vcfR)
 [![Coverage Status](https://coveralls.io/repos/github/knausb/vcfR/badge.svg?branch=master)](https://coveralls.io/github/knausb/vcfR?branch=master)
