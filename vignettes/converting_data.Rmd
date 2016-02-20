@@ -100,7 +100,7 @@ When verbose is set to FALSE the loci will be omitted silently.
 
 
 
-```{r}
+```{r, eval=FALSE}
 vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
 vcf <- read.vcfR(vcf_file, verbose = FALSE)
 x <- vcfR2genlight(vcf)
