@@ -25,7 +25,7 @@ An example exists on the \code{\link{create.chromR}} man page.
 
 
 
-The \strong{complete list of functions} can be displayed with: library(help = vcfR) or by clicking on the 'index' link at the bottom of the page.
+The \strong{complete list of functions} can be displayed with: library(help = vcfR).
 
 \strong{Vignettes} can be listed with: \code{browseVignettes('vcfR')}.
 }
