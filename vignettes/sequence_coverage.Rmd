@@ -15,14 +15,14 @@ A common attempt to address this question is by asking how much sequence coverag
 For a diploid organism, one would require at least two reads per variant to infer a genotype.
 Ideally, we would like a little more so that we have redundancy.
 How much redundancy is necessary may be a question the researchers need to address themselves.
-In this vignette we'll learn how to read in vcf data, extract sequence depth information from it and how to visualize this data.
+In this vignette we'll learn how to read in VCF data, extract sequence depth information from it and how to visualize this data.
 
 
-## Reading vcf data
+## Reading VCF data
 
 
-The topic of reading in vcf format data is covered in other vignettes.
-We include it here for redundancy, and because every example involving vcf data needs to start with some data.
+The topic of reading in VCF format data is covered in other vignettes.
+We include it here for redundancy, and because every example involving VCF data needs to start with some data.
 
 
 ```{r}
@@ -40,7 +40,7 @@ vcf
 ```
 
 
-## Querying vcf information
+## Querying VCF information
 
 
 Some, but not all, variant callers will provide per variant and per sample sequence depth information.
@@ -53,10 +53,10 @@ head(vcf)
 ```
 
 
-This provides a summary of the information contained in the vcf data.
+This provides a summary of the information contained in the VCF data.
 In the genotype section, the first column  is titled 'FORMAT' and includes fields that describe the genotype data included with each genotype.
-According to the vcf definition the first element must be the genotype.
-All subsequent data is optional according to the vcf definition.
+According to the VCF definition the first element must be the genotype.
+All subsequent data is optional according to the VCF definition.
 Each field is defined in the meta region.
 We can use 'grep' to search the meta slot for the definition of these fields.
 

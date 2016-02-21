@@ -49,7 +49,7 @@ When we've settled on a set of manipulations which we like we can then use this 
 
 
 The function masker() censors variants (i.e., sets the mask) based on several thresholds.
-A number of summaries regarding variant quality are reported in vcf files.
+A number of summaries regarding variant quality are reported in VCF files.
 These summaries may differ in content depending on what software was used to create them, as well as what options may have been used.
 For example, a quality metric may range from 0 to 20 or 0 to 100 depending on choices made by the developer (i.e., are they raw probabilities or phred converted, etc.).
 Because of this, the default values for masker() are not likely to be very useful.
@@ -63,11 +63,11 @@ head(chrom)
 
 
 The masker() function uses QUAL, sequence depth and mapping quality to try to filter out low quality variants.
-The parameter QUAL is a part of the vcf file definition.
+The parameter QUAL is a part of the VCF file definition.
 Because of this, it is not documented in the meta region.
 This parameter should always be present.
 However, it may be set to missing ('.' in the file, NA as read in by vcfR) or populated with a constant, both of which render this metric as unuseful.
-The parameters DP and MQ are in the INFO column an are not part of the vcf definition.
+The parameters DP and MQ are in the INFO column an are not part of the VCF definition.
 The parameter DP is not a required field, so it is defined in the meta region.
 
 
@@ -156,7 +156,7 @@ This conservative set may be used for analysis or it may be used as a training s
 
 
 Once satisfactory filtering has been completed you'll want to save this high quality set of variants.
-This can be done by writing these variants to a new vcf file with the function write.vcf().
+This can be done by writing these variants to a new VCF file with the function write.vcf().
 
 
 ```{r, eval=FALSE}

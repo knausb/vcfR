@@ -37,8 +37,8 @@ data(vcfR_example)
 ## Creating *.vcf.gz format files.
 
 
-The function **write.vcf()** can be used to create *.vcf.gz files (gzipped vcf files) from objects of class vcfR or chromR.
-These vcf files can be used for any downstream analysis which uses vcf files as input.
+The function **write.vcf()** can be used to create *.vcf.gz files (gzipped VCF files) from objects of class vcfR or chromR.
+These VCF files can be used for any downstream analysis which uses VCF files as input.
 
 
 ```{r, eval=FALSE}
@@ -113,13 +113,13 @@ x
 ## Creating DNAbin objects
 
 The package **ape** handles sequence data using objects of class **DNAbin**.
-The vcf file only contains information on variant positions.
+The VCF file only contains information on variant positions.
 Omitting invariant data provides for a more efficient representation of the data than including the invariant sites.
-Converting vcf data to sequence data presents a challenge in that these invariant sites may need to be included.
+Converting VCF data to sequence data presents a challenge in that these invariant sites may need to be included.
 This means that these objects can easily occupy large amounts of memory, and may exceed the physical memory when long sequences with many samples are included.
 In order to accomodate these issues, we've taken an approach which attempts to create DNAbin objects from portions of a chomosome, such as a gene.
 This means we'll need a little more information than we've needed for other conversions.
-First, we'll need to locate and read in our vcf file, a reference sequence and a gff file that has the coordinates for a gene.
+First, we'll need to locate and read in our VCF file, a reference sequence and a gff file that has the coordinates for a gene.
 
 
 ```{r}
@@ -166,7 +166,7 @@ So the user should excercise prudence when using this option.
 
 If we instead create two haplotypes for each diploid sample, it results in a DNAbin object which includes only unambiguous nucleotides(A, C,  G and T).
 This typically requires the data to be phased (I use [beagle4](https://faculty.washington.edu/browning/beagle/beagle.html)).
-In vcf files this is indicated by delimiting the alleles of the genotype with a pipe ('|') for phased data, while unphased data are delimited with a forward slash ('/').
+In VCF files this is indicated by delimiting the alleles of the genotype with a pipe ('|') for phased data, while unphased data are delimited with a forward slash ('/').
 
 
 ```{r, tidy=TRUE}
@@ -215,8 +215,8 @@ We can now proceed to downstream analyses.
 ## Conclusion
 
 The use of vcfR is an intermediary point in an analysis.
-Once vcf data are obtained, vcfR provides an interactive way to scrutinize and filter the data.
-A number of paths have been provided that take the results of vcf format data from exploration and filtering to downstream analyses by other software that uses vcf files as input or several R packages.
+Once VCF data are obtained, vcfR provides an interactive way to scrutinize and filter the data.
+A number of paths have been provided that take the results of VCF format data from exploration and filtering to downstream analyses by other software that uses VCF files as input or several R packages.
 
 
 

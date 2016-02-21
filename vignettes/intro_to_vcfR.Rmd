@@ -10,7 +10,7 @@ vignette: >
 ---
 
 
-vcfR is a package intended to help visualize, manipulate and quality filter data in vcf files.
+vcfR is a package intended to help visualize, manipulate and quality filter data in VCF files.
 
 
 ## Preliminaries
@@ -26,9 +26,9 @@ This later choice results in the creation of files which are largely redundant w
 ## Data input
 
 
-The vcfR package is designed to work with [vcf format](http://www.1000genomes.org/node/101) files.
+The vcfR package is designed to work with [VCF format](http://www.1000genomes.org/node/101) files.
 The use of a sequence file ([fasta format](https://en.wikipedia.org/wiki/FASTA_format)) and an annotation file ([gff format](http://www.sequenceontology.org/gff3.shtml)) can provide helpful context, but are not required.
-Reading in of the vcf format file can be performed with a function in vcfR.
+Reading in of the VCF format file can be performed with a function in vcfR.
 First we'll locate the example data from the package 'pinfsc50.'
 
 
@@ -40,7 +40,7 @@ gff_file <- system.file("extdata", "pinf_sc50.gff", package = pkg)
 ```
 
 
-Then read in the vcf file with vcfR.
+Then read in the VCF file with vcfR.
 
 
 ```{r}
@@ -51,7 +51,7 @@ vcf <- read.vcfR( vcf_file, verbose = FALSE)
 
 The function **read.vcfR()** takes the filename you specify and uses it to read the file into a **vcfR** object.
 The **vcfR** object is an S4 class object with three slots containing the metadata, the fixed data and the genotype data.
-More information on vcf data can be found in the vignette 'vcf data.'
+More information on VCF data can be found in the vignette 'vcf data.'
 This object provides a known organization for the data so that downstream functions can easily access it.
 
 
@@ -131,7 +131,7 @@ chrom <- create.chromR(name='Supercontig', vcf=vcf, seq=dna, ann=gff)
 
 Note that the names of our three data sources are not identical.
 This results in a warning.
-When we examine the output we see that the name in the vcf file is 'Supercontig_1.50,' while the name in the fasta is 'Supercontig_1.50 of Phytophthora infestans T30-4.'
+When we examine the output we see that the name in the VCF file is 'Supercontig_1.50,' while the name in the fasta is 'Supercontig_1.50 of Phytophthora infestans T30-4.'
 We know that these are synonyms so we can ignore the warning and proceed.
 
 
@@ -176,7 +176,7 @@ No SNP densities are found at this point because this data results from windowin
 Filtering on other parameters may reveal a more straight forward path.
 
 
-Note that vcf files created by different variant calling softwares may or may not have these fields or their ranges may be different.
+Note that VCF files created by different variant calling softwares may or may not have these fields or their ranges may be different.
 For example, here the mapping quality is peaked at 60.
 Other softwares may create files where mapping quality is peaked at 20 or some other value.
 This is why it is important to visualize the distribution of your data so you understand its properties.
@@ -280,10 +280,10 @@ chromoqc(chrom, xlim=c( gff[record,4]-buffer, gff[record,5]+buffer ))
 
 
 Thus far we've only looked at per variant summaries over all samples.
-This information is typically found in the fixed portion of a vcf file (the first 8 columns of the file).
+This information is typically found in the fixed portion of a VCF file (the first 8 columns of the file).
 Beyond these eight colomns are a flexible number of columns, one for each sample.
 Different softwares will place different types of data to accompany each genotype.
-We can use the function **extract.gt()** to extract specified fields from the genotype region of the vcf data.
+We can use the function **extract.gt()** to extract specified fields from the genotype region of the VCF data.
 Here we extract genotype quality (GQ) for each sample and each variant.
 
 
@@ -326,11 +326,11 @@ Once they've gained an understanding of this data, they will likely want to act 
 One way to act upon this understanding is to use their aquired comprehension of their data to filter it to what they feel is of adequate quality.
 
 
-### Output to vcf file
+### Output to VCF file
 
 Within the framework of the package vcfR, the filtering and output of variants determined to be of adequate quality can be accomplished with the function **write.vcf()**.
-This function takes a vcfR object and optionally subsets it using the mask, created in previous steps, and outputs it to a vcf format file.
-This file should be usable by all vcf format compliant softwares for downstream analyses.
+This function takes a vcfR object and optionally subsets it using the mask, created in previous steps, and outputs it to a VCF format file.
+This file should be usable by all VCF format compliant softwares for downstream analyses.
 
 
 ### Conversion to other R objects

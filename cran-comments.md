@@ -1,3 +1,19 @@
+## Resubmission
+This is a resubmission. In this version I have:
+
+> Description: Tools for working with variant call format (vcf) files. Reads
+>   in "vcf", gff and "fasta" data for visualization.  Includes
+
+* Can you pls use single quotes?
+Double quotes in the DESCRIPTION have been changed to single quotes.
+
+* Can you pls provide a refernce/URL for "vcf format"?
+http://samtools.github.io/hts-specs/
+
+* Also, is it vcf?  Vcf (as in the title)?  VCF?
+Review of the definition indicates that it should be VCF (my error). This has been updated.
+
+
 ## Test environments
 * local ubuntu 12.04, R 3.2.3
 * ubuntu 12.04 (on travis-ci), R 3.2.3
