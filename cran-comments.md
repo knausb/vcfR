@@ -1,5 +1,5 @@
 ## Resubmission
-This is a resubmission. In this version I have:
+This is a resubmission. In this version I have addressed the below comments:
 
 > Description: Tools for working with variant call format (vcf) files. Reads
 >   in "vcf", gff and "fasta" data for visualization.  Includes
@@ -50,12 +50,9 @@ Because this is a NOTE and not a ERROR or WARNING I have left it as one package 
 
 
 Possibly mis-spelled words in DESCRIPTION:
-  Vcf (2:52)
-  fasta (3:95)
-  gff (3:86)
-  vcf (3:58, 3:80, 3:171)
+  VCF (2:53, 3:59)
   
-The words fasta, gff and vcf are data file formats and are correctly spelled.
+The word VCF is a data file format and is correctly spelled.
 
 
 ## Downstream dependencies
