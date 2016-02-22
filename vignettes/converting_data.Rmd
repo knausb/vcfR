@@ -41,7 +41,7 @@ The function **write.vcf()** can be used to create *.vcf.gz files (gzipped VCF f
 These VCF files can be used for any downstream analysis which uses VCF files as input.
 
 
-```{r, eval=FALSE}
+```{r write.vcf, eval=FALSE}
 write.vcf(vcf, "test.vcf.gz")
 unlink("test.vcf.gz") # Clean up after our example is done.
 ```
@@ -79,7 +79,7 @@ The package **poppr** uses objects of class genclone as well as genind.
 Once a genind object has been created, it is fairly straight forward to create a genclone object.
 
 
-```{r, eval=TRUE}
+```{r genclone, eval=TRUE}
 my_genclone <- poppr::as.genclone(my_genind)
 class(my_genclone)
 my_genclone
@@ -100,7 +100,7 @@ When verbose is set to FALSE the loci will be omitted silently.
 
 
 
-```{r, eval=FALSE}
+```{r genlight, eval=FALSE}
 vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
 vcf <- read.vcfR(vcf_file, verbose = FALSE)
 x <- vcfR2genlight(vcf)
@@ -122,7 +122,7 @@ This means we'll need a little more information than we've needed for other conv
 First, we'll need to locate and read in our VCF file, a reference sequence and a gff file that has the coordinates for a gene.
 
 
-```{r}
+```{r load vcf dna gff}
 # Find the files.
 vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
 dna_file <- system.file("extdata", "pinf_sc50.fasta", package = "pinfsc50")
@@ -142,7 +142,7 @@ This results in a single sequence per individual.
 Alternatively, we can create two haplotypes for each diploid sample, resulting in two sequences per individual.
 
 
-```{r, tidy=TRUE}
+```{r vcfR2DNAbin, tidy=TRUE}
 record <- 130
 my_dnabin1 <- vcfR2DNAbin(vcf, consensus = TRUE, extract.haps = FALSE, gt.split="|", ref.seq=dna[,gff[record,4]:gff[record,5]], start.pos=gff[record,4], verbose=FALSE)
 my_dnabin1
@@ -152,7 +152,7 @@ my_dnabin1
 We can visualize the variable sites using tools from the package 'ape.'
 
 
-```{r, fig.align='center', fig.width=7, fig.height=7}
+```{r ape::image.DNAbin, fig.align='center', fig.width=7, fig.height=7}
 par(mar=c(5,8,4,2))
 ape::image.DNAbin(my_dnabin1[,ape::seg.sites(my_dnabin1)])
 par(mar=c(5,4,4,2))
@@ -169,12 +169,12 @@ This typically requires the data to be phased (I use [beagle4](https://faculty.w
 In VCF files this is indicated by delimiting the alleles of the genotype with a pipe ('|') for phased data, while unphased data are delimited with a forward slash ('/').
 
 
-```{r, tidy=TRUE}
+```{r vcfR2DNAbin 2, tidy=TRUE}
 my_dnabin1 <- vcfR2DNAbin(vcf, consensus=FALSE, extract.haps=TRUE, gt.split="|", ref.seq=dna[,gff[record,4]:gff[record,5]], start.pos=gff[record,4], verbose=FALSE)
 ```
 
 
-```{r, fig.align='center', fig.width=7, fig.height=7}
+```{r ape::image.DNAbin 2, fig.align='center', fig.width=7, fig.height=7}
 par(mar=c(5,8,4,2))
 ape::image.DNAbin(my_dnabin1[,ape::seg.sites(my_dnabin1)])
 par(mar=c(5,4,4,2))
@@ -202,7 +202,7 @@ The package **pegas** uses objects of class **loci**.
 We can use the function vcfR2loci to convert our vcfR object to one of class loci.
 
 
-```{r vcfR2loci}
+```{r vcfR2loci, eval=FALSE}
 system.time( my_loci <- vcfR2loci(vcf) )
 class(my_loci)
 ```
