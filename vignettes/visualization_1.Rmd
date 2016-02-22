@@ -132,26 +132,6 @@ The varaint count per window summarizes the degree of variability we've observed
 The peak near zero indicates that many windows lack variants.
 
 
-Comparing the chomo plots with the histograms we may wonder if mapping quality is really being driven by raw read depth.
-This idea can be explored with a scatterplot.
-
-
-
-```{r, fig.height=7, fig.width=7}
-plot(chrom@var.info$DP, chrom@var.info$MQ, pch=20, col="#0000ff22", log='xy')
-abline(a=0,b=1)
-```
-
-
-From this perspective there appears to be a correlation among mapping quality and depth.
-This can be validated by calculating a correlation.
-
-
-
-```{r}
-cor.test(chrom@var.info$DP, chrom@var.info$MQ)
-```
-
 
 ## Conclusion
 

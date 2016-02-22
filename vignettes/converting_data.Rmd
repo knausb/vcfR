@@ -152,7 +152,7 @@ my_dnabin1
 We can visualize the variable sites using tools from the package 'ape.'
 
 
-```{r ape::image.DNAbin, fig.align='center', fig.width=7, fig.height=7}
+```{r image_DNAbin1, fig.align='center', fig.width=7, fig.height=7}
 par(mar=c(5,8,4,2))
 ape::image.DNAbin(my_dnabin1[,ape::seg.sites(my_dnabin1)])
 par(mar=c(5,4,4,2))
@@ -169,12 +169,12 @@ This typically requires the data to be phased (I use [beagle4](https://faculty.w
 In VCF files this is indicated by delimiting the alleles of the genotype with a pipe ('|') for phased data, while unphased data are delimited with a forward slash ('/').
 
 
-```{r vcfR2DNAbin 2, tidy=TRUE}
+```{r vcfR2DNAbin_2, tidy=TRUE}
 my_dnabin1 <- vcfR2DNAbin(vcf, consensus=FALSE, extract.haps=TRUE, gt.split="|", ref.seq=dna[,gff[record,4]:gff[record,5]], start.pos=gff[record,4], verbose=FALSE)
 ```
 
 
-```{r ape::image.DNAbin 2, fig.align='center', fig.width=7, fig.height=7}
+```{r image_DNAbin_2, fig.align='center', fig.width=7, fig.height=7}
 par(mar=c(5,8,4,2))
 ape::image.DNAbin(my_dnabin1[,ape::seg.sites(my_dnabin1)])
 par(mar=c(5,4,4,2))

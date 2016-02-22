@@ -5,7 +5,27 @@ Thanks, processing the vignettes takes a while:
 * checking re-building of vignette outputs ... [334s] OK
 Can this be reduced?
 
+This package is intended to process genomic data.
+These datasets can be rather large.
+There are 8 vignettes in this package (this also contributeds to its size in NOTE below).
+I am of the opinion that one of the goals of these vignettes is that they should demonstrate the code performs reasonably on modest size datasets.
+(This opinion appears to be causing me be a bit of trouble.)
+I've created a data only package that is just under 5 MB that is used in these vignettes:
 
+https://cran.r-project.org/web/packages/pinfsc50/index.html
+
+This data set includes 18 samples and 22,031 variants.
+This dataset is processed in the vignettes and is why they take long to build.
+I have tried to reduce the build time of the vignettes by:
+
+- I have set eval=FALSE on code chuncks that demonstrate translation to data structures supported by other CRAN packages, some of which do not perform well on this size dataset (i.e., the slow down is due to code from these other packages).
+- I have tried to remove redundancy among the vignettes which has reduced their size.
+
+This has reduced the vignette build time to 128s (at win-builder).
+If this is not an adequate reduction perhaps I should omit the vignettes from the package and host them elsewhere?
+Feed back from CRAN would be appreciated on this.
+
+Thank you and apologies for a wordy response!
 
 
 

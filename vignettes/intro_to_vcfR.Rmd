@@ -236,86 +236,12 @@ chromoqc(chrom, dp.alpha=20)
 ```
 
 
-We can compare this to the raw data by resetting the mask.
-
-
-
-```{r masker proc.chromR, fig.align='center', fig.height=7, fig.width=7}
-chrom@var.info$mask <- TRUE
-chrom <- proc.chromR(chrom, verbose=FALSE)
-chromoqc(chrom, dp.alpha=20)
-chrom <- masker(chrom, min_QUAL = 1, min_DP = 300, max_DP = 700, min_MQ = 59.9,  max_MQ = 60.1)
-chrom <- proc.chromR(chrom, verbose=FALSE)
-```
-
-
-The last two lines reimplements our mask after we're done, by using the masker function and reprocessing the object.
-
-
-By applying our mask, we retain `r sum(chrom@var.info$mask)` of the `r length(chrom@var.info$mask)` varants, or `r round(100*sum(chrom@var.info$mask)/length(chrom@var.info$mask), digits=1)` percent of the variants.
-This is a rather severe mask in terms of attrition rate.
-However, if we have effectively identified the high quality fraction of the variants, it may improve our downstream analyses.
-
-
-
 We can also zoom in on a feature of interest by using the `xlim` parameter.
 
 
 ```{r chromoqc2, fig.align='center', fig.height=7, fig.width=7}
 chromoqc(chrom, xlim=c(5e+05, 6e+05))
 ```
-
-
-Or use the annotation file to zoom in on a gene.
-
-
-
-```{r chromoqc3, fig.align='center', fig.height=7, fig.width=7}
-record <- 130
-buffer=1e3
-chromoqc(chrom, xlim=c( gff[record,4]-buffer, gff[record,5]+buffer ))
-```
-
-
-
-Thus far we've only looked at per variant summaries over all samples.
-This information is typically found in the fixed portion of a VCF file (the first 8 columns of the file).
-Beyond these eight colomns are a flexible number of columns, one for each sample.
-Different softwares will place different types of data to accompany each genotype.
-We can use the function **extract.gt()** to extract specified fields from the genotype region of the VCF data.
-Here we extract genotype quality (GQ) for each sample and each variant.
-
-
-
-```{r extract.gt}
-gq <- extract.gt(chrom, element="GQ", as.numeric=TRUE)
-gq[1:4,1:10]
-```
-
-
-
-We can then visualize this data with a heatmap.
-
-
-
-```{r heatmap.bp, fig.align='center', fig.height=7, fig.width=7}
-heatmap.bp(gq)
-```
-
-
-Each sample is in a column and each variant is in a row.
-The sequence begins at the bottom of the plot and extends to the top of the plot.
-Barplots summarize column and row sums.
-We can see a few samples near the center of the plot have relatively low genotype qualities.
-These samples may be considered candidates for mitigation.
-For example, they may be excluded from subsequent analyses.
-Or they may be resequenced.
-Or they may be omitted from variant discovery steps but included in variant calling steps.
-It is up to the investigator to determine what is low quality and how to mitigate it.
-In order to remove samples, the data may be subset using the square brackets `[]`.
-In order to omit variants, their mask elements should be set to FALSE.
-
-
 
 
 ## Output of data
