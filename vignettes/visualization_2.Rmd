@@ -1,5 +1,5 @@
 ---
-title: "Visualizing vcf data 2"
+title: "Visualizing VCF data 2"
 author: "Brian Knaus"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -10,7 +10,7 @@ vignette: >
 ---
 
 
-In the vignette 'Visualizing vcf data I' we began to explore how to plot information contained in [variant call format (vcf)](http://samtools.github.io/hts-specs/ "vcf format at hts-specs") files.
+In the vignette 'Visualizing VCF data I' we began to explore how to plot information contained in [variant call format (vcf)](http://samtools.github.io/hts-specs/ "VCF format at hts-specs") files.
 This perspective was mostly one of summaries over all samples for each variant.
 Here we build on this by exploring data based on each sample's genotype information.
 
@@ -43,7 +43,7 @@ chrom <- proc.chromR(chrom, verbose = FALSE)
 
 ## Genotype data
 
-In the vignette 'Visualizing vcf data I' we explored summaries of variants made across all samples.
+In the vignette 'Visualizing VCF data I' we explored summaries of variants made across all samples.
 If all samples are fairly homogenous in the qualities of these metrics, than a summary across all samples may be appropriate.
 However, if a few samples have very low quality, or some samples are exceptional, this may be masked by looking at summaries across all samples.
 By looking at the individual samples, these differences may be discovered.
@@ -74,7 +74,7 @@ Read depth (DP) is numeric, and we'll use that in subsequent examples.
 ## Using extract.gt
 
 
-The genotype region of vcf data contains several values for each sample and each variant.
+The genotype region of VCF data contains several values for each sample and each variant.
 We can extract one of these colon delimited values using the function **extract.gt()**.
 This function determines the position of the desired element in the FORMAT column and uses this information to extract the same position from all of the other samples in that row.
 This is performed on a row by row basis so that files containing heterogeneous FORMAT specifications can be processed.
@@ -169,7 +169,7 @@ At the other end of the spectrum, the sample NL07434 has a high average coverage
 Now that we know our way around our chromosome it may be time to make some decisions.
 Regions which do not meet our expectations may need extra work to make sure they are of high quality.
 Alternatively, we may simply wish to censor these regions and focus on the high quality fraction of the data.
-Once we've gained a familiarity witht he data contained in our vcf file we can make informed decisions on how best to process it.
+Once we've gained a familiarity with the data contained in our VCF file we can make informed decisions on how best to process it.
 
 
 

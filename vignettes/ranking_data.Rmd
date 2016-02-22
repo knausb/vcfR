@@ -10,7 +10,7 @@ vignette: >
 ---
 
 
-In the vignette 'Filtering data' we used thresholds as an attempt to isolate the high quality fraction of variants from a vcf file.
+In the vignette 'Filtering data' we used thresholds as an attempt to isolate the high quality fraction of variants from a VCF file.
 Here we assign ranks to variants within windows.
 This information used alone, or in conjunction with thresholds, may be an effective strategy to identify high quality variants.
 
@@ -50,7 +50,7 @@ head(chrom)
 ```
 
 
-Let's use the genotype quality (GQ) and sequence depth (DP) from the vcf genotype information.
+Let's use the genotype quality (GQ) and sequence depth (DP) from the VCF genotype information.
 We can isolate matrices of genotype quality and sequence depth with the extract.gt function.
 
 

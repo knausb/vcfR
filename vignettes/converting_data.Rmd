@@ -37,11 +37,11 @@ data(vcfR_example)
 ## Creating *.vcf.gz format files.
 
 
-The function **write.vcf()** can be used to create *.vcf.gz files (gzipped vcf files) from objects of class vcfR or chromR.
-These vcf files can be used for any downstream analysis which uses vcf files as input.
+The function **write.vcf()** can be used to create *.vcf.gz files (gzipped VCF files) from objects of class vcfR or chromR.
+These VCF files can be used for any downstream analysis which uses VCF files as input.
 
 
-```{r, eval=FALSE}
+```{r write.vcf, eval=FALSE}
 write.vcf(vcf, "test.vcf.gz")
 unlink("test.vcf.gz") # Clean up after our example is done.
 ```
@@ -79,7 +79,7 @@ The package **poppr** uses objects of class genclone as well as genind.
 Once a genind object has been created, it is fairly straight forward to create a genclone object.
 
 
-```{r, eval=TRUE}
+```{r genclone, eval=TRUE}
 my_genclone <- poppr::as.genclone(my_genind)
 class(my_genclone)
 my_genclone
@@ -100,7 +100,7 @@ When verbose is set to FALSE the loci will be omitted silently.
 
 
 
-```{r, eval=FALSE}
+```{r genlight, eval=FALSE}
 vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
 vcf <- read.vcfR(vcf_file, verbose = FALSE)
 x <- vcfR2genlight(vcf)
@@ -113,16 +113,16 @@ x
 ## Creating DNAbin objects
 
 The package **ape** handles sequence data using objects of class **DNAbin**.
-The vcf file only contains information on variant positions.
+The VCF file only contains information on variant positions.
 Omitting invariant data provides for a more efficient representation of the data than including the invariant sites.
-Converting vcf data to sequence data presents a challenge in that these invariant sites may need to be included.
+Converting VCF data to sequence data presents a challenge in that these invariant sites may need to be included.
 This means that these objects can easily occupy large amounts of memory, and may exceed the physical memory when long sequences with many samples are included.
 In order to accomodate these issues, we've taken an approach which attempts to create DNAbin objects from portions of a chomosome, such as a gene.
 This means we'll need a little more information than we've needed for other conversions.
-First, we'll need to locate and read in our vcf file, a reference sequence and a gff file that has the coordinates for a gene.
+First, we'll need to locate and read in our VCF file, a reference sequence and a gff file that has the coordinates for a gene.
 
 
-```{r}
+```{r load vcf dna gff}
 # Find the files.
 vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
 dna_file <- system.file("extdata", "pinf_sc50.fasta", package = "pinfsc50")
@@ -142,7 +142,7 @@ This results in a single sequence per individual.
 Alternatively, we can create two haplotypes for each diploid sample, resulting in two sequences per individual.
 
 
-```{r, tidy=TRUE}
+```{r vcfR2DNAbin, tidy=TRUE}
 record <- 130
 my_dnabin1 <- vcfR2DNAbin(vcf, consensus = TRUE, extract.haps = FALSE, gt.split="|", ref.seq=dna[,gff[record,4]:gff[record,5]], start.pos=gff[record,4], verbose=FALSE)
 my_dnabin1
@@ -152,7 +152,7 @@ my_dnabin1
 We can visualize the variable sites using tools from the package 'ape.'
 
 
-```{r, fig.align='center', fig.width=7, fig.height=7}
+```{r ape::image.DNAbin, fig.align='center', fig.width=7, fig.height=7}
 par(mar=c(5,8,4,2))
 ape::image.DNAbin(my_dnabin1[,ape::seg.sites(my_dnabin1)])
 par(mar=c(5,4,4,2))
@@ -166,15 +166,15 @@ So the user should excercise prudence when using this option.
 
 If we instead create two haplotypes for each diploid sample, it results in a DNAbin object which includes only unambiguous nucleotides(A, C,  G and T).
 This typically requires the data to be phased (I use [beagle4](https://faculty.washington.edu/browning/beagle/beagle.html)).
-In vcf files this is indicated by delimiting the alleles of the genotype with a pipe ('|') for phased data, while unphased data are delimited with a forward slash ('/').
+In VCF files this is indicated by delimiting the alleles of the genotype with a pipe ('|') for phased data, while unphased data are delimited with a forward slash ('/').
 
 
-```{r, tidy=TRUE}
+```{r vcfR2DNAbin 2, tidy=TRUE}
 my_dnabin1 <- vcfR2DNAbin(vcf, consensus=FALSE, extract.haps=TRUE, gt.split="|", ref.seq=dna[,gff[record,4]:gff[record,5]], start.pos=gff[record,4], verbose=FALSE)
 ```
 
 
-```{r, fig.align='center', fig.width=7, fig.height=7}
+```{r ape::image.DNAbin 2, fig.align='center', fig.width=7, fig.height=7}
 par(mar=c(5,8,4,2))
 ape::image.DNAbin(my_dnabin1[,ape::seg.sites(my_dnabin1)])
 par(mar=c(5,4,4,2))
@@ -202,7 +202,7 @@ The package **pegas** uses objects of class **loci**.
 We can use the function vcfR2loci to convert our vcfR object to one of class loci.
 
 
-```{r vcfR2loci}
+```{r vcfR2loci, eval=FALSE}
 system.time( my_loci <- vcfR2loci(vcf) )
 class(my_loci)
 ```
@@ -215,8 +215,8 @@ We can now proceed to downstream analyses.
 ## Conclusion
 
 The use of vcfR is an intermediary point in an analysis.
-Once vcf data are obtained, vcfR provides an interactive way to scrutinize and filter the data.
-A number of paths have been provided that take the results of vcf format data from exploration and filtering to downstream analyses by other software that uses vcf files as input or several R packages.
+Once VCF data are obtained, vcfR provides an interactive way to scrutinize and filter the data.
+A number of paths have been provided that take the results of VCF format data from exploration and filtering to downstream analyses by other software that uses VCF files as input or several R packages.
 
 
 

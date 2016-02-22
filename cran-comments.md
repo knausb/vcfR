@@ -1,3 +1,30 @@
+## Resubmission
+This is a second resubmission. In this version I have addressed the below comments:
+
+Thanks, processing the vignettes takes a while:
+* checking re-building of vignette outputs ... [334s] OK
+Can this be reduced?
+
+
+
+
+
+## Resubmission
+This is a resubmission. In this version I have addressed the below comments:
+
+> Description: Tools for working with variant call format (vcf) files. Reads
+>   in "vcf", gff and "fasta" data for visualization.  Includes
+
+* Can you pls use single quotes?
+Double quotes in the DESCRIPTION have been changed to single quotes.
+
+* Can you pls provide a refernce/URL for "vcf format"?
+http://samtools.github.io/hts-specs/
+
+* Also, is it vcf?  Vcf (as in the title)?  VCF?
+Review of the definition indicates that it should be VCF (my error). This has been updated.
+
+
 ## Test environments
 * local ubuntu 12.04, R 3.2.3
 * ubuntu 12.04 (on travis-ci), R 3.2.3
@@ -33,12 +60,9 @@ Because this is a NOTE and not a ERROR or WARNING I have left it as one package 
 
 
 Possibly mis-spelled words in DESCRIPTION:
-  Vcf (2:52)
-  fasta (3:95)
-  gff (3:86)
-  vcf (3:58, 3:80, 3:171)
+  VCF (2:53, 3:59)
   
-The words fasta, gff and vcf are data file formats and are correctly spelled.
+The word VCF is a data file format and is correctly spelled.
 
 
 ## Downstream dependencies

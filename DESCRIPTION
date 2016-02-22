@@ -1,11 +1,11 @@
 Package: vcfR
-Title: Tools for Working with Variant Call Format (Vcf) Files
-Description: Tools for working with variant call format (vcf) files. Reads in "vcf", gff and "fasta" data for visualization.  Includes tools for filtering and writing to vcf format.
+Title: Tools for Working with Variant Call Format ('VCF') Files
+Description: Tools for working with variant call format ('VCF') files. Reads in 'VCF', 'GFF' and 'FASTA' data for visualization.  Includes tools for filtering and writing to 'VCF' files.
 Version: 1.0.0
-Authors@R: c(person(c("Brian", "J."), "Knaus", role = c("cre", "aut"),
-    email = "briank.lists@gmail.com"),
-    person(c("Niklaus", "J."), "Grunwald", role = "aut",
-    email = "grunwaln@science.oregonstate.edu"))
+Authors@R: c(person(c('Brian', 'J.'), 'Knaus', role = c('cre', 'aut'),
+    email = 'briank.lists@gmail.com'),
+    person(c('Niklaus', 'J.'), 'Grunwald', role = 'aut',
+    email = 'grunwaln@science.oregonstate.edu'))
 Maintainer: Brian J. Knaus <briank.lists@gmail.com>
 Depends:
     R (>= 3.0.1)

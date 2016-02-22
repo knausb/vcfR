@@ -10,7 +10,7 @@ vignette: >
 ---
 
 
-vcfR is a package intended to help visualize, manipulate and quality filter data in vcf files.
+vcfR is a package intended to help visualize, manipulate and quality filter data in VCF files.
 
 
 ## Preliminaries
@@ -26,9 +26,9 @@ This later choice results in the creation of files which are largely redundant w
 ## Data input
 
 
-The vcfR package is designed to work with [vcf format](http://www.1000genomes.org/node/101) files.
+The vcfR package is designed to work with [VCF format](http://www.1000genomes.org/node/101) files.
 The use of a sequence file ([fasta format](https://en.wikipedia.org/wiki/FASTA_format)) and an annotation file ([gff format](http://www.sequenceontology.org/gff3.shtml)) can provide helpful context, but are not required.
-Reading in of the vcf format file can be performed with a function in vcfR.
+Reading in of the VCF format file can be performed with a function in vcfR.
 First we'll locate the example data from the package 'pinfsc50.'
 
 
@@ -40,18 +40,18 @@ gff_file <- system.file("extdata", "pinf_sc50.gff", package = pkg)
 ```
 
 
-Then read in the vcf file with vcfR.
+Then read in the VCF file with vcfR.
 
 
-```{r}
+```{r read.vcfR}
 library(vcfR)
-vcf <- read.vcfR( vcf_file, verbose = FALSE)
+vcf <- read.vcfR( vcf_file, verbose = FALSE )
 ```
 
 
 The function **read.vcfR()** takes the filename you specify and uses it to read the file into a **vcfR** object.
 The **vcfR** object is an S4 class object with three slots containing the metadata, the fixed data and the genotype data.
-More information on vcf data can be found in the vignette 'vcf data.'
+More information on VCF data can be found in the vignette 'vcf data.'
 This object provides a known organization for the data so that downstream functions can easily access it.
 
 
@@ -59,7 +59,7 @@ Genomic reference sequence files are typically in fasta format files.
 These can be read in using the package ape.
 
 
-```{r}
+```{r read.dna}
 dna <- ape::read.dna(dna_file, format = "fasta")
 ```
 
@@ -67,7 +67,7 @@ dna <- ape::read.dna(dna_file, format = "fasta")
 Annotation files (we currently only support [gff](http://sequenceontology.org/resources/gff3.html)), files which contain coordinates for annotations such as start and end points of genes, are tabular and can be read in with typical R functions.
 
 
-```{r}
+```{r gff}
 gff <- read.table(gff_file, sep="\t", quote="")
 ```
 
@@ -115,7 +115,6 @@ This is also something that I am not likely to be able to improve on if it becom
 By dividing the analysis into these three phases I've divided that workflow into things I may be able to improve upon through my code writing, and things which I have little control over.
 
 
-
 ## Creating chromR objects
 
 
@@ -123,7 +122,7 @@ Once the data are in memory we can use it to create a **chromR** object with the
 The create.chromR() function creates a new chromR object and populates it with data you provided it.
 
 
-```{r}
+```{r create.chromR}
 library(vcfR)
 chrom <- create.chromR(name='Supercontig', vcf=vcf, seq=dna, ann=gff)
 ```
@@ -131,7 +130,7 @@ chrom <- create.chromR(name='Supercontig', vcf=vcf, seq=dna, ann=gff)
 
 Note that the names of our three data sources are not identical.
 This results in a warning.
-When we examine the output we see that the name in the vcf file is 'Supercontig_1.50,' while the name in the fasta is 'Supercontig_1.50 of Phytophthora infestans T30-4.'
+When we examine the output we see that the name in the VCF file is 'Supercontig_1.50,' while the name in the fasta is 'Supercontig_1.50 of Phytophthora infestans T30-4.'
 We know that these are synonyms so we can ignore the warning and proceed.
 
 
@@ -159,7 +158,7 @@ This can be done with the plot function.
 
 
 
-```{r, fig.align='center', fig.height=7, fig.width=7}
+```{r plot chrom, fig.align='center', fig.height=7, fig.width=7}
 plot(chrom)
 ```
 
@@ -176,7 +175,7 @@ No SNP densities are found at this point because this data results from windowin
 Filtering on other parameters may reveal a more straight forward path.
 
 
-Note that vcf files created by different variant calling softwares may or may not have these fields or their ranges may be different.
+Note that VCF files created by different variant calling softwares may or may not have these fields or their ranges may be different.
 For example, here the mapping quality is peaked at 60.
 Other softwares may create files where mapping quality is peaked at 20 or some other value.
 This is why it is important to visualize the distribution of your data so you understand its properties.
@@ -192,7 +191,7 @@ This maintains the geometry of the data matrices throughout the analyisis and al
 
 
 
-```{r, fig.align='center', fig.height=7, fig.width=7}
+```{r masker, fig.align='center', fig.height=7, fig.width=7}
 chrom <- masker(chrom, min_QUAL = 1, min_DP = 300, max_DP = 700, min_MQ = 59.9,  max_MQ = 60.1)
 plot(chrom)
 ```
@@ -210,7 +209,7 @@ The function **var.win()** performs windowing analyses on the data.
 Currently it summarizes variant count per window as well as G/C content per window.
 
 
-```{r, fig.align='center', fig.height=7, fig.width=7}
+```{r proc.chromR, fig.align='center', fig.height=7, fig.width=7}
 chrom <- proc.chromR(chrom, verbose=TRUE)
 plot(chrom)
 ```
@@ -232,7 +231,7 @@ The function **chromoqc()** uses the R function ```layout()``` to make composite
 
 
 
-```{r, fig.align='center', fig.height=7, fig.width=7}
+```{r chromoqc1, fig.align='center', fig.height=7, fig.width=7}
 chromoqc(chrom, dp.alpha=20)
 ```
 
@@ -241,7 +240,7 @@ We can compare this to the raw data by resetting the mask.
 
 
 
-```{r, fig.align='center', fig.height=7, fig.width=7}
+```{r masker proc.chromR, fig.align='center', fig.height=7, fig.width=7}
 chrom@var.info$mask <- TRUE
 chrom <- proc.chromR(chrom, verbose=FALSE)
 chromoqc(chrom, dp.alpha=20)
@@ -262,7 +261,7 @@ However, if we have effectively identified the high quality fraction of the vari
 We can also zoom in on a feature of interest by using the `xlim` parameter.
 
 
-```{r, fig.align='center', fig.height=7, fig.width=7}
+```{r chromoqc2, fig.align='center', fig.height=7, fig.width=7}
 chromoqc(chrom, xlim=c(5e+05, 6e+05))
 ```
 
@@ -271,7 +270,7 @@ Or use the annotation file to zoom in on a gene.
 
 
 
-```{r, fig.align='center', fig.height=7, fig.width=7}
+```{r chromoqc3, fig.align='center', fig.height=7, fig.width=7}
 record <- 130
 buffer=1e3
 chromoqc(chrom, xlim=c( gff[record,4]-buffer, gff[record,5]+buffer ))
@@ -280,15 +279,15 @@ chromoqc(chrom, xlim=c( gff[record,4]-buffer, gff[record,5]+buffer ))
 
 
 Thus far we've only looked at per variant summaries over all samples.
-This information is typically found in the fixed portion of a vcf file (the first 8 columns of the file).
+This information is typically found in the fixed portion of a VCF file (the first 8 columns of the file).
 Beyond these eight colomns are a flexible number of columns, one for each sample.
 Different softwares will place different types of data to accompany each genotype.
-We can use the function **extract.gt()** to extract specified fields from the genotype region of the vcf data.
+We can use the function **extract.gt()** to extract specified fields from the genotype region of the VCF data.
 Here we extract genotype quality (GQ) for each sample and each variant.
 
 
 
-```{r}
+```{r extract.gt}
 gq <- extract.gt(chrom, element="GQ", as.numeric=TRUE)
 gq[1:4,1:10]
 ```
@@ -299,7 +298,7 @@ We can then visualize this data with a heatmap.
 
 
 
-```{r, fig.align='center', fig.height=7, fig.width=7}
+```{r heatmap.bp, fig.align='center', fig.height=7, fig.width=7}
 heatmap.bp(gq)
 ```
 
@@ -326,17 +325,16 @@ Once they've gained an understanding of this data, they will likely want to act 
 One way to act upon this understanding is to use their aquired comprehension of their data to filter it to what they feel is of adequate quality.
 
 
-### Output to vcf file
+### Output to VCF file
 
 Within the framework of the package vcfR, the filtering and output of variants determined to be of adequate quality can be accomplished with the function **write.vcf()**.
-This function takes a vcfR object and optionally subsets it using the mask, created in previous steps, and outputs it to a vcf format file.
-This file should be usable by all vcf format compliant softwares for downstream analyses.
+This function takes a vcfR object and optionally subsets it using the mask, created in previous steps, and outputs it to a VCF format file.
+This file should be usable by all VCF format compliant softwares for downstream analyses.
 
 
 ### Conversion to other R objects
 
 Conversion of vcfR and chromR to objects supported in other R packages is covered in the vignette 'Converting data.'
-
 
 
 
