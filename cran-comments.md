@@ -3,7 +3,6 @@
 * ubuntu 12.04 (on travis-ci), R 3.2.3
 * local OS X install, R 3.2.3
 * win-builder (devel and release)
-* ubuntu 12.04, R Under development (unstable) (2016-01-11 r69918) (rocker r-devel container)
 
 
 ## R CMD check results
