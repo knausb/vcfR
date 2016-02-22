@@ -1,4 +1,15 @@
 ## Resubmission
+This is a second resubmission. In this version I have addressed the below comments:
+
+Thanks, processing the vignettes takes a while:
+* checking re-building of vignette outputs ... [334s] OK
+Can this be reduced?
+
+
+
+
+
+## Resubmission
 This is a resubmission. In this version I have addressed the below comments:
 
 > Description: Tools for working with variant call format (vcf) files. Reads
