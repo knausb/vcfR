@@ -1,14 +1,12 @@
 bibentry("Article",
-   title = "vcf.R: A package for visualizing and processing variant call format (VCF) files.",
-   author = person("Brian J. Knaus"),
-   journal = "In prep",
-   organization = "USDA ARS",
-   address      = "Corvallis, OR, USA",
-   year   = version$year,
+   title = "vcfR: a package to manipulate and visualize VCF data in R",
+   author = c(person('Brian J. Knaus'), person('Niklaus J. Gr{\\"u}nwald')),
+   journal = 'Molecular Ecology Resources',
+   year   = "submitted",
    note   = "{ISBN} N-NNNNNN-NN-N",
    url    = "http://brianknaus.com/",
 
-   mheader = "To cite R in publications use:",
+   mheader = "To cite vcfR in publications use:",
 
    mfooter = 
      paste("We have invested a lot of time and effort in creating R,",
