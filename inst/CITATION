@@ -1,5 +1,5 @@
 bibentry("Article",
-   title = "vcfR: a package to manipulate and visualize VCF data in R",
+   title = "vcf{R}: a package to manipulate and visualize {VCF} data in {R}",
    author = c(person('Brian J. Knaus'), person('Niklaus J. Gr{\\"u}nwald')),
    journal = 'Molecular Ecology Resources',
    year   = "submitted",
