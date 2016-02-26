@@ -106,8 +106,8 @@ vcfR2genlight <- function(x){
   x[x=="1/1"] <- 2
 
   #  dim(x)
-#  x <- adegenet::as.genlight(t(x), n.cores=1)
-  x <- adegenet::as.genlight(t(x))
+  x <- adegenet::as.genlight(t(x), n.cores=3)
+#  x <- adegenet::as.genlight(t(x))
   adegenet::chromosome(x) <- CHROM
   adegenet::position(x)   <- POS
   adegenet::locNames(x)   <- ID

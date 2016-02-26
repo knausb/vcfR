@@ -4,7 +4,7 @@ bibentry("Article",
    journal = 'Molecular Ecology Resources',
    year   = "submitted",
    note   = "{ISBN} N-NNNNNN-NN-N",
-   url    = "http://brianknaus.com/",
+   url    = "http://dx.doi.org/10.1101/041277",
 
    mheader = "To cite vcfR in publications use:",
 

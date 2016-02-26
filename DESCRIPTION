@@ -18,7 +18,8 @@ Imports:
     methods,
     Rcpp,
     stats,
-    utils
+    utils,
+    viridisLite
 Suggests:
     adegenet,
     ggplot2,
@@ -28,7 +29,6 @@ Suggests:
     reshape2,
     rmarkdown,
     scales,
-    testthat,
-    viridisLite
+    testthat
 VignetteBuilder: knitr
 License: GPL

@@ -5,6 +5,7 @@ VcfR: tools to read, write, parse and visualize [vcf](https://github.com/samtool
 
 [![Travis-CI Build Status](https://travis-ci.org/knausb/vcfR.png?branch=master)](https://travis-ci.org/knausb/vcfR)
 [![Coverage Status](https://coveralls.io/repos/github/knausb/vcfR/badge.svg?branch=master)](https://coveralls.io/github/knausb/vcfR?branch=master)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/vcfR)](http://cran.r-project.org/package=vcfR)
 
 
 vcfR is an R package intended to allow easy manipulation and visualization of variant call format (vcf) data.

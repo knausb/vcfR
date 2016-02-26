@@ -47,7 +47,7 @@
 # heatmap.bp(pinf_gq, scale="col")
 # heatmap.bp(pinf_gq, col.ramp = colorRampPalette(c("red", "yellow", "#008000"))(100))
 # heatmap.bp(pinf_gq, col.ramp = colorRampPalette(c("#D55E00", "#F0E442", "#009E73"))(100))
-#' 
+#' @importFrom viridisLite viridis
 heatmap.bp <- function(x, cbarplot = TRUE, rbarplot = TRUE,
                        legend = TRUE, clabels = TRUE, rlabels = TRUE,
                        na.rm = TRUE, scale = c("row", "column", "none"),
@@ -56,6 +56,7 @@ heatmap.bp <- function(x, cbarplot = TRUE, rbarplot = TRUE,
                        col.ramp = viridisLite::viridis(n = 100, alpha=1),
                        ...){
 #  require(viridis)
+#  viridisLite::viridis(n=4)
   stopifnot(class(x) == 'matrix')
   scale <- if(missing(scale))
     "none"
