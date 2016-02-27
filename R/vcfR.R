@@ -33,6 +33,7 @@
 #   N-NN. \url{http://www.someurl.org/v40/i03/}.
 #' 
 #' 
+#' @import pinfsc50
 #' @import ape
 #' @docType package
 #' @name vcfR
