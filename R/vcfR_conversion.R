@@ -104,6 +104,8 @@ vcfR2genlight <- function(x, n.cores=1){
     x <- x[bi,]
   }
   
+  x <- addID(x)
+  
   CHROM <- x@fix[,'CHROM']
   POS   <- x@fix[,'POS']
   ID    <- x@fix[,'ID']
@@ -129,7 +131,7 @@ vcfR2genlight <- function(x, n.cores=1){
   adegenet::position(x)   <- POS
   adegenet::locNames(x)   <- ID
   
-  x
+  return(x)
 }
 
 
