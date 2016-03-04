@@ -249,7 +249,10 @@ seq2chromR <- function(x, seq=NULL){
   # multiple sequences, but as a matrix when the fasta
   # only contains one sequence.
   if(is.list(seq)){
-    stopifnot(length(seq)==1)
+    #stopifnot(length(seq)==1)
+    if( length(seq) != 1 ){
+      stop("seq2chromR expects a DNAbin object with only one sequence in it.")
+    }
     x@seq <- as.matrix(seq)
     x@len <- length(x@seq)
   } else if (is.matrix(seq)){
