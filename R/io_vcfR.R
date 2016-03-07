@@ -59,6 +59,9 @@
 read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, verbose = TRUE){
 #  require(memuse)
   
+  # gzopen does not appear to deal well with tilde expansion.
+  file <- path.expand(file)
+  
   if(file.access(file, mode = 0) != 0){
     stop(paste("File:", file, "does not appear to exist!"))
   }
