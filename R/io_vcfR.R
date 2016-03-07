@@ -33,7 +33,8 @@
 #' If an index is supplied as 'mask', then this index is used, and recycled as necessary, to subset the data.
 #' 
 #' @return read.vcfR returns an object of class \code{\link{vcfR-class}}.
-#' See the \strong{vignette:} \code{vignette('vcf_data')}
+#' See the \strong{vignette:} \code{vignette('vcf_data')}.
+#' The function write.vcf creates a gzipped VCF file.
 #'
 #' @seealso
 # \code{\link[PopGenome]{readVCF}}
