@@ -96,19 +96,19 @@ test_that("write.vcf APPEND=TRUE does not include header",{
 
 
 test_that("read.vcfR works for files in other directories",{
-  orig.dir <- getwd()
-  test_dir <- tempdir()
+#  orig.dir <- getwd()
+#  test_dir <- tempdir()
   setwd(test_dir)
   dir.create('subdir')
   setwd('subdir')
   write.vcf(vcf, "test.vcf.gz")
   setwd(test_dir)
   
-  vcf1 <- read.vcfR("./subdir/test.vcf.gz")
+  vcf1 <- read.vcfR("./subdir/test.vcf.gz", verbose = FALSE)
   expect_equal(nrow(vcf@fix), nrow(vcf1@fix))
   
-  setwd(orig.dir)
-  unlink(test_dir, recursive = TRUE)
+  setwd(original_dir)
+#  unlink(test_dir, recursive = TRUE)
 })
 
 #test_that("read/write.vcf works for Chrom objects",{

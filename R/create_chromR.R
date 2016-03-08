@@ -118,6 +118,14 @@ create.chromR <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
     if(class(ann[,4]) == "character"){ann[,4] <- as.numeric(ann[,4])}
     if(class(ann[,5]) == "character"){ann[,5] <- as.numeric(ann[,5])}
     x@ann <- ann
+    
+    # Manage length
+    if( max(as.integer(as.character(ann[,4]))) > x@len ){
+      x@len <- max(as.integer(as.character(ann[,4])))
+    }
+    if( max(as.integer(as.character(ann[,5]))) > x@len ){
+      x@len <- max(as.integer(as.character(ann[,5])))
+    }
   }
 
   # Report names of objects to user.
