@@ -47,11 +47,11 @@ setMethod(
     nna <- sum( is.na(object@gt[,-1]) )
     pna <- nna / c( nsamp * nvar )
 
-    message("***** Object of Class vcfR *****")
-    message( paste( nsamp, "samples") )
-    message( paste( format(nvar, big.mark=","), "variants") )
-    message( paste( format(pna * 100, digits = 4), "percent missing data") )
-    message("*****        *****         *****")
+    cat("***** Object of Class vcfR *****\n")
+    cat( paste( nsamp, "samples\n") )
+    cat( paste( format(nvar, big.mark=","), "variants\n") )
+    cat( paste( format(pna * 100, digits = 4), "percent missing data\n") )
+    cat("*****        *****         *****\n")
 #    message("*****        --*--         *****")
   }
 )

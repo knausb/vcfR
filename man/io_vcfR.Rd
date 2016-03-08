@@ -31,7 +31,8 @@ write.vcf(x, file = "", mask = FALSE, APPEND = FALSE)
 }
 \value{
 read.vcfR returns an object of class \code{\link{vcfR-class}}.
-See the \strong{vignette:} \code{vignette('vcf_data')}
+See the \strong{vignette:} \code{vignette('vcf_data')}.
+The function write.vcf creates a gzipped VCF file.
 }
 \description{
 Read and files in the *.vcf structured text format, as well as the compressed *.vcf.gz format.
