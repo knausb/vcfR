@@ -9,8 +9,6 @@ bibentry("Article",
    mheader = "To cite vcfR in publications use:",
 
    mfooter = 
-     paste("We have invested a lot of time and effort in creating R,",
-      "please cite it when using it for data analysis.",
-      "See also", sQuote("citation(\"pkgname\")"),
-      "for citing R packages.", sep = " ")
+     paste("We have invested a lot of time and effort in creating vcfR,",
+      "please cite it when using it for data analysis.")
 )
