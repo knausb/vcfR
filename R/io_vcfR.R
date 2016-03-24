@@ -109,11 +109,11 @@ read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, verbos
 #' 
 write.vcf <- function(x, file = "", mask = FALSE, APPEND = FALSE){
   if(class(x) == "chromR"){
-    filter <- x@var.info$mask
-#    x <- chrom_to_vcfR(x)
+    if( mask == TRUE ){
+      is.na( x@vcf@fix[,'FILTER'] ) <- TRUE
+      x@vcf@fix[,'FILTER'][ x@var.info[,'mask'] ] <- 'PASS'
+    }
     x <- x@vcf
-#    x@fix$FILTER[filter] <- "PASS"
-    x@fix[,'FILTER'] <- "PASS"
   }
   if(class(x) != "vcfR"){
     stop("Unexpected class! Expecting an object of class vcfR or chromR.")
@@ -131,10 +131,8 @@ write.vcf <- function(x, file = "", mask = FALSE, APPEND = FALSE){
   
   if(mask == FALSE){
     test <- .Call('vcfR_write_vcf_body', PACKAGE = 'vcfR', fix = x@fix, gt = x@gt, filename = file, mask = 0)
-#    test <- .Call('vcfR_write_vcf_body_gz', PACKAGE = 'vcfR', fix = x@fix, gt = x@gt, filename = file, mask = 0)
   } else if (mask == TRUE){
     test <- .Call('vcfR_write_vcf_body', PACKAGE = 'vcfR', fix = x@fix, gt = x@gt, filename = file, mask = 1)
-#    test <- .Call('vcfR_write_vcf_body_gz', PACKAGE = 'vcfR', fix = x@fix, gt = x@gt, filename = file, mask = 1)
   }
 }
 

@@ -1,11 +1,18 @@
 #'
-#' @rdname vcfR-methods
+#' @rdname
+#' vcfR-methods
 #' 
-# @export
-#' @aliases vcfR-methods
-#' @title vcfR methods
 #' 
-#' @description Methods to show, subset or plot data from objects of class vcfR.
+#' @aliases
+#' vcfR_methods
+#' 
+#' @title vcfR_methods
+#' 
+#' @name
+#' vcfR_methods
+#' 
+#' @description
+#' Methods to show, subset or plot data from objects of class vcfR
 #' 
 #' 
 #' @param object object of class vcfR
@@ -36,6 +43,9 @@
 
 
 ##### Method show #####
+#' 
+#' 
+#' 
 #' 
 setMethod(
   f="show",
@@ -117,6 +127,7 @@ setMethod(
 
 
 #### Method [] ####
+#' 
 #' @rdname vcfR-methods
 #' 
 # @export

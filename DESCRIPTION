@@ -1,6 +1,8 @@
 Package: vcfR
 Title: Tools for Working with Variant Call Format ('VCF') Files
-Description: Tools for working with variant call format ('VCF') files. Reads in 'VCF', 'GFF' and 'FASTA' data for visualization.  Includes tools for filtering and writing to 'VCF' files.
+Description: Tools for working with variant call format ('VCF') files. Reads in
+    'VCF', 'GFF' and 'FASTA' data for visualization. Includes tools for filtering
+    and writing to 'VCF' files.
 Version: 1.0.0.9000
 Authors@R: c(person(c('Brian', 'J.'), 'Knaus', role = c('cre', 'aut'),
     email = 'briank.lists@gmail.com'),
@@ -32,3 +34,4 @@ Suggests:
     testthat
 VignetteBuilder: knitr
 License: GPL
+RoxygenNote: 5.0.1

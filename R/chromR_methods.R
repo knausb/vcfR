@@ -1,12 +1,14 @@
-
+#' 
+#' @rdname chromR_methods
 #' @title chromR methods
+#' @description methods that act on objects of class chromR
+#' 
 #' 
 #' @param x an object of class chromR
 #' @param object an object of class chromR
 #' @param y some sort of object???
 #' @param ... Arguments to be passed to methods
 #' 
-#' @rdname chromR_methods
 #
 
 ##### ##### Generic methods. #####
