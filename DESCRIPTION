@@ -12,13 +12,17 @@ Depends:
 LinkingTo: Rcpp
 Imports:
     ape,
+    dplyr,
     graphics,
     grDevices,
+    magrittr,
     memuse,
     methods,
     pinfsc50,
     Rcpp,
     stats,
+    stringr,
+    tidyr,
     utils,
     viridisLite
 Suggests:
