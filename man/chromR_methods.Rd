@@ -36,9 +36,9 @@ windowize(x, win.size = 1000, max.win = 10000)
 \item{max.win}{maximum window size}
 }
 \description{
-methods that act on objects of class chromR
+Methods that act on objects of class chromR
 }
 \details{
-Reads in a vcf file and stores it in a chromR class.
+Methods that act on objects of class chromR.
 }
 

@@ -1,4 +1,3 @@
-
 #' @title Read and write vcf format files
 #' @rdname io_vcfR
 #' @export

@@ -1,21 +1,18 @@
 #'
-#' @rdname
-#' vcfR-methods
+#' @rdname vcfR-method
+#' @title vcfR-method
 #' 
+#' @aliases vcfR-method
 #' 
-#' @aliases
-#' vcfR_methods
-#' 
-#' @title vcfR_methods
 #' 
 #' @name
-#' vcfR_methods
+#' vcfR-method
 #' 
 #' @description
 #' Methods to show, subset or plot data from objects of class vcfR
 #' 
 #' 
-#' @param object object of class vcfR
+#' @param object object1 of class vcfR
 #' @param x object of class vcfR
 #' @param n number of rows to print
 #' @param maxchar maximum number of characters to print per line
@@ -44,8 +41,8 @@
 
 ##### Method show #####
 #' 
-#' 
-#' 
+#' @rdname vcfR-method
+# @aliases show.vcfR
 #' 
 setMethod(
   f="show",
@@ -69,7 +66,7 @@ setMethod(
 
 #### Method head ####
 #' 
-#' @rdname vcfR-methods
+#' @rdname vcfR-method
 #' 
 setMethod(
   f="head",
@@ -128,7 +125,7 @@ setMethod(
 
 #### Method [] ####
 #' 
-#' @rdname vcfR-methods
+#' @rdname vcfR-method
 #' 
 # @export
 # @aliases []
@@ -151,7 +148,7 @@ setMethod(
 setGeneric("plot")
 #### Method plot ####
 #'
-#' @rdname vcfR-methods
+#' @rdname vcfR-method
 #' @export
 #' @aliases plot.vcfR
 #' 
@@ -179,7 +176,7 @@ setMethod(
 #setGeneric("rbind", signature="...")
 #setGeneric("rbind")
 # '
-# ' @rdname vcfR-methods
+# ' @rdname vcfR-method
 # ' @aliases rbind.vcfR, rbind
 # ' 
 # ' @param deparse.level integer controlling the construction of labels. see ?rbind.
@@ -242,7 +239,7 @@ setMethod("rbind",
 )
 
 
-#' @rdname vcfR-methods
+#' @rdname vcfR-method
 #' @aliases rbind2.vcfR
 #' 
 setMethod("rbind2",
@@ -254,7 +251,7 @@ setMethod("rbind2",
   }
 )
 
-#' @rdname vcfR-methods
+#' @rdname vcfR-method
 #' @aliases rbind2.vcfR
 #' 
 setMethod("rbind2",
@@ -267,7 +264,7 @@ setMethod("rbind2",
 )
 
 #setGeneric("rbind2")
-#' @rdname vcfR-methods
+#' @rdname vcfR-method
 #' @aliases rbind2.vcfR
 #' @export
 #' 
@@ -291,7 +288,7 @@ setMethod("rbind2",
 ##### ##### ##### ##### #####
 
 
-#' @rdname vcfR-methods
+#' @rdname vcfR-method
 #' @aliases dim.vcfR
 #' @export
 #' 
@@ -306,7 +303,7 @@ setMethod("dim",
 )
 
 
-#' @rdname vcfR-methods
+#' @rdname vcfR-method
 #' @aliases nrow.vcfR
 #' @export
 #' 

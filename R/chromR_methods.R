@@ -1,7 +1,7 @@
 #' 
 #' @rdname chromR_methods
 #' @title chromR methods
-#' @description methods that act on objects of class chromR
+#' @description Methods that act on objects of class chromR
 #' 
 #' 
 #' @param x an object of class chromR
@@ -9,6 +9,10 @@
 #' @param y some sort of object???
 #' @param ... Arguments to be passed to methods
 #' 
+#' 
+#' @details
+#' Methods that act on objects of class chromR.
+
 #
 
 ##### ##### Generic methods. #####
@@ -232,8 +236,6 @@ setReplaceMethod(
 #' @param win.size window size, in base pairs
 #' @param max.win maximum window size
 #'
-#' @details
-#' Reads in a vcf file and stores it in a chromR class.
 #' 
 #'
 windowize <- function(x, win.size=1000, max.win=10000){
