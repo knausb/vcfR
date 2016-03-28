@@ -37,12 +37,12 @@
 #' The \strong{plot} method generates a histogram from data found in the 'QUAL' column from the 'fix' slot.
 #' 
 #' 
-
-
-##### Method show #####
+#' 
+#' 
+#' ##### Method show #####
 #' 
 #' @rdname vcfR-method
-# @aliases show.vcfR
+#' @aliases show.vcfR
 #' 
 setMethod(
   f="show",

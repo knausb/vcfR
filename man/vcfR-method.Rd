@@ -75,5 +75,10 @@ The parameter j is a vector used to subset the columns of the gt slot.
 Note that it is essential to include the first column here (FORMAT) or downsream processes will encounter trouble.
 
 The \strong{plot} method generates a histogram from data found in the 'QUAL' column from the 'fix' slot.
+
+
+
+
+##### Method show #####
 }
 
