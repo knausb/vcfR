@@ -90,9 +90,11 @@ Convert the information in a vcfR object to a long-format data frame
 suitable for analysis or use with Hadley Wickham's packages,
 \href{http://cran.r-project.org/package=dplyr}{dplyr},
 \href{http://cran.r-project.org/package=tidyr}{tidyr}, and
-\href{http://cran.r-project.org/package=ggplot2}{ggplot2}
-which have been
-optimized for operation on large data frames.  For some background
+\href{http://cran.r-project.org/package=ggplot2}{ggplot2}.
+These packages have been
+optimized for operation on large data frames, and, though they can bog down
+with very large data sets, they provide a good framework for handling and filtering
+large variant data sets.  For some background
 on the benefits of such "tidy" data frames, see
 \href{https://www.jstatsoft.org/article/view/v059i10}{this article}.
 
@@ -107,7 +109,7 @@ data frames.
 }
 \details{
 The function \strong{vcfR2tidy} is the main function in this series.  It takes a vcfR
-object and converts the information to a list of long-format data framse.  The user can
+object and converts the information to a list of long-format data frames.  The user can
 specify whether only the INFO or both the INFO and the FORMAT columns should be extracted, and also
 which INFO and FORMAT fields to extract.  If no specific INFO or FORMAT fields are asked
 for, then they will all be returned.  If \code{single_frame == FALSE} and
@@ -203,7 +205,10 @@ Z$gt
 # here we put the data into a single, joined data frame (list component
 # dat in the returned list) and the meta data.  Let's just pick out a
 # few fields:
-vcfR2tidy(vcf, single_frame = TRUE, info_fields = c("AC", "AN", "MQ"), format_fields = c("GT", "PL"))
+vcfR2tidy(vcf,
+          single_frame = TRUE,
+          info_fields = c("AC", "AN", "MQ"),
+          format_fields = c("GT", "PL"))
 
 
 # note that the "gt_GT_alleles" column is always returned when any
