@@ -143,7 +143,10 @@ NULL
 #' # here we put the data into a single, joined data frame (list component
 #' # dat in the returned list) and the meta data.  Let's just pick out a 
 #' # few fields:
-#' vcfR2tidy(vcf, single_frame = TRUE, info_fields = c("AC", "AN", "MQ"), format_fields = c("GT", "PL"))
+#' vcfR2tidy(vcf, 
+#'           single_frame = TRUE, 
+#'           info_fields = c("AC", "AN", "MQ"), 
+#'           format_fields = c("GT", "PL"))
 #' 
 #' 
 #' # note that the "gt_GT_alleles" column is always returned when any
