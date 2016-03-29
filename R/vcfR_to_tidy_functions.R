@@ -362,7 +362,7 @@ extract_info_tidy <- function(x, info_fields = NULL, info_types = NULL, info_sep
   if(!is.null(info_types) && length(info_types) == 1 && info_types[1] == TRUE) {
     info_df <- vcfR::vcf_field_names(vcf, tag = "INFO") %>%
       dplyr::filter(ID %in% info_fields)
-    info_types <- vcfR:::guess_types(info_df)
+    info_types <- guess_types(info_df)
   }
   
   # here is where the action is
@@ -447,7 +447,7 @@ extract_gt_tidy <- function(x,
   # then we try to discern the fields amongst info_fields that should be coerced to integer and
   # numeric
   if(!is.null(format_types) && length(format_types) == 1 && format_types[1] == TRUE) {
-    format_types <- vcfR:::guess_types(format_df %>% dplyr::filter(ID %in% format_fields))
+    format_types <- guess_types(format_df %>% dplyr::filter(ID %in% format_fields))
   }
   
   # make a parallel vector to that as to whether the fields should numeric or not
