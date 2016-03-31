@@ -54,7 +54,8 @@ setMethod(
 #' 
 #' @rdname vcfR-method
 #' @title head
-#' @description Returns the first parts of an object of class vcfR.
+#' @description \strong{head} returns the first parts of an object of class vcfR.
+#' 
 #' @details 
 #' The method \strong{head} is similar to show, but is more flexible.
 #' The number of rows displayed is parameterized by  the variable n.
@@ -152,7 +153,7 @@ setGeneric("plot")
 #'
 #' @rdname vcfR-method
 #' @title plot.vcfR
-#' @description plot objects of class vcfR
+#' @description The \strong{plot} method visualizes objects of class vcfR
 # @export
 #' @aliases plot.vcfR
 #' 

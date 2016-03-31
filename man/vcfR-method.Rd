@@ -64,11 +64,11 @@
 \description{
 Methods to show, subset or plot data from objects of class vcfR
 
-Returns the first parts of an object of class vcfR.
+\strong{head} returns the first parts of an object of class vcfR.
 
 The brackets ('[]') subset objects of class vcfR
 
-plot objects of class vcfR
+The \strong{plot} method visualizes objects of class vcfR
 }
 \details{
 The method \strong{show} is used to display an object.
