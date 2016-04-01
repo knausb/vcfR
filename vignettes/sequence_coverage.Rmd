@@ -187,4 +187,17 @@ par(mar=c(5,4,4,2))
 
 We can see that we've removed many of our outlier variants (circles beyond the whiskers).
 And our data appear much better behaved.
+We can now use this information to update our vcfR object.
+
+
+```{r}
+vcf
+is.na( vcf@gt[,-1][ is.na(dp) ] ) <- TRUE
+vcf
+```
+
+
+We can see that we've increased the amount of missing data in our vcfR object.
+This validated the success of our manipulation.
+However, we may want to use this information to further mitigate the data set.
 
