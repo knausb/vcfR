@@ -1,41 +1,33 @@
 #'
-#' @rdname vcfR-methods
+#' @rdname vcfR-method
+#' @title vcfR-method
 #' 
-# @export
-#' @aliases vcfR-methods
-#' @title vcfR methods
+#' @aliases vcfR-method
 #' 
-#' @description Methods to show, subset or plot data from objects of class vcfR.
+#' @description
+#' Methods to show, subset or plot data from objects of class vcfR
 #' 
-#' 
-#' @param object object of class vcfR
+#' @param object object1 of class vcfR
 #' @param x object of class vcfR
 #' @param n number of rows to print
 #' @param maxchar maximum number of characters to print per line
 #' 
+#' 
+#' 
+#' 
+#' 
+
+
+
+#' ##### Method show #####
+#' 
+#' @rdname vcfR-method
+#' @aliases show.vcfR
 #' @details 
 #' The method \strong{show} is used to display an object.
 #' Because vcf data are relatively large, this has been abbreviated.
 #' Here we display the first four lines of the meta section, and truncate them to no more than 80 characters.
 #' The first eight columns and six rows of the fix section are also displayed. 
-#' 
-#' The method \strong{head} is similar to show, but is more flexible.
-#' The number of rows displayed is parameterized by  the variable n.
-#' And the maximum number of characters to print per line (row) is also parameterized.
-#' In contract to show, head includes a summary of the gt portion of the vcfR object.
-#' 
-#' The \strong{square brackets ([])} are used to subset objects of class vcfR.
-#' Rows are subset by providing a vector i to specify which rows to use.
-#' The columns in the fix slot will not be subset by j.
-#' The parameter j is a vector used to subset the columns of the gt slot.
-#' Note that it is essential to include the first column here (FORMAT) or downsream processes will encounter trouble.
-#' 
-#' The \strong{plot} method generates a histogram from data found in the 'QUAL' column from the 'fix' slot.
-#' 
-#' 
-
-
-##### Method show #####
 #' 
 setMethod(
   f="show",
@@ -47,19 +39,29 @@ setMethod(
     nna <- sum( is.na(object@gt[,-1]) )
     pna <- nna / c( nsamp * nvar )
 
-    message("***** Object of Class vcfR *****")
-    message( paste( nsamp, "samples") )
-    message( paste( format(nvar, big.mark=","), "variants") )
-    message( paste( format(pna * 100, digits = 4), "percent missing data") )
-    message("*****        *****         *****")
+    cat("***** Object of Class vcfR *****\n")
+    cat( paste( nsamp, "samples\n") )
+    cat( paste( format(nvar, big.mark=","), "variants\n") )
+    cat( paste( format(pna * 100, digits = 4), "percent missing data\n") )
+    cat("*****        *****         *****\n")
 #    message("*****        --*--         *****")
   }
 )
 
 
+
 #### Method head ####
 #' 
-#' @rdname vcfR-methods
+#' @rdname vcfR-method
+#' @title head
+#' @description \strong{head} returns the first parts of an object of class vcfR.
+#' 
+#' @details 
+#' The method \strong{head} is similar to show, but is more flexible.
+#' The number of rows displayed is parameterized by  the variable n.
+#' And the maximum number of characters to print per line (row) is also parameterized.
+#' In contract to show, head includes a summary of the gt portion of the vcfR object.
+#' 
 #' 
 setMethod(
   f="head",
@@ -115,9 +117,18 @@ setMethod(
 )
 
 
-
 #### Method [] ####
-#' @rdname vcfR-methods
+#' 
+#' @rdname vcfR-method
+#' @title Brackets
+#' @description The brackets ('[]') subset objects of class vcfR
+#' @details
+#' The \strong{square brackets ([])} are used to subset objects of class vcfR.
+#' Rows are subset by providing a vector i to specify which rows to use.
+#' The columns in the fix slot will not be subset by j.
+#' The parameter j is a vector used to subset the columns of the gt slot.
+#' Note that it is essential to include the first column here (FORMAT) or downsream processes will encounter trouble.
+
 #' 
 # @export
 # @aliases []
@@ -140,12 +151,17 @@ setMethod(
 setGeneric("plot")
 #### Method plot ####
 #'
-#' @rdname vcfR-methods
-#' @export
+#' @rdname vcfR-method
+#' @title plot.vcfR
+#' @description The \strong{plot} method visualizes objects of class vcfR
+# @export
 #' @aliases plot.vcfR
 #' 
 #' @param y not used
 #' @param ... Arguments to be passed to methods
+#' 
+#' @details 
+#' The \strong{plot} method generates a histogram from data found in the 'QUAL' column from the 'fix' slot.
 #' 
 setMethod(
   f="plot",
@@ -168,7 +184,7 @@ setMethod(
 #setGeneric("rbind", signature="...")
 #setGeneric("rbind")
 # '
-# ' @rdname vcfR-methods
+# ' @rdname vcfR-method
 # ' @aliases rbind.vcfR, rbind
 # ' 
 # ' @param deparse.level integer controlling the construction of labels. see ?rbind.
@@ -231,7 +247,7 @@ setMethod("rbind",
 )
 
 
-#' @rdname vcfR-methods
+#' @rdname vcfR-method
 #' @aliases rbind2.vcfR
 #' 
 setMethod("rbind2",
@@ -243,7 +259,7 @@ setMethod("rbind2",
   }
 )
 
-#' @rdname vcfR-methods
+#' @rdname vcfR-method
 #' @aliases rbind2.vcfR
 #' 
 setMethod("rbind2",
@@ -256,7 +272,7 @@ setMethod("rbind2",
 )
 
 #setGeneric("rbind2")
-#' @rdname vcfR-methods
+#' @rdname vcfR-method
 #' @aliases rbind2.vcfR
 #' @export
 #' 
@@ -280,7 +296,7 @@ setMethod("rbind2",
 ##### ##### ##### ##### #####
 
 
-#' @rdname vcfR-methods
+#' @rdname vcfR-method
 #' @aliases dim.vcfR
 #' @export
 #' 
@@ -295,7 +311,7 @@ setMethod("dim",
 )
 
 
-#' @rdname vcfR-methods
+#' @rdname vcfR-method
 #' @aliases nrow.vcfR
 #' @export
 #' 

@@ -100,13 +100,28 @@ When verbose is set to FALSE the loci will be omitted silently.
 
 
 
-```{r genlight, eval=FALSE}
+```{r genlight, eval=TRUE}
 vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
 vcf <- read.vcfR(vcf_file, verbose = FALSE)
 x <- vcfR2genlight(vcf)
 x
 ```
 
+
+## Creating snpclone objects
+
+The **genlight** object is extended by the **snpclone** object for analysis of clonal and partially clonal populations in **poppr**.
+The genlight object can be converted to a snpclone object with functions in the poppr package.
+
+
+```{r snpclone}
+library(poppr)
+x <- as.snpclone(x)
+x
+```
+
+
+Note that we now have a **mlg** slot to hold multilocus genotype indicators.
 
 
 

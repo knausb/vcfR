@@ -6,6 +6,8 @@
 #' @export
 #' @aliases chromo
 #' 
+#' @description plot chromR objects
+#' 
 #' @param chrom an object of class chrom.
 #' @param boxp logical specifying whether marginal boxplots should be plotted [T/F].
 #' @param dp.alpha degree of transparency applied to points in dot plots [0-255].

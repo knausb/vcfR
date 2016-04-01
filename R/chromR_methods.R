@@ -1,12 +1,18 @@
-
+#' 
+#' @rdname chromR_methods
 #' @title chromR methods
+#' @description Methods that act on objects of class chromR
+#' 
 #' 
 #' @param x an object of class chromR
 #' @param object an object of class chromR
 #' @param y some sort of object???
 #' @param ... Arguments to be passed to methods
 #' 
-#' @rdname chromR_methods
+#' 
+#' @details
+#' Methods that act on objects of class chromR.
+
 #
 
 ##### ##### Generic methods. #####
@@ -17,17 +23,14 @@ setMethod(
 #  definition=function(x){
   definition=function(object){
             #1234567890123456789012345678901234567890
-    print("*****   Class chromR, method Show   *****")
-    print(paste("Name: ", object@name))
-    print(paste("Length: ", object@len))
-    print("Use head(object) for more details.")
-#    print(paste("Name: ", x@name, "\n"))
-#    print(paste("Length: ", x@len, "\n"))
-    #    print("Use head(x) for more details.\n")    
-            #1234567890123456789012345678901234567890
-    print("*****      End Show (chromR)        *****")
+    cat("*****   Class chromR, method Show   *****\n")
+    cat(paste("Name: ", object@name, "\n"))
+    cat(paste("Length: ", object@len, "\n"))
+    cat("Use head(object) for more details.\n")
+    cat("*****      End Show (chromR)        *****\n")
   }
 )
+
 
 setMethod(
   f="print",
@@ -233,8 +236,6 @@ setReplaceMethod(
 #' @param win.size window size, in base pairs
 #' @param max.win maximum window size
 #'
-#' @details
-#' Reads in a vcf file and stores it in a chromR class.
 #' 
 #'
 windowize <- function(x, win.size=1000, max.win=10000){

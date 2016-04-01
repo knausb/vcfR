@@ -1,6 +1,7 @@
 bibentry("Article",
    title = "vcf{R}: a package to manipulate and visualize {VCF} data in {R}",
-   author = c(person('Brian J. Knaus'), person('Niklaus J. Gr{\\"u}nwald')),
+   author = personList(as.person("Brian J. Knaus"),
+                       as.person('Niklaus J. Gr{\\"u}nwald')),
    journal = 'Molecular Ecology Resources',
    year   = "submitted",
    note   = "{ISBN} N-NNNNNN-NN-N",
@@ -9,8 +10,6 @@ bibentry("Article",
    mheader = "To cite vcfR in publications use:",
 
    mfooter = 
-     paste("We have invested a lot of time and effort in creating R,",
-      "please cite it when using it for data analysis.",
-      "See also", sQuote("citation(\"pkgname\")"),
-      "for citing R packages.", sep = " ")
+     paste("We have invested a lot of time and effort in creating vcfR,",
+      "please cite it when using it for data analysis.")
 )

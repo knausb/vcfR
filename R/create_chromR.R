@@ -118,6 +118,14 @@ create.chromR <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
     if(class(ann[,4]) == "character"){ann[,4] <- as.numeric(ann[,4])}
     if(class(ann[,5]) == "character"){ann[,5] <- as.numeric(ann[,5])}
     x@ann <- ann
+    
+    # Manage length
+    if( max(as.integer(as.character(ann[,4]))) > x@len ){
+      x@len <- max(as.integer(as.character(ann[,4])))
+    }
+    if( max(as.integer(as.character(ann[,5]))) > x@len ){
+      x@len <- max(as.integer(as.character(ann[,5])))
+    }
   }
 
   # Report names of objects to user.
@@ -249,7 +257,10 @@ seq2chromR <- function(x, seq=NULL){
   # multiple sequences, but as a matrix when the fasta
   # only contains one sequence.
   if(is.list(seq)){
-    stopifnot(length(seq)==1)
+    #stopifnot(length(seq)==1)
+    if( length(seq) != 1 ){
+      stop("seq2chromR expects a DNAbin object with only one sequence in it.")
+    }
     x@seq <- as.matrix(seq)
     x@len <- length(x@seq)
   } else if (is.matrix(seq)){

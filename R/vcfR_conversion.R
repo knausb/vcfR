@@ -21,6 +21,10 @@
 #' A genind object can be converted to a genclone object with the function poppr::as.genclone.
 #' 
 #' 
+#' The function vcfR2genlight calls the 'new' method for the genlight object.
+#' This method implements multi-threading through calls to the function \code{\link[parallel]{mclapply}}.
+#' Because 'forks' do not exist in the windows environment, this will only work for windows users when n.cores=1.
+#' In the Unix environment, users may increase this number to allow the use of multiple threads (i.e., cores).
 #' 
 #' 
 #' 
@@ -46,7 +50,13 @@
 vcfR2genind <- function(x, sep="[|/]") {
   locNames <- x@fix[,'ID']
   x <- extract.gt(x)
-  x <- adegenet::df2genind(t(x), sep=sep)
+#  x <- adegenet::df2genind(t(x), sep=sep)
+  if( requireNamespace('adegenet') ){
+    x <- adegenet::df2genind(t(x), sep=sep)
+#    x <- df2genind(t(x), sep=sep)
+  } else {
+    warning("adegenet not installed")
+  }
   x
 }
 
@@ -80,8 +90,10 @@ vcfR2loci <- function(x)
 #' @rdname vcfR_conversion
 #' @aliases vcfR2genlight
 #' 
+#' @param n.cores integer specifying the number of cores to use.
+#' 
 #' @export
-vcfR2genlight <- function(x){
+vcfR2genlight <- function(x, n.cores=1){
 
   bi <- is.biallelic(x)
   if(sum(!bi) > 0){
@@ -91,6 +103,8 @@ vcfR2genlight <- function(x){
     warning(msg)
     x <- x[bi,]
   }
+  
+  x <- addID(x)
   
   CHROM <- x@fix[,'CHROM']
   POS   <- x@fix[,'POS']
@@ -106,13 +120,18 @@ vcfR2genlight <- function(x){
   x[x=="1/1"] <- 2
 
   #  dim(x)
-  x <- adegenet::as.genlight(t(x), n.cores=3)
+  if( requireNamespace('adegenet') ){
+    x <- new('genlight', t(x), n.cores=n.cores)
+  } else {
+    warning("adegenet not installed")
+  }
+#  x <- adegenet::as.genlight(t(x), n.cores=3)
 #  x <- adegenet::as.genlight(t(x))
   adegenet::chromosome(x) <- CHROM
   adegenet::position(x)   <- POS
   adegenet::locNames(x)   <- ID
   
-  x
+  return(x)
 }
 
 

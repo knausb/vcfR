@@ -492,9 +492,10 @@ Rcpp::StringMatrix DataFrame_to_StringMatrix( Rcpp::DataFrame df ){
 /*  Write vcf body  */
 
 // [[Rcpp::export]]
-void write_vcf_body( Rcpp::CharacterMatrix fix, Rcpp::CharacterMatrix gt, std::string filename , int mask=0 ) {
-//void write_vcf_body( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filename , int mask=0 ) {
-//int write_vcf_body( Rcpp::DataFrame fix, Rcpp::DataFrame gt, std::string filename , int mask=0 ) {
+void write_vcf_body( Rcpp::CharacterMatrix fix,
+                     Rcpp::CharacterMatrix gt,
+                     std::string filename,
+                     int mask=0 ) {
   // http://stackoverflow.com/a/5649224
   
   int i = 0; // Rows
@@ -507,26 +508,7 @@ void write_vcf_body( Rcpp::CharacterMatrix fix, Rcpp::CharacterMatrix gt, std::s
   // In order for APPEND=TRUE to work the header
   // should not be printed here.
 
-  // Manage header.
-/*  Rcpp::List matrix_names = fix.attr("dimnames");
-  Rcpp::StringVector head_names = matrix_names(1);
-  tmpstring = "#" + head_names(0);
-  for(i = 1; i < head_names.size(); i++){
-    tmpstring = tmpstring + "\t" + head_names(i);
-  }
 
-  matrix_names = gt.attr("dimnames");
-  head_names = matrix_names(1);
-  for(i = 0; i < head_names.size(); i++){
-    tmpstring = tmpstring + "\t" + head_names(i);
-  }
-*/
-  // Write header.
-//  gzwrite(fi, (char *)tmpstring.c_str(), tmpstring.size());
-//  gzwrite(fi,"\n",strlen("\n"));
-
-  
-  
   // Manage body
   for(i = 0; i < fix.nrow(); i++){
     Rcpp::checkUserInterrupt();

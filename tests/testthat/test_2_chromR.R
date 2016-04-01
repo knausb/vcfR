@@ -84,6 +84,14 @@ test_that("We can create a chromR, no sequence",{
 })
 
 
+test_that("We can create a chromR, no sequence, annotation greater than vcf POS",{
+  gff2 <- gff
+  gff2[23,5] <- 100000
+  chrom <- create.chromR(name="Supercontig_1.50", vcf=vcf, ann=gff2, verbose=FALSE)
+  expect_equal( chrom@len, 100000)
+})
+
+
 test_that("We can create a chromR",{
   chrom <- create.chromR(name="Supercontig_1.50", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
   expect_is(chrom, "chromR")

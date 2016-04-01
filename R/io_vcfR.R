@@ -1,4 +1,3 @@
-
 #' @title Read and write vcf format files
 #' @rdname io_vcfR
 #' @export
@@ -33,7 +32,8 @@
 #' If an index is supplied as 'mask', then this index is used, and recycled as necessary, to subset the data.
 #' 
 #' @return read.vcfR returns an object of class \code{\link{vcfR-class}}.
-#' See the \strong{vignette:} \code{vignette('vcf_data')}
+#' See the \strong{vignette:} \code{vignette('vcf_data')}.
+#' The function write.vcf creates a gzipped VCF file.
 #'
 #' @seealso
 # \code{\link[PopGenome]{readVCF}}
@@ -58,6 +58,9 @@
 #' 
 read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, verbose = TRUE){
 #  require(memuse)
+  
+  # gzopen does not appear to deal well with tilde expansion.
+  file <- path.expand(file)
   
   if(file.access(file, mode = 0) != 0){
     stop(paste("File:", file, "does not appear to exist!"))
@@ -105,11 +108,11 @@ read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, verbos
 #' 
 write.vcf <- function(x, file = "", mask = FALSE, APPEND = FALSE){
   if(class(x) == "chromR"){
-    filter <- x@var.info$mask
-#    x <- chrom_to_vcfR(x)
+    if( mask == TRUE ){
+      is.na( x@vcf@fix[,'FILTER'] ) <- TRUE
+      x@vcf@fix[,'FILTER'][ x@var.info[,'mask'] ] <- 'PASS'
+    }
     x <- x@vcf
-#    x@fix$FILTER[filter] <- "PASS"
-    x@fix[,'FILTER'] <- "PASS"
   }
   if(class(x) != "vcfR"){
     stop("Unexpected class! Expecting an object of class vcfR or chromR.")
@@ -127,10 +130,8 @@ write.vcf <- function(x, file = "", mask = FALSE, APPEND = FALSE){
   
   if(mask == FALSE){
     test <- .Call('vcfR_write_vcf_body', PACKAGE = 'vcfR', fix = x@fix, gt = x@gt, filename = file, mask = 0)
-#    test <- .Call('vcfR_write_vcf_body_gz', PACKAGE = 'vcfR', fix = x@fix, gt = x@gt, filename = file, mask = 0)
   } else if (mask == TRUE){
     test <- .Call('vcfR_write_vcf_body', PACKAGE = 'vcfR', fix = x@fix, gt = x@gt, filename = file, mask = 1)
-#    test <- .Call('vcfR_write_vcf_body_gz', PACKAGE = 'vcfR', fix = x@fix, gt = x@gt, filename = file, mask = 1)
   }
 }
 

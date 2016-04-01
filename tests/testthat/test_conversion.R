@@ -32,6 +32,7 @@ gene <- dna[,gff[1,4]:gff[1,5]]
 
 test_that("vcfR2genlight works",{
   suppressWarnings( gl <- vcfR2genlight(vcf) )
+
   ma <- t(as.matrix(gl))
   
   vcf2 <- vcf[is.biallelic(vcf),]

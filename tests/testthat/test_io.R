@@ -52,6 +52,8 @@ test_that("vcfR_vcf_meta_gz works",{
 
 
 
+##### ##### ##### ##### #####
+# read_body
 
 test_that("vcfR_read_body_gz works",{
   setwd(test_dir)
@@ -67,6 +69,10 @@ test_that("vcfR_read_body_gz works",{
   expect_equal(nrow(body), as.integer(stats['variants']))
   
 })
+
+
+##### ##### ##### ##### #####
+# write.vcf
 
 
 test_that("read/write.vcf works for vcfR objects",{
@@ -94,6 +100,23 @@ test_that("write.vcf APPEND=TRUE does not include header",{
 
 })
 
+
+test_that("read.vcfR works for files in other directories",{
+#  orig.dir <- getwd()
+#  test_dir <- tempdir()
+  setwd(test_dir)
+  dir.create('subdir')
+  setwd('subdir')
+  write.vcf(vcf, "test.vcf.gz")
+  setwd(test_dir)
+  
+  vcf1 <- read.vcfR("./subdir/test.vcf.gz", verbose = FALSE)
+  expect_equal(nrow(vcf@fix), nrow(vcf1@fix))
+  
+  setwd(original_dir)
+#  unlink(test_dir, recursive = TRUE)
+})
+
 #test_that("read/write.vcf works for Chrom objects",{
 #  setwd(test_dir)
 #  write.vcf(chrom, "test.vcf")
@@ -109,7 +132,6 @@ test_that("write.vcf APPEND=TRUE does not include header",{
 
 
 test_that("write.vcf.gz works for Chrom objects",{
-  
   setwd(test_dir)
   write.vcf(chrom, "test.vcf.gz")
   test <- read.vcfR("test.vcf.gz", verbose = FALSE)
@@ -121,6 +143,27 @@ test_that("write.vcf.gz works for Chrom objects",{
   expect_equal(nrow(test@gt), nrow(vcf@gt))
   expect_equal(ncol(test@gt), ncol(vcf@gt))
 })
+
+
+
+test_that("write.vcf.gz works for Chrom objects with mask",{
+  setwd(test_dir)
+  chrom@var.info$mask <- FALSE
+  chrom@var.info$mask[1:50] <- TRUE
+  
+  write.vcf(chrom, "test.vcf.gz", mask=TRUE)
+  test <- read.vcfR("test.vcf.gz", verbose = FALSE)
+  unlink("test.vcf.gz")
+  setwd(original_dir)
+  chrom@var.info$mask <- TRUE
+
+  expect_is(test, "vcfR")
+  expect_identical(colnames(test@fix)[1], "CHROM")
+  expect_equal(ncol(test@gt), ncol(vcf@gt))
+  expect_equal( nrow(test@fix), 50 )
+  
+})
+
 
 
 test_that("write.var.info works for Chrom objects",{
