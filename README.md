@@ -1,7 +1,7 @@
 
 ## Manipulate and visualize variant call format (VCF) data
 
-VcfR: tools to read, write, parse and visualize [VCF](https://github.com/samtools/hts-specs) data.
+VcfR: an R package to manipulate and visualize [VCF](https://github.com/samtools/hts-specs) format data
 
 [![Travis-CI Build Status](https://travis-ci.org/knausb/vcfR.png?branch=master)](https://travis-ci.org/knausb/vcfR)
 [![Coverage Status](https://coveralls.io/repos/github/knausb/vcfR/badge.svg?branch=master)](https://coveralls.io/github/knausb/vcfR?branch=master)
@@ -25,7 +25,7 @@ With this information in hand, researchers should be able to determine criteria 
 
 ## Publication
 
-Currently published at bioRxive http://dx.doi.org/10.1101/041277.
+Knaus, Brian J., and Niklaus J. Grunwald. 2016. VcfR: an R package to manipulate and visualize VCF format data. bioRxiv: 041277. http://dx.doi.org/10.1101/041277.
 
 
 ## Download
