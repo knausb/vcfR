@@ -1,6 +1,4 @@
 
-Manipulate and visualize variant call format (VCF) data
-
 ## VcfR: an R package to manipulate and visualize [VCF](https://github.com/samtools/hts-specs) format data
 
 [![Travis-CI Build Status](https://travis-ci.org/knausb/vcfR.png?branch=master)](https://travis-ci.org/knausb/vcfR)
