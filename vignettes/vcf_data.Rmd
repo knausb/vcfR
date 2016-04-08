@@ -39,9 +39,9 @@ plot(c(0,5), c(0,5), type="n", frame.plot=FALSE, axes=FALSE, xlab="", ylab="")
 rect(xleft=0, ybottom=4, xright=3, ytop=5)
 rect(xleft=0, ybottom=0, xright=2, ytop=4)
 rect(xleft=2, ybottom=0, xright=5, ytop=4)
-text(1.5, 4.5, "meta")
-text(1.0, 2.5, "fix")
-text(3.5, 2.5, "gt")
+text(1.5, 4.5, "meta", cex=1)
+text(1.0, 2.5, "fix", cex=1)
+text(3.5, 2.5, "gt", cex=1)
 par(mar=c(5,4,4,2))
 ```
 
