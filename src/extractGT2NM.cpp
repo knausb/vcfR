@@ -259,7 +259,8 @@ Rcpp::StringMatrix extract_GT_to_CM2( Rcpp::StringMatrix fix,
         return_matrix(i, j-1) = NA_STRING;
       } else {
         return_matrix(i, j-1) = extractElementS( gt(i, j), position, extract );
-      
+        // Manage NAs.
+        if( return_matrix(i, j-1) == "." ){ return_matrix(i, j-1) = NA_STRING; }
         // Convert to alleles
         if( alleles == 1 )
         {

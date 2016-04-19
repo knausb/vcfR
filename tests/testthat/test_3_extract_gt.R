@@ -123,22 +123,9 @@ test_that("extract_gt_to_CM2 compiled code works",{
   gt <- .Call( 'vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', vcf@fix, vcf@gt, 'DP', '|', 0, 1 )
 #  head(gt)
   
-
-#  gt <- .Call( 'vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', vcf@fix, vcf@gt, 'GT', '/', 0, 0 )
-#  
-#  head(gt)
-#  head(vcf@gt)
-#  expect_equal(nchar(gt[1,1]), 17)
-  
-#  gt <- .Call( 'vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', vcf@fix, vcf@gt, 'AD', '/', 0, 0 )
-#  expect_equal(nchar(gt[1,1]), 17)
-  
-#  gt <- .Call( 'vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', vcf@fix, vcf@gt, 'PL', '/', 0, 0 )
-#  expect_equal(nchar(gt[1,1]), 12)
-  
-#  expect_is(haps, "matrix")
-#  expect_equal(ncol(haps), 2 * ncol(gt))
-#  expect_equal(nrow(haps), nrow(gt))
+  # Manage NA_STRING
+#  grep("\\.", gt[,1], value = TRUE)
+  expect_equal(length( grep("\\.", gt) ), 0)
 })
 
 
