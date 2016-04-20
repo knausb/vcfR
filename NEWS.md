@@ -2,7 +2,8 @@
 
 # vcfR 1.0.0.9000
 
-* Added tidyr compatibility.
+* `extract.gt()` converts "." to NA.
+* Added tidyr compatibility - thank you Eric Anderson!
 * `write.vcf()` now uses mask = TRUE.
 * `maf()` provides counts and frequency for the minor (or other) allele.
 * `create.chromR()` now handles instances with no seq and the annotation position exceeds the greatest VCF POS.
