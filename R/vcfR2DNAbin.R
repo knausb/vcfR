@@ -139,29 +139,9 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = FALSE,
     }
   }
 
-  
-  
-
-  
-  # The only reason to NOT extract haplotypes is if
-  # consensus = TRUE
-#  if( extract.haps == TRUE ){
-#    x <- extract.haps( x, gt.split = gt.split, verbose = verbose )
-#  }
-  
-  # Determine if extract.haps returned something successfully.
-  # nrow of x could be because x had no variants,
-  # or because gt.split was not properly specified.
-#  if( nrow(x) == 0 ){
-#    warning( paste('extract.haps returned nrow = 0, gt.split = ', gt.split, '. Does this seem appropriate?', sep="") )
-#  }
-  
 
   # Data could be haploid, diploid or higher ploid.
-  
-  
-  
-  
+
   # x should be a matrix of variants by here.
   
   # Return full sequence when ref.seq is not NULL

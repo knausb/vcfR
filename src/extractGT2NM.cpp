@@ -259,7 +259,8 @@ Rcpp::StringMatrix extract_GT_to_CM2( Rcpp::StringMatrix fix,
         return_matrix(i, j-1) = NA_STRING;
       } else {
         return_matrix(i, j-1) = extractElementS( gt(i, j), position, extract );
-      
+        // Manage NAs.
+        if( return_matrix(i, j-1) == "." ){ return_matrix(i, j-1) = NA_STRING; }
         // Convert to alleles
         if( alleles == 1 )
         {
@@ -401,8 +402,13 @@ Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
         vcfRCommon::strsplit(line, al_vec, al_split);
         hap_num = 0;
         while(hap_num < ploidy){
-          int al_num = atoi(al_vec[hap_num].c_str());
-          haps(i, hap_col) = alleles_vec[al_num];
+          // Manage missing alleles.
+          if( al_vec[hap_num] == "." ){
+            haps(i, hap_col) = NA_STRING;
+          } else {
+            int al_num = atoi(al_vec[hap_num].c_str());
+            haps(i, hap_col) = alleles_vec[al_num];
+          }
           hap_num++;
           hap_col++;
         }
