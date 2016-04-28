@@ -71,19 +71,55 @@ test_that("extract.gt extract parameter works",{
 #
 ##### ##### ##### ##### #####
 
+data(vcfR_example)
+gt <- extract.gt(vcf, element="GT", extract=TRUE)
 
 test_that("extract_haps compiled code works",{
   is.na(gt[1:5,1]) <- TRUE
+  gt[1:5,2] <- ".|."
+  gt[4,2] <- "0|."
+  gt[5,2] <- ".|1"
+    
   haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', vcf@fix[,'REF'], vcf@fix[,'ALT'], gt, '|', 0)
   expect_is(haps, "matrix")
   expect_true( is.na(haps[1,1]) )
   expect_true( is.na(haps[1,2]) )
+
+  expect_true( is.na(haps[1,3]) )
+  expect_true( is.na(haps[1,4]) )
+  expect_true( !is.na(haps[4,3]) )
+  expect_true( is.na(haps[4,4]) )
+  expect_true( is.na(haps[5,3]) )
+  expect_true( !is.na(haps[5,4]) )
+  
   expect_equal(ncol(haps), 2 * ncol(gt))
   expect_equal(nrow(haps), nrow(gt))
 })
 
 
-test_that("extract_haps R code works",{
+test_that("extract_haps R code works on vcfR objects",{
+  vcf@gt[1,3] <- ".|.:12,0:12:39:0,39,585"
+  vcf@gt[2,3] <- "0|.:12,0:12:39:0,39,585"
+  vcf@gt[3,3] <- ".|1:12,0:12:39:0,39,585"
+  
+  haps <- extract.haps(vcf, gt.split="|", verbose = FALSE)
+  haps[1:6,1:8]
+  
+  expect_true( is.na(haps[1,3]) )
+  expect_true( is.na(haps[1,4]) )
+  
+  expect_true( !is.na(haps[2,3]) )
+  expect_true( is.na(haps[2,4]) )
+  
+  expect_true( is.na(haps[3,3]) )
+  expect_true( !is.na(haps[3,4]) )
+})
+
+
+chrom <- create.chromR(name="Chrom", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
+chrom <- masker(chrom, min_DP = 1e3, max_DP = 2e3)
+
+test_that("extract_haps R code works on chromR objects",{
   haps <- extract.haps(chrom, gt.split="|", verbose = FALSE)
   expect_is(haps, "matrix")
   expect_equal(ncol(haps), 2 * ncol(gt))

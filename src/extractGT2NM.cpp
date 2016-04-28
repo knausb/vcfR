@@ -402,8 +402,13 @@ Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
         vcfRCommon::strsplit(line, al_vec, al_split);
         hap_num = 0;
         while(hap_num < ploidy){
-          int al_num = atoi(al_vec[hap_num].c_str());
-          haps(i, hap_col) = alleles_vec[al_num];
+          // Manage missing alleles.
+          if( al_vec[hap_num] == "." ){
+            haps(i, hap_col) = NA_STRING;
+          } else {
+            int al_num = atoi(al_vec[hap_num].c_str());
+            haps(i, hap_col) = alleles_vec[al_num];
+          }
           hap_num++;
           hap_col++;
         }
