@@ -2,6 +2,7 @@
 
 # vcfR 1.0.0.9000
 
+* `chromR2vcfR` implements use.mask
 * `extract.gt()` converts "." to NA.
 * Added tidyr compatibility - thank you Eric Anderson!
 * `write.vcf()` now uses mask = TRUE.

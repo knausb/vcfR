@@ -5,6 +5,8 @@
 library(vcfR)
 context("create.chromR functions")
 
+data("vcfR_example")
+
 #library(testthat)
 #data(vcfR_example)
 
@@ -22,7 +24,7 @@ test_that("Create a null chromR",{
   expect_equal(nrow(chrom@ann), 0)
 })
 
-data("vcfR_example")
+
 
 #vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
 #seq_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
@@ -129,6 +131,18 @@ test_that("proc.chromR works",{
 })
 
 
+##### ##### ##### ##### #####
+
+
+test_that("chromR2vcfR works",{
+  chrom <- create.chromR(name="Supercontig_1.50", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
+  chrom <- masker(chrom, min_DP = 300, max_DP = 700)
+  
+  test <- chromR2vcfR(chrom, use.mask = TRUE)
+
+  sum(chrom@var.info$mask)
+nrow(test)
+})
 
 ##### ##### ##### ##### #####
 # EOF.
