@@ -39,7 +39,13 @@ test_that("compiled input functions work",{
   expect_is(body, "matrix")
   expect_equal(nrow(body), as.numeric(stats["variants"]))
   expect_equal(ncol(body), as.numeric(stats["columns"]))
+  
+  # Check for cariage return.
+#  body[1,ncol(body)] <- "0/0:32,0:32:90:0,90,999\r" # Test example.
+  expect_equal(grep("\r$", body[1,ncol(body)]), integer(0))
+  
 })
+
 
 
 test_that("compiled vcfR_read_body works when file contains no variants",{

@@ -142,6 +142,12 @@ Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats, int ve
 
     int i = 0;
     while(meta_row < stats(0) && i < svec.size() - 1){
+      
+      // Check and remove carriage returns (Windows).
+      if( svec[i][ svec[i].size()-1] == '\r' ){
+        svec[i].erase( svec[i].size() - 1 );
+      }
+
       meta(meta_row) = svec[i];
       meta_row++;
       i++;
@@ -350,6 +356,11 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
 
     // Scroll through lines.
     for(int i = 0; i < svec.size() - 1; i++){
+      
+      // Check and remove carriage returns (Windows).
+      if( svec[i][ svec[i].size()-1] == '\r' ){
+        svec[i].erase( svec[i].size() - 1 );
+      }
 
       if(svec[i][0] == '#' && svec[i][1] == '#'){
         // Meta line, ignore.

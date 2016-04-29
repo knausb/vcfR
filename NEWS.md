@@ -2,6 +2,7 @@
 
 # vcfR 1.0.0.9000
 
+* `read.vcfR()` checks for and removes carriage returns (Windows)'
 * `vcfR2DNAbin` converts 'NA' to 'n' prior to conversion to DNAbin
 * `chromR2vcfR` implements use.mask
 * `extract.gt()` converts "." to NA.
