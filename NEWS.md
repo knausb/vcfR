@@ -2,6 +2,7 @@
 
 # vcfR 1.0.0.9000
 
+* `vcfR2DNAbin` converts 'NA' to 'n' prior to conversion to DNAbin
 * `chromR2vcfR` implements use.mask
 * `extract.gt()` converts "." to NA.
 * Added tidyr compatibility - thank you Eric Anderson!

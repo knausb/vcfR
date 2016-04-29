@@ -173,7 +173,10 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = FALSE,
     pos <- pos - start.pos + 1
     x[pos,] <- variants
   }
-  
+
+  # Convert NA to n
+  x[ is.na(x) ] <- 'n'
+
   # DNAbin characters must be lower case.
   # tolower requires dim(X) to be positive.
   if( nrow(x) > 0 ){
@@ -187,14 +190,7 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = FALSE,
   return(x)
 }
 
-  
-  
-  
-  
-  
-  
-  
-  
+
 vcfR2DNAbin1 <- function( x, extract.indels = TRUE , consensus = TRUE,
                            extract.haps = FALSE, gt.split="|",
                            ref.seq = NULL, start.pos = NULL,
@@ -261,20 +257,11 @@ vcfR2DNAbin1 <- function( x, extract.indels = TRUE , consensus = TRUE,
   } else {
     stop( "Invalid specification of extract.haps.\nShould be a logical." )
   }
-  
-  # If we have no variants (rows) return NA.
-#  if( nrow(x) < 1 )
-#  {
-#    return( NA )
-#  }
 
   # Strategies to convert genotypes (with a delimiter) to nucleotides.
   # If extract.haps was set to TRUE, then our data is effectively haploid now.
   ploid <- length(unlist( strsplit( x[!is.na(x)][1], split=gt.split, fixed=TRUE ) ))
-  
-#  if( verbose == TRUE ){
-#    message( paste("Ploidy detected to be:", ploid) )
-#  }
+
   
   if( ploid == 1 ){
     # Haploid case
