@@ -17,6 +17,10 @@
 #' Note that some functions, such as ape::seg.sites do not recognize ambiguity characters (other than 'n').
 #' This means that these functions, as well as functions that depend on them (e.g., pegas::tajima.test), will produce unexpected results.
 #' 
+#' Missing data are handled in a number of steps.
+#' When both alleles are missing ('.') the genotype is converted to NA.
+#' Secondly, if one of the alleles is missing ('.') the genotype is converted to NA>
+#' Lastly, NAs can be optionally converted to 'n' for compatibility with DNAbin objects.
 #' 
 #' @export
 alleles2consensus <- function( x, sep = "/", NA_to_n = TRUE ){
@@ -25,10 +29,17 @@ alleles2consensus <- function( x, sep = "/", NA_to_n = TRUE ){
                         sep=sep),
                   c('a','c','g','t', 'w','w','s','s', 'm','m','k','k', 'r','r','y','y'))
   
+  # Both alleles missing, set to NA.
+  x <- gsub( paste(".", ".", sep=sep), NA, x, fixed=TRUE)
+
+  # One of the alleles missing set to NA.
+  x <- gsub( ".", NA, x, fixed=TRUE)
+  
   for(i in 1:nrow( lookup ))
   {
     x[ x == lookup[i,1] ] <- lookup[i,2]
   }
+  
   if( NA_to_n == TRUE )
   {
     x[ is.na(x) ] <- 'n'

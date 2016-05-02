@@ -45,6 +45,7 @@ In the Unix environment, users may increase this number to allow the use of mult
 }
 \seealso{
 \code{\link{extract.gt}},
+\code{\link{alleles2consensus}},
 \code{\link[adegenet]{df2genind}},
 \code{\link[adegenet]{genind}},
 \href{http://cran.r-project.org/package=pegas}{pegas},

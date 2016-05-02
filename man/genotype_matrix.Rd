@@ -33,6 +33,11 @@ The function \strong{alleles2consensus} converts genotypes to a single consensus
 Note that some functions, such as ape::seg.sites do not recognize ambiguity characters (other than 'n').
 This means that these functions, as well as functions that depend on them (e.g., pegas::tajima.test), will produce unexpected results.
 
+Missing data are handled in a number of steps.
+When both alleles are missing ('.') the genotype is converted to NA.
+Secondly, if one of the alleles is missing ('.') the genotype is converted to NA>
+Lastly, NAs can be optionally converted to 'n' for compatibility with DNAbin objects.
+
 The function \strong{get.alleles} takes a vector of genotypes and returns the unique alleles.
 }
 

@@ -185,31 +185,64 @@ std::vector < std::string > get_allele_vector( Rcpp::String ref,
 
 std::string gt2alleles( Rcpp::String gt, std::vector< std::string > allele_vector, char allele_sep )
 {
+  // gt is a genotpye (e.g., 0/0, 1/2, 1/.).
+  // allele_vector is a concatenation of the REF and ALT data.
+  // allele_sep specifies the allele delimiter.
+  
+  // Recast allele_sep (char) to sep (std::string).
   std::string sep = std::string(1, allele_sep);
+  
+  // Create a std::string NA character.
+  std::string na_allele = ".";
+
+  // Split the genotype into alleles delimited by allele_sep.
+  // This results in the vector gt_vector.
   std::string gt2 = gt;
   std::vector < std::string > gt_vector;
   vcfRCommon::strsplit( gt2, gt_vector, allele_sep );
   
-//  std::string gt3 = "A";
-  
 //  Rcpp::Rcout << "Made it.!\n";
 //  Rcpp::Rcout << "  gt_vector[0]" << gt_vector[0] << "\n";
 
-  // stoi is not supported in MinGW so should not be used.  
-//  int allele_number = std::stoi( gt_vector[0] );
-  int allele_number;
-  if ( ! (std::istringstream(gt_vector[0]) >> allele_number) ) allele_number = 0;
-
-  std::string gt3 = allele_vector[ allele_number ];
+  // stoi is not supported in MinGW so should not be used.
+  // Instead we use std:istringstream to set (>>) the int value.
   
+  //  int allele_number = std::stoi( gt_vector[0] );
+  int allele_number; // Initialize allele counter.
+
+
+  // Initialize our return value, gt3.
+  std::string gt3;
+  if( gt_vector[0].compare( na_allele ) == 0 ){
+    gt3.append( na_allele );
+  } else if ( ! (std::istringstream( gt_vector[0] ) >> allele_number) ){
+    gt3.append( na_allele );
+  } else {
+    std::istringstream(gt_vector[0]) >> allele_number;
+    gt3.append( allele_vector[ allele_number ] );
+  }
+  
+  // If we're greater than haploid.
   if( gt_vector.size() > 1 )
   {
     for( int i=1; i<gt_vector.size(); i++ )
     {
-//      allele_number = stoi(gt_vector[i]);
-      if ( ! (std::istringstream(gt_vector[i]) >> allele_number) ) allele_number = 0;
-      gt3.append( sep );
-      gt3.append( allele_vector[ allele_number ] );
+//      if ( ! (std::istringstream(gt_vector[i]) >> allele_number) ) allele_number = 0;
+//      gt3.append( sep );
+//      gt3.append( allele_vector[ allele_number ] );
+      if( gt_vector[i].compare( na_allele ) == 0 ){
+        gt3.append( sep );
+        gt3.append( na_allele );
+      } else if ( ! (std::istringstream( gt_vector[i] ) >> allele_number) ){
+        //  
+        Rcpp::Rcout << "Couldn't convert string to int!\n";
+        gt3.append( sep );
+        gt3.append( na_allele );
+      } else {
+        gt3.append( sep );
+        std::istringstream(gt_vector[i]) >> allele_number;
+        gt3.append( allele_vector[ allele_number ] );
+      }
     }
   }
     

@@ -144,6 +144,31 @@ test_that("extract.indels works",{
 
 ##### ##### ##### ##### #####
 #
+# gt2alleles tests
+#
+##### ##### ##### ##### #####
+
+
+data(vcfR_example)
+
+vcf <- vcf[1:4, 1:3]
+vcf@gt[2,3] <- ".|0:12,0:12:39:0,39,585"
+vcf@gt[3,3] <- "0|.:12,0:12:39:0,39,585"
+vcf@gt[4,3] <- ".|.:12,0:12:39:0,39,585"
+
+test_that("gt2alleles works",{
+#  cbind(vcf@fix[,4:5], vcf@gt)
+  gt <- extract.gt(vcf, return.alleles=TRUE, allele.sep = "|")
+  expect_equal( as.character(gt[1,2]), "T|T")
+  expect_equal( as.character(gt[2,2]), ".|C")
+  expect_equal( as.character(gt[3,2]), "A|.")
+  expect_equal( as.character(gt[4,2]), ".|.")
+})
+
+
+
+##### ##### ##### ##### #####
+#
 #
 #
 ##### ##### ##### ##### #####
