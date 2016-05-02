@@ -399,11 +399,15 @@ chromoqc <- function( chrom,
   )
 
   # Mapping Quality (MQ)
-  myList2 <- list(title = "Mapping Quality (MQ)",
-                  dmat  = chrom@var.info[ chrom@var.info[,"mask"] , c("POS","MQ") ],
-                  dcol  = grDevices::rgb( red=46, green=139, blue=87, alpha=dp.alpha, maxColorValue = 255),
-                  bwcol = grDevices::rgb( red=46, green=139, blue=87, maxColorValue = 255)
-  )
+  if( !is.null(chrom@var.info$MQ) ){
+    myList2 <- list(title = "Mapping Quality (MQ)",
+                    dmat  = chrom@var.info[ chrom@var.info[,"mask"] , c("POS","MQ") ],
+                    dcol  = grDevices::rgb( red=46, green=139, blue=87, alpha=dp.alpha, maxColorValue = 255),
+                    bwcol = grDevices::rgb( red=46, green=139, blue=87, maxColorValue = 255)
+    )
+  } else {
+    myList2 <- NULL
+  }
   
   # Phred-Scaled Quality (QUAL)
   dmat <- as.matrix( cbind(chrom@var.info[,"POS"], 
