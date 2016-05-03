@@ -17,6 +17,16 @@ test_file("testthat/test_io.R")
 #
 test_file("testthat/test_conversion.R")
 #
+test_file("testthat/test_vcfR_methods.R")
+#
+test_file("testthat/test_addID.R")
+#
+test_file("testthat/test_maf.R")
+#
+test_file("testthat/test_genotype_matrix_functions.R")
+#
+test_file("testthat/test_vcfRtidy.R")
+
 #
 
 #
@@ -31,12 +41,6 @@ test_file("testthat/test_chromo_plot.R")
 test_file("testthat/test_drplot.R")
 
 
-test_file("testthat/test_vcfR_methods.R")
-
-test_file("testthat/test_addID.R")
-test_file("testthat/test_maf.R")
-
-test_file("testthat/test_genotype_matrix_functions.R")
 
 #test_file("testthat/test_rank_variants.R")
 #test_file("testthat/test_var_window.R")
