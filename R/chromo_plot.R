@@ -51,6 +51,11 @@ chromo <- function( chrom,
     stop("Expecting object of class chromR")
   }
   
+  # Test to see if the mask is populated.
+#  if( length(grep('mask', colnames(chrom@var.info))) < 1 ){
+#    chrom@var.info$mask <- rep( TRUE, times=nrow(chrom@vcf@fix) )
+#  }
+  
   # Save original parameters.
   orig.oma <- graphics::par('oma')
   orig.mar <- graphics::par('mar')
@@ -310,10 +315,32 @@ chromo <- function( chrom,
     }
     
     # Sequence plot.
-    rmat1 <- cbind(chrom@seq.info$nuc.win[,1], -1, chrom@seq.info$nuc.win[,2], 1)
-    rmat2 <- cbind(chrom@seq.info$N.win[,1], -0.5, chrom@seq.info$N.win[,2], 0.5)
+    if( nrow(chrom@seq.info$nuc.win) > 0 ){
+      rmat1 <- cbind(chrom@seq.info$nuc.win[,1], -1, chrom@seq.info$nuc.win[,2], 1)
+    } else {
+      rmat1 <- NULL
+    }
+    if( nrow(chrom@seq.info$N.win) > 0 ){
+      rmat2 <- cbind(chrom@seq.info$N.win[,1], -0.5, chrom@seq.info$N.win[,2], 0.5)
+    } else {
+      rmat2 <- NULL
+    }
     graphics::par( mar = c(0,4,0,0) )
-    dr.plot( rlst = list( rmat1, rmat2 ), chrom.s = 1, chrom.e = chrom@len,
+    
+    # Create a list from the sequence data.
+    if( !is.null(rmat1) & !is.null(rmat2) ){
+      rlist <- list( rmat1, rmat2 )
+    }
+    if( !is.null(rmat1) & is.null(rmat2) ){
+      rlist <- list( rmat1 )
+    }
+    if( is.null(rmat1) & !is.null(rmat2) ){
+      rlist <- list( rmat2 )
+    }
+    if( is.null(rmat1) & is.null(rmat2) ){
+      rlist <- NULL
+    }
+    dr.plot( rlst = rlist, chrom.s = 1, chrom.e = chrom@len,
                     title = "Nucleotides", hline = NULL,
                     dcol = NULL,
                     rcol  = c('green', 'red'),

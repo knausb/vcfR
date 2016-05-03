@@ -50,8 +50,8 @@ The \strong{win.info} slot contains a data.frame containing information about wi
 For example, window, start, end, length, A, C, G, T, N, other, variants and genic fields are stored here.
 
 The \strong{seq.info} slot is a list containing two matrices.
-The first describes rectangles for called nucleotides and the second describes rectangles for 'N' calls.
-Within each matrix, the first column indicates tha start position and the second column indicates the end position of each rectangle.
+The first matrix describes rectangles for called nucleotides and the second describes rectangles for 'N' calls.
+Within each matrix, the first column indicates the start position and the second column indicates the end position of each rectangle.
 }
 \seealso{
 \code{\link{vcfR-class}}, \code{\link[ape]{DNAbin}},
