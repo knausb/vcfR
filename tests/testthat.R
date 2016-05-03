@@ -28,8 +28,7 @@ test_file("testthat/test_conversion.R")
 #
 test_file("testthat/test_chromo_plot.R")
 #
-# Alternate version:
-#test_file("testthat/test_chromo.R")
+test_file("testthat/test_drplot.R")
 
 
 test_file("testthat/test_vcfR_methods.R")
@@ -46,7 +45,7 @@ test_file("testthat/test_genotype_matrix_functions.R")
 
 
 ##### ##### ##### ##### #####
-# Debugging compiled code.
+# Notes on debugging compiled code.
 
 # lldg gdb
 # http://kevinushey.github.io/blog/2015/04/13/debugging-with-lldb/

@@ -1,6 +1,6 @@
 
-#' @title dr plot elements
-#' @name  dr plot elements
+#' @title dr.plot elements
+#' @name  dr.plot elements
 #'
 #' @description Plot chromR objects and their components
 #' @rdname drplot
