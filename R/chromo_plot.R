@@ -28,6 +28,7 @@
 #' For example, transparency may be desired in the dot plot but not the box and whisker plot.
 #' When one (or more) of these elements is omitted an attempt to use default values is made.
 #' 
+#' @return Returns an invisible NULL.
 #' 
 #' 
 #' @seealso \code{\link{dr.plot}}
@@ -364,6 +365,8 @@ chromo <- function( chrom,
   graphics::par( mar = orig.mar )
   graphics::par( oma = orig.oma )
   graphics::par( mfrow = c(1,1) )
+  
+  invisible(NULL)
 }
 
 ##### ##### ##### ##### #####

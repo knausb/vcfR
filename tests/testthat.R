@@ -17,7 +17,20 @@ test_file("testthat/test_io.R")
 #
 test_file("testthat/test_conversion.R")
 #
-#test_file("testthat/test_chromo_plot.R")
+#
+
+#
+
+# This test will write the plots to a file on the filesystem.
+# This should cause CRAN to complain.
+# Comment out this test prior to CRAN submission.
+#
+#
+test_file("testthat/test_chromo_plot.R")
+#
+# Alternate version:
+#test_file("testthat/test_chromo.R")
+
 
 test_file("testthat/test_vcfR_methods.R")
 

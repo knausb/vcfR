@@ -30,6 +30,9 @@ chromoqc(chrom, boxp = TRUE, dp.alpha = 255, ...)
 
 \item{...}{arguments to be passed to other methods.}
 }
+\value{
+Returns an invisible NULL.
+}
 \description{
 plot chromR objects
 }

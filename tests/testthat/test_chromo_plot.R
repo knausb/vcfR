@@ -1,15 +1,8 @@
-
 #library("testthat")
-context("chromo plotting functionality")
+context("chromo plotting function")
 
 library(vcfR)
 data("vcfR_example")
-
-
-#chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, verbose=FALSE)
-#chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
-#chrom <- masker(chrom, min_QUAL=0, min_DP=350, max_DP=650, min_MQ=59.5, max_MQ=60.5)
-#chrom <- proc.chromR(chrom, verbose = FALSE)
 
 
 ##### ##### ##### ##### #####
@@ -50,7 +43,6 @@ test_that("chromo works, variant and seq data",{
 ##### ##### ##### ##### #####
 # chromo, vcf and annotation
 
-
 test_that("chromo works, variant and annotation data",{
   chrom <- create.chromR(name="Supercontig", vcf=vcf, ann=gff, verbose=FALSE)
 #  chromo( chrom )
@@ -83,57 +75,56 @@ test_that("chromo works, variant and annotation data",{
 })
 
 
-##### ##### ##### ##### #####
-# Create lists of dots and rectangles
-
-rlst1 <- cbind( gff[ seq(1,23, by=2) , 4 ],
-                0, 
-                gff[ seq(1,23, by=2) , 5 ],
-                500
-              )
-rlist <- list(rlst1)
-
-myList1 <- list(title = "Track1",
-                dmat  = chrom@var.info[,2:4],
-                rlst = rlst1,
-                rcol=4,
-                bwcol=1:2
-                )
-# rlist, dcol, rcol, rbcol and bwcol.)
-#names(myList1)
-
-
-
 
 ##### ##### ##### ##### #####
-# chromo, vcf and drlist1
+# chromo with custom tracks.
 
-data("vcfR_example")
 
 test_that("chromo works, custom tracks",{
-#chrom <- create.chromR(name="Supercontig", vcf=vcf, verbose=FALSE)
-#
-#  chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
+  chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
+  
+  ##### ##### ##### ##### #####
+  # Create lists of dots and rectangles
+  rlst1 <- cbind( gff[ seq(1,23, by=2) , 4 ],
+                  0, 
+                  gff[ seq(1,23, by=2) , 5 ],
+                  500
+                )
+  rlist <- list(rlst1)
+  myList1 <- list(title = "Track1",
+                  dmat  = chrom@var.info[,2:4],
+                  rlst = rlst1,
+                  rcol=4,
+                  bwcol=1:2
+                  )
 
-#chromo( chrom, boxp = FALSE , chrom.e = chrom@len, drlist1 = myList1 )
+  ##### ##### ##### ##### #####
+  # Custom plots.
+  plot1 <- chromo( chrom, boxp = FALSE , chrom.e = chrom@len, drlist1 = myList1 )
+  expect_true( is.null(plot1) )
 
-#chrom <- proc.chromR(chrom, verbose = FALSE)
+  chrom <- proc.chromR(chrom, verbose = FALSE)
 
-#chromo( chrom, boxp = FALSE , chrom.e = chrom@len, drlist1 = myList1 )
-#chromo( chrom, boxp = TRUE , chrom.e = chrom@len, drlist1 = myList1  )
+  plot2 <- chromo( chrom, boxp = FALSE , chrom.e = chrom@len, drlist1 = myList1 )
+  expect_true( is.null(plot2) )
+  
+  plot3 <- chromo( chrom, boxp = TRUE , chrom.e = chrom@len, drlist1 = myList1  )
+  expect_true( is.null(plot3) )
+  
+  plot4 <- chromo( chrom, boxp = TRUE , chrom.e = chrom@len, drlist1 = myList1, drlist2 = myList1  )
+  expect_true( is.null(plot4) )
 
-#chromo( chrom, boxp = TRUE , chrom.e = chrom@len, drlist1 = myList1, drlist2 = myList1  )
-#chromo( chrom, boxp = TRUE , chrom.e = chrom@len, drlist1 = myList1, drlist2 = myList1, drlist3 = myList1  )
-
+  plot5 <- chromo( chrom, boxp = TRUE , chrom.e = chrom@len, drlist1 = myList1, drlist2 = myList1, drlist3 = myList1  )
+  expect_true( is.null(plot5) )
 })
 
 
-##### ##### ##### ##### #####
-# xlim
-
-chromo( chrom, boxp = TRUE , chrom.e = chrom@len, drlist1 = myList1, drlist2 = myList1, xlim=c(2e4, 5e4) )
-
-
+# rlist, dcol, rcol, rbcol and bwcol.)
+#names(myList1)
 
 ##### ##### ##### ##### #####
+# Clean up when we're done.
+
+unlink('Rplots.pdf')
+
 # EOF.
