@@ -58,6 +58,7 @@ setMethod(
 
 
 
+
 ##### Basic methods (definitions) #####
 
 #' @rdname chromR_methods
@@ -76,8 +77,10 @@ setMethod(
     #    print(as.character(x@vcf.fix[1,1]))
     #    cat("\n")
     #    cat("Sample names: \n")
-    temp <- names(x@vcf@gt)[-1]
-    temp
+#    temp <- names(x@vcf@gt)[-1]
+#    temp
+    cat(x@name)
+    cat("\n")
   }
 )
 
