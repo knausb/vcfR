@@ -26,9 +26,8 @@ test_file("testthat/test_maf.R")
 test_file("testthat/test_genotype_matrix_functions.R")
 #
 test_file("testthat/test_vcfRtidy.R")
-
 #
-
+test_file("testthat/test_heatmapbp.R")
 #
 
 # This test will write the plots to a file on the filesystem.

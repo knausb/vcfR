@@ -134,6 +134,7 @@ heatmap.bp <- function(x, cbarplot = TRUE, rbarplot = TRUE,
   graphics::par(mfrow=c(1,1))
   graphics::par(mar=c(5,4,4,2))
   #
+  invisible(NULL)
 }
 
 

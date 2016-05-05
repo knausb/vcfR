@@ -46,6 +46,14 @@ If this estimate exceeds the value of 'limit' an error is thrown and execution s
 The user may increase this limit to any value, but is encourages to compare that value to the amout of available physical memory.
 
 
+It is possible to input part of a VCF file by using the parameters nrows, skip and cols.
+The first eight columns (the fix region) are part of the definition and will always be included.
+Any columns beyond eight are optional (the gt region).
+You can specify which of these columns you would like to input by setting the cols parameter.
+If you want a usable vcfR object you will want to always include nine (the FORMAT column).
+If you do not include column nine you may experience reduced functionality.
+
+
 The function \strong{write.vcf} takes an object of either class vcfR or chromR and writes the vcf data to a vcf.gz file (gzipped text).
 If the parameter 'mask' is set to FALSE, the entire object is written to file.
 If the parameter 'mask' is set to TRUE and the object is of class chromR (which has a mask slot), this mask is used to subset the data.

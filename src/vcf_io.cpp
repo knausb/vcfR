@@ -244,11 +244,12 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
   
   /*
    * Manage cols vector.
-   * The first nine (1-based) columns are mandatory.
+   * The first eight (1-based) columns are mandatory.
    * We can ensure they are there by adding them,
    * sorting and removing adjacent non-identical values.
    */
-  for( int i=9; i >= 1; i-- ){
+//  for( int i=9; i >= 1; i-- ){
+  for( int i=8; i >= 1; i-- ){
     cols.push_front(i);
   }
   cols.sort();
@@ -508,6 +509,8 @@ void write_vcf_body( Rcpp::CharacterMatrix fix,
                      std::string filename,
                      int mask=0 ) {
   // http://stackoverflow.com/a/5649224
+  
+//  Rcpp::Rcout << "Made it into the function!\n";
   
   int i = 0; // Rows
   int j = 0; // Columns
