@@ -14,7 +14,15 @@
 #' @param delim character that delimits values
 #'
 #' @details
-#' To do.
+#' Files containing VCF data frequently include data on allelic depth (e.g., AD).
+#' This is the number of times each allele has been sequenced.
+#' Our naive assumption for diploids is that these alleles should be observed at a frequency of 1 or zero for homozygous positions and near 0.5 for heterozygous positions.
+#' Deviations from this expectation may indicate allelic imbalance or ploidy differences.
+#' This function is intended to facilitate the exploration of allele frequencies for all positions in a sample.
+#'
+#' The alleles are sorted by their frequency within the function.
+#' The user can then specify is the would like to calculate the frequency of the most frequent allele (allele = 1), the second most frequent allele (allele = 2) and so one.
+#' If an allele is requested that does not exist it should result in NA for that position and sample.
 #'
 #' There are two methods to calculate a sum for the denominator of the frequency.
 #' When sum_type = 0 the alleles are sorted decendingly and the first two allele counts are used for the sum.
