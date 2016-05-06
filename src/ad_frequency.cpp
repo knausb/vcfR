@@ -1,6 +1,8 @@
 #include <Rcpp.h>
 #include "vcfRCommon.h"
 
+//using namespace Rcpp;
+
 // Helper for std::sort.
 struct greater
 {
@@ -48,12 +50,25 @@ std::vector<float> str_vec_to_float_vec( std::vector<std::string> str_vec ){
 //' This may be useful when a state of diploidy may be known to be appropriate and other alleles may be interpreted as erroneous.
 //' When sum_type = 1 a sum is taken over all the observed alleles for a variant.
 //'
-//' @return a numeric matrix of frequencies
-//' [[Rcpp::export]]
+//' @return A numeric matrix of frequencies
+//' 
+//' @examples
+//' set.seed(999)
+//' x1 <- round(rnorm(n=9, mean=10, sd=2))
+//' x2 <- round(rnorm(n=9, mean=20, sd=2))
+//' ad <- matrix(paste(x1, x2, sep=","), nrow=3, ncol=3)
+//' colnames(ad) <- paste('Sample', 1:3, sep="_")
+//' rownames(ad) <- paste('Variant', 1:3, sep="_")
+//' ad[1,1] <- "9,23,12"
+//' AD_frequency(ad=ad)
+//' 
+//' 
+//' @export
+// [[Rcpp::export]]
 Rcpp::NumericMatrix AD_frequency(Rcpp::StringMatrix ad,
+                                 std::string delim = ",",
                                  int allele = 1,
-                                 int sum_type = 0,
-                                 char delim = ','
+                                 int sum_type = 0
                                  ) {
 
   // Initialize return data structure.
@@ -80,7 +95,8 @@ Rcpp::NumericMatrix AD_frequency(Rcpp::StringMatrix ad,
 
       if( ad(i,j) != NA_STRING ){
         std::vector < std::string > col_vec;
-        char my_split = ','; // Must be single quotes!
+//        char my_split = ','; // Must be single quotes!
+        char my_split = delim[0];
         std::string my_string;
         my_string = ad(i,j);
         vcfRCommon::strsplit(my_string, col_vec, my_split);
@@ -119,4 +135,7 @@ Rcpp::NumericMatrix AD_frequency(Rcpp::StringMatrix ad,
 
   return adf;
 }
+
+
+
 

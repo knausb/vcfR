@@ -5,6 +5,20 @@
 
 using namespace Rcpp;
 
+// AD_frequency
+Rcpp::NumericMatrix AD_frequency(Rcpp::StringMatrix ad, std::string delim, int allele, int sum_type);
+RcppExport SEXP vcfR_AD_frequency(SEXP adSEXP, SEXP delimSEXP, SEXP alleleSEXP, SEXP sum_typeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::StringMatrix >::type ad(adSEXP);
+    Rcpp::traits::input_parameter< std::string >::type delim(delimSEXP);
+    Rcpp::traits::input_parameter< int >::type allele(alleleSEXP);
+    Rcpp::traits::input_parameter< int >::type sum_type(sum_typeSEXP);
+    __result = Rcpp::wrap(AD_frequency(ad, delim, allele, sum_type));
+    return __result;
+END_RCPP
+}
 // extract_GT_to_CM
 Rcpp::CharacterMatrix extract_GT_to_CM(Rcpp::DataFrame x, std::string element);
 RcppExport SEXP vcfR_extract_GT_to_CM(SEXP xSEXP, SEXP elementSEXP) {

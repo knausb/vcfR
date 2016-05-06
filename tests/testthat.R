@@ -29,6 +29,9 @@ test_file("testthat/test_vcfRtidy.R")
 #
 test_file("testthat/test_heatmapbp.R")
 #
+test_file("testthat/test_ad_frequency.R")
+
+
 
 # This test will write the plots to a file on the filesystem.
 # This should cause CRAN to complain.

@@ -2,11 +2,12 @@
 
 # vcfR 1.0.0.9000
 
-* `read.vcfR()` handles VCF data with no GT region (ala LoFreq)
-* `gt2alleles` handles missing data ('.')
-* `read.vcfR()` checks for and removes carriage returns (Windows)'
-* `vcfR2DNAbin` converts 'NA' to 'n' prior to conversion to DNAbin
-* `chromR2vcfR` implements use.mask
+* `added AD_frequency` calculates allele frequencies from matrices of AD data.
+* `read.vcfR()` handles VCF data with no GT region (ala LoFreq).
+* `gt2alleles` handles missing data ('.').
+* `read.vcfR()` checks for and removes carriage returns (Windows).
+* `vcfR2DNAbin` converts 'NA' to 'n' prior to conversion to DNAbin.
+* `chromR2vcfR` implements use.mask.
 * `extract.gt()` converts "." to NA.
 * Added tidyr compatibility - thank you Eric Anderson!
 * `write.vcf()` now uses mask = TRUE.
