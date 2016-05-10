@@ -1,4 +1,6 @@
 #' @title Create chromR object
+#' 
+#' 
 #' @name create.chromR
 #' @rdname create_chromR
 #' @export
@@ -202,7 +204,9 @@ create.chromR <- function(name="CHROM1", vcf, seq=NULL, ann=NULL, verbose=TRUE){
 
 #' @rdname create_chromR
 #' @export
-#' @aliases chromR-methods vcf2chromR
+#' @aliases vcf2chromR
+# @aliases chromR-methods vcf2chromR
+#' 
 #'
 # @description
 # Methods to work with objects of the chromR class

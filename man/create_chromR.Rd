@@ -2,7 +2,6 @@
 % Please edit documentation in R/create_chromR.R
 \name{create.chromR}
 \alias{ann2chromR}
-\alias{chromR-methods}
 \alias{create.chromR}
 \alias{getCHROM}
 \alias{getFIX}

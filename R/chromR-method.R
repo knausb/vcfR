@@ -1,6 +1,9 @@
 #' 
-#' @rdname chromR_methods
-#' @title chromR methods
+#' @rdname chromR-method
+#' @title chromR-method
+#' 
+#' @aliases chromR-method
+#' 
 #' @description Methods that act on objects of class chromR
 #' 
 #' 
@@ -12,6 +15,26 @@
 #' 
 #' @details
 #' Methods that act on objects of class chromR.
+#' 
+#' 
+#' 
+#' 
+#' @examples 
+#' 
+#' library(vcfR)
+#' data(vcfR_example)
+#' chrom <- create.chromR('sc50', seq=dna, vcf=vcf, ann=gff)
+#' chrom
+#' 
+#' print(chrom)
+#' head(chrom)
+#' plot(chrom)
+#' setName(chrom) <- "Supercontig_1.50"
+#' getName(chrom)
+#' names(chrom) <- "Scaffold_50"
+#' names(chrom)
+#' 
+#' 
 
 #
 
@@ -61,31 +84,21 @@ setMethod(
 
 ##### Basic methods (definitions) #####
 
-#' @rdname chromR_methods
-#' @export
-#' @aliases names.chromR
-#' 
-setMethod(
-  f="names",
-  signature = "chromR",
-  definition=function(x){
-    #    cat("**** Class chromR, method names **** \n")
-    #    cat("Sequence name: ", as.character(names(x@seq)), "\n")
-    #    cat("First annotation name: ")
-    #    print(as.character(x@ann[1,1]))
-    #    cat("First variant name: ")
-    #    print(as.character(x@vcf.fix[1,1]))
-    #    cat("\n")
-    #    cat("Sample names: \n")
-#    temp <- names(x@vcf@gt)[-1]
-#    temp
-    cat(x@name)
-    cat("\n")
-  }
-)
+# @rdname chromR-method
+# @export
+# @aliases names.chromR
+#
+#setMethod(
+#  f="names",
+#  signature = "chromR",
+#  definition=function(x){
+#    cat(x@name)
+#    cat("\n")
+#  }
+#)
 
 
-#' @rdname chromR_methods
+#' @rdname chromR-method
 #' @export
 #' @aliases head.chromR
 #' 
@@ -141,7 +154,7 @@ setMethod(
 
 
 
-#' @rdname chromR_methods
+#' @rdname chromR-method
 #' @export
 #' @aliases plot.chromR
 #' 
@@ -202,6 +215,10 @@ setMethod(
 #### Getter for "names" ####
 setGeneric("getName",function(object){standardGeneric ("getName")})
 
+#' @rdname chromR-method
+#' @export
+#' @aliases getName
+#' 
 setMethod("getName","chromR",
           function(object){
             return(object@name)
@@ -212,6 +229,9 @@ setMethod("getName","chromR",
 
 setGeneric("setName<-",function(object,value){standardGeneric("setName<-")})
 
+#' @rdname chromR-method
+#' @export
+#' @aliases setName
 setReplaceMethod(
   f="setName",
   signature="chromR",
@@ -223,13 +243,25 @@ setReplaceMethod(
 
 
 
+## names
+setMethod("names", signature(x = "chromR"), function(x){
+    return( x@name )
+})
 
+
+setReplaceMethod(
+  f="names",
+  signature(x = "chromR"),
+  definition = function(x, value){
+    x@name <-value
+    return(x)
+})
 
 
 
 ##### ##### win.info functions #####
 
-#' @rdname chromR_methods
+#' @rdname chromR-method
 #' @export
 #' @aliases windowize
 #'
