@@ -12,7 +12,7 @@
 \alias{vcfR2chromR}
 \title{Create chromR object}
 \usage{
-create.chromR(name = "CHROM1", vcf, seq = NULL, ann = NULL,
+create.chromR(vcf, name = "CHROM1", seq = NULL, ann = NULL,
   verbose = TRUE)
 
 vcfR2chromR(x, vcf)
@@ -30,9 +30,9 @@ getPOS(x)
 getQUAL(x)
 }
 \arguments{
-\item{name}{a name for the chromosome (for plotting purposes)}
-
 \item{vcf}{an object of class vcfR}
+
+\item{name}{a name for the chromosome (for plotting purposes)}
 
 \item{seq}{a sequence as a DNAbin object}
 
