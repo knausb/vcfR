@@ -227,6 +227,9 @@ setMethod("getName","chromR",
 
 #### Setter for name. ####
 
+#' @rdname chromR-method
+#' @export
+#' @aliases setName.chromR
 setGeneric("setName<-",function(object,value){standardGeneric("setName<-")})
 
 #' @rdname chromR-method
@@ -243,12 +246,23 @@ setReplaceMethod(
 
 
 
-## names
+##### names #####
+#'
+#' @rdname chromR-method
+#' @export
+#' @aliases names.chromR
+#' 
 setMethod("names", signature(x = "chromR"), function(x){
     return( x@name )
 })
 
 
+#' @rdname chromR-method
+#' @export
+#' @aliases names<-.chromR
+#' 
+#' @param value character vector of length one containing the name for the chromR object
+#' 
 setReplaceMethod(
   f="names",
   signature(x = "chromR"),
