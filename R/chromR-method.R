@@ -1,31 +1,35 @@
-#' 
+
+
+#'
 #' @rdname chromR-method
-#' @title chromR-method
-#' 
+#' @title chromR methods
+#' @name chromR methods
+#'
 #' @aliases chromR-method
-#' 
-#' @description Methods that act on objects of class chromR
-#' 
-#' 
+#'
+#'
+#' @description
+#' Methods that act on objects of class chromR.
+#' These methods allow you to view and modify objects of class chromR.
+#'
+#'
 #' @param x an object of class chromR
 #' @param object an object of class chromR
-#' @param y some sort of object???
+#' @param y dummy parameter
 #' @param ... Arguments to be passed to methods
-#' 
-#' 
+#'
+#'
 #' @details
 #' Methods that act on objects of class chromR.
-#' 
-#' 
-#' 
-#' 
-#' @examples 
-#' 
+#'
+#'
+#' @examples
+#'
 #' library(vcfR)
 #' data(vcfR_example)
 #' chrom <- create.chromR('sc50', seq=dna, vcf=vcf, ann=gff)
-#' chrom
-#' 
+# chrom
+#'
 #' print(chrom)
 #' head(chrom)
 #' plot(chrom)
@@ -33,19 +37,20 @@
 #' getName(chrom)
 #' names(chrom) <- "Scaffold_50"
 #' names(chrom)
-#' 
-#' 
 
-#
 
 ##### ##### Generic methods. #####
 
+#' @rdname chromR-method
+#' @aliases show
+#' @export
+#' 
 setMethod(
   f="show",
   signature = "chromR",
-#  definition=function(x){
+  #  definition=function(x){
   definition=function(object){
-            #1234567890123456789012345678901234567890
+    #1234567890123456789012345678901234567890
     cat("*****   Class chromR, method Show   *****\n")
     cat(paste("Name: ", object@name, "\n"))
     cat(paste("Length: ", object@len, "\n"))
@@ -80,73 +85,58 @@ setMethod(
 )
 
 
-
-
 ##### Basic methods (definitions) #####
-
-# @rdname chromR-method
-# @export
-# @aliases names.chromR
-#
-#setMethod(
-#  f="names",
-#  signature = "chromR",
-#  definition=function(x){
-#    cat(x@name)
-#    cat("\n")
-#  }
-#)
 
 
 #' @rdname chromR-method
 #' @export
 #' @aliases head.chromR
-#' 
+#'
 setMethod(
   f="head",
   signature = "chromR",
   definition=function(x){
-            #1234567890123456789012345678901234567890
+    #1234567890123456789012345678901234567890
     print("*****   Class chromR, method head   *****")
     print(paste("Name: ", x@name))
     print(paste("Length: ", x@len))
     print('', quote=FALSE)
-            #1234567890123456789012345678901234567890
+    #1234567890123456789012345678901234567890
     print("*****     Sample names (chromR)     *****")
     print(colnames(x@vcf@gt)[-1])
     print('', quote=FALSE)
-            #1234567890123456789012345678901234567890
+    #1234567890123456789012345678901234567890
     print("*****    Vcf fixed data (chromR)    *****")
     print(x@vcf@fix[1:6,1:7])
     print('', quote=FALSE)
     print("INFO column has been suppressed, first INFO record:")
     print(unlist(strsplit(as.character(x@vcf@fix[1, 'INFO']), split=";")))
     print('', quote=FALSE)
-            #1234567890123456789012345678901234567890
+    #1234567890123456789012345678901234567890
     print("*****   Vcf genotype data (chromR)  *****")
     if(ncol(x@vcf@gt)>=6){
-              #1234567890123456789012345678901234567890
+      #1234567890123456789012345678901234567890
       print("*****     First 6 columns      *********")
       print(x@vcf@gt[1:6,1:6])
     } else {
       print(x@vcf@gt[1:6,])
     }
     print('', quote=FALSE)
-            #1234567890123456789012345678901234567890
+    #1234567890123456789012345678901234567890
     print("*****      Var info (chromR)        *****")
     if(ncol(x@var.info)>=6){
-              #1234567890123456789012345678901234567890
+      #1234567890123456789012345678901234567890
       print("*****       First 6 columns        *****")
       print(x@var.info[1:6,1:6])
     } else {
       print(x@var.info[1:6,])
     }
     print('', quote=FALSE)
-            #1234567890123456789012345678901234567890
+    #1234567890123456789012345678901234567890
     print("*****      Vcf mask (chromR)        *****")
     print( paste("Percent unmasked:", round(100*(sum(x@var.info$mask)/length(x@var.info$mask)), digits=2 ) ) )
     print('', quote=FALSE)
-            #1234567890123456789012345678901234567890
+    #1234567890123456789012345678901234567890
     print("*****      End head (chromR)        *****")
     print('', quote=FALSE)
   }
@@ -157,7 +147,7 @@ setMethod(
 #' @rdname chromR-method
 #' @export
 #' @aliases plot.chromR
-#' 
+#'
 setMethod(
   f= "plot",
   signature= "chromR",
@@ -165,16 +155,16 @@ setMethod(
     DP <- x@var.info$DP[x@var.info$mask]
     MQ <- x@var.info$MQ[x@var.info$mask]
     QUAL <- as.numeric(x@vcf@fix[x@var.info$mask, 'QUAL'])
-
-#    if( length(DP) < 0 )
-      
+    
+    #    if( length(DP) < 0 )
+    
     if( nrow(x@win.info ) > 0 ){
-#    if( na.omit(x@win.info$variants) > 0 ){
-      SNPS <- x@win.info$variants/x@win.info$length 
+      #    if( na.omit(x@win.info$variants) > 0 ){
+      SNPS <- x@win.info$variants/x@win.info$length
     } else {
       SNPS <- NULL
     }
-
+    
     
     graphics::par(mfrow=c(2,2))
     if( length(DP) > 0 ){
@@ -218,23 +208,29 @@ setGeneric("getName",function(object){standardGeneric ("getName")})
 #' @rdname chromR-method
 #' @export
 #' @aliases getName
-#' 
+#'
 setMethod("getName","chromR",
           function(object){
             return(object@name)
           }
 )
 
+
 #### Setter for name. ####
 
 #' @rdname chromR-method
 #' @export
+#'
+#' @param value character vector of length one containing the new name.
+#'
 #' @aliases setName.chromR
+#'
 setGeneric("setName<-",function(object,value){standardGeneric("setName<-")})
 
 #' @rdname chromR-method
 #' @export
 #' @aliases setName
+#'
 setReplaceMethod(
   f="setName",
   signature="chromR",
@@ -245,32 +241,28 @@ setReplaceMethod(
 )
 
 
-
 ##### names #####
+#
+
+#' @rdname chromR-method
+# @aliases names
 #'
-#' @rdname chromR-method
-#' @export
-#' @aliases names.chromR
-#' 
-setMethod("names", signature(x = "chromR"), function(x){
-    return( x@name )
-})
-
+setMethod(f="names",
+          signature="chromR",
+          definition=function(x){
+            return( x@name )
+          })
 
 #' @rdname chromR-method
-#' @export
-#' @aliases names<-.chromR
-#' 
-#' @param value character vector of length one containing the name for the chromR object
-#' 
+#'
+#'
 setReplaceMethod(
   f="names",
   signature(x = "chromR"),
   definition = function(x, value){
     x@name <-value
     return(x)
-})
-
+  })
 
 
 ##### ##### win.info functions #####
@@ -279,13 +271,12 @@ setReplaceMethod(
 #' @export
 #' @aliases windowize
 #'
-# @description
 # Creates windows
 #'
 #' @param win.size window size, in base pairs
 #' @param max.win maximum window size
 #'
-#' 
+#'
 #'
 windowize <- function(x, win.size=1000, max.win=10000){
   #  acgt.w <- x@acgt.w
@@ -388,8 +379,4 @@ vcf.fix2gt.m <- function(x){
   x@gt.m <- x1
   return(x)
 }
-
-
-
-
 

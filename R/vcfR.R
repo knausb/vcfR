@@ -40,6 +40,9 @@
 #' @rdname vcfR
 #' @useDynLib vcfR
 #' @importFrom Rcpp sourceCpp
+#' @importFrom stats setNames
+#' 
+#' 
 NULL
 
 
