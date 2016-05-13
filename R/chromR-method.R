@@ -17,6 +17,8 @@
 #' @details
 #' Methods that act on objects of class chromR.
 #'
+#' @importFrom utils object.size
+#'
 #'
 
 
@@ -31,7 +33,7 @@ setMethod( f="show",
     cat( paste("Name: ", object@names, "\n") )
     cat( paste("Length: ", format(object@len, big.mark=","), "\n") )
     cat( "Object size: ")
-    print(object.size(object), units="MB")
+    print( utils::object.size(object), units="MB" )
     cat( "Use head(object) for more details.\n" )
     cat( "*****      End Show (chromR)        *****\n" )
   }
