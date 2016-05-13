@@ -67,6 +67,42 @@ test_that("extract.gt extract parameter works",{
 
 ##### ##### ##### ##### #####
 #
+# extract.gt return.alleles tests
+#
+##### ##### ##### ##### #####
+
+test_that("extract.gt return.alleles works",{
+  gt <- extract.gt(chrom, element="GT", return.alleles = TRUE, allele.sep="|")
+  expect_is(gt, "matrix")
+  
+})
+
+
+test_that("extract.gt return.alleles works for multiallelic variants",{
+#  vcf2 <- vcf[nchar(vcf@fix[,'ALT']) > 1,]
+  vcf2 <- vcf[grep(",", vcf@fix[,'ALT']),]
+  gt <- extract.gt(vcf2, element="GT", return.alleles = TRUE, allele.sep="|")
+  
+  # Locus 1: 0,1,2 = T,A,G
+  # 0|0
+  expect_equal( as.character(gt[1,'BL2009P4_us23']), "T|T")
+  # 0|1
+  expect_equal( as.character(gt[1,'DDR7602']), "T|A")
+  # 0|2
+  expect_equal( as.character(gt[1,'blue13']), "T|G")
+  
+  # Locus 6: 0,1,2 = G,GTCTAATAGAGGCTCGAACTC,GTCTAATAGAGGCTCGAGCTC
+  # 0|2
+  expect_equal( as.character(gt[6,'BL2009P4_us23']), "G|GTCTAATAGAGGCTCGAGCTC")
+  # 1|2
+  expect_equal( as.character(gt[6,'DDR7602']), "GTCTAATAGAGGCTCGAACTC|GTCTAATAGAGGCTCGAGCTC" )
+
+})
+
+
+
+##### ##### ##### ##### #####
+#
 # extract.haps tests
 #
 ##### ##### ##### ##### #####

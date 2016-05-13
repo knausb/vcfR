@@ -1,5 +1,5 @@
 
-## VcfR: an R package to manipulate and visualize [VCF](https://github.com/samtools/hts-specs) format data
+## VcfR: an R package to manipulate and visualize [VCF](https://github.com/samtools/hts-specs) data
 
 [![Travis-CI Build Status](https://travis-ci.org/knausb/vcfR.png?branch=master)](https://travis-ci.org/knausb/vcfR)
 [![Coverage Status](https://coveralls.io/repos/github/knausb/vcfR/badge.svg?branch=master)](https://coveralls.io/github/knausb/vcfR?branch=master)
@@ -7,8 +7,15 @@
 [![](http://cranlogs.r-pkg.org/badges/grand-total/vcfR)](https://cran.r-project.org/package=vcfR)
 
 
-vcfR is an R package intended to allow easy manipulation and visualization of variant call format (VCF) data.
-Functions are provided to rapidly read from and write to vcf files.
+VcfR is an R package intended to allow easy manipulation and visualization of variant call format (VCF) data.
+Functions are provided to rapidly read from and write to VCF files.
+Once in R a parser function extracts matrices from the VCF data for use with typical R funcitons.
+This information can then be used for quality control or other purposes.
+Additional functions provide visualization of genomic data.
+Once processing is complete data may be written to VCF file or converted into other popular R objects (e.g., genlight, DNAbin).
+VcfR provides a link between VCF data and the R environment connecting familiar software to this form of data.
+
+
 Once data are read into memory they can be stored in either of two data structures.
 
 *vcfR* - S4 class to contain a vcf file as well as functions to load this object.
