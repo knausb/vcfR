@@ -1,165 +1,48 @@
-#' 
+#'
 #' @rdname chromR-method
 #' @title chromR-method
-#' 
+#'
 #' @aliases chromR-method
-#' 
+#'
 #' @description Methods that act on objects of class chromR
-#' 
-#' 
+#'
+#'
 #' @param x an object of class chromR
-#' @param object an object of class chromR
 #' @param y some sort of object???
+#' @param object an object of class chromR
+#' @param value a character containing a name
 #' @param ... Arguments to be passed to methods
-#' 
-#' 
+#'
+#'
 #' @details
 #' Methods that act on objects of class chromR.
-#' 
-#' 
-#' 
-#' 
-#' @examples 
-#' 
-#' library(vcfR)
-#' data(vcfR_example)
-#' chrom <- create.chromR('sc50', seq=dna, vcf=vcf, ann=gff)
-#' chrom
-#' 
-#' print(chrom)
-#' head(chrom)
-#' plot(chrom)
-#' setName(chrom) <- "Supercontig_1.50"
-#' getName(chrom)
-#' names(chrom) <- "Scaffold_50"
-#' names(chrom)
-#' 
-#' 
+#'
+#'
 
-#
 
-##### ##### Generic methods. #####
 
-setMethod(
-  f="show",
+##### Generic methods. #####
+
+setMethod( f="show",
   signature = "chromR",
-#  definition=function(x){
   definition=function(object){
             #1234567890123456789012345678901234567890
-    cat("*****   Class chromR, method Show   *****\n")
-    cat(paste("Name: ", object@name, "\n"))
-    cat(paste("Length: ", object@len, "\n"))
-    cat("Use head(object) for more details.\n")
-    cat("*****      End Show (chromR)        *****\n")
+    cat( "*****   Class chromR, method show   *****\n" )
+    cat( paste("Name: ", names(object), "\n") )
+    cat( paste("Length: ", object@len, "\n") )
+    cat( "Object size: ")
+    print(object.size(object), units="MB")
+    cat(" MB.\n")
+    cat( "Use head(object) for more details.\n" )
+    cat( "*****      End Show (chromR)        *****\n" )
   }
 )
-
-
-setMethod(
-  f="print",
-  signature="chromR",
-  definition=function (x,y,...){
-    print("***** Object of class 'chromR' *****\n")
-    print(paste("Name: ", x@name, "\n"))
-    print(paste("Length: ", x@len, "\n"))
-    print("\nVCF fixed data:\n")
-    print("Last column (info) omitted.\n")
-    print("\nVCF variable data:\n")
-    print(paste("Columns: ", ncol(x@vcf@gt), "\n"))
-    print(paste("Rows: ", nrow(x@vcf@gt), "\n"))
-    print("(First column is format.)\n")
-    print("\nAnnotation data:\n")
-    if(length(x@ann)>0){
-      print(head(x@ann[,1:8], n=4))
-      print("Last column (attributes) omitted.\n")
-    } else {
-      print("Empty slot.\n")
-    }
-    print("***** End print (chromR) ***** \n")
-  }
-)
-
-
-
-
-##### Basic methods (definitions) #####
-
-# @rdname chromR-method
-# @export
-# @aliases names.chromR
-#
-#setMethod(
-#  f="names",
-#  signature = "chromR",
-#  definition=function(x){
-#    cat(x@name)
-#    cat("\n")
-#  }
-#)
 
 
 #' @rdname chromR-method
 #' @export
-#' @aliases head.chromR
-#' 
-setMethod(
-  f="head",
-  signature = "chromR",
-  definition=function(x){
-            #1234567890123456789012345678901234567890
-    print("*****   Class chromR, method head   *****")
-    print(paste("Name: ", x@name))
-    print(paste("Length: ", x@len))
-    print('', quote=FALSE)
-            #1234567890123456789012345678901234567890
-    print("*****     Sample names (chromR)     *****")
-    print(colnames(x@vcf@gt)[-1])
-    print('', quote=FALSE)
-            #1234567890123456789012345678901234567890
-    print("*****    Vcf fixed data (chromR)    *****")
-    print(x@vcf@fix[1:6,1:7])
-    print('', quote=FALSE)
-    print("INFO column has been suppressed, first INFO record:")
-    print(unlist(strsplit(as.character(x@vcf@fix[1, 'INFO']), split=";")))
-    print('', quote=FALSE)
-            #1234567890123456789012345678901234567890
-    print("*****   Vcf genotype data (chromR)  *****")
-    if(ncol(x@vcf@gt)>=6){
-              #1234567890123456789012345678901234567890
-      print("*****     First 6 columns      *********")
-      print(x@vcf@gt[1:6,1:6])
-    } else {
-      print(x@vcf@gt[1:6,])
-    }
-    print('', quote=FALSE)
-            #1234567890123456789012345678901234567890
-    print("*****      Var info (chromR)        *****")
-    if(ncol(x@var.info)>=6){
-              #1234567890123456789012345678901234567890
-      print("*****       First 6 columns        *****")
-      print(x@var.info[1:6,1:6])
-    } else {
-      print(x@var.info[1:6,])
-    }
-    print('', quote=FALSE)
-            #1234567890123456789012345678901234567890
-    print("*****      Vcf mask (chromR)        *****")
-    print( paste("Percent unmasked:", round(100*(sum(x@var.info$mask)/length(x@var.info$mask)), digits=2 ) ) )
-    print('', quote=FALSE)
-            #1234567890123456789012345678901234567890
-    print("*****      End head (chromR)        *****")
-    print('', quote=FALSE)
-  }
-)
-
-
-
-#' @rdname chromR-method
-#' @export
-#' @aliases plot.chromR
-#' 
-setMethod(
-  f= "plot",
+#'
+setMethod( f="plot",
   signature= "chromR",
   definition=function (x,y,...){
     DP <- x@var.info$DP[x@var.info$mask]
@@ -167,15 +50,15 @@ setMethod(
     QUAL <- as.numeric(x@vcf@fix[x@var.info$mask, 'QUAL'])
 
 #    if( length(DP) < 0 )
-      
+
     if( nrow(x@win.info ) > 0 ){
 #    if( na.omit(x@win.info$variants) > 0 ){
-      SNPS <- x@win.info$variants/x@win.info$length 
+      SNPS <- x@win.info$variants/x@win.info$length
     } else {
       SNPS <- NULL
     }
 
-    
+
     graphics::par(mfrow=c(2,2))
     if( length(DP) > 0 ){
       graphics::hist(DP, col=3, main="Read depth (DP)", xlab="")
@@ -210,186 +93,128 @@ setMethod(
 )
 
 
-##### Accessors.  #####
 
-#### Getter for "names" ####
-setGeneric("getName",function(object){standardGeneric ("getName")})
+##### ##### ##### ##### #####
+
+
+#' @rdname chromR-method
+#'
+setMethod( f="print",
+  signature="chromR",
+  definition=function (x,y,...){
+    cat("***** Object of class 'chromR' *****\n")
+    cat(paste("Name: ", names(x), "\n"))
+    cat(paste("Length: ", x@len, "\n"))
+    cat("\nVCF fixed data:\n")
+    cat("Last column (info) omitted.\n")
+    cat("\nVCF variable data:\n")
+    cat(paste("Columns: ", ncol(x@vcf@gt), "\n"))
+    cat(paste("Rows: ", nrow(x@vcf@gt), "\n"))
+    cat("(First column is format.)\n")
+    cat("\nAnnotation data:\n")
+    if(length(x@ann)>0){
+      cat(head(x@ann[,1:8], n=4))
+      cat("Last column (attributes) omitted.\n")
+    } else {
+      cat("Empty slot.\n")
+    }
+    cat("***** End print (chromR) ***** \n")
+  }
+)
 
 #' @rdname chromR-method
 #' @export
-#' @aliases getName
-#' 
-setMethod("getName","chromR",
-          function(object){
-            return(object@name)
+#'
+setMethod( f="head",
+  signature = "chromR",
+  definition=function(x){
+            #1234567890123456789012345678901234567890
+    cat( "*****   Class chromR, method head   *****" )
+    cat("\n")
+    cat( paste("Name: ", names(x)) )
+    cat("\n")
+    cat( paste("Length: ", x@len) )
+    cat("\n")
+#    cat( '', quote=FALSE )
+    cat("\n")
+            #1234567890123456789012345678901234567890
+    cat("*****     Sample names (chromR)     *****")
+    cat("\n")
+    print(colnames(x@vcf@gt)[-1])
+    cat("\n")
+#    cat('', quote=FALSE)
+#    cat("\n")
+            #1234567890123456789012345678901234567890
+    cat("*****    VCF fixed data (chromR)    *****")
+    cat("\n")
+    print(x@vcf@fix[1:6,1:7])
+    cat("\n")
+#    cat('', quote=FALSE)
+#    cat("\n")
+    cat("INFO column has been suppressed, first INFO record:")
+    cat("\n")
+    print(unlist(strsplit(as.character(x@vcf@fix[1, 'INFO']), split=";")))
+    cat("\n")
+#    cat('', quote=FALSE)
+            #1234567890123456789012345678901234567890
+    cat("*****   VCF genotype data (chromR)  *****")
+    cat("\n")
+    if(ncol(x@vcf@gt)>=6){
+              #1234567890123456789012345678901234567890
+      cat("*****     First 6 columns       *********")
+      cat("\n")
+      print(x@vcf@gt[1:6,1:6])
+#      cat("\n")
+    } else {
+      print(x@vcf@gt[1:6,])
+#      cat("\n")
+    }
+    cat("\n")
+#    cat('', quote=FALSE)
+            #1234567890123456789012345678901234567890
+    cat("*****      Var info (chromR)        *****")
+    cat("\n")
+    if(ncol(x@var.info)>=6){
+              #1234567890123456789012345678901234567890
+      cat("*****       First 6 columns         *****")
+      cat("\n")
+      print(x@var.info[1:6,1:6])
+#      cat("\n")
+    } else {
+      print(x@var.info[1:6,])
+#      cat("\n")
+    }
+#    cat('', quote=FALSE)
+    cat("\n")
+            #1234567890123456789012345678901234567890
+    cat("*****      Vcf mask (chromR)        *****")
+    cat("\n")
+    cat( paste("Percent unmasked:", round(100*(sum(x@var.info$mask)/length(x@var.info$mask)), digits=2 ) ) )
+    cat("\n")
+#    cat('', quote=FALSE)
+    cat("\n")
+            #1234567890123456789012345678901234567890
+    cat("*****      End head (chromR)        *****")
+    cat("\n")
+#    cat('', quote=FALSE)
+    cat("\n")
+  }
+)
+
+
+#' @rdname chromR-method
+#'
+setMethod(f="names<-",
+          signature( x = "chromR", value = "character" ),
+          function(x, value){
+            if( length(value) >=1 ){
+              x@names <- value[1]
+            } else {
+              x@names <- character()
+            }
+            return(x)
           }
 )
 
-#### Setter for name. ####
 
-#' @rdname chromR-method
-#' @export
-#' @aliases setName.chromR
-setGeneric("setName<-",function(object,value){standardGeneric("setName<-")})
-
-#' @rdname chromR-method
-#' @export
-#' @aliases setName
-setReplaceMethod(
-  f="setName",
-  signature="chromR",
-  definition=function(object,value){
-    object@name <-value
-    return (object)
-  }
-)
-
-
-
-##### names #####
-#'
-#' @rdname chromR-method
-#' @export
-#' @aliases names.chromR
-#' 
-setMethod("names", signature(x = "chromR"), function(x){
-    return( x@name )
-})
-
-
-#' @rdname chromR-method
-#' @export
-#' @aliases names<-.chromR
-#' 
-#' @param value character vector of length one containing the name for the chromR object
-#' 
-setReplaceMethod(
-  f="names",
-  signature(x = "chromR"),
-  definition = function(x, value){
-    x@name <-value
-    return(x)
-})
-
-
-
-##### ##### win.info functions #####
-
-#' @rdname chromR-method
-#' @export
-#' @aliases windowize
-#'
-# @description
-# Creates windows
-#'
-#' @param win.size window size, in base pairs
-#' @param max.win maximum window size
-#'
-#' 
-#'
-windowize <- function(x, win.size=1000, max.win=10000){
-  #  acgt.w <- x@acgt.w
-  acgt.w <- x@seq.info$nuc.win
-  windows <- matrix(NA, ncol=2, nrow=max.win)
-  i <- 1
-  for(j in 1:nrow(acgt.w)){
-    while(acgt.w[j,2]-acgt.w[j,1] > win.size){
-      windows[i,1] <- acgt.w[j,1]
-      windows[i,2] <- acgt.w[j,1] + win.size - 1
-      acgt.w[j,1] <- acgt.w[j,1] + win.size + 0
-      i <- i+1
-      if(i > max.win){
-        print(paste("max i equals", max.win))
-        print(paste("i equals", i))
-        print(paste("j equals", j))
-        print("chromR error: max.win is too small.\n")
-        break
-      }
-    }
-    windows[i,1] <- acgt.w[j,1]
-    windows[i,2] <- acgt.w[j,2]
-    i <- i+1
-  }
-  x@windows <- windows[1:i-1,]
-  return(x)
-}
-
-gc.win <- function(x){
-  win <- matrix(ncol=7,
-                nrow=nrow(x@windows),
-                dimnames=list(c(),
-                              c('index','start','stop','gc','at','gcf','atf'))
-  )
-  win[,1] <- 1:nrow(win)
-  win[,2] <- x@windows[,1]
-  win[,3] <- x@windows[,2]
-  chrom <- as.character(x@seq)[[1]]
-  #
-  count.nucs <- function(x){
-    chrom <- chrom[x[2]:x[3]]
-    win[x[1],4] <<- length(grep("[GgCc]", chrom, perl=TRUE))
-    win[x[1],5] <<- length(grep("[AaTt]", chrom, perl=TRUE))
-  }
-  #
-  apply(win, MARGIN=1, count.nucs)
-  win[,6] <- win[,4]/(win[,3]-win[,2])
-  win[,7] <- win[,5]/(win[,3]-win[,2])
-  x@nuccomp.w <- as.data.frame(win)
-  return(x)
-}
-
-snp.win <- function(x){
-  snp <- matrix(ncol=5,
-                nrow=nrow(x@windows),
-                dimnames=list(c(),
-                              c('index','start','stop','count','density'))
-  )
-  snp[,1] <- 1:nrow(snp)
-  snp[,2] <- x@windows[,1]
-  snp[,3] <- x@windows[,2]
-  vcf <- x@var.info$POS[x@var.info$mask]
-  #
-  count.snps <- function(x){
-    vcf2 <- vcf[vcf >= x[2] & vcf <= x[3]]
-    snp[x[1],4] <<- length(vcf2)
-  }
-  apply(snp, MARGIN=1, count.snps)
-  snp[,5] <- snp[,4]/(snp[,3]-snp[,2]+1)
-  x@snpden.w <- as.data.frame(snp)
-  return(x)
-}
-
-
-
-##### ##### vcf functions #####
-
-vcf.fix2gt.m <- function(x){
-  snames <- names(x@vcf@gt)[-1]
-  pos <- paste(x@vcf@fix[,1], x@vcf@fix[,2], sep="_")
-  #  pos <- x@vcf.fix[,2]
-  x1 <- as.matrix(x@vcf@gt)
-  nsamp <- ncol(x1) - 1
-  #
-  x1 <- cbind(unlist(lapply(strsplit(x1[,1], ":"), function(x){grep("GT", x)})),x1)
-  #
-  get.gt <- function(x){
-    cell <- as.numeric(x[1])
-    x <- lapply(strsplit(x[3:length(x)], ":"), function(x){x[cell]})
-    unlist(x)
-  }
-  x1 <- apply(x1, MARGIN=1, get.gt)
-  x1[x1=="0/0"] <- 0
-  x1[x1=="0/1"] <- 1
-  x1[x1=="1/0"] <- 1
-  x1[x1=="1/1"] <- 2
-  x1 <- as.numeric(x1)
-  x1 <- matrix(data=x1, ncol=nsamp, byrow=TRUE,
-               dimnames=list(pos, snames))
-  x@gt.m <- x1
-  return(x)
-}
-
-
-
-
-
+# EOF.

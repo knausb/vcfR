@@ -74,7 +74,8 @@ chromo <- function( chrom,
   ##### ##### ##### ##### #####
   
   # Plot title
-  if( length(chrom@name) > 0 ){
+#  if( length(chrom@name) > 0 ){
+  if( length(chrom@names) > 0 ){
     graphics::par( oma = c(3,0,1,0) )
   } else {
     graphics::par( oma = c(3,0,0,0) )
@@ -378,8 +379,10 @@ chromo <- function( chrom,
   }
 
   graphics::title( xlab = "Base pairs", line = 1.6, outer = TRUE )
-  if( length(chrom@name) > 0 ){
-    graphics::title( main = chrom@name, line = 0.2, outer = TRUE )
+#  if( length(chrom@name) > 0 ){
+  if( length(chrom@names) > 0 ){
+    graphics::title( main = chrom@names, line = 0.2, outer = TRUE )
+#    graphics::title( main = chrom@name, line = 0.2, outer = TRUE )
   }
 
   
@@ -466,31 +469,6 @@ chromoqc <- function( chrom,
 ##### ##### ##### ##### #####
 
 
-
-
-# ' @rdname chromo_plot
-# ' @export
-# ' @aliases chromoqc
-# '
-#chromohwe <- function(chrom, ...){
-#  stop("Function not implemented.")
-#}
-
-# ' @rdname chromo_plot
-# ' @export
-# ' @aliases chromodot
-# '
-#chromodot <- function( chrom, ...){
-#  message("Function not implemented.")
-#}
-
-# ' @rdname chromo_plot
-# ' @export
-# ' @aliases chromopop
-# '
-#chromopop <- function( chrom, ...){
-#  stop("Function not implemented.")
-#}
 
 ##### ##### ##### ##### #####
 # EOF.

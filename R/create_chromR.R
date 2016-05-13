@@ -89,7 +89,8 @@ create.chromR <- function(vcf, name="CHROM1", seq=NULL, ann=NULL, verbose=TRUE){
 
   # Initialize chromR object.  
   x <- new(Class="chromR")
-  setName(x) <- name
+  names(x) <- name
+#  setName(x) <- name
   
   # Insert vcf into Chom.
   if(length(vcf)>0){

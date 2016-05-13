@@ -2,6 +2,7 @@
 
 # vcfR 1.0.0.9000
 
+* changed chromR@name to chromR@names for consistency with other R objects.
 * `added AD_frequency` calculates allele frequencies from matrices of AD data.
 * `read.vcfR()` handles VCF data with no GT region (ala LoFreq).
 * `gt2alleles` handles missing data ('.').
