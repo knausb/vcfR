@@ -12,8 +12,8 @@ Functions are provided to rapidly read from and write to VCF files.
 Once in R a parser function extracts matrices from the VCF data for use with typical R funcitons.
 This information can then be used for quality control or other purposes.
 Additional functions provide visualization of genomic data.
-Once processing is complete data may be written to VCF file or converted into other popular R objects (e.g., genlight, DNAbin).
-VcfR provides a link between VCF data and the R environment connecting familiar software to this form of data.
+Once processing is complete data may be written to a VCF file or converted into other popular R objects (e.g., genlight, DNAbin).
+VcfR provides a link between VCF data and the R environment connecting familiar software with genomic data.
 
 
 Once data are read into memory they can be stored in either of two data structures.
