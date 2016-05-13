@@ -28,16 +28,19 @@ setMethod( f="show",
   definition=function(object){
             #1234567890123456789012345678901234567890
     cat( "*****   Class chromR, method Show   *****\n" )
-    cat( paste("Name: ", object@name, "\n") )
-    cat( paste("Length: ", object@len, "\n") )
-    cat( paste("Object size:", print(object.size(object), units="MB"), "MB.\n") )
+    cat( paste("Name: ", object@names, "\n") )
+    cat( paste("Length: ", format(object@len, big.mark=","), "\n") )
+    cat( "Object size: ")
+    print(object.size(object), units="MB")
     cat( "Use head(object) for more details.\n" )
     cat( "*****      End Show (chromR)        *****\n" )
   }
 )
 
 
+
 #' @rdname chromR-method
+#' @export
 #'
 setMethod( f="plot",
   signature= "chromR",
@@ -46,15 +49,11 @@ setMethod( f="plot",
     MQ <- x@var.info$MQ[x@var.info$mask]
     QUAL <- as.numeric(x@vcf@fix[x@var.info$mask, 'QUAL'])
 
-#    if( length(DP) < 0 )
-
     if( nrow(x@win.info ) > 0 ){
-#    if( na.omit(x@win.info$variants) > 0 ){
       SNPS <- x@win.info$variants/x@win.info$length
     } else {
       SNPS <- NULL
     }
-
 
     graphics::par(mfrow=c(2,2))
     if( length(DP) > 0 ){
@@ -95,13 +94,14 @@ setMethod( f="plot",
 
 
 #' @rdname chromR-method
+#' @export
 #'
 setMethod( f="print",
   signature="chromR",
   definition=function (x,y,...){
     cat("***** Object of class 'chromR' *****\n")
-    cat(paste("Name: ", x@name, "\n"))
-    cat(paste("Length: ", x@len, "\n"))
+    cat(paste("Name: ", x@names, "\n"))
+    cat(paste("Length: ", format(x@len, big.mark=","), "\n"))
     cat("\nVCF fixed data:\n")
     cat("Last column (info) omitted.\n")
     cat("\nVCF variable data:\n")
@@ -110,7 +110,7 @@ setMethod( f="print",
     cat("(First column is format.)\n")
     cat("\nAnnotation data:\n")
     if(length(x@ann)>0){
-      cat(head(x@ann[,1:8], n=4))
+      print(head(x@ann[,1:8], n=4))
       cat("Last column (attributes) omitted.\n")
     } else {
       cat("Empty slot.\n")
@@ -120,52 +120,68 @@ setMethod( f="print",
 )
 
 
+#' @rdname chromR-method
+#' @export
+#'
 setMethod( f="head",
   signature = "chromR",
   definition=function(x){
             #1234567890123456789012345678901234567890
     cat("*****   Class chromR, method head   *****")
-    cat(paste("Name: ", x@name))
-    cat(paste("Length: ", x@len))
-    cat('', quote=FALSE)
+    cat("\n")
+    cat(paste("Name: ", x@names))
+    cat("\n")
+    cat( paste("Length: ", format(x@len, big.mark=",")) )
+    cat("\n")
+    cat("\n")
             #1234567890123456789012345678901234567890
     cat("*****     Sample names (chromR)     *****")
-    cat(colnames(x@vcf@gt)[-1])
-    cat('', quote=FALSE)
+    cat("\n")
+    print(colnames(x@vcf@gt)[-1])
+    cat("\n")
             #1234567890123456789012345678901234567890
-    cat("*****    Vcf fixed data (chromR)    *****")
-    cat(x@vcf@fix[1:6,1:7])
-    cat('', quote=FALSE)
+    cat("*****    VCF fixed data (chromR)    *****")
+    cat("\n")
+    print(x@vcf@fix[1:6,1:7])
+    cat("\n")
     cat("INFO column has been suppressed, first INFO record:")
-    cat(unlist(strsplit(as.character(x@vcf@fix[1, 'INFO']), split=";")))
-    cat('', quote=FALSE)
+    cat("\n")
+    print(unlist(strsplit(as.character(x@vcf@fix[1, 'INFO']), split=";")))
+    cat("\n")
             #1234567890123456789012345678901234567890
-    cat("*****   Vcf genotype data (chromR)  *****")
+    cat("*****  VCF genotype data (chromR)  *****")
+    cat("\n")
     if(ncol(x@vcf@gt)>=6){
               #1234567890123456789012345678901234567890
       cat("*****     First 6 columns      *********")
-      cat(x@vcf@gt[1:6,1:6])
+      cat("\n")
+      print(x@vcf@gt[1:6,1:6])
     } else {
-      cat(x@vcf@gt[1:6,])
+      print(x@vcf@gt[1:6,])
     }
-    cat('', quote=FALSE)
+    cat("\n")
             #1234567890123456789012345678901234567890
-    cat("*****      Var info (chromR)        *****")
+    cat("*****      Var info (chromR)       *****")
+    cat("\n")
     if(ncol(x@var.info)>=6){
               #1234567890123456789012345678901234567890
       cat("*****       First 6 columns        *****")
-      cat(x@var.info[1:6,1:6])
+      cat("\n")
+      print(x@var.info[1:6,1:6])
     } else {
-      cat(x@var.info[1:6,])
+      print(x@var.info[1:6,])
     }
-    cat('', quote=FALSE)
+    cat("\n")
             #1234567890123456789012345678901234567890
-    cat("*****      Vcf mask (chromR)        *****")
+    cat("*****      VCF mask (chromR)        *****")
+    cat("\n")
     cat( paste("Percent unmasked:", round(100*(sum(x@var.info$mask)/length(x@var.info$mask)), digits=2 ) ) )
-    cat('', quote=FALSE)
+    cat("\n")
+    cat("\n")
             #1234567890123456789012345678901234567890
     cat("*****      End head (chromR)        *****")
-    cat('', quote=FALSE)
+    cat("\n")
+
   }
 )
 
