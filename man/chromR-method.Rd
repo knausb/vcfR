@@ -3,7 +3,6 @@
 \docType{methods}
 \name{show,chromR-method}
 \alias{chromR-method}
-\alias{head,chromR-method}
 \alias{names<-,chromR,character-method}
 \alias{plot,chromR-method}
 \alias{print,chromR-method}
@@ -15,8 +14,6 @@
 \S4method{plot}{chromR}(x, y, ...)
 
 \S4method{print}{chromR}(x, y, ...)
-
-\S4method{head}{chromR}(x)
 
 \S4method{names}{chromR,character}(x) <- value
 }
