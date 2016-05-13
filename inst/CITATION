@@ -1,9 +1,26 @@
 bibentry("Article",
-   title = "vcf{R}: a package to manipulate and visualize {VCF} data in {R}",
+   title = "Vcf{R}: an R package to manipulate and visualize {VCF} format data",
    author = personList(as.person("Brian J. Knaus"),
                        as.person('Niklaus J. Gr{\\"u}nwald')),
    journal = 'Molecular Ecology Resources',
-   year   = "submitted",
+   year   = "Accepted pending minor revisions",
+   note   = "{ISBN} N-NNNNNN-NN-N",
+   url    = "http://dx.doi.org/10.1101/041277",
+
+   mheader = "To cite vcfR in publications use:",
+
+   mfooter = 
+     paste("We have invested a lot of time and effort in creating vcfR,",
+      "please cite it when using it for data analysis.")
+)
+
+
+bibentry("Article",
+   title = "Vcf{R}: an R package to manipulate and visualize {VCF} format data",
+   author = personList(as.person("Brian J. Knaus"),
+                       as.person('Niklaus J. Gr{\\"u}nwald')),
+   journal = 'BioRxiv',
+   year   = 2016,
    note   = "{ISBN} N-NNNNNN-NN-N",
    url    = "http://dx.doi.org/10.1101/041277",
 
