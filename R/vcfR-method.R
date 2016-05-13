@@ -42,6 +42,8 @@ setMethod(
     cat("***** Object of Class vcfR *****\n")
     cat( paste( nsamp, "samples\n") )
     cat( paste( format(nvar, big.mark=","), "variants\n") )
+    cat( "Object size: ")
+    print(object.size(object), units="MB")
     cat( paste( format(pna * 100, digits = 4), "percent missing data\n") )
     cat("*****        *****         *****\n")
 #    message("*****        --*--         *****")
