@@ -2,6 +2,7 @@
 
 # vcfR 1.0.0.9000
 
+* Fixed one-off error in `vcfR2DNAbin` where a variant one position beyond the locus would attempt to be included but threw an error.
 * Added examples to VCF input and output.
 * Added `vcfR_test` as lightweight test VCF data.
 * Changed chromR@name to chromR@names for consistency with other R objects.
