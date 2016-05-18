@@ -2,6 +2,8 @@
 
 # vcfR 1.0.0.9000
 
+This release includes the incorporation of suggestions made by reviewers of the manuscript submitted to Molecular Ecology Resources.
+
 * Fixed one-off error in `vcfR2DNAbin` where a variant one position beyond the locus would attempt to be included but threw an error.
 * Added examples to VCF input and output.
 * Added `vcfR_test` as lightweight test VCF data.
@@ -22,4 +24,5 @@
 
 # vcfR 1.0.0
 Released on CRAN 2016-02-22.
+This release was used to prepare the manuscript that was submitted to Molecular Ecology Resources.
 
