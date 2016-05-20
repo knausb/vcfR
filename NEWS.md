@@ -1,10 +1,11 @@
 
 
-# vcfR 1.0.0.9000
+# vcfR 1.1.0
 Released on CRAN 2016-05-XX.
 
 This release includes the incorporation of suggestions made by reviewers of the manuscript submitted to Molecular Ecology Resources.
 
+* added `is.het()` to identify heterozygotes in a matrix of genotypes.
 * Fixed one-off error in `vcfR2DNAbin` where a variant one position beyond the locus would attempt to be included but threw an error.
 * Added examples to VCF input and output.
 * Added `vcfR_test` as lightweight test VCF data.
