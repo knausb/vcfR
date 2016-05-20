@@ -33,7 +33,7 @@ With this information in hand, researchers should be able to determine criteria 
 
 Accepted pending minor revisions:
 
-Knaus, Brian J., and Niklaus J. Grunwald. 201X. VcfR: an R package to manipulate and visualize VCF format data. Molecular Ecology Resources.
+Knaus, Brian J., and Niklaus J. Grunwald. 201X. VcfR: a package to manipulate and visualize VCF data in R. Molecular Ecology Resources.
 
 Knaus, Brian J., and Niklaus J. Grunwald. 2016. VcfR: an R package to manipulate and visualize VCF format data. bioRxiv: 041277. http://dx.doi.org/10.1101/041277.
 
