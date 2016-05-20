@@ -9,28 +9,30 @@
 
 VcfR is an R package intended to allow easy manipulation and visualization of variant call format (VCF) data.
 Functions are provided to rapidly read from and write to VCF files.
-Once in R a parser function extracts matrices from the VCF data for use with typical R funcitons.
+Once VCF data is read into R a parser function extracts matrices from the VCF data for use with typical R funcitons.
 This information can then be used for quality control or other purposes.
 Additional functions provide visualization of genomic data.
 Once processing is complete data may be written to a VCF file or converted into other popular R objects (e.g., genlight, DNAbin).
 VcfR provides a link between VCF data and the R environment connecting familiar software with genomic data.
 
 
-Once data are read into memory they can be stored in either of two data structures.
 
-*vcfR* - S4 class to contain a vcf file as well as functions to load this object.
+VcfR is built upon two data structures.
 
-*chromR* - S4 class to contain variant information (VCF) as well as sequence (FASTA) and annotation (GFF) information.
+*vcfR* - S4 class to contain data from a VCF file.
 
-Additional functions provide tha ability to subset vcf data as well as to extract and parse subsets of the data.
-For example, individual genotypes, sequence depths or genotype likelihoods (when provided in the file) can easily be accessed.
-These tools are provided to aid researchers in rapidly surveying the quality and other characteristics of data provided as vcf data.
+*chromR* - S4 class to contain variant information (VCF) and optional sequence (FASTA) and annotation (GFF) information.
+
+Functions in vcfR provide the ability to subset VCF data as well as to extract and parse the data.
+For example, individual genotypes, sequence depths or genotype likelihoods (when provided in the VCF file) can easily be accessed.
+These tools are provided to aid researchers in rapidly surveying the quality and other characteristics of data provided as VCF data.
 With this information in hand, researchers should be able to determine criteria for hard filtering in order to attempt to maximize biological variation and minimize technical variation.
 
 
 ## Publication
 
 Accepted pending minor revisions:
+
 Knaus, Brian J., and Niklaus J. Grunwald. 201X. VcfR: an R package to manipulate and visualize VCF format data. Molecular Ecology Resources.
 
 Knaus, Brian J., and Niklaus J. Grunwald. 2016. VcfR: an R package to manipulate and visualize VCF format data. bioRxiv: 041277. http://dx.doi.org/10.1101/041277.
