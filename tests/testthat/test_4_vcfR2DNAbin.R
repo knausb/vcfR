@@ -146,7 +146,21 @@ test_that("vcfR2DNAbin works for triploid data, no ref.seq",{
 })
 
 
+##### ##### ##### ##### #####
+#
+# Variant at end of locus
+#
+##### ##### ##### ##### #####
 
+
+test_that("vcfR2DNAbin does not include variants at end.pos + 1",{
+#  vcf@fix[586,1:6]
+#  vcf@fix[586,2] <- "24527"
+  vcf@fix[586,2] <- "24528"
+  my_DNAbin <- vcfR2DNAbin( vcf, gt.split = "|", ref.seq = gene, start.pos = gff[1,4], verbose = FALSE )
+  expect_true( inherits(my_DNAbin, "DNAbin") )  
+  expect_equal(length(ape::seg.sites(my_DNAbin)), 40)
+})
 
 
 ##### ##### ##### ##### #####

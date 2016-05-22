@@ -166,8 +166,8 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = FALSE,
     # First we remove variants above the region.
     # Then we remove variants below this region.
     # Then we rescale the region to be one-based.
-    variants <- variants[ pos <= start.pos + dim(ref.seq)[2], ]
-    pos <- pos[ pos <= start.pos + dim(ref.seq)[2] ]    
+    variants <- variants[ pos < start.pos + dim(ref.seq)[2], ]
+    pos <- pos[ pos < start.pos + dim(ref.seq)[2] ]    
     variants <- variants[ pos >= start.pos, ]
     pos <- pos[ pos >= start.pos ]
     pos <- pos - start.pos + 1
