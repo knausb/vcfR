@@ -25,14 +25,6 @@ This could reduce this package's size to 4.9Mb.
 Because this is a NOTE and not a ERROR or WARNING I have left it as one package for now.
 
 
-
-
-Possibly mis-spelled words in DESCRIPTION:
-  VCF (2:53, 3:59)
-  
-The word VCF is a data file format and is correctly spelled.
-
-
 ## Downstream dependencies
 
 

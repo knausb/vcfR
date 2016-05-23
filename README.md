@@ -16,12 +16,12 @@ Once processing is complete data may be written to a VCF file or converted into 
 VcfR provides a link between VCF data and the R environment connecting familiar software with genomic data.
 
 
-
 VcfR is built upon two data structures.
 
-*vcfR* - S4 class to contain data from a VCF file.
+**vcfR** - S4 class to contain data from a VCF file.
 
-*chromR* - S4 class to contain variant information (VCF) and optional sequence (FASTA) and annotation (GFF) information.
+**chromR** - S4 class to contain variant information (VCF) and optional sequence (FASTA) and annotation (GFF) information.
+
 
 Functions in vcfR provide the ability to subset VCF data as well as to extract and parse the data.
 For example, individual genotypes, sequence depths or genotype likelihoods (when provided in the VCF file) can easily be accessed.
@@ -31,11 +31,13 @@ With this information in hand, researchers should be able to determine criteria 
 
 ## Publication
 
+
+Knaus, Brian J., and Niklaus J. Grunwald. 2016. VcfR: an R package to manipulate and visualize VCF format data. bioRxiv: 041277. http://dx.doi.org/10.1101/041277.
+
+
 Accepted pending minor revisions:
 
 Knaus, Brian J., and Niklaus J. Grunwald. 201X. VcfR: a package to manipulate and visualize VCF data in R. Molecular Ecology Resources.
-
-Knaus, Brian J., and Niklaus J. Grunwald. 2016. VcfR: an R package to manipulate and visualize VCF format data. bioRxiv: 041277. http://dx.doi.org/10.1101/041277.
 
 
 ## Download
@@ -78,5 +80,33 @@ And to build the vignettes:
 
 ------
 
+## Software that produces VCF files
+
+
+A fun part of this project has been learning about how people use vcfR.
+One facet of this is learning about the software that create VCF files.
+So I've decided to make a list of these software.
+If you know of a software that I have not included on this list, particularly if you can report that vcfR works with its files, feel free to let me know!
+
+
+**Genomic variant callers:**
+
+* [GATK haplotype caller](https://www.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_haplotypecaller_HaplotypeCaller.php)
+* [freebayes](https://github.com/ekg/freebayes)
+* [Samtools](http://www.htslib.org/)
+* [LoFreq](http://csb5.github.io/lofreq/)
+* [Cortex](http://cortexassembler.sourceforge.net/)
+* [VarScan2](http://dkoboldt.github.io/varscan/)
+
+
+
+**Restriction site associated DNA markers (e.g., RADseq, GBS):**
+
+* [Tassel](http://www.maizegenetics.net/#!tassel/c17q9)
+* [Stacks](http://catchenlab.life.illinois.edu/stacks/)
+
+
+
+------
 
 Enjoy!
