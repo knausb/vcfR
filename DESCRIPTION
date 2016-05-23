@@ -9,7 +9,9 @@ Authors@R: c(person(c('Brian', 'J.'), 'Knaus', role = c('cre', 'aut'),
     person(c('Niklaus', 'J.'), 'Grunwald', role = 'aut',
     email = 'grunwaln@science.oregonstate.edu'),
     person(c('Eric', 'C.'), 'Anderson', role = 'ctb',
-    email = 'eric.anderson@noaa.gov'))
+    email = 'eric.anderson@noaa.gov'),
+    person(c('David', 'J.'), 'Winter', role = 'ctb',
+    email = 'david.winter@gmail.com'))
 Maintainer: Brian J. Knaus <briank.lists@gmail.com>
 Depends:
     R (>= 3.0.1)
