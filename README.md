@@ -80,7 +80,7 @@ And to build the vignettes:
 
 ------
 
-## Software that produces VCF files
+## Software that produce VCF files
 
 
 A fun part of this project has been learning about how people use vcfR.
