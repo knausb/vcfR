@@ -1,3 +1,15 @@
+## Resubmission
+This is a resubmission. In this version I have:
+
+* Changed the title to:
+'Manipulate and Visualize VCF Data'
+
+* The description field has been changed so that it does not start with the package name.
+
+* The redundant "VcfR is intended to allow" has been removed from the Description.
+
+
+
 ## Test environments
 * local ubuntu 12.04, R 3.2.5
 * ubuntu 12.04 (on travis-ci), R 3.3.0
