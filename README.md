@@ -1,5 +1,6 @@
 
-## VcfR: an R package to manipulate and visualize [VCF](https://github.com/samtools/hts-specs) data
+## VcfR: a package to manipulate and visualize [VCF](https://github.com/samtools/hts-specs) data in R
+
 
 [![Travis-CI Build Status](https://travis-ci.org/knausb/vcfR.png?branch=master)](https://travis-ci.org/knausb/vcfR)
 [![Coverage Status](https://coveralls.io/repos/github/knausb/vcfR/badge.svg?branch=master)](https://coveralls.io/github/knausb/vcfR?branch=master)
