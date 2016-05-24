@@ -21,8 +21,8 @@ Maintainer: ‘Brian J. Knaus <briank.lists@gmail.com>’
 
 There are 8 vignettes (HTML) which contribute to the 2.8Mb in doc.
 These could be migrated to a separate documentation package.
-This could reduce this package's size to 4.9Mb.
-Because this is a NOTE and not a ERROR or WARNING I have left it as one package for now.
+This could reduce this package's size.
+Because this is a NOTE and not an ERROR or WARNING I have left it as one package for now.
 
 
 ## Downstream dependencies
