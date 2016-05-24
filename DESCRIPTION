@@ -1,8 +1,12 @@
 Package: vcfR
-Title: Tools for Working with Variant Call Format ('VCF') Files
-Description: Tools for working with variant call format ('VCF') files. Reads in
-    'VCF', 'GFF' and 'FASTA' data for visualization. Includes tools for filtering
-    and writing to 'VCF' files.
+Title: VcfR: a package to manipulate and visualize VCF data in R
+Description: VcfR is an R package intended to allow easy manipulation and visualization of variant call format (VCF) data.
+Functions are provided to rapidly read from and write to VCF files.
+Once VCF data is read into R a parser function extracts matrices from the VCF data for use with typical R functions.
+This information can then be used for quality control or other purposes.
+Additional functions provide visualization of genomic data.
+Once processing is complete data may be written to a VCF file or converted into other popular R objects (e.g., genlight, DNAbin).
+VcfR provides a link between VCF data and the R environment connecting familiar software with genomic data.
 Version: 1.1.0
 Authors@R: c(person(c('Brian', 'J.'), 'Knaus', role = c('cre', 'aut'),
     email = 'briank.lists@gmail.com'),

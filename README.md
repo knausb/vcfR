@@ -10,7 +10,7 @@
 
 VcfR is an R package intended to allow easy manipulation and visualization of variant call format (VCF) data.
 Functions are provided to rapidly read from and write to VCF files.
-Once VCF data is read into R a parser function extracts matrices from the VCF data for use with typical R funcitons.
+Once VCF data is read into R a parser function extracts matrices from the VCF data for use with typical R functions.
 This information can then be used for quality control or other purposes.
 Additional functions provide visualization of genomic data.
 Once processing is complete data may be written to a VCF file or converted into other popular R objects (e.g., genlight, DNAbin).
