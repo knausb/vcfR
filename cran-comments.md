@@ -8,6 +8,7 @@ This is a resubmission. In this version I have:
 
 * The redundant "VcfR is intended to allow" has been removed from the Description.
 
+Thank you!
 
 
 ## Test environments
