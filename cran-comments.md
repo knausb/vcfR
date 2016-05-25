@@ -1,3 +1,12 @@
+
+## Resubmission
+This is a resubmission. In this version I have:
+
+* Changed the Description field so that it does not start with the package name, 'This package' or similar.
+
+Thank you!
+
+
 ## Resubmission
 This is a resubmission. In this version I have:
 
@@ -7,8 +16,6 @@ This is a resubmission. In this version I have:
 * The description field has been changed so that it does not start with the package name.
 
 * The redundant "VcfR is intended to allow" has been removed from the Description.
-
-Thank you!
 
 
 ## Test environments

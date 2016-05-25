@@ -1,6 +1,6 @@
 Package: vcfR
 Title: Manipulate and Visualize VCF Data
-Description: This package facilitates easy manipulation of variant call format (VCF) data.
+Description: Facilitates easy manipulation of variant call format (VCF) data.
     Functions are provided to rapidly read from and write to VCF files.
     Once VCF data is read into R a parser function extracts matrices of data.
     This information can then be used for quality control or other purposes.
