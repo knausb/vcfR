@@ -1,7 +1,10 @@
 
+# vcfR 1.1.0.9000
+
+
 
 # vcfR 1.1.0
-Submitted to CRAN 2016-05-25.
+Released on CRAN 2016-05-26.
 
 This release includes the incorporation of suggestions made by reviewers of the manuscript submitted to Molecular Ecology Resources.
 
