@@ -47,3 +47,12 @@ Because this is a NOTE and not an ERROR or WARNING I have left it as one package
 ## Downstream dependencies
 
 
+
+## Thank you CRAN core Team!
+
+[CRAN Repository Policy](https://cran.r-project.org/web/packages/policies.html) states that all correspondence should be with CRAN and not members of the team.
+However, I think its polite to thank those who have helped this project.
+So I've decided to start a list of thanks with the hope that these individuals may see this in the future.
+
+v1.1.0 Thank you Uwe Ligges for helping me get my title in title case, my Description in order and handling my submission!
+
