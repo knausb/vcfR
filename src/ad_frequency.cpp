@@ -130,7 +130,11 @@ Rcpp::NumericMatrix AD_frequency(Rcpp::StringMatrix ad,
         
         // Calculate the frequency.
         if( allele < float_vec.size() ){
-          adf(i,j) = float_vec[ allele ]/my_sum;
+          if( my_sum == 0 ){
+            adf(i,j) = 0;
+          } else {
+            adf(i,j) = float_vec[ allele ]/my_sum;
+          }
         } else {
           adf(i,j) = NA_REAL;
         }
