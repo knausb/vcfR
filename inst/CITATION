@@ -3,7 +3,7 @@ bibentry("Article",
    author = personList(as.person("Brian J. Knaus"),
                        as.person('Niklaus J. Gr{\\"u}nwald')),
    journal = 'Molecular Ecology Resources',
-   year   = "Accepted pending minor revisions",
+   year   = "In press",
    note   = "{ISBN} N-NNNNNN-NN-N",
    url    = "http://dx.doi.org/10.1101/041277",
 
