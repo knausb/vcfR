@@ -13,7 +13,16 @@
 #' This function populates the missing elements by concatenating the chromosome and position.
 #' When this concatenation results in non-unique names, an index is added to force uniqueness.
 #' 
+#' 
+#' @examples
+#' data(vcfR_test)
+#' head(vcfR_test)
+#' vcfR_test <- addID(vcfR_test)
+#' head(vcfR_test)
+#' 
+#' 
 #' @export
+#' 
 addID <- function(x){
   if( class(x) == 'chromR' ){
     ID <- x@vcf@fix[,'ID']
