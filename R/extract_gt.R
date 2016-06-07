@@ -217,13 +217,20 @@ extract.info <- function(x, element, as.numeric=FALSE, mask=FALSE){
     stop("Expecting an object of class vcfR or chromR.")
   }
   
-  values <- unlist(
-    lapply(strsplit(unlist(
-#      lapply(strsplit(x@vcf.fix$INFO, split=";"),
-      lapply(strsplit(x@fix[,'INFO'], split=";"),             
-             function(x){grep(paste("^", element, "=", sep=""), x, value=TRUE)})),
-      split="="), function(x){x[2]})
-  )
+#  values <- unlist(
+#    lapply(strsplit(unlist(
+#      lapply(strsplit(x@fix[,'INFO'], split=";"),             
+#             function(x){grep(paste("^", element, "=", sep=""), x, value=TRUE)})),
+#      split="="), function(x){x[2]})
+#  )
+  
+  values <- strsplit(x@fix[,'INFO'], split=";")
+  values <- lapply(values, function(x){grep(paste("^", element, "=", sep=""), x, value=TRUE)})
+  values <- lapply(values, function(x){ unlist( strsplit(x, split="=") ) })
+  values <- lapply(values, function(x){x[2]})
+  values <- lapply(values, function(x){ if(is.null(x)){NA}else{x} })
+  values <- unlist(values)
+  
 
   if(as.numeric == TRUE){
     values <- as.numeric(values)

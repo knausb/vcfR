@@ -236,9 +236,17 @@ test_that("extract_gt_to_CM2 compiled code works",{
 ##### ##### ##### ##### #####
 
 
-test_that("extract.info works",{
+test_that("extract.info handles missing elements",{
+  data(vcfR_test)
   
-
+  # Element is present in some, but not all, samples.
+  info <- extract.info(vcfR_test, element = "AF")
+  expect_equal(length(info), nrow(vcfR_test))
+  expect_equal( length(grep("AF", vcfR_test@fix[,'INFO'])), sum( !is.na(info) ) )
+  
+  # Element does not exist.
+  info <- extract.info(vcfR_test, element = "XX")
+  expect_equal( length(grep("XX", vcfR_test@fix[,'INFO'])), sum( !is.na(info) ) )
 })
 
 
