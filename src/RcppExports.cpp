@@ -85,6 +85,18 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// is_het
+Rcpp::LogicalMatrix is_het(Rcpp::StringMatrix gt, Rcpp::LogicalVector na_is_false);
+RcppExport SEXP vcfR_is_het(SEXP gtSEXP, SEXP na_is_falseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::StringMatrix >::type gt(gtSEXP);
+    Rcpp::traits::input_parameter< Rcpp::LogicalVector >::type na_is_false(na_is_falseSEXP);
+    __result = Rcpp::wrap(is_het(gt, na_is_false));
+    return __result;
+END_RCPP
+}
 // NM2winNM
 NumericMatrix NM2winNM(NumericMatrix x, std::vector<int> pos, int maxbp, int winsize);
 RcppExport SEXP vcfR_NM2winNM(SEXP xSEXP, SEXP posSEXP, SEXP maxbpSEXP, SEXP winsizeSEXP) {

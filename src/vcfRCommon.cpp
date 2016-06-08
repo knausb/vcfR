@@ -27,3 +27,41 @@ void vcfRCommon::strsplit(std::string& mystring, std::vector<std::string>& vec_o
 }
 
 
+void vcfRCommon::gtsplit(std::string& mystring,
+                         std::vector<std::string>& vec_o_strings,
+                         int& unphased_as_na){
+
+  // mystring is a string of genotypes to be split a character.
+  // Genotypes may be delimited as | or /.
+  // vec_o_strings is empty and will be pushed on to.
+  // Sometimes, genotypes delimited with / may be undesireable.
+  // In this case missing data should be returned.
+  
+  int start = 0;
+  int i=0;
+  
+  char split1 = '|'; // Must be single quotes!
+  char split2 = '/'; // Must be single quotes!
+  
+  for(i = 1; i < mystring.size(); i++){
+    if( mystring[i] == split1 ){
+      std::string temp = mystring.substr(start, i - start);
+      vec_o_strings.push_back(temp);
+      start = i+1;
+      i = i+1;
+    } else if ( mystring[i] == split2 ){
+      if( unphased_as_na == 1 ){
+        while( vec_o_strings.size() > 0 ){
+          vec_o_strings.pop_back();
+        }
+        vec_o_strings.push_back( "." );
+        return;
+      }
+      std::string temp = mystring.substr(start, i - start);
+      vec_o_strings.push_back(temp);
+      start = i+1;
+      i = i+1;
+    }
+  }
+}
+
