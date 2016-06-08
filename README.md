@@ -98,6 +98,8 @@ If you know of a software that I have not included on this list, particularly if
 **Genomic variant callers:**
 
 * [GATK haplotype caller](https://www.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_haplotypecaller_HaplotypeCaller.php)
+* [GATK MuTect2](https://www.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_cancer_m2_MuTect2.php)
+* [GATK GenotypeGVCFs](https://www.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_variantutils_GenotypeGVCFs.php)
 * [freebayes](https://github.com/ekg/freebayes)
 * [Samtools](http://www.htslib.org/)
 * [LoFreq](http://csb5.github.io/lofreq/)
@@ -105,12 +107,10 @@ If you know of a software that I have not included on this list, particularly if
 * [VarScan2](http://dkoboldt.github.io/varscan/)
 
 
-
 **Restriction site associated DNA markers (e.g., RADseq, GBS):**
 
 * [Tassel](http://www.maizegenetics.net/#!tassel/c17q9)
 * [Stacks](http://catchenlab.life.illinois.edu/stacks/)
-
 
 
 ------
