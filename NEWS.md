@@ -1,6 +1,7 @@
 
 # vcfR 1.1.0.9000
 
+* `is_het()` rapidly identifies heterozygotes.
 * `extract.info()` scores missing elements as NA.
 
 
