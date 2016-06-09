@@ -54,7 +54,7 @@ test_that("is_hets, na_is_false=FALSE returns NAs",{
   gt[1,2] <- "1|."
   gt[1,3] <- "./1"
   
-  hets <- is.het(gt, na_is_false = FALSE)
+#  hets <- is_het(gt, na_is_false = FALSE)
   
   expect_equal( sum( is.na(hets[1,]) ), 3)
 
