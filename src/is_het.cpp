@@ -9,7 +9,7 @@
 //' 
 //' @export
 // [[Rcpp::export]]
-Rcpp::LogicalMatrix is_het(Rcpp::StringMatrix gt,
+Rcpp::LogicalMatrix is_het(Rcpp::StringMatrix x,
                            Rcpp::LogicalVector na_is_false = true
 ){
 
@@ -18,85 +18,73 @@ Rcpp::LogicalMatrix is_het(Rcpp::StringMatrix gt,
 //  nam(0,0) = NA_LOGICAL;
   
   // Initialize return data matrix.
-  Rcpp::LogicalMatrix hets( gt.nrow(), gt.ncol() );
-  hets.attr("dimnames") = gt.attr("dimnames");
+  Rcpp::LogicalMatrix hets( x.nrow(), x.ncol() );
+  hets.attr("dimnames") = x.attr("dimnames");
   
   int i;
   int j;
-  
-  for( i=0; i<gt.nrow(); i++){
-    for( j=0; j<gt.ncol(); j++){
+  int k;  
+  for( i=0; i<x.nrow(); i++){
+    for( j=0; j<x.ncol(); j++){
 
       // Parse genotype string into alleles.
       std::string my_string;
-      my_string = gt(i,j);
-      Rcpp::Rcout << my_string << "\n";
-      
+      if( x(i,j) == NA_STRING ){
+        my_string = ".";
+      } else {
+        my_string = x(i,j);
+      }
+
+
       std::vector < std::string > allele_vec;
 //      vcfRCommon::strsplit(my_string, allele_vec, my_split);
       int unphased_as_na = 0; // 0 == FALSE
       vcfRCommon::gtsplit( my_string, allele_vec, unphased_as_na );
 
-      Rcpp::Rcout << "allele_vec.size(): " << allele_vec.size() << "\n";
-      Rcpp::Rcout << "allele_vec[0]: " << allele_vec[0] << "\n";
-      
-      // Remove missing alleles from start of vector.
-      while( allele_vec[0] == "." ){
-        allele_vec.erase( allele_vec.begin() );
-      }
-      Rcpp::Rcout << "allele_vec.size(): " << allele_vec.size() << "\n";
-      
-      // Case of all missing alleles.
-      if( allele_vec.size() == 0 ){
-        if( na_is_false ){
-          hets(i,j) = false;
-        } else {
-          hets(i,j) = NA_LOGICAL;
-        }
-      }
-      
-      // Case of one allele.
-//      if( allele_vec.size() == 1 ){
-//        hets(i,j) = false;
+//      Rcpp::Rcout << "gtsplit returned: " << allele_vec[0];
+//      for( k=1; k<allele_vec.size(); k++){
+//        Rcpp::Rcout << "," << allele_vec[k];
 //      }
-      
-      // Case of alleles present.
+//      Rcpp::Rcout << "\n";
+
+
       // Initialize new vector of alleles with first element of allele_vec.
       std::vector < std::string > allele_vec2;
-      allele_vec2.push_back( allele_vec[0] );
-//      if( allele_vec.size() > 0 ){
-//        allele_vec.erase( allele_vec.begin() );
-        
-      // Scroll through vector looking for a second allele.
-      int k;
-      for(k=1; k<allele_vec.size(); k++){
+
+      // Scroll through vector looking for alleles.
+      for(k=0; k<allele_vec.size(); k++){
         if( allele_vec[k] == "." ){
-          // Ignore missing alleles.
-        }
-        if( allele_vec2[0] != allele_vec[k] ){
-          Rcpp::Rcout << "New allele: " << allele_vec[k] << "\n";
+          // Found missing value.
+          // Delete and bail out.
+          while( allele_vec2.size() > 0 ){
+            allele_vec2.erase( allele_vec2.begin() );
+          }
+          k = allele_vec.size();
+        } else if( allele_vec2.size() == 0 ){
+          // Initialize.
+          allele_vec2.push_back( allele_vec[k] );
+        } else if( allele_vec2[0] != allele_vec[k] ){
           allele_vec2.push_back( allele_vec[k] );
         }
-//        }
       }
       
-      Rcpp::Rcout << "allele_vec2 size: " << allele_vec2.size() << "\n";
-      Rcpp::Rcout << allele_vec2[0];
-//      int k;
-      for(k=1; k<allele_vec2.size(); k++){
-        Rcpp::Rcout << "," << allele_vec2[k];
-      }
-      Rcpp::Rcout << "\n";
-      Rcpp::Rcout << "\n";
-        
-      if( allele_vec2.size() == 1){
+//      Rcpp::Rcout << "allele_vec2.size(): " << allele_vec2.size();
+//      Rcpp::Rcout << "\n";
+//      Rcpp::Rcout << "\n";
+      
+      // Score return value.
+      if( allele_vec2.size() == 0){
+        if( na_is_false[0] == true ){
+          hets(i,j) = false;
+        } else if( na_is_false[0] == false ){
+          hets(i,j) = NA_LOGICAL;
+        }
+      } else if( allele_vec2.size() == 1){
         hets(i,j) = false;
-      }        
-      if( allele_vec2.size() > 1){
+      } else if( allele_vec2.size() > 1){
         hets(i,j) = true;
       }
-        
-//      }
+
     }
   }
   

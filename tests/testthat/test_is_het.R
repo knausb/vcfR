@@ -17,6 +17,8 @@ test_that("is.hets, na_is_false=TRUE returns all logicals",{
 
 
 test_that("is.hets, na_is_false=FALSE returns NAs",{
+  data(vcfR_test)
+  gt <- extract.gt(vcfR_test)
   gt[1,1] <- NA
   gt[1,2] <- "1|."
   gt[1,3] <- "./1"
@@ -46,15 +48,32 @@ test_that("is_hets, na_is_false=TRUE returns all logicals",{
 })
 
 
+test_that("is_hets, na_is_false=TRUE does not return NAs",{
+  data(vcfR_test)
+  gt <- extract.gt(vcfR_test)
+  
+  gt[1,1] <- "."
+  is.na(gt[2,1]) <- TRUE
+  gt[1,2] <- "1|."
+  gt[1,3] <- "./1"
+  
+  hets <- is_het(gt, na_is_false = TRUE)
+  
+  expect_equal( sum( is.na(hets[1,]) ), 0 )
+  
+})
+
+
 test_that("is_hets, na_is_false=FALSE returns NAs",{
   data(vcfR_test)
   gt <- extract.gt(vcfR_test)
   
-  gt[1,1] <- NA
+  gt[1,1] <- "."
+  is.na(gt[2,1]) <- TRUE
   gt[1,2] <- "1|."
   gt[1,3] <- "./1"
   
-#  hets <- is_het(gt, na_is_false = FALSE)
+  hets <- is_het(gt, na_is_false = FALSE)
   
   expect_equal( sum( is.na(hets[1,]) ), 3)
 

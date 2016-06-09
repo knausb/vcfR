@@ -73,8 +73,8 @@ gt_to_popsum <- function(var_info, gt) {
 #' 
 #' 
 #' @export
-is_het <- function(gt, na_is_false = TRUE) {
-    .Call('vcfR_is_het', PACKAGE = 'vcfR', gt, na_is_false)
+is_het <- function(x, na_is_false = TRUE) {
+    .Call('vcfR_is_het', PACKAGE = 'vcfR', x, na_is_false)
 }
 
 NM2winNM <- function(x, pos, maxbp, winsize = 100L) {

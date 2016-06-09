@@ -86,14 +86,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // is_het
-Rcpp::LogicalMatrix is_het(Rcpp::StringMatrix gt, Rcpp::LogicalVector na_is_false);
-RcppExport SEXP vcfR_is_het(SEXP gtSEXP, SEXP na_is_falseSEXP) {
+Rcpp::LogicalMatrix is_het(Rcpp::StringMatrix x, Rcpp::LogicalVector na_is_false);
+RcppExport SEXP vcfR_is_het(SEXP xSEXP, SEXP na_is_falseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< Rcpp::StringMatrix >::type gt(gtSEXP);
+    Rcpp::traits::input_parameter< Rcpp::StringMatrix >::type x(xSEXP);
     Rcpp::traits::input_parameter< Rcpp::LogicalVector >::type na_is_false(na_is_falseSEXP);
-    __result = Rcpp::wrap(is_het(gt, na_is_false));
+    __result = Rcpp::wrap(is_het(x, na_is_false));
     return __result;
 END_RCPP
 }

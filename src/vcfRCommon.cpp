@@ -42,26 +42,35 @@ void vcfRCommon::gtsplit(std::string& mystring,
   
   char split1 = '|'; // Must be single quotes!
   char split2 = '/'; // Must be single quotes!
-  
-  for(i = 1; i < mystring.size(); i++){
+
+  // Iterate through genotype string looking for delimiters.  
+  for(i = 0; i < mystring.size(); i++){
     if( mystring[i] == split1 ){
+      // Found a delimiter.
       std::string temp = mystring.substr(start, i - start);
       vec_o_strings.push_back(temp);
       start = i+1;
       i = i+1;
     } else if ( mystring[i] == split2 ){
+      // Found a delimiter.
       if( unphased_as_na == 1 ){
         while( vec_o_strings.size() > 0 ){
           vec_o_strings.pop_back();
         }
         vec_o_strings.push_back( "." );
         return;
+      } else {
+        std::string temp = mystring.substr(start, i - start);
+        vec_o_strings.push_back(temp);
+        start = i+1;
+        i = i+1;
       }
-      std::string temp = mystring.substr(start, i - start);
-      vec_o_strings.push_back(temp);
-      start = i+1;
-      i = i+1;
     }
   }
+  
+  // Handle the last element.
+  std::string temp = mystring.substr(start, i - start);
+  vec_o_strings.push_back(temp);
+  
 }
 
