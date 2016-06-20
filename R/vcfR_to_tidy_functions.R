@@ -99,6 +99,7 @@ NULL
 #' returns a \code{tbl_df}-ed data frame with column names: "Tag", "ID", "Number","Type",
 #' "Description", "Source", and "Version".
 #' 
+#' @return An object of class tidy::data_frame or a list where every element is of class tidy::data_frame.
 #' 
 #' @note  To run all the examples, you can issue this:
 #' \code{example("vcfR2tidy")}
@@ -300,11 +301,11 @@ vcfR2tidy <- function(x,
   retfix <- cbind(base, fix) %>%
     dplyr::tbl_df() %>%
     dplyr::mutate_(ChromKey = ~as.integer(factor(CHROM), levels = unique(CHROM))) %>%
-    dplyr::select_(~ChromKey, ~everything())  # note that we will drop Key from this after we have used it
+    dplyr::select_(~ChromKey, ~dplyr::everything())  # note that we will drop Key from this after we have used it
   
   retgt <- gt %>%
     dplyr::left_join(dplyr::select_(retfix, ~ChromKey, ~Key, ~POS), by = "Key") %>%
-    dplyr::select_(~ChromKey, ~POS, ~everything()) %>%
+    dplyr::select_(~ChromKey, ~POS, ~dplyr::everything()) %>%
     dplyr::select_(~ -Key)
   
   info_meta <- info_meta_full %>%
@@ -431,21 +432,26 @@ extract_gt_tidy <- function(x,
                             allele.sep = "/",
                             gt_column_prepend = "gt_") {
   
-  if(!is.null(format_fields) && any(duplicated(format_fields))) stop("Requesting extraction of duplicate format_field names")
-  if(class(x) != "vcfR") stop("Expecting x to be a vcfR object, not a ", class(x))
+  if(!is.null(format_fields) && any(duplicated(format_fields))){
+    stop("Requesting extraction of duplicate format_field names")
+  }
+  if(class(x) != "vcfR"){
+    stop("Expecting x to be a vcfR object, not a ", class(x))
+  }
   
-  vcf <- x  # rename it
+  vcf <- x  # Rename it.
   
-  # get this, because we may need it
+  # Get this, because we may need it.
+  # Extracts FORMAT acronyms from the meta region.
   format_df <- vcfR::vcf_field_names(vcf, tag = "FORMAT")
   
-  # if format_fields is NULL then we try to do all of them
+  # If format_fields is NULL then we try to do all of them
   if(is.null(format_fields)) {
     format_fields <- format_df$ID
   }
-  # if info_types == TRUE
+  # If info_types == TRUE
   # then we try to discern the fields amongst info_fields that should be coerced to integer and
-  # numeric
+  # numeric.
   if(!is.null(format_types) && length(format_types) == 1 && format_types[1] == TRUE) {
     format_types <- guess_types(format_df %>% dplyr::filter_(~ID %in% format_fields))
   }
@@ -469,8 +475,10 @@ extract_gt_tidy <- function(x,
     dplyr::mutate_(Key = ~rep(1:nrow(vcf@fix), times = ncol(vcf@gt) - 1),
  #          ChromKey = rep(fix$ChromKey, times = ncol(V@gt) - 1),
            Indiv = ~rep(colnames(vcf@gt)[-1], each = nrow(vcf@fix))) %>%
-    dplyr::select_(~Key, ~Indiv, ~everything())
+    dplyr::select_(~Key, ~Indiv, ~dplyr::everything())
+
   
+    
   # now coerce numerics that should be integers to ints:
   geno_info[names(format_types)[format_types == "i"]] <- 
     lapply(geno_info[names(format_types)[format_types == "i"]], as.integer)
