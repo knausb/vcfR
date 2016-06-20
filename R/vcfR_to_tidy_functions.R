@@ -211,6 +211,9 @@ NULL
 #' its consituent parts will have been parsed into separate columns.
 #' @param ... more options to pass to \code{\link{extract_info_tidy}} and 
 #' \code{\link{extract_gt_tidy}}.  See parameters listed below.
+#' 
+#' @importFrom dplyr everything
+#' 
 #' @export
 vcfR2tidy <- function(x, 
                       info_only = FALSE, 
@@ -301,11 +304,11 @@ vcfR2tidy <- function(x,
   retfix <- cbind(base, fix) %>%
     dplyr::tbl_df() %>%
     dplyr::mutate_(ChromKey = ~as.integer(factor(CHROM), levels = unique(CHROM))) %>%
-    dplyr::select_(~ChromKey, ~dplyr:::everything())  # note that we will drop Key from this after we have used it
+    dplyr::select_(~ChromKey, ~dplyr::everything())  # note that we will drop Key from this after we have used it
   
   retgt <- gt %>%
     dplyr::left_join(dplyr::select_(retfix, ~ChromKey, ~Key, ~POS), by = "Key") %>%
-    dplyr::select_(~ChromKey, ~POS, ~dplyr:::everything()) %>%
+    dplyr::select_(~ChromKey, ~POS, ~dplyr::everything()) %>%
     dplyr::select_(~ -Key)
   
   info_meta <- info_meta_full %>%
@@ -475,7 +478,7 @@ extract_gt_tidy <- function(x,
     dplyr::mutate_(Key = ~rep(1:nrow(vcf@fix), times = ncol(vcf@gt) - 1),
  #          ChromKey = rep(fix$ChromKey, times = ncol(V@gt) - 1),
            Indiv = ~rep(colnames(vcf@gt)[-1], each = nrow(vcf@fix))) %>%
-    dplyr::select_(~Key, ~Indiv, ~dplyr:::everything())
+    dplyr::select_(~Key, ~Indiv, ~dplyr::everything())
 
   
     
