@@ -216,7 +216,7 @@ NULL
 #' @param ... more options to pass to \code{\link{extract_info_tidy}} and 
 #' \code{\link{extract_gt_tidy}}.  See parameters listed below.
 #' 
-# @importFrom dplyr everything
+#' @importFrom dplyr everything
 #' 
 #' @export
 vcfR2tidy <- function(x, 
