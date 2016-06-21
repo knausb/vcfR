@@ -178,6 +178,8 @@ To run all the examples, you can issue this:
 data(vcfR_example)
 
 
+\dontrun{
+
 # extract all the INFO and FORMAT fields into a list of tidy
 # data frames: fix, gt, and meta. Here we don't coerce columns
 # to integer or numeric types...
@@ -256,6 +258,8 @@ vcf_field_names(vcf, tag = "INFO")
 
 # get the FORMAT field metadata in a data frame
 vcf_field_names(vcf, tag = "FORMAT")
+
+}
 
 }
 \author{
