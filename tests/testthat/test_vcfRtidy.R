@@ -5,7 +5,17 @@ library(vcfR)
 context("vcfRtidy functions")
 
 data("vcfR_example")
+#data("vcfR_test")
 
+##### ##### ##### ##### #####
+# extract_gt_tidy
+
+test_that("extract_gt_tidy works",{
+#  Z <- extract_gt_tidy(vcf)
+  suppressMessages( Z <- extract_gt_tidy(vcf, format_fields = c('GT')) )
+  expect_is(Z, 'tbl_df')
+  
+})
 
 ##### ##### ##### ##### #####
 # vcfR2tidy
