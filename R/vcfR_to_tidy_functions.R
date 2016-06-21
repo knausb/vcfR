@@ -114,7 +114,7 @@ NULL
 #' data(vcfR_example)
 #' 
 #' 
-# \dontrun{
+#' \dontrun{
 #' 
 #' # extract all the INFO and FORMAT fields into a list of tidy
 #' # data frames: fix, gt, and meta. Here we don't coerce columns
@@ -169,7 +169,7 @@ NULL
 #' # extracted are left as character ("chr" in the dplyr summary)
 #' vcfR2tidy(vcf, single_frame = TRUE)
 #' 
-#' 
+#' }
 #' 
 #' 
 #' 
@@ -195,7 +195,7 @@ NULL
 #' # get the FORMAT field metadata in a data frame
 #' vcf_field_names(vcf, tag = "FORMAT")
 #' 
-# }
+#' 
 #' 
 
 
