@@ -176,6 +176,7 @@ chromo <- function( chrom,
       }
       graphics::boxplot( x    = drlist1$dmat[,-1],
                ylim = bdim,
+               xaxt = "n",
                yaxt = "n",
                col  = drlist1$bwcol
               )
@@ -205,6 +206,7 @@ chromo <- function( chrom,
       }
       graphics::boxplot( x    = drlist2$dmat[,-1],
                ylim = bdim,
+               xaxt = "n",
                yaxt = "n",
                col  = drlist2$bwcol
               )
@@ -234,6 +236,7 @@ chromo <- function( chrom,
       }
       graphics::boxplot( x    = drlist3$dmat[,-1],
                ylim = bdim,
+               xaxt = "n",
                yaxt = "n",
                col  = drlist3$bwcol
               )
