@@ -162,14 +162,14 @@ NULL
 #' # types of the columns according to the entries in the metadata.
 #' vcfR2tidy(vcf, single_frame = TRUE, info_types = TRUE, format_types = TRUE)
 #' 
-#' 
+#' }
 #' 
 #' 
 #' # for comparison, here note that all the INFO and FORMAT fields that were
 #' # extracted are left as character ("chr" in the dplyr summary)
 #' vcfR2tidy(vcf, single_frame = TRUE)
 #' 
-#' }
+#' 
 #' 
 #' 
 #' 
