@@ -115,7 +115,7 @@ NULL
 #' 
 #' 
 #' \dontrun{
-#' 
+#' }
 #' # extract all the INFO and FORMAT fields into a list of tidy
 #' # data frames: fix, gt, and meta. Here we don't coerce columns
 #' # to integer or numeric types...
@@ -150,7 +150,7 @@ NULL
 #'           single_frame = TRUE, 
 #'           info_fields = c("AC", "AN", "MQ"), 
 #'           format_fields = c("GT", "PL"))
-#' }
+#'
 #' 
 #' # note that the "gt_GT_alleles" column is always returned when any
 #' # FORMAT fields are extracted.
