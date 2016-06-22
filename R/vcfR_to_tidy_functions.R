@@ -150,7 +150,7 @@ NULL
 #'           single_frame = TRUE, 
 #'           info_fields = c("AC", "AN", "MQ"), 
 #'           format_fields = c("GT", "PL"))
-#' 
+#' }
 #' 
 #' # note that the "gt_GT_alleles" column is always returned when any
 #' # FORMAT fields are extracted.
@@ -162,7 +162,7 @@ NULL
 #' # types of the columns according to the entries in the metadata.
 #' vcfR2tidy(vcf, single_frame = TRUE, info_types = TRUE, format_types = TRUE)
 #' 
-#' }
+#' 
 #' 
 #' 
 #' # for comparison, here note that all the INFO and FORMAT fields that were
