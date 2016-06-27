@@ -1,8 +1,13 @@
 # Sample .travis.yml for R projects
 
 language: r
+r:
+    - release
+    - devel
+
+cache: packages
 warnings_are_errors: true
-sudo: required
+sudo: false 
 
 r_github_packages:
   - jimhester/covr
