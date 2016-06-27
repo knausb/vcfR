@@ -59,6 +59,9 @@ The function \strong{write.vcf} takes an object of either class vcfR or chromR a
 If the parameter 'mask' is set to FALSE, the entire object is written to file.
 If the parameter 'mask' is set to TRUE and the object is of class chromR (which has a mask slot), this mask is used to subset the data.
 If an index is supplied as 'mask', then this index is used, and recycled as necessary, to subset the data.
+
+Because vcfR provides the opportunity to manipulate VCF data, it also provides the opportunity for the user to create invalid VCF files.
+If there is a question regarding the validity of a file you have created one option is the \href{https://vcftools.github.io/perl_module.html#vcf-validator}{VCF validator} from VCF tools.
 }
 \examples{
 data(vcfR_test)

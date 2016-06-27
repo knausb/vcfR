@@ -1,6 +1,7 @@
 
 # vcfR 1.1.0.9000
 
+* dplyr v0.5.0 broke some vcfR2tidy functionality. This functionality is fixed in this release.
 * `is_het()` rapidly identifies heterozygotes.
 * `extract.info()` scores missing elements as NA.
 
