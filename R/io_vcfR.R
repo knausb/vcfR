@@ -152,7 +152,11 @@ write.vcf <- function(x, file = "", mask = FALSE, APPEND = FALSE){
   
   if(APPEND == FALSE){
     gz <- gzfile(file, "w")
-    write(x@meta, gz)
+    
+    if( length(x@meta) > 0 ){
+      write(x@meta, gz)
+    }
+    
     header <- c(colnames(x@fix), colnames(x@gt))
     header[1] <- "#CHROM"
     header <- paste(header, collapse="\t")

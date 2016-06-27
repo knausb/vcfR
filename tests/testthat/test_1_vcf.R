@@ -49,9 +49,67 @@ test_that("We can create an empty vcfR object",{
 
 ##### ##### ##### ##### #####
 #
+# vcf_stats
+#
+##### ##### ##### ##### #####
+
+
+test_that("compiled vcfR_vcf_stats_gz works",{
+  data("vcfR_test")
+  write.vcf(vcfR_test, file=ex_file)
+  
+  stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', ex_file)
+
+  expect_equal( as.numeric(stats['meta']), length(vcfR_test@meta) )
+  expect_equal( as.numeric(stats['variants']), nrow(vcfR_test@fix) )
+  expect_equal( as.numeric(stats['columns']), ncol(vcfR_test@fix) + ncol(vcfR_test@gt))
+})
+
+
+test_that("compiled vcfR_vcf_stats_gz works, Windows carriage return",{
+  data("vcfR_test")
+  ex_file <- "test.vcf"
+  
+  # Create e file with carriage returns.
+  cat(vcfR_test@meta[1], file=ex_file, append = FALSE)
+  for(i in 2:length(vcfR_test@meta) ){
+    cat('\r\n', file=ex_file, append = TRUE)
+#    cat('\n', file=ex_file, append = TRUE)
+    cat(vcfR_test@meta[i], file=ex_file, append = TRUE)
+  }
+  cat('\r\n', file=ex_file, append = TRUE)
+#  cat('\n', file=ex_file, append = TRUE)
+  cat('#', file=ex_file, append = TRUE)    
+  cat(colnames(vcfR_test@fix), file=ex_file, append = TRUE)
+  cat(colnames(vcfR_test@gt), file=ex_file, append = TRUE)
+  for(i in 1:nrow(vcfR_test@fix)){
+    cat('\r\n', file=ex_file, append = TRUE)
+#    cat('\n', file=ex_file, append = TRUE)
+    cat(vcfR_test@fix[i,], file=ex_file, append = TRUE)
+    cat(vcfR_test@gt[i,], file=ex_file, append = TRUE)
+  }
+  cat('\r\n', file=ex_file, append = TRUE)
+#  cat('\n', file=ex_file, append = TRUE)
+  
+  stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', ex_file)
+  
+  expect_equal( as.numeric(stats['meta']), length(vcfR_test@meta) )
+  expect_equal( as.numeric(stats['variants']), nrow(vcfR_test@fix) )
+  expect_equal( as.numeric(stats['columns']), ncol(vcfR_test@fix) + ncol(vcfR_test@gt))
+
+})
+
+
+##### ##### ##### ##### #####
+#
 # Input functions
 #
 ##### ##### ##### ##### #####
+
+
+data("vcfR_example")
+ex_file <- "test.vcf.gz"
+write.vcf(vcf, file=ex_file)
 
 test_that("compiled input functions work",{
   stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', ex_file)
@@ -147,6 +205,41 @@ test_that("read.vcfR works for vcf files which contain no variants",{
   expect_equal(nrow(test@fix), nrow(vcf2@fix))
   expect_equal(nrow(test@gt), nrow(vcf2@gt))
 })
+
+
+test_that("read.vcfR works when file contains one variant",{
+  data(vcfR_test)
+  vcfR_test <- vcfR_test[1,]
+  
+  setwd( test_dir )
+  
+  write.vcf(vcfR_test, ex_file)
+  vcfR_test2 <- read.vcfR(ex_file, verbose=FALSE)
+  
+  expect_equal( nrow(vcfR_test2@fix), 1)
+  
+  unlink(ex_file)
+  setwd( original_dir )
+})
+
+
+test_that("read.vcfR works when file contains one variant, no meta",{
+  data(vcfR_test)
+  vcfR_test <- vcfR_test[1,]
+  vcfR_test@meta <- vector(mode='character', length=0)
+
+  setwd( test_dir )
+  
+  write.vcf(vcfR_test, ex_file)
+  vcfR_test2 <- read.vcfR(ex_file, verbose=FALSE)
+  
+  expect_equal( nrow(vcfR_test2@fix), 1)
+  
+  unlink(ex_file)
+  setwd( original_dir )
+})
+
+
 
 
 ##### ##### ##### ##### #####
