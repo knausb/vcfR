@@ -4,10 +4,12 @@
 \alias{addID}
 \title{Populate the ID column of VCF data}
 \usage{
-addID(x)
+addID(x, sep = "_")
 }
 \arguments{
-\item{x}{an object of class vcfR or chromR}
+\item{x}{an object of class vcfR or chromR.}
+
+\item{sep}{a character string to separate the terms.}
 }
 \description{
 Populate the ID column of VCF data by concatenating the chromosome, position and optionally an index.
