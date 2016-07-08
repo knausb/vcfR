@@ -113,6 +113,11 @@ If you know of a software that I have not included on this list, particularly if
 * [Stacks](http://catchenlab.life.illinois.edu/stacks/)
 
 
+**Phasing**
+
+* [Beagle v4.1](https://faculty.washington.edu/browning/beagle/beagle.html) Inputs VCF genotypes and outputs to VCF format.
+
+
 ------
 
 Enjoy!

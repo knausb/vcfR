@@ -62,7 +62,7 @@ test_file("testthat/test_drplot.R")
 # quit
 
 # Also control-c returns to gdb.
-# continue retruns from gdb to R (plus a second return)
+# continue returns from gdb to R (plus a second return)
 
 # in gdb
 # b rcppMean

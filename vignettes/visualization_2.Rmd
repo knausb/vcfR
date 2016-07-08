@@ -104,7 +104,7 @@ heatmap.bp(dp[1001:1500,])
 
 
 The plot that results from heatmap.bp() shows samples in columns and variants in rows.
-MArginal barplots summarize sums of the rows and columns.
+Marginal barplots summarize sums of the rows and columns.
 The color ramp, at the right, is parameterized for continuous data.
 In the above plot, yellow is a high number of high quality bases violet is a low number of high quality bases.
 If you ask the function to visualize more values than the screen has pixels, some form of interpolation is performed.
