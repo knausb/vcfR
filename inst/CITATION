@@ -1,11 +1,10 @@
 bibentry("Article",
-   title = "Vcf{R}: a package to manipulate and visualize {VCF} format data in R",
+   title = "{VCFR}: a package to manipulate and visualize variant call format data in {R}",
    author = personList(as.person("Brian J. Knaus"),
                        as.person('Niklaus J. Gr{\\"u}nwald')),
    journal = 'Molecular Ecology Resources',
    year   = "In press",
-   note   = "{ISBN} N-NNNNNN-NN-N",
-   url    = "http://dx.doi.org/10.1101/041277",
+   url    = "http://dx.doi.org/10.1111/1755-0998.12549",
 
    mheader = "To cite vcfR in publications use:",
 
