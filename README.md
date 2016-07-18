@@ -39,12 +39,10 @@ With this information in hand, researchers should be able to determine criteria 
 
 ## Publication
 
-
-Knaus, Brian J., and Niklaus J. Grunwald. 2016. VcfR: an R package to manipulate and visualize VCF format data. bioRxiv: 041277. http://dx.doi.org/10.1101/041277.
-
-
 Knaus, Brian J., and Niklaus J. Grunwald. In press. VCFR: a package to manipulate and visualize variant call format data in R. Molecular Ecology Resources. http://dx.doi.org/10.1111/1755-0998.12549.
 
+
+Knaus, Brian J., and Niklaus J. Grunwald. 2016. VcfR: an R package to manipulate and visualize VCF format data. bioRxiv: 041277. http://dx.doi.org/10.1101/041277.
 
 
 ## Download
