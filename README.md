@@ -47,7 +47,14 @@ Knaus, Brian J., and Niklaus J. Grunwald. 2016. VcfR: an R package to manipulate
 
 ## Download
 
-While this project is in development it can be installed through github:
+[vcfR](https://cran.r-project.org/package=vcfR) is available at CRAN.
+To install use:
+
+    install.packages('vcfR')
+
+
+
+The development vaerion can be installed through github:
 
     devtools::install_github(repo="knausb/vcfR")
     library(vcfR)
@@ -72,7 +79,7 @@ If you've installed this package with devtools you will probably need to run:
 
 ## Development version
 
-The development version (which may not be stable) can also be installed:
+The development branch (which may not be stable) can also be installed:
 
     devtools::install_github(repo="knausb/vcfR@devel")
     library(vcfR)
