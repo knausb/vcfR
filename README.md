@@ -77,9 +77,9 @@ If you've installed this package with devtools you will probably need to run:
 
 ------
 
-## Development version
+## Devel branch
 
-The development branch (which may not be stable) can also be installed:
+The devel branch (which may not be stable) can also be installed:
 
     devtools::install_github(repo="knausb/vcfR@devel")
     library(vcfR)
