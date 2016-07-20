@@ -125,11 +125,14 @@ heatmap.bp <- function(x, cbarplot = TRUE, rbarplot = TRUE,
       graphics::text(min(rowSums(x, na.rm=na.rm), na.rm=na.rm), c(1:nrow(x))-0.5, rownames(x), adj=c(0.0,0.5), srt=0)
     }
     #
-    graphics::barplot(rep(1, times=length(col.ramp)), space=0, border=NA, horiz = TRUE,
-            col = col.ramp,
-            axes=FALSE)
-    graphics::text(0.5, 5, "Low", col="#FFFFFF")
-    graphics::text(0.5, 95, "High", col="#FFFFFF")
+    mp <- graphics::barplot(rep(1, times=length(col.ramp)), space=0, border=NA, horiz = TRUE,
+                            col = col.ramp, axes=FALSE)
+#    graphics::text(0.5, 5, "Low", col="#FFFFFF")
+#    graphics::text(0.5, 95, "High", col="#FFFFFF")
+    if ( mp[nrow(mp),1] - mp[1,1] >= 1 ){
+      graphics::text(0.5, mp[1,1], "Low", col="#FFFFFF")
+      graphics::text(0.5, mp[nrow(mp),1], "High", col="#FFFFFF")
+    }
   }
   graphics::par(mfrow=c(1,1))
   graphics::par(mar=c(5,4,4,2))
