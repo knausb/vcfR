@@ -71,28 +71,32 @@ test_that("compiled vcfR_vcf_stats_gz works, Windows carriage return",{
   ex_file <- "test.vcf"
   
   # Create e file with carriage returns.
-  cat(vcfR_test@meta[1], file=ex_file, append = FALSE)
+  # Write it to a file.
+  cat(vcfR_test@meta[1], file=ex_file, append = FALSE, sep = '\t')
   for(i in 2:length(vcfR_test@meta) ){
-    cat('\r\n', file=ex_file, append = TRUE)
+    cat('\r\n', file=ex_file, append = TRUE, sep = '\t')
 #    cat('\n', file=ex_file, append = TRUE)
-    cat(vcfR_test@meta[i], file=ex_file, append = TRUE)
+    cat(vcfR_test@meta[i], file=ex_file, append = TRUE, sep = '\t')
   }
-  cat('\r\n', file=ex_file, append = TRUE)
+  cat('\r\n', file=ex_file, append = TRUE, sep = '\t')
 #  cat('\n', file=ex_file, append = TRUE)
-  cat('#', file=ex_file, append = TRUE)    
-  cat(colnames(vcfR_test@fix), file=ex_file, append = TRUE)
-  cat(colnames(vcfR_test@gt), file=ex_file, append = TRUE)
+  cat('#', file=ex_file, append = TRUE, sep = '\t')
+  cat(colnames(vcfR_test@fix), file=ex_file, append = TRUE, sep = '\t')
+  cat('\t', file=ex_file, append = TRUE)
+  cat(colnames(vcfR_test@gt), file=ex_file, append = TRUE, sep = '\t')
   for(i in 1:nrow(vcfR_test@fix)){
-    cat('\r\n', file=ex_file, append = TRUE)
+    cat('\r\n', file=ex_file, append = TRUE, sep = '\t')
 #    cat('\n', file=ex_file, append = TRUE)
-    cat(vcfR_test@fix[i,], file=ex_file, append = TRUE)
-    cat(vcfR_test@gt[i,], file=ex_file, append = TRUE)
+    cat(vcfR_test@fix[i,], file=ex_file, append = TRUE, sep = '\t')
+    cat(vcfR_test@gt[i,], file=ex_file, append = TRUE, sep = '\t')
   }
-  cat('\r\n', file=ex_file, append = TRUE)
+  cat('\r\n', file=ex_file, append = TRUE, sep = '\t')
 #  cat('\n', file=ex_file, append = TRUE)
   
+  # Query file.
   stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', ex_file)
   
+  # Test.
   expect_equal( as.numeric(stats['meta']), length(vcfR_test@meta) )
   expect_equal( as.numeric(stats['variants']), nrow(vcfR_test@fix) )
   expect_equal( as.numeric(stats['columns']), ncol(vcfR_test@fix) + ncol(vcfR_test@gt))
