@@ -9,6 +9,22 @@ r:
 warnings_are_errors: true
 sudo: false 
 
+# https://github.com/jimhester/rio/blob/9026180fd731aaed34f21cba3b5e207124618e5b/.travis.yml#L8-L20
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-4.9
+      - g++-4.9
+
+before_install: |
+  mkdir ~/.R
+  cat <<EOF > ~/.R/Makevars
+  CXX1X=g++-4.9
+  CXX1XSTD=-std=c++11
+
 r_github_packages:
   - jimhester/covr
 #  - ./travis-tool.sh install_github knausb/vcfR
