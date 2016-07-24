@@ -5,7 +5,7 @@ r:
     - release
     - devel
 
-# cache: packages
+cache: packages
 warnings_are_errors: true
 sudo: false 
 
@@ -26,8 +26,11 @@ before_install: |
   CXX1XSTD=-std=c++11
 
 r_github_packages:
-  - jimhester/covr
+#  - jimhester/covr
 #  - ./travis-tool.sh install_github knausb/vcfR
+
+r_packages:
+  - covr
 
 after_success:
   - Rscript -e 'library(covr);coveralls()'
