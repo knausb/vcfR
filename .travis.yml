@@ -3,7 +3,7 @@
 language: r
 r:
     - release
-    - devel
+#    - devel
 
 cache: packages
 warnings_are_errors: true
