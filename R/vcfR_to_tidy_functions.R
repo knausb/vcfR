@@ -511,8 +511,11 @@ extract_gt_tidy <- function(x,
   
     
   # now coerce numerics that should be integers to ints:
+#  if( length(format_types) > 0 ){
+  if( sum( format_types == "i" ) > 0 ){
   geno_info[names(format_types)[format_types == "i"]] <- 
     lapply(geno_info[names(format_types)[format_types == "i"]], as.integer)
+  }
   
   # and now, if alleles == TRUE, get the GT column expressed as alleles
   if(alleles == TRUE) {

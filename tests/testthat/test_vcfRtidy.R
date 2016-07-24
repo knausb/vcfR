@@ -12,7 +12,12 @@ data("vcfR_example")
 
 test_that("extract_gt_tidy works for GT element",{
 #  Z <- extract_gt_tidy(vcf)
-  suppressMessages( Z <- extract_gt_tidy(vcf, format_fields = c('GT')) )
+  suppressMessages( 
+#
+    Z <- extract_gt_tidy(vcf, format_fields = c('GT'))
+#    Z <- extract_gt_tidy(vcf, format_fields = c('GT'), format_types = TRUE )
+#    Z <- extract_gt_tidy( vcf, format_fields = c('GT'), format_types = character(0) )
+  )
   expect_is(Z, 'tbl_df')
   expect_equal(names(Z)[1], 'Key')
   expect_equal(names(Z)[2], 'Indiv')
