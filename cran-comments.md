@@ -26,6 +26,21 @@ This could reduce this package's size.
 Because this is a NOTE and not an ERROR or WARNING I have left it as one package for now.
 
 
+Possibly mis-spelled words in DESCRIPTION:
+  DNAbin (9:76)
+  VCF (2:33, 3:68, 4:62, 5:10, 8:58, 10:34)
+  VcfR (10:5)
+  genlight (9:66)
+  genomic (7:51)
+
+I have reviewed these word and feel they are spelled correctly.
+'DNAbin' referr to an object of class ape::DNAbin.
+'VCF' refers to the variant call format specification, a format of file handled by this package.
+'VcfR' refers to this package.
+'genlight' refers to an object of class adegenet::genlight.
+'genomic' refers to properties of a genome.
+
+
 ## Downstream dependencies
 
 

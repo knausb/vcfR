@@ -64,7 +64,7 @@ dna <- ape::read.dna(dna_file, format = "fasta")
 ```
 
 
-Annotation files (we currently only support [gff](http://sequenceontology.org/resources/gff3.html)), files which contain coordinates for annotations such as start and end points of genes, are tabular and can be read in with typical R functions.
+Annotation files (we currently only support [gff](https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md)), files which contain coordinates for annotations such as start and end points of genes, are tabular and can be read in with typical R functions.
 
 
 ```{r gff}
@@ -141,7 +141,7 @@ This object is inserted into the chrom object with the function **vcfR2chromR()*
 The parameter 'seq' should be a DNAbin object (see the R package ape) with one sequence in it.
 This sequence will be inserted into the chromR object with the function **seq2chromR()**.
 If a sequence is not provided, seq2chromR will infer the length of your chromosome from the maximum position in the vcfR object.
-The parameter 'ann' should be a [gff](http://sequenceontology.org/resources/gff3.html) and be of class data.frame.
+The parameter 'ann' should be a [gff](https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md) and be of class data.frame.
 These can typically be read in with base R functions such as read.table().
 This table will then be inserted into the chromR object by **ann2chromR()**.
 This function will check to see if columns 4 and 5 ("start" and "end") are numeric.

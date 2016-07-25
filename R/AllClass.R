@@ -112,7 +112,7 @@ setOldClass("DNAbin")
 #'
 #' The \strong{vcf} slot is an object of class vcfR \code{\link{vcfR-class}}.
 #'
-#' The \strong{ann} slot is a data.frame containing \href{http://www.sequenceontology.org/gff3.shtml}{gff format} data.
+#' The \strong{ann} slot is a data.frame containing \href{https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md}{gff format} data.
 #' When this slot is not populated it has nrows equal to zero.
 #'
 #' The \strong{var.info} slot contains a data.frame containing information about variants.
