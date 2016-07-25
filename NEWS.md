@@ -1,8 +1,8 @@
 
-# vcfR 1.1.0.9000
+# vcfR 1.2.0
 
 * `vcfR2genind()` greps genotypes containing a missing allele ('.') and sets to NA.
-* dplyr v0.5.0 broke some vcfR2tidy functionality. This functionality is fixed in this release.
+* dplyr v0.5.0 broke some vcfR2tidy functionality. This functionality should be fixed in this release.
 * `is_het()` rapidly identifies heterozygotes.
 * `extract.info()` scores missing elements as NA.
 
