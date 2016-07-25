@@ -40,7 +40,7 @@ The function \code{\link[base]{tolower}} can facilitate this.
 
 The \strong{vcf} slot is an object of class vcfR \code{\link{vcfR-class}}.
 
-The \strong{ann} slot is a data.frame containing \href{http://www.sequenceontology.org/gff3.shtml}{gff format} data.
+The \strong{ann} slot is a data.frame containing \href{https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md} data.
 When this slot is not populated it has nrows equal to zero.
 
 The \strong{var.info} slot contains a data.frame containing information about variants.
@@ -57,6 +57,6 @@ Within each matrix, the first column indicates the start position and the second
 \seealso{
 \code{\link{vcfR-class}}, \code{\link[ape]{DNAbin}},
 \href{http://www.1000genomes.org/wiki/analysis/variant\%20call\%20format/vcf-variant-call-format-version-41}{vcf format},
-\href{http://www.sequenceontology.org/gff3.shtml}{gff3 format}
+\href{https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md}{gff3 format}
 }
 

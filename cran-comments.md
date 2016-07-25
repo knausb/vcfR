@@ -1,21 +1,3 @@
-## Resubmission
-This is a resubmission. In this version I have:
-
-* Changed the Description field so that it does not start with the package name, 'This package' or similar.
-
-Thank you!
-
-
-## Resubmission
-This is a resubmission. In this version I have:
-
-* Changed the title to:
-'Manipulate and Visualize VCF Data'
-
-* The description field has been changed so that it does not start with the package name.
-
-* The redundant "VcfR is intended to allow" has been removed from the Description.
-
 
 ## Test environments
 * local ubuntu 12.04, R 3.2.5
@@ -35,8 +17,8 @@ Maintainer: ‘Brian J. Knaus <briank.lists@gmail.com>’
 * checking installed package size ... NOTE
   installed size is  7.7Mb
   sub-directories of 1Mb or more:
-    doc    2.8Mb
-    libs   4.3Mb
+    doc    2.2Mb
+    libs   4.8Mb
 
 There are 8 vignettes (HTML) which contribute to the 2.8Mb in doc.
 These could be migrated to a separate documentation package.

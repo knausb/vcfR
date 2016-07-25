@@ -27,7 +27,7 @@ This later choice results in the creation of files which are largely redundant w
 
 
 The vcfR package is designed to work with [VCF format](http://www.1000genomes.org/node/101) files.
-The use of a sequence file ([fasta format](https://en.wikipedia.org/wiki/FASTA_format)) and an annotation file ([gff format](http://www.sequenceontology.org/gff3.shtml)) can provide helpful context, but are not required.
+The use of a sequence file ([fasta format](https://en.wikipedia.org/wiki/FASTA_format)) and an annotation file ([gff format](https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md)) can provide helpful context, but are not required.
 Reading in of the VCF format file can be performed with a function in vcfR.
 First we'll locate the example data from the package 'pinfsc50.'
 
