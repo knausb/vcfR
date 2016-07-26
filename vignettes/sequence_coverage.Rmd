@@ -130,7 +130,11 @@ if( require(reshape2) & require(ggplot2) ){
   p <- p + theme(axis.title.x = element_blank(), 
                  axis.text.x = element_text(angle = 60, hjust = 1))
 #  p <- p + stat_summary(fun.data=mean_sdl, mult=1, geom="pointrange", color="black")
-  p <- p + scale_y_continuous(trans=scales::log2_trans(), breaks=c(1, 10, 100, 800))
+  p <- p + scale_y_continuous(trans=scales::log2_trans(), 
+                              breaks=c(1, 10, 100, 800),
+                              minor_breaks=c(1:10, 2:10*10, 2:8*100))
+  p <- p + theme( panel.grid.major.y=element_line(color = "#A9A9A9", size=0.6) )
+  p <- p + theme( panel.grid.minor.y=element_line(color = "#C0C0C0", size=0.2) )
   p
 } else {
   message("The packages reshape2 and ggplot2 are required for this example but do not appear
