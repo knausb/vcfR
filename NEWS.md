@@ -1,5 +1,6 @@
 
 # vcfR 1.2.0
+Released on CRAN 2016-07-25.
 
 * `vcfR2genind()` greps genotypes containing a missing allele ('.') and sets to NA.
 * dplyr v0.5.0 broke some vcfR2tidy functionality. This functionality should be fixed in this release.

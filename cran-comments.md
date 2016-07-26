@@ -1,7 +1,11 @@
 
+
+Release of dplyr 0.5.0 affected functionality of some vcfR code.
+This release should address this functionality.
+
 ## Test environments
 * local ubuntu 12.04, R 3.2.5
-* ubuntu 12.04 (on travis-ci), R 3.3.0
+* ubuntu 12.04 (on travis-ci), R 3.3.1
 * local OS X install, R 3.3.0
 * win-builder (devel and release)
 
@@ -15,7 +19,7 @@ There were 2 NOTEs:
 Maintainer: ‘Brian J. Knaus <briank.lists@gmail.com>’
 
 * checking installed package size ... NOTE
-  installed size is  7.7Mb
+  installed size is  7.6Mb
   sub-directories of 1Mb or more:
     doc    2.2Mb
     libs   4.8Mb
@@ -50,6 +54,10 @@ I have reviewed these word and feel they are spelled correctly.
 [CRAN Repository Policy](https://cran.r-project.org/web/packages/policies.html) states that all correspondence should be with CRAN and not members of the team.
 However, I think its polite to thank those who have helped this project.
 So I've decided to start a list of thanks with the hope that these individuals may see this in the future.
+
+v1.2.0 Thank you Uwe Ligges for helping me!
+This version was accepted on the first try.
+See Uwe, I'm learning!
 
 v1.1.0 Thank you Uwe Ligges for helping me get my title in title case, my Description in order and handling my submission!
 
