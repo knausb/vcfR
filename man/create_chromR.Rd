@@ -3,10 +3,6 @@
 \name{create.chromR}
 \alias{ann2chromR}
 \alias{create.chromR}
-\alias{getCHROM}
-\alias{getFIX}
-\alias{getPOS}
-\alias{getQUAL}
 \alias{seq2chromR}
 \alias{vcf2chromR}
 \alias{vcfR2chromR}
@@ -20,14 +16,6 @@ vcfR2chromR(x, vcf)
 seq2chromR(x, seq = NULL)
 
 ann2chromR(x, gff)
-
-getFIX(x)
-
-getCHROM(x)
-
-getPOS(x)
-
-getQUAL(x)
 }
 \arguments{
 \item{vcf}{an object of class vcfR}
