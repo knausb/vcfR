@@ -200,29 +200,6 @@ setMethod(
 #'
 #' @rdname getFIX
 #' @export
-#' @aliases getALT,chromR-method
-#'    getALT,vcfR-method
-getALT <- function(x) standardGeneric("getALT")
-#' @export
-setGeneric("getALT")
-
-setMethod(
-  f = "getALT", 
-  signature(x = "chromR"), 
-  definition = function(x) {
-    x@vcf@fix[,"ALT"]
-})
-
-setMethod(
-  f = "getALT", 
-  signature(x = "vcfR"), 
-  definition = function(x) {
-    x@fix[,"ALT"]
-})
-
-#'
-#' @rdname getFIX
-#' @export
 #' @aliases getFILTER,chromR-method
 #'    getFILTER,vcfR-method
 getFILTER <- function(x) standardGeneric("getFILTER")

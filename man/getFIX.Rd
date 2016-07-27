@@ -41,8 +41,6 @@ getREF(x)
 
 getID(x)
 
-getALT(x)
-
 getFILTER(x)
 }
 \arguments{
