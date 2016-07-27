@@ -59,5 +59,8 @@ v1.2.0 Thank you Uwe Ligges for helping me!
 This version was accepted on the first try.
 See Uwe, I'm learning!
 
+Prof. Brian Ripley also brought to my attention that I had overlooked memory-access errors and that valgrind was reporting use of uninitialized memory and many small memory leaks.
+Thank you for bringin this to my attention, its a big help for those of us who are still learning valgrind!
+
 v1.1.0 Thank you Uwe Ligges for helping me get my title in title case, my Description in order and handling my submission!
 

@@ -1,4 +1,9 @@
 
+
+# vcfR 1.2.0.9000
+
+
+
 # vcfR 1.2.0
 Released on CRAN 2016-07-25.
 
