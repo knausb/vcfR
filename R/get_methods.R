@@ -95,14 +95,14 @@ setMethod(
   f = "getPOS", 
   signature(x = "chromR"), 
   definition = function(x) {
-    x@vcf@fix[,"POS"]
+    as.integer(x@vcf@fix[,"POS"])
 })
 
 setMethod(
   f = "getPOS", 
   signature(x = "vcfR"), 
   definition = function(x) {
-    x@fix[,"POS"]
+    as.integer(x@fix[,"POS"])
 })
 
 #'
@@ -118,14 +118,14 @@ setMethod(
   f = "getQUAL", 
   signature(x = "chromR"), 
   definition = function(x) {
-    x@vcf@fix[,"QUAL"]
+    as.numeric(x@vcf@fix[,"QUAL"])
 })
 
 setMethod(
   f = "getQUAL", 
   signature(x = "vcfR"), 
   definition = function(x) {
-    x@fix[,"QUAL"]
+    as.numeric(x@fix[,"QUAL"])
 })
 
 #'
