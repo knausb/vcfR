@@ -14,6 +14,7 @@
 #' @examples 
 #' library("vcfR")
 #' data("vcfR_example")
+#' chrom <- create.chromR('sc50', seq=dna, vcf=vcf, ann=gff)
 #' getFIX(vcf) %>% head
 #' getFIX(chrom) %>% head
 #' 
@@ -171,6 +172,29 @@ setMethod(
   signature(x = "vcfR"), 
   definition = function(x) {
     x@fix[,"REF"]
+})
+
+#'
+#' @rdname getFIX
+#' @export
+#' @aliases getID,chromR-method
+#'    getID,vcfR-method
+getID <- function(x) standardGeneric("getID")
+#' @export
+setGeneric("getID")
+
+setMethod(
+  f = "getID", 
+  signature(x = "chromR"), 
+  definition = function(x) {
+    x@vcf@fix[,"ID"]
+})
+
+setMethod(
+  f = "getID", 
+  signature(x = "vcfR"), 
+  definition = function(x) {
+    x@fix[,"ID"]
 })
 
 #'

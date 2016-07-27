@@ -13,6 +13,9 @@
 \alias{getFIX}
 \alias{getFIX,chromR-method}
 \alias{getFIX,vcfR-method}
+\alias{getID}
+\alias{getID,chromR-method}
+\alias{getID,vcfR-method}
 \alias{getPOS}
 \alias{getPOS,chromR-method}
 \alias{getPOS,vcfR-method}
@@ -36,6 +39,8 @@ getALT(x)
 
 getREF(x)
 
+getID(x)
+
 getALT(x)
 
 getFILTER(x)
@@ -53,6 +58,7 @@ These accessors allow you to isolate these variables from these objects.
 \examples{
 library("vcfR")
 data("vcfR_example")
+chrom <- create.chromR('sc50', seq=dna, vcf=vcf, ann=gff)
 getFIX(vcf) \%>\% head
 getFIX(chrom) \%>\% head
 
