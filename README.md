@@ -122,6 +122,7 @@ If you know of a software that I have not included on this list, particularly if
 **Manipulation**
 
 * [VCFtools](https://vcftools.github.io/) General manipulation and analysis.
+* [PyVCF](https://pyvcf.readthedocs.io/en/latest/)
 * [Beagle v4.1](https://faculty.washington.edu/browning/beagle/beagle.html) Inputs VCF genotypes and outputs phased genotypes to VCF format.
 
 
