@@ -295,46 +295,6 @@ ann2chromR <- function(x, gff){
 
 
 
-##### ##### ##### ##### #####
-#
-# Getters.
-#
-##### ##### ##### ##### #####
-
-#' @rdname create_chromR
-#' @export
-#' @aliases getPOS
-getFIX <- function(x){
-  if(class(x) != "chromR"){stop("expecting object of class chromR")}
-  x@vcf@fix
-}
-
-#' @rdname create_chromR
-#' @export
-#' @aliases getPOS
-getCHROM <- function(x){
-  if(class(x) != "chromR"){stop("expecting object of class chromR")}
-  x@vcf@fix[,"CHROM"]
-}
-
-
-#' @rdname create_chromR
-#' @export
-#' @aliases getPOS
-getPOS <- function(x){
-  if(class(x) != "chromR"){stop("expecting object of class chromR")}
-  as.integer(x@vcf@fix[,"POS"])
-}
-
-
-#' @rdname create_chromR
-#' @export
-#' @aliases getPOS
-getQUAL <- function(x){
-  if(class(x) != "chromR"){stop("expecting object of class chromR")}
-  as.integer(x@vcf@fix[,"QUAL"])
-}
-
 
 
 ##### ##### ##### ##### #####

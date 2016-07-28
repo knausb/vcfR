@@ -31,6 +31,7 @@ test_file("testthat/test_heatmapbp.R")
 #
 test_file("testthat/test_ad_frequency.R")
 #test_file("testthat/test_chromR_method.R")
+test_file("testthat/test_get.R")
 
 
 # This test will write the plots to a file on the filesystem.
