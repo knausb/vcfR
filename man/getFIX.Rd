@@ -80,6 +80,5 @@ getQUAL(chrom) \%>\% head
 
 getFILTER(vcf) \%>\% head
 getFILTER(chrom) \%>\% head
-
 }
 

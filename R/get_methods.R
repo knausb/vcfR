@@ -2,15 +2,13 @@
 #' 
 #' Both chromR objects and vcfR objects contain a region with fixed variables.
 #' These accessors allow you to isolate these variables from these objects.
-#' 
+#'   
 #' @param x a vcfR or chromR object
-#' 
+#'   
 #' @return a vector or data frame
-#' 
 #' @rdname getFIX
 #' @export
-#' @aliases getFIX,chromR-method 
-#'    getFIX,vcfR-method
+#' @aliases getFIX,chromR-method getFIX,vcfR-method
 #' @examples 
 #' library("vcfR")
 #' data("vcfR_example")
@@ -38,7 +36,6 @@
 #' 
 #' getFILTER(vcf) %>% head
 #' getFILTER(chrom) %>% head
-#' 
 getFIX <- function(x) standardGeneric("getFIX")
 #' @export
 setGeneric("getFIX")
@@ -57,7 +54,6 @@ setMethod(
     x@fix  
 })
 
-#'
 #' @rdname getFIX
 #' @export
 #' @aliases getCHROM,chromR-method
@@ -82,7 +78,6 @@ setMethod(
 
 
 
-#'
 #' @rdname getFIX
 #' @export
 #' @aliases getPOS,chromR-method
@@ -105,7 +100,6 @@ setMethod(
     as.integer(x@fix[,"POS"])
 })
 
-#'
 #' @rdname getFIX
 #' @export
 #' @aliases getQUAL,chromR-method
@@ -128,7 +122,6 @@ setMethod(
     as.numeric(x@fix[,"QUAL"])
 })
 
-#'
 #' @rdname getFIX
 #' @export
 #' @aliases getALT,chromR-method
@@ -151,7 +144,6 @@ setMethod(
     x@fix[,"ALT"]
 })
 
-#'
 #' @rdname getFIX
 #' @export
 #' @aliases getREF,chromR-method
@@ -174,7 +166,6 @@ setMethod(
     x@fix[,"REF"]
 })
 
-#'
 #' @rdname getFIX
 #' @export
 #' @aliases getID,chromR-method
@@ -197,7 +188,6 @@ setMethod(
     x@fix[,"ID"]
 })
 
-#'
 #' @rdname getFIX
 #' @export
 #' @aliases getFILTER,chromR-method
