@@ -82,6 +82,16 @@ test_file("testthat/test_drplot.R")
 # R -d "valgrind --db-attach=yes" -f test_1_vcf.R
 # R -d "valgrind --track-origins=yes" -f test_1_vcf.R
 
+# R -d "valgrind --track-origins=yes" -f testthat/test_conversion.R
+# R -d "valgrind --track-origins=yes" -f testthat/test_windowing.R
+
+
+# 2016-08-05
+
+# R -d "valgrind --leak-check=full --vgdb-error=1" -f testthat/test_1_vcf.R
+
+
+
 
 ##### ##### ##### ##### #####
 # EOF.
