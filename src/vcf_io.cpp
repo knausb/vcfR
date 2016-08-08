@@ -515,13 +515,18 @@ void write_vcf_body( Rcpp::CharacterMatrix fix,
   int i = 0; // Rows
   int j = 0; // Columns
   std::string tmpstring;  // Assemble each line before writing
-  
-  
-  gzFile fi = gzopen( filename.c_str(), "ab" );
+
+  // Initialize filehandle.
+//  gzFile *fi = (gzFile *)gzopen(filename.c_str(),"ab");
+  gzFile fi;
+  fi = gzopen( filename.c_str(), "ab" );
+  if (! fi) {
+    Rcpp::Rcerr << "gzopen of " << filename << " failed: " << strerror (errno) << ".\n";
+    return;
+  }
 
   // In order for APPEND=TRUE to work the header
   // should not be printed here.
-
 
   // Manage body
   for(i = 0; i < fix.nrow(); i++){
@@ -548,10 +553,12 @@ void write_vcf_body( Rcpp::CharacterMatrix fix,
         }
       }
 
-      gzwrite(fi, (char *)tmpstring.c_str(), tmpstring.size());
+//      gzwrite(fi, (char *)tmpstring.c_str(), tmpstring.size());
+      gzwrite(fi, tmpstring.c_str(), tmpstring.size());
       gzwrite(fi,"\n",strlen("\n"));
     }
   }
+  
   gzclose(fi);
   
   return;
