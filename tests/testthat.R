@@ -5,6 +5,8 @@ library("testthat")
 
 
 #
+test_file("testthat/test_010_write_vcf.R")
+#
 test_file("testthat/test_1_vcf.R")
 #
 test_file("testthat/test_2_chromR.R")
@@ -88,9 +90,10 @@ test_file("testthat/test_drplot.R")
 
 # 2016-08-05
 
-# R -d "valgrind --leak-check=full --vgdb-error=1" -f testthat/test_1_vcf.R
+# R -d "valgrind --leak-check=full --vgdb-error=1" -f tests/testthat/test_1_vcf.R
 
 
+# R -d "valgrind --leak-check=full --vgdb-error=1" -f tests/testthat/test_010_write_vcf.R
 
 
 ##### ##### ##### ##### #####

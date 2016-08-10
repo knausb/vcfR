@@ -510,58 +510,93 @@ void write_vcf_body( Rcpp::CharacterMatrix fix,
                      int mask=0 ) {
   // http://stackoverflow.com/a/5649224
   
-//  Rcpp::Rcout << "Made it into the function!\n";
+//  
+int verbose = 0;
+//  int verbose = 1;
+  
+  if( verbose == 1 ){
+    Rcpp::Rcout << "Made it into the function!\n";
+  }
   
   int i = 0; // Rows
   int j = 0; // Columns
   std::string tmpstring;  // Assemble each line before writing
 
   // Initialize filehandle.
-//  gzFile *fi = (gzFile *)gzopen(filename.c_str(),"ab");
   gzFile fi;
-  fi = gzopen( filename.c_str(), "ab" );
-  if (! fi) {
-    Rcpp::Rcerr << "gzopen of " << filename << " failed: " << strerror (errno) << ".\n";
-    return;
+  
+  // Initialize file.
+  // Note that gzfile does not tolerate initializing an empty file.
+  // Use ofstream instead.
+  if ( ! std::ifstream( filename ) ){
+    if( verbose == 1 ){
+      Rcpp::Rcout << "File does not exist." << std::endl;
+    }
+    
+    std::ofstream myfile;
+    myfile.open (filename, std::ios::out | std::ios::binary);
+    myfile.close();
   }
 
   // In order for APPEND=TRUE to work the header
   // should not be printed here.
 
+  if( verbose == 1 ){
+    Rcpp::Rcout << "Matrix fix has " << fix.nrow() << " rows (variants).\n";
+  }
+  
   // Manage body
-  for(i = 0; i < fix.nrow(); i++){
-    Rcpp::checkUserInterrupt();
-    if(mask == 1 && fix(i,6) != "PASS" ){
-      // Don't print variant.
-    } else {
-      j = 0;
-      tmpstring = fix(i,j);
-      for(j = 1; j < fix.ncol(); j++){
-        if(fix(i,j) == NA_STRING){
-          tmpstring = tmpstring + "\t" + ".";
-        } else {
-          tmpstring = tmpstring + "\t" + fix(i,j);
-        }
-      }
+  if( fix.nrow() >= 1 ){
+    if( verbose == 1 ){
+      Rcpp::Rcout << "Processing the body (variants).\n";
+    }
+    // There is at least one variant.
+    fi = gzopen( filename.c_str(), "ab" );
+    if (! fi) {
+      Rcpp::Rcerr << "gzopen of " << filename << " failed: " << strerror (errno) << ".\n";
+    }
 
-      // gt portion
-      for(j = 0; j < gt.ncol(); j++){
-        if(gt(i, j) == NA_STRING){
-          tmpstring = tmpstring + "\t" + "./.";
-        } else {
-          tmpstring = tmpstring + "\t" + gt(i, j);
-        }
-      }
+    for(i = 0; i < fix.nrow(); i++){
+      Rcpp::checkUserInterrupt();
 
-//      gzwrite(fi, (char *)tmpstring.c_str(), tmpstring.size());
-      gzwrite(fi, tmpstring.c_str(), tmpstring.size());
-      gzwrite(fi,"\n",strlen("\n"));
+      if(mask == 1 && fix(i,6) != "PASS" ){
+        // Don't print variant.
+      } else {
+        // Print variant.
+        j = 0;
+        tmpstring = fix(i,j);
+        for(j = 1; j < fix.ncol(); j++){
+          if(fix(i,j) == NA_STRING){
+            tmpstring = tmpstring + "\t" + ".";
+          } else {
+            tmpstring = tmpstring + "\t" + fix(i,j);
+          }
+        }
+
+        // gt portion
+        for(j = 0; j < gt.ncol(); j++){
+          if(gt(i, j) == NA_STRING){
+            tmpstring = tmpstring + "\t" + "./.";
+          } else {
+            tmpstring = tmpstring + "\t" + gt(i, j);
+          }
+        }
+
+        gzwrite(fi, tmpstring.c_str(), tmpstring.size());
+        gzwrite(fi,"\n",strlen("\n"));
+      }
+    }
+    if( verbose == 1 ){
+      Rcpp::Rcout << "Finished processing the body (variants).\n";
+    }
+    gzclose(fi);
+  } else {
+    if( verbose == 1 ){
+      Rcpp::Rcout << "No rows (variants).\n";
     }
   }
   
-  gzclose(fi);
-  
-  return;
+//  return void;
 }
 
 

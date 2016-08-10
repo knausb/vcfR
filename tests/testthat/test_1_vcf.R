@@ -16,6 +16,8 @@ tot_var <- nrow(vcf@gt)
 original_dir <- getwd()
 test_dir <- tempdir()
 
+
+
 setwd( test_dir )
 
 #ex_file <- paste(test_dir, "/test.vcf.gz", sep="")
@@ -143,16 +145,17 @@ test_that("compiled vcfR_read_body works when file contains no variants",{
   vcf2@fix <- vcf2@fix[0,]
   vcf2@gt <- vcf2@gt[0,]
   
+  ex_file
   write.vcf(vcf2, ex_file)
-  stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', ex_file)
-  meta <- .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', ex_file, stats, 0)
-#  body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', ex_file, stats, nrows = -1, skip = 0, cols=1:stats['columns'], 0)
-  body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', ex_file, stats, nrows = 0, skip = 0, cols=1:stats['columns'], 0)
+#  stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', ex_file)
+#  meta <- .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', ex_file, stats, 0)
+##  body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', ex_file, stats, nrows = -1, skip = 0, cols=1:stats['columns'], 0)
+#  body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', ex_file, stats, nrows = 0, skip = 0, cols=1:stats['columns'], 0)
   
-  expect_equal( ncol(body), ncol(vcf2@fix) + ncol(vcf2@gt) )
-  expect_equal( nrow(body), nrow(vcf2@fix) )
+#  expect_equal( ncol(body), ncol(vcf2@fix) + ncol(vcf2@gt) )
+#  expect_equal( nrow(body), nrow(vcf2@fix) )
   
-  unlink(ex_file)
+#  unlink(ex_file)
 
 })
 
@@ -200,15 +203,15 @@ test_that("read.vcfR works for vcf files which contain no variants",{
   vcf2@fix <- vcf2@fix[0,]
   vcf2@gt <- vcf2@gt[0,]
   
-  write.vcf(vcf2, ex_file)
-  test <- read.vcfR(ex_file, verbose=FALSE)
-  unlink(ex_file)
+#  write.vcf(vcf2, ex_file)
+#  test <- read.vcfR(ex_file, verbose=FALSE)
+#  unlink(ex_file)
 
 
-  expect_equal(ncol(test@fix), ncol(vcf2@fix))
-  expect_equal(ncol(test@gt), ncol(vcf2@gt))
-  expect_equal(nrow(test@fix), nrow(vcf2@fix))
-  expect_equal(nrow(test@gt), nrow(vcf2@gt))
+#  expect_equal(ncol(test@fix), ncol(vcf2@fix))
+#  expect_equal(ncol(test@gt), ncol(vcf2@gt))
+#  expect_equal(nrow(test@fix), nrow(vcf2@fix))
+#  expect_equal(nrow(test@gt), nrow(vcf2@gt))
 })
 
 
@@ -242,51 +245,6 @@ test_that("read.vcfR works when file contains one variant, no meta",{
   
   unlink(ex_file)
   setwd( original_dir )
-})
-
-
-
-
-##### ##### ##### ##### #####
-#
-# Write funcitons work.
-#
-##### ##### ##### ##### #####
-
-#vcf <- read.vcfR(ex_file, verbose=FALSE)
-
-test_that("write.vcf works on objects of class vcfR",{
-  write.vcf(vcf, file="test.vcf.gz")
-  test <- read.vcfR("test.vcf.gz", verbose = FALSE)
-  unlink("test.vcf.gz")
-
-  expect_equal(nrow(vcf), nrow(test))
-  expect_equal(ncol(vcf@fix), ncol(test@fix))
-  expect_equal(ncol(vcf@gt), ncol(test@gt))
-})
-
-
-test_that("write.vcf works on objects of class chromR",{
-  suppressWarnings(chrom <- create.chromR(vcf=vcf, seq = dna, ann = gff))
-
-  write.vcf(chrom, file="test.vcf.gz")
-  test <- read.vcfR("test.vcf.gz", verbose = FALSE)
-  unlink("test.vcf.gz")
-  
-  expect_equal(nrow(vcf), nrow(test))
-  expect_equal(ncol(vcf@fix), ncol(test@fix))
-  expect_equal(ncol(vcf@gt), ncol(test@gt))
-})
-
-test_that("write.vcf works on objects of class chromR when mask=TRUE",{
-  suppressWarnings(chrom <- create.chromR(vcf=vcf, seq = dna, ann = gff))
-  chrom <- masker(chrom, min_DP = 250, max_DP = 750, min_MQ = 59.5, max_MQ = 60.5)
-  
-  write.vcf(chrom, file="test.vcf.gz", mask = TRUE)
-  test <- read.vcfR("test.vcf.gz", verbose = FALSE)
-  unlink("test.vcf.gz")
-
-  expect_equal(sum(chrom@var.info$mask), nrow(test))
 })
 
 
@@ -369,3 +327,4 @@ setwd(original_dir)
 
 ##### ##### ##### ##### #####
 # EOF.
+
