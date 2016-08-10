@@ -5,7 +5,7 @@ library("testthat")
 
 
 #
-test_file("testthat/test_010_write_vcf.R")
+test_file("testthat/test_10_write_vcf.R")
 #
 test_file("testthat/test_1_vcf.R")
 #
