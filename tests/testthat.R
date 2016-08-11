@@ -97,6 +97,8 @@ test_file("testthat/test_drplot.R")
 # R -d "valgrind --leak-check=full --vgdb-error=1" -f tests/testthat/test_1_vcf.R
 # R -d "valgrind --leak-check=full --vgdb-error=1" -f tests/testthat/test_10_write_vcf.R
 
+# R -d "valgrind --leak-check=full --vgdb-error=1" -f tests/testthat/test_conversion.R 
+
 # R -d "valgrind --leak-check=full --vgdb-error=1" -f tests/testthat.R
 
 

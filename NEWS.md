@@ -1,12 +1,10 @@
 
 
 # vcfR 1.2.0.9000
-
-# vcfR 1.3.0
 Released on CRAN 2016-XX-XX.
 
 * Prof Brian Ripley made me aware of memory leaks reported by valgrind.
-
+  Conditional jump or move depends on uninitialised value(s) - write_vcf_body file initialization issue resolved.
 
 # vcfR 1.2.0
 Released on CRAN 2016-07-25.

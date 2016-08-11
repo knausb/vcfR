@@ -1,7 +1,9 @@
 
-#library(testthat)
+#
+library(testthat)
 #detach(package:vcfR, unload=TRUE)
 library(vcfR)
+#
 context("vcf functions")
 
 #ex_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
