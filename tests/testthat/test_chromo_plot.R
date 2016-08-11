@@ -1,5 +1,5 @@
 #library("testthat")
-context("chromo plotting function")
+context("chromo_plot  functions")
 
 library(vcfR)
 data("vcfR_example")

@@ -1,3 +1,4 @@
+#
 # rank_variants tests.
 # detach(package:vcfR, unload=T)
 library(vcfR)
