@@ -33,6 +33,7 @@ test_file("testthat/test_heatmapbp.R")
 #
 test_file("testthat/test_ad_frequency.R")
 #test_file("testthat/test_chromR_method.R")
+#
 test_file("testthat/test_get.R")
 
 
@@ -91,9 +92,9 @@ test_file("testthat/test_drplot.R")
 # 2016-08-05
 
 # R -d "valgrind --leak-check=full --vgdb-error=1" -f tests/testthat/test_1_vcf.R
+# R -d "valgrind --leak-check=full --vgdb-error=1" -f tests/testthat/test_10_write_vcf.R
 
-
-# R -d "valgrind --leak-check=full --vgdb-error=1" -f tests/testthat/test_010_write_vcf.R
+# R -d "valgrind --leak-check=full --vgdb-error=1" -f tests/testthat.R
 
 
 ##### ##### ##### ##### #####
