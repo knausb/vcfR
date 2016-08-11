@@ -32,7 +32,8 @@ test_file("testthat/test_vcfRtidy.R")
 test_file("testthat/test_heatmapbp.R")
 #
 test_file("testthat/test_ad_frequency.R")
-#test_file("testthat/test_chromR_method.R")
+#
+test_file("testthat/test_chromR_method.R")
 #
 test_file("testthat/test_get.R")
 
@@ -46,6 +47,8 @@ test_file("testthat/test_chromo_plot.R")
 #
 test_file("testthat/test_drplot.R")
 
+
+##### ##### ##### ##### #####
 
 
 #test_file("testthat/test_rank_variants.R")

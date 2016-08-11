@@ -536,6 +536,11 @@ int verbose = 0;
     std::ofstream myfile;
     myfile.open (filename, std::ios::out | std::ios::binary);
     myfile.close();
+    
+    // This should make valgrind hang.
+    // Or not???
+//    fi = gzopen( filename.c_str(), "ab" );
+//    gzclose(fi);
   }
 
   // In order for APPEND=TRUE to work the header

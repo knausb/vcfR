@@ -56,7 +56,7 @@ Within each matrix, the first column indicates the start position and the second
 }
 \seealso{
 \code{\link{vcfR-class}}, \code{\link[ape]{DNAbin}},
-\href{http://www.1000genomes.org/wiki/analysis/variant\%20call\%20format/vcf-variant-call-format-version-41}{vcf format},
+\href{https://github.com/samtools/hts-specs}{VCF specification}
 \href{https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md}{gff3 format}
 }
 
