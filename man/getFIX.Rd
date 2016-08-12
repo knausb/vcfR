@@ -16,6 +16,9 @@
 \alias{getID}
 \alias{getID,chromR-method}
 \alias{getID,vcfR-method}
+\alias{getINFO}
+\alias{getINFO,chromR-method}
+\alias{getINFO,vcfR-method}
 \alias{getPOS}
 \alias{getPOS,chromR-method}
 \alias{getPOS,vcfR-method}
@@ -42,6 +45,8 @@ getREF(x)
 getID(x)
 
 getFILTER(x)
+
+getINFO(x)
 }
 \arguments{
 \item{x}{a vcfR or chromR object}
@@ -80,5 +85,9 @@ getQUAL(chrom) \%>\% head
 
 getFILTER(vcf) \%>\% head
 getFILTER(chrom) \%>\% head
+
+getINFO(vcf) \%>\% head
+getINFO(chrom) \%>\% head
+
 }
 

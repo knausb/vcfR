@@ -36,6 +36,10 @@
 #' 
 #' getFILTER(vcf) %>% head
 #' getFILTER(chrom) %>% head
+#' 
+#' getINFO(vcf) %>% head
+#' getINFO(chrom) %>% head
+#' 
 getFIX <- function(x) standardGeneric("getFIX")
 #' @export
 setGeneric("getFIX")
@@ -209,3 +213,27 @@ setMethod(
   definition = function(x) {
     x@fix[,"FILTER"]
 })
+
+
+#' @rdname getFIX
+#' @export
+#' @aliases getINFO,chromR-method
+#'    getINFO,vcfR-method
+getINFO <- function(x) standardGeneric("getINFO")
+#' @export
+setGeneric("getINFO")
+
+setMethod(
+  f = "getINFO", 
+  signature(x = "chromR"), 
+  definition = function(x) {
+    x@vcf@fix[,"INFO"]
+})
+
+setMethod(
+  f = "getINFO", 
+  signature(x = "vcfR"), 
+  definition = function(x) {
+    x@fix[,"INFO"]
+})
+

@@ -101,6 +101,8 @@ test_file("testthat/test_drplot.R")
 
 # R -d "valgrind --leak-check=full --vgdb-error=1" -f tests/testthat.R
 
+# R -d "valgrind --leak-check=full --vgdb-error=1" -f tests/testthat.R --restore --save --no-readline --vanilla > log.txt 2>&1
+
 
 ##### ##### ##### ##### #####
 # EOF.
