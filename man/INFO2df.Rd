@@ -7,10 +7,12 @@
 \usage{
 INFO2df(x)
 
-metaINFO2df(x)
+metaINFO2df(x, field = "INFO")
 }
 \arguments{
 \item{x}{an object of class vcfR or chromR.}
+
+\item{field}{should either the INFo or FORMAT data be returned?}
 }
 \value{
 A data.frame

@@ -36,21 +36,21 @@ INFO2df <- function(x){
     x <- x@vcfR
   }  
   
-  INFO.Type <- metaINFO2df(x)
-
-  # Initialize a data.frame for the INFO data
-  INFOdf <- data.frame( matrix( nrow=nrow(x@fix),  ncol=nrow(INFO.Type) ) )
-  names(INFOdf) <- INFO.Type[,'ID']
+  metaINFO <- metaINFO2df(x)
   
-  for( i in 1:nrow(INFO.Type) ){
-    tmp <- extract.info(x, element = INFO.Type[,'ID'][i])
-    if( INFO.Type[,'Type'][i] == "Integer" & INFO.Type[,'Number'][i] == "1" ){
+  # Initialize a data.frame for the INFO data
+  INFOdf <- data.frame( matrix( nrow=nrow(x@fix),  ncol=nrow(metaINFO) ) )
+  names(INFOdf) <- metaINFO[,'ID']
+  
+  for( i in 1:nrow(metaINFO) ){
+    tmp <- extract.info(x, element = metaINFO[,'ID'][i])
+    if( metaINFO[,'Type'][i] == "Integer" & metaINFO[,'Number'][i] == "1" ){
       tmp <- as.integer( tmp )
     }
-    if( INFO.Type[,'Type'][i] == "Float" & INFO.Type[,'Number'][i] == "1" ){
+    if( metaINFO[,'Type'][i] == "Float" & metaINFO[,'Number'][i] == "1" ){
       tmp <- as.numeric( tmp )
     }
-    INFOdf[,INFO.Type[,'ID'][i]] <- tmp
+    INFOdf[,metaINFO[,'ID'][i]] <- tmp
   }
   return(INFOdf)
 }
@@ -58,19 +58,30 @@ INFO2df <- function(x){
 
 #' @rdname INFO2df
 #'
+#' @param field should either the INFo or FORMAT data be returned?
+#'
 #' @export
 #'
-metaINFO2df <- function(x){
+metaINFO2df <- function(x, field = "INFO"){
 
   if( inherits(x, "chromR") ){
     x <- x@vcfR
   }
   
+  field <- match.arg( field, choices = c("INFO","FORMAT") )
+  
   # Isolate INFO from meta
-  INFO <- x@meta[grep("##INFO=", x@meta)]
+  if( field == "INFO" ){
+    INFO <- x@meta[grep("##INFO=", x@meta)]
+    INFO <- sub("##INFO=<", "", INFO)
+  }
+  if( field == "FORMAT" ){
+    INFO <- x@meta[grep("##FORMAT=", x@meta)]
+    INFO <- sub("##FORMAT=<", "", INFO)
+  }
   
   # Clean things up a bit.
-  INFO <- sub("##INFO=<", "", INFO)
+
   INFO <- sub(">$", "", INFO)
   INFO <- sub('\"', "", INFO)
   INFO <- sub('\"$', "", INFO)

@@ -24,8 +24,9 @@
 #' @examples 
 #' data(vcfR_test)
 #' gt <- extract.gt(vcfR_test)
-#' hets <- is.het(gt)
-#' 
+#' hets <- is_het(gt)
+#' # Censor non-heterozygous positions.
+#' is.na(vcfR_test@gt[,-1][!hets]) <- TRUE
 #' 
 #' @export
 is.het <- function(x, na_is_false = TRUE){

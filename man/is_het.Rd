@@ -26,8 +26,9 @@ In order to preserve missing data as missing na_is_false can be set to FALSE whe
 \examples{
 data(vcfR_test)
 gt <- extract.gt(vcfR_test)
-hets <- is.het(gt)
-
+hets <- is_het(gt)
+# Censor non-heterozygous positions.
+is.na(vcfR_test@gt[,-1][!hets]) <- TRUE
 
 }
 \seealso{
