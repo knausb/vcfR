@@ -37,6 +37,7 @@ Imports:
     stringr,
     tidyr,
     utils,
+    vegan,
     viridisLite
 Suggests:
     adegenet,
