@@ -141,8 +141,9 @@ setMethod(
 #'
 setMethod(
   f= "[",
-  signature="vcfR",
-  definition=function(x, i, j, drop){
+#  signature="vcfR",
+  signature(x = "vcfR", i = "ANY", j="ANY"),
+  definition=function(x, i, j, ..., drop){
     x@fix <- x@fix[ i, , drop = FALSE ]
     x@gt <- x@gt[ i, j, drop = FALSE ]
     return(x)

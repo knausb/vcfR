@@ -38,6 +38,7 @@
 #' }
 #' 
 #' 
+#' @import vegan
 #' @export
 #' 
 ordisample <- function(x, sample, distance = "bray", plot = TRUE, verbose = TRUE, ...){
