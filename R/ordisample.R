@@ -74,6 +74,8 @@
 #' points(myOrd$metaMDS, display = "sites", pch=20, col="#8B4513")
 #' text(myOrd$metaMDS, display = "spec", col="blue")
 #' plot(myOrd$envfit, col = "#008000", add = TRUE)
+#' head(myOrd$metaMDS$points)
+#' myOrd$envfit
 #' }
 #' 
 #' 
@@ -118,6 +120,8 @@ ordisample <- function(x, sample, distance = "bray", plot = TRUE, alpha = 88, ve
   
   myGT <- data.frame( matrix( nrow=nrow(x), ncol=nrow(myFORMAT) ) )
   names(myGT) <- myFORMAT$ID
+  tmp <- extract.gt( x, element = colnames(myGT)[1] )
+  rownames(myGT) <- rownames(tmp)
   
   for(i in 1:ncol(myGT)){
     tmp <- extract.gt( x, element = colnames(myGT)[i] )
@@ -133,6 +137,7 @@ ordisample <- function(x, sample, distance = "bray", plot = TRUE, alpha = 88, ve
     }
     myGT[,i] <- tmp
   }
+
   
   # Manage NAs.
   # GT missingness.

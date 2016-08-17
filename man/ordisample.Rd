@@ -74,6 +74,8 @@ plot(myOrd$metaMDS, type = "n")
 points(myOrd$metaMDS, display = "sites", pch=20, col="#8B4513")
 text(myOrd$metaMDS, display = "spec", col="blue")
 plot(myOrd$envfit, col = "#008000", add = TRUE)
+head(myOrd$metaMDS$points)
+myOrd$envfit
 }
 
 
