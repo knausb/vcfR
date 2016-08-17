@@ -55,7 +55,9 @@ vcfR2genind <- function(x, sep="[|/]") {
 #  x[grep('\\.', x)] <- NA
 #  x[x == "./."] <- NA
 #  x[x == ".|."] <- NA
-
+  
+  # adegenet like to delimit on periods.
+  rownames(x) <- sub(".", "_", rownames(x), fixed = TRUE)
 #  x <- adegenet::df2genind(t(x), sep=sep)
   if( requireNamespace('adegenet') ){
     x <- adegenet::df2genind(t(x), sep=sep)

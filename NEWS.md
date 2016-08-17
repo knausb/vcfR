@@ -3,6 +3,8 @@
 # vcfR 1.2.0.9000
 Released on CRAN 2016-XX-XX.
 
+* Created `ordisample()` to ordinate sample information.
+* `extract.gt()` can now use the ID column from the fix region for rownames.
 * Created `INFO2df()` and `metaINFO2df()`.
 * Prof Brian Ripley made me aware of memory leaks reported by valgrind.
   Conditional jump or move depends on uninitialised value(s) - write_vcf_body file initialization issue resolved.

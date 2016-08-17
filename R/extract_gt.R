@@ -14,6 +14,7 @@
 #' @param verbose should verbose output be generated
 #' @param as.numeric logical, should the matrix be converted to numerics
 #' @param return.alleles logical indicating whether to return the genotypes (0/1) or alleles (A/T)
+#' @param IDtoRowNames logical specifying whether to use the ID column from the FIX region as rownames
 #' @param allele.sep character which delimits the alleles in a genotype (/ or |), here this is not used for a regex (as it is in other functions)
 #' @param extract logical indicating whether to return the extracted element or the remaining string
 #' 
@@ -36,16 +37,13 @@
 #' @seealso
 #' \code{\link{is.polymorphic}}
 #' 
-# @export
-#' 
-# @rdname extract_gt
-#' 
-
-
 
 #' 
 #' @export
-extract.gt <- function(x, element="GT", mask=FALSE, as.numeric=FALSE, return.alleles=FALSE, allele.sep="/", extract = TRUE ){
+extract.gt <- function(x, element="GT", mask=FALSE,
+                       as.numeric=FALSE, return.alleles=FALSE,
+                       IDtoRowNames = TRUE,
+                       allele.sep="/", extract = TRUE ){
 
   # Validate that we have an expected data structure
   if( class(x) != "chromR" & class(x) != "vcfR" ){
@@ -74,7 +72,7 @@ extract.gt <- function(x, element="GT", mask=FALSE, as.numeric=FALSE, return.all
     mask <- TRUE
   }
   
-  # Validat that the gt slot is a matrix
+  # Validate that the gt slot is a matrix
   if( class(x@gt) != "matrix" ){
     stop( paste("gt slot expected to be of class matrix. Instead found class", class(x@gt)) )
   }
@@ -97,6 +95,17 @@ extract.gt <- function(x, element="GT", mask=FALSE, as.numeric=FALSE, return.all
   # If as.numeric is true, convert to a numeric matrix.
   if(as.numeric == TRUE){
     outM <- .Call('vcfR_CM_to_NM', PACKAGE = 'vcfR', outM)
+  }
+  
+  # 
+  if( IDtoRowNames == TRUE ){
+    if( sum(is.na(x@fix[,'ID'])) > 0 ){
+      x <- addID(x)
+    }
+    if( length(unique(x@fix[,'ID'])) != nrow(x@fix) ){
+      stop('ID column contains non-unique names')
+    }
+    rownames(outM) <- x@fix[,'ID']
   }
 
   # Apply mask.

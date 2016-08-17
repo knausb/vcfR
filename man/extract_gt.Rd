@@ -8,7 +8,8 @@
 \title{Extract elements from vcfR objects}
 \usage{
 extract.gt(x, element = "GT", mask = FALSE, as.numeric = FALSE,
-  return.alleles = FALSE, allele.sep = "/", extract = TRUE)
+  return.alleles = FALSE, IDtoRowNames = TRUE, allele.sep = "/",
+  extract = TRUE)
 
 extract.haps(x, mask = FALSE, gt.split = "|", verbose = TRUE)
 
@@ -26,6 +27,8 @@ extract.info(x, element, as.numeric = FALSE, mask = FALSE)
 \item{as.numeric}{logical, should the matrix be converted to numerics}
 
 \item{return.alleles}{logical indicating whether to return the genotypes (0/1) or alleles (A/T)}
+
+\item{IDtoRowNames}{logical specifying whether to use the ID column from the FIX region as rownames}
 
 \item{allele.sep}{character which delimits the alleles in a genotype (/ or |), here this is not used for a regex (as it is in other functions)}
 

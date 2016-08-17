@@ -11,6 +11,7 @@
 #' @param sample a sample number where the first sample (column) is 2
 #' @param distance metric to be used for ordination, options are in \code{\link[vegan]{vegdist}}
 #' @param plot logical specifying whether to plot the ordination
+#' @param alpha alpha channel (transparency) ranging from 0-255
 #' @param verbose logical specifying whether to produce verbose output
 #' @param ... parameters to be passed to child processes
 #' 
@@ -27,6 +28,15 @@
 #' This that while starting with a small number is good, you will need to have a large enough number so that a substantial amount of the data make it to the ordination step.
 #' In the example I use 100 variants which appears to be a reasonable compromise.
 #' 
+#' The data contained in VCF files can frequently contain a large fraction of missing data.
+#' I advovate censoring data that does not meet quality control thresholds as missing which compounds the problem.
+#' An attempt is made to omit these missing data by querying the GT and INFO data for missingness and omitting the missing variants.
+#' The data may also include characters (columns) that contain all missing values which are omitted as well.
+#' When verbose == TRUE these omissions are reported as messages.
+#' 
+#' Some data may contain multiple values.
+#' For example, AD is the sequence depth for each observed allele.
+#' In these instances the values are sorted and the largest value is used.
 #' 
 #' Several of the steps of this ordination make distributional assumptions.
 #' That is, they assume the data to be normally distributed.
@@ -39,13 +49,18 @@
 #' 
 #' @return 
 #' A list consisting of two objects.
-#' The first object is an object of class 'metaMDS' created by the function vegan::metaMDS.
-#' The second is an object of class 'envfit' created by the function vegan::envfit.
-#' 
+#' \itemize{
+#'   \item an object of class 'metaMDS' created by the function vegan::metaMDS
+#'   \item an object of class 'envfit' created by the function vegan::envfit
+#' }
+#' This list is returned invisibly.
 #' 
 #' @seealso
-#' \code{\link[vegan]{metaMDS}}
-#' \code{\link[vegan]{vegdist}}
+#' \code{\link[vegan]{metaMDS}}, 
+#' \code{\link[vegan]{vegdist}},
+#' \code{\link[vegan]{monoMDS}},
+#' \code{\link[MASS]{isoMDS}}
+#' 
 #' 
 #' @examples
 #' \dontrun{
@@ -65,7 +80,7 @@
 #' @import vegan
 #' @export
 #' 
-ordisample <- function(x, sample, distance = "bray", plot = TRUE, verbose = TRUE, ...){
+ordisample <- function(x, sample, distance = "bray", plot = TRUE, alpha = 88, verbose = TRUE, ...){
 #  require(vegan, quietly = verbose)
   if( class(sample) == "character" ){
     sample <- grep( sample, colnames(x@gt), fixed = TRUE )
@@ -107,7 +122,8 @@ ordisample <- function(x, sample, distance = "bray", plot = TRUE, verbose = TRUE
   for(i in 1:ncol(myGT)){
     tmp <- extract.gt( x, element = colnames(myGT)[i] )
       tmp <- strsplit(tmp, split = ",")
-      tmp <- lapply(tmp, function(x){x[1]})
+#      tmp <- lapply(tmp, function(x){x[1]})
+      tmp <- lapply(tmp, function(x){ sort(x, decreasing = TRUE)[1] })
       tmp <- unlist(tmp)
     if( myFORMAT$Type[i] == "Integer"){
       tmp <- as.integer(tmp)
@@ -130,13 +146,13 @@ ordisample <- function(x, sample, distance = "bray", plot = TRUE, verbose = TRUE
   
   badChars <- apply(myINFO, MARGIN=2, function(x){ sum( is.na(x) ) == length(x) })
   if( verbose == TRUE & sum(badChars) > 0 ){
-    message(paste("INFO character: ", names(myINFO)[badChars], " omitted due to missingness.\n" ))
+    message(paste("INFO character: ", names(myINFO)[badChars], " omitted due to missingness." ))
   }
   myINFO <- myINFO[,!badChars]
   
   badChars <- apply(myINFO, MARGIN=2, function(x){ length( unique(x) ) == 1 })
   if( verbose == TRUE & sum(badChars) > 0 ){
-    message(paste("INFO character: ", names(myINFO)[badChars], " omitted as monomorphic.\n" ))
+    message(paste("INFO character: ", names(myINFO)[badChars], " omitted as monomorphic." ))
   }
   myINFO <- myINFO[,!badChars]
 
@@ -157,7 +173,7 @@ ordisample <- function(x, sample, distance = "bray", plot = TRUE, verbose = TRUE
   # Plot
   if( plot == TRUE ){
     graphics::plot(mds1, type = "n")
-    graphics::points(mds1, display = "sites", cex = 0.8, pch=20, col=grDevices::rgb(139,69,19, alpha=50, maxColorValue = 255))
+    graphics::points(mds1, display = "sites", cex = 0.8, pch=20, col=grDevices::rgb(139,69,19, alpha=alpha, maxColorValue = 255))
     vegan::ordiellipse(mds1, groups = factor( rep(1, times=nrow(myGT)) ), kind = "sd", conf = 0.68, col = "#808080" )  
     graphics::text(mds1, display = "spec", col="blue", ...)
     graphics::title( main = colnames(x@gt)[2] )
