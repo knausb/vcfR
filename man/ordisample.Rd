@@ -61,7 +61,8 @@ There is no real reason to assume this assumption to be valid with VCF data.
 It has been my experience that this assumption is frequently violated with VCF data.
 It is therefore suggested to use this funciton as an exploratory tool that may help inform other decisions.
 These analyst may be able to address these issues through data transformation or other topics beyond the scope of this function.
-Interpretation of the results of this function need to take into account that assumptions may hav been violated.
+This function is intended to provide a rapid assessment of the data which may help determine if more elegant handling of the data may be required.
+Interpretation of the results of this function need to take into account that assumptions may have been violated.
 }
 \examples{
 \dontrun{
