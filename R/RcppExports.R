@@ -12,6 +12,7 @@
 #' @param allele which (1-based) allele to report frequency for
 #' @param sum_type type of sum to calculate, see details
 #' @param delim character that delimits values
+#' @param decreasing should the values be sorted decreasing (1) or increasing (0)?
 #'
 #' @details
 #' Files containing VCF data frequently include data on allelic depth (e.g., AD).
@@ -43,8 +44,8 @@
 #' 
 #' 
 #' @export
-AD_frequency <- function(ad, delim = ",", allele = 1L, sum_type = 0L) {
-    .Call('vcfR_AD_frequency', PACKAGE = 'vcfR', ad, delim, allele, sum_type)
+AD_frequency <- function(ad, delim = ",", allele = 1L, sum_type = 0L, decreasing = 1L) {
+    .Call('vcfR_AD_frequency', PACKAGE = 'vcfR', ad, delim, allele, sum_type, decreasing)
 }
 
 extract_GT_to_CM <- function(x, element = "DP") {

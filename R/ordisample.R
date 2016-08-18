@@ -67,10 +67,19 @@
 #' @examples
 #' \dontrun{
 # data(vcfR_test)
+#' 
+#' # Example of normally distributed, random data.
+#' set.seed(9)
+#' x1 <- rnorm(500)
+#' set.seed(99)
+#' y1 <- rnorm(500)
+#' plot(x1, y1, pch=20, col="#8B451388", main="Normal, random, bivariate data")
+#' 
 #' data(vcfR_example)
 #' ordisample(vcf[1:100,], sample = 2)
 #' 
-#' myOrd <- ordisample(vcf[1:100,], sample = 2, plot = FALSE)
+#' vars <- 1:100
+#' myOrd <- ordisample(vcf[vars,], sample = "P17777us22", plot = FALSE)
 #' names(myOrd)
 #' plot(myOrd$metaMDS, type = "n")
 #' points(myOrd$metaMDS, display = "sites", pch=20, col="#8B451366")
@@ -78,6 +87,21 @@
 #' plot(myOrd$envfit, col = "#008000", add = TRUE)
 #' head(myOrd$metaMDS$points)
 #' myOrd$envfit
+#' pairs(myOrd$data1)
+#' 
+#' # Seperate heterozygotes and homozygotes.
+#' gt <- extract.gt(vcf)
+#' hets <- is_het(gt, na_is_false = FALSE)
+#' vcfhe <- vcf
+#' vcfhe@gt[,-1][ !hets & !is.na(hets)  ] <- NA
+#' vcfho <- vcf
+#' vcfho@gt[,-1][ hets & !is.na(hets) ] <- NA
+#' 
+#' myOrdhe <- ordisample(vcfhe[vars,], sample = "P17777us22", plot = FALSE)
+#' myOrdho <- ordisample(vcfho[vars,], sample = "P17777us22", plot = FALSE)
+#' pairs(myOrdhe$data1)
+#' pairs(myOrdho$data1)
+#' hist(myOrdho$data1$PL, breaks = seq(0,9000, by=100), col="#8B4513")
 #' }
 #' 
 #' 
@@ -191,6 +215,9 @@ ordisample <- function(x, sample, distance = "bray", plot = TRUE, alpha = 88, ve
          col = "#008000", add = TRUE, ... )
   }
   
-  invisible( list( metaMDS = mds1, envfit = ord.fit ) )
+  invisible( list( metaMDS = mds1, 
+                   envfit = ord.fit,
+                   data1 = myGT,
+                   data2 = myINFO) )
 }
 

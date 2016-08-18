@@ -6,8 +6,8 @@
 using namespace Rcpp;
 
 // AD_frequency
-Rcpp::NumericMatrix AD_frequency(Rcpp::StringMatrix ad, std::string delim, int allele, int sum_type);
-RcppExport SEXP vcfR_AD_frequency(SEXP adSEXP, SEXP delimSEXP, SEXP alleleSEXP, SEXP sum_typeSEXP) {
+Rcpp::NumericMatrix AD_frequency(Rcpp::StringMatrix ad, std::string delim, int allele, int sum_type, int decreasing);
+RcppExport SEXP vcfR_AD_frequency(SEXP adSEXP, SEXP delimSEXP, SEXP alleleSEXP, SEXP sum_typeSEXP, SEXP decreasingSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -15,7 +15,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::string >::type delim(delimSEXP);
     Rcpp::traits::input_parameter< int >::type allele(alleleSEXP);
     Rcpp::traits::input_parameter< int >::type sum_type(sum_typeSEXP);
-    __result = Rcpp::wrap(AD_frequency(ad, delim, allele, sum_type));
+    Rcpp::traits::input_parameter< int >::type decreasing(decreasingSEXP);
+    __result = Rcpp::wrap(AD_frequency(ad, delim, allele, sum_type, decreasing));
     return __result;
 END_RCPP
 }

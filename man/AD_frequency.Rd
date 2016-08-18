@@ -4,7 +4,8 @@
 \alias{AD_frequency}
 \title{AD_frequency}
 \usage{
-AD_frequency(ad, delim = ",", allele = 1L, sum_type = 0L)
+AD_frequency(ad, delim = ",", allele = 1L, sum_type = 0L,
+  decreasing = 1L)
 }
 \arguments{
 \item{ad}{a matrix of allele depths (e.g., "7,2")}
@@ -14,6 +15,8 @@ AD_frequency(ad, delim = ",", allele = 1L, sum_type = 0L)
 \item{allele}{which (1-based) allele to report frequency for}
 
 \item{sum_type}{type of sum to calculate, see details}
+
+\item{decreasing}{should the values be sorted decreasing (1) or increasing (0)?}
 }
 \value{
 A numeric matrix of frequencies

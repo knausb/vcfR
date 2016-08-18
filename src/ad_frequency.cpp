@@ -10,6 +10,12 @@ struct greater
     bool operator()(T const &a, T const &b) const { return a > b; }
 };
 
+struct lesser
+{
+    template<class T>
+    bool operator()(T const &a, T const &b) const { return a < b; }
+};
+
 
 // Convert vectors of strings to floats.
 std::vector<float> str_vec_to_float_vec( std::vector<std::string> str_vec ){
@@ -41,6 +47,7 @@ std::vector<float> str_vec_to_float_vec( std::vector<std::string> str_vec ){
 //' @param allele which (1-based) allele to report frequency for
 //' @param sum_type type of sum to calculate, see details
 //' @param delim character that delimits values
+//' @param decreasing should the values be sorted decreasing (1) or increasing (0)?
 //'
 //' @details
 //' Files containing VCF data frequently include data on allelic depth (e.g., AD).
@@ -76,7 +83,8 @@ std::vector<float> str_vec_to_float_vec( std::vector<std::string> str_vec ){
 Rcpp::NumericMatrix AD_frequency(Rcpp::StringMatrix ad,
                                  std::string delim = ",",
                                  int allele = 1,
-                                 int sum_type = 0
+                                 int sum_type = 0,
+                                 int decreasing = 1
                                  ) {
 
   // Initialize return data structure.
@@ -114,8 +122,15 @@ Rcpp::NumericMatrix AD_frequency(Rcpp::StringMatrix ad,
         float_vec = str_vec_to_float_vec(col_vec);
 
         // Sort the vector.
-        std::sort ( float_vec.begin(), float_vec.end(), greater() );
-        
+        if( decreasing == 1 ){
+          std::sort ( float_vec.begin(), float_vec.end(), greater() );
+        } else if ( decreasing == 0 ){
+          std::sort ( float_vec.begin(), float_vec.end(), lesser() );
+        } else {
+          Rcpp::Rcerr << "Specification of 'decreasing' should be either 0 or 1.\n";
+          return nam;
+        }
+
         // Calculate a sum.
         float my_sum = 0;
         if( sum_type == 0 ){
