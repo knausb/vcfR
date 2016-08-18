@@ -78,6 +78,48 @@ is_het <- function(x, na_is_false = TRUE) {
     .Call('vcfR_is_het', PACKAGE = 'vcfR', x, na_is_false)
 }
 
+#' 
+#' @rdname masplit
+#' 
+#' @title masplit
+#' @description Split a matrix of delimited strings.
+#' 
+#' @param myMat a matrix of delimited strings (e.g., "7,2").
+#' @param delim character that delimits values.
+#' @param count return the count of delimited records.
+#' @param record which (1-based) record to return.
+#' @param sort should the records be sorted prior to selecting the element?
+#' @param decreasing should the values be sorted decreasing (1) or increasing (0)?
+#' 
+#' 
+#' 
+#' @details Split a matrix of delimited strings.
+#' 
+#' @return A numeric matrix of numerics
+#' 
+#' 
+#' @examples
+#' set.seed(999)
+#' x1 <- round(rnorm(n=9, mean=10, sd=2))
+#' x2 <- round(rnorm(n=9, mean=20, sd=2))
+#' ad <- matrix(paste(x1, x2, sep=","), nrow=3, ncol=3)
+#' colnames(ad) <- paste('Sample', 1:3, sep="_")
+#' rownames(ad) <- paste('Variant', 1:3, sep="_")
+#' ad[1,1] <- "9,23,12"
+#' 
+#' ad
+#' masplit(ad, count = 1)
+#' masplit(ad, sort = 0)
+#' masplit(ad, sort = 0, record = 2)
+#' masplit(ad, sort = 0, record = 3)
+#' masplit(ad, sort = 1, decreasing = 0)
+#' 
+#' 
+#' @export
+masplit <- function(myMat, delim = ",", count = 0L, record = 1L, sort = 1L, decreasing = 1L) {
+    .Call('vcfR_masplit', PACKAGE = 'vcfR', myMat, delim, count, record, sort, decreasing)
+}
+
 NM2winNM <- function(x, pos, maxbp, winsize = 100L) {
     .Call('vcfR_NM2winNM', PACKAGE = 'vcfR', x, pos, maxbp, winsize)
 }

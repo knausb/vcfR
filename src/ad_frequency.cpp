@@ -18,7 +18,7 @@ struct lesser
 
 
 // Convert vectors of strings to floats.
-std::vector<float> str_vec_to_float_vec( std::vector<std::string> str_vec ){
+std::vector<float> str_vec_to_float_vec2( std::vector<std::string> str_vec ){
   // Initialize return vector.
   std::vector<float> float_vec( str_vec.size(), 0 );
   
@@ -34,6 +34,7 @@ std::vector<float> str_vec_to_float_vec( std::vector<std::string> str_vec ){
   }
   return float_vec;
 }
+
 
 
 //' @title AD_frequency
@@ -119,7 +120,7 @@ Rcpp::NumericMatrix AD_frequency(Rcpp::StringMatrix ad,
 
         // Recast vector of string to vector of floats.
         std::vector < float > float_vec;( col_vec.size(), 0);
-        float_vec = str_vec_to_float_vec(col_vec);
+        float_vec = str_vec_to_float_vec2(col_vec);
 
         // Sort the vector.
         if( decreasing == 1 ){

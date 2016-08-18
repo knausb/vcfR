@@ -98,6 +98,22 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// masplit
+Rcpp::NumericMatrix masplit(Rcpp::StringMatrix myMat, std::string delim, int count, int record, int sort, int decreasing);
+RcppExport SEXP vcfR_masplit(SEXP myMatSEXP, SEXP delimSEXP, SEXP countSEXP, SEXP recordSEXP, SEXP sortSEXP, SEXP decreasingSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::StringMatrix >::type myMat(myMatSEXP);
+    Rcpp::traits::input_parameter< std::string >::type delim(delimSEXP);
+    Rcpp::traits::input_parameter< int >::type count(countSEXP);
+    Rcpp::traits::input_parameter< int >::type record(recordSEXP);
+    Rcpp::traits::input_parameter< int >::type sort(sortSEXP);
+    Rcpp::traits::input_parameter< int >::type decreasing(decreasingSEXP);
+    __result = Rcpp::wrap(masplit(myMat, delim, count, record, sort, decreasing));
+    return __result;
+END_RCPP
+}
 // NM2winNM
 NumericMatrix NM2winNM(NumericMatrix x, std::vector<int> pos, int maxbp, int winsize);
 RcppExport SEXP vcfR_NM2winNM(SEXP xSEXP, SEXP posSEXP, SEXP maxbpSEXP, SEXP winsizeSEXP) {
