@@ -76,7 +76,7 @@
 #' plot(x1, y1, pch=20, col="#8B451388", main="Normal, random, bivariate data")
 #' 
 #' data(vcfR_example)
-#' ordisample(vcf[1:100,], sample = 2)
+#' ordisample(vcf[1:100,], sample = "P17777us22")
 #' 
 #' vars <- 1:100
 #' myOrd <- ordisample(vcf[vars,], sample = "P17777us22", plot = FALSE)
@@ -151,15 +151,25 @@ ordisample <- function(x, sample, distance = "bray", plot = TRUE, alpha = 88, ve
   
   for(i in 1:ncol(myGT)){
     tmp <- extract.gt( x, element = colnames(myGT)[i] )
+    # First handle reserved words.
+#    if( colnames(myGT)[i] == "AD" ){
+#      tmp <- AD_frequency(tmp)
+    # AD_frequency may help distinguish heterozygotes 
+    # from homozygotes but seems dubious here.
+#    }
+    if( colnames(myGT)[i] == "PL" ){
+      tmp <- AD_frequency(tmp, decreasing = 0)
+    } else  {
       tmp <- strsplit(tmp, split = ",")
 #      tmp <- lapply(tmp, function(x){x[1]})
       tmp <- lapply(tmp, function(x){ sort(x, decreasing = TRUE)[1] })
       tmp <- unlist(tmp)
-    if( myFORMAT$Type[i] == "Integer"){
-      tmp <- as.integer(tmp)
-    }
-    if( myFORMAT$Type[i] == "Float"){
-      tmp <- as.numeric(tmp)
+      if( myFORMAT$Type[i] == "Integer"){
+        tmp <- as.integer(tmp)
+      }
+      if( myFORMAT$Type[i] == "Float"){
+        tmp <- as.numeric(tmp)
+      }
     }
     myGT[,i] <- tmp
   }

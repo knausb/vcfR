@@ -75,7 +75,7 @@ y1 <- rnorm(500)
 plot(x1, y1, pch=20, col="#8B451388", main="Normal, random, bivariate data")
 
 data(vcfR_example)
-ordisample(vcf[1:100,], sample = 2)
+ordisample(vcf[1:100,], sample = "P17777us22")
 
 vars <- 1:100
 myOrd <- ordisample(vcf[vars,], sample = "P17777us22", plot = FALSE)
