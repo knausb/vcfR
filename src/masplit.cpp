@@ -65,6 +65,7 @@ std::vector<float> str_vec_to_float_vec( std::vector<std::string> str_vec ){
 //' colnames(ad) <- paste('Sample', 1:3, sep="_")
 //' rownames(ad) <- paste('Variant', 1:3, sep="_")
 //' ad[1,1] <- "9,23,12"
+//' is.na(ad[3,1]) <- TRUE
 //' 
 //' ad
 //' masplit(ad, count = 1)
@@ -143,6 +144,9 @@ Rcpp::NumericMatrix masplit(Rcpp::StringMatrix myMat,
             retMat(i,j) = float_vec[ record ];
           }
         }
+      } else if( myMat(i,j) == NA_STRING ){
+        retMat(i,j) = NA_REAL;
+//        Rcpp::Rcout << "NA input to NA out.\n";
       }
 
 //      } else {
