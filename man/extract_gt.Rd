@@ -68,6 +68,16 @@ When the parameter return_indels is TRUE only indels will be returned.
 
 The function \strong{extract.info} is used to isolate elements from the INFO column of vcf data.
 }
+\examples{
+data(vcfR_test)
+getFIX(vcfR_test)
+vcf <- extract.indels(vcfR_test)
+getFIX(vcf)
+vcf@fix[4,'ALT'] <- ".,A"
+vcf <- extract.indels(vcf)
+getFIX(vcf)
+
+}
 \seealso{
 \code{\link{is.polymorphic}}
 }

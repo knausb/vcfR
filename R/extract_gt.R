@@ -181,7 +181,16 @@ extract.haps <- function(x, mask=FALSE, gt.split="|",verbose=TRUE){
 #' The function queries the 'REF' and 'ALT' columns of the 'fix' slot to see if any alleles are greater than one character in length.
 #' When the parameter return_indels is FALSE only SNPs will be returned.
 #' When the parameter return_indels is TRUE only indels will be returned.
-#'
+#' 
+#' 
+#' @examples
+#' data(vcfR_test)
+#' getFIX(vcfR_test)
+#' vcf <- extract.indels(vcfR_test)
+#' getFIX(vcf)
+#' vcf@fix[4,'ALT'] <- ".,A"
+#' vcf <- extract.indels(vcf)
+#' getFIX(vcf)
 #' 
 #' @export
 extract.indels <- function(x, return.indels=FALSE){
@@ -194,9 +203,12 @@ extract.indels <- function(x, return.indels=FALSE){
 
   # Check reference for indels
   mask <- nchar(x@fix[,'REF']) > 1
+  mask[ grep(".", x@fix[,'REF'], fixed = TRUE) ] <- TRUE
   
   # Check alternate for indels
-  mask[unlist(lapply(strsplit(x@fix[,'ALT'], split=","), function(x){max(nchar(x))})) > 1] <- TRUE
+  mask[unlist(
+    lapply(strsplit(x@fix[,'ALT'], split=","), function(x){ max(nchar(x)) > 1 | length(grep(".",x,fixed=TRUE))>0 })
+    ) ] <- TRUE
 
   if(return.indels == FALSE){
     x <- x[ !mask, , drop = FALSE ]
