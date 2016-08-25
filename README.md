@@ -103,30 +103,34 @@ If you know of a software that I have not included on this list, particularly if
 
 **Genomic variant callers:**
 
+* [Cortex](http://cortexassembler.sourceforge.net/)
+* [freebayes](https://github.com/ekg/freebayes)
 * [GATK haplotype caller](https://www.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_haplotypecaller_HaplotypeCaller.php)
 * [GATK MuTect2](https://www.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_cancer_m2_MuTect2.php)
 * [GATK GenotypeGVCFs](https://www.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_variantutils_GenotypeGVCFs.php)
-* [freebayes](https://github.com/ekg/freebayes)
-* [Samtools](http://www.htslib.org/)
 * [LoFreq](http://csb5.github.io/lofreq/)
-* [Cortex](http://cortexassembler.sourceforge.net/)
+* [Platypus](http://www.well.ox.ac.uk/platypus)
+* [Samtools](http://www.htslib.org/)
 * [VarScan2](http://dkoboldt.github.io/varscan/)
 
 
 **Restriction site associated DNA markers (e.g., RADseq, GBS):**
 
-* [Tassel](http://www.maizegenetics.net/#!tassel/c17q9)
 * [Stacks](http://catchenlab.life.illinois.edu/stacks/)
+* [Tassel](http://www.maizegenetics.net/#!tassel/c17q9)
 
+**Manipulation of VCF data:**
 
-**Manipulation**
-
-* [VCFtools](https://vcftools.github.io/) General manipulation and analysis.
-* [VariantAnnotation::readVcf](https://bioconductor.org/packages/release/bioc/html/VariantAnnotation.html) Bioconductor package for annotating variants.
+* [Beagle v4.1](https://faculty.washington.edu/browning/beagle/beagle.html) Inputs VCF genotypes and outputs phased genotypes to VCF format.
 * [pegas::read.vcf](https://cran.r-project.org/package=pegas) Population and Evolutionary Genetics Analysis System
 * [PyVCF](https://pyvcf.readthedocs.io/en/latest/)
-* [Beagle v4.1](https://faculty.washington.edu/browning/beagle/beagle.html) Inputs VCF genotypes and outputs phased genotypes to VCF format.
+* [VCFtools](https://vcftools.github.io/) General manipulation and analysis.
+* [VariantAnnotation::readVcf](https://bioconductor.org/packages/release/bioc/html/VariantAnnotation.html) Bioconductor package for annotating variants.
 
+**R packages that read VCF data**
+
+* [VariantAnnotation](https://bioconductor.org/packages/release/bioc/html/VariantAnnotation.html)
+* [pegas](https://cran.r-project.org/package=pegas)
 
 ------
 
