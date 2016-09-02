@@ -62,7 +62,8 @@ We can use 'grep' to search the meta slot for the definition of these fields.
 
 
 ```{r}
-strwrap(grep('DP', vcf@meta, value = TRUE))
+#strwrap(grep('DP', vcf@meta, value = TRUE))
+queryMETA(vcf, element = 'DP')
 ```
 
 
