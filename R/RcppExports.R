@@ -64,6 +64,40 @@ extract_haps <- function(ref, alt, gt, gt_split, verbose) {
     .Call('vcfR_extract_haps', PACKAGE = 'vcfR', ref, alt, gt, gt_split, verbose)
 }
 
+#' 
+#' @rdname freq_peak
+#' 
+#' @title freq_peak
+#' @description Find peaks in frequency data.
+#' 
+#' @param myMat a matrix of frequencies [0-1].
+#' @param pos a numeric vector describing the position of variants in myMat.
+#' @param winsize sliding window size.
+#' 
+#' @details
+#' More to come.
+#' 
+#' @return 
+#' A list
+#' 
+#' @examples
+#' freqs <- matrix(runif(n=9), ncol=3, nrow=3)
+#' pos <- 1:3
+#' myPeaks <- freq_peak(freqs, pos)
+#' 
+#' data(vcfR_example)
+#' ad <- extract.gt(vcf, element = "AD")
+#' ad1 <- masplit(ad, record = 1)
+#' ad2 <- masplit(ad, record = 2)
+#' freqs <- ad1/(ad1+ad2)
+#' # myPeaks <- freq_peak(freqs, getPOS(vcf))
+#' 
+#' 
+#' @export
+freq_peak <- function(myMat, pos, winsize = 1000L) {
+    .Call('vcfR_freq_peak', PACKAGE = 'vcfR', myMat, pos, winsize)
+}
+
 gt_to_popsum <- function(var_info, gt) {
     .Call('vcfR_gt_to_popsum', PACKAGE = 'vcfR', var_info, gt)
 }

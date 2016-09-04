@@ -74,6 +74,19 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// freq_peak
+Rcpp::List freq_peak(Rcpp::NumericMatrix myMat, Rcpp::NumericVector pos, int winsize);
+RcppExport SEXP vcfR_freq_peak(SEXP myMatSEXP, SEXP posSEXP, SEXP winsizeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type myMat(myMatSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type pos(posSEXP);
+    Rcpp::traits::input_parameter< int >::type winsize(winsizeSEXP);
+    __result = Rcpp::wrap(freq_peak(myMat, pos, winsize));
+    return __result;
+END_RCPP
+}
 // gt_to_popsum
 Rcpp::DataFrame gt_to_popsum(Rcpp::DataFrame var_info, Rcpp::CharacterMatrix gt);
 RcppExport SEXP vcfR_gt_to_popsum(SEXP var_infoSEXP, SEXP gtSEXP) {
