@@ -43,9 +43,11 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
   naMat(0,0) = NA_REAL;
   
   // Create a matrix of windows.
-//  Rcpp::Rcout << "pos.size() is: " << pos.size() << ".\n"; 
+//  
+Rcpp::Rcout << "pos.size() is: " << pos.size() << ".\n"; 
   int max_pos = pos[ pos.size() - 1 ] / winsize + 1;
-//  Rcpp::Rcout << "max_pos is: " << max_pos << ".\n"; 
+//  
+Rcpp::Rcout << "max_pos is: " << max_pos << ".\n"; 
   Rcpp::NumericMatrix wins( max_pos, 4);
   Rcpp::StringVector rownames( max_pos );
   for(i=0; i<max_pos; i++){
@@ -53,6 +55,7 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
     wins(i,1) = i * winsize + winsize;
     rownames(i) = "win" + std::to_string(i+1);
   }
+  Rcpp::Rcout << "wins initialized!\n";
   Rcpp::StringVector colnames(4);
   colnames(0) = "START";
   colnames(1) = "END";
@@ -63,7 +66,19 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
   // Initialize a freq matrix.
   Rcpp::NumericMatrix freqs( max_pos, myMat.ncol() );
   Rcpp::List myNames = myMat.attr("dimnames");
-  freqs.attr("dimnames") = Rcpp::List::create(rownames, myNames(1));
+  Rcpp::Rcout << "Trying dimnames.\n";
+  Rcpp::StringVector myColNames = Rcpp::colnames(myMat);
+  Rcpp::Rcout << "myColNames.size(): " << myColNames.size() << "\n";
+//  Rcpp::Rcout << "myNames(0).size(): " << myNames(0)(0) << "\n";
+//  Rcpp::Rcout << "myNames(1).size(): " << myNames(1) << "\n";
+//  freqs.attr("dimnames") = Rcpp::List::create(rownames, myNames(1));
+  
+  Rcpp::rownames(freqs) = rownames;
+  if( myColNames.size() > 0 ){
+    Rcpp::colnames(freqs) = myColNames;
+  }
+  
+  Rcpp::Rcout << "Finished dimnames.\n";
   
   // Find windows in pos.
   
