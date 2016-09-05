@@ -4,7 +4,7 @@
 \alias{freq_peak}
 \title{freq_peak}
 \usage{
-freq_peak(myMat, pos, winsize = 1000L)
+freq_peak(myMat, pos, winsize = 10000L)
 }
 \arguments{
 \item{myMat}{a matrix of frequencies [0-1].}
@@ -32,7 +32,7 @@ ad <- extract.gt(vcf, element = "AD")
 ad1 <- masplit(ad, record = 1)
 ad2 <- masplit(ad, record = 2)
 freqs <- ad1/(ad1+ad2)
-# myPeaks <- freq_peak(freqs, getPOS(vcf))
+myPeaks <- freq_peak(freqs, getPOS(vcf))
 
 
 }

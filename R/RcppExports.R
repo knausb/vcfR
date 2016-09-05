@@ -90,11 +90,11 @@ extract_haps <- function(ref, alt, gt, gt_split, verbose) {
 #' ad1 <- masplit(ad, record = 1)
 #' ad2 <- masplit(ad, record = 2)
 #' freqs <- ad1/(ad1+ad2)
-#' # myPeaks <- freq_peak(freqs, getPOS(vcf))
+#' myPeaks <- freq_peak(freqs, getPOS(vcf))
 #' 
 #' 
 #' @export
-freq_peak <- function(myMat, pos, winsize = 1000L) {
+freq_peak <- function(myMat, pos, winsize = 10000L) {
     .Call('vcfR_freq_peak', PACKAGE = 'vcfR', myMat, pos, winsize)
 }
 
