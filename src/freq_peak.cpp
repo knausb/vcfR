@@ -43,48 +43,86 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
   naMat(0,0) = NA_REAL;
   
   // Create a matrix of windows.
-//  
-Rcpp::Rcout << "pos.size() is: " << pos.size() << ".\n"; 
+// Rcpp::Rcout << "pos.size() is: " << pos.size() << ".\n"; 
   int max_pos = pos[ pos.size() - 1 ] / winsize + 1;
-//  
-Rcpp::Rcout << "max_pos is: " << max_pos << ".\n"; 
-  Rcpp::NumericMatrix wins( max_pos, 4);
+// Rcpp::Rcout << "max_pos is: " << max_pos << ".\n"; 
+  Rcpp::NumericMatrix wins( max_pos, 6);
   Rcpp::StringVector rownames( max_pos );
   for(i=0; i<max_pos; i++){
     wins(i,0) = i * winsize + 1;
     wins(i,1) = i * winsize + winsize;
     rownames(i) = "win" + std::to_string(i+1);
   }
-  Rcpp::Rcout << "wins initialized!\n";
-  Rcpp::StringVector colnames(4);
+//  Rcpp::Rcout << "wins initialized!\n";
+  Rcpp::StringVector colnames(6);
   colnames(0) = "START";
   colnames(1) = "END";
-  colnames(2) = "START_pos";
-  colnames(3) = "END_pos";
+  colnames(2) = "START_row";
+  colnames(3) = "END_row";
+  colnames(4) = "START_pos";
+  colnames(5) = "END_pos";
   wins.attr("dimnames") = Rcpp::List::create(rownames, colnames);
 
   // Initialize a freq matrix.
   Rcpp::NumericMatrix freqs( max_pos, myMat.ncol() );
-  Rcpp::List myNames = myMat.attr("dimnames");
-  Rcpp::Rcout << "Trying dimnames.\n";
+//  Rcpp::Rcout << "Trying dimnames.\n";
   Rcpp::StringVector myColNames = Rcpp::colnames(myMat);
-  Rcpp::Rcout << "myColNames.size(): " << myColNames.size() << "\n";
-//  Rcpp::Rcout << "myNames(0).size(): " << myNames(0)(0) << "\n";
-//  Rcpp::Rcout << "myNames(1).size(): " << myNames(1) << "\n";
-//  freqs.attr("dimnames") = Rcpp::List::create(rownames, myNames(1));
-  
+//  Rcpp::Rcout << "myColNames.size(): " << myColNames.size() << "\n";
+
   Rcpp::rownames(freqs) = rownames;
   if( myColNames.size() > 0 ){
     Rcpp::colnames(freqs) = myColNames;
   }
   
-  Rcpp::Rcout << "Finished dimnames.\n";
+//  Rcpp::Rcout << "Finished dimnames.\n";
   
   // Find windows in pos.
+  int win_num = 0;
+  i = 0;
+
+  // First row.
+  Rcpp::Rcout << "First row.\n";
+  if( pos(0) >= wins(win_num,0) & pos(0) <= wins(win_num,1) ){
+    // First row (variant) is in first window.
+    wins(win_num,3) = 0;
+    wins(win_num,5) = pos(0);
+    wins(win_num,4) = 0;
+    wins(win_num,6) = pos(0);
+  } else {
+    while( pos(0) < wins(win_num,0) ){
+      win_num++;
+    }
+    wins(win_num,3) = i;
+    wins(win_num,5) = pos(i);
+    wins(win_num,4) = i;
+    wins(win_num,6) = pos(i);
+  }
+  // First variant should be placed in a window.
+  
+  Rcpp::Rcout << "Windowing.\n";
+  // Iterate through rows (variants).
+  for(i=1; i<pos.size(); i++){
+    if( pos(i) >= wins(win_num,0) & pos(i) <= wins(win_num,1) ){
+      // In the same window.
+      wins(win_num,4) = i;
+      wins(win_num,6) = pos(i);
+    } else {
+      // New window.
+      while( pos(i) < wins(win_num,0) ){
+        win_num = win_num + 1;
+        Rcpp::Rcout << "Window: " << win_num << "\n";
+      }
+      wins(win_num,3) = i;
+      wins(win_num,5) = pos(i);
+      wins(win_num,4) = i;
+      wins(win_num,5) = pos(i);
+    }
+  }
+  
   
   
   // Windowize and process.
-//  int win_num = 0;
+
   
   // Create the return List.
   Rcpp::List myList = Rcpp::List::create(
