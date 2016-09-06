@@ -75,15 +75,17 @@ BEGIN_RCPP
 END_RCPP
 }
 // freq_peak
-Rcpp::List freq_peak(Rcpp::NumericMatrix myMat, Rcpp::NumericVector pos, int winsize);
-RcppExport SEXP vcfR_freq_peak(SEXP myMatSEXP, SEXP posSEXP, SEXP winsizeSEXP) {
+Rcpp::List freq_peak(Rcpp::NumericMatrix myMat, Rcpp::NumericVector pos, int winsize, float bin_width, Rcpp::LogicalVector count);
+RcppExport SEXP vcfR_freq_peak(SEXP myMatSEXP, SEXP posSEXP, SEXP winsizeSEXP, SEXP bin_widthSEXP, SEXP countSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type myMat(myMatSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type pos(posSEXP);
     Rcpp::traits::input_parameter< int >::type winsize(winsizeSEXP);
-    __result = Rcpp::wrap(freq_peak(myMat, pos, winsize));
+    Rcpp::traits::input_parameter< float >::type bin_width(bin_widthSEXP);
+    Rcpp::traits::input_parameter< Rcpp::LogicalVector >::type count(countSEXP);
+    __result = Rcpp::wrap(freq_peak(myMat, pos, winsize, bin_width, count));
     return __result;
 END_RCPP
 }
