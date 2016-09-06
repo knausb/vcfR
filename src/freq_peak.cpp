@@ -81,46 +81,38 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
   i = 0;
 
   // First row.
-  Rcpp::Rcout << "First row.\n";
-  if( pos(0) >= wins(win_num,0) & pos(0) <= wins(win_num,1) ){
-    // First row (variant) is in first window.
-    wins(win_num,3) = 0;
-    wins(win_num,5) = pos(0);
-    wins(win_num,4) = 0;
-    wins(win_num,6) = pos(0);
-  } else {
-    while( pos(0) < wins(win_num,0) ){
+//  Rcpp::Rcout << "First row.\n";
+  while( pos(i) < wins(win_num,0) ){
       win_num++;
-    }
-    wins(win_num,3) = i;
-    wins(win_num,5) = pos(i);
-    wins(win_num,4) = i;
-    wins(win_num,6) = pos(i);
   }
-  // First variant should be placed in a window.
+  wins(win_num,2) = i + 1;
+  wins(win_num,4) = pos(0);
   
-  Rcpp::Rcout << "Windowing.\n";
-  // Iterate through rows (variants).
-  for(i=1; i<pos.size(); i++){
-    if( pos(i) >= wins(win_num,0) & pos(i) <= wins(win_num,1) ){
-      // In the same window.
-      wins(win_num,4) = i;
-      wins(win_num,6) = pos(i);
-    } else {
-      // New window.
-      while( pos(i) < wins(win_num,0) ){
-        win_num = win_num + 1;
-        Rcpp::Rcout << "Window: " << win_num << "\n";
-      }
+  // Remaining rows.
+//  Rcpp::Rcout << "Windowing.\n";
+  for(i=1; i<myMat.nrow(); i++){
+    
+    if( pos(i) > wins(win_num,1) ){
+      // Increment window.
+//      Rcpp::Rcout << "  New window, pos(i): " << pos(i) << " wins(win_num,0): " << wins(win_num,0) << " wins(win_num,1): " << wins(win_num,1) << "\n";
       wins(win_num,3) = i;
-      wins(win_num,5) = pos(i);
-      wins(win_num,4) = i;
-      wins(win_num,5) = pos(i);
+      wins(win_num,5) = pos(i-1);
+      
+      while( pos(i) > wins(win_num,1) ){
+//        win_num++;
+        win_num = win_num + 1;
+//        Rcpp::Rcout << "    Incrementing win_num: " << win_num << "\n";
+      }
+//      Rcpp::Rcout << "    win_num: " << win_num << "\n";
+      wins(win_num,2) = i + 1;
+      wins(win_num,4) = pos(i);
     }
   }
   
-  
-  
+  // Last row.
+  wins(win_num,3) = i;
+  wins(win_num,5) = pos(i-1);
+
   // Windowize and process.
 
   
