@@ -4,7 +4,7 @@
 \alias{freq_peak}
 \title{freq_peak}
 \usage{
-freq_peak(myMat, pos, winsize = 10000L, count = FALSE)
+freq_peak(myMat, pos, winsize = 10000L, bin_width = 0.02, count = FALSE)
 }
 \arguments{
 \item{myMat}{a matrix of frequencies [0-1].}
@@ -12,6 +12,8 @@ freq_peak(myMat, pos, winsize = 10000L, count = FALSE)
 \item{pos}{a numeric vector describing the position of variants in myMat.}
 
 \item{winsize}{sliding window size.}
+
+\item{bin_width}{Width of bins to summarize ferequencies in [0-1].}
 
 \item{count}{logical specifying to count the number of non-NA values intead of reporting peak.}
 }
