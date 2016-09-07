@@ -73,7 +73,7 @@ extract_haps <- function(ref, alt, gt, gt_split, verbose) {
 #' @param myMat a matrix of frequencies [0-1].
 #' @param pos a numeric vector describing the position of variants in myMat.
 #' @param winsize sliding window size.
-#' @param bin_width Width of bins to summarize ferequencies in [0-1].
+#' @param bin_width Width of bins to summarize ferequencies in (0-1].
 #' @param count logical specifying to count the number of non-NA values intead of reporting peak.
 #' 
 #' @details

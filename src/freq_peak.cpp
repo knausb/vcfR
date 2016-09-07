@@ -46,23 +46,37 @@ Rcpp::NumericVector count_nonNA( Rcpp::NumericMatrix myMat ){
 }
 
 
-// Count non missing values in a matrix.
+// Find peaks from frequency values [0-1].
 Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat, float bin_width ){
   Rcpp::NumericVector myPeaks( myMat.ncol() );
-
   int i = 0;
   int j = 0;
-  
   // Initialize to zero.
   for(i=0; i<myPeaks.size(); i++){
     myPeaks(i) = 0;
   }
+
+  int nbins = 1 / bin_width;
+  Rcpp::NumericVector breaks( nbins + 1 );
+  Rcpp::NumericVector mids( nbins );
+  Rcpp::NumericVector counts( nbins );
   
-  // 1/binwidth + 1;
+  // Test thet 1/bin_width does not have a remainder.
+  if( 1/bin_width - nbins > 0 ){
+    Rcpp::Rcerr << "1/bin_width has a remainder, please try another bin_width.\n";
+    return(myPeaks);
+  }
   
-  
+  // Initialize vectors.
+  breaks(0) = 0;
+  for(i=1; i<mids.size(); i++ ){
+    breaks(i) = breaks(i-1) + bin_width;
+    mids(i-1) = breaks(i) - bin_width/2;
+    counts(i-1) = 0;
+  }
+
   for(i=0; i<myMat.ncol(); i++){
-    
+
   }
 
   return(myPeaks);
@@ -78,7 +92,7 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat, float bin_width ){
 //' @param myMat a matrix of frequencies [0-1].
 //' @param pos a numeric vector describing the position of variants in myMat.
 //' @param winsize sliding window size.
-//' @param bin_width Width of bins to summarize ferequencies in [0-1].
+//' @param bin_width Width of bins to summarize ferequencies in (0-1].
 //' @param count logical specifying to count the number of non-NA values intead of reporting peak.
 //' 
 //' @details
@@ -188,6 +202,40 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
 
   // Windowize and process.
 
+  // Check bin_width validity.
+  if( !count(0) ){
+    // Positive bin width.
+    if( bin_width <= 0 ){
+      Rcpp::Rcerr << "bin_width must be greater than zero, please try another bin_width.\n";
+      Rcpp::List myList = Rcpp::List::create(
+        Rcpp::Named("wins") = wins,
+        Rcpp::Named("peaks") = naMat
+      );
+      return( myList );
+    }
+    
+    // bin width less than one.
+    if( bin_width > 1 ){
+      Rcpp::Rcerr << "bin_width must be no greater than one, please try another bin_width.\n";
+      Rcpp::List myList = Rcpp::List::create(
+        Rcpp::Named("wins") = wins,
+        Rcpp::Named("peaks") = naMat
+      );
+      return( myList );
+    }
+    
+    // No remainder to bin width.
+    int nbins = 1 / bin_width;
+    if( 1/bin_width - nbins > 0 ){
+      Rcpp::Rcerr << "1/bin_width has a remainder, please try another bin_width.\n";
+      Rcpp::List myList = Rcpp::List::create(
+        Rcpp::Named("wins") = wins,
+        Rcpp::Named("peaks") = naMat
+      );
+    return( myList );
+    }
+  }
+  
   // Window counter.
   for(i=0; i<freqs.nrow(); i++){
     Rcpp::NumericMatrix myWin(wins(i,3) - wins(i,2) + 1, freqs.ncol());
@@ -202,7 +250,6 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
     } else {
       freqs(i,Rcpp::_) = find_peaks( myWin, bin_width );
     }
-
   }
   
   // Create the return List.
