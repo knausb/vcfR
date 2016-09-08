@@ -92,7 +92,17 @@ extract_haps <- function(ref, alt, gt, gt_split, verbose) {
 #' ad1 <- masplit(ad, record = 1)
 #' ad2 <- masplit(ad, record = 2)
 #' freqs <- ad1/(ad1+ad2)
-#' myPeaks <- freq_peak(freqs, getPOS(vcf))
+#' # myPeaks <- freq_peak(freqs, getPOS(vcf))
+#' myPeaks <- freq_peak(freqs[1:115,], getPOS(vcf)[1:115])
+#' 
+#' # Visualize
+#' mySample <- "P17777us22"
+#' myWin <- 1
+#' hist(freqs[myPeaks$wins[myWin,'START_row']:myPeaks$wins[myWin,'END_row'], mySample], 
+#'      breaks=seq(0,1,by=0.02), col=8, main="", xlab="", xaxt="n")
+#' axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), 
+#'      labels=c(0,'1/4','1/3','1/2','2/3','3/4',1), las=3)
+#' abline(v=myPeaks$peaks[myWin,mySample], col=2, lwd=2)
 #' 
 #' 
 #' @export

@@ -1,8 +1,6 @@
 #include <Rcpp.h>
 
 
-
-
 // Slice a window of rows out of a matrix.
 Rcpp::NumericMatrix mat_to_win( Rcpp::NumericMatrix myMat, 
                                 int start_row, 
@@ -14,13 +12,14 @@ Rcpp::NumericMatrix mat_to_win( Rcpp::NumericMatrix myMat,
   int j = 0;
   
   for(i=0; i<myMat.ncol(); i++){
-    for(j=start_row; j<end_row; j++){
-      retMatrix(j - start_row + 1, i) = myMat(j,i);
+    for(j=start_row; j<=end_row; j++){
+      retMatrix(j - start_row + 0, i) = myMat(j,i);
     }
   }
   
   return(retMatrix);
 }
+
 
 // Count non missing values in a matrix.
 Rcpp::NumericVector count_nonNA( Rcpp::NumericMatrix myMat ){
@@ -72,21 +71,84 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat, float bin_width ){
   
   // Initialize vectors.
   breaks(0) = 0;
-  for(i=1; i<mids.size(); i++ ){
-    breaks(i) = breaks(i-1) + bin_width;
-    mids(i-1) = breaks(i) - bin_width/2;
-    counts(i-1) = 0;
+  for(i=0; i<mids.size(); i++ ){
+    breaks(i+1) = breaks(i) + bin_width;
+    mids(i) = breaks(i+1) - bin_width/2;
+    counts(i) = 0;
   }
-
+//  breaks( breaks.size() - 1 ) = 1;
+  
+  
+  Rcpp::Rcout << "Breaks: " << breaks(0);
+  for(i=1; i<10; i++){
+      Rcpp::Rcout << ", " << breaks(i);
+  }
+  Rcpp::Rcout << ", ... " << breaks( breaks.size() - 1 ) << "\n";
+  
+  Rcpp::Rcout << "Mids: " << mids(0);
+  for(i=1; i<10; i++){
+      Rcpp::Rcout << ", " << mids(i);
+  }
+  Rcpp::Rcout << ", ... " << mids( mids.size() - 1 ) << "\n";
+  
+  
+  // Bin the data.
   for(i=0; i<myMat.ncol(); i++){ // Column (sample) counter.
     for(j=0; j<myMat.nrow(); j++){ // Row (variant) counter.
-      for(k=0; k<counts.size(); k++){ // Bin counter.
-        if( myMat(j,i) >= breaks(i) & myMat(j,i) < breaks(i + 1) ){
-          counts(i)++;
+      if( myMat(j,i) != NA_REAL ){
+        //Rcpp::Rcout << "\n  counts.size(): " << counts.size() << "\n";
+        Rcpp::Rcout << "Freq: " << myMat(j,i) << "\n";
+
+        for(k=0; k<counts.size()-1; k++){ // Bin counter.
+          if( myMat(j,i) >= breaks(k) & myMat(j,i) < breaks(k + 1) ){
+            counts(k)++;
+            Rcpp::Rcout << "    Binned: " << "\t" << breaks(k)  << "\t" << breaks(k + 1) << "\n";
+          }
+        }
+        // Last bin.
+//        Rcpp::Rcout << "Last break: " << k << ": " << breaks(k + 1) << "\n";
+        if( myMat(j,i) == 1 ){
+          Rcpp::Rcout << "Freqing 1, k: " << k << ", breaks(k):" << breaks(k) << ", breaks(k+1): " << breaks(k+1) << "\n";
+          if( myMat(j,i) == breaks(k+1) ){
+            Rcpp::Rcout << "  This should bin!\n";
+          }
+          if( breaks(k+1) == myMat(j,i) ){
+            Rcpp::Rcout << "  breaks(k+1) == 1!\n";
+          }
+        }
+
+        if( myMat(j,i) >= breaks(k) & myMat(j,i) <= breaks(k + 1) ){
+          counts(k)++;
+          Rcpp::Rcout << "    Binned: " << "\t" << breaks(k) << "\t" << breaks(k + 1) << "\n";
         }
       }
-      
     }
+    
+    // Report counts.
+    
+    
+    Rcpp::Rcout << "\nSample: " << i << "\n";
+    Rcpp::Rcout << "Counts\tmids\n";
+    for(k=0; k<counts.size(); k++){
+      Rcpp::Rcout << counts[k] << "\t" << mids[k] << "\n";
+    }
+    Rcpp::Rcout << "\n";
+    
+
+    
+    // Data should be binned.
+    // Now find the bin with the greatest number of counts.
+    int max_peak = 0;
+//    Rcpp::Rcout << "Counts: " << counts(0) << " mid: " << mids(0);
+    for(k=1; k<counts.size(); k++){ // Bin counter.
+//      Rcpp::Rcout << ", " << counts(k) << " mid: " << mids(k);
+      if( counts[k] > counts[max_peak] ){
+        max_peak = k;
+//        Rcpp::Rcout << "\nnew max at: " << counts(k)<< " mid: " << mids(k) << "\n";
+      }
+    }
+//    Rcpp::Rcout << ", done!\n\n";
+    myPeaks[i] = mids[max_peak];
   }
 
   return(myPeaks);
@@ -121,7 +183,17 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat, float bin_width ){
 //' ad1 <- masplit(ad, record = 1)
 //' ad2 <- masplit(ad, record = 2)
 //' freqs <- ad1/(ad1+ad2)
-//' myPeaks <- freq_peak(freqs, getPOS(vcf))
+//' # myPeaks <- freq_peak(freqs, getPOS(vcf))
+//' myPeaks <- freq_peak(freqs[1:115,], getPOS(vcf)[1:115])
+//' 
+//' # Visualize
+//' mySample <- "P17777us22"
+//' myWin <- 1
+//' hist(freqs[myPeaks$wins[myWin,'START_row']:myPeaks$wins[myWin,'END_row'], mySample], 
+//'      breaks=seq(0,1,by=0.02), col=8, main="", xlab="", xaxt="n")
+//' axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), 
+//'      labels=c(0,'1/4','1/3','1/2','2/3','3/4',1), las=3)
+//' abline(v=myPeaks$peaks[myWin,mySample], col=2, lwd=2)
 //' 
 //' 
 //' @export
@@ -252,6 +324,16 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
     // Remember, R=1-based, C++=0-based!
     myWin = mat_to_win(myMat, wins(i,2) - 1, wins(i,3) - 1 );
 
+    /*
+    Rcpp::Rcout << "myWin nrow: " << myWin.nrow() << "\n";
+    Rcpp::Rcout << "myWin ncol: " << myWin.ncol() << "\n";
+    
+    Rcpp::Rcout << "Freqs: " << myWin(0,1);
+    for(j=1; j<myWin.nrow(); j++){
+      Rcpp::Rcout << ", " << myWin(j,0);
+    }
+    Rcpp::Rcout << "\n";
+    */
     
 //    Rcpp::Rcout << "count(0):" << count(0) << "\n";
     if( count(0) ){
