@@ -46,11 +46,14 @@ Rcpp::NumericVector count_nonNA( Rcpp::NumericMatrix myMat ){
 }
 
 
+
 // Find peaks from frequency values [0-1].
 Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat, float bin_width ){
   Rcpp::NumericVector myPeaks( myMat.ncol() );
   int i = 0;
   int j = 0;
+  int k = 0;
+  
   // Initialize to zero.
   for(i=0; i<myPeaks.size(); i++){
     myPeaks(i) = 0;
@@ -75,8 +78,15 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat, float bin_width ){
     counts(i-1) = 0;
   }
 
-  for(i=0; i<myMat.ncol(); i++){
-
+  for(i=0; i<myMat.ncol(); i++){ // Column (sample) counter.
+    for(j=0; j<myMat.nrow(); j++){ // Row (variant) counter.
+      for(k=0; k<counts.size(); k++){ // Bin counter.
+        if( myMat(j,i) >= breaks(i) & myMat(j,i) < breaks(i + 1) ){
+          counts(i)++;
+        }
+      }
+      
+    }
   }
 
   return(myPeaks);
