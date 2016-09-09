@@ -3,6 +3,7 @@
 # vcfR 1.2.0.9000
 Released on CRAN 2016-XX-XX.
 
+* Created `freq_peak()` to find peaks in allele balance frequency data.
 * Created `masplit()` to parse matrices contains delimited strings.
 * Created `ordisample()` to ordinate sample information.
 * `extract.gt()` can now use the ID column from the fix region for rownames.

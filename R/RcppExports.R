@@ -77,10 +77,34 @@ extract_haps <- function(ref, alt, gt, gt_split, verbose) {
 #' @param count logical specifying to count the number of non-NA values intead of reporting peak.
 #' 
 #' @details
-#' More to come.
+#' Noisy data, such as genomic data, lack a clear consensus.
+#' Summaries may be made in an attempt to 'clean it up.'
+#' Common summaries, such as the mean, rely on an assumption of normalicy.
+#' An assumption that frequently can be violated.
+#' This leaves a conundrum as to how to effectively summarize these data.
+#' 
+#' 
+#' Here we implement an attempt to summarize noisy data through binning the data and selecting the bin containing the greatest density of data.
+#' The data are first divided into parameter sized windows.
+#' Next the data are categorized by parameterizable bin widths.
+#' Finally, the bin with the greatest density, the greatest count of data, is used as a summary.
+#' Because this method is based on binning the data it does not rely on a distributional assumption.
+#' 
+#' 
 #' 
 #' @return 
-#' A list
+#' A list containing:
+#' \itemize{
+#'   \item a matrix containing window coordinates
+#'   \item a matrix containing peak locations
+#' }
+#' 
+#' The window matrix contains start and end coordinates for each window, the rows of the original matrix that demarcate each window and the position of the variants that begin and end each window.
+#' 
+#' The matrix of peak locations contains the midpoint for the bin of greatest density for each sample and each window.
+#' Alternatively, if `count = TRUE` the number of non-missing values in each window is reported.
+#' The number of non-mising values in each window may be used to censor windows containing low quantities of data.
+#' 
 #' 
 #' @examples
 #' data(vcfR_example)
