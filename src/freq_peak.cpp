@@ -45,15 +45,29 @@ Rcpp::NumericVector count_nonNA( Rcpp::NumericMatrix myMat ){
 }
 
 
+//Rcpp::NumericVector find_one_peak( Rcpp::NumericVector myFreqs ){
+double find_one_peak( Rcpp::NumericVector myFreqs,
+                      Rcpp::NumericVector breaks,
+                      Rcpp::NumericVector mids
+                      ){
+  double myPeak = 0;
 
-// Find peaks from frequency values [0-1].
+  std::vector<int> counts ( mids.size(), 0 );
+    
+  return( myPeak );
+}
+
+
+// Find peaks from frequency values [0-1] from a ingle window of data.
+//
 Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat, float bin_width ){
-  Rcpp::NumericVector myPeaks( myMat.ncol() );
+
   int i = 0;
   int j = 0;
   int k = 0;
   
-  // Initialize to zero.
+  // Create return vector and initialize to zero.
+  Rcpp::NumericVector myPeaks( myMat.ncol() );
   for(i=0; i<myPeaks.size(); i++){
     myPeaks(i) = 0;
   }
@@ -65,7 +79,7 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat, float bin_width ){
   
   // Test thet 1/bin_width does not have a remainder.
   if( 1/bin_width - nbins > 0 ){
-    Rcpp::Rcerr << "1/bin_width has a remainder, please try another bin_width.\n";
+    Rcpp::Rcerr << "1/bin_width has a remainder.\nThis will result in uneven bins.\nPlease try another bin_width.\n";
     return(myPeaks);
   }
   
@@ -78,78 +92,82 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat, float bin_width ){
   }
 //  breaks( breaks.size() - 1 ) = 1;
   
-  
-  Rcpp::Rcout << "Breaks: " << breaks(0);
+  /*
+  Rcpp::Rcout << "Breaks (n=" << breaks.size() << "): " << breaks(0);
   for(i=1; i<10; i++){
       Rcpp::Rcout << ", " << breaks(i);
   }
   Rcpp::Rcout << ", ... " << breaks( breaks.size() - 1 ) << "\n";
   
-  Rcpp::Rcout << "Mids: " << mids(0);
+  Rcpp::Rcout << "Mids (n=" << mids.size() << "): " << mids(0);
   for(i=1; i<10; i++){
       Rcpp::Rcout << ", " << mids(i);
   }
   Rcpp::Rcout << ", ... " << mids( mids.size() - 1 ) << "\n";
+  */
   
+  for(i=0; i<myMat.ncol(); i++){ // Column (sample) counter.
+    myPeaks(i) = find_one_peak( myMat( Rcpp::_, i), breaks, mids );
+  }
   
   // Bin the data.
-  for(i=0; i<myMat.ncol(); i++){ // Column (sample) counter.
-    for(j=0; j<myMat.nrow(); j++){ // Row (variant) counter.
-      if( myMat(j,i) != NA_REAL ){
+//  for(i=0; i<myMat.ncol(); i++){ // Column (sample) counter.
+//    for(j=0; j<myMat.nrow(); j++){ // Row (variant) counter.
+//      if( myMat(j,i) != NA_REAL ){
         //Rcpp::Rcout << "\n  counts.size(): " << counts.size() << "\n";
-        Rcpp::Rcout << "Freq: " << myMat(j,i) << "\n";
+//        Rcpp::Rcout << "Freq: " << myMat(j,i) << "\n";
 
-        for(k=0; k<counts.size()-1; k++){ // Bin counter.
-          if( myMat(j,i) >= breaks(k) & myMat(j,i) < breaks(k + 1) ){
-            counts(k)++;
-            Rcpp::Rcout << "    Binned: " << "\t" << breaks(k)  << "\t" << breaks(k + 1) << "\n";
-          }
-        }
+//        for(k=0; k<counts.size()-1; k++){ // Bin counter.
+//          if( myMat(j,i) >= breaks(k) & myMat(j,i) < breaks(k + 1) ){
+//            counts(k)++;
+//            Rcpp::Rcout << "    Binned: " << "\t" << breaks(k)  << "\t" << breaks(k + 1) << "\n";
+//          }
+//        }
         // Last bin.
 //        Rcpp::Rcout << "Last break: " << k << ": " << breaks(k + 1) << "\n";
-        if( myMat(j,i) == 1 ){
-          Rcpp::Rcout << "Freqing 1, k: " << k << ", breaks(k):" << breaks(k) << ", breaks(k+1): " << breaks(k+1) << "\n";
-          if( myMat(j,i) == breaks(k+1) ){
-            Rcpp::Rcout << "  This should bin!\n";
-          }
-          if( breaks(k+1) == myMat(j,i) ){
-            Rcpp::Rcout << "  breaks(k+1) == 1!\n";
-          }
-        }
+//        if( myMat(j,i) == 1 ){
+//          Rcpp::Rcout << "Freqing 1, k: " << k << ", breaks(k):" << breaks(k) << ", breaks(k+1): " << breaks(k+1) << "\n";
+//          if( myMat(j,i) == breaks(k+1) ){
+//            Rcpp::Rcout << "  This should bin!\n";
+//          }
+//          if( breaks(k+1) == myMat(j,i) ){
+//            Rcpp::Rcout << "  breaks(k+1) == 1!\n";
+//          }
+//        }
 
-        if( myMat(j,i) >= breaks(k) & myMat(j,i) <= breaks(k + 1) ){
-          counts(k)++;
-          Rcpp::Rcout << "    Binned: " << "\t" << breaks(k) << "\t" << breaks(k + 1) << "\n";
-        }
-      }
-    }
+//        if( myMat(j,i) >= breaks(k) & myMat(j,i) <= breaks(k + 1) ){
+//          counts(k)++;
+//          Rcpp::Rcout << "    Binned: " << "\t" << breaks(k) << "\t" << breaks(k + 1) << "\n";
+//        }
+//      }
+//    }
     
     // Report counts.
     
     
-    Rcpp::Rcout << "\nSample: " << i << "\n";
-    Rcpp::Rcout << "Counts\tmids\n";
-    for(k=0; k<counts.size(); k++){
-      Rcpp::Rcout << counts[k] << "\t" << mids[k] << "\n";
-    }
-    Rcpp::Rcout << "\n";
+//    Rcpp::Rcout << "\nSample: " << i << "\n";
+//    Rcpp::Rcout << "Counts\tmids\n";
+//    for(k=0; k<counts.size(); k++){
+//      Rcpp::Rcout << counts[k] << "\t" << mids[k] << "\n";
+//    }
+//    Rcpp::Rcout << "\n";
     
 
     
     // Data should be binned.
     // Now find the bin with the greatest number of counts.
-    int max_peak = 0;
+//    int max_peak = 0;
 //    Rcpp::Rcout << "Counts: " << counts(0) << " mid: " << mids(0);
-    for(k=1; k<counts.size(); k++){ // Bin counter.
+//    for(k=1; k<counts.size(); k++){ // Bin counter.
 //      Rcpp::Rcout << ", " << counts(k) << " mid: " << mids(k);
-      if( counts[k] > counts[max_peak] ){
-        max_peak = k;
+//      if( counts[k] > counts[max_peak] ){
+//        max_peak = k;
 //        Rcpp::Rcout << "\nnew max at: " << counts(k)<< " mid: " << mids(k) << "\n";
-      }
-    }
+//      }
+//    }
 //    Rcpp::Rcout << ", done!\n\n";
-    myPeaks[i] = mids[max_peak];
-  }
+//    myPeaks[i] = mids[max_peak];
+//  }
 
   return(myPeaks);
 }

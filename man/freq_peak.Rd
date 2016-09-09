@@ -36,7 +36,7 @@ ad <- extract.gt(vcf, element = "AD")
 ad1 <- masplit(ad, record = 1)
 ad2 <- masplit(ad, record = 2)
 freqs <- ad1/(ad1+ad2)
-myPeaks <- freq_peak(freqs, getPOS(vcf))
+# myPeaks <- freq_peak(freqs, getPOS(vcf))
 myPeaks <- freq_peak(freqs[1:115,], getPOS(vcf)[1:115])
 
 # Visualize
