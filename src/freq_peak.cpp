@@ -21,7 +21,7 @@ Rcpp::NumericMatrix mat_to_win( Rcpp::NumericMatrix myMat,
 }
 
 
-// Count non missing values in a matrix.
+// Count non missing values in a NumericMatrix.
 Rcpp::NumericVector count_nonNA( Rcpp::NumericMatrix myMat ){
   Rcpp::NumericVector myCounts( myMat.ncol() );
 
@@ -34,26 +34,81 @@ Rcpp::NumericVector count_nonNA( Rcpp::NumericMatrix myMat ){
   }
 
   for(i=0; i<myMat.ncol(); i++){
-    for(j=0; j<myMat.nrow(); j++){
-      if( myMat(i,j) != NA_REAL){
+    for(j=0; j<myMat.nrow() - 1; j++){
+      if( !Rcpp::NumericVector::is_na( myMat(j,i) ) ){
         myCounts(i) = myCounts(i) + 1;
       }
     }
   }
-  
+
   return(myCounts);  
 }
 
+// Sort data into bins based on breaks (boundaries).
+std::vector<int> bin_data( Rcpp::NumericVector myFreqs,
+                           std::vector<double> breaks
+//                           Rcpp::NumericVector breaks
+){
+  std::vector<int> counts ( breaks.size() - 1, 0 );
+  
+  int i = 0;
+  int j = 0;
+  
+  for(i=0; i<myFreqs.size(); i++){
+//    Rcpp::Rcout << "myFreqs(i): " << myFreqs(i) << "\n";
+//    if( myFreqs(i) == 1 ){
+//      Rcpp::Rcout << "myFreqs(i) is one!\n";
+//    }
+      
+    for(j=0; j < counts.size() - 1; j++){
+      if( myFreqs(i) >= breaks[j] & myFreqs(i) < breaks[j+1] ){
+        counts[j]++;
+//        Rcpp::Rcout << j << ": breaks[j]: " << breaks[j] << ", breaks[j+1]: " << breaks[j+1] << "\n";
+      }
+    }
+//    Rcpp::Rcout << "j: " << j << " breaks[j]: " << breaks[j] << ", breaks[j+1]: " << breaks[j+1] << "\n";
+//    if( 1 <= breaks[j+1] + 0.0000001 ){
+//      Rcpp::Rcout << " 1 <= breaks(j+1) is TRUE!\n";
+//    }
+    if( myFreqs(i) >= breaks[j] & myFreqs(i) <= breaks[j+1] + 0.0000001 ){
+      counts[j]++;
+//      Rcpp::Rcout << j << ": breaks[j]: " << breaks[j] << ", breaks[j+1]: " << breaks[j+1] << "\n";
+    }
+//    Rcpp::Rcout << "\n";
+  }
+  
+  return(counts);
+}
 
 //Rcpp::NumericVector find_one_peak( Rcpp::NumericVector myFreqs ){
 double find_one_peak( Rcpp::NumericVector myFreqs,
-                      Rcpp::NumericVector breaks,
+//                      Rcpp::NumericVector breaks,
+                      std::vector<double> breaks,
                       Rcpp::NumericVector mids
                       ){
   double myPeak = 0;
+  int i = 0;
 
+  // Bin the data.
   std::vector<int> counts ( mids.size(), 0 );
-    
+  counts = bin_data(myFreqs, breaks);
+  
+//  Rcpp::Rcout << "Counts\tMids\n";
+//  Rcpp::Rcout << "0: " << counts[0] << "\t" << mids(0) << "\n";
+//  for(i=1;i<counts.size(); i++){
+//    Rcpp::Rcout << i << ": " << counts[i] << "\t" << mids(i) << "\n";
+//  }
+//  Rcpp::Rcout << "\n";
+  
+  // Find the peak.
+  int max_peak = 0;
+  for(i=1; i<counts.size(); i++){
+    if( counts[i] > counts[max_peak] ){
+      max_peak = i;
+    }
+  }
+  
+  myPeak = mids[max_peak];
   return( myPeak );
 }
 
@@ -73,9 +128,10 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat, float bin_width ){
   }
 
   int nbins = 1 / bin_width;
-  Rcpp::NumericVector breaks( nbins + 1 );
+//  Rcpp::NumericVector breaks( nbins + 1 );
+  std::vector<double> breaks ( nbins + 1, 0 );
   Rcpp::NumericVector mids( nbins );
-  Rcpp::NumericVector counts( nbins );
+//  Rcpp::NumericVector counts( nbins );
   
   // Test thet 1/bin_width does not have a remainder.
   if( 1/bin_width - nbins > 0 ){
@@ -84,11 +140,11 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat, float bin_width ){
   }
   
   // Initialize vectors.
-  breaks(0) = 0;
+  breaks[0] = 0;
   for(i=0; i<mids.size(); i++ ){
-    breaks(i+1) = breaks(i) + bin_width;
-    mids(i) = breaks(i+1) - bin_width/2;
-    counts(i) = 0;
+    breaks[i+1] = breaks[i] + bin_width;
+    mids(i) = breaks[i] + bin_width/2;
+//    counts(i) = 0;
   }
 //  breaks( breaks.size() - 1 ) = 1;
   
@@ -192,26 +248,50 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat, float bin_width ){
 //' A list
 //' 
 //' @examples
-//' freqs <- matrix(runif(n=9), ncol=3, nrow=3)
-//' pos <- 1:3
-//' myPeaks <- freq_peak(freqs, pos)
-//' 
 //' data(vcfR_example)
+//' gt <- extract.gt(vcf)
+//' hets <- is_het(gt)
+//' # Censor non-heterozygous positions.
+//' is.na(vcf@gt[,-1][!hets]) <- TRUE
+//' # Extract allele depths.
 //' ad <- extract.gt(vcf, element = "AD")
 //' ad1 <- masplit(ad, record = 1)
 //' ad2 <- masplit(ad, record = 2)
-//' freqs <- ad1/(ad1+ad2)
-//' # myPeaks <- freq_peak(freqs, getPOS(vcf))
-//' myPeaks <- freq_peak(freqs[1:115,], getPOS(vcf)[1:115])
+//' freq1 <- ad1/(ad1+ad2)
+//' freq2 <- ad2/(ad1+ad2)
+//' myPeaks1 <- freq_peak(freq1, getPOS(vcf))
+//' myCounts1 <- freq_peak(freq1, getPOS(vcf), count = TRUE)
+//' is.na(myPeaks1$peaks[myCounts1$peaks < 20]) <- TRUE
+//' myPeaks2 <- freq_peak(freq2, getPOS(vcf))
+//' myCounts2 <- freq_peak(freq2, getPOS(vcf), count = TRUE)
+//' is.na(myPeaks2$peaks[myCounts2$peaks < 20]) <- TRUE
+//' #myPeaks <- freq_peak(freqs[1:115,], getPOS(vcf)[1:115])
 //' 
 //' # Visualize
 //' mySample <- "P17777us22"
-//' myWin <- 1
-//' hist(freqs[myPeaks$wins[myWin,'START_row']:myPeaks$wins[myWin,'END_row'], mySample], 
-//'      breaks=seq(0,1,by=0.02), col=8, main="", xlab="", xaxt="n")
+//' myWin <- 2
+//' hist(freq1[myPeaks1$wins[myWin,'START_row']:myPeaks1$wins[myWin,'END_row'], mySample], 
+//'      breaks=seq(0,1,by=0.02), col="#A6CEE3", main="", xlab="", xaxt="n")
+//' hist(freq2[myPeaks2$wins[myWin,'START_row']:myPeaks2$wins[myWin,'END_row'], mySample], 
+//'      breaks=seq(0,1,by=0.02), col="#1F78B4", main="", xlab="", xaxt="n", add = TRUE)
 //' axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), 
 //'      labels=c(0,'1/4','1/3','1/2','2/3','3/4',1), las=3)
-//' abline(v=myPeaks$peaks[myWin,mySample], col=2, lwd=2)
+//' abline(v=myPeaks1$peaks[myWin,mySample], col=2, lwd=2)
+//' abline(v=myPeaks2$peaks[myWin,mySample], col=2, lwd=2)
+//' 
+//' # Visualize #2
+//' plot(getPOS(vcf), freq1[,mySample], ylim=c(0,1), type="n", yaxt='n', 
+//'      main = mySample, xlab = "POS", ylab = "Allele balance")
+//' axis(side=2, at=c(0,0.25,0.333,0.5,0.666,0.75,1), 
+//'      labels=c(0,'1/4','1/3','1/2','2/3','3/4',1), las=1)
+//' abline(h=c(0.25,0.333,0.5,0.666,0.75), col=8)
+//' points(getPOS(vcf), freq1[,mySample], pch = 20, col= "#A6CEE3")
+//' points(getPOS(vcf), freq2[,mySample], pch = 20, col= "#1F78B4")
+//' segments(x0=myPeaks1$wins[,'START_pos'], y0=myPeaks1$peaks[,mySample],
+//'          x1=myPeaks1$wins[,'END_pos'], lwd=3)
+//' segments(x0=myPeaks1$wins[,'START_pos'], y0=myPeaks2$peaks[,mySample],
+//'          x1=myPeaks1$wins[,'END_pos'], lwd=3)
+//' 
 //' 
 //' 
 //' @export
