@@ -84,7 +84,8 @@ std::vector<int> bin_data( Rcpp::NumericVector myFreqs,
 double find_one_peak( Rcpp::NumericVector myFreqs,
 //                      Rcpp::NumericVector breaks,
                       std::vector<double> breaks,
-                      Rcpp::NumericVector mids
+                      Rcpp::NumericVector mids,
+                      Rcpp::LogicalVector lhs
                       ){
   double myPeak = 0;
   int i = 0;
@@ -103,8 +104,14 @@ double find_one_peak( Rcpp::NumericVector myFreqs,
   // Find the peak.
   int max_peak = 0;
   for(i=1; i<counts.size(); i++){
-    if( counts[i] > counts[max_peak] ){
-      max_peak = i;
+    if( lhs(0) == 1 ){
+      if( counts[i] > counts[max_peak] ){
+        max_peak = i;
+      }
+    } else {
+      if( counts[i] >= counts[max_peak] ){
+        max_peak = i;
+      }
     }
   }
   
@@ -115,7 +122,10 @@ double find_one_peak( Rcpp::NumericVector myFreqs,
 
 // Find peaks from frequency values [0-1] from a ingle window of data.
 //
-Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat, float bin_width ){
+Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat, 
+                                float bin_width,
+                                Rcpp::LogicalVector lhs
+                                ){
 
   int i = 0;
   int j = 0;
@@ -144,86 +154,14 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat, float bin_width ){
   for(i=0; i<mids.size(); i++ ){
     breaks[i+1] = breaks[i] + bin_width;
     mids(i) = breaks[i] + bin_width/2;
-//    counts(i) = 0;
   }
-//  breaks( breaks.size() - 1 ) = 1;
-  
-  /*
-  Rcpp::Rcout << "Breaks (n=" << breaks.size() << "): " << breaks(0);
-  for(i=1; i<10; i++){
-      Rcpp::Rcout << ", " << breaks(i);
-  }
-  Rcpp::Rcout << ", ... " << breaks( breaks.size() - 1 ) << "\n";
-  
-  Rcpp::Rcout << "Mids (n=" << mids.size() << "): " << mids(0);
-  for(i=1; i<10; i++){
-      Rcpp::Rcout << ", " << mids(i);
-  }
-  Rcpp::Rcout << ", ... " << mids( mids.size() - 1 ) << "\n";
-  */
-  
+
   for(i=0; i<myMat.ncol(); i++){ // Column (sample) counter.
-    myPeaks(i) = find_one_peak( myMat( Rcpp::_, i), breaks, mids );
+    myPeaks(i) = find_one_peak( myMat( Rcpp::_, i), breaks, mids, lhs );
   }
   
-  // Bin the data.
-//  for(i=0; i<myMat.ncol(); i++){ // Column (sample) counter.
-//    for(j=0; j<myMat.nrow(); j++){ // Row (variant) counter.
-//      if( myMat(j,i) != NA_REAL ){
-        //Rcpp::Rcout << "\n  counts.size(): " << counts.size() << "\n";
-//        Rcpp::Rcout << "Freq: " << myMat(j,i) << "\n";
-
-//        for(k=0; k<counts.size()-1; k++){ // Bin counter.
-//          if( myMat(j,i) >= breaks(k) & myMat(j,i) < breaks(k + 1) ){
-//            counts(k)++;
-//            Rcpp::Rcout << "    Binned: " << "\t" << breaks(k)  << "\t" << breaks(k + 1) << "\n";
-//          }
-//        }
-        // Last bin.
-//        Rcpp::Rcout << "Last break: " << k << ": " << breaks(k + 1) << "\n";
-//        if( myMat(j,i) == 1 ){
-//          Rcpp::Rcout << "Freqing 1, k: " << k << ", breaks(k):" << breaks(k) << ", breaks(k+1): " << breaks(k+1) << "\n";
-//          if( myMat(j,i) == breaks(k+1) ){
-//            Rcpp::Rcout << "  This should bin!\n";
-//          }
-//          if( breaks(k+1) == myMat(j,i) ){
-//            Rcpp::Rcout << "  breaks(k+1) == 1!\n";
-//          }
-//        }
-
-//        if( myMat(j,i) >= breaks(k) & myMat(j,i) <= breaks(k + 1) ){
-//          counts(k)++;
-//          Rcpp::Rcout << "    Binned: " << "\t" << breaks(k) << "\t" << breaks(k + 1) << "\n";
-//        }
-//      }
-//    }
-    
-    // Report counts.
-    
-    
-//    Rcpp::Rcout << "\nSample: " << i << "\n";
-//    Rcpp::Rcout << "Counts\tmids\n";
-//    for(k=0; k<counts.size(); k++){
-//      Rcpp::Rcout << counts[k] << "\t" << mids[k] << "\n";
-//    }
-//    Rcpp::Rcout << "\n";
-    
 
     
-    // Data should be binned.
-    // Now find the bin with the greatest number of counts.
-//    int max_peak = 0;
-//    Rcpp::Rcout << "Counts: " << counts(0) << " mid: " << mids(0);
-//    for(k=1; k<counts.size(); k++){ // Bin counter.
-//      Rcpp::Rcout << ", " << counts(k) << " mid: " << mids(k);
-//      if( counts[k] > counts[max_peak] ){
-//        max_peak = k;
-//        Rcpp::Rcout << "\nnew max at: " << counts(k)<< " mid: " << mids(k) << "\n";
-//      }
-//    }
-//    Rcpp::Rcout << ", done!\n\n";
-//    myPeaks[i] = mids[max_peak];
-//  }
 
   return(myPeaks);
 }
@@ -240,6 +178,7 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat, float bin_width ){
 //' @param winsize sliding window size.
 //' @param bin_width Width of bins to summarize ferequencies in (0-1].
 //' @param count logical specifying to count the number of non-NA values intead of reporting peak.
+//' @param lhs logical specifying whether the search for the bin of greatest density should favor values from the left hand side.
 //' 
 //' @details
 //' Noisy data, such as genomic data, lack a clear consensus.
@@ -255,6 +194,15 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat, float bin_width ){
 //' Finally, the bin with the greatest density, the greatest count of data, is used as a summary.
 //' Because this method is based on binning the data it does not rely on a distributional assumption.
 //' 
+//' 
+//' The parameter `lhs` specifyies whether the search for the bin of greatest density should be performed from the left hand side.
+//' The default value of TRUE starts at the left hand side, or zero, and selects a new bin as having the greatest density only if a new bin has a greater density.
+//' If the new bin has an equal density then no update is made.
+//' This causees the analysis to select lower frequencies.
+//' When this parameter is set to FALSE ties result in an update of the bin of greatest density.
+//' This causes the analysis to select higher frequencies.
+//' It is recommended that when testing the most abundant allele (typically [0.5-1]) to use the default of TURE so that a low value is preferred.
+//' Similarly, when testing the less abundant alleles it is recommended to set this value at FALSE to preferentially select high values.
 //' 
 //' 
 //' @return 
@@ -286,7 +234,7 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat, float bin_width ){
 //' myPeaks1 <- freq_peak(freq1, getPOS(vcf))
 //' myCounts1 <- freq_peak(freq1, getPOS(vcf), count = TRUE)
 //' is.na(myPeaks1$peaks[myCounts1$peaks < 20]) <- TRUE
-//' myPeaks2 <- freq_peak(freq2, getPOS(vcf))
+//' myPeaks2 <- freq_peak(freq2, getPOS(vcf), lhs = FALSE)
 //' myCounts2 <- freq_peak(freq2, getPOS(vcf), count = TRUE)
 //' is.na(myPeaks2$peaks[myCounts2$peaks < 20]) <- TRUE
 //' #myPeaks <- freq_peak(freqs[1:115,], getPOS(vcf)[1:115])
@@ -304,6 +252,7 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat, float bin_width ){
 //' abline(v=myPeaks2$peaks[myWin,mySample], col=2, lwd=2)
 //' 
 //' # Visualize #2
+//' mySample <- "P17777us22"
 //' plot(getPOS(vcf), freq1[,mySample], ylim=c(0,1), type="n", yaxt='n', 
 //'      main = mySample, xlab = "POS", ylab = "Allele balance")
 //' axis(side=2, at=c(0,0.25,0.333,0.5,0.666,0.75,1), 
@@ -324,7 +273,8 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
                      Rcpp::NumericVector pos,
                      int winsize = 10000,
                      float bin_width = 0.02,
-                     Rcpp::LogicalVector count = false
+                     Rcpp::LogicalVector count = false,
+                     Rcpp::LogicalVector lhs = true
                      ){
   int i = 0;
   int j = 0;
@@ -462,7 +412,7 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
 //          Rcpp::Rcout << "count(0):" << count(0) << " must be true!\n";
       freqs(i,Rcpp::_) = count_nonNA( myWin );
     } else {
-      freqs(i,Rcpp::_) = find_peaks( myWin, bin_width );
+      freqs(i,Rcpp::_) = find_peaks( myWin, bin_width, lhs );
     }
   }
   
