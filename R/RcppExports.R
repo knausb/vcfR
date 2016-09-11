@@ -149,6 +149,7 @@ extract_haps <- function(ref, alt, gt, gt_split, verbose) {
 #' abline(v=myPeaks2$peaks[myWin,mySample], col=2, lwd=2)
 #' 
 #' # Visualize #2
+#' mySample <- "P17777us22"
 #' plot(getPOS(vcf), freq1[,mySample], ylim=c(0,1), type="n", yaxt='n', 
 #'      main = mySample, xlab = "POS", ylab = "Allele balance")
 #' axis(side=2, at=c(0,0.25,0.333,0.5,0.666,0.75,1), 
