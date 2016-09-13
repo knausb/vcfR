@@ -397,6 +397,7 @@ extract_info_tidy <- function(x, info_fields = NULL, info_types = NULL, info_sep
   if(!is.null(info_types)) {
     ns <- info_types[!is.na(info_types) & info_types == "n"]
     is <- info_types[!is.na(info_types) & info_types == "i"]
+    fs <- info_types[!is.na(info_types) & info_types == "f"]
     
     if(length(ns) > 0) {
       ret[names(ns)] <- lapply(ret[names(ns)], as.numeric)
@@ -404,6 +405,16 @@ extract_info_tidy <- function(x, info_fields = NULL, info_types = NULL, info_sep
     if(length(is) > 0) {
       ret[names(is)] <- lapply(ret[names(is)], as.integer)
     }
+    
+    proc_flag <- function(x, INFO){
+      x2 <- rep(FALSE, times = length(INFO))
+      x2[ grep(x, INFO) ] <- TRUE
+      x2
+    }
+    if(length(fs) > 0) {
+      ret[names(fs)] <- lapply(names(fs), proc_flag, x$INFO)
+    }
+    
   }
   cbind(Key = 1:nrow(ret), ret) %>% dplyr::tbl_df()
 }
@@ -538,12 +549,17 @@ guess_types <- function(D) {
     dplyr::filter_(~Number == 1) %>%
     dplyr::mutate_(tt = ~ifelse(Type == "Integer", "i", ifelse(Type == "Numeric" | Type == "Float", "n", ""))) %>%
     dplyr::filter_(~tt %in% c("n", "i")) %>%
-    dplyr::select_(~ID, ~Number, ~Type, ~tt) 
+    dplyr::select_(~ID, ~Number, ~Type, ~tt)
+  
+  tmp <- D %>%  dplyr::filter_(~Number == 0 & Type == 'Flag')  %>%
+    dplyr::mutate_(tt = ~ifelse(Type == "Flag", "f")) %>%
+    dplyr::filter_(~tt %in% c("f")) %>%
+    dplyr::select_(~ID, ~Number, ~Type, ~tt)  %>%
+    dplyr::bind_rows(tmp)   
   
   ret <- tmp$tt
   names(ret) <- tmp$ID
   ret
-    
 }
 
 #### vcf_field_names ####

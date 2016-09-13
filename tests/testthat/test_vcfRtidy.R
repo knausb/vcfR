@@ -64,6 +64,13 @@ test_that("extract_info_tidy works",{
 
 })
 
+test_that("extract_info_tidy works with Flags",{
+  data(vcfR_test)
+  Z <- extract_info_tidy(vcfR_test, info_types = TRUE)
+  expect_is(Z$DB, "logical")
+  expect_is(Z$H2, "logical")
+})
+
 
 ##### ##### ##### ##### #####
 # vcf_field_names
