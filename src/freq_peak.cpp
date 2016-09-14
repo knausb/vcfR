@@ -59,9 +59,13 @@ std::vector<int> bin_data( Rcpp::NumericVector myFreqs,
 //    if( myFreqs(i) == 1 ){
 //      Rcpp::Rcout << "myFreqs(i) is one!\n";
 //    }
-      
-    for(j=0; j < counts.size() - 1; j++){
-      if( myFreqs(i) >= breaks[j] & myFreqs(i) < breaks[j+1] ){
+    
+    if( myFreqs(i) >= breaks[0] & myFreqs(i) <= breaks[0+1] ){
+      counts[0]++;
+//      Rcpp::Rcout << j << ": breaks[j]: " << breaks[j] << ", breaks[j+1]: " << breaks[j+1] << "\n";
+    }
+    for(j=1; j < counts.size() - 1; j++){
+      if( myFreqs(i) > breaks[j] & myFreqs(i) <= breaks[j+1] ){
         counts[j]++;
 //        Rcpp::Rcout << j << ": breaks[j]: " << breaks[j] << ", breaks[j+1]: " << breaks[j+1] << "\n";
       }
@@ -70,7 +74,7 @@ std::vector<int> bin_data( Rcpp::NumericVector myFreqs,
 //    if( 1 <= breaks[j+1] + 0.0000001 ){
 //      Rcpp::Rcout << " 1 <= breaks(j+1) is TRUE!\n";
 //    }
-    if( myFreqs(i) >= breaks[j] & myFreqs(i) <= breaks[j+1] + 0.0000001 ){
+    if( myFreqs(i) > breaks[j] & myFreqs(i) <= breaks[j+1] + 0.0000001 ){
       counts[j]++;
 //      Rcpp::Rcout << j << ": breaks[j]: " << breaks[j] << ", breaks[j+1]: " << breaks[j+1] << "\n";
     }
@@ -101,6 +105,14 @@ double find_one_peak( Rcpp::NumericVector myFreqs,
 //  }
 //  Rcpp::Rcout << "\n";
   
+  Rcpp::Rcout << "tmp1 <- structure(c(";
+  Rcpp::Rcout << counts[0] << ", " << mids(0);
+  for(i=1;i<counts.size(); i++){
+    Rcpp::Rcout << ", " << counts[i] << ", " << mids(i);
+  }
+  Rcpp::Rcout << "), .Dim = c(2L, " << counts.size() << "L), .Dimnames = list(c(\"counts\", \"mids\"), NULL))\n";
+  
+  
   // Find the peak.
   int max_peak = 0;
   for(i=1; i<counts.size(); i++){
@@ -120,7 +132,8 @@ double find_one_peak( Rcpp::NumericVector myFreqs,
 }
 
 
-// Find peaks from frequency values [0-1] from a ingle window of data.
+// Find peaks from frequency values [0-1]
+// from a single window (matrix of columns) of data.
 //
 Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat, 
                                 float bin_width,
@@ -159,9 +172,6 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat,
   for(i=0; i<myMat.ncol(); i++){ // Column (sample) counter.
     myPeaks(i) = find_one_peak( myMat( Rcpp::_, i), breaks, mids, lhs );
   }
-  
-
-    
 
   return(myPeaks);
 }
@@ -283,7 +293,10 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
   Rcpp::NumericMatrix naMat( 1, 1 );
   naMat(0,0) = NA_REAL;
   
-  // Create a matrix of windows.
+  //                             //
+  // Create a matrix of windows. //
+  //                             //
+  
 // Rcpp::Rcout << "pos.size() is: " << pos.size() << ".\n"; 
   int max_pos = pos[ pos.size() - 1 ] / winsize + 1;
 // Rcpp::Rcout << "max_pos is: " << max_pos << ".\n"; 
@@ -304,7 +317,10 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
   colnames(5) = "END_pos";
   wins.attr("dimnames") = Rcpp::List::create(rownames, colnames);
 
-  // Initialize a freq matrix.
+  //                             //
+  // Initialize a freq matrix.   //
+  //                             //
+
   Rcpp::NumericMatrix freqs( max_pos, myMat.ncol() );
 //  Rcpp::Rcout << "Trying dimnames.\n";
   Rcpp::StringVector myColNames = Rcpp::colnames(myMat);
@@ -354,8 +370,11 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
   wins(win_num,3) = i;
   wins(win_num,5) = pos(i-1);
 
-  // Windowize and process.
-
+  
+  //                             //
+  // Windowize and process.      //
+  //                             //
+  
   // Check bin_width validity.
   if( !count(0) ){
     // Positive bin width.
