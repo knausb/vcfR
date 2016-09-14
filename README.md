@@ -15,6 +15,9 @@ Coveralls:
 *****
 
 
+![Supercontig_50](pinfsc50.png)
+
+
 VcfR is an R package intended to allow easy manipulation and visualization of variant call format (VCF) data.
 Functions are provided to rapidly read from and write to VCF files.
 Once VCF data is read into R a parser function extracts matrices from the VCF data for use with typical R functions.
