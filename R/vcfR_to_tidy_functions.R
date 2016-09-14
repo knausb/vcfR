@@ -344,18 +344,17 @@ vcfR2tidy <- function(x,
 #' @param info_fields names of the fields to be extracted from the INFO column
 #' into a long format data frame.  If this is left as NULL (the default) then
 #' the function returns a column for every INFO field listed in the metadata.
-#' @param info_types named vector of "i" or "n" if you want the fields extracted from 
-#' the INFO column to be converted
-#' to integer or numeric types, respectively.  Otherwise they will be characters.  The names have to be
-#' the exact names of the fields.  For example \code{info_types = c(AF = "n", DP = "i")} will convert
-#' column AF to numeric and DP to integer.  If you would like the function to try to figure out the conversion
-#' from the metadata information, then set \code{info_types = TRUE}.  Anything with Number == 1 and (Type == Integer
-#' or Type == Numeric) will then be converted accordingly.
+#' @param info_types named vector of "i" or "n" if you want the fields extracted from the INFO column to be converted to integer or numeric types, respectively.
+#' When set to NULL they will be characters.  
+#' The names have to be the exact names of the fields.  
+#' For example \code{info_types = c(AF = "n", DP = "i")} will convert column AF to numeric and DP to integer.
+#' If you would like the function to try to figure out the conversion from the metadata information, then set \code{info_types = TRUE}.  
+#' Anything with Number == 1 and (Type == Integer or Type == Numeric) will then be converted accordingly.
 #' @param info_sep the delimiter used in the data portion of the INFO fields to 
 #' separate different entries.  By default it is ";", but earlier versions of the VCF
 #' standard apparently used ":" as a delimiter.
 #' @export
-extract_info_tidy <- function(x, info_fields = NULL, info_types = NULL, info_sep = ";") {
+extract_info_tidy <- function(x, info_fields = NULL, info_types = TRUE, info_sep = ";") {
   
   if(!is.null(info_fields) && any(duplicated(info_fields))) stop("Requesting extraction of duplicate info_field names")
   if(class(x) != "vcfR") stop("Expecting x to be a vcfR object, not a ", class(x))
@@ -427,10 +426,11 @@ extract_info_tidy <- function(x, info_fields = NULL, info_types = NULL, info_sep
 #' each individual in the vcfR object into 
 #' a long format data frame.  If left as NULL, the function will extract all the FORMAT
 #' columns that were documented in the meta section of the VCF file.
-#' @param format_types named vector of "i" or "n" if you want the fields extracted according to 
-#' the FORMAT column to be converted
-#' to integer or numeric types, respectively.  Otherwise they will be characters.  The names have to be
-#' the exact names of the format_fields.  Works equivalently to the \code{info_types} argument in 
+#' @param format_types named vector of "i" or "n" if you want the fields extracted according to the FORMAT column to be converted to integer or numeric types, respectively.
+#' When set to TRUE an attempt to determine their type will be made from the meta information.
+#' When set to NULL they will be characters.  
+#' The names have to be the exact names of the format_fields.  
+#' Works equivalently to the \code{info_types} argument in 
 #' \code{\link{extract_info_tidy}}, i.e., if you set it to TRUE then it uses the information in the
 #' meta section of the VCF to coerce to types as indicated.
 #' @param dot_is_NA if TRUE then a single "." in a character field will be set to NA.  If FALSE
@@ -449,7 +449,7 @@ extract_info_tidy <- function(x, info_fields = NULL, info_types = NULL, info_sep
 #' @export
 extract_gt_tidy <- function(x, 
                             format_fields = NULL, 
-                            format_types = NULL, 
+                            format_types = TRUE, 
                             dot_is_NA = TRUE,
                             alleles = TRUE,
                             allele.sep = "/",
