@@ -68,7 +68,7 @@ extract_haps <- function(ref, alt, gt, gt_split, verbose) {
 #' @rdname freq_peak
 #' 
 #' @title freq_peak
-#' @description Find peaks in frequency data.
+#' @description Find density peaks in frequency data.
 #' 
 #' @param myMat a matrix of frequencies [0-1].
 #' @param pos a numeric vector describing the position of variants in myMat.

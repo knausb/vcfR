@@ -45,11 +45,70 @@ Rcpp::NumericVector count_nonNA( Rcpp::NumericMatrix myMat ){
 }
 
 // Sort data into bins based on breaks (boundaries).
-std::vector<int> bin_data( Rcpp::NumericVector myFreqs,
-                           std::vector<double> breaks
+Rcpp::NumericMatrix bin_data( Rcpp::NumericVector myFreqs,
+                              float bin_width
+){
+  int i = 0;
+  int j = 0;
+  int nbins = 1/bin_width;
+  Rcpp::NumericMatrix breaks( nbins, 4 );
+  int multiplier = 1000; // Convert floating points to ints.
+  Rcpp::IntegerMatrix intBreaks( nbins, 4 );
+  
+  Rcpp::StringVector colnames(4);
+  colnames(0) = "START";
+  colnames(1) = "MID";
+  colnames(2) = "END";
+  colnames(3) = "COUNT";
+  Rcpp::colnames(breaks) = colnames;
+  Rcpp::colnames(intBreaks) = colnames;
+  
+//  Rcpp::IntegerVector counts(nbins);
+  
+  breaks(0,0) = 0;
+  breaks(0,1) = bin_width/2;
+  breaks(0,2) = bin_width;
+  intBreaks(0,0) = 0;
+  intBreaks(0,1) = (bin_width/2) * multiplier;
+  intBreaks(0,2) = bin_width * multiplier;
+  
+  for(i=1; i<breaks.nrow(); i++){
+    breaks(i,0) = breaks(i-1,0) + bin_width;
+    breaks(i,1) = breaks(i-1,1) + bin_width;
+    breaks(i,2) = breaks(i-1,2) + bin_width;
+    
+    intBreaks(i,0) = intBreaks(i-1,0) + bin_width * multiplier;
+    intBreaks(i,1) = intBreaks(i-1,1) + bin_width * multiplier;
+    intBreaks(i,2) = intBreaks(i-1,2) + bin_width * multiplier;
+  }
+  
+//  Rcpp::Rcout << "\nBinning!\n\n";
+  
+  for(i=0; i<myFreqs.size(); i++){
+    int intQuery = myFreqs(i) * multiplier;
+    j = 0;
+    if( intQuery >= intBreaks(j,0) & intQuery <= intBreaks(j,2) ){
+      Rcpp::Rcout << "Binned: " <<  myFreqs(i) << " is >= " << breaks(j,0) << " & <= " << breaks(j,2) << "\n";
+//      breaks(j,3) = breaks(j,3) + 1;
+    }
+    for(j=1; j<breaks.nrow(); j++){
+      if( intQuery > intBreaks(j,0) & intQuery <= intBreaks(j,2) ){
+//        Rcpp::Rcout << "Binned: " <<  myFreqs(i) << " is > " << breaks(j,0) << " & <= " << breaks(j,2) << "\n";
+        breaks(j,3) = breaks(j,3) + 1;
+      }
+    }
+    
+  }
+  
+  return(breaks);  
+}
+
+/*
+//std::vector<int> bin_data( Rcpp::NumericVector myFreqs,
+//                           std::vector<double> breaks
 //                           Rcpp::NumericVector breaks
 ){
-  std::vector<int> counts ( breaks.size() - 1, 0 );
+//  std::vector<int> counts ( breaks.size() - 1, 0 );
   
   int i = 0;
   int j = 0;
@@ -83,6 +142,7 @@ std::vector<int> bin_data( Rcpp::NumericVector myFreqs,
   
   return(counts);
 }
+*/
 
 //Rcpp::NumericVector find_one_peak( Rcpp::NumericVector myFreqs ){
 double find_one_peak( Rcpp::NumericVector myFreqs,
@@ -96,7 +156,7 @@ double find_one_peak( Rcpp::NumericVector myFreqs,
 
   // Bin the data.
   std::vector<int> counts ( mids.size(), 0 );
-  counts = bin_data(myFreqs, breaks);
+//  counts = bin_data(myFreqs, breaks);
   
 //  Rcpp::Rcout << "Counts\tMids\n";
 //  Rcpp::Rcout << "0: " << counts[0] << "\t" << mids(0) << "\n";
@@ -131,6 +191,45 @@ double find_one_peak( Rcpp::NumericVector myFreqs,
   return( myPeak );
 }
 
+void dput_bins( Rcpp::NumericMatrix binned_data){
+  
+  int i = 0;
+  int j = 0;
+  
+
+  Rcpp::StringVector myColNames( binned_data.ncol() );
+  Rcpp::StringVector myRowNames( binned_data.nrow() );
+  
+  myColNames = Rcpp::colnames(binned_data);
+//  myRowNames = Rcpp::rownames(binned_data);
+
+  Rcpp::Rcout << "\n\n";
+  Rcpp::Rcout << "structure(c(";
+  // First column.
+  Rcpp::Rcout << binned_data(0,0);
+  for(i=1; i<binned_data.nrow(); i++){
+    Rcpp::Rcout << ", " << binned_data(i,j);
+  }
+
+  // Remaining columns.
+  for(j=1; j<binned_data.ncol(); j++){
+    for(i=0; i<binned_data.nrow(); i++){
+      Rcpp::Rcout << ", " << binned_data(i,j);
+    }
+  }
+  
+  Rcpp::Rcout << "), .Dim = c(" << binned_data.nrow() << "L, " << binned_data.ncol() << "L)";
+  Rcpp::Rcout << ", .Dimnames = list(NULL, c(\"";
+  Rcpp::Rcout << myColNames(0);
+  for(i=1; i<myColNames.size(); i++){
+    Rcpp::Rcout << "\", \"" << myColNames(i);
+  }
+
+  Rcpp::Rcout << "\")))\n";
+  Rcpp::Rcout << "\n";
+}
+
+
 
 // Find peaks from frequency values [0-1]
 // from a single window (matrix of columns) of data.
@@ -139,23 +238,26 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat,
                                 float bin_width,
                                 Rcpp::LogicalVector lhs
                                 ){
-
+  // myMat is a matrix that consists of samples in rows
+  // and one window's length of frequencies in rows.
+  
   int i = 0;
   int j = 0;
   int k = 0;
   
   // Create return vector and initialize to zero.
+  // Return vector contains peaks and is as long
+  // as the number of samples which is the same as
+  // the number of columns in myMat.
   Rcpp::NumericVector myPeaks( myMat.ncol() );
   for(i=0; i<myPeaks.size(); i++){
     myPeaks(i) = 0;
   }
 
   int nbins = 1 / bin_width;
-//  Rcpp::NumericVector breaks( nbins + 1 );
   std::vector<double> breaks ( nbins + 1, 0 );
   Rcpp::NumericVector mids( nbins );
-//  Rcpp::NumericVector counts( nbins );
-  
+
   // Test thet 1/bin_width does not have a remainder.
   if( 1/bin_width - nbins > 0 ){
     Rcpp::Rcerr << "1/bin_width has a remainder.\nThis will result in uneven bins.\nPlease try another bin_width.\n";
@@ -170,7 +272,10 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat,
   }
 
   for(i=0; i<myMat.ncol(); i++){ // Column (sample) counter.
-    myPeaks(i) = find_one_peak( myMat( Rcpp::_, i), breaks, mids, lhs );
+    Rcpp::NumericMatrix binned_data;
+    binned_data = bin_data( myMat( Rcpp::_, i), bin_width );
+    dput_bins(binned_data);
+//    myPeaks(i) = find_one_peak( myMat( Rcpp::_, i), breaks, mids, lhs );
   }
 
   return(myPeaks);
@@ -181,7 +286,7 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat,
 //' @rdname freq_peak
 //' 
 //' @title freq_peak
-//' @description Find peaks in frequency data.
+//' @description Find density peaks in frequency data.
 //' 
 //' @param myMat a matrix of frequencies [0-1].
 //' @param pos a numeric vector describing the position of variants in myMat.
@@ -293,9 +398,9 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
   Rcpp::NumericMatrix naMat( 1, 1 );
   naMat(0,0) = NA_REAL;
   
-  //                             //
-  // Create a matrix of windows. //
-  //                             //
+  //                                 //
+  // Initialize a matrix of windows. //
+  //                                 //
   
 // Rcpp::Rcout << "pos.size() is: " << pos.size() << ".\n"; 
   int max_pos = pos[ pos.size() - 1 ] / winsize + 1;
@@ -333,7 +438,12 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
   
 //  Rcpp::Rcout << "Finished dimnames.\n";
   
-  // Find windows in pos.
+  
+  //                                 //
+  // Find windows in pos.            //
+  // Assign rows and POS to windows. //
+  //                                 //
+    
   int win_num = 0;
   i = 0;
 
@@ -371,9 +481,9 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
   wins(win_num,5) = pos(i-1);
 
   
-  //                             //
-  // Windowize and process.      //
-  //                             //
+  //                     //
+  // Sanity checks.      //
+  //                     //
   
   // Check bin_width validity.
   if( !count(0) ){
@@ -408,6 +518,10 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
     return( myList );
     }
   }
+
+  //                    //
+  // Process by window. //
+  //                    //
   
   // Window counter.
   for(i=0; i<freqs.nrow(); i++){
@@ -415,18 +529,6 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
     // Remember, R=1-based, C++=0-based!
     myWin = mat_to_win(myMat, wins(i,2) - 1, wins(i,3) - 1 );
 
-    /*
-    Rcpp::Rcout << "myWin nrow: " << myWin.nrow() << "\n";
-    Rcpp::Rcout << "myWin ncol: " << myWin.ncol() << "\n";
-    
-    Rcpp::Rcout << "Freqs: " << myWin(0,1);
-    for(j=1; j<myWin.nrow(); j++){
-      Rcpp::Rcout << ", " << myWin(j,0);
-    }
-    Rcpp::Rcout << "\n";
-    */
-    
-//    Rcpp::Rcout << "count(0):" << count(0) << "\n";
     if( count(0) ){
 //          Rcpp::Rcout << "count(0):" << count(0) << " must be true!\n";
       freqs(i,Rcpp::_) = count_nonNA( myWin );
