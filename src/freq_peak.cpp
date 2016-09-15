@@ -103,47 +103,32 @@ Rcpp::NumericMatrix bin_data( Rcpp::NumericVector myFreqs,
   return(breaks);  
 }
 
-/*
-//std::vector<int> bin_data( Rcpp::NumericVector myFreqs,
-//                           std::vector<double> breaks
-//                           Rcpp::NumericVector breaks
-){
-//  std::vector<int> counts ( breaks.size() - 1, 0 );
-  
+
+double find_one_peak( Rcpp::NumericMatrix binned_data, 
+                      Rcpp::LogicalVector lhs
+                    ){
+  double myPeak = 0;
+  int max_peak = 0;
   int i = 0;
-  int j = 0;
-  
-  for(i=0; i<myFreqs.size(); i++){
-//    Rcpp::Rcout << "myFreqs(i): " << myFreqs(i) << "\n";
-//    if( myFreqs(i) == 1 ){
-//      Rcpp::Rcout << "myFreqs(i) is one!\n";
-//    }
-    
-    if( myFreqs(i) >= breaks[0] & myFreqs(i) <= breaks[0+1] ){
-      counts[0]++;
-//      Rcpp::Rcout << j << ": breaks[j]: " << breaks[j] << ", breaks[j+1]: " << breaks[j+1] << "\n";
-    }
-    for(j=1; j < counts.size() - 1; j++){
-      if( myFreqs(i) > breaks[j] & myFreqs(i) <= breaks[j+1] ){
-        counts[j]++;
-//        Rcpp::Rcout << j << ": breaks[j]: " << breaks[j] << ", breaks[j+1]: " << breaks[j+1] << "\n";
+
+  for(i=1; i<binned_data.nrow(); i++){
+    if( lhs(0) == 1 ){
+      if( binned_data(i,3) > binned_data(max_peak,3) ){
+        max_peak = i;
+      }
+    } else {
+      if( binned_data(i,3) >= binned_data(max_peak,3) ){
+        max_peak = i;
       }
     }
-//    Rcpp::Rcout << "j: " << j << " breaks[j]: " << breaks[j] << ", breaks[j+1]: " << breaks[j+1] << "\n";
-//    if( 1 <= breaks[j+1] + 0.0000001 ){
-//      Rcpp::Rcout << " 1 <= breaks(j+1) is TRUE!\n";
-//    }
-    if( myFreqs(i) > breaks[j] & myFreqs(i) <= breaks[j+1] + 0.0000001 ){
-      counts[j]++;
-//      Rcpp::Rcout << j << ": breaks[j]: " << breaks[j] << ", breaks[j+1]: " << breaks[j+1] << "\n";
-    }
-//    Rcpp::Rcout << "\n";
   }
-  
-  return(counts);
+    
+  myPeak = binned_data(max_peak,1);
+  return( myPeak );  
 }
-*/
 
+
+/*
 //Rcpp::NumericVector find_one_peak( Rcpp::NumericVector myFreqs ){
 double find_one_peak( Rcpp::NumericVector myFreqs,
 //                      Rcpp::NumericVector breaks,
@@ -190,7 +175,8 @@ double find_one_peak( Rcpp::NumericVector myFreqs,
   myPeak = mids[max_peak];
   return( myPeak );
 }
-
+*/
+ 
 void dput_bins( Rcpp::NumericMatrix binned_data){
   
   int i = 0;
@@ -203,7 +189,7 @@ void dput_bins( Rcpp::NumericMatrix binned_data){
   myColNames = Rcpp::colnames(binned_data);
 //  myRowNames = Rcpp::rownames(binned_data);
 
-  Rcpp::Rcout << "\n\n";
+  Rcpp::Rcout << "\n";
   Rcpp::Rcout << "structure(c(";
   // First column.
   Rcpp::Rcout << binned_data(0,0);
@@ -274,8 +260,9 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat,
   for(i=0; i<myMat.ncol(); i++){ // Column (sample) counter.
     Rcpp::NumericMatrix binned_data;
     binned_data = bin_data( myMat( Rcpp::_, i), bin_width );
-    dput_bins(binned_data);
+//    dput_bins(binned_data);
 //    myPeaks(i) = find_one_peak( myMat( Rcpp::_, i), breaks, mids, lhs );
+    myPeaks(i) = find_one_peak( binned_data, lhs );
   }
 
   return(myPeaks);
