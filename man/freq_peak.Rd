@@ -34,7 +34,7 @@ Alternatively, if `count = TRUE` the number of non-missing values in each window
 The number of non-mising values in each window may be used to censor windows containing low quantities of data.
 }
 \description{
-Find peaks in frequency data.
+Find density peaks in frequency data.
 }
 \details{
 Noisy data, such as genomic data, lack a clear consensus.
