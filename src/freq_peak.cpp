@@ -88,7 +88,7 @@ Rcpp::NumericMatrix bin_data( Rcpp::NumericVector myFreqs,
     int intQuery = myFreqs(i) * multiplier;
     j = 0;
     if( intQuery >= intBreaks(j,0) & intQuery <= intBreaks(j,2) ){
-      Rcpp::Rcout << "Binned: " <<  myFreqs(i) << " is >= " << breaks(j,0) << " & <= " << breaks(j,2) << "\n";
+//      Rcpp::Rcout << "Binned: " <<  myFreqs(i) << " is >= " << breaks(j,0) << " & <= " << breaks(j,2) << "\n";
 //      breaks(j,3) = breaks(j,3) + 1;
     }
     for(j=1; j<breaks.nrow(); j++){
@@ -128,55 +128,7 @@ double find_one_peak( Rcpp::NumericMatrix binned_data,
 }
 
 
-/*
-//Rcpp::NumericVector find_one_peak( Rcpp::NumericVector myFreqs ){
-double find_one_peak( Rcpp::NumericVector myFreqs,
-//                      Rcpp::NumericVector breaks,
-                      std::vector<double> breaks,
-                      Rcpp::NumericVector mids,
-                      Rcpp::LogicalVector lhs
-                      ){
-  double myPeak = 0;
-  int i = 0;
 
-  // Bin the data.
-  std::vector<int> counts ( mids.size(), 0 );
-//  counts = bin_data(myFreqs, breaks);
-  
-//  Rcpp::Rcout << "Counts\tMids\n";
-//  Rcpp::Rcout << "0: " << counts[0] << "\t" << mids(0) << "\n";
-//  for(i=1;i<counts.size(); i++){
-//    Rcpp::Rcout << i << ": " << counts[i] << "\t" << mids(i) << "\n";
-//  }
-//  Rcpp::Rcout << "\n";
-  
-  Rcpp::Rcout << "tmp1 <- structure(c(";
-  Rcpp::Rcout << counts[0] << ", " << mids(0);
-  for(i=1;i<counts.size(); i++){
-    Rcpp::Rcout << ", " << counts[i] << ", " << mids(i);
-  }
-  Rcpp::Rcout << "), .Dim = c(2L, " << counts.size() << "L), .Dimnames = list(c(\"counts\", \"mids\"), NULL))\n";
-  
-  
-  // Find the peak.
-  int max_peak = 0;
-  for(i=1; i<counts.size(); i++){
-    if( lhs(0) == 1 ){
-      if( counts[i] > counts[max_peak] ){
-        max_peak = i;
-      }
-    } else {
-      if( counts[i] >= counts[max_peak] ){
-        max_peak = i;
-      }
-    }
-  }
-  
-  myPeak = mids[max_peak];
-  return( myPeak );
-}
-*/
- 
 void dput_bins( Rcpp::NumericMatrix binned_data){
   
   int i = 0;
