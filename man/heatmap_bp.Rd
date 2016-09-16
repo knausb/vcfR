@@ -46,6 +46,18 @@ heatmap.bp(x, scale="col")
 heatmap.bp(x, col.ramp = colorRampPalette(c("red", "yellow", "#008000"))(100))
 heatmap.bp(x)
 
+\dontrun{
+heatmap.bp(x, cbarplot = FALSE, rbarplot = FALSE, legend = FALSE)
+heatmap.bp(x, cbarplot = FALSE, rbarplot = TRUE, legend = FALSE)
+heatmap.bp(x, cbarplot = FALSE, rbarplot = FALSE, legend = TRUE)
+heatmap.bp(x, cbarplot = FALSE, rbarplot = TRUE, legend = TRUE)
+
+heatmap.bp(x, cbarplot = TRUE, rbarplot = FALSE, legend = FALSE)
+heatmap.bp(x, cbarplot = TRUE, rbarplot = TRUE, legend = FALSE)
+heatmap.bp(x, cbarplot = TRUE, rbarplot = FALSE, legend = TRUE)
+heatmap.bp(x, cbarplot = TRUE, rbarplot = TRUE, legend = TRUE)
+}
+
  
 }
 \seealso{
