@@ -180,8 +180,8 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat,
   // and one window's length of frequencies in rows.
   
   int i = 0;
-  int j = 0;
-  int k = 0;
+//  int j = 0;
+//  int k = 0;
   
   // Create return vector and initialize to zero.
   // Return vector contains peaks and is as long
@@ -331,7 +331,7 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
                      Rcpp::LogicalVector lhs = true
                      ){
   int i = 0;
-  int j = 0;
+//  int j = 0;
   
   // NA matrix to return in case of unexpected results.
   Rcpp::NumericMatrix naMat( 1, 1 );
