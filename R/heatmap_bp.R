@@ -97,6 +97,15 @@ heatmap.bp <- function(x, cbarplot = TRUE, rbarplot = TRUE,
   # Handle column names.
   if(is.null(colnames(x))){colnames(x) <- 1:ncol(x)}
   if(is.null(rownames(x))){rownames(x) <- 1:nrow(x)}
+  
+  
+  # Get user's par(), ignoring the read-only variables.
+  userpar <- graphics::par(no.readonly = TRUE)
+  # Promise to reset graphics device
+  on.exit({
+    graphics::par(userpar)
+  })
+
 
   # Set plot geometry.
   if( cbarplot == FALSE & rbarplot == FALSE & legend == FALSE ){
@@ -182,11 +191,6 @@ heatmap.bp <- function(x, cbarplot = TRUE, rbarplot = TRUE,
       graphics::text(0.5, mp[nrow(mp),1], "High", col="#FFFFFF", adj=c(0.5,1))
     }
   }
-  
-  # Reset graphics device.
-  graphics::par(mfrow=c(1,1))
-  graphics::par(mar=c(5,4,4,2))
-  #
   invisible(NULL)
 }
 
