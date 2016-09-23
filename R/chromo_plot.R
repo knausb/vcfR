@@ -57,8 +57,8 @@ chromo <- function( chrom,
 #  }
   
   # Save original parameters.
-#  orig.oma <- graphics::par('oma')
-#  orig.mar <- graphics::par('mar')
+  orig.oma <- graphics::par('oma')
+  orig.mar <- graphics::par('mar')
   
   # Get user's par(), ignoring the read-only variables.
   userpar <- graphics::par(no.readonly = TRUE)
