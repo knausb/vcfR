@@ -59,7 +59,14 @@ chromo <- function( chrom,
   # Save original parameters.
   orig.oma <- graphics::par('oma')
   orig.mar <- graphics::par('mar')
-    
+  
+  # Get user's par(), ignoring the read-only variables.
+  userpar <- graphics::par(no.readonly = TRUE)
+  # Promise to reset graphics device
+  on.exit({
+    graphics::par(userpar)
+  })
+  
   # Initialize parameters.
   mwidth <- 8
   ncols <- 1
@@ -395,9 +402,9 @@ chromo <- function( chrom,
   #
   ##### ##### ##### ##### #####
 
-  graphics::par( mar = orig.mar )
-  graphics::par( oma = orig.oma )
-  graphics::par( mfrow = c(1,1) )
+#  graphics::par( mar = orig.mar )
+#  graphics::par( oma = orig.oma )
+#  graphics::par( mfrow = c(1,1) )
   
   invisible(NULL)
 }
