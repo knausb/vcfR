@@ -129,34 +129,39 @@ double find_one_peak( Rcpp::NumericMatrix binned_data,
 
 
 
-void dput_bins( Rcpp::NumericMatrix binned_data){
+void dput_NumericMatrix( Rcpp::NumericMatrix myMat){
   
   int i = 0;
   int j = 0;
   
+  Rcpp::StringVector myRowNames( myMat.nrow() );
+  Rcpp::StringVector myColNames( myMat.ncol() );
 
-  Rcpp::StringVector myColNames( binned_data.ncol() );
-  Rcpp::StringVector myRowNames( binned_data.nrow() );
-  
-  myColNames = Rcpp::colnames(binned_data);
-//  myRowNames = Rcpp::rownames(binned_data);
+  if( !Rf_isNull(rownames(myMat)) && Rf_length(rownames(myMat)) > 1 ){
+//  myRowNames = Rcpp::rownames(myMat);    
+  }
+  if( !Rf_isNull(colnames(myMat)) && Rf_length(colnames(myMat)) > 1 ){
+//  myColNames = Rcpp::colnames(myMat);    
+  }
+
+
 
   Rcpp::Rcout << "\n";
   Rcpp::Rcout << "structure(c(";
   // First column.
-  Rcpp::Rcout << binned_data(0,0);
-  for(i=1; i<binned_data.nrow(); i++){
-    Rcpp::Rcout << ", " << binned_data(i,j);
+  Rcpp::Rcout << myMat(0,0);
+  for(i=1; i<myMat.nrow(); i++){
+    Rcpp::Rcout << ", " << myMat(i,j);
   }
 
   // Remaining columns.
-  for(j=1; j<binned_data.ncol(); j++){
-    for(i=0; i<binned_data.nrow(); i++){
-      Rcpp::Rcout << ", " << binned_data(i,j);
+  for(j=1; j<myMat.ncol(); j++){
+    for(i=0; i<myMat.nrow(); i++){
+      Rcpp::Rcout << ", " << myMat(i,j);
     }
   }
   
-  Rcpp::Rcout << "), .Dim = c(" << binned_data.nrow() << "L, " << binned_data.ncol() << "L)";
+  Rcpp::Rcout << "), .Dim = c(" << myMat.nrow() << "L, " << myMat.ncol() << "L)";
   Rcpp::Rcout << ", .Dimnames = list(NULL, c(\"";
   Rcpp::Rcout << myColNames(0);
   for(i=1; i<myColNames.size(); i++){
@@ -209,10 +214,21 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat,
     mids(i) = breaks[i] + bin_width/2;
   }
 
+  // Process by sample (column) each set of frequencies in the matrix myMat.
+  // First bin the data using 'bin_data'.
+  // Then find the peak in the data using 'find_one_peak'.
+  //
+  // Debugging info:
+  // dput_NumericMatrix will take an Rcpp::NumericMatrix and print it to stdout in
+  // a format similar to R's dput.
+  //
   for(i=0; i<myMat.ncol(); i++){ // Column (sample) counter.
     Rcpp::NumericMatrix binned_data;
     binned_data = bin_data( myMat( Rcpp::_, i), bin_width );
-//    dput_bins(binned_data);
+
+    // 
+    dput_NumericMatrix( myMat );
+// dput_NumericMatrix(binned_data);
 //    myPeaks(i) = find_one_peak( myMat( Rcpp::_, i), breaks, mids, lhs );
     myPeaks(i) = find_one_peak( binned_data, lhs );
   }
@@ -420,9 +436,9 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
   wins(win_num,5) = pos(i-1);
 
   
-  //                     //
-  // Sanity checks.      //
-  //                     //
+  //                //
+  // Sanity checks. //
+  //                //
   
   // Check bin_width validity.
   if( !count(0) ){
