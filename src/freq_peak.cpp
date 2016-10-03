@@ -130,46 +130,70 @@ double find_one_peak( Rcpp::NumericMatrix binned_data,
 
 
 void dput_NumericMatrix( Rcpp::NumericMatrix myMat){
-  
   int i = 0;
   int j = 0;
   
   Rcpp::StringVector myRowNames( myMat.nrow() );
   Rcpp::StringVector myColNames( myMat.ncol() );
-
+  
   if( !Rf_isNull(rownames(myMat)) && Rf_length(rownames(myMat)) > 1 ){
-//  myRowNames = Rcpp::rownames(myMat);    
+    myRowNames = Rcpp::rownames(myMat);    
   }
   if( !Rf_isNull(colnames(myMat)) && Rf_length(colnames(myMat)) > 1 ){
-//  myColNames = Rcpp::colnames(myMat);    
+    myColNames = Rcpp::colnames(myMat);
   }
-
-
-
+  
+  
   Rcpp::Rcout << "\n";
   Rcpp::Rcout << "structure(c(";
-  // First column.
+  
+  // Print the first column.
   Rcpp::Rcout << myMat(0,0);
   for(i=1; i<myMat.nrow(); i++){
     Rcpp::Rcout << ", " << myMat(i,j);
   }
-
-  // Remaining columns.
+  
+  // Print the remaining columns.
   for(j=1; j<myMat.ncol(); j++){
     for(i=0; i<myMat.nrow(); i++){
       Rcpp::Rcout << ", " << myMat(i,j);
     }
   }
   
-  Rcpp::Rcout << "), .Dim = c(" << myMat.nrow() << "L, " << myMat.ncol() << "L)";
-  Rcpp::Rcout << ", .Dimnames = list(NULL, c(\"";
-  Rcpp::Rcout << myColNames(0);
-  for(i=1; i<myColNames.size(); i++){
-    Rcpp::Rcout << "\", \"" << myColNames(i);
+  Rcpp::Rcout << "),";
+  
+  // Dimensions
+  Rcpp::Rcout << " .Dim = c(" << myMat.nrow() << "L, " << myMat.ncol() << "L)";
+  
+  Rcpp::Rcout << ", .Dimnames = list(";
+  // Row names.
+  if( !Rf_isNull(rownames(myMat)) && Rf_length(rownames(myMat)) > 1 ){
+    //  myRowNames = Rcpp::rownames(myMat);
+    Rcpp::Rcout << "c(\"" << myRowNames(0);
+    for(i=1; i<myRowNames.size(); i++){
+      Rcpp::Rcout << "\", \"" << myRowNames(i);
+    }
+    Rcpp::Rcout << "\")";
+  } else {
+    Rcpp::Rcout << "NULL";
   }
-
-  Rcpp::Rcout << "\")))\n";
-  Rcpp::Rcout << "\n";
+  
+  Rcpp::Rcout << ",";
+  // Column names.
+  if( !Rf_isNull(colnames(myMat)) && Rf_length(colnames(myMat)) > 1 ){
+    Rcpp::Rcout << "c(\"" << myColNames(0);
+    for(i=1; i<myColNames.size(); i++){
+      Rcpp::Rcout << "\", \"" << myColNames(i);
+    }
+    Rcpp::Rcout << "\")";
+  } else {
+    Rcpp::Rcout << "NULL";
+  }
+  
+  //
+  Rcpp::Rcout << ")"; // Close .Dimnames list.
+  Rcpp::Rcout << ")\n"; // Close structure.
+  Rcpp::Rcout << "\n\n"; // Delimit dput statements.
 }
 
 
