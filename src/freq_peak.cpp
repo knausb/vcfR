@@ -52,7 +52,8 @@ Rcpp::NumericMatrix bin_data( Rcpp::NumericVector myFreqs,
   int j = 0;
   int nbins = 1/bin_width;
   Rcpp::NumericMatrix breaks( nbins, 4 );
-  int multiplier = 1000; // Convert floating points to ints.
+//  int multiplier = 1000; // Convert floating points to ints.
+  int multiplier = 10000000; // Convert floating points to ints, graphics::hist uses 1e7.
   Rcpp::IntegerMatrix intBreaks( nbins, 4 );
   
   Rcpp::StringVector colnames(4);
@@ -139,7 +140,9 @@ void dput_NumericMatrix( Rcpp::NumericMatrix myMat){
   if( !Rf_isNull(rownames(myMat)) && Rf_length(rownames(myMat)) > 1 ){
     myRowNames = Rcpp::rownames(myMat);    
   }
+//  Rcpp::Rcout << "Checking for colnames!\n";
   if( !Rf_isNull(colnames(myMat)) && Rf_length(colnames(myMat)) > 1 ){
+//    Rcpp::Rcout << "Found colnames!\n";
     myColNames = Rcpp::colnames(myMat);
   }
   
@@ -148,15 +151,28 @@ void dput_NumericMatrix( Rcpp::NumericMatrix myMat){
   Rcpp::Rcout << "structure(c(";
   
   // Print the first column.
-  Rcpp::Rcout << myMat(0,0);
+  if( Rcpp::NumericVector::is_na( myMat(0,0) ) ){
+    Rcpp::Rcout << "NA";
+  } else {
+    Rcpp::Rcout << myMat(0,0);
+  }
   for(i=1; i<myMat.nrow(); i++){
-    Rcpp::Rcout << ", " << myMat(i,j);
+//    Rcpp::Rcout << ", " << myMat(i,j);
+    if( Rcpp::NumericVector::is_na( myMat(i,j) ) ){
+      Rcpp::Rcout << ",NA";
+    } else {
+      Rcpp::Rcout << "," << myMat(i,j);
+    }
   }
   
   // Print the remaining columns.
   for(j=1; j<myMat.ncol(); j++){
     for(i=0; i<myMat.nrow(); i++){
-      Rcpp::Rcout << ", " << myMat(i,j);
+      if( Rcpp::NumericVector::is_na( myMat(i,j) ) ){
+        Rcpp::Rcout << ",NA";
+      } else {
+        Rcpp::Rcout << "," << myMat(i,j);
+      }
     }
   }
   
@@ -250,8 +266,7 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat,
     Rcpp::NumericMatrix binned_data;
     binned_data = bin_data( myMat( Rcpp::_, i), bin_width );
 
-    // 
-    dput_NumericMatrix( myMat );
+// dput_NumericMatrix( myMat );
 // dput_NumericMatrix(binned_data);
 //    myPeaks(i) = find_one_peak( myMat( Rcpp::_, i), breaks, mids, lhs );
     myPeaks(i) = find_one_peak( binned_data, lhs );
