@@ -1,4 +1,5 @@
 library('vcfR')
+library('testthat')
 
 context("getFIX accessors")
 

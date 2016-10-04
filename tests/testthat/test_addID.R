@@ -1,6 +1,7 @@
 
 
 library(vcfR)
+library(testthat)
 context("addID")
 
 data("vcfR_example")

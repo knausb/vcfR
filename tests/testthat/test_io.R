@@ -1,5 +1,6 @@
 #detach(package:vcfR, unload=TRUE)
 library(vcfR)
+library(testthat)
 context("io functions")
 
 # Load data

@@ -1,5 +1,6 @@
 # detach(package:vcfR, unload=T)
-#library(testthat)
+#
+library(testthat)
 library(vcfR)
 
 context("heatmap.bp function")

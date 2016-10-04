@@ -1,6 +1,7 @@
 
 
-#library(testthat)
+#
+library(testthat)
 library(vcfR)
 context("vcfRtidy functions")
 

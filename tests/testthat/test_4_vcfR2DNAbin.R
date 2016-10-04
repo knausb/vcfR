@@ -1,5 +1,6 @@
 
-#library(testthat)
+#
+library(testthat)
 library(vcfR)
 context("vcfR2DNAbin functions")
 

@@ -2,6 +2,7 @@
 
 
 library(vcfR)
+library(testthat)
 context("maf")
 
 data("vcfR_example")
