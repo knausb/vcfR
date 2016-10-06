@@ -124,11 +124,12 @@ If you know of a software that I have not included on this list, particularly if
 
 **Manipulation of VCF data:**
 
-* [Beagle v4.1](https://faculty.washington.edu/browning/beagle/beagle.html) Inputs VCF genotypes and outputs phased genotypes to VCF format.
+* [Beagle v4.1](https://faculty.washington.edu/browning/beagle/beagle.html) Inputs VCF genotypes and outputs phased genotypes to VCF format
 * [pegas::read.vcf](https://cran.r-project.org/package=pegas) Population and Evolutionary Genetics Analysis System
 * [PyVCF](https://pyvcf.readthedocs.io/en/latest/)
-* [VCFtools](https://vcftools.github.io/) General manipulation and analysis.
-* [VariantAnnotation::readVcf](https://bioconductor.org/packages/release/bioc/html/VariantAnnotation.html) Bioconductor package for annotating variants.
+* [SnpEff](http://snpeff.sourceforge.net/) Genetic variant annotation and effect prediction toolbox
+* [VCFtools](https://vcftools.github.io/) General manipulation and analysis
+* [VariantAnnotation::readVcf](https://bioconductor.org/packages/release/bioc/html/VariantAnnotation.html) Bioconductor package for annotating variants
 
 **R packages that read VCF data**
 
