@@ -128,6 +128,7 @@ If you know of a software that I have not included on this list, particularly if
 * [pegas::read.vcf](https://cran.r-project.org/package=pegas) Population and Evolutionary Genetics Analysis System
 * [PyVCF](https://pyvcf.readthedocs.io/en/latest/)
 * [SnpEff](http://snpeff.sourceforge.net/) Genetic variant annotation and effect prediction toolbox
+* [Picard](http://broadinstitute.github.io/picard/index.html) A set of command line tools (in Java) for manipulating high-throughput sequencing (HTS) data and formats such as SAM/BAM/CRAM and VCF
 * [VCFtools](https://vcftools.github.io/) General manipulation and analysis
 * [VariantAnnotation::readVcf](https://bioconductor.org/packages/release/bioc/html/VariantAnnotation.html) Bioconductor package for annotating variants
 
