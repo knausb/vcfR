@@ -24,7 +24,7 @@
 #' 
 #' @details The function heatmap.bp creates a heatmap from a numeric matrix with optional barplots to summarize the rows and columns.
 #' 
-#' @seealso \code{\link[stats]{heatmap}}, \code{\link[graphics]{image}}, heatmap2 in \href{https://cran.r-project.org/package=gplots}{gplots}.
+#' @seealso \code{\link[stats]{heatmap}}, \code{\link[graphics]{image}}, heatmap2 in \href{https://cran.r-project.org/package=gplots}{gplots}, \href{https://cran.r-project.org/package=pheatmap}{pheatmap}.
 #' 
 #' @examples
 #' library(vcfR)
