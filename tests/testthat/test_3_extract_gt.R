@@ -1,6 +1,7 @@
 # extractgt devel
 
-#library(testthat)
+#
+library(testthat)
 #detach(package:vcfR, unload=TRUE)
 library(vcfR)
 context("extract.gt functions")

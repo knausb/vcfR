@@ -1,7 +1,9 @@
 
-context("vcfR methods")
 
-#library(testthat)
+
+#
+library(testthat)
+context("vcfR methods")
 library(vcfR)
 data("vcfR_example")
 

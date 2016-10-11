@@ -1,7 +1,8 @@
 # create.chromR tests.
 
 # detach(package:vcfR, unload=T)
-#library(testthat)
+#
+library(testthat)
 library(vcfR)
 context("create.chromR functions")
 
