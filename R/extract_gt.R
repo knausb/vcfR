@@ -120,7 +120,7 @@ extract.gt <- function(x, element="GT", mask=FALSE,
 
 #' @rdname extract_gt
 #' @aliases extract.haps
-#' @param gt.split character which delimits alleles in genotypes
+# @param gt.split character which delimits alleles in genotypes
 #' @param unphased_as_NA logical specifying how to handle unphased genotypes
 #' 
 #' @details 

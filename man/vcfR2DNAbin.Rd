@@ -5,8 +5,7 @@
 \title{Convert vcfR to DNAbin}
 \usage{
 vcfR2DNAbin(x, extract.indels = TRUE, consensus = FALSE,
-  extract.haps = TRUE, gt.split = "|", ref.seq = NULL, start.pos = NULL,
-  verbose = TRUE)
+  extract.haps = TRUE, ref.seq = NULL, start.pos = NULL, verbose = TRUE)
 }
 \arguments{
 \item{x}{an object of class chromR or vcfR}
@@ -17,13 +16,13 @@ vcfR2DNAbin(x, extract.indels = TRUE, consensus = FALSE,
 
 \item{extract.haps}{logical specifying whether to separate each genotype into alleles based on a delimiting character}
 
-\item{gt.split}{character to delimit alleles within genotypes}
-
 \item{ref.seq}{reference sequence (DNAbin) for the region being converted}
 
 \item{start.pos}{chromosomal position for the start of the ref.seq}
 
 \item{verbose}{logical specifying whether to produce verbose output}
+
+\item{unphased_as_NA}{logical indicating how to handle alleles in unphased genotypes}
 }
 \description{
 Convert objects of class vcfR to objects of class ape::DNAbin
@@ -46,14 +45,11 @@ The option \strong{extract.indels} was included to remind us of this, and to pro
 
 
 The \strong{ploidy} of the samples is inferred from the first non-missing genotype.
-The option \code{gt.split} is used to split this genotype into alleles and these are counted.
-Values for \code{gt.split} are typically '|' for phased data or '/' for unphased data.
-Note that this option is an exact match and not used in a regular expression, as the 'sep' parameter in \code{\link{vcfR2genind}} is used.
 All samples and all variants within each sample are assumed to be of the same ploid.
 
 
 Conversion of \strong{haploid data} is fairly straight forward.
-The options \code{consensus}, \code{extract.haps} and \code{gt.split} are not relevant here.
+The options \code{consensus} and \code{extract.haps} are not relevant here.
 When vcfR2DNAbin encounters missing data in the vcf data (NA) it is coded as an ambiguous nucleotide (n) in the DNAbin object.
 When no reference sequence is provided (option \code{ref.seq}), a DNAbin object consisting only of variant sites is created.
 When a reference sequence and a starting position are provided the entire sequence, including invariant sites, is returned.
@@ -62,13 +58,13 @@ Because the data in the vcfR object will be using a chromosomal coordinate syste
 
 
 Conversion of \strong{diploid data} presents a number of scenarios.
-When the option \code{consensus} is TRUE, each genotype is split into two alleles using gt.split and the two alleles are converted into their IUPAC ambiguity code.
+When the option \code{consensus} is TRUE, each genotype is split into two alleles and the two alleles are converted into their IUPAC ambiguity code.
 This results in one sequence for each diploid sample.
 This may be an appropriate path when you have unphased data.
 Note that functions called downstream of this choice may handle IUPAC ambiguity codes in unexpected manners.
-When extract.haps is set to TRUE, each genotype is split into two alleles using gt.split.
+When extract.haps is set to TRUE, each genotype is split into two alleles.
 These alleles are inserted into two sequences.
-Thsi results in two sequences per diploid sample.
+This results in two sequences per diploid sample.
 Note that this really only makes sense if you have phased data.
 The options ref.seq and start.pos are used as in halpoid data.
 

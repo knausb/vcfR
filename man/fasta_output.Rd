@@ -4,15 +4,13 @@
 \alias{write.fasta}
 \title{Create fasta format output}
 \usage{
-write.fasta(x, file = "", gt_split = "|", rowlength = 80,
-  tolower = TRUE, verbose = TRUE, APPEND = FALSE)
+write.fasta(x, file = "", rowlength = 80, tolower = TRUE,
+  verbose = TRUE, APPEND = FALSE)
 }
 \arguments{
 \item{x}{object of class chromR}
 
 \item{file}{name for output file}
-
-\item{gt_split}{character which delimits alleles in genotype}
 
 \item{rowlength}{number of characters each row should not exceed}
 

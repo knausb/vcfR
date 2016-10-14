@@ -8,7 +8,7 @@
 #' 
 #' @param x object of class chromR
 #' @param file name for output file
-#' @param gt_split character which delimits alleles in genotype
+# @param gt_split character which delimits alleles in genotype
 #' @param rowlength number of characters each row should not exceed
 #' @param tolower convert all characters to lowercase (T/F)
 #' @param verbose should verbose output be generated (T/F)
@@ -24,7 +24,8 @@
 #' 
 #' @export
 #' 
-write.fasta <- function(x, file = "", gt_split = "|", rowlength=80, tolower=TRUE, verbose=TRUE, APPEND = FALSE){
+write.fasta <- function(x, file = "", rowlength=80, tolower=TRUE, verbose=TRUE, APPEND = FALSE){
+#write.fasta <- function(x, file = "", gt_split = "|", rowlength=80, tolower=TRUE, verbose=TRUE, APPEND = FALSE){
   if(class(x) != "chromR"){
     stop("Expected object of class chromR")
   }
@@ -33,7 +34,8 @@ write.fasta <- function(x, file = "", gt_split = "|", rowlength=80, tolower=TRUE
       file.remove(file)
     }
   }
-  haps <- extract_haps(x, gt_split = gt_split)
+#  haps <- extract_haps(x, gt_split = gt_split)
+  haps <- extract_haps(x)
   if(tolower == TRUE){
     haps <- apply(haps, MARGIN=2, tolower)
   }

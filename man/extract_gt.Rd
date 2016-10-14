@@ -39,8 +39,6 @@ extract.info(x, element, as.numeric = FALSE, mask = FALSE)
 \item{verbose}{should verbose output be generated}
 
 \item{return.indels}{logical indicating whether to return indels or not}
-
-\item{gt.split}{character which delimits alleles in genotypes}
 }
 \description{
 Extract elements from the 'gt' slot, convert extracted genotypes to their allelic state, extract indels from the data structure or extract elements from the INFO column of the 'fix' slot.
