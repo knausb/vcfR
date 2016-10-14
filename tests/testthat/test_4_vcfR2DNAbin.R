@@ -85,7 +85,8 @@ rm(gt2)
 ##### ##### ##### ##### #####
 
 test_that("vcfR2DNAbin works for haploid data, no ref.seq",{
-  my_DNAbin <- vcfR2DNAbin( vcf1, gt.split = "|" )
+#  my_DNAbin <- vcfR2DNAbin( vcf1, gt.split = "|" )
+  my_DNAbin <- vcfR2DNAbin( vcf1 )
   expect_equal( dim(my_DNAbin)[2], nrow( extract.indels(vcf)@gt ) )
 })
 
@@ -100,7 +101,8 @@ test_that("vcfR2DNAbin works for haploid data, no ref.seq",{
 
 
 test_that("vcfR2DNAbin works for diploid data, no ref.seq",{
-  my_DNAbin <- vcfR2DNAbin( vcf, gt.split = "|", verbose = FALSE )
+#  my_DNAbin <- vcfR2DNAbin( vcf, gt.split = "|", verbose = FALSE )
+  my_DNAbin <- vcfR2DNAbin( vcf, verbose = FALSE )
   expect_true( inherits(my_DNAbin, "DNAbin") )  
   expect_equal( dim(my_DNAbin)[2], nrow( extract.indels(vcf)@gt ) )
   expect_equal( dim(my_DNAbin)[1], 2 * (ncol(vcf@gt) - 1) )
@@ -114,7 +116,8 @@ test_that("vcfR2DNAbin works for diploid data, no ref.seq, wrong gt.split",{
 })
 
 test_that("vcfR2DNAbin with consensus works",{
-  my_DNAbin <- vcfR2DNAbin( vcf, consensus = TRUE, extract.haps = FALSE, gt.split = "|" )
+#  my_DNAbin <- vcfR2DNAbin( vcf, consensus = TRUE, extract.haps = FALSE, gt.split = "|" )
+  my_DNAbin <- vcfR2DNAbin( vcf, consensus = TRUE, extract.haps = FALSE )
   expect_true( inherits(my_DNAbin, "DNAbin") )
   expect_equal( dim(my_DNAbin)[1], ncol(vcf@gt) - 1 )
   expect_equal( dim(my_DNAbin)[2], nrow(extract.indels(vcf)@gt) )
@@ -122,7 +125,8 @@ test_that("vcfR2DNAbin with consensus works",{
 
 
 test_that("vcfR2DNAbin works for diploid data, ref.seq is not NULL",{
-  my_DNAbin <- vcfR2DNAbin( vcf, gt.split = "|", ref.seq = gene, start.pos = gff[1,4], verbose = FALSE )
+#  my_DNAbin <- vcfR2DNAbin( vcf, gt.split = "|", ref.seq = gene, start.pos = gff[1,4], verbose = FALSE )
+  my_DNAbin <- vcfR2DNAbin( vcf, ref.seq = gene, start.pos = gff[1,4], verbose = FALSE )
   expect_true( inherits(my_DNAbin, "DNAbin") )
   expect_equal( dim(my_DNAbin)[1], 2 * (ncol(vcf@gt) - 1) )
   expect_equal( dim(my_DNAbin)[2], dim(gene)[2] )
@@ -140,7 +144,8 @@ test_that("vcfR2DNAbin works for diploid data, ref.seq is not NULL",{
 
 
 test_that("vcfR2DNAbin works for triploid data, no ref.seq",{
-  my_DNAbin <- vcfR2DNAbin( vcf3, gt.split = "|", verbose = FALSE )
+#  my_DNAbin <- vcfR2DNAbin( vcf3, gt.split = "|", verbose = FALSE )
+  my_DNAbin <- vcfR2DNAbin( vcf3, verbose = FALSE )
   expect_true( inherits(my_DNAbin, "DNAbin") )  
   expect_equal( dim(my_DNAbin)[2], nrow( extract.indels(vcf)@gt ) )
   expect_equal( dim(my_DNAbin)[1], 3 * (ncol(vcf@gt) - 1) )
@@ -158,7 +163,8 @@ test_that("vcfR2DNAbin does not include variants at end.pos + 1",{
 #  vcf@fix[586,1:6]
 #  vcf@fix[586,2] <- "24527"
   vcf@fix[586,2] <- "24528"
-  my_DNAbin <- vcfR2DNAbin( vcf, gt.split = "|", ref.seq = gene, start.pos = gff[1,4], verbose = FALSE )
+#  my_DNAbin <- vcfR2DNAbin( vcf, gt.split = "|", ref.seq = gene, start.pos = gff[1,4], verbose = FALSE )
+  my_DNAbin <- vcfR2DNAbin( vcf, ref.seq = gene, start.pos = gff[1,4], verbose = FALSE )
   expect_true( inherits(my_DNAbin, "DNAbin") )  
   expect_equal(length(ape::seg.sites(my_DNAbin)), 40)
 })
