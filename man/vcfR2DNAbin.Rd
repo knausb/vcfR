@@ -83,6 +83,23 @@ But be prepared to scrutinize the output to make sure it appears reasonable.
 Creation of DNAbin objects from large chromosomal regions may result in objects which occupy large amounts of memory.
 If in doubt, begin by subsetting your data and the scale up to ensure you do not run out of memory.
 }
+\examples{
+library(ape)
+
+data(vcfR_test)
+# Create an example reference.
+nucs <- c('a','c','g','t')
+set.seed(9)
+myRef <- as.DNAbin(nucs[round(runif(n=20, min=0.5, max=4.5))])
+set.seed(9)
+vcfR_test@fix[,'POS'] <- sample(1:20, size=length(getPOS(vcfR_test)))
+
+myDNA <- vcfR2DNAbin(vcfR_test)
+
+seg.sites(myDNA)
+
+
+}
 \seealso{
 \href{http://cran.r-project.org/package=ape}{ape}
 }

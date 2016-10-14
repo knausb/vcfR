@@ -121,15 +121,26 @@ extract.gt <- function(x, element="GT", mask=FALSE,
 #' @rdname extract_gt
 #' @aliases extract.haps
 #' @param gt.split character which delimits alleles in genotypes
+#' @param unphased_as_NA logical specifying how to handle unphased genotypes
 #' 
 #' @details 
 #' The function \strong{extract.haps} uses extract.gt to isolate genotypes.
 #' It then uses the information in the REF and ALT columns as well as an allele delimiter (gt_split) to split genotypes into their allelic state.
 #' Ploidy is determined by the first non-NA genotype in the first sample.
 #' 
+#' The VCF specification allows for genotypes to be delimited with a '|' when they are phased and a '/' when unphased.
+#' This becomes important when dividing a genotype into two haplotypes.
+#' When the alleels are phased this is straight forward.
+#' When the alleles are unphased it presents a decision.
+#' The default is to handle unphased data by converting them to NAs.
+#' When unphased_as_NA is set to TRUE the alleles will be returned in the order they appear in the genotype.
+#' This does not assign each allele to it's correct chromosome.
+#' It becomes the user's responsibility to make informed decisions at this point.
+#' 
 #' 
 #' @export
-extract.haps <- function(x, mask=FALSE, gt.split="|",verbose=TRUE){
+#extract.haps <- function(x, mask=FALSE, gt.split="|",verbose=TRUE){
+extract.haps <- function(x, mask=FALSE, unphased_as_NA = TRUE, verbose=TRUE){
   if(class(x) == "chromR"){
     if(length(mask) == 1 && mask==TRUE){
       x <- chromR2vcfR(x, use.mask = TRUE)
@@ -144,10 +155,9 @@ extract.haps <- function(x, mask=FALSE, gt.split="|",verbose=TRUE){
   }
 
   # Determine ploidy  
-#  first.gt <- gt[!is.na(gt)][1]
   first.gt <- unlist(strsplit(x@gt[,-1][!is.na(x@gt[,-1])][1], ":"))[1]
-  ploidy <- length(unlist(strsplit(first.gt, split = gt.split, fixed = TRUE )))
-#  gt <- extract.gt(x, element="GT", return.alleles = TRUE)
+#  ploidy <- length(unlist(strsplit(first.gt, split = gt.split, fixed = TRUE )))
+  ploidy <- length(unlist(strsplit(first.gt, split = "[\\|/]" )))
 
 
   if( nrow( x@fix ) == 0 ){
@@ -157,9 +167,12 @@ extract.haps <- function(x, mask=FALSE, gt.split="|",verbose=TRUE){
     haps <- extract.gt( x )
   } else if ( ploidy > 1 ) {
     gt <- extract.gt( x )
+#    haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', 
+#                  x@fix[,'REF'], x@fix[,'ALT'], 
+#                  gt, gt.split, as.numeric(verbose))
     haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', 
-                  x@fix[,'REF'], x@fix[,'ALT'], 
-                  gt, gt.split, as.numeric(verbose))
+                  x@fix[,'REF'], x@fix[,'ALT'],
+                  gt, as.numeric(unphased_as_NA), as.numeric(verbose))
   } else {
     stop('Oops, we should never arrive here!')
   }
@@ -191,6 +204,11 @@ extract.haps <- function(x, mask=FALSE, gt.split="|",verbose=TRUE){
 #' vcf@fix[4,'ALT'] <- ".,A"
 #' vcf <- extract.indels(vcf)
 #' getFIX(vcf)
+#' 
+#' data(vcfR_test)
+#' extract.haps(vcfR_test, unphased_as_NA = FALSE)
+#' extract.haps(vcfR_test)
+#' 
 #' 
 #' @export
 extract.indels <- function(x, return.indels=FALSE){

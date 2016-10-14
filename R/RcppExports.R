@@ -60,8 +60,8 @@ CM_to_NM <- function(x) {
     .Call('vcfR_CM_to_NM', PACKAGE = 'vcfR', x)
 }
 
-extract_haps <- function(ref, alt, gt, gt_split, verbose) {
-    .Call('vcfR_extract_haps', PACKAGE = 'vcfR', ref, alt, gt, gt_split, verbose)
+extract_haps <- function(ref, alt, gt, unphased_as_NA, verbose) {
+    .Call('vcfR_extract_haps', PACKAGE = 'vcfR', ref, alt, gt, unphased_as_NA, verbose)
 }
 
 #' 

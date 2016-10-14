@@ -11,7 +11,7 @@ extract.gt(x, element = "GT", mask = FALSE, as.numeric = FALSE,
   return.alleles = FALSE, IDtoRowNames = TRUE, allele.sep = "/",
   extract = TRUE)
 
-extract.haps(x, mask = FALSE, gt.split = "|", verbose = TRUE)
+extract.haps(x, mask = FALSE, unphased_as_NA = TRUE, verbose = TRUE)
 
 extract.indels(x, return.indels = FALSE)
 
@@ -34,11 +34,13 @@ extract.info(x, element, as.numeric = FALSE, mask = FALSE)
 
 \item{extract}{logical indicating whether to return the extracted element or the remaining string}
 
-\item{gt.split}{character which delimits alleles in genotypes}
+\item{unphased_as_NA}{logical specifying how to handle unphased genotypes}
 
 \item{verbose}{should verbose output be generated}
 
 \item{return.indels}{logical indicating whether to return indels or not}
+
+\item{gt.split}{character which delimits alleles in genotypes}
 }
 \description{
 Extract elements from the 'gt' slot, convert extracted genotypes to their allelic state, extract indels from the data structure or extract elements from the INFO column of the 'fix' slot.
@@ -61,6 +63,15 @@ The function \strong{extract.haps} uses extract.gt to isolate genotypes.
 It then uses the information in the REF and ALT columns as well as an allele delimiter (gt_split) to split genotypes into their allelic state.
 Ploidy is determined by the first non-NA genotype in the first sample.
 
+The VCF specification allows for genotypes to be delimited with a '|' when they are phased and a '/' when unphased.
+This becomes important when dividing a genotype into two haplotypes.
+When the alleels are phased this is straight forward.
+When the alleles are unphased it presents a decision.
+The default is to handle unphased data by converting them to NAs.
+When unphased_as_NA is set to TRUE the alleles will be returned in the order they appear in the genotype.
+This does not assign each allele to it's correct chromosome.
+It becomes the user's responsibility to make informed decisions at this point.
+
 The function \strong{extract.indels} is used to remove indels from SNPs.
 The function queries the 'REF' and 'ALT' columns of the 'fix' slot to see if any alleles are greater than one character in length.
 When the parameter return_indels is FALSE only SNPs will be returned.
@@ -76,6 +87,11 @@ getFIX(vcf)
 vcf@fix[4,'ALT'] <- ".,A"
 vcf <- extract.indels(vcf)
 getFIX(vcf)
+
+data(vcfR_test)
+extract.haps(vcfR_test, unphased_as_NA = FALSE)
+extract.haps(vcfR_test)
+
 
 }
 \seealso{

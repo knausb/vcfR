@@ -13,7 +13,8 @@
 #' @param extract.indels logical, at present, the only option is TRUE
 #' @param consensus logical, at present, the only option is TRUE
 #' @param extract.haps logical specifying whether to separate each genotype into alleles based on a delimiting character
-#' @param gt.split character to delimit alleles within genotypes
+# @param gt.split character to delimit alleles within genotypes
+#' @param unphased_as_NA logical indicating how to handle alleles in unphased genotypes
 #' @param ref.seq reference sequence (DNAbin) for the region being converted
 #' @param start.pos chromosomal position for the start of the ref.seq
 #' @param verbose logical specifying whether to produce verbose output
@@ -36,14 +37,14 @@
 #' 
 #' 
 #' The \strong{ploidy} of the samples is inferred from the first non-missing genotype.
-#' The option \code{gt.split} is used to split this genotype into alleles and these are counted.
-#' Values for \code{gt.split} are typically '|' for phased data or '/' for unphased data.
-#' Note that this option is an exact match and not used in a regular expression, as the 'sep' parameter in \code{\link{vcfR2genind}} is used.
+# The option \code{gt.split} is used to split this genotype into alleles and these are counted.
+# Values for \code{gt.split} are typically '|' for phased data or '/' for unphased data.
+# Note that this option is an exact match and not used in a regular expression, as the 'sep' parameter in \code{\link{vcfR2genind}} is used.
 #' All samples and all variants within each sample are assumed to be of the same ploid.
 #' 
 #' 
 #' Conversion of \strong{haploid data} is fairly straight forward.
-#' The options \code{consensus}, \code{extract.haps} and \code{gt.split} are not relevant here.
+#' The options \code{consensus} and \code{extract.haps} are not relevant here.
 #' When vcfR2DNAbin encounters missing data in the vcf data (NA) it is coded as an ambiguous nucleotide (n) in the DNAbin object.
 #' When no reference sequence is provided (option \code{ref.seq}), a DNAbin object consisting only of variant sites is created.
 #' When a reference sequence and a starting position are provided the entire sequence, including invariant sites, is returned.
@@ -52,13 +53,13 @@
 #' 
 #' 
 #' Conversion of \strong{diploid data} presents a number of scenarios.
-#' When the option \code{consensus} is TRUE, each genotype is split into two alleles using gt.split and the two alleles are converted into their IUPAC ambiguity code.
+#' When the option \code{consensus} is TRUE, each genotype is split into two alleles and the two alleles are converted into their IUPAC ambiguity code.
 #' This results in one sequence for each diploid sample.
 #' This may be an appropriate path when you have unphased data.
 #' Note that functions called downstream of this choice may handle IUPAC ambiguity codes in unexpected manners.
-#' When extract.haps is set to TRUE, each genotype is split into two alleles using gt.split.
+#' When extract.haps is set to TRUE, each genotype is split into two alleles.
 #' These alleles are inserted into two sequences.
-#' Thsi results in two sequences per diploid sample.
+#' This results in two sequences per diploid sample.
 #' Note that this really only makes sense if you have phased data.
 #' The options ref.seq and start.pos are used as in halpoid data.
 #' 
@@ -79,9 +80,26 @@
 #' @seealso 
 #' \href{http://cran.r-project.org/package=ape}{ape}
 #' 
+#' 
+#' @examples 
+#' library(ape)
+#' 
+#' data(vcfR_test)
+#' # Create an example reference.
+#' nucs <- c('a','c','g','t')
+#' set.seed(9)
+#' myRef <- as.DNAbin(nucs[round(runif(n=20, min=0.5, max=4.5))])
+#' set.seed(9)
+#' vcfR_test@fix[,'POS'] <- sample(1:20, size=length(getPOS(vcfR_test)))
+#' 
+#' myDNA <- vcfR2DNAbin(vcfR_test)
+#' 
+#' seg.sites(myDNA)
+#' 
+#' 
 #' @export
 vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = FALSE,
-                         extract.haps = TRUE, gt.split="|",
+                         extract.haps = TRUE,
                          ref.seq = NULL, start.pos = NULL,
                          verbose = TRUE )
 {
@@ -132,10 +150,13 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = FALSE,
 #  if( class(x) == "vcfR" ){
 #    first.gt <- x@gt[ ,-1 ][ !is.na(x@gt[,-1]) ][1]
     if( consensus == TRUE & extract.haps == FALSE ){
-      x <- extract.gt( x, return.alleles = TRUE, allele.sep = gt.split )       
-      x <- alleles2consensus( x, sep = gt.split )
+#      x <- extract.gt( x, return.alleles = TRUE, allele.sep = gt.split )
+#      x <- alleles2consensus( x, sep = gt.split )
+      x <- extract.gt( x, return.alleles = TRUE )
+      x <- alleles2consensus( x )
     } else {
-      x <- extract.haps( x, gt.split = gt.split, verbose = verbose )
+#      x <- extract.haps( x, gt.split = gt.split, verbose = verbose )
+      x <- extract.haps( x, verbose = verbose )
     }
   }
 
