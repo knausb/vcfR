@@ -3,6 +3,8 @@
 # vcfR 1.2.0.9000
 Released on CRAN 2016-XX-XX.
 
+* extract.haps omits gt.split and implements unphased_as_NA
+* gtsplit handles a mixture of phased and unphased data
 * Added 'getters' for vcfR and chromR slots. (Thanks Zhian!)
 * Created `freq_peak()` to find peaks in allele balance frequency data.
 * Created `masplit()` to parse matrices contains delimited strings.

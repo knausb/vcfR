@@ -83,23 +83,44 @@
 #' 
 #' @examples 
 #' library(ape)
-#' 
 #' data(vcfR_test)
-#' # Create an example reference.
+#' 
+#' # Create an example reference sequence.
 #' nucs <- c('a','c','g','t')
 #' set.seed(9)
-#' myRef <- as.DNAbin(nucs[round(runif(n=20, min=0.5, max=4.5))])
-#' set.seed(9)
-#' vcfR_test@fix[,'POS'] <- sample(1:20, size=length(getPOS(vcfR_test)))
+#' myRef <- as.DNAbin(matrix(nucs[round(runif(n=20, min=0.5, max=4.5))], nrow=1))
 #' 
+#' # Recode the POS data for a smaller example.
+#' set.seed(99)
+#' vcfR_test@fix[,'POS'] <- sort(sample(10:20, size=length(getPOS(vcfR_test))))
+#' 
+#' # Just vcfR
 #' myDNA <- vcfR2DNAbin(vcfR_test)
-#' 
 #' seg.sites(myDNA)
+#' image(myDNA)
+#' 
+#' # ref.seq, no start.pos
+#' myDNA <- vcfR2DNAbin(vcfR_test, ref.seq = myRef)
+#' seg.sites(myDNA)
+#' image(myDNA)
+#' 
+#' # ref.seq, start.pos = 4.
+#' # Note that this is the same as the previous example but the variants are shifted.
+#' myDNA <- vcfR2DNAbin(vcfR_test, ref.seq = myRef, start.pos = 4)
+#' seg.sites(myDNA)
+#' image(myDNA)
+#' 
+#' # ref.seq, no start.pos, unphased_as_NA = FALSE
+#' myDNA <- vcfR2DNAbin(vcfR_test, unphased_as_NA = FALSE, ref.seq = myRef)
+#' seg.sites(myDNA)
+#' image(myDNA)
+#' 
 #' 
 #' 
 #' @export
 vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = FALSE,
                          extract.haps = TRUE,
+                         unphased_as_NA = TRUE,
                          ref.seq = NULL, start.pos = NULL,
                          verbose = TRUE )
 {
@@ -121,17 +142,29 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = FALSE,
     ref.seq <- as.matrix(ref.seq)
   }
   
+  # Check start.pos
+  if( is.null(start.pos) & !is.null(ref.seq) ){
+    if( verbose == TRUE ){
+      warning("start.pos == NULL, this means that I do not know where the variants are located in the ref.seq. I'll try start.pos == 1, but results may be unexpected")
+    }
+    start.pos <- 1
+  }
+  
   # Extract indels.
   # Currently the only option is TRUE.
   if( extract.indels == TRUE ){
     x <- extract.indels(x)
+    if( verbose == TRUE ){
+      message(paste("After extracting indels,", nrow(x), "variants remain."))
+    }
   } else {
     stop("extract.indels == FALSE is not currently implemented.")
   }
   
   # Save POS in case we need it.
   # i.e., for inserting variants into a matrix.
-  pos <- as.numeric(x@fix[,'POS'])
+#  pos <- as.numeric(x@fix[,'POS'])
+  pos <- getPOS(x)
   
   # If we think we have variants we should extract them.
   # Our GT matrix may contain zero rows, all NA or data.
@@ -156,7 +189,7 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = FALSE,
       x <- alleles2consensus( x )
     } else {
 #      x <- extract.haps( x, gt.split = gt.split, verbose = verbose )
-      x <- extract.haps( x, verbose = verbose )
+      x <- extract.haps( x, unphased_as_NA = unphased_as_NA, verbose = verbose )
     }
   }
 
@@ -182,7 +215,7 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = FALSE,
     )
     colnames(x) <- colnames(variants)
 
-    # Populate with variants.
+    # Populate matrix of reference sequences with variants.
     # We need to subset the variant data to the region of interest.
     # First we remove variants above the region.
     # Then we remove variants below this region.
@@ -210,134 +243,6 @@ vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = FALSE,
   
   return(x)
 }
-
-
-vcfR2DNAbin1 <- function( x, extract.indels = TRUE , consensus = TRUE,
-                           extract.haps = FALSE, gt.split="|",
-                           ref.seq = NULL, start.pos = NULL,
-                           verbose = TRUE )
-    
-  {
-  # Sanitize input.
-  if( class(x) == 'chromR' )
-  {
-    x <- x@vcf
-  }
-  if( class(x) != 'vcfR' )
-  {
-    stop( "Expecting an object of class chromR or vcfR" )
-  }
-  if( consensus == TRUE & extract.haps == TRUE){
-    stop("consensus and extract_haps both set to true. These options are incompatible. A haplotype should not be ambiguous.")
-  }
-  if( !is.null(start.pos) & class(start.pos) == "character" ){
-    start.pos <- as.integer(start.pos)
-  }
-  
-  # Check and sanitize ref.seq.
-  if( class(ref.seq) != 'DNAbin' & !is.null(ref.seq) ){
-    stop( paste("expecting ref.seq to be of class DNAbin but it is of class", class(ref.seq)) )
-  }
-  if( is.list(ref.seq) ){
-    ref.seq <- as.matrix(ref.seq)
-  }
-  
-  # Extract indels.
-  # Currently the only option is TRUE.
-  if( extract.indels == TRUE ){
-    x <- extract.indels(x)
-  } else {
-    stop("extract.indels == FALSE is not currently implemented.")
-  }
-  
-  # If we removed all variants, return.
-#  if( nrow(x@fix) < 1 & is.null(ref.seq) ){
-#    return( x )
-#    return( NA )
-#  }
-  
-  # Save POS in case we need it.
-  # i.e., for inserting variants into a matrix.
-  pos <- as.numeric(x@fix[,'POS'])
-  
-  if( extract.haps == FALSE ){
-    x <- extract.gt( x, return.alleles = TRUE, allele.sep = gt.split )
-  } else if( extract.haps == TRUE & nrow(x@gt) > 0 ){
-#    x <- extract_haps(x, gt_split=gt.split, verbose = verbose)
-    x <- extract.haps( x, gt.split = gt.split, verbose = verbose )
-  } else if( extract.haps == TRUE & nrow(x@gt) == 0 ){
-#    ref.seq <- as.matrix(ref.seq)
-    out.seq <- matrix( as.character(ref.seq),
-                       nrow = dim(ref.seq)[2],
-                       ncol = ncol(x) * 2,
-                       byrow = FALSE
-    )
-    colnames(out.seq) <- paste(rep(colnames(x@gt)[-1], each=2), rep(c(0,1), times=ncol(x@gt[,-1]), sep="_"))
-    out.seq <- ape::as.DNAbin(t(out.seq))
-    return( out.seq )
-  } else {
-    stop( "Invalid specification of extract.haps.\nShould be a logical." )
-  }
-
-  # Strategies to convert genotypes (with a delimiter) to nucleotides.
-  # If extract.haps was set to TRUE, then our data is effectively haploid now.
-  ploid <- length(unlist( strsplit( x[!is.na(x)][1], split=gt.split, fixed=TRUE ) ))
-
-  
-  if( ploid == 1 ){
-    # Haploid case
-    x[is.na(x)] <- 'n'
-    if( nrow(x) > 1 ){
-      x <- apply(x, MARGIN=2, tolower)
-    } else if( nrow(x) == 1 ){
-      x <- apply(x, MARGIN=2, tolower)
-      x <- matrix(x, nrow=1, dimnames = list( NULL, names(x)))
-    }
-  } else if ( ploid == 2 & consensus == TRUE ){
-    # Diploid case
-    x <- alleles2consensus( x, sep = gt.split, NA_to_n = TRUE )
-    x <- apply(x, MARGIN=2, tolower)
-  } else if ( ploid == 2 & consensus == FALSE ){
-    stop( "Ploidy is 2 but consensus is set to FALSE.\nGenotypes must be converted to a nucleotide.\nConsider setting consensus to TRUE." )
-#    stop( "function only valid for diploid and haploid genotypes." )
-  } else if ( ploid > 2 & extract_haps == FALSE ){
-    stop( "Ploidy is greater than 2 but extract_haps is set to FALSE.\nGenotypes must be converted to a nucleotide.\nConsider setting extract_haps to TRUE." )
-  }
-  
-  # Fill with reference sequence.
-  if( !is.null(ref.seq) ){
-    if( class(ref.seq) == "list" & inherits(ref.seq, "DNAbin") ){
-      ref.seq <- as.matrix(ref.seq)
-    }
-    
-    # Subset the vcf data to our region of interest.
-    end.pos <- start.pos + dim(ref.seq)[2] - 1
-    x <- x[ pos >= start.pos & pos <= end.pos, , drop = FALSE ]
-    
-    # Subset pos to our region of interest
-    # and set to new coordinate system.
-    pos <- pos[ pos >= start.pos & pos <= end.pos ]
-    pos <- pos - start.pos + 1
-    
-    # Create a matrix with the same number of columns as vcf data
-    # and the number of rows to match the sequence length.
-    out.seq <- matrix( as.character(ref.seq),
-                       nrow = dim(ref.seq)[2],
-                       ncol = ncol(x),
-                       byrow = FALSE
-    )
-    colnames(out.seq) <- colnames(x)
-    
-#    pos <- pos - start.pos + 1
-    out.seq[pos,] <- x
-    x <- out.seq
-  }
-
-  # DNAbin characters must be lower case.
-  x <- ape::as.DNAbin(t(x))
-  x
-}
-
 
 
 
