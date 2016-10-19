@@ -1,4 +1,4 @@
-#' 
+
 #' @title Extract elements from vcfR objects
 #' 
 #'  

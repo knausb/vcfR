@@ -452,6 +452,7 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
   // Remaining rows.
 //  Rcpp::Rcout << "Windowing.\n";
   for(i=1; i<myMat.nrow(); i++){
+    R_CheckUserInterrupt();
     
     if( pos(i) > wins(win_num,1) ){
       // Increment window.
@@ -519,6 +520,7 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
   
   // Window counter.
   for(i=0; i<freqs.nrow(); i++){
+    R_CheckUserInterrupt();
     Rcpp::NumericMatrix myWin(wins(i,3) - wins(i,2) + 1, freqs.ncol());
     // Remember, R=1-based, C++=0-based!
     myWin = mat_to_win(myMat, wins(i,2) - 1, wins(i,3) - 1 );
