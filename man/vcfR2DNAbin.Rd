@@ -5,7 +5,8 @@
 \title{Convert vcfR to DNAbin}
 \usage{
 vcfR2DNAbin(x, extract.indels = TRUE, consensus = FALSE,
-  extract.haps = TRUE, ref.seq = NULL, start.pos = NULL, verbose = TRUE)
+  extract.haps = TRUE, unphased_as_NA = TRUE, ref.seq = NULL,
+  start.pos = NULL, verbose = TRUE)
 }
 \arguments{
 \item{x}{an object of class chromR or vcfR}
@@ -16,13 +17,13 @@ vcfR2DNAbin(x, extract.indels = TRUE, consensus = FALSE,
 
 \item{extract.haps}{logical specifying whether to separate each genotype into alleles based on a delimiting character}
 
+\item{unphased_as_NA}{logical indicating how to handle alleles in unphased genotypes}
+
 \item{ref.seq}{reference sequence (DNAbin) for the region being converted}
 
 \item{start.pos}{chromosomal position for the start of the ref.seq}
 
 \item{verbose}{logical specifying whether to produce verbose output}
-
-\item{unphased_as_NA}{logical indicating how to handle alleles in unphased genotypes}
 }
 \description{
 Convert objects of class vcfR to objects of class ape::DNAbin
@@ -81,18 +82,38 @@ If in doubt, begin by subsetting your data and the scale up to ensure you do not
 }
 \examples{
 library(ape)
-
 data(vcfR_test)
-# Create an example reference.
+
+# Create an example reference sequence.
 nucs <- c('a','c','g','t')
 set.seed(9)
-myRef <- as.DNAbin(nucs[round(runif(n=20, min=0.5, max=4.5))])
-set.seed(9)
-vcfR_test@fix[,'POS'] <- sample(1:20, size=length(getPOS(vcfR_test)))
+myRef <- as.DNAbin(matrix(nucs[round(runif(n=20, min=0.5, max=4.5))], nrow=1))
 
+# Recode the POS data for a smaller example.
+set.seed(99)
+vcfR_test@fix[,'POS'] <- sort(sample(10:20, size=length(getPOS(vcfR_test))))
+
+# Just vcfR
 myDNA <- vcfR2DNAbin(vcfR_test)
-
 seg.sites(myDNA)
+image(myDNA)
+
+# ref.seq, no start.pos
+myDNA <- vcfR2DNAbin(vcfR_test, ref.seq = myRef)
+seg.sites(myDNA)
+image(myDNA)
+
+# ref.seq, start.pos = 4.
+# Note that this is the same as the previous example but the variants are shifted.
+myDNA <- vcfR2DNAbin(vcfR_test, ref.seq = myRef, start.pos = 4)
+seg.sites(myDNA)
+image(myDNA)
+
+# ref.seq, no start.pos, unphased_as_NA = FALSE
+myDNA <- vcfR2DNAbin(vcfR_test, unphased_as_NA = FALSE, ref.seq = myRef)
+seg.sites(myDNA)
+image(myDNA)
+
 
 
 }
