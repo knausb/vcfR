@@ -56,6 +56,9 @@ Note that this is not used for a regular expression as similar parameters are us
 Extract allows the user to extract just the specified element (TRUE) or every element except the one specified.
 
 Note that when 'as.numeric' is set to 'TRUE' but the data are not actually numeric, unexpected results will likely occur.
+For example, the genotype field will typically be populated with values such as "0/1" or "1|0".
+Although these may appear numeric, they contain a delimiter (the forward slash or the pipe) that is non-numeric.
+This means that there is no straight forward conversion to a numeric and unexpected values should be expected.
 
 The function \strong{extract.haps} uses extract.gt to isolate genotypes.
 It then uses the information in the REF and ALT columns as well as an allele delimiter (gt_split) to split genotypes into their allelic state.
