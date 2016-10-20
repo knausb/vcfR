@@ -426,17 +426,20 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
   //                             //
 
   Rcpp::NumericMatrix freqs( max_pos, myMat.ncol() );
+  Rcpp::NumericMatrix cnts( max_pos, myMat.ncol() );
 //  Rcpp::Rcout << "Trying dimnames.\n";
   Rcpp::StringVector myColNames = Rcpp::colnames(myMat);
 //  Rcpp::Rcout << "myColNames.size(): " << myColNames.size() << "\n";
 
   Rcpp::rownames(freqs) = rownames;
+  Rcpp::rownames(cnts) = rownames;
   if( myColNames.size() > 0 ){
     Rcpp::colnames(freqs) = myColNames;
+    Rcpp::colnames(cnts) = myColNames;
   }
 //  Rcpp::Rcout << "Finished dimnames.\n";
 
-  Rcpp::NumericMatrix cnts = freqs;
+//  Rcpp::NumericMatrix cnts = freqs;
 
   //                                 //
   // Find windows in pos.            //
@@ -533,9 +536,9 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
 
 //      if( count(0) ){
 //          Rcpp::Rcout << "count(0):" << count(0) << " must be true!\n";
-        cnts(i,Rcpp::_) = count_nonNA( myWin );
+      cnts(i,Rcpp::_) = count_nonNA( myWin );
 //      } else {
-        freqs(i,Rcpp::_) = find_peaks( myWin, bin_width, lhs );
+      freqs(i,Rcpp::_) = find_peaks( myWin, bin_width, lhs );
 //      }
     }
 
@@ -549,7 +552,6 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
     Rcpp::Named("peaks") = freqs,
     Rcpp::Named("counts") = cnts
   );
-  
   
   return(myList);
 }
