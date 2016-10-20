@@ -286,7 +286,6 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat,
 //' @param pos a numeric vector describing the position of variants in myMat.
 //' @param winsize sliding window size.
 //' @param bin_width Width of bins to summarize ferequencies in (0-1].
-//' @param count logical specifying to count the number of non-NA values intead of reporting peak.
 //' @param lhs logical specifying whether the search for the bin of greatest density should favor values from the left hand side.
 //' 
 //' @details
@@ -319,6 +318,7 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat,
 //' \itemize{
 //'   \item a matrix containing window coordinates
 //'   \item a matrix containing peak locations
+//'   \item a matrix containing the counts of variants for each sample in each window
 //' }
 //' 
 //' The window matrix contains start and end coordinates for each window, the rows of the original matrix that demarcate each window and the position of the variants that begin and end each window.
@@ -341,11 +341,9 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat,
 //' freq1 <- ad1/(ad1+ad2)
 //' freq2 <- ad2/(ad1+ad2)
 //' myPeaks1 <- freq_peak(freq1, getPOS(vcf))
-//' myCounts1 <- freq_peak(freq1, getPOS(vcf), count = TRUE)
-//' is.na(myPeaks1$peaks[myCounts1$peaks < 20]) <- TRUE
+//' is.na(myPeaks1$peaks[myPeaks1$counts < 20]) <- TRUE
 //' myPeaks2 <- freq_peak(freq2, getPOS(vcf), lhs = FALSE)
-//' myCounts2 <- freq_peak(freq2, getPOS(vcf), count = TRUE)
-//' is.na(myPeaks2$peaks[myCounts2$peaks < 20]) <- TRUE
+//' is.na(myPeaks2$peaks[myPeaks2$counts < 20]) <- TRUE
 //' #myPeaks <- freq_peak(freqs[1:115,], getPOS(vcf)[1:115])
 //' 
 //' # Visualize
@@ -382,9 +380,9 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
                      Rcpp::NumericVector pos,
                      int winsize = 10000,
                      float bin_width = 0.02,
-                     Rcpp::LogicalVector count = false,
                      Rcpp::LogicalVector lhs = true
                      ){
+//  Rcpp::Rcout << "In freq_peak" << "\n"; 
   int i = 0;
 //  int j = 0;
   
@@ -395,10 +393,16 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
   //                                 //
   // Initialize a matrix of windows. //
   //                                 //
-  
-// Rcpp::Rcout << "pos.size() is: " << pos.size() << ".\n"; 
-  int max_pos = pos[ pos.size() - 1 ] / winsize + 1;
-// Rcpp::Rcout << "max_pos is: " << max_pos << ".\n"; 
+
+//  Rcpp::Rcout << "Initializing win matrix: " << "\n";
+  //Rcpp::Rcout << "pos.size() is: " << pos.size() << ".\n";
+  // May have zero variants.
+  int max_pos = 0;
+  if( pos.size() > 0 ){
+     max_pos = pos[ pos.size() - 1 ] / winsize + 1;
+  }
+  //
+//Rcpp::Rcout << "max_pos is: " << max_pos << ".\n"; 
   Rcpp::NumericMatrix wins( max_pos, 6);
   Rcpp::StringVector rownames( max_pos );
   for(i=0; i<max_pos; i++){
@@ -406,7 +410,7 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
     wins(i,1) = i * winsize + winsize;
     rownames(i) = "win" + std::to_string(i+1);
   }
-//  Rcpp::Rcout << "wins initialized!\n";
+  //  Rcpp::Rcout << "wins initialized!\n";
   Rcpp::StringVector colnames(6);
   colnames(0) = "START";
   colnames(1) = "END";
@@ -415,7 +419,8 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
   colnames(4) = "START_pos";
   colnames(5) = "END_pos";
   wins.attr("dimnames") = Rcpp::List::create(rownames, colnames);
-
+  
+  
   //                             //
   // Initialize a freq matrix.   //
   //                             //
@@ -429,10 +434,10 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
   if( myColNames.size() > 0 ){
     Rcpp::colnames(freqs) = myColNames;
   }
-  
 //  Rcpp::Rcout << "Finished dimnames.\n";
-  
-  
+
+  Rcpp::NumericMatrix cnts = freqs;
+
   //                                 //
   // Find windows in pos.            //
   // Assign rows and POS to windows. //
@@ -441,48 +446,49 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
   int win_num = 0;
   i = 0;
 
-  // First row.
+  if( pos.size() > 0 ){
+    // First row.
 //  Rcpp::Rcout << "First row.\n";
-  while( pos(i) < wins(win_num,0) ){
-    win_num++;
-  }
-  wins(win_num,2) = i + 1;
-  wins(win_num,4) = pos(0);
-  
-  // Remaining rows.
-//  Rcpp::Rcout << "Windowing.\n";
-  for(i=1; i<myMat.nrow(); i++){
-    R_CheckUserInterrupt();
-    
-    if( pos(i) > wins(win_num,1) ){
-      // Increment window.
-//      Rcpp::Rcout << "  New window, pos(i): " << pos(i) << " wins(win_num,0): " << wins(win_num,0) << " wins(win_num,1): " << wins(win_num,1) << "\n";
-      wins(win_num,3) = i;
-      wins(win_num,5) = pos(i-1);
-      
-      while( pos(i) > wins(win_num,1) ){
-//        win_num++;
-        win_num = win_num + 1;
-//        Rcpp::Rcout << "    Incrementing win_num: " << win_num << "\n";
-      }
-//      Rcpp::Rcout << "    win_num: " << win_num << "\n";
-      wins(win_num,2) = i + 1;
-      wins(win_num,4) = pos(i);
+    while( pos(i) < wins(win_num,0) ){
+      win_num++;
     }
-  }
+    wins(win_num,2) = i + 1;
+    wins(win_num,4) = pos(0);
   
-  // Last row.
-  wins(win_num,3) = i;
-  wins(win_num,5) = pos(i-1);
+    // Remaining rows.
+//  Rcpp::Rcout << "Windowing.\n";
+    for(i=1; i<myMat.nrow(); i++){
+      R_CheckUserInterrupt();
+    
+      if( pos(i) > wins(win_num,1) ){
+        // Increment window.
+//      Rcpp::Rcout << "  New window, pos(i): " << pos(i) << " wins(win_num,0): " << wins(win_num,0) << " wins(win_num,1): " << wins(win_num,1) << "\n";
+        wins(win_num,3) = i;
+        wins(win_num,5) = pos(i-1);
+      
+        while( pos(i) > wins(win_num,1) ){
+//        win_num++;
+          win_num = win_num + 1;
+//        Rcpp::Rcout << "    Incrementing win_num: " << win_num << "\n";
+        }
+//      Rcpp::Rcout << "    win_num: " << win_num << "\n";
+        wins(win_num,2) = i + 1;
+        wins(win_num,4) = pos(i);
+      }
+    }
+  
+    // Last row.
+    wins(win_num,3) = i;
+    wins(win_num,5) = pos(i-1);
 
   
-  //                //
-  // Sanity checks. //
-  //                //
+    //                //
+    // Sanity checks. //
+    //                //
   
-  // Check bin_width validity.
-  if( !count(0) ){
-    // Positive bin width.
+    // Check bin_width validity.
+//    if( !count(0) ){
+      // Positive bin width.
     if( bin_width <= 0 ){
       Rcpp::Rcerr << "bin_width must be greater than zero, please try another bin_width.\n";
       Rcpp::List myList = Rcpp::List::create(
@@ -512,32 +518,38 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
       );
     return( myList );
     }
-  }
+//    }
 
-  //                    //
-  // Process by window. //
-  //                    //
+    //                    //
+    // Process by window. //
+    //                    //
   
-  // Window counter.
-  for(i=0; i<freqs.nrow(); i++){
-    R_CheckUserInterrupt();
-    Rcpp::NumericMatrix myWin(wins(i,3) - wins(i,2) + 1, freqs.ncol());
-    // Remember, R=1-based, C++=0-based!
-    myWin = mat_to_win(myMat, wins(i,2) - 1, wins(i,3) - 1 );
+    // Window counter.
+    for(i=0; i<freqs.nrow(); i++){
+      R_CheckUserInterrupt();
+      Rcpp::NumericMatrix myWin(wins(i,3) - wins(i,2) + 1, freqs.ncol());
+      // Remember, R=1-based, C++=0-based!
+      myWin = mat_to_win(myMat, wins(i,2) - 1, wins(i,3) - 1 );
 
-    if( count(0) ){
+//      if( count(0) ){
 //          Rcpp::Rcout << "count(0):" << count(0) << " must be true!\n";
-      freqs(i,Rcpp::_) = count_nonNA( myWin );
-    } else {
-      freqs(i,Rcpp::_) = find_peaks( myWin, bin_width, lhs );
+        cnts(i,Rcpp::_) = count_nonNA( myWin );
+//      } else {
+        freqs(i,Rcpp::_) = find_peaks( myWin, bin_width, lhs );
+//      }
     }
+
+    
   }
+  
   
   // Create the return List.
   Rcpp::List myList = Rcpp::List::create(
     Rcpp::Named("wins") = wins,
-    Rcpp::Named("peaks") = freqs
+    Rcpp::Named("peaks") = freqs,
+    Rcpp::Named("counts") = cnts
   );
+  
   
   return(myList);
 }

@@ -74,7 +74,6 @@ extract_haps <- function(ref, alt, gt, unphased_as_NA, verbose) {
 #' @param pos a numeric vector describing the position of variants in myMat.
 #' @param winsize sliding window size.
 #' @param bin_width Width of bins to summarize ferequencies in (0-1].
-#' @param count logical specifying to count the number of non-NA values intead of reporting peak.
 #' @param lhs logical specifying whether the search for the bin of greatest density should favor values from the left hand side.
 #' 
 #' @details
@@ -107,6 +106,7 @@ extract_haps <- function(ref, alt, gt, unphased_as_NA, verbose) {
 #' \itemize{
 #'   \item a matrix containing window coordinates
 #'   \item a matrix containing peak locations
+#'   \item a matrix containing the counts of variants for each sample in each window
 #' }
 #' 
 #' The window matrix contains start and end coordinates for each window, the rows of the original matrix that demarcate each window and the position of the variants that begin and end each window.
@@ -129,11 +129,9 @@ extract_haps <- function(ref, alt, gt, unphased_as_NA, verbose) {
 #' freq1 <- ad1/(ad1+ad2)
 #' freq2 <- ad2/(ad1+ad2)
 #' myPeaks1 <- freq_peak(freq1, getPOS(vcf))
-#' myCounts1 <- freq_peak(freq1, getPOS(vcf), count = TRUE)
-#' is.na(myPeaks1$peaks[myCounts1$peaks < 20]) <- TRUE
+#' is.na(myPeaks1$peaks[myPeaks1$counts < 20]) <- TRUE
 #' myPeaks2 <- freq_peak(freq2, getPOS(vcf), lhs = FALSE)
-#' myCounts2 <- freq_peak(freq2, getPOS(vcf), count = TRUE)
-#' is.na(myPeaks2$peaks[myCounts2$peaks < 20]) <- TRUE
+#' is.na(myPeaks2$peaks[myPeaks2$counts < 20]) <- TRUE
 #' #myPeaks <- freq_peak(freqs[1:115,], getPOS(vcf)[1:115])
 #' 
 #' # Visualize
@@ -165,8 +163,8 @@ extract_haps <- function(ref, alt, gt, unphased_as_NA, verbose) {
 #' 
 #' 
 #' @export
-freq_peak <- function(myMat, pos, winsize = 10000L, bin_width = 0.02, count = FALSE, lhs = TRUE) {
-    .Call('vcfR_freq_peak', PACKAGE = 'vcfR', myMat, pos, winsize, bin_width, count, lhs)
+freq_peak <- function(myMat, pos, winsize = 10000L, bin_width = 0.02, lhs = TRUE) {
+    .Call('vcfR_freq_peak', PACKAGE = 'vcfR', myMat, pos, winsize, bin_width, lhs)
 }
 
 gt_to_popsum <- function(var_info, gt) {

@@ -29,8 +29,22 @@ test_that("freq_peak works",{
   myPeaks1 <- freq_peak(freq1, getPOS(vcf))
   
   expect_is(myPeaks1, 'list')
-  expect_equal(length(myPeaks1), 2)
+  expect_equal(length(myPeaks1), 3)
   expect_equal( sum(myPeaks1$peaks >= 0), length(myPeaks1$peaks))
   expect_equal( sum(myPeaks1$peaks <= 1), length(myPeaks1$peaks))
   
 })
+
+
+test_that("freq_peak works, zero variants",{
+  data("vcfR_test")
+  vcfR_test <- vcfR_test[0,]
+  dp <- extract.gt(vcfR_test, element = "DP", as.numeric = TRUE)
+  
+  myPeaks1 <- freq_peak(dp, pos = getPOS(vcfR_test))
+#  myPeaks1 <- freq_peak(dp[0,], pos = getPOS(vcfR_test))
+  
+})
+
+
+
