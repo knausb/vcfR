@@ -1,6 +1,89 @@
 #include <Rcpp.h>
 
 
+void dput_NumericMatrix( Rcpp::NumericMatrix myMat){
+  int i = 0;
+  int j = 0;
+  
+  Rcpp::StringVector myRowNames( myMat.nrow() );
+  Rcpp::StringVector myColNames( myMat.ncol() );
+  
+  if( !Rf_isNull(rownames(myMat)) && Rf_length(rownames(myMat)) > 1 ){
+    myRowNames = Rcpp::rownames(myMat);    
+  }
+//  Rcpp::Rcout << "Checking for colnames!\n";
+  if( !Rf_isNull(colnames(myMat)) && Rf_length(colnames(myMat)) > 1 ){
+//    Rcpp::Rcout << "Found colnames!\n";
+    myColNames = Rcpp::colnames(myMat);
+  }
+  
+  
+  Rcpp::Rcout << "\n";
+  Rcpp::Rcout << "structure(c(";
+  
+  // Print the first column.
+  if( Rcpp::NumericVector::is_na( myMat(0,0) ) ){
+    Rcpp::Rcout << "NA";
+  } else {
+    Rcpp::Rcout << myMat(0,0);
+  }
+  for(i=1; i<myMat.nrow(); i++){
+//    Rcpp::Rcout << ", " << myMat(i,j);
+    if( Rcpp::NumericVector::is_na( myMat(i,j) ) ){
+      Rcpp::Rcout << ",NA";
+    } else {
+      Rcpp::Rcout << "," << myMat(i,j);
+    }
+  }
+  
+  // Print the remaining columns.
+  for(j=1; j<myMat.ncol(); j++){
+    for(i=0; i<myMat.nrow(); i++){
+      if( Rcpp::NumericVector::is_na( myMat(i,j) ) ){
+        Rcpp::Rcout << ",NA";
+      } else {
+        Rcpp::Rcout << "," << myMat(i,j);
+      }
+    }
+  }
+  
+  Rcpp::Rcout << "),";
+  
+  // Dimensions
+  Rcpp::Rcout << " .Dim = c(" << myMat.nrow() << "L, " << myMat.ncol() << "L)";
+  
+  Rcpp::Rcout << ", .Dimnames = list(";
+  // Row names.
+  if( !Rf_isNull(rownames(myMat)) && Rf_length(rownames(myMat)) > 1 ){
+    //  myRowNames = Rcpp::rownames(myMat);
+    Rcpp::Rcout << "c(\"" << myRowNames(0);
+    for(i=1; i<myRowNames.size(); i++){
+      Rcpp::Rcout << "\", \"" << myRowNames(i);
+    }
+    Rcpp::Rcout << "\")";
+  } else {
+    Rcpp::Rcout << "NULL";
+  }
+  
+  Rcpp::Rcout << ",";
+  // Column names.
+  if( !Rf_isNull(colnames(myMat)) && Rf_length(colnames(myMat)) > 1 ){
+    Rcpp::Rcout << "c(\"" << myColNames(0);
+    for(i=1; i<myColNames.size(); i++){
+      Rcpp::Rcout << "\", \"" << myColNames(i);
+    }
+    Rcpp::Rcout << "\")";
+  } else {
+    Rcpp::Rcout << "NULL";
+  }
+  
+  //
+  Rcpp::Rcout << ")"; // Close .Dimnames list.
+  Rcpp::Rcout << ")\n"; // Close structure.
+  Rcpp::Rcout << "\n\n"; // Delimit dput statements.
+}
+
+
 Rcpp::NumericMatrix init_window_matrix(Rcpp::NumericVector pos, int winsize){
 //  Rcpp::Rcout << "In myFunction.\n";
   
@@ -123,23 +206,43 @@ Rcpp::NumericMatrix mat_to_win( Rcpp::NumericMatrix myMat,
                                 int start_row, 
                                 int end_row
 ){
-  Rcpp::NumericMatrix retMatrix( end_row - start_row + 1, myMat.ncol() );
+//  Rcpp::NumericMatrix retMatrix;
   
-  int i = 0;
-  int j = 0;
+  if( start_row >= 0 & end_row >= 0){
+    Rcpp::NumericMatrix retMatrix( end_row - start_row + 1, myMat.ncol() );
   
-  for(i=0; i<myMat.ncol(); i++){
-    for(j=start_row; j<=end_row; j++){
-      retMatrix(j - start_row + 0, i) = myMat(j,i);
+//    Rcpp::Rcout << "start_row: " << start_row << "\n";
+//    Rcpp::Rcout << "end_row: " << end_row << "\n";
+//    Rcpp::Rcout << "retMatrix.nrow(): " << retMatrix.nrow() << "\n";
+  
+    int i = 0;
+    int j = 0;
+  
+    for(i=0; i<myMat.ncol(); i++){
+      for(j=start_row; j<=end_row; j++){
+        retMatrix(j - start_row + 0, i) = myMat(j,i);
+      }
     }
+    return(retMatrix);
+    
+  } else {
+    Rcpp::NumericMatrix retMatrix( 0, myMat.ncol() );
+    return(retMatrix);
   }
-  
-  return(retMatrix);
 }
 
 
-// Count non missing values in a NumericMatrix.
+// Count non missing values in a NumericMatrix 
+// summarizing by column.
 Rcpp::NumericVector count_nonNA( Rcpp::NumericMatrix myMat ){
+  
+//  Rcpp::Rcout << "myMat.nrow(): " << myMat.nrow() << "\n";
+  
+//  if( myMat.nrow() >= 1){
+//    dput_NumericMatrix(myMat);
+//  }
+  
+  // Initialize a return vector.
   Rcpp::NumericVector myCounts( myMat.ncol() );
 
   int i = 0;
@@ -150,11 +253,17 @@ Rcpp::NumericVector count_nonNA( Rcpp::NumericMatrix myMat ){
     myCounts(i) = 0;
   }
 
+  // Iterate through columns and rows
+  // counting the number of non-NA cells.
   for(i=0; i<myMat.ncol(); i++){
-    for(j=0; j<myMat.nrow() - 1; j++){
+    for(j=0; j<myMat.nrow(); j++){
+//      Rcpp::Rcout << "   row number: " << j <<"\n";
+//      Rcpp::Rcout << " myMat value: " << myMat(j,i);
       if( !Rcpp::NumericVector::is_na( myMat(j,i) ) ){
         myCounts(i) = myCounts(i) + 1;
+//        Rcpp::Rcout << " Increment!";
       }
+//      Rcpp::Rcout << "\n";
     }
   }
 
@@ -240,94 +349,20 @@ double find_one_peak( Rcpp::NumericMatrix binned_data,
       }
     }
   }
-    
-  myPeak = binned_data(max_peak,1);
+  
+//  Rcpp::Rcout << "binned_data(max_peak,3): " << binned_data(max_peak,3) << "\n";
+  if( binned_data(max_peak,3) == 0 ){
+    // There was no data in this window.
+    // Rcpp::Rcout << "  No data in window!\n";
+//    myPeak = 0;
+  } else {
+    myPeak = binned_data(max_peak,1);
+  }
   return( myPeak );  
 }
 
 
 
-void dput_NumericMatrix( Rcpp::NumericMatrix myMat){
-  int i = 0;
-  int j = 0;
-  
-  Rcpp::StringVector myRowNames( myMat.nrow() );
-  Rcpp::StringVector myColNames( myMat.ncol() );
-  
-  if( !Rf_isNull(rownames(myMat)) && Rf_length(rownames(myMat)) > 1 ){
-    myRowNames = Rcpp::rownames(myMat);    
-  }
-//  Rcpp::Rcout << "Checking for colnames!\n";
-  if( !Rf_isNull(colnames(myMat)) && Rf_length(colnames(myMat)) > 1 ){
-//    Rcpp::Rcout << "Found colnames!\n";
-    myColNames = Rcpp::colnames(myMat);
-  }
-  
-  
-  Rcpp::Rcout << "\n";
-  Rcpp::Rcout << "structure(c(";
-  
-  // Print the first column.
-  if( Rcpp::NumericVector::is_na( myMat(0,0) ) ){
-    Rcpp::Rcout << "NA";
-  } else {
-    Rcpp::Rcout << myMat(0,0);
-  }
-  for(i=1; i<myMat.nrow(); i++){
-//    Rcpp::Rcout << ", " << myMat(i,j);
-    if( Rcpp::NumericVector::is_na( myMat(i,j) ) ){
-      Rcpp::Rcout << ",NA";
-    } else {
-      Rcpp::Rcout << "," << myMat(i,j);
-    }
-  }
-  
-  // Print the remaining columns.
-  for(j=1; j<myMat.ncol(); j++){
-    for(i=0; i<myMat.nrow(); i++){
-      if( Rcpp::NumericVector::is_na( myMat(i,j) ) ){
-        Rcpp::Rcout << ",NA";
-      } else {
-        Rcpp::Rcout << "," << myMat(i,j);
-      }
-    }
-  }
-  
-  Rcpp::Rcout << "),";
-  
-  // Dimensions
-  Rcpp::Rcout << " .Dim = c(" << myMat.nrow() << "L, " << myMat.ncol() << "L)";
-  
-  Rcpp::Rcout << ", .Dimnames = list(";
-  // Row names.
-  if( !Rf_isNull(rownames(myMat)) && Rf_length(rownames(myMat)) > 1 ){
-    //  myRowNames = Rcpp::rownames(myMat);
-    Rcpp::Rcout << "c(\"" << myRowNames(0);
-    for(i=1; i<myRowNames.size(); i++){
-      Rcpp::Rcout << "\", \"" << myRowNames(i);
-    }
-    Rcpp::Rcout << "\")";
-  } else {
-    Rcpp::Rcout << "NULL";
-  }
-  
-  Rcpp::Rcout << ",";
-  // Column names.
-  if( !Rf_isNull(colnames(myMat)) && Rf_length(colnames(myMat)) > 1 ){
-    Rcpp::Rcout << "c(\"" << myColNames(0);
-    for(i=1; i<myColNames.size(); i++){
-      Rcpp::Rcout << "\", \"" << myColNames(i);
-    }
-    Rcpp::Rcout << "\")";
-  } else {
-    Rcpp::Rcout << "NULL";
-  }
-  
-  //
-  Rcpp::Rcout << ")"; // Close .Dimnames list.
-  Rcpp::Rcout << ")\n"; // Close structure.
-  Rcpp::Rcout << "\n\n"; // Delimit dput statements.
-}
 
 
 
@@ -340,6 +375,10 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat,
                                 ){
   // myMat is a matrix that consists of samples in rows
   // and one window's length of frequencies in rows.
+  //
+  // bin_width specifies the width of bins to be used (i.e., 0.01, 0.02, etc.).
+  // lhs is a logical specifying whether to favor the 
+  // left hand value in the case of ties.
   
   int i = 0;
 //  int j = 0;
@@ -364,7 +403,7 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat,
     return(myPeaks);
   }
   
-  // Initialize vectors.
+  // Initialize breaks and mids vectors.
   breaks[0] = 0;
   for(i=0; i<mids.size(); i++ ){
     breaks[i+1] = breaks[i] + bin_width;
@@ -380,6 +419,7 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat,
   // a format similar to R's dput.
   //
   for(i=0; i<myMat.ncol(); i++){ // Column (sample) counter.
+// Rcpp::Rcout << "  Sample: " << i << "\n";
     Rcpp::NumericMatrix binned_data;
     binned_data = bin_data( myMat( Rcpp::_, i), bin_width );
 
@@ -526,9 +566,8 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
 
   Rcpp::NumericMatrix cnts = init_freq_matrix(myMat, wins);
   
-  
-  
-    //                                 //
+
+  //                                 //
   // Find windows in pos.            //
   // Assign rows and POS to windows. //
   //                                 //
@@ -618,12 +657,24 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
     // Window counter.
     for(i=0; i<freqs.nrow(); i++){
       R_CheckUserInterrupt();
+      
+      // Initialize container.
       Rcpp::NumericMatrix myWin(wins(i,3) - wins(i,2) + 1, freqs.ncol());
+      
+      // Subset data matrix to one window of data.
       // Remember, R=1-based, C++=0-based!
       myWin = mat_to_win(myMat, wins(i,2) - 1, wins(i,3) - 1 );
 
-      cnts(i,Rcpp::_) = count_nonNA( myWin );
-      freqs(i,Rcpp::_) = find_peaks( myWin, bin_width, lhs );
+//      Rcpp::Rcout << "myWin.nrow(): " << myWin.nrow() << "\n";
+      // Some windows may not have data.
+      if( myWin.nrow() > 0 ){
+        // Count data.
+        cnts(i,Rcpp::_) = count_nonNA( myWin );
+        
+        // Frequency data.
+        freqs(i,Rcpp::_) = find_peaks( myWin, bin_width, lhs );
+      }
+      
     }
   }
   

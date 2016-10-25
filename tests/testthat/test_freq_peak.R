@@ -55,9 +55,27 @@ test_that("freq_peak works, one variant",{
   vcfR_test <- vcfR_test[1,]
   dp <- extract.gt(vcfR_test, element = "DP", as.numeric = TRUE)
   
-  myPeaks1 <- freq_peak(dp, pos = getPOS(vcfR_test))
+  myPeaks1 <- freq_peak(dp, pos = getPOS(vcfR_test), lhs = FALSE)
   #  myPeaks1 <- freq_peak(dp[0,], pos = getPOS(vcfR_test))
   
   expect_is(myPeaks1, 'list')
 })
 
+
+test_that("freq_peak works, one variant",{
+  data("vcfR_test")
+  dp <- extract.gt(vcfR_test, element = "DP", as.numeric = TRUE)
+  
+  set.seed(1)
+  dp[1:nrow(dp), 1:ncol(dp)] <- as.matrix( jitter( rep( 0.5, times = length(dp) ) ) )
+  dp[1:2,2] <- 1/4
+  
+  myPeaks1 <- freq_peak(dp, pos = getPOS(vcfR_test), lhs = FALSE)
+
+#  myPeaks1$wins[c(1,112,124),]
+#  myPeaks1$peaks[c(1,112,124),]
+#  myPeaks1$counts[c(1,112,124),]
+  
+  expect_is(myPeaks1, 'list')
+  
+})
