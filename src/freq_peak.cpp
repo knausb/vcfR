@@ -1,6 +1,112 @@
 #include <Rcpp.h>
 
 
+Rcpp::NumericMatrix init_window_matrix(Rcpp::NumericVector pos, int winsize){
+//  Rcpp::Rcout << "In myFunction.\n";
+  
+  int i = 0;
+  int min_pos = 0;
+  int max_pos = 0;
+
+  if( pos.size() > 1 ){
+    min_pos = pos[0];
+    max_pos = pos[ pos.size() - 1 ];
+  } else if( pos.size() == 1 ){
+    min_pos = pos[0];
+    max_pos = pos[0];
+  }
+
+
+  if( pos.size() > 0){
+    // Find the start of the first window.
+    // This does not need to be 1.
+    while( min_pos % winsize > 1 & min_pos >= 1 ){
+      min_pos--;
+//    Rcpp::Rcout << "min_pos: " << min_pos << ".\n";
+    }
+    // Find the end of the last window.
+    while( max_pos % winsize != 0 ){
+      max_pos++;
+//    Rcpp::Rcout << "max_pos: " << max_pos << ".\n";
+    }
+  }
+
+
+  // Count the number of windows.
+  int win_num = 0;
+  if( pos.size() > 0 ){
+    win_num = ( max_pos / winsize ) - ( min_pos / winsize ) + 1;
+  }
+  
+
+  if( pos.size() > 0 ){
+    Rcpp::NumericMatrix wins( win_num, 6);
+    Rcpp::StringVector row_names( win_num );
+
+    // First window.
+    row_names(0) = "win1";
+    wins(0,0) = min_pos;
+    wins(0,1) = min_pos + winsize -1;
+    
+    for(i=1; i<win_num; i++){
+      wins(i,0) = i * winsize + 1;
+      wins(i,1) = i * winsize + winsize;
+    
+      std::stringstream ss;
+      ss << i + 1;
+      std::string str = ss.str();
+    
+      row_names(i) = "win" + ss.str();
+    }
+    
+    //  Rcpp::Rcout << "wins initialized!\n";
+    Rcpp::StringVector col_names(6);
+    col_names(0) = "START";
+    col_names(1) = "END";
+    col_names(2) = "START_row";
+    col_names(3) = "END_row";
+    col_names(4) = "START_pos";
+    col_names(5) = "END_pos";
+  
+    wins.attr("dimnames") = Rcpp::List::create(row_names, col_names);
+    return(wins);
+  } else {
+    Rcpp::NumericMatrix wins( 0, 6);
+    Rcpp::StringVector row_names(0);
+    Rcpp::StringVector col_names(6);
+    col_names(0) = "START";
+    col_names(1) = "END";
+    col_names(2) = "START_row";
+    col_names(3) = "END_row";
+    col_names(4) = "START_pos";
+    col_names(5) = "END_pos";
+  
+    wins.attr("dimnames") = Rcpp::List::create(row_names, col_names);
+    return(wins);
+  }
+}
+
+
+Rcpp::NumericMatrix init_freq_matrix(Rcpp::NumericMatrix myMat, Rcpp::NumericMatrix winMat){
+//  Rcpp::Rcout << "In myFunction.\n";
+  Rcpp::NumericMatrix retMat( winMat.nrow(), myMat.ncol());
+  
+  if( !Rf_isNull(colnames(myMat)) && Rf_length(colnames(myMat)) > 1 ){
+    Rcpp::StringVector myColNames = Rcpp::colnames(myMat);
+    Rcpp::colnames(retMat) = myColNames;
+  }
+
+  if( !Rf_isNull(rownames(winMat)) && Rf_length(rownames(winMat)) > 1 ){
+    Rcpp::StringVector myRowNames = Rcpp::rownames(winMat);
+    Rcpp::rownames(retMat) = myRowNames;
+  }
+  
+  return( retMat );
+}
+
+
+
+
 // Slice a window of rows out of a matrix.
 Rcpp::NumericMatrix mat_to_win( Rcpp::NumericMatrix myMat, 
                                 int start_row, 
@@ -394,54 +500,24 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
   // Initialize a matrix of windows. //
   //                                 //
 
-//  Rcpp::Rcout << "Initializing win matrix: " << "\n";
-  //Rcpp::Rcout << "pos.size() is: " << pos.size() << ".\n";
-  // May have zero variants.
-  int max_pos = 0;
-  if( pos.size() > 0 ){
-     max_pos = pos[ pos.size() - 1 ] / winsize + 1;
-  }
-  //
-//Rcpp::Rcout << "max_pos is: " << max_pos << ".\n"; 
-  Rcpp::NumericMatrix wins( max_pos, 6);
-  Rcpp::StringVector rownames( max_pos );
-  for(i=0; i<max_pos; i++){
-    wins(i,0) = i * winsize + 1;
-    wins(i,1) = i * winsize + winsize;
-    rownames(i) = "win" + std::to_string(i+1);
-  }
-  //  Rcpp::Rcout << "wins initialized!\n";
-  Rcpp::StringVector colnames(6);
-  colnames(0) = "START";
-  colnames(1) = "END";
-  colnames(2) = "START_row";
-  colnames(3) = "END_row";
-  colnames(4) = "START_pos";
-  colnames(5) = "END_pos";
-  wins.attr("dimnames") = Rcpp::List::create(rownames, colnames);
-  
+  Rcpp::NumericMatrix wins = init_window_matrix(pos, winsize);
+
   
   //                             //
   // Initialize a freq matrix.   //
   //                             //
 
-  Rcpp::NumericMatrix freqs( max_pos, myMat.ncol() );
-  Rcpp::NumericMatrix cnts( max_pos, myMat.ncol() );
-//  Rcpp::Rcout << "Trying dimnames.\n";
-  Rcpp::StringVector myColNames = Rcpp::colnames(myMat);
-//  Rcpp::Rcout << "myColNames.size(): " << myColNames.size() << "\n";
+  Rcpp::NumericMatrix freqs = init_freq_matrix(myMat, wins);
+  
+  //                             //
+  // Initialize a count matrix.  //
+  //                             //
 
-  Rcpp::rownames(freqs) = rownames;
-  Rcpp::rownames(cnts) = rownames;
-  if( myColNames.size() > 0 ){
-    Rcpp::colnames(freqs) = myColNames;
-    Rcpp::colnames(cnts) = myColNames;
-  }
-//  Rcpp::Rcout << "Finished dimnames.\n";
-
-//  Rcpp::NumericMatrix cnts = freqs;
-
-  //                                 //
+  Rcpp::NumericMatrix cnts = init_freq_matrix(myMat, wins);
+  
+  
+  
+    //                                 //
   // Find windows in pos.            //
   // Assign rows and POS to windows. //
   //                                 //
@@ -449,6 +525,7 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
   int win_num = 0;
   i = 0;
 
+  
   if( pos.size() > 0 ){
     // First row.
 //  Rcpp::Rcout << "First row.\n";
@@ -526,7 +603,7 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
     //                    //
     // Process by window. //
     //                    //
-  
+
     // Window counter.
     for(i=0; i<freqs.nrow(); i++){
       R_CheckUserInterrupt();
@@ -534,16 +611,17 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
       // Remember, R=1-based, C++=0-based!
       myWin = mat_to_win(myMat, wins(i,2) - 1, wins(i,3) - 1 );
 
-//      if( count(0) ){
-//          Rcpp::Rcout << "count(0):" << count(0) << " must be true!\n";
       cnts(i,Rcpp::_) = count_nonNA( myWin );
-//      } else {
       freqs(i,Rcpp::_) = find_peaks( myWin, bin_width, lhs );
-//      }
     }
 
     
   }
+
+  
+  
+  
+  
   
   
   // Create the return List.
@@ -552,7 +630,11 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
     Rcpp::Named("peaks") = freqs,
     Rcpp::Named("counts") = cnts
   );
-  
+
+//  Rcpp::List myList = Rcpp::List::create(
+//    Rcpp::Named("wins") = naMat
+//  );
+
   return(myList);
 }
 
