@@ -100,6 +100,17 @@ Rcpp::NumericMatrix init_freq_matrix(Rcpp::NumericMatrix myMat, Rcpp::NumericMat
     Rcpp::StringVector myRowNames = Rcpp::rownames(winMat);
     Rcpp::rownames(retMat) = myRowNames;
   }
+
+  /*  
+  int i = 0;
+  int j = 0;
+  
+  for(i=0; i<retMat.ncol(); i++){
+    for(j=0; j<retMat.ncol(); j++){
+      retMat(i,j) = NA_REAL;
+    }
+  }
+  */
   
   return( retMat );
 }
@@ -614,14 +625,7 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
       cnts(i,Rcpp::_) = count_nonNA( myWin );
       freqs(i,Rcpp::_) = find_peaks( myWin, bin_width, lhs );
     }
-
-    
   }
-
-  
-  
-  
-  
   
   
   // Create the return List.
@@ -630,10 +634,6 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
     Rcpp::Named("peaks") = freqs,
     Rcpp::Named("counts") = cnts
   );
-
-//  Rcpp::List myList = Rcpp::List::create(
-//    Rcpp::Named("wins") = naMat
-//  );
 
   return(myList);
 }
