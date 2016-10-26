@@ -174,12 +174,12 @@ Rcpp::NumericMatrix init_freq_matrix(Rcpp::NumericMatrix myMat, Rcpp::NumericMat
 //  Rcpp::Rcout << "In myFunction.\n";
   Rcpp::NumericMatrix retMat( winMat.nrow(), myMat.ncol());
   
-  if( !Rf_isNull(colnames(myMat)) && Rf_length(colnames(myMat)) > 1 ){
+  if( !Rf_isNull(colnames(myMat)) && Rf_length(colnames(myMat)) >= 1 ){
     Rcpp::StringVector myColNames = Rcpp::colnames(myMat);
     Rcpp::colnames(retMat) = myColNames;
   }
 
-  if( !Rf_isNull(rownames(winMat)) && Rf_length(rownames(winMat)) > 1 ){
+  if( !Rf_isNull(rownames(winMat)) && Rf_length(rownames(winMat)) >= 1 ){
     Rcpp::StringVector myRowNames = Rcpp::rownames(winMat);
     Rcpp::rownames(retMat) = myRowNames;
   }
