@@ -37,12 +37,14 @@ queryMETA <- function(x, element = NULL, nice = TRUE){
   
   if( is.null(element) ){
     ID <- grep("=<ID=", x@meta, value = TRUE)
+    ID <- grep("contig=<ID", ID, value = TRUE, invert = TRUE)
     
     if( nice ){
       ID <- nice(ID)
       ID <- lapply( ID, function(x){ x[1] } )
       ID <- unlist(ID)
     }
+    ID <- c(ID, "contig=<ID omitted from queryMETA")
     return(ID)
   }
   
