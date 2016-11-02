@@ -39,6 +39,18 @@ test_that("Works with no variants, ref.seq is not NULL",{
 })
 
 
+test_that("Works with one variant, ref.seq is not NULL",{
+  vcf <- vcf[1,]
+  my_DNAbin <- vcfR2DNAbin( vcf, ref.seq = gene, start.pos = gff[1,4], verbose = FALSE )
+  expect_true( inherits(my_DNAbin, "DNAbin") )
+  expect_equal( dim(my_DNAbin)[1], (ncol(vcf@gt) - 1) * 2 )
+  expect_equal( dim(my_DNAbin)[2], length(gene) )
+  expect_equal( length(ape::seg.sites(my_DNAbin)), 0 )
+  expect_equal( sum(ape::base.freq(my_DNAbin) > 0), 4 )
+})
+
+
+
 
 ##### ##### ##### ##### #####
 #
