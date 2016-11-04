@@ -93,6 +93,7 @@ Rcpp::NumericMatrix init_window_matrix(Rcpp::NumericVector pos, int winsize){
 
   if( pos.size() > 1 ){
     min_pos = pos[0];
+//    max_pos = pos[ pos.size() ];
     max_pos = pos[ pos.size() - 1 ];
   } else if( pos.size() == 1 ){
     min_pos = pos[0];
@@ -110,17 +111,19 @@ Rcpp::NumericMatrix init_window_matrix(Rcpp::NumericVector pos, int winsize){
     // Find the end of the last window.
     while( max_pos % winsize != 0 ){
       max_pos++;
-//    Rcpp::Rcout << "max_pos: " << max_pos << ".\n";
+//    Rcpp::Rcout << "max_pos: " << max_pos << " pos[ pos.size() - 1 ]: " << pos[ pos.size() - 1 ] << ".\n";
     }
+// Rcpp::Rcout << "  pos[0]: " << pos[0] << ", pos[ pos.size() - 1 ]: " << pos[ pos.size() - 1 ] << ", min_pos: " << min_pos << ", max_pos: " << max_pos << "\n";
   }
 
 
   // Count the number of windows.
   int win_num = 0;
   if( pos.size() > 0 ){
-    win_num = ( max_pos / winsize ) - ( min_pos / winsize ) + 1;
+//    win_num = ( max_pos / winsize ) - ( (min_pos - 1) / winsize ) + 1;
+    win_num = max_pos / winsize - (min_pos - 1) / winsize;
   }
-  
+//Rcpp::Rcout << "  win_num: " << win_num << "\n";
 
   if( pos.size() > 0 ){
     Rcpp::NumericMatrix wins( win_num, 6);
@@ -129,12 +132,15 @@ Rcpp::NumericMatrix init_window_matrix(Rcpp::NumericVector pos, int winsize){
     // First window.
     row_names(0) = "win1";
     wins(0,0) = min_pos;
-    wins(0,1) = min_pos + winsize -1;
+    wins(0,1) = min_pos + winsize - 1;
     
     for(i=1; i<win_num; i++){
-      wins(i,0) = i * winsize + 1;
-      wins(i,1) = i * winsize + winsize;
-    
+//      wins(i,0) = i * winsize + 1;
+//      wins(i,1) = i * winsize + winsize;
+      int previous_window = i - 1;
+      wins(i,0) = wins(previous_window,0) + winsize;
+      wins(i,1) = wins(previous_window,1) + winsize;
+
       std::stringstream ss;
       ss << i + 1;
       std::string str = ss.str();
@@ -154,6 +160,7 @@ Rcpp::NumericMatrix init_window_matrix(Rcpp::NumericVector pos, int winsize){
     wins.attr("dimnames") = Rcpp::List::create(row_names, col_names);
     return(wins);
   } else {
+//    Rcpp::Rcout << "  Zero rows!" << "\n";
     Rcpp::NumericMatrix wins( 0, 6);
     Rcpp::StringVector row_names(0);
     Rcpp::StringVector col_names(6);
@@ -164,14 +171,27 @@ Rcpp::NumericMatrix init_window_matrix(Rcpp::NumericVector pos, int winsize){
     col_names(4) = "START_pos";
     col_names(5) = "END_pos";
   
+//    Rcpp::Rcout << "  Zero rows, before attributes!" << "\n";
     wins.attr("dimnames") = Rcpp::List::create(row_names, col_names);
+//    Rcpp::Rcout << "  Zero rows, before return!" << "\n";
     return(wins);
   }
 }
 
 
 Rcpp::NumericMatrix init_freq_matrix(Rcpp::NumericMatrix myMat, Rcpp::NumericMatrix winMat){
-//  Rcpp::Rcout << "In myFunction.\n";
+
+  // myMat is a matrix of frequencies where
+  // there is a row for each variant
+  // and a column for each sample.
+  
+  // winMat is a matrix of windows with six columns
+  // where the first column indicates the start of each window,
+  // the second colomn indicates the end of the window
+  // and there are as many rows as there are windows.
+
+  //  Rcpp::Rcout << "In myFunction.\n";
+
   Rcpp::NumericMatrix retMat( winMat.nrow(), myMat.ncol());
   
   if( !Rf_isNull(colnames(myMat)) && Rf_length(colnames(myMat)) >= 1 ){
@@ -198,6 +218,64 @@ Rcpp::NumericMatrix init_freq_matrix(Rcpp::NumericMatrix myMat, Rcpp::NumericMat
   return( retMat );
 }
 
+
+void pos_to_windows(Rcpp::NumericVector pos, Rcpp::NumericMatrix wins){
+  
+  // pos is a vector od positions for variants.
+  
+  // wins is a matrix of windows where each row is a window.
+  // The first column indicates the start of the window.
+  // The second column indicates the end of the windows.
+  // The third column is the index (row) of the first variant in the window.
+  // The fourth column is the index (row) of the last variant in the window.
+  // The fifth column indicates the position of the first variant in the window.
+  // The sixth column indicates the position of the last variant in the window.
+  
+  int i = 0;
+  int win_num = 0; // Window counter.
+  
+  if( pos.size() > 0 ){
+  
+    // First row.
+//    Rcpp::Rcout << "First row.\n";
+    while( pos(i) < wins(win_num,0) ){
+      win_num++;
+    }
+    wins(win_num,2) = i + 1;
+    wins(win_num,4) = pos(0);
+  
+    // Remaining rows.
+//  Rcpp::Rcout << "Windowing.\n";
+//    for(i=1; i<myMat.nrow(); i++){
+    for(i=1; i<pos.size(); i++){
+      R_CheckUserInterrupt();
+    
+      if( pos(i) > wins(win_num,1) ){
+        // Increment window.
+//Rcpp::Rcout << "  New window, pos(i): " << pos(i) << " wins(win_num,0): " << wins(win_num,0) << " wins(win_num,1): " << wins(win_num,1) << "\n";
+        wins(win_num,3) = i;
+        wins(win_num,5) = pos(i-1);
+      
+//Rcpp::Rcout << "    While: increment win_num.\n";
+        while( pos(i) > wins(win_num,1) ){
+//Rcpp::Rcout << "      pos(i): " << pos(i) << " wins(win_num,1): " << wins(win_num,1) << "\n";
+//        win_num++;
+          win_num = win_num + 1;
+//        Rcpp::Rcout << "    Incrementing win_num: " << win_num << "\n";
+        }
+//Rcpp::Rcout << "    End while\n";
+//Rcpp::Rcout << "    win_num: " << win_num << "\n";
+        wins(win_num,2) = i + 1;
+        wins(win_num,4) = pos(i);
+      }
+    }
+  
+    // Last row.
+    wins(win_num,3) = i;
+    wins(win_num,5) = pos(i-1);
+
+  }
+}
 
 
 
@@ -552,64 +630,42 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
   //                                 //
 
   Rcpp::NumericMatrix wins = init_window_matrix(pos, winsize);
-
+//  Rcpp::Rcout << " Returned from init_window_matrix.\n";
+//  dput_NumericMatrix(wins);
+//  Rcpp::Rcout << "Returned from dput_NumericMatrix.\n";
   
   //                             //
   // Initialize a freq matrix.   //
   //                             //
 
   Rcpp::NumericMatrix freqs = init_freq_matrix(myMat, wins);
+//  Rcpp::Rcout << " Returned from init_freq_matrix.\n";
+  
   
   //                             //
   // Initialize a count matrix.  //
   //                             //
-
+  
   Rcpp::NumericMatrix cnts = init_freq_matrix(myMat, wins);
-  
+//  Rcpp::Rcout << " Returned from init_freq_matrix.\n";
 
+  
   //                                 //
-  // Find windows in pos.            //
-  // Assign rows and POS to windows. //
+  // Assign pos to windows.          //
   //                                 //
+
+  pos_to_windows(pos, wins);
+//  Rcpp::Rcout << " Finding windows.\n";
+
+  
     
-  int win_num = 0;
-  i = 0;
+//  int win_num = 0;
+//  i = 0;
 
   
-  if( pos.size() > 0 ){
+//  if( pos.size() > 0 ){
     // First row.
-//  Rcpp::Rcout << "First row.\n";
-    while( pos(i) < wins(win_num,0) ){
-      win_num++;
-    }
-    wins(win_num,2) = i + 1;
-    wins(win_num,4) = pos(0);
-  
-    // Remaining rows.
-//  Rcpp::Rcout << "Windowing.\n";
-    for(i=1; i<myMat.nrow(); i++){
-      R_CheckUserInterrupt();
-    
-      if( pos(i) > wins(win_num,1) ){
-        // Increment window.
-//      Rcpp::Rcout << "  New window, pos(i): " << pos(i) << " wins(win_num,0): " << wins(win_num,0) << " wins(win_num,1): " << wins(win_num,1) << "\n";
-        wins(win_num,3) = i;
-        wins(win_num,5) = pos(i-1);
-      
-        while( pos(i) > wins(win_num,1) ){
-//        win_num++;
-          win_num = win_num + 1;
-//        Rcpp::Rcout << "    Incrementing win_num: " << win_num << "\n";
-        }
-//      Rcpp::Rcout << "    win_num: " << win_num << "\n";
-        wins(win_num,2) = i + 1;
-        wins(win_num,4) = pos(i);
-      }
-    }
-  
-    // Last row.
-    wins(win_num,3) = i;
-    wins(win_num,5) = pos(i-1);
+//  
 
   
     //                //
@@ -617,8 +673,6 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
     //                //
   
     // Check bin_width validity.
-//    if( !count(0) ){
-      // Positive bin width.
     if( bin_width <= 0 ){
       Rcpp::Rcerr << "bin_width must be greater than zero, please try another bin_width.\n";
       Rcpp::List myList = Rcpp::List::create(
@@ -676,7 +730,7 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
       }
       
     }
-  }
+//  }
   
   
   // Create the return List.

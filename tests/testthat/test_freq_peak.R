@@ -33,6 +33,8 @@ test_that("freq_peak works",{
   expect_equal( sum(myPeaks1$peaks >= 0), length(myPeaks1$peaks))
   expect_equal( sum(myPeaks1$peaks <= 1), length(myPeaks1$peaks))
   
+  expect_equal( colSums(myPeaks1$counts), apply(freq1, MARGIN = 2, function(x){sum(!is.na(x))}) )
+  
 })
 
 
@@ -79,3 +81,13 @@ test_that("freq_peak works, one variant",{
   expect_is(myPeaks1, 'list')
   
 })
+
+
+
+
+# pos[0]: 848853, pos[ pos.size() - 1 ]: 4.50364e+06, min_pos: 800001, max_pos: 4600000
+
+
+
+##### ##### ##### ##### #####
+# EOF
