@@ -87,6 +87,19 @@ test_that("freq_peak works, one variant",{
 
 # pos[0]: 848853, pos[ pos.size() - 1 ]: 4.50364e+06, min_pos: 800001, max_pos: 4600000
 
+test_that("freq_peak works, first window doesn't begin at 1",{
+  data("vcfR_test")
+  myPos <- getPOS(vcfR_test)
+  myPos <- myPos + 848853 - myPos[1]
+  myPos[ length(myPos) ] <- 4503640
+  vcfR_test@fix[,'POS'] <- myPos
+  
+  dp <- extract.gt(vcfR_test, element = "DP", as.numeric = TRUE)
+  myPeaks1 <- freq_peak(dp, pos = getPOS(vcfR_test), winsize = 1e5, lhs = FALSE)
+  
+  expect_equal( sum(myPeaks1$wins[-1,"START"] > myPeaks1$wins[-nrow(myPeaks1$wins),"END"]), nrow(myPeaks1$wins) - 1 )
+})
+
 
 
 ##### ##### ##### ##### #####

@@ -111,6 +111,24 @@ test_that("We can create a chromR",{
 })
 
 
+test_that("We can create a chromR, vcfR object with zero variants",{
+#  vcf <- vcf[0,]
+#  chrom <- create.chromR(name="Supercontig_1.50", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
+#  expect_is(chrom, "chromR")
+#  expect_is(chrom@vcf, "vcfR")
+#  expect_is(chrom@seq, "DNAbin")
+#  expect_is(chrom@ann, "data.frame")
+#  expect_is(chrom@var.info, "data.frame")
+  
+#  expect_equal(ncol(chrom@vcf@fix), 8)
+#  expect_equal(nrow(chrom@vcf@fix) > 0, TRUE)
+#  expect_equal(length(chrom@seq)>0, TRUE)
+#  expect_equal(ncol(chrom@ann), 9)
+#  expect_equal(nrow(chrom@ann)>0, TRUE)
+})
+
+
+
 ##### ##### ##### ##### #####
 # seq2chromR
 
