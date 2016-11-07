@@ -79,14 +79,18 @@ proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
   }
   
 #  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
-  ptime <- system.time(x@win.info <- .Call('vcfR_window_init', PACKAGE = 'vcfR', window_size=win.size, max_bp=x@len))
-  x@win.info <- cbind(rep(x@var.info$CHROM[1], times=nrow(x@win.info)), x@win.info)
-  names(x@win.info)[1] <- "CHROM"
-  if(verbose==TRUE){
+  
+  # Initialize windows.
+  if( length(x@len) > 0 ){
+    ptime <- system.time(x@win.info <- .Call('vcfR_window_init', PACKAGE = 'vcfR', window_size=win.size, max_bp=x@len))
+    x@win.info <- cbind(rep(x@var.info$CHROM[1], times=nrow(x@win.info)), x@win.info)
+    names(x@win.info)[1] <- "CHROM"
+    if(verbose==TRUE){
 #    print("window_init complete.")
 #    print(paste("  elapsed time: ", round(ptime[3], digits=4)))
-    message("window_init complete.")
-    message(paste("  elapsed time: ", round(ptime[3], digits=4)))
+      message("window_init complete.")
+      message(paste("  elapsed time: ", round(ptime[3], digits=4)))
+    }
   }
 #  }
 

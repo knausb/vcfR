@@ -189,7 +189,9 @@ create.chromR <- function(vcf, name="CHROM1", seq=NULL, ann=NULL, verbose=TRUE){
 #  dp <- getDP(x)
   dp <- extract.info(x, element = 'DP', as.numeric = TRUE)
   if( length(dp) > 0 ){ x@var.info$DP <- dp }
-  x@var.info$mask <- TRUE
+  if( nrow(x@var.info) > 0 ){
+    x@var.info$mask <- TRUE
+  }
   if( verbose == TRUE ){
     message("var.info slot initialized.")
   }
