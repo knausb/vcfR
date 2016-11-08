@@ -84,7 +84,7 @@
 # hist(tab$Ho - tab$He, col=5)
 # # Note that this example is a mitochondrion, so this is a bit silly.
 #' 
-create.chromR <- function(vcf, name="CHROM1", seq=NULL, ann=NULL, verbose=TRUE){
+create.chromR <- function(vcf, name="CHROM", seq=NULL, ann=NULL, verbose=TRUE){
   # Determine whether we received the expected classes.
   stopifnot(class(vcf) == "vcfR")
 
@@ -114,21 +114,23 @@ create.chromR <- function(vcf, name="CHROM1", seq=NULL, ann=NULL, verbose=TRUE){
   }
 
   # Annotations.
-  if(!is.null(ann)){
+  if( !is.null(ann) ){
+    if( nrow(ann) > 0 ){
 #  if(nrow(ann) > 0){
-    stopifnot(class(ann) == "data.frame")
-    if(class(ann[,4]) == "factor"){ann[,4] <- as.character(ann[,4])}
-    if(class(ann[,5]) == "factor"){ann[,5] <- as.character(ann[,5])}
-    if(class(ann[,4]) == "character"){ann[,4] <- as.numeric(ann[,4])}
-    if(class(ann[,5]) == "character"){ann[,5] <- as.numeric(ann[,5])}
-    x@ann <- ann
+      stopifnot(class(ann) == "data.frame")
+      if(class(ann[,4]) == "factor"){ann[,4] <- as.character(ann[,4])}
+      if(class(ann[,5]) == "factor"){ann[,5] <- as.character(ann[,5])}
+      if(class(ann[,4]) == "character"){ann[,4] <- as.numeric(ann[,4])}
+      if(class(ann[,5]) == "character"){ann[,5] <- as.numeric(ann[,5])}
+      x@ann <- ann
     
-    # Manage length
-    if( max(as.integer(as.character(ann[,4]))) > x@len ){
-      x@len <- max(as.integer(as.character(ann[,4])))
-    }
-    if( max(as.integer(as.character(ann[,5]))) > x@len ){
-      x@len <- max(as.integer(as.character(ann[,5])))
+      # Manage length
+      if( max(as.integer(as.character(ann[,4]))) > x@len ){
+        x@len <- max(as.integer(as.character(ann[,4])))
+      }
+      if( max(as.integer(as.character(ann[,5]))) > x@len ){
+        x@len <- max(as.integer(as.character(ann[,5])))
+      }
     }
   }
 

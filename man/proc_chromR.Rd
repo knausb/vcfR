@@ -55,5 +55,14 @@ It is then called a second time to generate coordinates to define rectangles to 
 The function \strong{gt2popsum} is called to create summaries of the variant data.
 
 The function \strong{var.win} is called to create windowized summaries of the chromR object.
+
+Each \strong{window} receives a \strong{name} and its coordinates.
+Several attempts are made to name the windows appropriately.
+First, the CHROM column of vcfR@fix is queried for a name.
+Next, the label of the sequence is queried for a name.
+Next, the first cell of the annotation matrix is queried.
+If an appropriate name was not found in the above locations the chromR object's 'name' slot is used.
+Note that the 'name' slot has a default value.
+If this default value is not updated then all of your windows may receive the same name.
 }
 

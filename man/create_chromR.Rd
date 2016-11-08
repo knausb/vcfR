@@ -8,7 +8,7 @@
 \alias{vcfR2chromR}
 \title{Create chromR object}
 \usage{
-create.chromR(vcf, name = "CHROM1", seq = NULL, ann = NULL,
+create.chromR(vcf, name = "CHROM", seq = NULL, ann = NULL,
   verbose = TRUE)
 
 vcfR2chromR(x, vcf)

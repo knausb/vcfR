@@ -21,6 +21,15 @@
 #' 
 #' The function \strong{var.win} is called to create windowized summaries of the chromR object.
 #' 
+#' Each \strong{window} receives a \strong{name} and its coordinates.
+#' Several attempts are made to name the windows appropriately.
+#' First, the CHROM column of vcfR@fix is queried for a name.
+#' Next, the label of the sequence is queried for a name.
+#' Next, the first cell of the annotation matrix is queried.
+#' If an appropriate name was not found in the above locations the chromR object's 'name' slot is used.
+#' Note that the 'name' slot has a default value.
+#' If this default value is not updated then all of your windows may receive the same name.
+#' 
 #' 
 
 
@@ -65,9 +74,10 @@ proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
     warning( "seq slot is NULL, chromosome representation not made (seq2rects, chars=n)." )
   }
 
-    
+
+  # Population summary
 #  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
-  if(nrow(x@vcf@gt[x@var.info$mask,])>0){
+  if( nrow( x@vcf@gt[ x@var.info$mask, , drop = FALSE ] ) > 0 ){
 #    ptime <- system.time(x <- gt2popsum(x))
     ptime <- system.time(x <- gt.to.popsum(x))
     if(verbose==TRUE){
@@ -83,8 +93,21 @@ proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
   # Initialize windows.
   if( length(x@len) > 0 ){
     ptime <- system.time(x@win.info <- .Call('vcfR_window_init', PACKAGE = 'vcfR', window_size=win.size, max_bp=x@len))
-    x@win.info <- cbind(rep(x@var.info$CHROM[1], times=nrow(x@win.info)), x@win.info)
-    names(x@win.info)[1] <- "CHROM"
+
+    # Name of windows based on chromosome name.
+    if( !is.na(x@var.info$CHROM[1]) ){
+      x@win.info <- cbind(rep(x@var.info$CHROM[1], times=nrow(x@win.info)), x@win.info)
+      names(x@win.info)[1] <- "CHROM"
+    } else if( !is.null(x@seq) ){
+      x@win.info <- cbind(rep( labels(x@seq)[1], times=nrow(x@win.info)), x@win.info)
+      names(x@win.info)[1] <- "CHROM"
+    } else if( nrow(x@ann) > 0 ){
+      x@win.info <- cbind(rep( x@ann[1,1], times=nrow(x@win.info)), x@win.info)
+      names(x@win.info)[1] <- "CHROM"
+    } else {
+      x@win.info <- cbind(rep( x@name, times=nrow(x@win.info)), x@win.info)
+      names(x@win.info)[1] <- "CHROM"
+    }
     if(verbose==TRUE){
 #    print("window_init complete.")
 #    print(paste("  elapsed time: ", round(ptime[3], digits=4)))
@@ -95,7 +118,7 @@ proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
 #  }
 
   if(class(x@seq) == "DNAbin"){
-    if(nrow(x@vcf@gt[x@var.info$mask,])>0){
+#    if( nrow( x@vcf@gt[x@var.info$mask, , drop = FALSE ] ) > 0 ){
       ptime <- system.time(x@win.info <- .Call('vcfR_windowize_fasta', 
                                                PACKAGE = 'vcfR',
                                                wins=x@win.info,
@@ -107,15 +130,15 @@ proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
         message("windowize_fasta complete.")
         message(paste("  elapsed time: ", round(ptime[3], digits=4)))
       }
-    }
+#    }
   } else if ( is.null( x@seq ) & verbose == TRUE ){
     warning( "seq slot is NULL, windowize_fasta not run." )
   }
-
-
+  
+  # Windowize annotations.
 #  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
   if( nrow(x@ann) > 0 ){
-    if( nrow(x@vcf@gt[x@var.info$mask,]) > 0 ){
+    #if( nrow( x@vcf@gt[x@var.info$mask, , drop = FALSE] ) > 0 ){
       ptime <- system.time(x@win.info <- .Call('vcfR_windowize_annotations', PACKAGE = 'vcfR', wins=x@win.info,
                                                ann_starts=as.numeric(as.character(x@ann[,4])), 
                                                ann_ends=as.numeric(as.character(x@ann[,5])),
@@ -127,20 +150,29 @@ proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
         message("windowize_annotations complete.")
         message(paste("  elapsed time: ", round(ptime[3], digits=4)))
       }
+    #}
+  } else if ( nrow(x@ann) == 0 ){
+    if ( verbose == TRUE ){
+      warning( "ann slot has zero rows." )
     }
-  } else if ( nrow(x@ann) == 0 & verbose == TRUE ){
-    warning( "ann slot has zero rows, windowize_annotations not run." )
+    if( nrow(x@win.info) > 0 ){
+      x@win.info$genic <- 0
+    }
   }
 
-  
+  # Windowize variants.
 #  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
-  if( nrow(x@vcf@gt[x@var.info$mask,]) > 0 ){
+  if( nrow( x@vcf@gt[x@var.info$mask, , drop = FALSE ] ) > 0 ){
     ptime <- system.time(x@win.info <- .Call('vcfR_windowize_variants', PACKAGE = 'vcfR', windows=x@win.info, variants=x@var.info[c('POS','mask')]))
     if(verbose==TRUE){
 #      print("windowize_variants complete.")
 #      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
       message("windowize_variants complete.")
       message(paste("  elapsed time: ", round(ptime[3], digits=4)))
+    }
+  } else {
+    if( nrow(x@win.info) > 0 ){
+      x@win.info$variants <- 0
     }
   }
   
