@@ -476,7 +476,14 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat,
   Rcpp::NumericVector mids( nbins );
 
   // Test thet 1/bin_width does not have a remainder.
-  if( 1/bin_width - nbins > 0 ){
+  if( bin_width < 0.001 ){
+    Rcpp::Rcerr << "Please use a bin_width >= 0.001.\n";
+    return(myPeaks);    
+  }
+  
+  int myTest = bin_width * 1000;
+//  if( 1/bin_width - nbins > 0 ){
+  if( 1000 % myTest != 0 ){
     Rcpp::Rcerr << "1/bin_width has a remainder.\nThis will result in uneven bins.\nPlease try another bin_width.\n";
     return(myPeaks);
   }
@@ -579,7 +586,7 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat,
 //' is.na(myPeaks1$peaks[myPeaks1$counts < 20]) <- TRUE
 //' myPeaks2 <- freq_peak(freq2, getPOS(vcf), lhs = FALSE)
 //' is.na(myPeaks2$peaks[myPeaks2$counts < 20]) <- TRUE
-//' #myPeaks <- freq_peak(freqs[1:115,], getPOS(vcf)[1:115])
+//' myPeaks1
 //' 
 //' # Visualize
 //' mySample <- "P17777us22"
@@ -692,9 +699,26 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
       return( myList );
     }
     
+    if( bin_width < 0.001 ){
+      Rcpp::Rcerr << "Please use a bin_width >= 0.001.\n";
+      Rcpp::List myList = Rcpp::List::create(
+        Rcpp::Named("wins") = wins,
+        Rcpp::Named("peaks") = naMat
+      );
+      return( myList );
+    }
+    
     // No remainder to bin width.
-    int nbins = 1 / bin_width;
-    if( 1/bin_width - nbins > 0 ){
+    //int nbins = 1 / bin_width;
+//    float nbins = 1.0 / bin_width;
+//    if( 1.0/bin_width - nbins > 0.0 ){
+//    if( 1.0 % bin_width != 0 ){
+//    float myTest = fmod(1, bin_width);
+    int myTest = (bin_width * 1000) + 0.5;
+    if( 1000 % myTest != 0 ){
+      Rcpp::Rcerr << "bin_width: " << bin_width << "\n";
+      Rcpp::Rcerr << "myTest: " << myTest << "\n";
+//      Rcpp::Rcerr << "nbins: " << nbins << "\n";
       Rcpp::Rcerr << "1/bin_width has a remainder, please try another bin_width.\n";
       Rcpp::List myList = Rcpp::List::create(
         Rcpp::Named("wins") = wins,

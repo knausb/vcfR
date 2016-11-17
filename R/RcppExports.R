@@ -132,7 +132,7 @@ extract_haps <- function(ref, alt, gt, unphased_as_NA, verbose) {
 #' is.na(myPeaks1$peaks[myPeaks1$counts < 20]) <- TRUE
 #' myPeaks2 <- freq_peak(freq2, getPOS(vcf), lhs = FALSE)
 #' is.na(myPeaks2$peaks[myPeaks2$counts < 20]) <- TRUE
-#' #myPeaks <- freq_peak(freqs[1:115,], getPOS(vcf)[1:115])
+#' myPeaks1
 #' 
 #' # Visualize
 #' mySample <- "P17777us22"

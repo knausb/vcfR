@@ -3,9 +3,14 @@
   pkg.version <- utils::packageVersion("vcfR")
   
   startup.txt <- paste("\n",
-                       "   >>> This is vcfR ", pkg.version, " <<<\n",
-                       "   > To cite: citation('vcfR')\n",
-                       "   > Documentation: browseVignettes('vcfR')",
+                       "   *****       ***   vcfR   ***       *****\n",
+#                       "   *****       *****      *****       *****\n",
+                       "   This is vcfR ", pkg.version, " \n",
+                       "     browseVignettes('vcfR') # Documentation\n",
+                       "     citation('vcfR') # View citation\n",
+#                       "   > To cite: citation('vcfR')\n",
+#                       "   > Documentation: browseVignettes('vcfR')\n",
+                       "   *****       *****      *****       *****",
                        "\n",
                        sep="")
 
