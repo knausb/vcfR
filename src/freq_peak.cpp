@@ -481,7 +481,7 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat,
     return(myPeaks);    
   }
   
-  int myTest = bin_width * 1000;
+  int myTest = (bin_width * 1000) + 0.5;
 //  if( 1/bin_width - nbins > 0 ){
   if( 1000 % myTest != 0 ){
     Rcpp::Rcerr << "1/bin_width has a remainder.\nThis will result in uneven bins.\nPlease try another bin_width.\n";
