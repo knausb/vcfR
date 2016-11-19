@@ -7,7 +7,7 @@
 #                       "   *****       *****      *****       *****\n",
                        "   This is vcfR ", pkg.version, " \n",
                        "     browseVignettes('vcfR') # Documentation\n",
-                       "     citation('vcfR') # View citation\n",
+                       "     citation('vcfR') # Citation\n",
 #                       "   > To cite: citation('vcfR')\n",
 #                       "   > Documentation: browseVignettes('vcfR')\n",
                        "   *****       *****      *****       *****",
