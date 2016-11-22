@@ -17,6 +17,7 @@
 # @param vfile an output filename.
 #' @param mask logical vector indicating rows to use.
 #' @param APPEND logical indicating whether to append to existing vcf file or write a new file.
+#' @param convertNA logical specifying to convert VCF missing data to NA.
 #' 
 #' @param verbose report verbose progress.
 #'
@@ -34,6 +35,14 @@
 #' You can specify which of these columns you would like to input by setting the cols parameter.
 #' If you want a usable vcfR object you will want to always include nine (the FORMAT column).
 #' If you do not include column nine you may experience reduced functionality.
+#' 
+#' 
+#' According to the VCF specification \strong{missing data} are encoded by a period (".").
+#' Within the R language, missing data can be encoded as NA.
+#' The parameter `convertNA` allows the user to either retain the VCF representation or the R representation of missing data.
+#' Note that the conversion only takes place when the entire value can be determined to be missing.
+#' For example, ".|.:48:8:51,51" would be retained because the missing genotype is accompanied by other delimited information.
+#' In contrast, ".|." should be converted to NA when \code{convertNA = TRUE}.
 #' 
 #' 
 #' The function \strong{write.vcf} takes an object of either class vcfR or chromR and writes the vcf data to a vcf.gz file (gzipped text).
@@ -84,7 +93,7 @@
 #' @aliases read.vcfR
 #' @export
 #' 
-read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, verbose = TRUE){
+read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, convertNA = TRUE, verbose = TRUE){
 #  require(memuse)
   
   # gzopen does not appear to deal well with tilde expansion.
@@ -119,7 +128,8 @@ read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, verbos
   
   vcf@meta <- .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', file, stats, as.numeric(verbose))
   body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', file = file, stats = stats, 
-                nrows = nrows, skip = skip, cols = cols, as.numeric(verbose))
+                nrows = nrows, skip = skip, cols = cols, 
+                convertNA = as.numeric(convertNA), verbose = as.numeric(verbose))
 
   vcf@fix <- body[ ,1:8, drop=FALSE ]
   if( ncol(body) > 8 ){

@@ -268,8 +268,8 @@ read_meta_gz <- function(x, stats, verbose) {
     .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', x, stats, verbose)
 }
 
-read_body_gz <- function(x, stats, nrows = -1L, skip = 0L, cols = 0L, verbose = 1L) {
-    .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', x, stats, nrows, skip, cols, verbose)
+read_body_gz <- function(x, stats, nrows = -1L, skip = 0L, cols = 0L, convertNA = 1L, verbose = 1L) {
+    .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', x, stats, nrows, skip, cols, convertNA, verbose)
 }
 
 write_vcf_body <- function(fix, gt, filename, mask = 0L) {
