@@ -33,18 +33,18 @@ BEGIN_RCPP
 END_RCPP
 }
 // extract_GT_to_CM2
-Rcpp::StringMatrix extract_GT_to_CM2(Rcpp::StringMatrix fix, Rcpp::StringMatrix gt, std::string element, char allele_sep, int alleles, int extract);
-RcppExport SEXP vcfR_extract_GT_to_CM2(SEXP fixSEXP, SEXP gtSEXP, SEXP elementSEXP, SEXP allele_sepSEXP, SEXP allelesSEXP, SEXP extractSEXP) {
+Rcpp::StringMatrix extract_GT_to_CM2(Rcpp::StringMatrix fix, Rcpp::StringMatrix gt, std::string element, int alleles, int extract, int convertNA);
+RcppExport SEXP vcfR_extract_GT_to_CM2(SEXP fixSEXP, SEXP gtSEXP, SEXP elementSEXP, SEXP allelesSEXP, SEXP extractSEXP, SEXP convertNASEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< Rcpp::StringMatrix >::type fix(fixSEXP);
     Rcpp::traits::input_parameter< Rcpp::StringMatrix >::type gt(gtSEXP);
     Rcpp::traits::input_parameter< std::string >::type element(elementSEXP);
-    Rcpp::traits::input_parameter< char >::type allele_sep(allele_sepSEXP);
     Rcpp::traits::input_parameter< int >::type alleles(allelesSEXP);
     Rcpp::traits::input_parameter< int >::type extract(extractSEXP);
-    __result = Rcpp::wrap(extract_GT_to_CM2(fix, gt, element, allele_sep, alleles, extract));
+    Rcpp::traits::input_parameter< int >::type convertNA(convertNASEXP);
+    __result = Rcpp::wrap(extract_GT_to_CM2(fix, gt, element, alleles, extract, convertNA));
     return __result;
 END_RCPP
 }

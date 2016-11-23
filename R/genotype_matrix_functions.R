@@ -24,20 +24,32 @@
 #' 
 #' @export
 alleles2consensus <- function( x, sep = "/", NA_to_n = TRUE ){
-  lookup <- cbind(paste(c('A','C','G','T', 'A','T','C','G', 'A','C','G','T', 'A','G','C','T'),
-                        c('A','C','G','T', 'T','A','G','C', 'C','A','T','G', 'G','A','T','C'),
-                        sep=sep),
-                  c('a','c','g','t', 'w','w','s','s', 'm','m','k','k', 'r','r','y','y'))
+#  lookup <- cbind(paste(c('A','C','G','T', 'A','T','C','G', 'A','C','G','T', 'A','G','C','T'),
+#                        c('A','C','G','T', 'T','A','G','C', 'C','A','T','G', 'G','A','T','C'),
+#                        sep=sep),
+#                  c('a','c','g','t', 'w','w','s','s', 'm','m','k','k', 'r','r','y','y'))
   
+  lookup1 <- cbind(paste(c('A','C','G','T', 'A','T','C','G', 'A','C','G','T', 'A','G','C','T'),
+                         c('A','C','G','T', 'T','A','G','C', 'C','A','T','G', 'G','A','T','C'),
+                         sep="/"),
+                   c('a','c','g','t', 'w','w','s','s', 'm','m','k','k', 'r','r','y','y'))
+  lookup2 <- cbind(paste(c('A','C','G','T', 'A','T','C','G', 'A','C','G','T', 'A','G','C','T'),
+                         c('A','C','G','T', 'T','A','G','C', 'C','A','T','G', 'G','A','T','C'),
+                         sep="|"),
+                   c('a','c','g','t', 'w','w','s','s', 'm','m','k','k', 'r','r','y','y'))
+      
   # Both alleles missing, set to NA.
-  x <- gsub( paste(".", ".", sep=sep), NA, x, fixed=TRUE)
-
+#  x <- gsub( paste(".", ".", sep=sep), NA, x, fixed=TRUE)
+  x <- gsub( paste(".", ".", sep="/"), NA, x, fixed=TRUE)
+  x <- gsub( paste(".", ".", sep="|"), NA, x, fixed=TRUE)
+  
   # One of the alleles missing set to NA.
   x <- gsub( ".", NA, x, fixed=TRUE)
   
-  for(i in 1:nrow( lookup ))
+  for(i in 1:nrow( lookup1 ))
   {
-    x[ x == lookup[i,1] ] <- lookup[i,2]
+    x[ x == lookup1[i,1] ] <- lookup1[i,2]
+    x[ x == lookup2[i,1] ] <- lookup2[i,2]
   }
   
   if( NA_to_n == TRUE )

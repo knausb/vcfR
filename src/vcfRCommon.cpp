@@ -2,6 +2,7 @@
 #include "vcfRCommon.h"
 #include <string>
 
+
 //static 
 //static 
 void vcfRCommon::strsplit(std::string& mystring, std::vector<std::string>& vec_o_strings, char& split){
@@ -88,4 +89,31 @@ void vcfRCommon::gtsplit(std::string& mystring,
   Rcpp::Rcout << "\n";
   */
 }
+
+
+
+
+void vcfRCommon::gtdelim(std::string& mystring,
+                         std::vector<std::string>& vec_o_strings){
+  // Collect a genotype's allelic delimitors.
+  
+  char split1 = '|'; // Must be single quotes!
+  char split2 = '/'; // Must be single quotes!
+  
+  int i = 0;
+  
+  for(i = 0; i < mystring.size(); i++){
+    if( mystring[i] == split1 | mystring[i] == split2 ){
+      std::stringstream ss;
+      ss << mystring[i];
+//      vec_o_strings.push_back( ss );
+      std::string myDelim;
+      ss >> myDelim;
+      vec_o_strings.push_back( myDelim );
+//      vec_o_strings.push_back( split1 );
+    }
+  }
+}
+
+
 

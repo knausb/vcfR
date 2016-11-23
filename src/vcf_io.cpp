@@ -214,12 +214,20 @@ void proc_body_line(Rcpp::CharacterMatrix gt,
         gt(var_num, i) = NA_STRING;
       } else {
         // Possible genotype missing.
+        std::vector < std::string > allele_vec;
+        int unphased_as_na = 0; // 0 == FALSE
+        std::string my_string;
+//        if( data_vec[ cols[i] ] == NA_STRING ){
+//          my_string = ".";
+//        } else {
+          my_string = data_vec[ cols[i] ];
+//        }
+        
+        vcfRCommon::gtsplit( my_string, allele_vec, unphased_as_na );
         int gtNA = 1;
-        for(int j = 0; j < data_vec[ cols[i] ].size(); j++){
-          if( data_vec[ cols[i] ][j] != '.' ){
-            gtNA = 0;
-          }
-          j++; // Every other character should be a delimiter.
+        for( int k = 0; k < allele_vec.size(); k++ ){
+//            Rcpp::Rcout << "allele_vec[k]: " << allele_vec[k] << "\n";
+          if( allele_vec[k] != "." ){ gtNA = 0; }
         }
         if( gtNA == 1 ){
           gt(var_num, i) = NA_STRING;
@@ -227,6 +235,19 @@ void proc_body_line(Rcpp::CharacterMatrix gt,
           gt(var_num, i) = data_vec[ cols[i] ];
         }
       }
+//        int gtNA = 1;
+//        for(int j = 0; j < data_vec[ cols[i] ].size(); j++){
+//          if( data_vec[ cols[i] ][j] != '.' ){
+//            gtNA = 0;
+//          }
+//          j++; // Every other character should be a delimiter.
+//        }
+//        if( gtNA == 1 ){
+//          gt(var_num, i) = NA_STRING;
+//        } else {
+//          gt(var_num, i) = data_vec[ cols[i] ];
+//        }
+//      }
 //      } else if( data_vec[ cols[i] ][0] == '.' & data_vec[ cols[i] ][2] == '.' & 
 //               data_vec[ cols[i] ].size() == 3 & convertNA == 1 ){
       // We can also convert diploid genotypes where both alleles are "." to NA.
