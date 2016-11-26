@@ -33,19 +33,24 @@ BEGIN_RCPP
 END_RCPP
 }
 // extract_GT_to_CM2
-Rcpp::StringMatrix extract_GT_to_CM2(Rcpp::StringMatrix fix, Rcpp::StringMatrix gt, std::string element, char allele_sep, int alleles, int extract);
-RcppExport SEXP vcfR_extract_GT_to_CM2(SEXP fixSEXP, SEXP gtSEXP, SEXP elementSEXP, SEXP allele_sepSEXP, SEXP allelesSEXP, SEXP extractSEXP) {
+Rcpp::StringMatrix extract_GT_to_CM2(Rcpp::StringMatrix fix, Rcpp::StringMatrix gt, std::string element, int alleles, int extract, int convertNA);
+RcppExport SEXP vcfR_extract_GT_to_CM2(SEXP fixSEXP, SEXP gtSEXP, SEXP elementSEXP, SEXP allelesSEXP, SEXP extractSEXP, SEXP convertNASEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::StringMatrix >::type fix(fixSEXP);
     Rcpp::traits::input_parameter< Rcpp::StringMatrix >::type gt(gtSEXP);
     Rcpp::traits::input_parameter< std::string >::type element(elementSEXP);
-    Rcpp::traits::input_parameter< char >::type allele_sep(allele_sepSEXP);
     Rcpp::traits::input_parameter< int >::type alleles(allelesSEXP);
     Rcpp::traits::input_parameter< int >::type extract(extractSEXP);
+<<<<<<< HEAD
     rcpp_result_gen = Rcpp::wrap(extract_GT_to_CM2(fix, gt, element, allele_sep, alleles, extract));
     return rcpp_result_gen;
+=======
+    Rcpp::traits::input_parameter< int >::type convertNA(convertNASEXP);
+    __result = Rcpp::wrap(extract_GT_to_CM2(fix, gt, element, alleles, extract, convertNA));
+    return __result;
+>>>>>>> b0cf630149d7a8b7b67ef2c35b489e545e8e8739
 END_RCPP
 }
 // CM_to_NM
@@ -268,8 +273,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // read_body_gz
-Rcpp::CharacterMatrix read_body_gz(std::string x, Rcpp::NumericVector stats, int nrows, int skip, Rcpp::IntegerVector cols, int verbose);
-RcppExport SEXP vcfR_read_body_gz(SEXP xSEXP, SEXP statsSEXP, SEXP nrowsSEXP, SEXP skipSEXP, SEXP colsSEXP, SEXP verboseSEXP) {
+Rcpp::CharacterMatrix read_body_gz(std::string x, Rcpp::NumericVector stats, int nrows, int skip, Rcpp::IntegerVector cols, int convertNA, int verbose);
+RcppExport SEXP vcfR_read_body_gz(SEXP xSEXP, SEXP statsSEXP, SEXP nrowsSEXP, SEXP skipSEXP, SEXP colsSEXP, SEXP convertNASEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -278,9 +283,15 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type nrows(nrowsSEXP);
     Rcpp::traits::input_parameter< int >::type skip(skipSEXP);
     Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type cols(colsSEXP);
+    Rcpp::traits::input_parameter< int >::type convertNA(convertNASEXP);
     Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
+<<<<<<< HEAD
     rcpp_result_gen = Rcpp::wrap(read_body_gz(x, stats, nrows, skip, cols, verbose));
     return rcpp_result_gen;
+=======
+    __result = Rcpp::wrap(read_body_gz(x, stats, nrows, skip, cols, convertNA, verbose));
+    return __result;
+>>>>>>> b0cf630149d7a8b7b67ef2c35b489e545e8e8739
 END_RCPP
 }
 // write_vcf_body

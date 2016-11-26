@@ -183,15 +183,19 @@ std::vector < std::string > get_allele_vector( Rcpp::String ref,
 }
 
 
-std::string gt2alleles( Rcpp::String gt, std::vector< std::string > allele_vector, char allele_sep )
+std::string gt2alleles( Rcpp::String gt, 
+                        std::vector< std::string > allele_vector )
 {
   // gt is a genotpye (e.g., 0/0, 1/2, 1/.).
   // allele_vector is a concatenation of the REF and ALT data.
+  
+  // Deprecated:
   // allele_sep specifies the allele delimiter.
   
   // Recast allele_sep (char) to sep (std::string).
-  std::string sep = std::string(1, allele_sep);
-  
+//  std::string sep = std::string(1, allele_sep);
+  std::string sep = "/";
+    
   // Create a std::string NA character.
   std::string na_allele = ".";
 
@@ -199,7 +203,14 @@ std::string gt2alleles( Rcpp::String gt, std::vector< std::string > allele_vecto
   // This results in the vector gt_vector.
   std::string gt2 = gt;
   std::vector < std::string > gt_vector;
-  vcfRCommon::strsplit( gt2, gt_vector, allele_sep );
+//  vcfRCommon::strsplit( gt2, gt_vector, allele_sep );
+  
+  int unphased_as_na = 0; // 0 == FALSE
+  vcfRCommon::gtsplit( gt2, gt_vector, unphased_as_na );
+  
+  std::vector < std::string > delim_vector;
+  vcfRCommon::gtdelim( gt2, delim_vector );
+  
   
 //  Rcpp::Rcout << "Made it.!\n";
 //  Rcpp::Rcout << "  gt_vector[0]" << gt_vector[0] << "\n";
@@ -223,25 +234,35 @@ std::string gt2alleles( Rcpp::String gt, std::vector< std::string > allele_vecto
   }
   
   // If we're greater than haploid.
+//  Rcpp::Rcout << "  gt_vector.size(): " << gt_vector.size() << "\n";
   if( gt_vector.size() > 1 )
   {
     for( int i=1; i<gt_vector.size(); i++ )
     {
-//      if ( ! (std::istringstream(gt_vector[i]) >> allele_number) ) allele_number = 0;
-//      gt3.append( sep );
-//      gt3.append( allele_vector[ allele_number ] );
+//      Rcpp::Rcout << "  gt_vector[i]: " << gt_vector[i] << "\n";
       if( gt_vector[i].compare( na_allele ) == 0 ){
+        // Append a missing allele (NA).
+        sep = gt2[ gt3.length() ];
+        sep = delim_vector[ i - 1 ];
         gt3.append( sep );
         gt3.append( na_allele );
       } else if ( ! (std::istringstream( gt_vector[i] ) >> allele_number) ){
         //  
-        Rcpp::Rcout << "Couldn't convert string to int!\n";
+//        Rcpp::Rcout << "Couldn't convert string to int!\n";
+        sep = gt2[ gt3.length() ];
+        sep = delim_vector[ i - 1 ];
         gt3.append( sep );
         gt3.append( na_allele );
       } else {
+//        Rcpp::Rcout << "    Appending allele " << i; // << "\n";
+        sep = gt2[ gt3.length() ];
+        sep = "_";
+        sep = delim_vector[ i - 1 ];
+//        Rcpp::Rcout << ", sep: " << sep;
         gt3.append( sep );
-        std::istringstream(gt_vector[i]) >> allele_number;
+        std::istringstream( gt_vector[i] ) >> allele_number;
         gt3.append( allele_vector[ allele_number ] );
+//        Rcpp::Rcout << "\n";
       }
     }
   }
@@ -255,14 +276,14 @@ std::string gt2alleles( Rcpp::String gt, std::vector< std::string > allele_vecto
 Rcpp::StringMatrix extract_GT_to_CM2( Rcpp::StringMatrix fix,
                                          Rcpp::StringMatrix gt,
                                          std::string element="DP",
-                                         char allele_sep = '/',
                                          int alleles = 0,
-                                         int extract = 1 ) {
+                                         int extract = 1,
+                                         int convertNA = 1) {
   int i = 0;
   int j = 0;
 
   // Initialize a return matrix.
-  // The first column of gt is FORMAT, 
+  // The first column of gt is FORMAT,
   // so the return_matrix will have one less column than in gt.
   // We'll preserve the column names of gt in return_matrix.
   Rcpp::StringMatrix return_matrix( gt.nrow(), gt.ncol() - 1 );
@@ -293,18 +314,47 @@ Rcpp::StringMatrix extract_GT_to_CM2( Rcpp::StringMatrix fix,
       } else {
         return_matrix(i, j-1) = extractElementS( gt(i, j), position, extract );
         // Manage NAs.
-        if( return_matrix(i, j-1) == "." ){ return_matrix(i, j-1) = NA_STRING; }
+        if( return_matrix(i, j-1) == "." & convertNA == 1 ){
+          return_matrix(i, j-1) = NA_STRING;
+        }
+        
+        if( element.compare("GT") == 0 & convertNA == 1 ){
+//          Rcpp::Rcout << "Looking for a GT.\n";
+          std::vector < std::string > allele_vec;
+          int unphased_as_na = 0; // 0 == FALSE
+          std::string my_string;
+          if( return_matrix(i, j-1) == NA_STRING ){
+            my_string = ".";
+          } else {
+            my_string = return_matrix(i, j-1);
+          }
+          
+//          Rcpp::Rcout << "  my_string: " << my_string << "\n";
+          vcfRCommon::gtsplit( my_string, allele_vec, unphased_as_na );
+          int gtNA = 1;
+          for( int k = 0; k < allele_vec.size(); k++ ){
+//            Rcpp::Rcout << "allele_vec[k]: " << allele_vec[k] << "\n";
+            if( allele_vec[k] != "." ){ gtNA = 0; }
+          }
+          if( gtNA == 1 ){
+            return_matrix(i, j-1) = NA_STRING;
+          }
+        }
+        
         // Convert to alleles
         if( alleles == 1 )
         {
           std::string gt_string = Rcpp::as< std::string >( return_matrix(i, j-1) );
         
-//        Rcpp::Rcout << "gt_string: " << gt_string << "\n";
+//          Rcpp::Rcout << "gt_string: " << gt_string << "\n";
 //        Rcpp::Rcout << "test ic_naC: " << gt_string == na_string << "\n";
         
-          gt_string = gt2alleles( gt_string, allele_vector, allele_sep );
+          gt_string = gt2alleles( gt_string, allele_vector );
+//          Rcpp::Rcout << "  gt_string: " << gt_string << "\n";
+//          gt_string = gt2alleles( gt_string, allele_vector, allele_sep );
           return_matrix(i, j-1) = gt_string;
         }
+        
       }
     }
 

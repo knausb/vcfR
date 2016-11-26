@@ -52,8 +52,8 @@ extract_GT_to_CM <- function(x, element = "DP") {
     .Call('vcfR_extract_GT_to_CM', PACKAGE = 'vcfR', x, element)
 }
 
-extract_GT_to_CM2 <- function(fix, gt, element = "DP", allele_sep = '/', alleles = 0L, extract = 1L) {
-    .Call('vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', fix, gt, element, allele_sep, alleles, extract)
+extract_GT_to_CM2 <- function(fix, gt, element = "DP", alleles = 0L, extract = 1L, convertNA = 1L) {
+    .Call('vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', fix, gt, element, alleles, extract, convertNA)
 }
 
 CM_to_NM <- function(x) {
@@ -268,8 +268,8 @@ read_meta_gz <- function(x, stats, verbose) {
     .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', x, stats, verbose)
 }
 
-read_body_gz <- function(x, stats, nrows = -1L, skip = 0L, cols = 0L, verbose = 1L) {
-    .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', x, stats, nrows, skip, cols, verbose)
+read_body_gz <- function(x, stats, nrows = -1L, skip = 0L, cols = 0L, convertNA = 1L, verbose = 1L) {
+    .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', x, stats, nrows, skip, cols, convertNA, verbose)
 }
 
 write_vcf_body <- function(fix, gt, filename, mask = 0L) {

@@ -14,6 +14,7 @@ public:
   // https://isocpp.org/wiki/faq/references
   static void strsplit(std::string&, std::vector<std::string>&, char&);
   static void gtsplit(std::string&, std::vector<std::string>&, int&);
+  static void gtdelim(std::string&, std::vector<std::string>&);
 //  static void strsplit(unsigned char[]&, std::vector<std::string>&, char&);
 };
 

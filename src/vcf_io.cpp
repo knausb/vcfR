@@ -197,22 +197,61 @@ cols is a vector indicating which columns to select from the file data.
 void proc_body_line(Rcpp::CharacterMatrix gt,
                     int var_num,
                     std::string myline,
-                    Rcpp::IntegerVector cols){
+                    Rcpp::IntegerVector cols,
+                    int convertNA){
   
   char split = '\t'; // Must be single quotes!
   std::vector < std::string > data_vec;
   
   vcfRCommon::strsplit(myline, data_vec, split);
 
-//  for(int i = 0; i < data_vec.size(); i++){
   for(int i = 0; i < cols.size(); i++){
-//    if(data_vec[i] == "."){
-    if(data_vec[ cols[i] ] == "."){
-      gt(var_num, i) = NA_STRING;
-//    } else if(data_vec[i] == "./."){
-//    } else if( data_vec[ i ][0] == '.' & data_vec[ i ][2] == '.' ){
-    } else if( data_vec[ cols[i] ][0] == '.' & data_vec[ cols[i] ][2] == '.' & data_vec[ cols[i] ].size() == 3 ){
-      gt(var_num, i) = NA_STRING;
+    if( convertNA == 1 ){
+      // The VCF specification encodes missing data as ".".
+      // Missing genotypes may be encoded as "./.", ".|.", etc.
+      // Here we convert is to NA.
+      if( data_vec[ cols[i] ] == "." ){
+        gt(var_num, i) = NA_STRING;
+      } else {
+        // Possible genotype missing.
+        std::vector < std::string > allele_vec;
+        int unphased_as_na = 0; // 0 == FALSE
+        std::string my_string;
+//        if( data_vec[ cols[i] ] == NA_STRING ){
+//          my_string = ".";
+//        } else {
+          my_string = data_vec[ cols[i] ];
+//        }
+        
+        vcfRCommon::gtsplit( my_string, allele_vec, unphased_as_na );
+        int gtNA = 1;
+        for( int k = 0; k < allele_vec.size(); k++ ){
+//            Rcpp::Rcout << "allele_vec[k]: " << allele_vec[k] << "\n";
+          if( allele_vec[k] != "." ){ gtNA = 0; }
+        }
+        if( gtNA == 1 ){
+          gt(var_num, i) = NA_STRING;
+        } else {
+          gt(var_num, i) = data_vec[ cols[i] ];
+        }
+      }
+//        int gtNA = 1;
+//        for(int j = 0; j < data_vec[ cols[i] ].size(); j++){
+//          if( data_vec[ cols[i] ][j] != '.' ){
+//            gtNA = 0;
+//          }
+//          j++; // Every other character should be a delimiter.
+//        }
+//        if( gtNA == 1 ){
+//          gt(var_num, i) = NA_STRING;
+//        } else {
+//          gt(var_num, i) = data_vec[ cols[i] ];
+//        }
+//      }
+//      } else if( data_vec[ cols[i] ][0] == '.' & data_vec[ cols[i] ][2] == '.' & 
+//               data_vec[ cols[i] ].size() == 3 & convertNA == 1 ){
+      // We can also convert diploid genotypes where both alleles are "." to NA.
+//      gt(var_num, i) = NA_STRING;
     } else {
       gt(var_num, i) = data_vec[ cols[i] ];
     }
@@ -235,6 +274,7 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
                                    int nrows = -1,
                                    int skip = 0,
                                    Rcpp::IntegerVector cols = 0,
+                                   int convertNA = 1,
                                    int verbose = 1) {
 
   // NA matrix for unexpected results.
@@ -381,7 +421,7 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
         // Variant line.
 
         if ( var_num >= skip & row_num < nrows ){
-          proc_body_line(gt, row_num, svec[i], cols);
+          proc_body_line(gt, row_num, svec[i], cols, convertNA);
           row_num++; // Return matrix row number.
         }
         var_num++; // Input row number.

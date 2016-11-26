@@ -3,6 +3,8 @@
 # vcfR 1.2.0.9000
 Released on CRAN 2016-XX-XX.
 
+* added `convertNA` parameter to `extract.gt()` to allow preservation of VCF encoding of missing data. Thank you Thierry!
+* added `convertNA` parameter to `read.vcfR()` to allow preservation of VCF encoding of missing data. Thank you Thierry!
 * extract.haps omits gt.split and implements unphased_as_NA
 * gtsplit handles a mixture of phased and unphased data
 * Added 'getters' for vcfR and chromR slots. (Thanks Zhian!)

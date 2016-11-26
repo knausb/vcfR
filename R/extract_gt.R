@@ -17,6 +17,7 @@
 #' @param IDtoRowNames logical specifying whether to use the ID column from the FIX region as rownames
 #' @param allele.sep character which delimits the alleles in a genotype (/ or |), here this is not used for a regex (as it is in other functions)
 #' @param extract logical indicating whether to return the extracted element or the remaining string
+#' @param convertNA logical indicating whether to convert "." to NA.
 #' 
 #' @details
 #' 
@@ -46,7 +47,8 @@
 extract.gt <- function(x, element="GT", mask=FALSE,
                        as.numeric=FALSE, return.alleles=FALSE,
                        IDtoRowNames = TRUE,
-                       allele.sep="/", extract = TRUE ){
+                       allele.sep="/", extract = TRUE,
+                       convertNA = TRUE ){
 
   # Validate that we have an expected data structure
   if( class(x) != "chromR" & class(x) != "vcfR" ){
@@ -91,8 +93,10 @@ extract.gt <- function(x, element="GT", mask=FALSE,
     }
 #    .Call('vcfR_extract_haps', PACKAGE = 'vcfR', ref, alt, gt, gt_split, verbose)
 #    outM <- .Call('vcfR_extract_GT_to_CM', PACKAGE = 'vcfR', x@gt, element)
-    outM <- .Call('vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', x@fix, x@gt, element, allele.sep, return.alleles, as.integer(extract) )
-    
+    outM <- .Call('vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', x@fix, x@gt,
+                  element,
+                  return.alleles, as.integer(extract), 
+                  convertNA = as.numeric(convertNA) )
   }
 
   # If as.numeric is true, convert to a numeric matrix.

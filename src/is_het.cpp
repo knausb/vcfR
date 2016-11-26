@@ -24,7 +24,7 @@ Rcpp::LogicalMatrix is_het(Rcpp::StringMatrix x,
   int i;
   int j;
   int k;  
-  for( i=0; i<x.nrow(); i++){
+  for( i=0; i<x.nrow(); i++ ){
     for( j=0; j<x.ncol(); j++){
 
       // Parse genotype string into alleles.

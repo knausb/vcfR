@@ -7,7 +7,7 @@
 \title{Read and write vcf format files}
 \usage{
 read.vcfR(file, limit = 1e+07, nrows = -1, skip = 0, cols = NULL,
-  verbose = TRUE)
+  convertNA = TRUE, verbose = TRUE)
 
 write.vcf(x, file = "", mask = FALSE, APPEND = FALSE)
 }
@@ -21,6 +21,8 @@ write.vcf(x, file = "", mask = FALSE, APPEND = FALSE)
 \item{skip}{integer specifying the number of rows (variants) to skip before beginning to read data.}
 
 \item{cols}{vector of column numbers to extract from file.}
+
+\item{convertNA}{logical specifying to convert VCF missing data to NA.}
 
 \item{verbose}{report verbose progress.}
 
@@ -53,6 +55,14 @@ Any columns beyond eight are optional (the gt region).
 You can specify which of these columns you would like to input by setting the cols parameter.
 If you want a usable vcfR object you will want to always include nine (the FORMAT column).
 If you do not include column nine you may experience reduced functionality.
+
+
+According to the VCF specification \strong{missing data} are encoded by a period (".").
+Within the R language, missing data can be encoded as NA.
+The parameter `convertNA` allows the user to either retain the VCF representation or the R representation of missing data.
+Note that the conversion only takes place when the entire value can be determined to be missing.
+For example, ".|.:48:8:51,51" would be retained because the missing genotype is accompanied by other delimited information.
+In contrast, ".|." should be converted to NA when \code{convertNA = TRUE}.
 
 
 The function \strong{write.vcf} takes an object of either class vcfR or chromR and writes the vcf data to a vcf.gz file (gzipped text).

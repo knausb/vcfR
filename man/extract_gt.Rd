@@ -9,7 +9,7 @@
 \usage{
 extract.gt(x, element = "GT", mask = FALSE, as.numeric = FALSE,
   return.alleles = FALSE, IDtoRowNames = TRUE, allele.sep = "/",
-  extract = TRUE)
+  extract = TRUE, convertNA = TRUE)
 
 extract.haps(x, mask = FALSE, unphased_as_NA = TRUE, verbose = TRUE)
 
@@ -33,6 +33,8 @@ extract.info(x, element, as.numeric = FALSE, mask = FALSE)
 \item{allele.sep}{character which delimits the alleles in a genotype (/ or |), here this is not used for a regex (as it is in other functions)}
 
 \item{extract}{logical indicating whether to return the extracted element or the remaining string}
+
+\item{convertNA}{logical indicating whether to convert "." to NA.}
 
 \item{unphased_as_NA}{logical specifying how to handle unphased genotypes}
 
