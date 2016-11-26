@@ -162,6 +162,14 @@ create.chromR <- function(vcf, name="CHROM", seq=NULL, ann=NULL, verbose=TRUE){
       message("Names in annotation:")
       message(paste('  ', unique(as.character(x@ann[,1])), sep=""))
 #      if(unique(as.character(x@vcf.fix$CHROM)) != unique(as.character(x@ann[,1]))){
+      if( length( unique(as.character(x@ann[,1])) ) > 1 ){
+        warning("The annotation data appear to include more than one chromosome.\nUsing only the first.\n")
+        firstChrom <- unique(as.character(x@ann[,1]))[1]
+        x@ann <- x@ann[ x@ann[,1] == firstChrom, , drop = FALSE]
+        myChrom <- unique( x@ann[,1] )
+        warning( paste('Using annotation chromosome:', myChrom, '\n') )
+      }
+      
       if(chr_names != unique(as.character(x@ann[,1]))){
         warning("
         Names in variant data and annotation data do not match perfectly.

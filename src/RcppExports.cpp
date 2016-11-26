@@ -43,14 +43,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::string >::type element(elementSEXP);
     Rcpp::traits::input_parameter< int >::type alleles(allelesSEXP);
     Rcpp::traits::input_parameter< int >::type extract(extractSEXP);
-<<<<<<< HEAD
-    rcpp_result_gen = Rcpp::wrap(extract_GT_to_CM2(fix, gt, element, allele_sep, alleles, extract));
-    return rcpp_result_gen;
-=======
     Rcpp::traits::input_parameter< int >::type convertNA(convertNASEXP);
-    __result = Rcpp::wrap(extract_GT_to_CM2(fix, gt, element, alleles, extract, convertNA));
-    return __result;
->>>>>>> b0cf630149d7a8b7b67ef2c35b489e545e8e8739
+    rcpp_result_gen = Rcpp::wrap(extract_GT_to_CM2(fix, gt, element, alleles, extract, convertNA));
+    return rcpp_result_gen;
 END_RCPP
 }
 // CM_to_NM
@@ -285,13 +280,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type cols(colsSEXP);
     Rcpp::traits::input_parameter< int >::type convertNA(convertNASEXP);
     Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
-<<<<<<< HEAD
-    rcpp_result_gen = Rcpp::wrap(read_body_gz(x, stats, nrows, skip, cols, verbose));
+    rcpp_result_gen = Rcpp::wrap(read_body_gz(x, stats, nrows, skip, cols, convertNA, verbose));
     return rcpp_result_gen;
-=======
-    __result = Rcpp::wrap(read_body_gz(x, stats, nrows, skip, cols, convertNA, verbose));
-    return __result;
->>>>>>> b0cf630149d7a8b7b67ef2c35b489e545e8e8739
 END_RCPP
 }
 // write_vcf_body
