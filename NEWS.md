@@ -3,7 +3,7 @@
 # vcfR 1.2.0.9000
 Released on CRAN 2016-XX-XX.
 
-* When annotation data include more than one chromosome in `create.chromR()` the data are subset to the first chromosome.
+* When annotation data include more than one chromosome in `create.chromR()` the data are subset to the first chromosome. Thank you Christian!
 * added `convertNA` parameter to `extract.gt()` to allow preservation of VCF encoding of missing data. Thank you Thierry!
 * added `convertNA` parameter to `read.vcfR()` to allow preservation of VCF encoding of missing data. Thank you Thierry!
 * extract.haps omits gt.split and implements unphased_as_NA
