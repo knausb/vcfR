@@ -1,6 +1,6 @@
 
 
-# vcfR 1.2.0.9000
+# vcfR 1.3.0
 Released on CRAN 2016-XX-XX.
 
 * Added more info to chromR show method.
@@ -9,7 +9,7 @@ Released on CRAN 2016-XX-XX.
 * added `convertNA` parameter to `read.vcfR()` to allow preservation of VCF encoding of missing data. Thank you Thierry!
 * extract.haps omits gt.split and implements unphased_as_NA
 * gtsplit handles a mixture of phased and unphased data
-* Added 'getters' for vcfR and chromR slots. (Thanks Zhian!)
+* Added 'getters' for vcfR and chromR slots. Thanks Zhian!
 * Created `freq_peak()` to find peaks in allele balance frequency data.
 * Created `masplit()` to parse matrices contains delimited strings.
 * Created `ordisample()` to ordinate sample information.

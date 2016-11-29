@@ -1,12 +1,9 @@
 
 
-Release of dplyr 0.5.0 affected functionality of some vcfR code.
-This release should address this functionality.
-
 ## Test environments
-* local ubuntu 12.04, R 3.2.5
+* local ubuntu 16.04 LTS, R 3.3.2
 * ubuntu 12.04 (on travis-ci), R 3.3.1
-* local OS X install, R 3.3.0
+* local OS X install, R 3.3.2
 * win-builder (devel and release)
 
 
@@ -37,7 +34,7 @@ Possibly mis-spelled words in DESCRIPTION:
   genlight (9:66)
   genomic (7:51)
 
-I have reviewed these word and feel they are spelled correctly.
+I have reviewed these words and feel they are spelled correctly.
 'DNAbin' referr to an object of class ape::DNAbin.
 'VCF' refers to the variant call format specification, a format of file handled by this package.
 'VcfR' refers to this package.
@@ -60,7 +57,7 @@ This version was accepted on the first try.
 See Uwe, I'm learning!
 
 Prof. Brian Ripley also brought to my attention that I had overlooked memory-access errors and that valgrind was reporting use of uninitialized memory and many small memory leaks.
-Thank you for bringin this to my attention, its a big help for those of us who are still learning valgrind!
+Thank you for bringing this to my attention, its a big help for those of us who are still learning valgrind!
 
 v1.1.0 Thank you Uwe Ligges for helping me get my title in title case, my Description in order and handling my submission!
 
