@@ -58,6 +58,14 @@ chrom <- proc.chromR(chrom, verbose = FALSE)
 chromoqc( chrom )
 chromoqc( chrom, boxp = FALSE )
 
+# GT region contains only GT
+data("vcfR_example")
+chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
+gt <- extract.gt(chrom)
+chrom@vcf@gt[,'FORMAT'] <- "GT"
+chrom@vcf@gt[,-1] <- gt
+chromoqc( chrom )
+
 
 ##### ##### ##### ##### #####
 # EOF.
