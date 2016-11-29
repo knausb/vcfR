@@ -30,7 +30,9 @@ setMethod( f="show",
   definition=function(object){
             #1234567890123456789012345678901234567890
     cat( "*****   Class chromR, method Show   *****\n" )
+#    cat( "\n" )
     cat( paste("Name:", object@names, "\n") )
+#    cat( "\n" )
     cat( paste("Chromosome length:", format(object@len, big.mark=","), "bp\n") )
     cat( "  Chromosome labels: ")
     if( length( labels(object@seq) ) > 0 ){
@@ -41,23 +43,25 @@ setMethod( f="show",
     cat( "\n" )
     cat( paste("Annotation (@ann) count:", format(nrow(object@ann), big.mark=","), "\n") )
     cat( "  Annotation chromosome names: " )
-    if( length( unique( chrom@ann[,'seqid'] ) ) > 0 ){
-      cat( paste( unique( chrom@ann[,'seqid'] ) ), sep = "," )
+    if( length( unique( object@ann[,1] ) ) > 0 ){
+      cat( paste( unique( object@ann[,1] ) ), sep = "," )
     } else {
       cat( "None" )
     }
     cat( "\n" )
     cat( paste("Variant (@vcf) count:", format(nrow(object@vcf), big.mark=","), "\n") )
     cat( "  Variant (@vcf) chromosome names: " )
-    if( length( unique(getCHROM(chrom@vcf)) ) > 0 ){
-      cat( paste( unique(getCHROM(chrom@vcf)), sep = "," ) )
+    if( length( unique(getCHROM(object@vcf)) ) > 0 ){
+      cat( paste( unique(getCHROM(object@vcf)), sep = "," ) )
     } else {
       cat( "None" )
     }
     cat( "\n" )
+#    cat( "\n" )
     cat( "Object size: ")
     print( utils::object.size(object), units="MB" )
     cat( "Use head(object) for more details.\n" )
+#    cat( "\n" )
     cat( "*****      End Show (chromR)        *****\n" )
   }
 )
