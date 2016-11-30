@@ -15,7 +15,7 @@
 #' @param as.numeric logical, should the matrix be converted to numerics
 #' @param return.alleles logical indicating whether to return the genotypes (0/1) or alleles (A/T)
 #' @param IDtoRowNames logical specifying whether to use the ID column from the FIX region as rownames
-#' @param allele.sep character which delimits the alleles in a genotype (/ or |), here this is not used for a regex (as it is in other functions)
+# @param allele.sep character which delimits the alleles in a genotype (/ or |), here this is not used for a regex (as it is in other functions)
 #' @param extract logical indicating whether to return the extracted element or the remaining string
 #' @param convertNA logical indicating whether to convert "." to NA.
 #' 
@@ -28,7 +28,7 @@
 #' The 'as.numeric' option will convert the results from a character to a numeric.
 #' Note that if the data is not actually numeric, it will result in a numeric result which may not be interpretable.
 #' The 'return.alleles' option allows the default behavior of numerically encoded genotypes (e.g., 0/1) to be converted to their nucleic acid representation (e.g., A/T).
-#' The allele.sep parameter allows the genotype delimiter to be specified.
+# The allele.sep parameter allows the genotype delimiter to be specified.
 #' Note that this is not used for a regular expression as similar parameters are used in other functions.
 #' Extract allows the user to extract just the specified element (TRUE) or every element except the one specified.
 #' 
@@ -44,10 +44,13 @@
 
 #' 
 #' @export
-extract.gt <- function(x, element="GT", mask=FALSE,
-                       as.numeric=FALSE, return.alleles=FALSE,
+extract.gt <- function(x, element="GT", 
+                       mask=FALSE,
+                       as.numeric=FALSE, 
+                       return.alleles=FALSE,
                        IDtoRowNames = TRUE,
-                       allele.sep="/", extract = TRUE,
+#                       allele.sep="/",
+                       extract = TRUE,
                        convertNA = TRUE ){
 
   # Validate that we have an expected data structure
@@ -93,9 +96,12 @@ extract.gt <- function(x, element="GT", mask=FALSE,
     }
 #    .Call('vcfR_extract_haps', PACKAGE = 'vcfR', ref, alt, gt, gt_split, verbose)
 #    outM <- .Call('vcfR_extract_GT_to_CM', PACKAGE = 'vcfR', x@gt, element)
-    outM <- .Call('vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR', x@fix, x@gt,
+    outM <- .Call('vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR',
+                  x@fix,
+                  x@gt,
                   element,
-                  return.alleles, as.integer(extract), 
+                  return.alleles, 
+                  as.integer(extract), 
                   convertNA = as.numeric(convertNA) )
   }
 
@@ -147,7 +153,10 @@ extract.gt <- function(x, element="GT", mask=FALSE,
 #' 
 #' @export
 #extract.haps <- function(x, mask=FALSE, gt.split="|",verbose=TRUE){
-extract.haps <- function(x, mask=FALSE, unphased_as_NA = TRUE, verbose=TRUE){
+extract.haps <- function(x, 
+                         mask=FALSE, 
+                         unphased_as_NA = TRUE, 
+                         verbose=TRUE ){
   if(class(x) == "chromR"){
     if(length(mask) == 1 && mask==TRUE){
       x <- chromR2vcfR(x, use.mask = TRUE)

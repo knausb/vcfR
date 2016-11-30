@@ -8,8 +8,8 @@
 \title{Extract elements from vcfR objects}
 \usage{
 extract.gt(x, element = "GT", mask = FALSE, as.numeric = FALSE,
-  return.alleles = FALSE, IDtoRowNames = TRUE, allele.sep = "/",
-  extract = TRUE, convertNA = TRUE)
+  return.alleles = FALSE, IDtoRowNames = TRUE, extract = TRUE,
+  convertNA = TRUE)
 
 extract.haps(x, mask = FALSE, unphased_as_NA = TRUE, verbose = TRUE)
 
@@ -29,8 +29,6 @@ extract.info(x, element, as.numeric = FALSE, mask = FALSE)
 \item{return.alleles}{logical indicating whether to return the genotypes (0/1) or alleles (A/T)}
 
 \item{IDtoRowNames}{logical specifying whether to use the ID column from the FIX region as rownames}
-
-\item{allele.sep}{character which delimits the alleles in a genotype (/ or |), here this is not used for a regex (as it is in other functions)}
 
 \item{extract}{logical indicating whether to return the extracted element or the remaining string}
 
@@ -53,7 +51,6 @@ The mask parameter allows the mask to be implemented when using a chromR object.
 The 'as.numeric' option will convert the results from a character to a numeric.
 Note that if the data is not actually numeric, it will result in a numeric result which may not be interpretable.
 The 'return.alleles' option allows the default behavior of numerically encoded genotypes (e.g., 0/1) to be converted to their nucleic acid representation (e.g., A/T).
-The allele.sep parameter allows the genotype delimiter to be specified.
 Note that this is not used for a regular expression as similar parameters are used in other functions.
 Extract allows the user to extract just the specified element (TRUE) or every element except the one specified.
 

@@ -62,7 +62,9 @@ data(vcfR_example)
 
 # Fabricate a vcf of haploid data.
 #haps <- extract.haps(vcf)
-haps <- extract.gt(vcf, return.alleles=FALSE, allele.sep="|")
+haps <- extract.gt(vcf, return.alleles=FALSE
+#                   , allele.sep="|"
+                   )
 haps <- apply(haps, MARGIN=2, function(x){unlist(lapply(strsplit(x, split="|"), function(x){x[1]}))})
 gt2 <- extract.gt(vcf, extract = FALSE)
 gt2 <- matrix( paste( haps, gt2, sep=":"), nrow=nrow(haps), dimnames=dimnames(haps) )
@@ -76,7 +78,9 @@ rm(gt2)
 
 # Fabricate a vcf of triploid data.
 #haps <- extract.haps(vcf)
-haps <- extract.gt(vcf, return.alleles=FALSE, allele.sep="|")
+haps <- extract.gt(vcf, return.alleles=FALSE
+#                   , allele.sep="|"
+                   )
 haps2 <- apply(haps, MARGIN=2, function(x){unlist(lapply(strsplit(x, split="|"), function(x){x[1]}))})
 haps <- matrix( paste( haps, haps2, sep="|"), nrow=nrow(haps), dimnames=dimnames(haps) )
 is.na(haps[is.na(haps2)]) <- TRUE

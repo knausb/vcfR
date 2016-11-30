@@ -45,6 +45,15 @@ I have reviewed these words and feel they are spelled correctly.
 ## Downstream dependencies
 
 
+## memory-access errors
+
+During the last submission Prof. Brian Ripley brought to my attention that vcfR contained memory access errors.
+I believe I have addressed this by running commands such as:
+
+R -d "valgrind --leak-check=full --vgdb-error=1" -f tests/testthat/test_conversion.R
+
+On various suspect functions.
+
 
 ## Thank you CRAN core Team!
 

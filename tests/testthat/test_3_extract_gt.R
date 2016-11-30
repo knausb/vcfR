@@ -110,7 +110,11 @@ test_that("extract.gt convertNA = FALSE works",{
 ##### ##### ##### ##### #####
 
 test_that("extract.gt return.alleles works",{
-  gt <- extract.gt(chrom, element="GT", return.alleles = TRUE, allele.sep="|")
+  gt <- extract.gt(chrom, 
+                   element="GT", 
+                   return.alleles = TRUE
+#                   allele.sep="|"
+                   )
   expect_is(gt, "matrix")
   
 })
@@ -119,7 +123,11 @@ test_that("extract.gt return.alleles works",{
 test_that("extract.gt return.alleles works for multiallelic variants",{
 #  vcf2 <- vcf[nchar(vcf@fix[,'ALT']) > 1,]
   vcf2 <- vcf[grep(",", vcf@fix[,'ALT']),]
-  gt <- extract.gt(vcf2, element="GT", return.alleles = TRUE, allele.sep="|")
+  gt <- extract.gt(vcf2, 
+                   element="GT", 
+                   return.alleles = TRUE
+#                   allele.sep="|"
+                   )
   
   # Locus 1: 0,1,2 = T,A,G
   # 0|0
