@@ -4,7 +4,7 @@
 * local ubuntu 16.04 LTS, R 3.3.2
 * ubuntu 12.04 (on travis-ci), R 3.3.1
 * local OS X install, R 3.3.2
-* win-builder (devel and release)
+* win-builder, devel (2016-11-29 r71698) and release (3.3.2)
 
 
 ## R CMD check results

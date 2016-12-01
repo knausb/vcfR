@@ -81,6 +81,10 @@ The function \strong{extract.info} is used to isolate elements from the INFO col
 }
 \examples{
 data(vcfR_test)
+gt <- extract.gt(vcfR_test)
+gt <- extract.gt(vcfR_test, return.alleles = TRUE)
+
+data(vcfR_test)
 getFIX(vcfR_test)
 vcf <- extract.indels(vcfR_test)
 getFIX(vcf)

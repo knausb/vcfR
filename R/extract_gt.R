@@ -41,7 +41,11 @@
 #' @seealso
 #' \code{\link{is.polymorphic}}
 #' 
-
+#' 
+#' @examples 
+#' data(vcfR_test)
+#' gt <- extract.gt(vcfR_test)
+#' gt <- extract.gt(vcfR_test, return.alleles = TRUE)
 #' 
 #' @export
 extract.gt <- function(x, element="GT", 

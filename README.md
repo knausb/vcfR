@@ -57,7 +57,7 @@ To install use:
 
 
 
-The development vaerion can be installed through github:
+The development version can be installed through github:
 
     devtools::install_github(repo="knausb/vcfR")
     library(vcfR)

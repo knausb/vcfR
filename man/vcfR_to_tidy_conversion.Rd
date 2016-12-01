@@ -175,9 +175,8 @@ To run all the examples, you can issue this:
 }
 \examples{
 # load the data
-data(vcfR_example)
-
-
+data("vcfR_test")
+vcf <- vcfR_test
 
 
 # extract all the INFO and FORMAT fields into a list of tidy
