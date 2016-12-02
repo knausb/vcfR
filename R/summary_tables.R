@@ -22,9 +22,9 @@
 #' \code{\link{write.vcf}}
 #'
 # CRAN:
-# \href{http://cran.r-project.org/web/packages/pegas/index.html}{pegas}::read.vcf,
-# \href{http://cran.r-project.org/web/packages/PopGenome/index.html}{PopGenome}::readVCF,
-# \href{http://cran.r-project.org/web/packages/data.table/index.html}{data.table}::fread
+# \href{https://cran.r-project.org/web/packages/pegas/index.html}{pegas}::read.vcf,
+# \href{https://cran.r-project.org/web/packages/PopGenome/index.html}{PopGenome}::readVCF,
+# \href{https://cran.r-project.org/web/packages/data.table/index.html}{data.table}::fread
 # 
 # Bioconductor:
 # \href{http://www.bioconductor.org/packages/release/bioc/html/VariantAnnotation.html}{VariantAnnotation}::readVcf

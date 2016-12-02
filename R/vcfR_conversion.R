@@ -9,9 +9,9 @@
 #' @details 
 #' After processing vcf data in vcfR, one will likely proceed to an analysis step.
 #' Within R, three obvious choices are:
-#' \href{http://cran.r-project.org/package=pegas}{pegas},
-#' \href{http://cran.r-project.org/package=adegenet}{adegenet} 
-#' and \href{http://cran.r-project.org/package=poppr}{poppr}.
+#' \href{https://cran.r-project.org/package=pegas}{pegas},
+#' \href{https://cran.r-project.org/package=adegenet}{adegenet} 
+#' and \href{https://cran.r-project.org/package=poppr}{poppr}.
 #' The package pegas uses objects of type loci.
 #' The function \strong{vcfR2loci} calls extract.gt to create a matrix of genotypes which is then converted into an object of type loci.
 #' 
@@ -33,10 +33,10 @@
 #' \code{\link{alleles2consensus}},
 #' \code{\link[adegenet]{df2genind}},
 #' \code{\link[adegenet]{genind}},
-#' \href{http://cran.r-project.org/package=pegas}{pegas},
-#' \href{http://cran.r-project.org/package=adegenet}{adegenet},
+#' \href{https://cran.r-project.org/package=pegas}{pegas},
+#' \href{https://cran.r-project.org/package=adegenet}{adegenet},
 #' and 
-#' \href{http://cran.r-project.org/package=poppr}{poppr}.
+#' \href{https://cran.r-project.org/package=poppr}{poppr}.
 #' To convert to objects of class \strong{DNAbin} see \code{\link{vcfR2DNAbin}}.
 #'
 
