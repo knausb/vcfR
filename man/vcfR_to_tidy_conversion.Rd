@@ -91,9 +91,9 @@ An object of class tidy::data_frame or a list where every element is of class ti
 \description{
 Convert the information in a vcfR object to a long-format data frame
 suitable for analysis or use with Hadley Wickham's packages, 
-\href{http://cran.r-project.org/package=dplyr}{dplyr},
-\href{http://cran.r-project.org/package=tidyr}{tidyr}, and
-\href{http://cran.r-project.org/package=ggplot2}{ggplot2}.
+\href{https://cran.r-project.org/package=dplyr}{dplyr},
+\href{https://cran.r-project.org/package=tidyr}{tidyr}, and
+\href{https://cran.r-project.org/package=ggplot2}{ggplot2}.
 These packages have been
 optimized for operation on large data frames, and, though they can bog down
 with very large data sets, they provide a good framework for handling and filtering
@@ -265,7 +265,7 @@ vcf_field_names(vcf, tag = "FORMAT")
 Eric C. Anderson <eric.anderson@noaa.gov>
 }
 \seealso{
-\href{http://cran.r-project.org/package=dplyr}{dplyr},
-\href{http://cran.r-project.org/package=tidyr}{tidyr}.
+\href{https://cran.r-project.org/package=dplyr}{dplyr},
+\href{https://cran.r-project.org/package=tidyr}{tidyr}.
 }
 

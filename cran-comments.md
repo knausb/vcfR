@@ -4,8 +4,9 @@
 * local ubuntu 16.04 LTS, R 3.3.2
 * ubuntu 12.04 (on travis-ci), R 3.3.1
 * local OS X install, R 3.3.2
-* win-builder, devel (2016-11-29 r71698) and release (3.3.2)
-* rhub, ubuntu-gcc-devel (Ubuntu Linux 16.04 LTS, R-devel, GCC), windows-x86_64-devel (Windows Server 2008 R2 SP1, R-devel, 32/64 bit)
+* rhub::check( platform = "ubuntu-gcc-devel" )
+* rhub::check( platform = "windows-x86_64-release" )
+* rhub::check( platform = "windows-x86_64-devel" )
 
 
 ## R CMD check results
@@ -45,8 +46,16 @@ I have reviewed these words and feel they are spelled correctly.
 
 ## Downstream dependencies
 
+I have also run R CMD check on downstream dependencies of vcfR
+All packages that I could install passed except:
 
-## memory-access errors
+* pcadapt: 
+* checking installed package size ... NOTE
+  installed size is  5.1Mb
+Does not appear to be related to vcfR
+
+
+## Memory-access errors
 
 During the last submission Prof. Brian Ripley brought to my attention that vcfR contained memory access errors.
 I believe I have addressed this by running commands such as:
