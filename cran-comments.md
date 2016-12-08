@@ -82,6 +82,8 @@ On various suspect functions.
 However, I think its polite to thank those who have helped this project.
 So I've decided to start a list of thanks with the hope that these individuals may see this in the future.
 
+v1.3.0 Thank you Uwe Ligges and Kurt Hornik for helping me!
+
 v1.2.0 Thank you Uwe Ligges for helping me!
 This version was accepted on the first try.
 See Uwe, I'm learning!
