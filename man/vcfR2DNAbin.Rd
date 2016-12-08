@@ -118,6 +118,6 @@ image(myDNA)
 
 }
 \seealso{
-\href{http://cran.r-project.org/package=ape}{ape}
+\href{https://cran.r-project.org/package=ape}{ape}
 }
 

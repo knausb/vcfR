@@ -91,9 +91,9 @@ setwd( orig_dir )
 }
 \seealso{
 CRAN:
-\href{http://cran.r-project.org/package=pegas}{pegas}::read.vcf,
+\href{https://cran.r-project.org/package=pegas}{pegas}::read.vcf,
 \href{https://cran.r-project.org/package=PopGenome}{PopGenome}::readVCF,
-\href{http://cran.r-project.org/package=data.table}{data.table}::fread
+\href{https://cran.r-project.org/package=data.table}{data.table}::fread
 
 Bioconductor:
 \href{http://www.bioconductor.org/packages/release/bioc/html/VariantAnnotation.html}{VariantAnnotation}::readVcf
