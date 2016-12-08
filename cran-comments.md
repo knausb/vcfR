@@ -1,4 +1,15 @@
 
+## Resubmission
+This is a resubmission. In this version I have:
+
+Changed:
+http://cran.r-project.org/package=pinfsc50
+to:
+https://cran.r-project.org/package=pinfsc50
+in vcfR.R to respect the CRAN URL cannonical form.
+
+The files in 'inst/doc' have been deleted and rebuilt.
+
 
 ## Test environments
 * local ubuntu 16.04 LTS, R 3.3.2

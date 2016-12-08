@@ -29,7 +29,7 @@
 #' Several example \strong{datasets} are included in vcfR.
 #' \strong{vcfR_test} comes from the VCF specification and provides a vcfR object with a diversity of examples in a small dataset.
 #' \strong{vcfR_example} is a subset of the pinfsc50 dataset that includes VCF, GFF and FASTA data for moderate sized testing.
-#' The \href{http://cran.r-project.org/package=pinfsc50}{pinfsc50} dataset is available as a separate package and includes VCF, GFF and FASTA data for testing and benchmarking.
+#' The \href{https://cran.r-project.org/package=pinfsc50}{pinfsc50} dataset is available as a separate package and includes VCF, GFF and FASTA data for testing and benchmarking.
 #'
 # @references Brian J Knaus (2015). Variant call format files processed 
 # with vcfR. Journal TBA, NN(N),
