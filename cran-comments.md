@@ -18,10 +18,10 @@ There were 2 NOTEs:
 Maintainer: ‘Brian J. Knaus <briank.lists@gmail.com>’
 
 * checking installed package size ... NOTE
-  installed size is  7.6Mb
+  installed size is  8.6Mb
   sub-directories of 1Mb or more:
     doc    2.2Mb
-    libs   4.8Mb
+    libs   5.7Mb
 
 There are 8 vignettes (HTML) which contribute to the 2.8Mb in doc.
 These could be migrated to a separate documentation package.
