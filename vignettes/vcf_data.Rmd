@@ -147,51 +147,33 @@ The FILTER field is not used here but could contain information on whether a var
 
 
 ```{r, echo=TRUE}
-vcf@fix[1:6, 1:7]
-#getFIX(vcf)
+head(getFIX(vcf))
 ```
 
 
 
 The eigth column, titled INFO, is a semicolon delimited list of information.
-It can be rather long and cumbersome, which is why its not presented in its entirety here.
+It can be rather long and cumbersome.
+The function `getFIX()` will suppress this column by default.
 Each abbreviation in the INFO column should be defined in the meta section.
-For example, line three from the meta region tells us that 'DP' is the raw read depth.
-We can validate this by querying the meta portion.
-
-
-```{r}
-strwrap(grep('DP', vcf@meta, value = TRUE))
-```
-
-We see that 'DP' is defined both for the INFO column and for the gt portion of the file (FORMAT).
-Returning to the INFO column, we see that the value of DP equals 197 for this variant (note the caveats in the meta line).
-This tells us that this variant was sequenced 197 times over all our samples.
-A number of other parameters are also included in this column which be explored by querying their definition in the meta region.
-Here we just look at what is present for the first variant.
-
-
-```{r, echo=TRUE}
-unlist(strsplit(as.character(vcf@fix[1, 8]), split=";"))
-```
-
+We can validate this by querying the meta portion, as we did in the 'meta' section above.
 
 
 ## The gt region
 
 
-The gt (genotype) region contains information for each variant for each sample.
+The gt (genotype) region contains information about each variant for each sample.
 The values for each variant and each sample are colon delimited.
 Multiple types of data for each genotype may be stored in this manner.
-The format of the data is specified by column nine, the FORMAT column.
+The format of the data is specified by the FORMAT column (column nine).
 Here we see that we have information for GT, AD, DP, GQ and PL.
 The definition of these acronyms can be referenced by querying the the meta region, as demonstrated previously.
-Every variant does not necessarily have the same information (e.g., SNPs and indels may be handled differently), so the rows are best treated separately.
+Every variant does not necessarily have the same information (e.g., SNPs and indels may be handled differently), so the rows are best treated independently.
+Different variant callers may include different information in this region.
 
 
-
-```{r, echo=FALSE}
-vcf@gt[1:6, 1:8]
+```{r, echo=TRUE, tidy=TRUE}
+vcf@gt[1:6, 1:4]
 ```
 
 
@@ -212,7 +194,4 @@ head(vcf)
 
 We now have a summary of our VCF file which we can use to help understand what forms of information are contained within it.
 This information can be further explored with plotting functions and used to filter the VCF file for high quality variants.
-These topics are discussed in other vignettes.
-
-
 
