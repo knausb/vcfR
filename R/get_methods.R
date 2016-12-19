@@ -4,7 +4,8 @@
 #' These accessors allow you to isolate these variables from these objects.
 #'   
 #' @param x a vcfR or chromR object
-#'   
+#' @param getINFO logical specifying whether getFIX should return the INFO column
+#'
 #' @return a vector or data frame
 #' @rdname getFIX
 #' @export
@@ -40,22 +41,30 @@
 #' getINFO(vcf) %>% head
 #' getINFO(chrom) %>% head
 #' 
-getFIX <- function(x) standardGeneric("getFIX")
+getFIX <- function(x, getINFO = FALSE) standardGeneric("getFIX")
 #' @export
 setGeneric("getFIX")
 
 setMethod(
   f = "getFIX", 
   signature(x = "chromR"), 
-  definition = function(x) {
-    x@vcf@fix  
+  definition = function(x, getINFO = FALSE) {
+    if(getINFO == TRUE){
+      return(x@vcf@fix)
+    } else {
+      return(x@vcf@fix[,-8])
+    }
 })
 
 setMethod(
   f = "getFIX", 
   signature(x = "vcfR"), 
-  definition = function(x) {
-    x@fix  
+  definition = function(x, getINFO = FALSE) {
+    if(getINFO == TRUE){
+      return(x@fix)
+    } else {
+      return(x@fix[,-8])
+    }
 })
 
 #' @rdname getFIX
