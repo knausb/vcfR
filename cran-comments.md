@@ -18,6 +18,7 @@ The files in 'inst/doc' have been deleted and rebuilt.
 * rhub::check( platform = "ubuntu-gcc-devel" )
 * rhub::check( platform = "windows-x86_64-release" )
 * rhub::check( platform = "windows-x86_64-devel" )
+* rhub::check( platform = "windows-x86_64-oldrel" )
 
 
 ## R CMD check results
