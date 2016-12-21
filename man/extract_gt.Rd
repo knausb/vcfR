@@ -88,7 +88,7 @@ data(vcfR_test)
 getFIX(vcfR_test)
 vcf <- extract.indels(vcfR_test)
 getFIX(vcf)
-vcf@fix[4,'ALT'] <- ".,A"
+vcf@fix[nrow(vcf@fix),'ALT'] <- ".,A"
 vcf <- extract.indels(vcf)
 getFIX(vcf)
 
