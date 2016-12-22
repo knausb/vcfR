@@ -1,7 +1,7 @@
 
 
 # vcfR 1.3.0
-Released on CRAN 2016-XX-XX.
+Released on CRAN 2016-12-08.
 
 * `extract.gt()` no longer uses parameter `allele.sep()`. 
 * Added more info to chromR show method.
