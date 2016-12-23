@@ -27,6 +27,7 @@ std::vector<float> str_vec_to_float_vec( std::vector<std::string> str_vec ){
     std::istringstream ss0(str_vec[i]);
     if ( !( ss0 >> float_vec[i] ) ){
       // error: didn't convert to a float
+      Rcpp::Rcout << "ss0: " << ss0.str() << "\n";
       Rcpp::Rcerr << "Failed to convert to a float.\n";
     }
   }
