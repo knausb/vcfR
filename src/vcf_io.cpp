@@ -661,8 +661,9 @@ void write_fasta( Rcpp::CharacterVector seq,
   FILE * pFile;
 //  pFile=fopen(filename.c_str(),"wt");
   pFile=fopen(filename.c_str(),"at");
-  unsigned int i = 0;
-
+  int i = 0;
+//  unsigned int i = 0;
+  
   if(verbose == 1){
     Rcpp::Rcout << "Processing sample: " << seqname << "\n";
   }

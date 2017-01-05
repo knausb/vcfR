@@ -15,7 +15,8 @@ std::vector < int > gtsplit(std::string line){
   }
   
   unsigned int start=0;
-  for(int i=1; i<line.size(); i++){
+  unsigned int i = 0;
+  for(i=1; i<line.size(); i++){
     if( line[i] == '/' || line[i] == '|' ){
       std::string temp = line.substr(start, i);
 //      Rcout << "  i: " << i << ", temp: " << temp << "\n";
@@ -46,7 +47,8 @@ Rcpp::DataFrame gt_to_popsum(Rcpp::DataFrame var_info, Rcpp::CharacterMatrix gt)
   Rcpp::NumericVector   Nes(mask.size());
   
   int i = 0;
-  unsigned int j = 0;
+  int j = 0;
+//  unsigned int j = 0;
   unsigned int k = 0;
   
   for(i=0; i < gt.nrow(); i++){ // Iterate over variants (rows)
@@ -69,9 +71,9 @@ Rcpp::DataFrame gt_to_popsum(Rcpp::DataFrame var_info, Rcpp::CharacterMatrix gt)
       }
 
       // Concatenate allele counts into a comma delimited string.
-      int n = 0;
       char buffer [50];
-      n = sprintf (buffer, "%d", myalleles[0]);
+      int n;
+      n=sprintf(buffer, "%d", myalleles[0]);
       for(j=1; j < myalleles.size(); j++){
         n=sprintf (buffer, "%s,%d", buffer, myalleles[j]);
       }

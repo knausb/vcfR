@@ -28,7 +28,8 @@ Rcpp::IntegerMatrix seq_to_rects(Rcpp::CharacterVector seq, std::string targets)
 //  Rcpp::IntegerVector starts;
 //  Rcpp::IntegerVector ends;
 
-  unsigned int i=0;
+  int i=0;
+//  unsigned int i=0;
   int in_rect = 0;
   int test = 0;
   
