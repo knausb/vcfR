@@ -4,7 +4,9 @@ using namespace Rcpp;
 
 
 NumericVector win_mean(std::vector< std::vector<double> > win){
-  int i;
+  unsigned int i = 0;
+  unsigned int j = 0;
+  int k = 0;
   NumericVector means(win.size());
 
   // Sum over samples.
@@ -12,7 +14,7 @@ NumericVector win_mean(std::vector< std::vector<double> > win){
     if(win[i].size() > 0){
       means[i] = win[i][0];
       if(win[i].size() > 1){
-        for(int j=1; j<win[i].size(); j++){
+        for(j=1; j<win[i].size(); j++){
           means[i] = means[i] + win[i][j];
         }
       }
@@ -21,9 +23,9 @@ NumericVector win_mean(std::vector< std::vector<double> > win){
     }
   }
 
-  for(i=0; i < means.size(); i++){
-    if(win[i].size() > 1){
-      means[i] = means[i] / win[i].size();
+  for(k=0; k < means.size(); k++){
+    if(win[k].size() > 1){
+      means[k] = means[k] / win[k].size();
     }
   }
 
@@ -56,7 +58,7 @@ NumericMatrix NM2winNM(NumericMatrix x, std::vector<int> pos, int maxbp, int win
   int winmax = + winsize;
   int winnum = 0;
   int i = 0;
-  int j = 0;
+  unsigned int j = 0;
 
   // Hold data for each window and sample.
 //  std::vector<NumericVector> temp(x.ncol());
@@ -116,7 +118,8 @@ double vector_count(std::vector<double> x){
 double vector_sum(std::vector<double> x){
 //  Rcout << "In vector_sum\n";
   double sum = 0;
-  for(int i=0; i<x.size(); i++){
+  unsigned int i=0;
+  for(i=0; i<x.size(); i++){
 //    Rcout << x[i] << "; ";
     sum = sum + x[i];
   }
@@ -129,9 +132,9 @@ double vector_sum(std::vector<double> x){
 double vector_mean(std::vector<double> x){
   double mean = 0;
   double count = 0;
-  int i = 0;
+  unsigned int i = 0;
   for( i=0; i<x.size(); i++ ){
-    if( x[i] != NA_REAL | x[i] != NA_INTEGER ){
+    if( ( x[i] != NA_REAL ) | ( x[i] != NA_INTEGER ) ){
       mean = mean + x[i];
       count++;
     }

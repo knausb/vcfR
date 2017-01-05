@@ -11,7 +11,7 @@ void vcfRCommon::strsplit(std::string& mystring, std::vector<std::string>& vec_o
   // vec_o_strings is empty and will be pushed on to.
 
   int start = 0;
-  int i=0;
+  unsigned int i=0;
 
   for(i = 1; i < mystring.size(); i++){
     if( mystring[i] == split){
@@ -42,7 +42,7 @@ void vcfRCommon::gtsplit(std::string& mystring,
 //  Rcpp::Rcout << "In gtsplit\n";
   
   int start = 0;
-  int i = 0;
+  unsigned int i = 0;
   int is_phased = 0;
   
   char split1 = '|'; // Must be single quotes!
@@ -100,10 +100,10 @@ void vcfRCommon::gtdelim(std::string& mystring,
   char split1 = '|'; // Must be single quotes!
   char split2 = '/'; // Must be single quotes!
   
-  int i = 0;
+  unsigned int i = 0;
   
   for(i = 0; i < mystring.size(); i++){
-    if( mystring[i] == split1 | mystring[i] == split2 ){
+    if( ( mystring[i] == split1 ) | ( mystring[i] == split2 ) ){
       std::stringstream ss;
       ss << mystring[i];
 //      vec_o_strings.push_back( ss );

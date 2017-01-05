@@ -5,7 +5,7 @@ using namespace Rcpp;
 
 int minimal_regex(char query, std::string db){
   int test = 0;
-  int i = 0;
+  unsigned int i = 0;
   
 //  Rcout << "Query: " << query << " db: " << db << "\n";
   for(i=0; i<db.size(); i++){
@@ -29,6 +29,7 @@ Rcpp::IntegerMatrix seq_to_rects(Rcpp::CharacterVector seq, std::string targets)
 //  Rcpp::IntegerVector ends;
 
   int i=0;
+//  unsigned int i=0;
   int in_rect = 0;
   int test = 0;
   
@@ -73,7 +74,7 @@ Rcpp::IntegerMatrix seq_to_rects(Rcpp::CharacterVector seq, std::string targets)
   }
 
   Rcpp::IntegerMatrix rects(starts.size(), 2);
-  for(i=0; i<starts.size(); i++){
+  for(i=0; (unsigned)i<starts.size(); i++){
 //    Rcout << "starts: " << starts[i] << ", ends: " << ends[i] << "\n";
     rects(i,0) = starts[i];
     rects(i,1) = ends[i];

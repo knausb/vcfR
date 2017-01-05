@@ -20,13 +20,16 @@ std::vector<float> str_vec_to_float_vec( std::vector<std::string> str_vec ){
   // Initialize return vector.
   std::vector<float> float_vec( str_vec.size(), 0 );
   
-  int i;
+  unsigned int i = 0;
   for( i=0 ; i < str_vec.size() ; i++ ){
   
 //    Rcpp::Rcout << "  " << str_vec[i] << "\n";
     std::istringstream ss0(str_vec[i]);
-    if ( !( ss0 >> float_vec[i] ) ){
+    if( str_vec[i] == "." ){
+      float_vec[i] = -99999;
+    } else if ( !( ss0 >> float_vec[i] ) ){
       // error: didn't convert to a float
+      Rcpp::Rcout << "ss0: " << ss0.str() << "\n";
       Rcpp::Rcerr << "Failed to convert to a float.\n";
     }
   }
@@ -34,6 +37,28 @@ std::vector<float> str_vec_to_float_vec( std::vector<std::string> str_vec ){
 }
 
 
+// Convert vectors of strings to NumericVector.
+Rcpp::NumericVector str_vec_to_NumericVector( std::vector<std::string> str_vec ){
+  // Initialize return vector.
+//  std::vector<float> float_vec( str_vec.size(), 0 );
+  Rcpp::NumericVector num_vec( str_vec.size(), 0 );
+  
+  unsigned int i = 0;
+  for( i=0 ; i < str_vec.size() ; i++ ){
+    
+    //    Rcpp::Rcout << "  " << str_vec[i] << "\n";
+    std::istringstream ss0(str_vec[i]);
+    
+    if( str_vec[i] == "." ){
+      num_vec[i] = NA_REAL;
+    } else if ( !( ss0 >> num_vec[i] ) ){
+      // error: didn't convert to a float
+      Rcpp::Rcout << "ss0: " << ss0.str() << "\n";
+      Rcpp::Rcerr << "Failed to convert to a float.\n";
+    }
+  }
+  return num_vec;
+}
 
 
 
@@ -118,11 +143,14 @@ Rcpp::NumericMatrix masplit(Rcpp::StringMatrix myMat,
         // Recast vector of string to vector of floats.
         std::vector < float > float_vec;( col_vec.size(), 0);
         float_vec = str_vec_to_float_vec(col_vec);
-
+//        Rcpp::NumericVector col_vec2( col_vec.size(), 0);
+//        col_vec2 = str_vec_to_NumericVector(col_vec);
+        
         // Process the vector.
         if( count == 1 ){
           // Return the length of the vector.
           retMat(i,j) = float_vec.size();
+//          retMat(i,j) = col_vec2.size();
         } else {
 
           // Sort the vector.
@@ -138,7 +166,9 @@ Rcpp::NumericMatrix masplit(Rcpp::StringMatrix myMat,
           }  
           
           // Select the record.
-          if( record + 1 > float_vec.size() ){
+          if( (unsigned)record + 1 > float_vec.size() ){
+            retMat(i,j) = NA_REAL;
+          } else if( float_vec[ record ] == -99999 ){
             retMat(i,j) = NA_REAL;
           } else {
             retMat(i,j) = float_vec[ record ];

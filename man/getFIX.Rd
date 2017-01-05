@@ -30,7 +30,7 @@
 \alias{getREF,vcfR-method}
 \title{Get elements from the fixed region of a VCF file}
 \usage{
-getFIX(x)
+getFIX(x, getINFO = FALSE)
 
 getCHROM(x)
 
@@ -50,6 +50,8 @@ getINFO(x)
 }
 \arguments{
 \item{x}{a vcfR or chromR object}
+
+\item{getINFO}{logical specifying whether getFIX should return the INFO column}
 }
 \value{
 a vector or data frame

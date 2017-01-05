@@ -221,7 +221,7 @@ extract.haps <- function(x,
 #' getFIX(vcfR_test)
 #' vcf <- extract.indels(vcfR_test)
 #' getFIX(vcf)
-#' vcf@fix[4,'ALT'] <- ".,A"
+#' vcf@fix[nrow(vcf@fix),'ALT'] <- ".,A"
 #' vcf <- extract.indels(vcf)
 #' getFIX(vcf)
 #' 
@@ -241,12 +241,16 @@ extract.indels <- function(x, return.indels=FALSE){
 
   # Check reference for indels
   mask <- nchar(x@fix[,'REF']) > 1
-  mask[ grep(".", x@fix[,'REF'], fixed = TRUE) ] <- TRUE
+  # Check reference for missing data.
+#  mask[ grep(".", x@fix[,'REF'], fixed = TRUE) ] <- TRUE
   
   # Check alternate for indels
-  mask[unlist(
-    lapply(strsplit(x@fix[,'ALT'], split=","), function(x){ max(nchar(x)) > 1 | length(grep(".",x,fixed=TRUE))>0 })
-    ) ] <- TRUE
+  mask[ unlist( lapply(
+          strsplit(x@fix[,'ALT'], split=","), 
+          function(x){ max(nchar(x)) > 1 }
+  ) ) ] <- TRUE
+  # Check alternate for missing data
+
 
   if(return.indels == FALSE){
     x <- x[ !mask, , drop = FALSE ]

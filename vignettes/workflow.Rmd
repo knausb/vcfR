@@ -1,0 +1,39 @@
+---
+title: "vcfR workflow"
+author: "Brian J. Knaus"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{vcfR workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+## Workflow
+
+
+Work begins with a variant call format file (VCF).
+A reference file (FASTA) and an annotation file are also suggested.
+These later two files are not necessary, but I feel they contribute substantially.
+The below flowchart outlines the major steps involved with vcfR use.
+
+
+
+![flowchart image](vcfR_flowchart.png)
+
+
+
+The green rectangles contain functions that the user will want to become familiar with.
+There are effectively three phases in the workflow: reading in data, processing the objects in memory and plotting the data graphically.
+Reading in the data frequently presents a bottleneck.
+Unfortunately, this is typically due to the time it takes to read from a drive and therefore may not be anything I can improve on.
+Once the data are in memory we can manipulate it.
+VcfR uses Rcpp to implement functions written in C++ to try to improve the performance of these functions.
+Lastly, we visualize the objects.
+Visualization relies on R's base graphics package.
+This is also something that I am not likely to be able to improve on if it becomes a bottleneck.
+By dividing the analysis into these three phases I've divided that workflow into things I may be able to improve upon through my code writing, and things which I have little control over.
+
+

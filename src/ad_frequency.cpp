@@ -22,7 +22,7 @@ std::vector<float> str_vec_to_float_vec2( std::vector<std::string> str_vec ){
   // Initialize return vector.
   std::vector<float> float_vec( str_vec.size(), 0 );
   
-  int i;
+  unsigned int i;
   for( i=0 ; i < str_vec.size() ; i++ ){
   
 //    Rcpp::Rcout << "  " << str_vec[i] << "\n";
@@ -83,7 +83,7 @@ std::vector<float> str_vec_to_float_vec2( std::vector<std::string> str_vec ){
 // [[Rcpp::export]]
 Rcpp::NumericMatrix AD_frequency(Rcpp::StringMatrix ad,
                                  std::string delim = ",",
-                                 int allele = 1,
+                                 unsigned int allele = 1,
                                  int sum_type = 0,
                                  int decreasing = 1
                                  ) {

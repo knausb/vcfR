@@ -100,6 +100,8 @@ test_file("testthat/test_drplot.R")
 # R -d "valgrind --leak-check=full --vgdb-error=1" -f tests/testthat/test_10_write_vcf.R
 # R -d "valgrind --leak-check=full --vgdb-error=1" -f tests/testthat/test_freq_peak.R
 
+# R -d "valgrind --leak-check=full --vgdb-error=1" -f tests/testthat/test_3_extract_gt.R
+
 
 # R -d "valgrind --leak-check=full --vgdb-error=1" -f tests/testthat/test_conversion.R 
 # R -d "valgrind --leak-check=full --vgdb-error=1" -f tests/testthat/test_conversion.R 
@@ -108,6 +110,12 @@ test_file("testthat/test_drplot.R")
 
 # R -d "valgrind --leak-check=full --vgdb-error=1" -f tests/testthat.R --restore --save --no-readline --vanilla > log.txt 2>&1
 
+
+##### ##### ##### ##### #####
+# g++
+
+# g++ -std=c++0x -I"C:/PROGRA~1/R/R-33~1.2/include" -DNDEBUG -I"C:/Users/USERtqITJhLcoQ/R/Rcpp/include" -I"d:/Compiler/gcc-4.9.3/local330/include" -O2 -Wall -mtune=core2 -c gt_to_popsum.cpp -o gt_to_popsum.o
+# g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/home/knausb/R/x86_64-pc-linux-gnu-library/3.3/Rcpp/include"   -fpic  -g -O2 -fstack-protector-strong -Wsign-compare -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g -c gt_to_popsum.cpp -o gt_to_popsum.o
 
 
 ##### ##### ##### ##### #####

@@ -1,4 +1,13 @@
 
+# vcfR 1.3.0.9000
+Released on CRAN 2017-XX-XX.
+
+* `masplit()` converts '.' to NA.
+* `extract.indels()` does not recognize NA as a deletion.
+* Added parameter `getINFO` to `getFIX()` to suppress INFO column.
+* Prof Brian Ripley brought to my attention that I have new memory access issues:
+The memory-access errors are new this version, and there is also undefined behavour (trying to coerce NaN to integer).
+
 
 # vcfR 1.3.0
 Released on CRAN 2016-12-08.

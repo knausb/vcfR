@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 
 
+
 void dput_NumericMatrix( Rcpp::NumericMatrix myMat){
   int i = 0;
   int j = 0;
@@ -104,7 +105,7 @@ Rcpp::NumericMatrix init_window_matrix(Rcpp::NumericVector pos, int winsize){
   if( pos.size() > 0){
     // Find the start of the first window.
     // This does not need to be 1.
-    while( min_pos % winsize > 1 & min_pos >= 1 ){
+    while( ( min_pos % winsize > 1 ) & ( min_pos >= 1 ) ){
       min_pos--;
 //    Rcpp::Rcout << "min_pos: " << min_pos << ".\n";
     }
@@ -286,7 +287,7 @@ Rcpp::NumericMatrix mat_to_win( Rcpp::NumericMatrix myMat,
 ){
 //  Rcpp::NumericMatrix retMatrix;
   
-  if( start_row >= 0 & end_row >= 0){
+  if( ( start_row >= 0 ) & ( end_row >= 0 ) ){
     Rcpp::NumericMatrix retMatrix( end_row - start_row + 1, myMat.ncol() );
   
 //    Rcpp::Rcout << "start_row: " << start_row << "\n";
@@ -392,12 +393,12 @@ Rcpp::NumericMatrix bin_data( Rcpp::NumericVector myFreqs,
   for(i=0; i<myFreqs.size(); i++){
     int intQuery = myFreqs(i) * multiplier;
     j = 0;
-    if( intQuery >= intBreaks(j,0) & intQuery <= intBreaks(j,2) ){
+    if( ( intQuery >= intBreaks(j,0) ) & ( intQuery <= intBreaks(j,2) ) ){
 //      Rcpp::Rcout << "Binned: " <<  myFreqs(i) << " is >= " << breaks(j,0) << " & <= " << breaks(j,2) << "\n";
 //      breaks(j,3) = breaks(j,3) + 1;
     }
     for(j=1; j<breaks.nrow(); j++){
-      if( intQuery > intBreaks(j,0) & intQuery <= intBreaks(j,2) ){
+      if( ( intQuery > intBreaks(j,0) ) & ( intQuery <= intBreaks(j,2) ) ){
 //        Rcpp::Rcout << "Binned: " <<  myFreqs(i) << " is > " << breaks(j,0) << " & <= " << breaks(j,2) << "\n";
         breaks(j,3) = breaks(j,3) + 1;
       }

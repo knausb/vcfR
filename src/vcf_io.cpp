@@ -69,7 +69,8 @@ Rcpp::NumericVector vcf_stats_gz(std::string x) {
     vcfRCommon::strsplit(mystring, svec, split);
         
     // Scroll through lines derived from the buffer.
-    for(int i=0; i < svec.size() - 1; i++){
+    unsigned int i = 0;
+    for(i=0; i < svec.size() - 1; i++){
       stat_line(stats, svec[i]);
     }
     // Manage the last line.
@@ -140,7 +141,7 @@ Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats, int ve
     vcfRCommon::strsplit(mystring, svec, split);
 
 
-    int i = 0;
+    unsigned int i = 0;
     while(meta_row < stats(0) && i < svec.size() - 1){
       
       // Check and remove carriage returns (Windows).
@@ -225,7 +226,8 @@ void proc_body_line(Rcpp::CharacterMatrix gt,
         
         vcfRCommon::gtsplit( my_string, allele_vec, unphased_as_na );
         int gtNA = 1;
-        for( int k = 0; k < allele_vec.size(); k++ ){
+        unsigned int k = 0;
+        for( k = 0; k < allele_vec.size(); k++ ){
 //            Rcpp::Rcout << "allele_vec[k]: " << allele_vec[k] << "\n";
           if( allele_vec[k] != "." ){ gtNA = 0; }
         }
@@ -306,13 +308,13 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
   int row_num = 0;
   
 
-  if( nrows == -1 & skip == 0 ){
+  if( ( nrows == -1 ) & ( skip == 0 ) ){
     nrows = stats[2];
-  } else if ( nrows != -1 & skip == 0 ){
+  } else if ( ( nrows != -1 ) & ( skip == 0 ) ){
     // nrows = nrows;
-  } else if ( nrows == -1 & skip > 0){
+  } else if ( ( nrows == -1 ) & ( skip > 0) ){
     nrows = stats[2] - skip;
-  } else if ( nrows != -1 & skip > 0){
+  } else if ( ( nrows != -1 ) & ( skip > 0) ){
     // nrows = nrows;
   } else {
     Rcpp::Rcerr << "failed to calculate return matrix geometry.";
@@ -396,7 +398,8 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
     */
 
     // Scroll through lines.
-    for(int i = 0; i < svec.size() - 1; i++){
+    unsigned int i = 0;
+    for(i = 0; i < svec.size() - 1; i++){
       
       // Check and remove carriage returns (Windows).
       if( svec[i][ svec[i].size()-1] == '\r' ){
@@ -420,7 +423,7 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
       } else {
         // Variant line.
 
-        if ( var_num >= skip & row_num < nrows ){
+        if ( ( var_num >= skip ) & ( row_num < nrows ) ){
           proc_body_line(gt, row_num, svec[i], cols, convertNA);
           row_num++; // Return matrix row number.
         }
@@ -452,7 +455,7 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
      * (important when nrows is small)
      * 3) we actually have a line (when buffer ends at the end of a line).
      */
-    if( row_num >= nrows & lastline[0] != '#' & lastline.size() > 0 ){
+    if( ( row_num >= nrows ) & ( lastline[0] != '#' ) & ( lastline.size() > 0 ) ){
 //        Rcpp::Rcout << "\nBreaking!\n";
 //        Rcpp::Rcout << "lastline: " << lastline.substr(0,40) << "\n";
         break;
@@ -490,7 +493,7 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
     }
   } else {
 
-    if( header_vec.size() == gt.ncol() ){
+    if( header_vec.size() == (unsigned)gt.ncol() ){
       header_vec[0] = "CHROM";
       gt.attr("dimnames") = Rcpp::List::create(Rcpp::CharacterVector::create(), header_vec);
     } else {
@@ -658,14 +661,15 @@ void write_fasta( Rcpp::CharacterVector seq,
   FILE * pFile;
 //  pFile=fopen(filename.c_str(),"wt");
   pFile=fopen(filename.c_str(),"at");
-  int i=0;
-
+  int i = 0;
+//  unsigned int i = 0;
+  
   if(verbose == 1){
     Rcpp::Rcout << "Processing sample: " << seqname << "\n";
   }
 
   putc ('>' , pFile);
-  for(i=0; i<seqname.size(); i++){
+  for(i=0; (unsigned)i<seqname.size(); i++){
     putc (seqname[i] , pFile);
   }
   putc ('\n' , pFile);

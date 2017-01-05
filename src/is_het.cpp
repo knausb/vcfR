@@ -23,7 +23,7 @@ Rcpp::LogicalMatrix is_het(Rcpp::StringMatrix x,
   
   int i;
   int j;
-  int k;  
+  unsigned int k;
   for( i=0; i<x.nrow(); i++ ){
     for( j=0; j<x.ncol(); j++){
 
