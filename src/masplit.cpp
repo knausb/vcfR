@@ -20,7 +20,7 @@ std::vector<float> str_vec_to_float_vec( std::vector<std::string> str_vec ){
   // Initialize return vector.
   std::vector<float> float_vec( str_vec.size(), 0 );
   
-  int i;
+  unsigned int i = 0;
   for( i=0 ; i < str_vec.size() ; i++ ){
   
 //    Rcpp::Rcout << "  " << str_vec[i] << "\n";
@@ -43,7 +43,7 @@ Rcpp::NumericVector str_vec_to_NumericVector( std::vector<std::string> str_vec )
 //  std::vector<float> float_vec( str_vec.size(), 0 );
   Rcpp::NumericVector num_vec( str_vec.size(), 0 );
   
-  int i;
+  unsigned int i = 0;
   for( i=0 ; i < str_vec.size() ; i++ ){
     
     //    Rcpp::Rcout << "  " << str_vec[i] << "\n";
@@ -166,7 +166,7 @@ Rcpp::NumericMatrix masplit(Rcpp::StringMatrix myMat,
           }  
           
           // Select the record.
-          if( record + 1 > float_vec.size() ){
+          if( (unsigned)record + 1 > float_vec.size() ){
             retMat(i,j) = NA_REAL;
           } else if( float_vec[ record ] == -99999 ){
             retMat(i,j) = NA_REAL;
