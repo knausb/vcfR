@@ -19,7 +19,8 @@ Rcpp::DataFrame pair_sort(){
   
   std::sort(v_prime.begin(), v_prime.end(), comparator2);
   
-  for(int i=0; i<v_prime.size(); i++){
+  unsigned int i = 0;
+  for(i=0; i<v_prime.size(); i++){
     pair1.push_back(v_prime[i].first);
     pair2.push_back(v_prime[i].second);
   }
