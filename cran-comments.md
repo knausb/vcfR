@@ -22,11 +22,10 @@ The files in 'inst/doc' have been deleted and rebuilt.
 
 
 ## Test environments
+* local OS X install, R 3.3.2
 * local ubuntu 16.04 LTS, R 3.3.2
 * local ubuntu 16.04 LTS, R 3.2.5
 * ubuntu 12.04 (on travis-ci), R 3.3.1
-* local OS X install, R 3.3.2
-* local OS X install, R 3.2.4
 * rhub::check( platform = "ubuntu-gcc-devel" )
 * rhub::check( platform = "windows-x86_64-release" )
 * rhub::check( platform = "windows-x86_64-devel" )
