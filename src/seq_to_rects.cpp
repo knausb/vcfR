@@ -74,7 +74,7 @@ Rcpp::IntegerMatrix seq_to_rects(Rcpp::CharacterVector seq, std::string targets)
   }
 
   Rcpp::IntegerMatrix rects(starts.size(), 2);
-  for(i=0; i<starts.size(); i++){
+  for(i=0; (unsigned)i<starts.size(); i++){
 //    Rcout << "starts: " << starts[i] << ", ends: " << ends[i] << "\n";
     rects(i,0) = starts[i];
     rects(i,1) = ends[i];

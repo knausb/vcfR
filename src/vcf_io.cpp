@@ -669,7 +669,7 @@ void write_fasta( Rcpp::CharacterVector seq,
   }
 
   putc ('>' , pFile);
-  for(i=0; i<seqname.size(); i++){
+  for(i=0; (unsigned)i<seqname.size(); i++){
     putc (seqname[i] , pFile);
   }
   putc ('\n' , pFile);

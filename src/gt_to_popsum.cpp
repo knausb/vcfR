@@ -72,23 +72,25 @@ Rcpp::DataFrame gt_to_popsum(Rcpp::DataFrame var_info, Rcpp::CharacterMatrix gt)
 
       // Concatenate allele counts into a comma delimited string.
       char buffer [50];
-      int n;
-      n=sprintf(buffer, "%d", myalleles[0]);
-      for(j=1; j < myalleles.size(); j++){
-        n=sprintf (buffer, "%s,%d", buffer, myalleles[j]);
+//      int n;
+//      n=sprintf(buffer, "%d", myalleles[0]);
+      sprintf(buffer, "%d", myalleles[0]);
+      for(j=1; (unsigned)j < myalleles.size(); j++){
+//        n=sprintf (buffer, "%s,%d", buffer, myalleles[j]);
+        sprintf (buffer, "%s,%d", buffer, myalleles[j]);
       }
       allele_counts[i] = buffer;
 
       // Sum all alleles.
       int nalleles = myalleles[0];
-      for(j=1; j < myalleles.size(); j++){
+      for(j=1; j < (unsigned)myalleles.size(); j++){
         nalleles = nalleles + myalleles[j];
       }
 
       // Stats.
       double He = 1;
       He = He - pow(double(myalleles[0])/double(nalleles), myalleles.size());
-      for(j=1; j < myalleles.size(); j++){
+      for(j=1; j < (unsigned)myalleles.size(); j++){
         He = He - pow(double(myalleles[j])/double(nalleles), myalleles.size());
       }
       Hes[i] = He;
