@@ -24,7 +24,7 @@ int elementNumber(String x, std::string element = "GT"){
   int start = 0;
 //  int len = 0;
   int pos = 1;
-  int i;
+  unsigned int i;
   std::string istring = x;
   istring = istring + ":";
   std::string teststring;
@@ -64,7 +64,7 @@ Rcpp::String extractElementS(Rcpp::String x, int position=0, int extract=1){
   std::string istring = x; // Convert Rcpp::String to std::string
   istring.push_back(':');
   std::string teststring;
-  int i;
+  unsigned int i;
 
   for(i=1; i <= istring.size(); i++){
     if(istring[i] == ':'){
@@ -115,8 +115,9 @@ double extractElementD(String x, int number=1){
   int pos = 1;
   std::string istring = x;
   std::string teststring;
+  unsigned int i = 0;
   
-  for(int i=1; i <= istring.size(); i++){
+  for(i=1; i <= istring.size(); i++){
     if(istring[i] == ':'){
       if(pos == number){
         teststring = istring.substr(start, i-start);
@@ -237,7 +238,8 @@ std::string gt2alleles( Rcpp::String gt,
 //  Rcpp::Rcout << "  gt_vector.size(): " << gt_vector.size() << "\n";
   if( gt_vector.size() > 1 )
   {
-    for( int i=1; i<gt_vector.size(); i++ )
+    unsigned int i = 0;
+    for( i=1; i<gt_vector.size(); i++ )
     {
 //      Rcpp::Rcout << "  gt_vector[i]: " << gt_vector[i] << "\n";
       if( gt_vector[i].compare( na_allele ) == 0 ){
@@ -318,7 +320,7 @@ Rcpp::StringMatrix extract_GT_to_CM2( Rcpp::StringMatrix fix,
           return_matrix(i, j-1) = NA_STRING;
         }
         
-        if( element.compare("GT") == 0 & convertNA == 1 ){
+        if( ( element.compare("GT") == 0 ) & ( convertNA == 1 ) ){
 //          Rcpp::Rcout << "Looking for a GT.\n";
           std::vector < std::string > allele_vec;
           int unphased_as_na = 0; // 0 == FALSE
@@ -332,7 +334,8 @@ Rcpp::StringMatrix extract_GT_to_CM2( Rcpp::StringMatrix fix,
 //          Rcpp::Rcout << "  my_string: " << my_string << "\n";
           vcfRCommon::gtsplit( my_string, allele_vec, unphased_as_na );
           int gtNA = 1;
-          for( int k = 0; k < allele_vec.size(); k++ ){
+          unsigned int k = 0;
+          for( k = 0; k < allele_vec.size(); k++ ){
 //            Rcpp::Rcout << "allele_vec[k]: " << allele_vec[k] << "\n";
             if( allele_vec[k] != "." ){ gtNA = 0; }
           }
@@ -401,7 +404,7 @@ Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
   // Rcpp::Rcout << "In extract_haps.\n";
   
   int ploidy = 1;
-  int i = 0;
+  unsigned int i = 0;
   int j = 0;
   int hap_col = 0;
   int hap_num = 0;
@@ -417,7 +420,7 @@ Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
   // Count elements to determine ploidy.
   for(i=0; i<temp.length(); i++){
 //    if( temp[i] == gt_split ){ploidy++;}
-    if( temp[i] == '|' | temp[i] == '/' ){ploidy++;}
+    if( ( temp[i] == '|' ) | ( temp[i] == '/' ) ){ploidy++;}
   }
 
   if(ploidy == 1){
