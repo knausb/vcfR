@@ -3,11 +3,25 @@
 ## Resubmission
 This is a resubmission.
 
+* checking files in 'vignettes' ... WARNING
+Files in the 'vignettes' directory newer than all files in 'inst/doc':
+  'converting_data.Rmd', 'intro_to_vcfR.Rmd', 'vcf_data.Rmd',
+    'workflow.Rmd'
+Files in this directory were deleted and the package was rebuilt.
+
+## Resubmission
+This is a resubmission.
+Actually, this was delayed some due to the holidays and I had made some other updates, so I've bumped teh version from 1.3.0 to 1.4.0.
+Apologies if this adds complexity.
+
 This version ERRORed on r-oldrel-windows-ix86+x86_64.
 This was R version 3.2.5 (2016-04-14).
 The ERROR was a subscript out of bounds ERROR.
 This was addressed by changing the index.
 
+Prof Brian Ripley brought to my attention that I have new memory access issues:
+The memory-access errors are new this version, and there is also undefined behavour (trying to coerce NaN to integer).
+I believe I have addressed these problems in this update.
 
 ## Resubmission
 This is a resubmission. In this version I have:
@@ -29,7 +43,12 @@ The files in 'inst/doc' have been deleted and rebuilt.
 * rhub::check( platform = "ubuntu-gcc-devel" )
 * rhub::check( platform = "windows-x86_64-release" )
 * rhub::check( platform = "windows-x86_64-devel" )
-* rhub::check( platform = "windows-x86_64-oldrel" ) # Failed to build. Created GitHub issue. Rhub maintainer is working on this.
+
+* rhub::check( platform = "windows-x86_64-oldrel" ) 
+This last environment failed to build.
+The failure does not appear due to this package.
+I've created GitHub issue (#62).
+The Rhub maintainer is working on this.
 
 
 ## R CMD check results
@@ -37,7 +56,7 @@ There were no ERRORs or WARNINGs.
 
 There were 2 NOTEs:
 
-* checking CRAN incoming feasibility ... NOTE
+* checking CRAN incoming feasibility ... Note_to_CRAN_maintainers
 Maintainer: ‘Brian J. Knaus <briank.lists@gmail.com>’
 
 * checking installed package size ... NOTE
@@ -94,7 +113,11 @@ On various suspect functions.
 However, I think its polite to thank those who have helped this project.
 So I've decided to start a list of thanks with the hope that these individuals may see this in the future.
 
+v1.4.0 Thank you Uwe Ligges and Kurt Hornik for helping me!
+
 v1.3.0 Thank you Uwe Ligges and Kurt Hornik for helping me!
+Prof Brian Ripley brought to my attention that I had new memory access issues.
+Thank you again for bringing these to my attention!
 
 v1.2.0 Thank you Uwe Ligges for helping me!
 This version was accepted on the first try.
