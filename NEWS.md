@@ -2,6 +2,8 @@
 # vcfR 1.4.0.9000
 Released on CRAN 2017-XX-XX.
 
+* adegenet::nLoc(NULL) appears to generate an error when converting data types.
+
 
 # vcfR 1.4.0
 Released on CRAN 2017-01-07.
