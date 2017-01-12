@@ -118,5 +118,11 @@ test_file("testthat/test_drplot.R")
 # g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/home/knausb/R/x86_64-pc-linux-gnu-library/3.3/Rcpp/include"   -fpic  -g -O2 -fstack-protector-strong -Wsign-compare -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g -c gt_to_popsum.cpp -o gt_to_popsum.o
 
 
+# g++ -std=c++11 -fsanitize=address -fno-omit-frame-pointer -I/usr/share/R/include -DNDEBUG   -I"/home/local/USDA-ARS/knausb/R/x86_64-pc-linux-gnu-library/3.3/Rcpp/include"   -fpic  -g -O2 -fstack-protector-strong -Wsign-compare -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g -c extractGT2NM.cpp -o extractGT2NM.o
+
+
+
+
+
 ##### ##### ##### ##### #####
 # EOF.
