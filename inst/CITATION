@@ -3,11 +3,14 @@ bibentry("Article",
    author = personList(as.person("Brian J. Knaus"),
                        as.person('Niklaus J. Gr{\\"u}nwald')),
    journal = 'Molecular Ecology Resources',
-   year   = "In press",
+   year   = "2017",
+   volume = "17",
+   number = "1",
+   issn = {1755-0998},   
    url    = "http://dx.doi.org/10.1111/1755-0998.12549",
 
    mheader = "To cite vcfR in publications use:",
-
+   pages = "44--53",
    mfooter = 
      paste("We have invested a lot of time and effort in creating vcfR,",
       "please cite it when using it for data analysis.")
