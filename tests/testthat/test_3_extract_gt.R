@@ -109,6 +109,7 @@ test_that("extract.gt convertNA = FALSE works",{
 #
 ##### ##### ##### ##### #####
 
+# This is my stack overflow.
 test_that("extract.gt return.alleles works",{
   gt <- extract.gt(chrom, 
                    element="GT", 
