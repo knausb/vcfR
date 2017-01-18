@@ -38,7 +38,7 @@ write.vcf(vcf, file=ex_file)
 
 
 test_that("We can create an empty vcfR object",{
-  myvcf <- new("vcfR")
+  myvcf <- methods::new("vcfR")
   
   expect_is(myvcf@meta, "character")
   expect_equal(length(myvcf@meta), 0)

@@ -12,7 +12,7 @@ data("vcfR_example")
 #data(vcfR_example)
 
 test_that("Create a null chromR",{
-  chrom <- new(Class="chromR")
+  chrom <- methods::new(Class="chromR")
   expect_is(chrom, "chromR")
   expect_is(chrom@vcf, "vcfR")
   expect_is(chrom@seq, "NULL")
