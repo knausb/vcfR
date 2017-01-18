@@ -109,6 +109,37 @@ test_that("extract.gt convertNA = FALSE works",{
 #
 ##### ##### ##### ##### #####
 
+
+#alleles <- .Call('vcfR_gt2alleles', PACKAGE = 'vcfR', "0|1", c("T","C"))
+#alleles <- .Call('vcfR_gt2alleles', PACKAGE = 'vcfR', "0|1", c("ATATTTAAACTTGCCAGTT","A"))
+
+
+
+test_that("extract.gt return.alleles works #1",{
+  data(vcfR_test)
+  gt <- extract.gt(vcfR_test, element="GT")
+  gt <- extract.gt(vcfR_test, element="GT", return.alleles=TRUE)
+  expect_is(gt, "matrix")
+})
+
+
+test_that("extract.gt return.alleles works #2",{
+  data(vcfR_example)
+#  gt <- extract.gt(vcf, element="GT")
+#  gt <- extract.gt(vcf[430:438,], element="GT", return.alleles=TRUE)
+#  gt <- extract.gt(vcf[430:439,], element="GT", return.alleles=TRUE)
+
+  # GT = 0|0
+  # allele_vector = c("T","C")
+  gt <- extract.gt(vcf[438,1:2], element="GT", return.alleles=TRUE)
+  # GT = 0|0
+  # allele_vector = c("ATATTTAAACTTGCCAGTT", "A")
+  gt <- extract.gt(vcf[439,1:2], element="GT", return.alleles=TRUE)
+
+  expect_is(gt, "matrix")
+
+})
+
 # This is my stack overflow.
 test_that("extract.gt return.alleles works",{
   gt <- extract.gt(chrom, 
@@ -119,6 +150,8 @@ test_that("extract.gt return.alleles works",{
   expect_is(gt, "matrix")
   
 })
+
+
 
 
 test_that("extract.gt return.alleles works for multiallelic variants",{

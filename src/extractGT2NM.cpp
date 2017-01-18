@@ -223,11 +223,15 @@ std::string gt2alleles( Rcpp::String gt,
   int allele_number; // Initialize allele counter.
 
 
-  // Initialize our return value, gt3.
+  // Initialize our return value: gt3.
+  // This will be our alleles delimited by delimiters to make the genotype.
+  // We'll initialize as haploid.
   std::string gt3;
   if( gt_vector[0].compare( na_allele ) == 0 ){
+    // gt_vector[0] is NA.
     gt3.append( na_allele );
   } else if ( ! (std::istringstream( gt_vector[0] ) >> allele_number) ){
+    // gt_vector[0] is empty or NULL.
     gt3.append( na_allele );
   } else {
     std::istringstream(gt_vector[0]) >> allele_number;
@@ -243,13 +247,15 @@ std::string gt2alleles( Rcpp::String gt,
     {
 //      Rcpp::Rcout << "  gt_vector[i]: " << gt_vector[i] << "\n";
       if( gt_vector[i].compare( na_allele ) == 0 ){
+        // gt_vector[i] is NA.
         // Append a missing allele (NA).
         sep = gt2[ gt3.length() ];
         sep = delim_vector[ i - 1 ];
         gt3.append( sep );
         gt3.append( na_allele );
       } else if ( ! (std::istringstream( gt_vector[i] ) >> allele_number) ){
-        //  
+        // gt_vector[i] is empty or NULL.
+        // Append a missing allele (NA).
 //        Rcpp::Rcout << "Couldn't convert string to int!\n";
         sep = gt2[ gt3.length() ];
         sep = delim_vector[ i - 1 ];
@@ -257,8 +263,9 @@ std::string gt2alleles( Rcpp::String gt,
         gt3.append( na_allele );
       } else {
 //        Rcpp::Rcout << "    Appending allele " << i; // << "\n";
-        sep = gt2[ gt3.length() ];
-        sep = "_";
+//        sep = gt2[ gt3.length() ];
+//        sep = "_";
+        // Grab the current delimiter.
         sep = delim_vector[ i - 1 ];
 //        Rcpp::Rcout << ", sep: " << sep;
         gt3.append( sep );
@@ -268,7 +275,7 @@ std::string gt2alleles( Rcpp::String gt,
       }
     }
   }
-    
+
   return gt3;
 }
 
