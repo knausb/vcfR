@@ -88,6 +88,31 @@ create.chromR <- function(vcf, name="CHROM", seq=NULL, ann=NULL, verbose=TRUE){
   # Determine whether we received the expected classes.
   stopifnot(class(vcf) == "vcfR")
 
+  if( length( unique( getCHROM(vcf) ) ) > 1 ){
+    myChroms <- unique( getCHROM(vcf) )
+    message('vcfR object includes more than one chromosome (CHROM).')
+    message( paste(myChroms, collapse = ", ") )
+    message("Subsetting to the first chromosome")
+    vcf <- vcf[ getCHROM(vcf) == myChroms[1],]
+  }
+  
+  if( length( names(seq) ) > 1 ){
+    mySeqs <- names(seq)
+    message('DNAbin object includes more than one chromosome.')
+    message( paste(mySeqs, collapse = ", ") )
+    message("Subsetting to the first chromosome")
+    seq <- seq[ mySeqs[1] ]
+  }
+  
+  if( length( unique( ann[,1] ) ) > 1 ){
+    myChroms <- unique( ann[,1] )
+    message('Annotations include more than one chromosome.')
+    message( paste(myChroms, collapse = ", ") )
+    message("Subsetting to the first chromosome")
+    ann <- ann[ann[,1] == myChroms[1], , drop = FALSE]
+  }
+  
+  
   # Initialize chromR object.  
   x <- new(Class="chromR")
   names(x) <- name
