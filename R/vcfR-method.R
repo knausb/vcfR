@@ -34,13 +34,19 @@ setMethod(
   signature = "vcfR",
   definition=function(object){
     
-    nsamp <- ncol(object@gt) - 1
+    if( ncol(object@gt) > 1 ){
+      nsamp <- ncol(object@gt) - 1
+    } else {
+      nsamp <- 0
+    }
+    nchrom <- length( unique( getCHROM( object ) ) )
     nvar <- nrow(object@gt)
     nna <- sum( is.na(object@gt[,-1]) )
     pna <- nna / c( nsamp * nvar )
 
     cat("***** Object of Class vcfR *****\n")
     cat( paste( nsamp, "samples\n") )
+    cat( paste( nchrom, "CHROMs\n") )
     cat( paste( format(nvar, big.mark=","), "variants\n") )
     cat( "Object size: ")
     print(object.size(object), units="MB")
