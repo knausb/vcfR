@@ -6,5 +6,5 @@ CXX_STD = CXX11
 
 # For address sanitizer (ASAN).
 # Omit from actual builds.
-CXX = g++ -g3 -fsanitize=address -fno-omit-frame-pointer
+# CXX = g++ -g3 -fsanitize=address -fno-omit-frame-pointer
 
