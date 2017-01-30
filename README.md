@@ -6,6 +6,9 @@ On CRAN:
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/vcfR)](https://cran.r-project.org/package=vcfR)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/vcfR)](https://cran.r-project.org/package=vcfR)
 
+RDocumentation:
+ [![Rdoc](http://www.rdocumentation.org/badges/version/vcfR)](http://www.rdocumentation.org/packages/vcfR) 
+
 Travis-CI:
 [![Travis-CI Build Status](https://travis-ci.org/knausb/vcfR.png?branch=master)](https://travis-ci.org/knausb/vcfR)
 
@@ -38,6 +41,11 @@ Functions in vcfR provide the ability to subset VCF data as well as to extract a
 For example, individual genotypes, sequence depths or genotype likelihoods (when provided in the VCF file) can easily be accessed.
 These tools are provided to aid researchers in rapidly surveying the quality and other characteristics of data provided as VCF data.
 With this information in hand, researchers should be able to determine criteria for hard filtering in order to attempt to maximize biological variation and minimize technical variation.
+
+
+## Documentation
+
+Documentation for vcfR can now be found here: [vcfR_documentation](https://knausb.github.io/vcfR_documentation/)
 
 
 ## Publication
