@@ -24,6 +24,19 @@ test_that("chromo works, variant data only",{
 })
 
 
+test_that("chromR plot when DP == NA",{
+  library(vcfR)
+#  trace('plot', browser, exit=browser, signature='chromR')
+  data(vcfR_test)
+  is.na(vcfR_test@fix[,'INFO']) <- TRUE
+  chrom <- create.chromR(vcfR_test, verbose = FALSE)
+  myPlot <- plot(chrom)
+  expect_true( is.null(myPlot) )
+})
+
+
+
+
 ##### ##### ##### ##### #####
 # chromo, vcf and seq
 

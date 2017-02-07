@@ -2,6 +2,7 @@
 # vcfR 1.4.0.9000
 Released on CRAN 2017-XX-XX.
 
+* `plot()` for signature 'chromR' handles INFO column when its all NA.
 * `create.chrom()` subsets to first chromosome when more than one is provided.
 * adegenet::nLoc(NULL) appears to generate an error when converting data types.
 

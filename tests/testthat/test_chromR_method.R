@@ -15,10 +15,9 @@ test_that("chromR show",{
   expect_null(tmp)
 })
 
-test_that("chromR plot",{
-#  tmp <- plot(chrom)
-#  expect_true(is.null(tmp))
-})
+
+##### ##### ##### ##### #####
+
 
 test_that("chromR print",{
 #  tmp <- print(chrom)
