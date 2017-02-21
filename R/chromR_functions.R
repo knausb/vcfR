@@ -19,6 +19,8 @@
 #' @param max_DP maximum cumulative depth
 #' @param min_MQ minimum mapping quality
 #' @param max_MQ maximum mapping quality
+#' @param preserve a logical indicating whether or not to preserve the state of
+#'   the current mask field. Defaults to \code{FALSE}
 #' @param ... arguments to be passed to methods
 #' 
 #' @details
@@ -34,30 +36,40 @@
 #' This vector is stored in the var.info$mask slot of a chromR object.
 #' 
 #masker <- function(x, min_QUAL=999, min_DP=0.25, max_DP=0.75, minmq=20, maxmq=50, ...){
-masker <- function(x, min_QUAL=1, min_DP=1, max_DP=1e4, min_MQ=20, max_MQ=100, ...){
+masker <- function(x, min_QUAL=1, min_DP=1, max_DP=1e4, min_MQ=20, max_MQ=100, preserve=FALSE, ...){
   quals <- getQUAL(x)
 #  quals  <- x@vcf.fix$QUAL
 #  info <- x@var.info[,grep("DP|MQ",names(x@var.info)), drop=FALSE]
 #  mask <- rep(TRUE, times=nrow(info))
-  mask <- rep(TRUE, times=nrow(x@var.info))
-  
+  if (preserve){
+    mask <- x@var.info$mask
+  } else {
+    mask <- rep(TRUE, times=nrow(x@var.info))
+  }
   # Mask on QUAL
   if(sum(is.na(quals)) < length(quals)){
-    mask[quals < min_QUAL] <- FALSE
+    # mask[quals < min_QUAL] <- FALSE
+    mask <- mask & quals >= min_QUAL
   }
 
   # Mask on DP
   if( !is.null( x@var.info$DP ) ){
     if(sum(is.na(x@var.info$DP)) < length(x@var.info$DP)){
-      mask[x@var.info$DP < min_DP] <- FALSE
-      mask[x@var.info$DP > max_DP] <- FALSE
+      # mask[x@var.info$DP < min_DP] <- FALSE
+      # mask[x@var.info$DP > max_DP] <- FALSE
+      mask <- mask & 
+        x@var.info$DP >= min_DP & 
+        x@var.info$DP <= max_DP
     }
   }
   
   if( !is.null( x@var.info$MQ ) ){
     if(sum(is.na(x@var.info$MQ)) < length(x@var.info$MQ)){
-      mask[x@var.info$MQ < min_MQ] <- FALSE
-      mask[x@var.info$MQ > max_MQ] <- FALSE
+      # mask[x@var.info$MQ < min_MQ] <- FALSE
+      # mask[x@var.info$MQ > max_MQ] <- FALSE
+      mask <- mask & 
+        x@var.info$MQ >= min_MQ & 
+        x@var.info$MQ <= max_MQ
     }
   }
   x@var.info$mask <- mask

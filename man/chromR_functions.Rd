@@ -8,7 +8,7 @@
 \title{chromR_functions}
 \usage{
 masker(x, min_QUAL = 1, min_DP = 1, max_DP = 10000, min_MQ = 20,
-  max_MQ = 100, ...)
+  max_MQ = 100, preserve = FALSE, ...)
 
 variant.table(x)
 
@@ -26,6 +26,9 @@ win.table(x)
 \item{min_MQ}{minimum mapping quality}
 
 \item{max_MQ}{maximum mapping quality}
+
+\item{preserve}{a logical indicating whether or not to preserve the state of
+the current mask field. Defaults to \code{FALSE}}
 
 \item{...}{arguments to be passed to methods}
 }
@@ -48,4 +51,3 @@ The function \strong{variant.table} creates a data.frame containing information 
 
 The funciton \strong{win.table}
 }
-
