@@ -52,4 +52,3 @@ AD_frequency(ad=ad)
 
 
 }
-

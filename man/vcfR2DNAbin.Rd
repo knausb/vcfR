@@ -13,7 +13,7 @@ vcfR2DNAbin(x, extract.indels = TRUE, consensus = FALSE,
 
 \item{extract.indels}{logical, at present, the only option is TRUE}
 
-\item{consensus}{logical, at present, the only option is TRUE}
+\item{consensus}{logical, at present, the only option is FALSE}
 
 \item{extract.haps}{logical specifying whether to separate each genotype into alleles based on a delimiting character}
 
@@ -120,4 +120,3 @@ image(myDNA)
 \seealso{
 \href{https://cran.r-project.org/package=ape}{ape}
 }
-

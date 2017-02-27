@@ -2,9 +2,9 @@
 % Please edit documentation in R/vcfR_to_tidy_functions.R
 \name{Convert to tidy data frames}
 \alias{Convert to tidy data frames}
-\alias{extract_gt_tidy}
-\alias{extract_info_tidy}
 \alias{vcfR2tidy}
+\alias{extract_info_tidy}
+\alias{extract_gt_tidy}
 \alias{vcf_field_names}
 \title{Convert vcfR objects to tidy data frames}
 \usage{
@@ -261,11 +261,10 @@ vcf_field_names(vcf, tag = "FORMAT")
 
 
 }
-\author{
-Eric C. Anderson <eric.anderson@noaa.gov>
-}
 \seealso{
 \href{https://cran.r-project.org/package=dplyr}{dplyr},
 \href{https://cran.r-project.org/package=tidyr}{tidyr}.
 }
-
+\author{
+Eric C. Anderson <eric.anderson@noaa.gov>
+}

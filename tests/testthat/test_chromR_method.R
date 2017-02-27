@@ -18,6 +18,17 @@ test_that("chromR show",{
 
 ##### ##### ##### ##### #####
 
+test_that("chromR length",{
+  data("vcfR_example")
+  chrom <- create.chromR(name="Supercontig_1.50", vcf=vcf, verbose=FALSE)
+  expect_equal(length(chrom), chrom@len)
+  
+#  tmp <- print(chrom)
+#  expect_true(is.null(tmp))
+})
+
+
+##### ##### ##### ##### #####
 
 test_that("chromR print",{
 #  tmp <- print(chrom)

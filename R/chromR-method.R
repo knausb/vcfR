@@ -231,4 +231,16 @@ setMethod(f="names<-",
 )
 
 
+
+#' @rdname chromR-method
+#' @export
+#'
+setMethod( f="length",
+  signature = "chromR",
+  definition=function(x){
+    return(x@len)
+  }
+)
+
+
 # EOF.

@@ -1,7 +1,17 @@
 
+# vcfR 2.0.0.
+There is currently no plan to release vcfR 2.0.0.
+If and when this 'major' release occurs it will include changes that will break backward compatibility.
+At the present, this is simply a to-do list for ideas to include in the next major release.
+
+* Move 'FORMAT' column to its own slot. We can then cbind FORMAT and gt when passing to compiled code.
+
+
 # vcfR 1.4.0.9000
 Released on CRAN 2017-XX-XX.
 
+* Deprecated (via message) the parameters 'chrom.s' and 'chrom.e' of 'chromo()', please use 'xlim()' instead.
+* Added `length()` method for chromR objects.
 * `plot()` for signature 'chromR' handles INFO column when its all NA.
 * `create.chrom()` subsets to first chromosome when more than one is provided.
 * adegenet::nLoc(NULL) appears to generate an error when converting data types.

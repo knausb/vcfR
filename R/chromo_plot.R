@@ -51,6 +51,20 @@ chromo <- function( chrom,
     stop("Expecting object of class chromR")
   }
   
+  if( chrom.s != 1 | !is.null(chrom.e) ){
+    stop("The parameters 'chrom.s' and 'chrom.e' were deprecated in vcfR v1.5.0. Please use 'xlim()' instead")
+  }
+  
+  myDots <- list(...)
+  
+  if( !is.null( myDots$xlim ) ){
+    chrom.s <- myDots$xlim[1]
+    chrom.e <- myDots$xlim[2]
+  } else {
+    chrom.s <- 1
+    chrom.e <- length(chrom)
+  }
+  
   # Test to see if the mask is populated.
 #  if( length(grep('mask', colnames(chrom@var.info))) < 1 ){
 #    chrom@var.info$mask <- rep( TRUE, times=nrow(chrom@vcf@fix) )
@@ -463,7 +477,7 @@ chromoqc <- function( chrom,
   )
   
   chromo( chrom, boxp = boxp, 
-          chrom.e = chrom@len, 
+#          chrom.e = chrom@len,
           drlist1 = myList1,
           drlist2 = myList2,
           drlist3 = myList3,
