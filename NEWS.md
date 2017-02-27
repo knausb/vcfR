@@ -12,6 +12,7 @@ Released on CRAN 2017-XX-XX.
 
 * Deprecated (via message) the parameters 'chrom.s' and 'chrom.e' of 'chromo()', please use 'xlim()' instead.
 * Added `length()` method for chromR objects.
+* `[` method throws warning if FORMAT is omitted.
 * `plot()` for signature 'chromR' handles INFO column when its all NA.
 * `create.chrom()` subsets to first chromosome when more than one is provided.
 * adegenet::nLoc(NULL) appears to generate an error when converting data types.
