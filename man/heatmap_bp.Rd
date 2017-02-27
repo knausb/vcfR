@@ -63,4 +63,3 @@ heatmap.bp(x, cbarplot = TRUE, rbarplot = TRUE, legend = TRUE)
 \seealso{
 \code{\link[stats]{heatmap}}, \code{\link[graphics]{image}}, heatmap2 in \href{https://cran.r-project.org/package=gplots}{gplots}, \href{https://cran.r-project.org/package=pheatmap}{pheatmap}.
 }
-

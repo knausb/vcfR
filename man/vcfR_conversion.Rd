@@ -3,8 +3,8 @@
 \name{Format conversion}
 \alias{Format conversion}
 \alias{vcfR2genind}
-\alias{vcfR2genlight}
 \alias{vcfR2loci}
+\alias{vcfR2genlight}
 \title{Convert vcfR objects to other formats}
 \usage{
 vcfR2genind(x, sep = "[|/]")
@@ -54,4 +54,3 @@ and
 \href{https://cran.r-project.org/package=poppr}{poppr}.
 To convert to objects of class \strong{DNAbin} see \code{\link{vcfR2DNAbin}}.
 }
-

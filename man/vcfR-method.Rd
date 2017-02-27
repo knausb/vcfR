@@ -2,20 +2,22 @@
 % Please edit documentation in R/vcfR-method.R
 \docType{methods}
 \name{show,vcfR-method}
-\alias{[,vcfR,ANY,ANY,ANY-method}
-\alias{dim,vcfR-method}
-\alias{dim.vcfR}
-\alias{head,vcfR-method}
-\alias{nrow,vcfR-method}
-\alias{nrow.vcfR}
-\alias{plot,vcfR-method}
-\alias{plot.vcfR}
-\alias{rbind2,vcfR,ANY-method}
-\alias{rbind2,vcfR,missing-method}
-\alias{rbind2,vcfR,vcfR-method}
-\alias{rbind2.vcfR}
 \alias{show,vcfR-method}
 \alias{vcfR-method}
+\alias{head,vcfR-method}
+\alias{[,vcfR,ANY,ANY,ANY-method}
+\alias{plot,vcfR-method}
+\alias{plot.vcfR}
+\alias{rbind2,vcfR,missing-method}
+\alias{rbind2.vcfR}
+\alias{rbind2,vcfR,ANY-method}
+\alias{rbind2.vcfR}
+\alias{rbind2,vcfR,vcfR-method}
+\alias{rbind2.vcfR}
+\alias{dim,vcfR-method}
+\alias{dim.vcfR}
+\alias{nrow,vcfR-method}
+\alias{nrow.vcfR}
 \title{vcfR-method}
 \usage{
 \S4method{show}{vcfR}(object)
@@ -89,4 +91,3 @@ Note that it is essential to include the first column here (FORMAT) or downsream
 
 The \strong{plot} method generates a histogram from data found in the 'QUAL' column from the 'fix' slot.
 }
-

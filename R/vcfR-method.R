@@ -152,6 +152,11 @@ setMethod(
   definition=function(x, i, j, ..., drop){
     x@fix <- x@fix[ i, , drop = FALSE ]
     x@gt <- x@gt[ i, j, drop = FALSE ]
+    
+    if( colnames(x@gt)[1] != 'FORMAT' ){
+      warning("You have chosen to omit the FORMAT column, this is not recommended.")
+    }
+    
     return(x)
   }
 )

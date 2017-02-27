@@ -11,7 +11,7 @@
 #' 
 #' @param x an object of class chromR or vcfR
 #' @param extract.indels logical, at present, the only option is TRUE
-#' @param consensus logical, at present, the only option is TRUE
+#' @param consensus logical, at present, the only option is FALSE
 #' @param extract.haps logical specifying whether to separate each genotype into alleles based on a delimiting character
 # @param gt.split character to delimit alleles within genotypes
 #' @param unphased_as_NA logical indicating how to handle alleles in unphased genotypes
@@ -118,10 +118,13 @@
 #' 
 #' 
 #' @export
-vcfR2DNAbin <- function( x, extract.indels = TRUE , consensus = FALSE,
+vcfR2DNAbin <- function( x,
+                         extract.indels = TRUE,
+                         consensus = FALSE,
                          extract.haps = TRUE,
                          unphased_as_NA = TRUE,
-                         ref.seq = NULL, start.pos = NULL,
+                         ref.seq = NULL,
+                         start.pos = NULL,
                          verbose = TRUE )
 {
   # Sanitize input.

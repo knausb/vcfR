@@ -24,6 +24,19 @@ test_that("chromo works, variant data only",{
 })
 
 
+test_that("chromR plot when DP == NA",{
+  library(vcfR)
+#  trace('plot', browser, exit=browser, signature='chromR')
+  data(vcfR_test)
+  is.na(vcfR_test@fix[,'INFO']) <- TRUE
+  chrom <- create.chromR(vcfR_test, verbose = FALSE)
+  myPlot <- plot(chrom)
+  expect_true( is.null(myPlot) )
+})
+
+
+
+
 ##### ##### ##### ##### #####
 # chromo, vcf and seq
 
@@ -134,21 +147,20 @@ test_that("chromo works, custom tracks",{
 
   ##### ##### ##### ##### #####
   # Custom plots.
-  plot1 <- chromo( chrom, boxp = FALSE , chrom.e = chrom@len, drlist1 = myList1 )
+  plot1 <- chromo( chrom, boxp = FALSE, drlist1 = myList1 )
   expect_true( is.null(plot1) )
 
   chrom <- proc.chromR(chrom, verbose = FALSE)
-
-  plot2 <- chromo( chrom, boxp = FALSE , chrom.e = chrom@len, drlist1 = myList1 )
+  plot2 <- chromo( chrom, boxp = FALSE , drlist1 = myList1 )
   expect_true( is.null(plot2) )
   
-  plot3 <- chromo( chrom, boxp = TRUE , chrom.e = chrom@len, drlist1 = myList1  )
+  plot3 <- chromo( chrom, boxp = TRUE , drlist1 = myList1  )
   expect_true( is.null(plot3) )
   
-  plot4 <- chromo( chrom, boxp = TRUE , chrom.e = chrom@len, drlist1 = myList1, drlist2 = myList1  )
+  plot4 <- chromo( chrom, boxp = TRUE , drlist1 = myList1, drlist2 = myList1  )
   expect_true( is.null(plot4) )
 
-  plot5 <- chromo( chrom, boxp = TRUE , chrom.e = chrom@len, drlist1 = myList1, drlist2 = myList1, drlist3 = myList1  )
+  plot5 <- chromo( chrom, boxp = TRUE , drlist1 = myList1, drlist2 = myList1, drlist3 = myList1  )
   expect_true( is.null(plot5) )
 })
 
