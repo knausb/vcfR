@@ -19,7 +19,7 @@
 
 
 
-#' ##### Method show #####
+##### Method show #####
 #' 
 #' @rdname vcfR-method
 #' @aliases show.vcfR
@@ -136,25 +136,55 @@ setMethod(
 #' The columns in the fix slot will not be subset by j.
 #' The parameter j is a vector used to subset the columns of the gt slot.
 #' Note that it is essential to include the first column here (FORMAT) or downsream processes will encounter trouble.
-
+#' 
+#' The \strong{samples} parameter allows another way to select samples.
+#' Because the first column of the gt section is the FORMAT column you typically need to include that column and sample numbers therefore begin at two.
+#' Use of the samples parameter allows you to select columns by a vector of numerics, logicals or characters.
+#' When numerics are used the samples can be selected starting at one.
+#' The function will then add one to this vector and include one to select the desired samples and the FORMAT column.
+#' When a vector of characters is used it should contain the desired sample names.
+#' The function will add the FORMAT column if it is not the first element.
+#' When a vector of logicals is used a TRUE will be added to the vector to ensure the FORMAT column is selected.
+#' Note that specification of samples will override specification of j.
+#' 
 #' 
 # @export
 # @aliases []
 #'
 #' @param i vector of rows (variants) to include
 #' @param j vector of columns (samples) to include
+#' @param samples vector (numeric, character or logical) specifying samples, see details
 #' @param drop delete the dimensions of an array which only has one level
 #'
 setMethod(
   f= "[",
-#  signature="vcfR",
-  signature(x = "vcfR", i = "ANY", j="ANY"),
-  definition=function(x, i, j, ..., drop){
+  signature(x = "vcfR"),
+#  signature(x = "vcfR", i = "ANY", j = "ANY"),
+#  signature(x = "vcfR", i = "ANY", j = "ANY", samples = "ANY"),
+  definition=function(x, i, j, samples = NULL, ..., drop){
+#  definition=function(x, i, j, ..., drop){
+    if( !is.null(samples) ){
+      if( inherits(samples, what  = "numeric") ){
+        samples <- samples + 1
+        j <- c(1, samples)
+      } else if( inherits(samples, what  = "character") ){
+        if( samples[1] != "FORMAT" ){ 
+          j <- c("FORMAT", samples)
+        } else {
+          j <- samples
+        }
+      } else if( inherits(samples, what  = "logical") ){
+        j <- c(TRUE, samples)
+      } else {
+        stop(paste("samples specified, expecting a numeric, character or logical but received", class(samples)))
+      }
+    }
+    
     x@fix <- x@fix[ i, , drop = FALSE ]
     x@gt <- x@gt[ i, j, drop = FALSE ]
     
     if( colnames(x@gt)[1] != 'FORMAT' ){
-      warning("You have chosen to omit the FORMAT column, this is not recommended.")
+      warning("You have chosen to omit the FORMAT column, this is typically undesireable.")
     }
     
     return(x)

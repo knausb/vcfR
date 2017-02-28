@@ -7,9 +7,11 @@ At the present, this is simply a to-do list for ideas to include in the next maj
 * Move 'FORMAT' column to its own slot. We can then cbind FORMAT and gt when passing to compiled code.
 
 
+
 # vcfR 1.4.0.9000
 Released on CRAN 2017-XX-XX.
 
+* Added `samples` parameter to vcfR method `[`
 * Deprecated the parameters 'chrom.s' and 'chrom.e' of 'chromo()', please use 'xlim' instead.
 * Added `length()` method for chromR objects.
 * `[` method throws warning if FORMAT is omitted.

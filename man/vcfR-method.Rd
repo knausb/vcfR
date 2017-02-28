@@ -24,7 +24,7 @@
 
 \S4method{head}{vcfR}(x, n = 6, maxchar = 80)
 
-\S4method{[}{vcfR,ANY,ANY,ANY}(x, i, j, ..., drop = TRUE)
+\S4method{[}{vcfR,ANY,ANY,ANY}(x, i, j, samples = NULL, ..., drop)
 
 \S4method{plot}{vcfR}(x, y, ...)
 
@@ -45,17 +45,13 @@
 
 \item{n}{number of rows to print}
 
-\item{maxchar}{maximum number of characters to print per line
-
-
-
-
-
-##### Method show #####}
+\item{maxchar}{maximum number of characters to print per line}
 
 \item{i}{vector of rows (variants) to include}
 
 \item{j}{vector of columns (samples) to include}
+
+\item{samples}{vector (numeric, character or logical) specifying samples, see details}
 
 \item{...}{Arguments to be passed to methods}
 
@@ -88,6 +84,16 @@ Rows are subset by providing a vector i to specify which rows to use.
 The columns in the fix slot will not be subset by j.
 The parameter j is a vector used to subset the columns of the gt slot.
 Note that it is essential to include the first column here (FORMAT) or downsream processes will encounter trouble.
+
+The \strong{samples} parameter allows another way to select samples.
+Because the first column of the gt section is the FORMAT column you typically need to include that column and sample numbers therefore begin at two.
+Use of the samples parameter allows you to select columns by a vector of numerics, logicals or characters.
+When numerics are used the samples can be selected starting at one.
+The function will then add one to this vector and include one to select the desired samples and the FORMAT column.
+When a vector of characters is used it should contain the desired sample names.
+The function will add the FORMAT column if it is not the first element.
+When a vector of logicals is used a TRUE will be added to the vector to ensure the FORMAT column is selected.
+Note that specification of samples will override specification of j.
 
 The \strong{plot} method generates a histogram from data found in the 'QUAL' column from the 'fix' slot.
 }

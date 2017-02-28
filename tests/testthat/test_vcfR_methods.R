@@ -1,6 +1,5 @@
 
 
-
 #
 library(testthat)
 context("vcfR methods")
@@ -11,8 +10,6 @@ data("vcfR_example")
 
 ##### ##### ##### ##### #####
 # rbind
-
-
 
 test_that("rbind works",{
 
@@ -31,6 +28,28 @@ test_that("rbind works",{
 
 test_that("nrow works",{
   expect_equal( nrow(vcf@fix), nrow(vcf) )
+})
+
+
+##### ##### ##### ##### #####
+# []
+
+test_that("[samples = numeric]",{
+  data("vcfR_test")
+  vcf <- vcfR_test[samples=c(1,3)]
+  expect_equal(colnames(vcf@gt), colnames(vcfR_test@gt)[c(1,2,4)])
+})
+
+test_that("[samples = character]",{
+  data("vcfR_test")
+  vcf <- vcfR_test[samples=c('NA00001', 'NA00003')]
+  expect_equal(colnames(vcf@gt), colnames(vcfR_test@gt)[c(1,2,4)])
+})
+
+test_that("[samples = logical]",{
+  data("vcfR_test")
+  vcf <- vcfR_test[samples=c(TRUE, FALSE, TRUE)]
+  expect_equal(colnames(vcf@gt), colnames(vcfR_test@gt)[c(1,2,4)])
 })
 
 
