@@ -164,7 +164,7 @@ setMethod(
   definition=function(x, i, j, samples = NULL, ..., drop){
 #  definition=function(x, i, j, ..., drop){
     if( !is.null(samples) ){
-      if( inherits(samples, what  = "numeric") ){
+      if( inherits(samples, what  = c("numeric", "integer") ) ){
         samples <- samples + 1
         j <- c(1, samples)
       } else if( inherits(samples, what  = "character") ){

@@ -40,6 +40,12 @@ test_that("[samples = numeric]",{
   expect_equal(colnames(vcf@gt), colnames(vcfR_test@gt)[c(1,2,4)])
 })
 
+test_that("[samples = integer]",{
+  data("vcfR_test")
+  vcf <- vcfR_test[samples=as.integer(c(1,3))]
+  expect_equal(colnames(vcf@gt), colnames(vcfR_test@gt)[c(1,2,4)])
+})
+
 test_that("[samples = character]",{
   data("vcfR_test")
   vcf <- vcfR_test[samples=c('NA00001', 'NA00003')]
