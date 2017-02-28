@@ -74,6 +74,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// grepa
+void grepa();
+RcppExport SEXP vcfR_grepa() {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    grepa();
+    return R_NilValue;
+END_RCPP
+}
 // freq_peak
 Rcpp::List freq_peak(Rcpp::NumericMatrix myMat, Rcpp::NumericVector pos, int winsize, float bin_width, Rcpp::LogicalVector lhs);
 RcppExport SEXP vcfR_freq_peak(SEXP myMatSEXP, SEXP posSEXP, SEXP winsizeSEXP, SEXP bin_widthSEXP, SEXP lhsSEXP) {

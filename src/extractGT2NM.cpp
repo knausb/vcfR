@@ -529,3 +529,11 @@ Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
   return(haps);
 }
 
+
+// [[Rcpp::export]]
+void grepa(){
+  Rcout << "Hola Javier!\n";
+  Rcout << "Eres un verdadero amigo!\n";
+  return;
+}
+

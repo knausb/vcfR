@@ -64,6 +64,10 @@ extract_haps <- function(ref, alt, gt, unphased_as_NA, verbose) {
     .Call('vcfR_extract_haps', PACKAGE = 'vcfR', ref, alt, gt, unphased_as_NA, verbose)
 }
 
+grepa <- function() {
+    invisible(.Call('vcfR_grepa', PACKAGE = 'vcfR'))
+}
+
 #' 
 #' @rdname freq_peak
 #' 
