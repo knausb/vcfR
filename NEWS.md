@@ -10,7 +10,7 @@ At the present, this is simply a to-do list for ideas to include in the next maj
 # vcfR 1.4.0.9000
 Released on CRAN 2017-XX-XX.
 
-* Deprecated (via message) the parameters 'chrom.s' and 'chrom.e' of 'chromo()', please use 'xlim()' instead.
+* Deprecated the parameters 'chrom.s' and 'chrom.e' of 'chromo()', please use 'xlim' instead.
 * Added `length()` method for chromR objects.
 * `[` method throws warning if FORMAT is omitted.
 * `plot()` for signature 'chromR' handles INFO column when its all NA.
