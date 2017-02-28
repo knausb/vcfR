@@ -44,7 +44,7 @@ queryMETA <- function(x, element = NULL, nice = TRUE){
       ID <- lapply( ID, function(x){ x[1] } )
       ID <- unlist(ID)
     }
-    myContigs <- grep("contig=<ID", vcf@meta)
+    myContigs <- grep("contig=<ID", x@meta)
     if( length(myContigs) > 0 ){
       ID <- c(ID, paste(length(myContigs), "contig=<IDs omitted from queryMETA"))
     }
