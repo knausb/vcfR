@@ -18,9 +18,9 @@ chromoqc(chrom, boxp = TRUE, dp.alpha = 255, ...)
 
 \item{dp.alpha}{degree of transparency applied to points in dot plots [0-255].}
 
-\item{chrom.s}{start position for the chromosome.}
+\item{chrom.s}{start position for the chromosome. (Deprecated. use xlim)}
 
-\item{chrom.e}{end position for the chromosome.}
+\item{chrom.e}{end position for the chromosome. (Deprecated. use xlim)}
 
 \item{drlist1}{a named list containing elements to create a drplot}
 
