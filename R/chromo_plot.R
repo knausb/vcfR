@@ -52,14 +52,7 @@ chromo <- function( chrom,
   }
   
   if( chrom.s != 1 | !is.null(chrom.e) ){
-    x1 <- if (chrom.s != 1) chrom.s else 1
-    x2 <- if (is.null(chrom.e)) chrom.e else length(chrom)
-    msg <- paste0(
-      "The parameters 'chrom.s' and 'chrom.e' were deprecated in vcfR v1.5.0.\n",
-      "Please use the 'xlim' parameter instead:\n",
-      "\txlim = c(", x1, ", ", x2, ")\n\n",
-      "Subsetting will not take place.")
-    warning(msg, call. = FALSE)
+    stop("The parameters 'chrom.s' and 'chrom.e' were deprecated in vcfR v1.5.0. Please use 'xlim' instead")
   }
   
   myDots <- list(...)
