@@ -11,6 +11,7 @@ This may have been addressed at 64a308ba50b9119108e8946737460de5997b805b by addi
 # vcfR 1.4.0.9000
 Released on CRAN 2017-XX-XX.
 
+* Moved `pinfsc50.png` to tools.
 * Added `samples` parameter to vcfR method `[`
 * Deprecated the parameters 'chrom.s' and 'chrom.e' of 'chromo()', please use 'xlim' instead.
 * Added `length()` method for chromR objects.
