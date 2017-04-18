@@ -41,7 +41,7 @@
 #' @docType package
 #' @name vcfR
 #' @rdname vcfR
-#' @useDynLib vcfR
+#' @useDynLib vcfR, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 #' @importFrom stats setNames
 #' 

@@ -5,10 +5,12 @@
 
 // From:
 // https://github.com/RcppCore/Rcpp/issues/636#issuecomment-280985661
+/*
 void R_init_vcfR(DllInfo* info) {
 	R_registerRoutines(info, NULL, NULL, NULL, NULL);
 	R_useDynamicSymbols(info, TRUE);
 }
+*/
 
 
 //static 

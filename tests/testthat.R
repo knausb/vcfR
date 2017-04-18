@@ -38,7 +38,8 @@ test_file("testthat/test_chromR_method.R")
 test_file("testthat/test_get.R")
 #
 test_file("testthat/test_freq_peak.R")
-
+#
+test_file("testthat/test_is_het.R")
 
 # This test will write the plots to a file on the filesystem.
 # This should cause CRAN to complain.
