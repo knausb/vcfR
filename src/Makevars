@@ -1,7 +1,8 @@
-## We need the compression library
+## We need some libraries
 PKG_LIBS = -lz
 
-## We want C++11 as it gets us 'long long' as well
+
+## Compiler flags
 CXX_STD = CXX11
 
 # For address sanitizer (ASAN).
