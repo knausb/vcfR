@@ -40,6 +40,9 @@ test_file("testthat/test_get.R")
 test_file("testthat/test_freq_peak.R")
 #
 test_file("testthat/test_is_het.R")
+#
+test_file("testthat/test_proc_chromR.R")
+
 
 # This test will write the plots to a file on the filesystem.
 # This should cause CRAN to complain.
@@ -49,6 +52,7 @@ test_file("testthat/test_is_het.R")
 test_file("testthat/test_chromo_plot.R")
 #
 test_file("testthat/test_drplot.R")
+
 
 
 ##### ##### ##### ##### #####
