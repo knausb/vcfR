@@ -28,4 +28,3 @@ head(vcfR_test)
 
 
 }
-

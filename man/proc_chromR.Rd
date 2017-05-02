@@ -2,12 +2,12 @@
 % Please edit documentation in R/proc_chromR.R
 \name{Process chromR objects}
 \alias{Process chromR objects}
-\alias{gt.to.popsum}
-\alias{gt2popsum}
 \alias{proc.chromR}
 \alias{regex.win}
 \alias{seq2rects}
 \alias{var.win}
+\alias{gt2popsum}
+\alias{gt.to.popsum}
 \title{Process chromR object}
 \usage{
 proc.chromR(x, win.size = 1000, verbose = TRUE)
@@ -65,4 +65,3 @@ If an appropriate name was not found in the above locations the chromR object's 
 Note that the 'name' slot has a default value.
 If this default value is not updated then all of your windows may receive the same name.
 }
-

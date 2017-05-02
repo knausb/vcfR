@@ -111,4 +111,3 @@ hist(myOrdho$data1$PL, breaks = seq(0,9000, by=100), col="#8B4513")
 \code{\link[vegan]{monoMDS}},
 \code{\link[MASS]{isoMDS}}
 }
-

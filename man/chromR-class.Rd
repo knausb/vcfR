@@ -59,4 +59,3 @@ Within each matrix, the first column indicates the start position and the second
 \href{https://github.com/samtools/hts-specs}{VCF specification}
 \href{https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md}{gff3 format}
 }
-

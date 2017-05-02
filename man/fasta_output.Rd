@@ -29,4 +29,3 @@ The sequence in the seq slot of the chromR object is used to fill in the invaria
 The parameter 'tolower', when set to TRUE, converts all the characters in teh sequence to lower case.
 This is important because some software, such as ape::DNAbin, requires sequences to be in lower case.
 }
-

@@ -23,4 +23,3 @@ to TRUE (the default), the object is subset to only the variants (rows) indicate
 to include by the mask.  When use.mask is set to FALSE, all variants (rows) from 
 the chrom object are included in the new vcfR object.
 }
-

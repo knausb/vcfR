@@ -37,6 +37,5 @@ colMeans(myDiff[,c(3:6,9)], na.rm = TRUE)
 Hedrick, Philip W. "A standardized genetic differentiation measure." Evolution 59.8 (2005): 1633-1638.
 }
 \seealso{
-poppr.amova in \href{https://cran.r-project.org/package=poppr}{poppr}, amova in \href{https://cran.r-project.org/package=poppr}{ade4}, amova in \href{https://cran.r-project.org/package=poppr}{pegas}, and \href{https://cran.r-project.org/package=poppr}{hierfstat}.
+poppr.amova in \href{https://cran.r-project.org/package=poppr}{poppr}, amova in \href{https://cran.r-project.org/package=ade4}{ade4}, amova in \href{https://cran.r-project.org/package=pegas}{pegas}, \href{https://cran.r-project.org/package=hierfstat}{hierfstat}, \href{https://cran.r-project.org/package=poppr}{hierfstat}, \href{https://cran.r-project.org/package=DEMEtics}{DEMEtics}, and , \href{https://cran.r-project.org/package=mmod}{mmod}.
 }
-
