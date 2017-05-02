@@ -1,8 +1,9 @@
 #'
 #' @rdname vcfR-method
 #' @title vcfR-method
-#' 
-#' @aliases vcfR-method
+#' @name vcfR-method
+# ' @aliases plot,vcfR-method
+#' @aliases vcfR,vcfR-method
 #' 
 #' @description
 #' Methods to show, subset or plot data from objects of class vcfR
@@ -200,6 +201,7 @@ setGeneric("plot")
 #' @description The \strong{plot} method visualizes objects of class vcfR
 # @export
 #' @aliases plot.vcfR
+# ' @aliases vcfR,vcfR-method
 #' 
 #' @param y not used
 #' @param ... Arguments to be passed to methods

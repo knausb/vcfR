@@ -9,7 +9,8 @@
 #' 
 #' \strong{File input and output} is facilitated with the functions \code{\link{read.vcfR}} and \code{\link{write.vcf}}.
 #' Input of vcf format data results in an S4 \code{\link{vcfR-class}} object.
-#' Objects of class vcfR can be manipulated with \code{\link{vcfR-method}}s and \code{\link{extract.gt}}.
+# ' Objects of class vcfR can be manipulated with \code{\link{vcfR-method}} and \code{\link{extract.gt}}.
+#' Objects of class vcfR can be manipulated with \link[vcfR:vcfR-method]{vcfR-method} and \code{\link{extract.gt}}.
 #' Contents of the vcfR object can be visualized with the \code{\link{plot.vcfR}} method.
 #' More complex visualizations can be created using a series of functions.
 #' See \code{vignette(topic="sequence_coverage")} for an example.
