@@ -1,41 +1,8 @@
 
 
-## Resubmission
-This is a resubmission.
-
-* checking files in 'vignettes' ... WARNING
-Files in the 'vignettes' directory newer than all files in 'inst/doc':
-  'converting_data.Rmd', 'intro_to_vcfR.Rmd', 'vcf_data.Rmd',
-    'workflow.Rmd'
-Files in this directory were deleted and the package was rebuilt.
-
-## Resubmission
-This is a resubmission.
-Actually, this was delayed some due to the holidays and I had made some other updates, so I've bumped teh version from 1.3.0 to 1.4.0.
-Apologies if this adds complexity.
-
-This version ERRORed on r-oldrel-windows-ix86+x86_64.
-This was R version 3.2.5 (2016-04-14).
-The ERROR was a subscript out of bounds ERROR.
-This was addressed by changing the index.
-
-Prof Brian Ripley brought to my attention that I have new memory access issues:
-The memory-access errors are new this version, and there is also undefined behavour (trying to coerce NaN to integer).
-I believe I have addressed these problems in this update.
-
-## Resubmission
-This is a resubmission. In this version I have:
-
-Changed:
-http://cran.r-project.org/package=pinfsc50
-to:
-https://cran.r-project.org/package=pinfsc50
-in vcfR.R to respect the CRAN URL cannonical form.
-
-The files in 'inst/doc' have been deleted and rebuilt.
-
-
 ## Test environments
+* local ubuntu 16.04 LTS, R 3.3.3
+
 * local OS X install, R 3.3.2
 * local ubuntu 16.04 LTS, R 3.3.2
 * local ubuntu 16.04 LTS, R 3.2.5
@@ -79,7 +46,7 @@ Possibly mis-spelled words in DESCRIPTION:
   genomic (7:51)
 
 I have reviewed these words and feel they are spelled correctly.
-'DNAbin' referr to an object of class ape::DNAbin.
+'DNAbin' refers to an object of class ape::DNAbin.
 'VCF' refers to the variant call format specification, a format of file handled by this package.
 'VcfR' refers to this package.
 'genlight' refers to an object of class adegenet::genlight.

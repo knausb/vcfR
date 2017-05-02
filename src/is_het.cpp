@@ -2,6 +2,7 @@
 #include "vcfRCommon.h"
 
 
+
 //' @rdname is_het
 //' @name is_het
 //' 

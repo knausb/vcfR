@@ -3,6 +3,16 @@
 #include <string>
 
 
+// From:
+// https://github.com/RcppCore/Rcpp/issues/636#issuecomment-280985661
+/*
+void R_init_vcfR(DllInfo* info) {
+	R_registerRoutines(info, NULL, NULL, NULL, NULL);
+	R_useDynamicSymbols(info, TRUE);
+}
+*/
+
+
 //static 
 //static 
 void vcfRCommon::strsplit(std::string& mystring, std::vector<std::string>& vec_o_strings, char& split){
