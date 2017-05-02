@@ -8,6 +8,7 @@ At the present, this is simply a to-do list for ideas to include in the next maj
 This may have been addressed at 64a308ba50b9119108e8946737460de5997b805b by adding `samples` to vcfR method `[`.
 
 
+
 # vcfR 1.4.0.9000
 Released on CRAN 2017-XX-XX.
 
