@@ -40,3 +40,4 @@ Lastly, NAs can be optionally converted to 'n' for compatibility with DNAbin obj
 
 The function \strong{get.alleles} takes a vector of genotypes and returns the unique alleles.
 }
+

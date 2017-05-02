@@ -39,3 +39,4 @@ Hedrick, Philip W. "A standardized genetic differentiation measure." Evolution 5
 \seealso{
 poppr.amova in \href{https://cran.r-project.org/package=poppr}{poppr}, amova in \href{https://cran.r-project.org/package=poppr}{ade4}, amova in \href{https://cran.r-project.org/package=poppr}{pegas}, and \href{https://cran.r-project.org/package=poppr}{hierfstat}.
 }
+
