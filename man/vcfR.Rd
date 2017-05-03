@@ -33,4 +33,3 @@ Several example \strong{datasets} are included in vcfR.
 \strong{vcfR_example} is a subset of the pinfsc50 dataset that includes VCF, GFF and FASTA data for moderate sized testing.
 The \href{https://cran.r-project.org/package=pinfsc50}{pinfsc50} dataset is available as a separate package and includes VCF, GFF and FASTA data for testing and benchmarking.
 }
-

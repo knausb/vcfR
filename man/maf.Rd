@@ -26,4 +26,3 @@ In an attempt to address these competing issues we sort the alleles by their fre
 For example, setting element=1 would return information about the major (most common) allele.
 Setting element=2 returns information about the second allele.
 }
-

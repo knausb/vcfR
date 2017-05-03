@@ -29,4 +29,3 @@ The function \strong{write.win.info} takes the window information table from a c
 \seealso{
 \code{\link{write.vcf}}
 }
-
