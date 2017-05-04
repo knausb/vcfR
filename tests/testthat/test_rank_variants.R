@@ -7,17 +7,22 @@ context("rank_variants functions")
 
 #data(vcfR_example)
 
-vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
-seq_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
-gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
+#vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
+#seq_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
+#gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
 
-vcf <- read.vcfR(vcf_file, verbose = FALSE)
-dna <- ape::read.dna(seq_file, format = "fasta")
-gff <- read.table(gff_file, sep="\t")
+#vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "vcfR")
+#seq_file <- system.file("extdata", "pinf_sc50.fasta", package = "vcfR")
+#gff_file <- system.file("extdata", "pinf_sc50.gff", package = "vcfR")
 
+#vcf <- read.vcfR(vcf_file, verbose = FALSE)
+#dna <- ape::read.dna(seq_file, format = "fasta")
+#gff <- read.table(gff_file, sep="\t")
 
-chrom <- create_chrom('pinf', seq=dna, vcf=vcf, ann=gff, verbose=FALSE)
-pinf_mt <- proc_chrom(chrom, verbose=FALSE, win.size=1e3)
+data(vcfR_example)
+
+chrom <- create.chromR('pinf', seq=dna, vcf=vcf, ann=gff, verbose=FALSE)
+pinf_mt <- proc.chromR(chrom, verbose=FALSE, win.size=1e3)
 
 set.seed(1)
 testv <- runif(nrow(chrom@var.info), 0, 40)
@@ -55,7 +60,7 @@ test_that("Rank variants binary is working",{
 
 
 test_that("rank_variants_chrom is working",{
-  expect_is(chrom, "Chrom")
+  expect_is(chrom, "chromR")
 
   set.seed(1)
   scores <- runif(nrow(chrom@var.info), min=1, max=10)
