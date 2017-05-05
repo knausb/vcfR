@@ -1,4 +1,5 @@
 #include <Rcpp.h>
+#include "vcfRCommon.h"
 
 using namespace Rcpp;
 
@@ -57,16 +58,28 @@ Rcpp::DataFrame gt_to_popsum(Rcpp::DataFrame var_info, Rcpp::CharacterMatrix gt)
       for(j=0; j < gt.ncol(); j++){ // Iterate over samples (columns)
         if(gt(i, j) != NA_STRING){
           nsample[i]++;  // Increment sample count.
-
+          
+//          Rcout << "gt: " << gt(i, j) << "\n";
           // Count alleles per sample.
-          std::vector < int > intv = gtsplit(as<std::string>(gt(i, j)));
-          for(k=0; k<intv.size(); k++){
-            while(myalleles.size() - 1 < (unsigned)intv[k]){
-              // We have more alleles than exist in the vector myalleles.
+
+          int unphased_as_na = 0; // 0 == FALSE
+          std::vector < std::string > gt_vector;
+          std::string gt2 = as<std::string>(gt(i,j));
+          vcfRCommon::gtsplit( gt2, gt_vector, unphased_as_na );
+          
+//          Rcout << "gt_vector.size: " << gt_vector.size() << "\n";
+
+          for(k=0; k<gt_vector.size(); k++){
+            int myAllele = std::stoi(gt_vector[k]);
+//            Rcout << "  " << myAllele;
+//            // If this genotype had an allele we did not previously observe
+            // we'll have to grow the vector.
+            while(myalleles.size() - 1 < myAllele){
               myalleles.push_back(0);
             }
-            myalleles[intv[k]]++;
+            myalleles[myAllele]++;
           }
+//          Rcout << "\n\n";
         }
       }
 

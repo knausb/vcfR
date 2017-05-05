@@ -33,9 +33,9 @@ test_that("Jost's example works",{
   # genetic_diff
   tmp <- genetic_diff(jost, myPops, method = "jost")
   
-  expect_equal(tmp$a, 0.25)
-  expect_equal(tmp$b, 0.4788895)
-  expect_equal(tmp$a, 0.4779589)
+  expect_equal(trunc(1e2*tmp$a), 25)
+  expect_equal(trunc(1e7*tmp$b), 4788895)
+  expect_equal(trunc(1e7*tmp$Dest_Chao), 4779589)
 })
 
 
