@@ -14,16 +14,21 @@ genetic_diff(vcf, pops, method = "nei")
 \item{method}{the method to measure differentiation}
 }
 \description{
-Calculate measures of genetic differentiation..
+Calculate measures of genetic differentiation.
 }
 \details{
 Measures of genetic differentiation, or fixation indicies, are commonly reported population genetic parameters.
 This function reports genetic differentiation for all variants presented to it.
 
-
-The method \strong{nei} returns Nei's Gst as well as Hedrick's correction for high alleleism (Hedrick 2005).
+The method \strong{nei} returns Nei's Gst as well as Hedrick's G'st, a correction for high alleleism (Hedrick 2005).
+Here it is calculated as in equation 2 from Hedrick (2005).
+G'st is calculated as in equation 4b from Hedrick (2005).
 This method is based on heterozygosity where all of the alleles in a population are used to calculate allele frequecies.
 This may make this a good choice when there is a mixture of ploidies in the sample.
+
+The method \strong{jost} return's Jost's D as a measure of differentiation.
+This is calculated as in equation 13 from Jost (2008).
+Examples are available at Jost's website: \url{http://www.loujost.com}.
 }
 \examples{
 data(vcfR_example)
@@ -35,8 +40,9 @@ colMeans(myDiff[,c(3:6,9)], na.rm = TRUE)
 }
 \references{
 Hedrick, Philip W. "A standardized genetic differentiation measure." Evolution 59.8 (2005): 1633-1638.
+
+Jost, Lou. "GST and its relatives do not measure differentiation." Molecular ecology 17.18 (2008): 4015-4026.
 }
 \seealso{
-poppr.amova in \href{https://cran.r-project.org/package=poppr}{poppr}, amova in \href{https://cran.r-project.org/package=ade4}{ade4}, amova in \href{https://cran.r-project.org/package=pegas}{pegas}, \href{https://cran.r-project.org/package=hierfstat}{hierfstat}, \href{https://cran.r-project.org/package=poppr}{hierfstat}, \href{https://cran.r-project.org/package=DEMEtics}{DEMEtics}, and , \href{https://cran.r-project.org/package=mmod}{mmod}.
+poppr.amova in \href{https://cran.r-project.org/package=poppr}{poppr}, amova in \href{https://cran.r-project.org/package=ade4}{ade4}, amova in \href{https://cran.r-project.org/package=pegas}{pegas}, \href{https://cran.r-project.org/package=hierfstat}{hierfstat}, \href{https://cran.r-project.org/package=DEMEtics}{DEMEtics}, and, \href{https://cran.r-project.org/package=mmod}{mmod}.
 }
-
