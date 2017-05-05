@@ -1,42 +1,63 @@
 
 
-
 calc_jost <- function(x){
   # x is a list of subpopulations.
+  # Each list element contains a data.frame with columns
+  #  CHROM, POS, mask, n, Allele_counts, He, Ne.
   nPop <- length(x)
+  nLoci <- nrow(x[[1]])
   
-  HprimeS <- matrix(nrow = nrow(x[[1]]), ncol = nPop + 1)
-  colnames(HprimeS) <- c(paste("Hprimej", names(x), sep = "_"), "HprimeS")
-
-  HprimeT <- vector(mode = "numeric", length = nrow(HprimeS))
-  
-  for(i in 1:length(x)){
-    ps <- as.character(x[[i]]$Allele_counts)
-    ps <- strsplit(ps, split = ",")
-    ps <- lapply(ps, function(x){as.numeric(x)/sum(as.numeric(x), na.rm = TRUE)})
-    Hprimej <- lapply(ps, function(x){ 1 - sum(x^2, na.rm = TRUE) } )
-    Hprimej <- unlist(Hprimej)
-    HprimeS[,i] <- Hprimej
-    
-    ps <- lapply(ps, function(x){ (1/(nPop) * sum(x, na.rm = TRUE))^2 })
-    HprimeT <- HprimeT + unlist(ps)
+  # Find the maximin number of alleles.
+  # We'll use this so we can store data in matrices.
+  maxAlleles <- 0
+  for(j in 1:nPop){
+    tmp <- strsplit(as.character(x[[j]]$Allele_counts), split = ",")
+    tmp <- max(unlist(lapply(tmp, function(x){length(x)})))
+    if(tmp > maxAlleles){
+      maxAlleles <- tmp
+    }
   }
-
-  HprimeS[, ncol(HprimeS)] <- 1/nPop * rowSums(HprimeS[,1:length(x) - 1])  
   
-  HprimeT <- 1 - HprimeT
-
-  Ntilde <- lapply(x, function(x){ ncol(x)^-1 })
-  Ntilde <- (sum(unlist(Ntilde))/nPop)^-1
-
-  # Here 2 implies diploidy
-  Hs_est <- ((2 * Ntilde)/( 2 * Ntilde - 1)) * HprimeS[, 'HprimeS']
-  Ht_est <- HprimeT + Hs_est/(2 * Ntilde * nPop)
-  Dest <- (Ht_est - Hs_est)/(1 - Hs_est) * (nPop/(nPop - 1))
+  subPop.l <- vector(mode = 'list', length = nPop)
+  Nj <- matrix(nrow = nLoci, ncol = nPop)
+  for(j in 1:nPop){
+    subPop.l[[j]] <- matrix(0, nrow = nLoci, ncol = maxAlleles)
+    tmp <- strsplit(as.character(x[[j]]$Allele_counts), split = ",")
+    lapply(as.list(1:nLoci), function(x){ subPop.l[[j]][x,1:length(tmp[[x]])] <<- as.numeric(tmp[[x]])})
+    Nj[,j] <- rowSums(subPop.l[[j]])
+  }
   
-  HprimeS <- cbind(HprimeS, HprimeT, Hs_est, Ht_est, Dest)
-  return(HprimeS)
+  a <- matrix(0, nrow = nLoci, ncol = maxAlleles)
+  b <- matrix(0, nrow = nLoci, ncol = maxAlleles)
+
+  # Calculate a
+  sum1 <- matrix(0, nrow = nLoci, ncol = maxAlleles)
+  sum2 <- matrix(0, nrow = nLoci, ncol = maxAlleles)
+  for(j in 1:nPop){
+    tmp <- sweep(subPop.l[[j]], MARGIN = 1, STATS = Nj[,j], FUN = "/")
+    sum1 <- sum1 + tmp
+    sum2 <- sum2 + tmp^2
+  }
+  sum1 <- sum1^2
+  a <- (sum1 - sum2)/(nPop-1)
+  a <- rowSums(a)
+
+  # Calculate b
+  for(j in 1:nPop){
+    tmp <- subPop.l[[j]] * (subPop.l[[j]] - 1)
+    tmp[tmp<0] <- 0
+    myDenom <- Nj[,j] * (Nj[,j] - 1)
+    tmp <- sweep(tmp, MARGIN = 1, STATS = myDenom, FUN = "/")
+    b <- b + tmp
+  }
+  b <- rowSums(b)
+  
+  Dest_Chao <- 1 - (a/b)
+
+  myRet <- data.frame(a=a, b=b, Dest_Chao)
+  return(myRet)
 }
+
 
 calc_nei <- function(x1, x2){
   # x1 is a data.frame for the total population.
@@ -153,8 +174,8 @@ genetic_diff <- function(vcf, pops, method = "nei"){
     
     gdiff <- calc_nei(tot, subpop.l)
   } else if( method == "jost" ){
-    #gdiff <- calc_jost(subpop.l)
-    warning('This methd is not currently implemented')
+    gdiff <- calc_jost(subpop.l)
+#    warning('This methd is not currently implemented')
   }
 
   gdiff <- as.data.frame(gdiff)
