@@ -4,25 +4,44 @@ library("testthat")
 #test_check("vcfR")
 
 
-#test_file("testthat/test_10_write_vcf.R")
-#test_file("testthat/test_1_vcf.R")
-#test_file("testthat/test_2_chromR.R")
-#test_file("testthat/test_3_extract_gt.R")
-#test_file("testthat/test_4_vcfR2DNAbin.R")
-#test_file("testthat/test_io.R")
-#test_file("testthat/test_conversion.R")
-#test_file("testthat/test_vcfR_methods.R")
-#test_file("testthat/test_addID.R")
-#test_file("testthat/test_maf.R")
-#test_file("testthat/test_genotype_matrix_functions.R")
-#test_file("testthat/test_vcfRtidy.R")
-#test_file("testthat/test_heatmapbp.R")
-#test_file("testthat/test_ad_frequency.R")
-#test_file("testthat/test_chromR_method.R")
-#test_file("testthat/test_get.R")
-#test_file("testthat/test_freq_peak.R")
-#test_file("testthat/test_is_het.R")
-#test_file("testthat/test_proc_chromR.R")
+#
+test_file("testthat/test_10_write_vcf.R")
+#
+test_file("testthat/test_1_vcf.R")
+#
+test_file("testthat/test_2_chromR.R")
+#
+test_file("testthat/test_3_extract_gt.R")
+#
+test_file("testthat/test_4_vcfR2DNAbin.R")
+#
+test_file("testthat/test_io.R")
+#
+test_file("testthat/test_conversion.R")
+#
+test_file("testthat/test_vcfR_methods.R")
+#
+test_file("testthat/test_addID.R")
+#
+test_file("testthat/test_maf.R")
+#
+test_file("testthat/test_genotype_matrix_functions.R")
+#
+test_file("testthat/test_vcfRtidy.R")
+#
+test_file("testthat/test_heatmapbp.R")
+#
+test_file("testthat/test_ad_frequency.R")
+#
+test_file("testthat/test_chromR_method.R")
+#
+test_file("testthat/test_get.R")
+#
+test_file("testthat/test_freq_peak.R")
+#
+test_file("testthat/test_is_het.R")
+#
+test_file("testthat/test_proc_chromR.R")
 
 
 # This test will write the plots to a file on the filesystem.

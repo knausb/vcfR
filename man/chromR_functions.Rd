@@ -51,4 +51,3 @@ The function \strong{variant.table} creates a data.frame containing information 
 
 The funciton \strong{win.table}
 }
-

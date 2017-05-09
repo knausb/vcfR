@@ -38,6 +38,7 @@ test_that("Jost's example works",{
   expect_equal(trunc(1e2*tmp$a), 25)
   expect_equal(trunc(1e7*tmp$b), 4788895)
   expect_equal(trunc(1e7*tmp$Dest_Chao), 4779589)
+  expect_equal(trunc(1e7*tmp$Db), 13333333)
 })
 
 
