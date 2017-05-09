@@ -72,10 +72,13 @@ calc_nei <- function(x1, x2){
   colnames(Hs) <- paste("Hs", names(x2), sep = "_")
   
   Htmax <- vector("character", length = nrow(Hs))
+  Hsize <- matrix(nrow=nrow(Hs), ncol=nPop)
+  colnames(Hsize) <- paste("n", names(x2), sep = "_")
   
   for(i in 1:nPop){
     Htmax <- paste(Htmax, as.character(x2[[i]]$Allele_counts), sep = ",")
     ps <- strsplit(as.character(x2[[i]]$Allele_counts), split = ",")
+    Hsize[,i] <- unlist(lapply(ps, function(x){sum(as.numeric(x), na.rm = TRUE)}))
     ps <- lapply(ps, function(x){as.numeric(x)/sum(as.numeric(x), na.rm = TRUE)})
     ps <- lapply(ps , function(x){1- sum(x^2)})
     Hs[,i] <- unlist(ps)
@@ -91,7 +94,7 @@ calc_nei <- function(x1, x2){
   Gstmax <- (Htmax - rowMeans(Hs))/ Htmax
   Gprimest <- Gst/Gstmax
   
-  Hs <- cbind(Hs, Ht, Gst, Htmax, Gstmax, Gprimest)
+  Hs <- cbind(Hs, Ht, Hsize, Gst, Htmax, Gstmax, Gprimest)
   return(Hs)
 }
 
