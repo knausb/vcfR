@@ -125,7 +125,8 @@ calc_nei <- function(x1, x2){
 #' This function reports genetic differentiation for all variants presented to it.
 #' 
 #' The method \strong{nei} returns Nei's Gst as well as Hedrick's G'st, a correction for high alleleism (Hedrick 2005).
-#' Here it is calculated as in equation 2 from Hedrick (2005).
+#' Here it is calculated as in equation 2 from Hedrick (2005) with the exception that the heterozygosities are weighted by the number of alleles observed in each subpopulation.
+#' This is similar to \code{hierfstat::pairwise.fst()} but by using the number of alleles instead of the number of individuals it avoids making an assumption about how many alleles are contributed by each individual.
 #' G'st is calculated as in equation 4b from Hedrick (2005).
 #' This method is based on heterozygosity where all of the alleles in a population are used to calculate allele frequecies.
 #' This may make this a good choice when there is a mixture of ploidies in the sample.
