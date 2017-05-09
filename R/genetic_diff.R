@@ -7,6 +7,9 @@ calc_jost <- function(x){
   nPop <- length(x)
   nLoci <- nrow(x[[1]])
   
+  Hs <- matrix(nrow = nrow(x[[1]]), ncol = nPop)
+  colnames(Hs) <- paste("Hs", names(x), sep = "_")
+  
   # Find the maximin number of alleles.
   # We'll use this so we can store data in matrices.
   maxAlleles <- 0
@@ -22,10 +25,26 @@ calc_jost <- function(x){
   Nj <- matrix(nrow = nLoci, ncol = nPop)
   for(j in 1:nPop){
     subPop.l[[j]] <- matrix(0, nrow = nLoci, ncol = maxAlleles)
-    tmp <- strsplit(as.character(x[[j]]$Allele_counts), split = ",")
-    lapply(as.list(1:nLoci), function(x){ subPop.l[[j]][x,1:length(tmp[[x]])] <<- as.numeric(tmp[[x]])})
+    ps <- strsplit(as.character(x[[j]]$Allele_counts), split = ",")
+    lapply(as.list(1:nLoci), function(x){ subPop.l[[j]][x,1:length(ps[[x]])] <<- as.numeric(ps[[x]])})
     Nj[,j] <- rowSums(subPop.l[[j]])
+    
+    ps <- lapply(ps, function(x){as.numeric(x)/sum(as.numeric(x), na.rm = TRUE)})
+    ps <- lapply(ps , function(x){1- sum(x^2)})
+    Hs[,j] <- unlist(ps)
   }
+  
+  
+  Dg <- Reduce('+', lapply(subPop.l, function(x){x/sum(x)}))
+  Dg <- Dg/nPop
+  Dg <- Dg^2
+  Dg <- 1/rowSums(Dg)
+  
+#  Hs2 <- Hs^2
+#  Hs2[Hs2 < 0] <- 0
+  Ha <- rowMeans(Hs, na.rm = TRUE)
+  Da <- 1/(1-Ha)
+  Db <- Dg/Da
   
   a <- matrix(0, nrow = nLoci, ncol = maxAlleles)
   b <- matrix(0, nrow = nLoci, ncol = maxAlleles)
@@ -54,7 +73,13 @@ calc_jost <- function(x){
   
   Dest_Chao <- 1 - (a/b)
 
-  myRet <- data.frame(a=a, b=b, Dest_Chao)
+  myRet <- data.frame(Hs)
+  myRet$a <- a
+  myRet$b <- b
+  myRet$Dest_Chao <- Dest_Chao
+  myRet$Da <- Da
+  myRet$Dg <- Dg
+  myRet$Db <- Db
   return(myRet)
 }
 
