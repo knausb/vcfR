@@ -67,6 +67,9 @@ calc_nei <- function(x1, x2){
   ps <- strsplit(as.character(x1$Allele_counts), split = ",")
   ps <- lapply(ps, function(x){as.numeric(x)/sum(as.numeric(x), na.rm = TRUE)})
   Ht <- unlist(lapply(ps , function(x){1- sum(x^2)}))
+
+  nAllele <- x1$n
+  nAlleles <- matrix(nrow = length(nAllele), ncol = nPop)
   
   Hs <- matrix(nrow = nrow(x2[[1]]), ncol = nPop)
   colnames(Hs) <- paste("Hs", names(x2), sep = "_")
@@ -82,6 +85,7 @@ calc_nei <- function(x1, x2){
     ps <- lapply(ps, function(x){as.numeric(x)/sum(as.numeric(x), na.rm = TRUE)})
     ps <- lapply(ps , function(x){1- sum(x^2)})
     Hs[,i] <- unlist(ps)
+    nAlleles[,i] <- x2[[i]]$n
   }
   
   Htmax <- substring(Htmax, 2)
@@ -90,8 +94,11 @@ calc_nei <- function(x1, x2){
   ps <- lapply(ps , function(x){1- sum(x^2)})
   Htmax <- unlist(ps)
   
-  Gst <- (Ht - rowMeans(Hs))/Ht
-  Gstmax <- (Htmax - rowMeans(Hs))/ Htmax
+#  Gst <- (Ht - rowMeans(Hs))/Ht
+  Gst <- (Ht - rowSums(Hs * nAlleles)/nAllele)/Ht
+  
+#  Gstmax <- (Htmax - rowMeans(Hs))/ Htmax
+  Gstmax <- (Htmax - rowSums(Hs * nAlleles)/nAllele)/ Htmax
   Gprimest <- Gst/Gstmax
   
   Hs <- cbind(Hs, Ht, Hsize, Gst, Htmax, Gstmax, Gprimest)
