@@ -35,6 +35,16 @@ test_that("chromR plot when DP == NA",{
 })
 
 
+test_that("chromR plot when MQ == NA",{
+  library(vcfR)
+#  trace('plot', browser, exit=browser, signature='chromR')
+  data(vcfR_test)
+  is.na(vcfR_test@fix[,'INFO']) <- TRUE
+  chrom <- create.chromR(vcfR_test, verbose = FALSE)
+  myPlot <- plot(chrom)
+  expect_true( is.null(myPlot) )
+})
+
 
 
 ##### ##### ##### ##### #####
