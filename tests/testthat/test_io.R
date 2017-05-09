@@ -1,22 +1,17 @@
 #detach(package:vcfR, unload=TRUE)
 library(vcfR)
 library(testthat)
+
 context("io functions")
 
 # Load data
 
+
 data(vcfR_example)
-
-#vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
-#seq_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
-#gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
-
-#vcf <- read.vcfR(vcf_file, verbose = FALSE)
-#dna <- ape::read.dna(seq_file, format = "fasta")
-#gff <- read.table(gff_file, sep="\t")
 
 chrom <- create.chromR(name="Supercontig_1.50", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
 chrom <- proc.chromR(chrom, verbose = FALSE)
+
 
 
 # Manage directories.
@@ -107,7 +102,11 @@ test_that("read.vcfR works for files in other directories",{
 #  orig.dir <- getwd()
 #  test_dir <- tempdir()
   setwd(test_dir)
-  dir.create('subdir')
+  
+  if( !dir.exists('subdir') ){
+    dir.create('subdir')
+  }
+  
   setwd('subdir')
   write.vcf(vcf, "test.vcf.gz")
   setwd(test_dir)

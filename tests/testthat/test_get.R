@@ -5,8 +5,10 @@ context("getFIX accessors")
 
 
 
-#data("vcfR_test")
-#chrom <- create.chromR(vcfR_test, verbose = FALSE)
+#
+data("vcfR_test")
+#
+chrom <- create.chromR(vcfR_test, verbose = FALSE)
 
 test_that("getFIX returns a matrix", {
   expect_is(getFIX(vcfR_test), "matrix")
