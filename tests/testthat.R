@@ -1,3 +1,4 @@
+
 library("testthat")
 #library("vcfR")
 #
@@ -14,8 +15,7 @@ test_file("testthat/test_2_chromR.R")
 test_file("testthat/test_3_extract_gt.R")
 #
 test_file("testthat/test_4_vcfR2DNAbin.R")
-#
-test_file("testthat/test_io.R")
+#test_file("testthat/test_io.R")
 #
 test_file("testthat/test_proc_chromR.R")
 #
