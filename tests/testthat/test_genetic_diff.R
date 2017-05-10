@@ -47,18 +47,17 @@ test_that("Jost's example works",{
 
 
 test_that("Nei's method works",{
-  #
-  devtools::load_all(".")
-  #
-  debug("calc_nei")
+  #  devtools::load_all(".")
+  #debug("calc_nei")
   data("vcfR_test")
   vcfR_test@gt <- cbind(vcfR_test@gt, vcfR_test@gt[,2:4])
   myPops <- as.factor(rep(c('a','b'), each=3))
   
   tmp <- genetic_diff(vcfR_test, myPops, method = "nei")
   
-
-  
+  expect_equal(10*tmp$Ht[1], 5)
+  expect_equal(tmp$n_a[1], 6)
+  expect_equal(tmp$Gprimest[1], 0)
 })
 
 

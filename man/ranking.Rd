@@ -15,3 +15,4 @@ rank.variants.chromR(x, scores)
 \description{
 Rank variants within windows.
 }
+

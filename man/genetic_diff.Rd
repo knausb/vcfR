@@ -47,3 +47,4 @@ Jost, Lou. "GST and its relatives do not measure differentiation." Molecular eco
 \seealso{
 poppr.amova in \href{https://cran.r-project.org/package=poppr}{poppr}, amova in \href{https://cran.r-project.org/package=ade4}{ade4}, amova in \href{https://cran.r-project.org/package=pegas}{pegas}, \href{https://cran.r-project.org/package=hierfstat}{hierfstat}, \href{https://cran.r-project.org/package=DEMEtics}{DEMEtics}, and, \href{https://cran.r-project.org/package=mmod}{mmod}.
 }
+

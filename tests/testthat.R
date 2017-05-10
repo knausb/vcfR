@@ -44,6 +44,8 @@ test_file("testthat/test_is_het.R")
 #
 test_file("testthat/test_get.R")
 
+test_file("testthat/test_genetic_diff.R")
+
 #test_file("testthat/test_heatmapbp.R")
 
 
