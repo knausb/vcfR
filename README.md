@@ -45,8 +45,9 @@ With this information in hand, researchers should be able to determine criteria 
 
 ## Documentation
 
-Documentation for vcfR can now be found here: [vcfR_documentation](https://knausb.github.io/vcfR_documentation/)
+Documentation for vcfR can now be found here: [vcfR_documentation](https://knausb.github.io/vcfR_documentation/).
 
+If you think you've found a bug, please see [reporting an issue](https://knausb.github.io/vcfR_documentation/reporting_issue.html).
 
 ## Publication
 
