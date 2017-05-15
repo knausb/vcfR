@@ -105,4 +105,3 @@ segments(x0=myPeaks1$wins[,'START_pos'], y0=myPeaks2$peaks[,mySample],
 
 
 }
-
