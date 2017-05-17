@@ -7,10 +7,11 @@ calc_jost <- function(x){
   nPop <- length(x)
   nLoci <- nrow(x[[1]])
   
+  # A matrix for heterozygosities.
   Hs <- matrix(nrow = nrow(x[[1]]), ncol = nPop)
   colnames(Hs) <- paste("Hs", names(x), sep = "_")
   
-  # Find the maximin number of alleles.
+  # Find the maximum number of alleles.
   # We'll use this so we can store data in matrices.
   maxAlleles <- 0
   for(j in 1:nPop){
@@ -20,7 +21,10 @@ calc_jost <- function(x){
       maxAlleles <- tmp
     }
   }
-  
+
+  # Hs is the heterozygosities for population j (created above).
+  # subPop.l is a list of matricies that hold allele counts for each population.
+  # Nj is the count or number of each allele in population j.
   subPop.l <- vector(mode = 'list', length = nPop)
   Nj <- matrix(nrow = nLoci, ncol = nPop)
   for(j in 1:nPop){
@@ -28,14 +32,17 @@ calc_jost <- function(x){
     ps <- strsplit(as.character(x[[j]]$Allele_counts), split = ",")
     lapply(as.list(1:nLoci), function(x){ subPop.l[[j]][x,1:length(ps[[x]])] <<- as.numeric(ps[[x]])})
     Nj[,j] <- rowSums(subPop.l[[j]])
-    
-    ps <- lapply(ps, function(x){as.numeric(x)/sum(as.numeric(x), na.rm = TRUE)})
-    ps <- lapply(ps , function(x){1- sum(x^2)})
-    Hs[,j] <- unlist(ps)
+     
+     ps <- lapply(ps, function(x){as.numeric(x)/sum(as.numeric(x), na.rm = TRUE)})
+     ps <- lapply(ps , function(x){1- sum(x^2)})
+     Hs[,j] <- unlist(ps)
+  #   Hs[,j] <- unlist( lapply(ps , function(x){1- sum(x^2)}) )
   }
-  
-  
-  Dg <- Reduce('+', lapply(subPop.l, function(x){x/sum(x)}))
+   
+  #
+  Dg <- lapply(subPop.l, function(x){sweep(x, MARGIN = 1, STATS = rowSums(x, na.rm = TRUE), FUN = "/")})
+  Dg <- Reduce('+', Dg)
+#  Dg <- Reduce('+', lapply(subPop.l, function(x){x/sum(x)}))
   Dg <- Dg/nPop
   Dg <- Dg^2
   Dg <- 1/rowSums(Dg)

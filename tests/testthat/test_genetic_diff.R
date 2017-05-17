@@ -202,8 +202,26 @@ myPops <- structure(c(2L, 2L, 1L, 2L, 2L, 2L, 2L, 2L, 2L, 1L, 1L, 1L, 1L,
 
 
 #myDiff <- genetic_diff(vcf, myPops, method = "nei")
-myDiff <- genetic_diff(vcf, myPops, method = "jost")
+
 
 #gt <- extract.gt(vcf)
 #table(gt[1,])
+
+
+test_that("GBS Jost's method works",{
+#  devtools::load_all(".")
+#
+  myDiff <- genetic_diff(vcf, myPops, method = "jost")
+
+  expect_equal(myDiff$Hs_OR[1], 0)
+  expect_equal(trunc(1e10*myDiff$Hs_WA[1]), 289792388)
+  expect_equal(trunc(1e10*myDiff$a[1]), 19705882352)
+  expect_equal(trunc(1e10*myDiff$b[1]), 19705882352)
+  expect_equal(myDiff$Dest_Chao[1], 0)
+  
+  expect_equal(trunc(1e10*myDiff$Da[1]), 10147026552)
+  expect_equal(trunc(1e10*myDiff$Dg[1]), 10148140019)
+  expect_equal(trunc(1e10*myDiff$Db[1]), 10001097333)
+})
+
 
