@@ -187,6 +187,14 @@ calc_nei <- function(x1, x2){
 #'
 genetic_diff <- function(vcf, pops, method = "nei"){
   
+  if( class(vcf) != "vcfR" ){
+    stop( paste("Expecting an object of class vcfR, instead received:", class(vcf)) )
+  }
+  
+  if( class(pops) != "factor" ){
+    stop( paste("Expecting a factor, instead received:", class(pops)) )
+  }
+  
   method <- match.arg(method, choices = c('jost', 'nei'))
   
   nPop <- length(levels(pops))
