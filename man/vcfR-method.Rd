@@ -3,11 +3,10 @@
 \docType{methods}
 \name{show,vcfR-method}
 \alias{show,vcfR-method}
-\alias{vcfR-method}
+\alias{head}
 \alias{head,vcfR-method}
 \alias{[,vcfR,ANY,ANY,ANY-method}
 \alias{plot,vcfR-method}
-\alias{plot.vcfR}
 \alias{rbind2,vcfR,missing-method}
 \alias{rbind2.vcfR}
 \alias{rbind2,vcfR,ANY-method}
@@ -18,7 +17,7 @@
 \alias{dim.vcfR}
 \alias{nrow,vcfR-method}
 \alias{nrow.vcfR}
-\title{vcfR-method}
+\title{show}
 \usage{
 \S4method{show}{vcfR}(object)
 
@@ -39,7 +38,7 @@
 \S4method{nrow}{vcfR}(x)
 }
 \arguments{
-\item{object}{object1 of class vcfR}
+\item{object}{a vcfR object}
 
 \item{x}{object of class vcfR}
 
@@ -53,14 +52,14 @@
 
 \item{samples}{vector (numeric, character or logical) specifying samples, see details}
 
-\item{...}{Arguments to be passed to methods}
+\item{...}{arguments to be passed to other methods}
 
 \item{drop}{delete the dimensions of an array which only has one level}
 
 \item{y}{not used}
 }
 \description{
-Methods to show, subset or plot data from objects of class vcfR
+Display a summary of a vcfR object.
 
 \strong{head} returns the first parts of an object of class vcfR.
 

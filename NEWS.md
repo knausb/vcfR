@@ -5,13 +5,17 @@ If and when this 'major' release occurs it will include changes that will break 
 At the present, this is simply a to-do list for ideas to include in the next major release.
 
 * Move 'FORMAT' column to its own slot. We can then cbind FORMAT and gt when passing to compiled code.
+This may have been addressed at 64a308ba50b9119108e8946737460de5997b805b by adding `samples` to vcfR method `[`.
 
 
 
 # vcfR 1.4.0.9000
 Released on CRAN 2017-XX-XX.
 
-* Added `samples` parameter to vcfR method `[`
+* Created `genetic_diff()` to calculate fixation indicies.
+* Addressed symbol recognition NOTE: https://github.com/RcppCore/Rcpp/issues/636#issuecomment-280985661.
+* Moved `pinfsc50.png` to tools.
+* Added `samples` parameter to vcfR method `[`.
 * Deprecated the parameters 'chrom.s' and 'chrom.e' of 'chromo()', please use 'xlim' instead.
 * Added `length()` method for chromR objects.
 * `[` method throws warning if FORMAT is omitted.

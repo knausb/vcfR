@@ -3,8 +3,9 @@
 \docType{methods}
 \name{show,chromR-method}
 \alias{show,chromR-method}
-\alias{chromR-method}
+\alias{chromR,chromR-method}
 \alias{plot,chromR-method}
+\alias{plot}
 \alias{print,chromR-method}
 \alias{head,chromR-method}
 \alias{names<-,chromR,character-method}

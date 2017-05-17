@@ -1,28 +1,17 @@
-#'
-#' @rdname vcfR-method
-#' @title vcfR-method
-#' 
-#' @aliases vcfR-method
-#' 
-#' @description
-#' Methods to show, subset or plot data from objects of class vcfR
-#' 
-#' @param object object1 of class vcfR
-#' @param x object of class vcfR
-#' @param n number of rows to print
-#' @param maxchar maximum number of characters to print per line
-#' 
-#' 
-#' 
-#' 
-#' 
-
 
 
 ##### Method show #####
 #' 
 #' @rdname vcfR-method
-#' @aliases show.vcfR
+# ' @aliases show.vcfR,show,vcfR-method
+# ' @aliases show,vcfR-method
+#' @title show
+#' 
+#' @description 
+#' Display a summary of a vcfR object.
+#' 
+#' @param object a vcfR object
+#' 
 #' @details 
 #' The method \strong{show} is used to display an object.
 #' Because vcf data are relatively large, this has been abbreviated.
@@ -57,11 +46,19 @@ setMethod(
 )
 
 
-
 #### Method head ####
 #' 
+#' @name head
 #' @rdname vcfR-method
 #' @title head
+#' @aliases head,vcfR-method
+#' @docType methods
+#' 
+#' @param x object of class vcfR
+#' @param n number of rows to print
+#' @param maxchar maximum number of characters to print per line
+#' @param ... arguments to be passed to other methods
+#' 
 #' @description \strong{head} returns the first parts of an object of class vcfR.
 #' 
 #' @details 
@@ -199,10 +196,10 @@ setGeneric("plot")
 #' @title plot.vcfR
 #' @description The \strong{plot} method visualizes objects of class vcfR
 # @export
-#' @aliases plot.vcfR
+# ' @aliases plot.vcfR
+# ' @aliases vcfR,vcfR-method
 #' 
 #' @param y not used
-#' @param ... Arguments to be passed to methods
 #' 
 #' @details 
 #' The \strong{plot} method generates a histogram from data found in the 'QUAL' column from the 'fix' slot.
@@ -223,45 +220,6 @@ setMethod(
 # rbind
 #
 ##### ##### ##### ##### #####
-
-
-#setGeneric("rbind", signature="...")
-#setGeneric("rbind")
-# '
-# ' @rdname vcfR-method
-# ' @aliases rbind.vcfR, rbind
-# ' 
-# ' @param deparse.level integer controlling the construction of labels. see ?rbind.
-#  @param ... objects of class vcfR passed to rbind
-# ' 
-# ' @export
-# '
-#setMethod(
-#  f = "rbind",
-#  signature = "vcfR", 
-#  definition = function( ..., deparse.level=1 )
-#  {
-    ## store arguments
-#    dots <- list(...)
-
-    ## extract arguments which are vcfR objects
-#    myList <- dots[sapply(dots, inherits, "vcfR")]
-#    if(!all(sapply(myList, class)=="vcfR")) stop("some objects are not vcfR objects")
-    
-    ## keep the rest in 'dots'
-#    dots <- dots[!sapply(dots, inherits, "vcfR")]
-    
-    # Initialize
-#    x <- myList[[1]]
-    
-    # Implement
-#    x@fix <- do.call( rbind, lapply( myList, function(x){ x@fix } ) )
-#    x@gt  <- do.call( rbind, lapply( myList, function(x){ x@gt  } ) )
-
-#    return(x)
-#  }
-#)
-
 
 
 setMethod("rbind",
@@ -289,6 +247,7 @@ setMethod("rbind",
     return(x)
   }
 )
+
 
 
 #' @rdname vcfR-method
@@ -331,6 +290,7 @@ setMethod("rbind2",
     return(x)
   }
 )
+
 
 
 ##### ##### ##### ##### #####

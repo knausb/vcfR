@@ -2,7 +2,7 @@
 #' @rdname chromR-method
 #' @title chromR-method
 #'
-#' @aliases chromR-method
+#' @aliases chromR,chromR-method
 #'
 #' @description Methods that act on objects of class chromR
 #'
@@ -69,6 +69,7 @@ setMethod( f="show",
 
 
 #' @rdname chromR-method
+#' @aliases plot
 #' @export
 #'
 setMethod( f="plot",

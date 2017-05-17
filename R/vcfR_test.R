@@ -1,6 +1,6 @@
 #' Test data for vcfR.
 #' 
-#' A test file containing a diversity of examples inended to tst functionality.
+#' A test file containing a diversity of examples intended to test functionality.
 #' 
 #' \itemize{
 #'   \item vcfR_test vcfR object
