@@ -1,21 +1,12 @@
 
 
 ## Test environments
-* local ubuntu 16.04 LTS, R 3.3.3
-
-* local OS X install, R 3.3.2
-* local ubuntu 16.04 LTS, R 3.3.2
-* local ubuntu 16.04 LTS, R 3.2.5
-* ubuntu 12.04 (on travis-ci), R 3.3.1
+* local ubuntu 16.04 LTS, R 3.4.0
+* local OS X install, R 3.4.0
+* ubuntu 12.04.5 (on travis-ci), R 3.4.0
+* winbuilder 3.4.0
+* winbuilder devel (2017-05-16 r72684)
 * rhub::check( platform = "ubuntu-gcc-devel" )
-* rhub::check( platform = "windows-x86_64-release" )
-* rhub::check( platform = "windows-x86_64-devel" )
-
-* rhub::check( platform = "windows-x86_64-oldrel" ) 
-This last environment failed to build.
-The failure does not appear due to this package.
-I've created GitHub issue (#62).
-The Rhub maintainer is working on this.
 
 
 ## R CMD check results
@@ -29,8 +20,9 @@ Maintainer: ‘Brian J. Knaus <briank.lists@gmail.com>’
 * checking installed package size ... NOTE
   installed size is  8.6Mb
   sub-directories of 1Mb or more:
-    doc    2.2Mb
+    doc    3.0Mb
     libs   5.7Mb
+
 
 There are 8 vignettes (HTML) which contribute to the 2.8Mb in doc.
 These could be migrated to a separate documentation package.
@@ -56,12 +48,9 @@ I have reviewed these words and feel they are spelled correctly.
 ## Downstream dependencies
 
 I have also run R CMD check on downstream dependencies of vcfR
-All packages that I could install passed except:
+All packages that I could install passed:
 
-* pcadapt: 
-* checking installed package size ... NOTE
-  installed size is  5.1Mb
-Does not appear to be related to vcfR
+* pcadapt: no errors or warnings
 
 
 ## Memory-access errors
@@ -74,7 +63,7 @@ R -d "valgrind --leak-check=full --vgdb-error=1" -f tests/testthat/test_conversi
 On various suspect functions.
 
 
-## Thank you CRAN core Team!
+## Thank you CRAN Core Team!
 
 [CRAN Repository Policy](https://cran.r-project.org/web/packages/policies.html) states that all correspondence should be with CRAN and not members of the team.
 However, I think its polite to thank those who have helped this project.
