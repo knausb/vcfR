@@ -8,9 +8,12 @@ At the present, this is simply a to-do list for ideas to include in the next maj
 This may have been addressed at 64a308ba50b9119108e8946737460de5997b805b by adding `samples` to vcfR method `[`.
 
 
+# vcfR 1.5.0.9000
+Released on CRAN 201X-XX-XX.
+
 
 # vcfR 1.5.0
-Released on CRAN 2017-05-XX.
+Released on CRAN 2017-05-18.
 
 * Created `genetic_diff()` to calculate fixation indicies.
 * Addressed symbol recognition NOTE: https://github.com/RcppCore/Rcpp/issues/636#issuecomment-280985661.
