@@ -100,3 +100,4 @@ Bioconductor:
 
 Use: browseVignettes('vcfR') to find examples.
 }
+

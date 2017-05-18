@@ -36,3 +36,4 @@ queryMETA(vcfR_test, element = "DP")
 \seealso{
 \code{\link[base]{grep}}, \code{\link[base]{regex}}.
 }
+
