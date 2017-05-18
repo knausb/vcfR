@@ -10,7 +10,7 @@ This may have been addressed at 64a308ba50b9119108e8946737460de5997b805b by addi
 
 
 # vcfR 1.5.0
-Released on CRAN 2017-05-XX.
+Released on CRAN 2017-05-18.
 
 * Created `genetic_diff()` to calculate fixation indicies.
 * Addressed symbol recognition NOTE: https://github.com/RcppCore/Rcpp/issues/636#issuecomment-280985661.
