@@ -120,4 +120,3 @@ image(myDNA)
 \seealso{
 \href{https://cran.r-project.org/package=ape}{ape}
 }
-

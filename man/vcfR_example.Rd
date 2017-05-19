@@ -2,10 +2,10 @@
 % Please edit documentation in R/vcfR_example.R
 \docType{data}
 \name{vcfR_example}
+\alias{vcfR_example}
 \alias{dna}
 \alias{gff}
 \alias{vcf}
-\alias{vcfR_example}
 \title{Example data for vcfR.}
 \format{A DNAbin object, a data.frame and a vcfR object}
 \description{
@@ -36,4 +36,3 @@ data(vcfR_example)
 
 }
 \keyword{datasets}
-

@@ -17,4 +17,3 @@ PackageUseDevtools: Yes
 PackageInstallArgs: --no-multiarch --without-keep.source --clean
 PackageBuildBinaryArgs: --clean
 PackageCheckArgs: --as-cran
-PackageRoxygenize: rd,namespace
