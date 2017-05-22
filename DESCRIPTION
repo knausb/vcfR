@@ -18,7 +18,9 @@ Authors@R: c(person(c("Brian", "J."), "Knaus", role = c("cre", "aut"),
     person(c("David", "J."), "Winter", role = "ctb",
     email = "david.winter@gmail.com"),
     person(c("Zhian", "N."), "Kamvar", role = "ctb",
-    email = "zkamvar@gmail.com"))
+    email = "zkamvar@gmail.com"),
+    person(c("Javier", "F."), "Tabima", role = "ctb",
+    email = "caifaz01@gmail.com"))
 Maintainer: Brian J. Knaus <briank.lists@gmail.com>
 URL: https://github.com/knausb/vcfR, https://knausb.github.io/vcfR_documentation/
 Depends:

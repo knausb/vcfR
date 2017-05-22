@@ -225,3 +225,32 @@ test_that("GBS Jost's method works",{
 })
 
 
+
+##### ##### ##### ##### #####
+
+
+test_that("pairwise_genetic_diff works, two pops",{
+  data(vcfR_example)
+#  vcf <- vcf[1:6,]
+  pops <- as.factor(rep(c('a','b'), each = 9))
+  myDiff <- pairwise_genetic_diff(vcf, pops, method = "nei")
+ 
+  expect_equal(class(myDiff), "data.frame")
+  expect_equal(ncol(myDiff), 5)
+})
+
+
+test_that("pairwise_genetic_diff works, three pops",{
+  data(vcfR_example)
+#  vcf <- vcf[1:8,]
+  pops <- as.factor(rep(c('a','b','c'), each = 6))
+  myDiff <- pairwise_genetic_diff(vcf, pops, method = "nei")
+ 
+  expect_equal(class(myDiff), "data.frame")
+  expect_equal(ncol(myDiff), 9)
+})
+
+
+
+##### ##### ##### ##### #####
+# EOF.

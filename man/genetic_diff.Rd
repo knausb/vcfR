@@ -35,7 +35,7 @@ Examples are available at Jost's website: \url{http://www.loujost.com}.
 data(vcfR_example)
 myPops <- as.factor(rep(c('a','b'), each = 9))
 myDiff <- genetic_diff(vcf, myPops, method = "nei")
-colMeans(myDiff[,c(3:6,9)], na.rm = TRUE)
+colMeans(myDiff[,c(3:8,11)], na.rm = TRUE)
 
 
 }
