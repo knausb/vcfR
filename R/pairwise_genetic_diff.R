@@ -27,7 +27,7 @@ pairwise_genetic_diff <- function (vcf, pops, method="nei"){
   if (is.null(var_info$mask)) {
     var_info$mask <- TRUE
   }
-  combination.df <- utils::combn(as.character(unique(pops)), 2, simplify = F)
+  combination.df <- utils::combn(x = as.character(unique(pops)), m = 2, simplify = FALSE)
   test <- lapply(combination.df, function (x) {
     vcf.temp <- vcf
     pop.tem <- as.factor(as.character(pops[pops %in% x]))
