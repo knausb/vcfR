@@ -6,6 +6,9 @@ On CRAN:
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/vcfR)](https://cran.r-project.org/package=vcfR)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/vcfR)](https://cran.r-project.org/package=vcfR)
 
+Depsy:
+[![Research software impact](http://depsy.org/api/package/cran/vcfR/badge.svg)](http://depsy.org/package/r/vcfR)
+
 RDocumentation:
  [![Rdoc](http://www.rdocumentation.org/badges/version/vcfR)](http://www.rdocumentation.org/packages/vcfR) 
 
