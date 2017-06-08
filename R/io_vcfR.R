@@ -108,6 +108,35 @@ read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, conver
   
   vcf <- new(Class="vcfR")
   stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', file)
+  # stats should be a named vector containing "meta", "header", "variants", "columns".
+  # They should have been initialize to zero.
+  if(verbose == TRUE){
+    cat("File attributes:")
+    cat("\n")
+    cat( paste("  meta lines:", stats['meta']) )
+    cat("\n")
+    cat( paste("  header line:", stats['header']) )
+    cat("\n")
+    cat( paste("  variant count:", stats['variants']) )
+    cat("\n")
+    cat( paste("  column count:", stats['columns']) )
+    cat("\n")
+  }
+  utils::flush.console()
+  
+  if( stats['meta'] < 0 ){
+    stop( paste("stats['meta'] less than zero:", stats['meta'], ", this should never happen.") )
+  }
+  if( stats['header'] < 0 ){
+    stop( paste("stats['header'] less than zero:", stats['header'], ", this should never happen.") )
+  }
+  if( stats['variants'] < 0 ){
+    stop( paste("stats['variants'] less than zero:", stats['variants'], ", this should never happen.") )
+  }
+  if( stats['columns'] < 0 ){
+    stop( paste("stats['columns'] less than zero:", stats['columns'], ", this should never happen.") )
+  }
+  
   
   if( is.null(cols) ){
     cols <- 1:stats['columns']
