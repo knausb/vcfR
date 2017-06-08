@@ -234,7 +234,10 @@ test_that("compiled vcfR_read_body convertNA = FALSE works",{
 
 
 ##### ##### ##### ##### #####
-
+#
+# R version
+#
+##### ##### ##### ##### #####
 
 data("vcfR_example")
 write.vcf(vcf, file=ex_file)
@@ -319,6 +322,28 @@ test_that("read.vcfR works when file contains one variant, no meta",{
   unlink(ex_file)
   setwd( original_dir )
 })
+
+
+test_that("read.vcfR verbose works",{
+  data(vcfR_test)
+#  vcfR_test@meta <- vector(mode='character', length=0)
+
+  setwd( test_dir )
+  test_file <- "test.vcf.gz"
+  
+  write.vcf(x = vcfR_test, file = test_file)
+#  vcfR_test2 <- read.vcfR(test_file, verbose=FALSE)
+  testMessage <- capture.output(read.vcfR(test_file, verbose=TRUE))
+  unlink(test_file)
+  setwd(original_dir)
+
+  expect_equal( grep("File attributes:", testMessage), 1)
+  expect_equal( grep("  meta lines:", testMessage), 2)
+  expect_equal( grep("  header line:", testMessage), 3)
+  expect_equal( grep("  variant count:", testMessage), 4)
+  expect_equal( grep("  column count:", testMessage), 5)
+})
+
 
 
 ##### ##### ##### ##### #####
