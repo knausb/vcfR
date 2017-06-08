@@ -155,7 +155,10 @@ read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, conver
     stop("Object size limit exceeded")
   }
   
+  # Read meta
   vcf@meta <- .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', file, stats, as.numeric(verbose))
+  
+  # Read body
   body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', file = file, stats = stats, 
                 nrows = nrows, skip = skip, cols = cols, 
                 convertNA = as.numeric(convertNA), verbose = as.numeric(verbose))
