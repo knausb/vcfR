@@ -107,7 +107,7 @@ read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, conver
   }
   
   vcf <- new(Class="vcfR")
-  if (nrows == 0) {
+  if (nrows != -1) {
     stats <- .Call('vcfR_vcf_stats_no_variants_gz', PACKAGE = 'vcfR', file)
   } else {
     stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', file)  
@@ -136,11 +136,9 @@ read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, conver
     stop( paste("stats['header'] less than zero:", stats['header'], ", this should never happen.") )
   }
   if( stats['variants'] < 0 ){
-    if (nrows == 0) { 
-      message('No variants read because nrows=0 parameter was set.') 
-    } else {
-      stop( paste("stats['variants'] less than zero:", stats['variants'], ", this should never happen.") )
-    }
+    if (nrows == -1) { 
+      stop( paste("stats['variants'] less than zero:", stats['variants'], ", this should not happen when nrows is unspecified.") )
+    } 
   }
   if( stats['columns'] < 0 ){
     stop( paste("stats['columns'] less than zero:", stats['columns'], ", this should never happen.") )
@@ -154,7 +152,7 @@ read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, conver
   cols <- sort( unique( c(1:8, cols) ) )
 
   
-#  ram_est <- stats['variants'] * stats['columns'] * 8 + 248
+  # ram_est <- stats['variants'] * stats['columns'] * 8 + 248
   ram_est <- memuse::howbig(stats['variants'], stats['columns'])
   
   if(ram_est@size > limit){
