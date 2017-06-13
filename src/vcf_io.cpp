@@ -273,8 +273,8 @@ void proc_body_line(Rcpp::CharacterMatrix gt,
 // [[Rcpp::export]]
 Rcpp::CharacterMatrix read_body_gz(std::string x,
                                    Rcpp::NumericVector stats,
-                                   int nrows = -1,
-                                   int skip = 0,
+                                   long int nrows = -1,
+                                   long int skip = 0,
                                    Rcpp::IntegerVector cols = 0,
                                    int convertNA = 1,
                                    int verbose = 1) {
@@ -283,6 +283,13 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
   Rcpp::StringMatrix na_matrix(1,1);
   na_matrix(0,0) = NA_STRING;
   
+  if(verbose == 1){
+    Rcpp::Rcout << "In function read_body_gz." << std::endl;
+    Rcpp::Rcout << "  stats(0): " << stats(0) << std::endl;
+    Rcpp::Rcout << "  stats(1): " << stats(1) << std::endl;
+    Rcpp::Rcout << "  stats(2): " << stats(2) << std::endl;
+    Rcpp::Rcout << "  stats(3): " << stats(3) << std::endl;
+  }
   
   /*
    * Manage cols vector.
@@ -305,7 +312,7 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
   
   // Initialize matrix for body data.
   // old: Rcpp::CharacterMatrix gt(stats[2], stats[3]);
-  int row_num = 0;
+  long int row_num = 0;
   
 
   if( ( nrows == -1 ) & ( skip == 0 ) ){
@@ -317,33 +324,47 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
   } else if ( ( nrows != -1 ) & ( skip > 0) ){
     // nrows = nrows;
   } else {
-    Rcpp::Rcerr << "failed to calculate return matrix geometry.";
+    Rcpp::Rcerr << "Failed to calculate return matrix geometry.";
     return na_matrix;
   }
-  Rcpp::CharacterMatrix gt( nrows, cols.size() );
   
-//  if ( nrows > -1 & skip == 0 ){
-//    row_num = nrows;
-//  } else if ( nrows == -1 & skip > 0 ){
-//    row_num = stats[2] - skip;
-//  } else {
-//    row_num = stats[2];    
+//  if( nrows > INT_MAX ){
+//    Rcpp::Rcerr << "failed to calculate return matrix geometry.";
+//    return na_matrix;
 //  }
-//  Rcpp::CharacterMatrix gt( row_num, cols.size() );
 
+  if(verbose == 1){
+    Rcpp::Rcout << "Initializing gt matrix." << std::endl;
+    Rcpp::Rcout << "  nrows: " << nrows << std::endl;
+    Rcpp::Rcout << "  cols.size(): " << cols.size() << std::endl;
+  }
+  
+  if( nrows > INT_MAX ){
+    Rcpp::Rcerr << "Requested a matrix of " << nrows << " rows." << std::endl;
+    Rcpp::Rcerr << "This exceeds INT_MAX, which is " << INT_MAX << "." << std::endl;
+    Rcpp::Rcerr << "I suggest you attempt to read in a portion of the file using the options 'nrows' and 'skip'." << std::endl;
+    return na_matrix;
+  }
+  
+  Rcpp::CharacterMatrix gt( nrows, cols.size() );
+
+  if(verbose == 1){
+    Rcpp::Rcout << "gt matrix initialized." << std::endl;
+  }
+  
   row_num = 0;
   
   if( verbose == 1 ){
     Rcpp::Rcout << "Character matrix gt created.\n";
-    Rcpp::Rcout << "Character matrix gt rows: ";  Rcpp::Rcout << gt.rows();
+    Rcpp::Rcout << "  Character matrix gt rows: ";  Rcpp::Rcout << gt.rows();
     Rcpp::Rcout << "\n";
-    Rcpp::Rcout << "Character matrix gt cols: ";  Rcpp::Rcout << gt.cols();
+    Rcpp::Rcout << "  Character matrix gt cols: ";  Rcpp::Rcout << gt.cols();
     Rcpp::Rcout << "\n";
-    Rcpp::Rcout << "skip: ";  Rcpp::Rcout << skip;
+    Rcpp::Rcout << "  skip: ";  Rcpp::Rcout << skip;
     Rcpp::Rcout << "\n";
-    Rcpp::Rcout << "nrows: ";  Rcpp::Rcout << nrows;
+    Rcpp::Rcout << "  nrows: ";  Rcpp::Rcout << nrows;
     Rcpp::Rcout << "\n";
-    Rcpp::Rcout << "row_num: ";  Rcpp::Rcout << row_num;
+    Rcpp::Rcout << "  row_num: ";  Rcpp::Rcout << row_num;
     Rcpp::Rcout << "\n";
     Rcpp::Rcout << "\n";
   }
@@ -368,7 +389,7 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
   std::vector<std::string> header_vec;
   
   // variant counter.  
-  int var_num = 0;
+  long int var_num = 0;
 
 
   // Scroll through buffers.
@@ -517,7 +538,6 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
 //  if(verbose == 1){
 //    Rcpp::Rcout << "Rcpp::DataFrame created.\n";
 //  }
-  
 
   return gt;
 }

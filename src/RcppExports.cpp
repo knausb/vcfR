@@ -277,15 +277,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // read_body_gz
-Rcpp::CharacterMatrix read_body_gz(std::string x, Rcpp::NumericVector stats, int nrows, int skip, Rcpp::IntegerVector cols, int convertNA, int verbose);
+Rcpp::CharacterMatrix read_body_gz(std::string x, Rcpp::NumericVector stats, long int nrows, long int skip, Rcpp::IntegerVector cols, int convertNA, int verbose);
 RcppExport SEXP vcfR_read_body_gz(SEXP xSEXP, SEXP statsSEXP, SEXP nrowsSEXP, SEXP skipSEXP, SEXP colsSEXP, SEXP convertNASEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type stats(statsSEXP);
-    Rcpp::traits::input_parameter< int >::type nrows(nrowsSEXP);
-    Rcpp::traits::input_parameter< int >::type skip(skipSEXP);
+    Rcpp::traits::input_parameter< long int >::type nrows(nrowsSEXP);
+    Rcpp::traits::input_parameter< long int >::type skip(skipSEXP);
     Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type cols(colsSEXP);
     Rcpp::traits::input_parameter< int >::type convertNA(convertNASEXP);
     Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
