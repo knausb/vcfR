@@ -263,6 +263,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// vcf_stats_no_variants_gz
+Rcpp::NumericVector vcf_stats_no_variants_gz(std::string x);
+RcppExport SEXP vcfR_vcf_stats_no_variants_gz(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(vcf_stats_no_variants_gz(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // read_meta_gz
 Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats, int verbose);
 RcppExport SEXP vcfR_read_meta_gz(SEXP xSEXP, SEXP statsSEXP, SEXP verboseSEXP) {

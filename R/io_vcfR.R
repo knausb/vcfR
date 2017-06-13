@@ -107,7 +107,12 @@ read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, conver
   }
   
   vcf <- new(Class="vcfR")
-  stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', file)
+  if (nrows == 0) {
+    stats <- .Call('vcfR_vcf_stats_no_variants_gz', PACKAGE = 'vcfR', file)
+  } else {
+    stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', file)  
+  }
+  
   # stats should be a named vector containing "meta", "header", "variants", "columns".
   # They should have been initialize to zero.
   if(verbose == TRUE){
@@ -131,7 +136,11 @@ read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, conver
     stop( paste("stats['header'] less than zero:", stats['header'], ", this should never happen.") )
   }
   if( stats['variants'] < 0 ){
-    stop( paste("stats['variants'] less than zero:", stats['variants'], ", this should never happen.") )
+    if (nrows == 0) { 
+      message('No variants read because nrows=0 parameter was set.') 
+    } else {
+      stop( paste("stats['variants'] less than zero:", stats['variants'], ", this should never happen.") )
+    }
   }
   if( stats['columns'] < 0 ){
     stop( paste("stats['columns'] less than zero:", stats['columns'], ", this should never happen.") )
