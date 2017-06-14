@@ -264,8 +264,8 @@ windowize_annotations <- function(wins, ann_starts, ann_ends, chrom_length) {
     .Call(vcfR_windowize_annotations, wins, ann_starts, ann_ends, chrom_length)
 }
 
-vcf_stats_gz <- function(x) {
-    .Call(vcfR_vcf_stats_gz, x)
+vcf_stats_gz <- function(x, nrows = -1L) {
+    .Call(vcfR_vcf_stats_gz, x, nrows)
 }
 
 vcf_stats_no_variants_gz <- function(x) {

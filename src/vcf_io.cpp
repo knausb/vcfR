@@ -18,7 +18,7 @@ Called by vcf_stats_gz.
 Processes lines from vcf files.
 Counts meta (^##), header (^#C), columns in the header and remaining lines.
 */
-void stat_line(Rcpp::NumericVector stats, std::string line){
+void stat_line(Rcpp::NumericVector stats, std::string line, int count_variants){
   if(line[0] == '#' && line[1] == '#'){
     // Meta
     stats(0)++;
@@ -31,31 +31,11 @@ void stat_line(Rcpp::NumericVector stats, std::string line){
     stats(3) = col_vec.size();
   } else {
     // Variant
-    stats(2)++;
-  }
-}
-
-
-
-/* 
- Called by vcf_stats_no_variants_gz.
- Processes lines from vcf files.
- Counts meta (^##), header (^#C), columns in the header but doesn't do anything with variants
- */
-void stat_line_no_variants(Rcpp::NumericVector stats, std::string line){
-  if(line[0] == '#' && line[1] == '#'){
-    // Meta
-    stats(0)++;
-  } else if (line[0] == '#' && line[1] == 'C'){
-    // Header
-    stats(1) = stats(0) + 1;
-    std::vector < std::string > col_vec;
-    char col_split = '\t'; // Must be single quotes!
-    vcfRCommon::strsplit(line, col_vec, col_split);
-    stats(3) = col_vec.size();
-  } else {
-    // Variant
-    stats(2) = -1;
+    if (count_variants) {
+      stats(2)++;
+    } else {
+      stats(2) = -1;
+    }
   }
 }
 
@@ -64,7 +44,7 @@ void stat_line_no_variants(Rcpp::NumericVector stats, std::string line){
 /*  Single pass of vcf file to get statistics */
 
 // [[Rcpp::export]]
-Rcpp::NumericVector vcf_stats_gz(std::string x) {
+Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows = -1) {
   
   Rcpp::NumericVector stats(4);  // 4 elements, all zero.  Zero is default.
   stats.names() = Rcpp::StringVector::create("meta", "header", "variants", "columns");
@@ -76,6 +56,13 @@ Rcpp::NumericVector vcf_stats_gz(std::string x) {
     return stats;
   }
 
+  int count_variants;
+  if (nrows == -1) {
+    count_variants = 1;
+  } else {
+    count_variants = 0;
+  }
+  
   // Scroll through buffers.
   std::string lastline = "";
   while (1) {
@@ -96,7 +83,13 @@ Rcpp::NumericVector vcf_stats_gz(std::string x) {
     // Scroll through lines derived from the buffer.
     unsigned int i = 0;
     for(i=0; i < svec.size() - 1; i++){
-      stat_line(stats, svec[i]);
+      stat_line(stats, svec[i], count_variants);
+      
+      // stats(2) == -1 is the signal from stat_line that a variant was read
+      if (stats(2) == -1) { 
+        //stats(2) = 0;
+        break; 
+      }
     }
     // Manage the last line.
     lastline = svec[svec.size() - 1];
@@ -125,79 +118,6 @@ Rcpp::NumericVector vcf_stats_gz(std::string x) {
   }
   gzclose (file);
 
-  return stats;
-}
-
-
-
-/*  Single pass of vcf file to get statistics */
-
-// [[Rcpp::export]]
-Rcpp::NumericVector vcf_stats_no_variants_gz(std::string x) {
-  
-  Rcpp::NumericVector stats(4);  // 4 elements, all zero.  Zero is default.
-  stats.names() = Rcpp::StringVector::create("meta", "header", "variants", "columns");
-  
-  gzFile file;
-  file = gzopen (x.c_str(), "r");
-  if (! file) {
-    Rcpp::Rcerr << "gzopen of " << x << " failed: " << strerror (errno) << ".\n";
-    return stats;
-  }
-  
-  // Scroll through buffers.
-  std::string lastline = "";
-  while (1) {
-    Rcpp::checkUserInterrupt();
-    int err;
-    int bytes_read;
-    char buffer[LENGTH];
-    bytes_read = gzread (file, buffer, LENGTH - 1);
-    buffer[bytes_read] = '\0';
-    
-    std::string mystring(reinterpret_cast<char*>(buffer));  // Recast buffer as a string.
-    mystring = lastline + mystring;
-    std::vector < std::string > svec;  // Initialize vector of strings for parsed buffer.
-    
-    char split = '\n'; // Must be single quotes!
-    vcfRCommon::strsplit(mystring, svec, split);
-    
-    // Scroll through lines derived from the buffer.
-    unsigned int i = 0;
-    for(i=0; i < svec.size() - 1; i++){
-      stat_line_no_variants(stats, svec[i]);
-      if (stats(2) == -1) { break; }
-    }
-    
-    break;
-    // // Manage the last line.
-    // lastline = svec[svec.size() - 1];
-    // 
-    // // Check for EOF or errors.
-    // if (bytes_read < LENGTH - 1) {
-    //   if ( gzeof (file) ) {
-    //     if( stats(3) == 0 ){
-    //       // Count columns from last line.
-    //       std::vector < std::string > col_vec;
-    //       char col_split = '\t'; // Must be single quotes!
-    //       vcfRCommon::strsplit(svec[0], col_vec, col_split);
-    //       stats(3) = col_vec.size();
-    //     }
-    //     break;
-    //   }
-    //   else {
-    //     const char * error_string;
-    //     error_string = gzerror (file, & err);
-    //     if (err) {
-    //       Rcpp::Rcerr << "Error: " << error_string << ".\n";
-    //       return stats;
-    //     }
-    //   }
-    // }
-    
-  }
-  gzclose (file);
-  
   return stats;
 }
 
