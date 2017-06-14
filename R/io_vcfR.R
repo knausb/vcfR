@@ -107,7 +107,7 @@ read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, conver
   }
   
   vcf <- new(Class="vcfR")
-  stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', file)
+  stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', file, nrows)
   # stats should be a named vector containing "meta", "header", "variants", "columns".
   # They should have been initialize to zero.
   if(verbose == TRUE){
@@ -117,7 +117,7 @@ read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, conver
     cat("\n")
     cat( paste("  header line:", stats['header']) )
     cat("\n")
-    cat( paste("  variant count:", stats['variants']) )
+    cat( paste("  variant count:", ifelse(test = stats['variants'] == -1, yes = 'not counted', no = stats['variants'])) )
     cat("\n")
     cat( paste("  column count:", stats['columns']) )
     cat("\n")
@@ -130,7 +130,7 @@ read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, conver
   if( stats['header'] < 0 ){
     stop( paste("stats['header'] less than zero:", stats['header'], ", this should never happen.") )
   }
-  if( stats['variants'] < 0 ){
+  if( stats['variants'] < 0 & nrows == -1){
     stop( paste("stats['variants'] less than zero:", stats['variants'], ", this should never happen.") )
   }
   if( stats['columns'] < 0 ){
@@ -146,7 +146,10 @@ read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, conver
 
   
 #  ram_est <- stats['variants'] * stats['columns'] * 8 + 248
-  ram_est <- memuse::howbig(stats['variants'], stats['columns'])
+  ram_est <- memuse::howbig(ifelse(test = is.null(stats['variants']),
+                                   yes = nrows,
+                                   no = stats['variants']),
+                            stats['columns'])
   
   if(ram_est@size > limit){
     message(paste("The number of variants in your file is:", prettyNum(stats['variants'], big.mark=",")))
