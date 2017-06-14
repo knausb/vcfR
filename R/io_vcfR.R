@@ -146,7 +146,7 @@ read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, conver
 
   
 #  ram_est <- stats['variants'] * stats['columns'] * 8 + 248
-  ram_est <- memuse::howbig(ifelse(test = is.null(stats['variants']),
+  ram_est <- memuse::howbig(ifelse(test = stats['variants'] == -1,
                                    yes = nrows,
                                    no = stats['variants']),
                             stats['columns'])
