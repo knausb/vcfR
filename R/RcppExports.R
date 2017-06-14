@@ -268,10 +268,6 @@ vcf_stats_gz <- function(x, nrows = -1L) {
     .Call(vcfR_vcf_stats_gz, x, nrows)
 }
 
-vcf_stats_no_variants_gz <- function(x) {
-    .Call(vcfR_vcf_stats_no_variants_gz, x)
-}
-
 read_meta_gz <- function(x, stats, verbose) {
     .Call(vcfR_read_meta_gz, x, stats, verbose)
 }
