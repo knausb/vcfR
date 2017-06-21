@@ -17,6 +17,20 @@ test_that("is.polymorphic works",{
   expect_equal(sum(myVars), nrow(vcfR_test))  
 })
 
+test_that("is.polymorphic, not vcfR warning",{
+  myMat <- matrix(1, ncol=3, nrow=4)
+  expect_error(is.polymorphic(myMat), "Expected an object of class vcfR")
+})
+
+
+test_that("is.polymorphic, na.omit == TRUE",{
+  data("vcfR_test")
+  myVars <- is.polymorphic(vcfR_test, na.omit = TRUE)
+  
+  expect_equal(sum(myVars), nrow(vcfR_test))
+})
+
+
 ##### ##### ##### ##### #####
 # is.biallelic
 
