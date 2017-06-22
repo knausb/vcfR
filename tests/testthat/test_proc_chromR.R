@@ -110,4 +110,19 @@ test_that("vcfR_gt_to_popsum, triploid samples",{
 
 
 ##### ##### ##### ##### #####
+
+
+test_that("vcfR_gt_to_popsum, triploid samples",{
+  data("vcfR_test")
+  
+  mySeq <- ape::as.DNAbin(matrix(sample(c('a','c','g','t'), size = 1234567, replace = TRUE), nrow=1))
+  
+  myChrom <- create.chromR(vcfR_test, seq = mySeq, verbose = FALSE)
+  suppressMessages(suppressWarnings(myChrom <- proc.chromR(myChrom, verbose = TRUE)))
+  
+  expect_is(myChrom, "chromR")
+})
+
+
+##### ##### ##### ##### #####
 # EOF.

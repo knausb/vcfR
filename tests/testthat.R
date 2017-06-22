@@ -52,6 +52,7 @@ test_file("testthat/test_query_gt.R")
 
 test_file("testthat/test_queryMETA.R")
 
+test_file("testthat/test_summary_tables.R")
 #
 test_file("testthat/test_heatmapbp.R")
 
