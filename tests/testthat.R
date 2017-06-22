@@ -52,15 +52,18 @@ test_file("testthat/test_query_gt.R")
 
 test_file("testthat/test_queryMETA.R")
 
-#test_file("testthat/test_heatmapbp.R")
+#
+test_file("testthat/test_heatmapbp.R")
 
 
 # This test will write the plots to a file on the filesystem.
 # This should cause CRAN to complain.
 # Comment out this test prior to CRAN submission.
 #
-#test_file("testthat/test_chromo_plot.R")
-#test_file("testthat/test_drplot.R")
+#
+test_file("testthat/test_chromo_plot.R")
+#
+test_file("testthat/test_drplot.R")
 
 
 
