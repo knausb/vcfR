@@ -391,19 +391,22 @@ Rcpp::NumericMatrix bin_data( Rcpp::NumericVector myFreqs,
 //  Rcpp::Rcout << "\nBinning!\n\n";
   
   for(i=0; i<myFreqs.size(); i++){
-    int intQuery = myFreqs(i) * multiplier;
-    j = 0;
-    if( ( intQuery >= intBreaks(j,0) ) & ( intQuery <= intBreaks(j,2) ) ){
-//      Rcpp::Rcout << "Binned: " <<  myFreqs(i) << " is >= " << breaks(j,0) << " & <= " << breaks(j,2) << "\n";
-//      breaks(j,3) = breaks(j,3) + 1;
-    }
-    for(j=1; j<breaks.nrow(); j++){
-      if( ( intQuery > intBreaks(j,0) ) & ( intQuery <= intBreaks(j,2) ) ){
-//        Rcpp::Rcout << "Binned: " <<  myFreqs(i) << " is > " << breaks(j,0) << " & <= " << breaks(j,2) << "\n";
-        breaks(j,3) = breaks(j,3) + 1;
+    // myFreqs is a Rcpp::NumericVector and can potentially include missing values.
+    // Here we are trying to bin the values, so we should be safe ignoring missing values.
+    if( myFreqs(i) != NA_REAL ){
+      int intQuery = myFreqs(i) * multiplier;
+      j = 0;
+      if( ( intQuery >= intBreaks(j,0) ) & ( intQuery <= intBreaks(j,2) ) ){
+//        Rcpp::Rcout << "Binned: " <<  myFreqs(i) << " is >= " << breaks(j,0) << " & <= " << breaks(j,2) << "\n";
+//        breaks(j,3) = breaks(j,3) + 1;
+      }
+      for(j=1; j<breaks.nrow(); j++){
+        if( ( intQuery > intBreaks(j,0) ) & ( intQuery <= intBreaks(j,2) ) ){
+//          Rcpp::Rcout << "Binned: " <<  myFreqs(i) << " is > " << breaks(j,0) << " & <= " << breaks(j,2) << "\n";
+          breaks(j,3) = breaks(j,3) + 1;
+        }
       }
     }
-    
   }
   
   return(breaks);  
