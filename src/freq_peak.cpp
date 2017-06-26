@@ -350,6 +350,7 @@ Rcpp::NumericVector count_nonNA( Rcpp::NumericMatrix myMat ){
 }
 
 // Sort data into bins based on breaks (boundaries).
+//
 Rcpp::NumericMatrix bin_data( Rcpp::NumericVector myFreqs,
                               float bin_width
 ){
@@ -393,7 +394,7 @@ Rcpp::NumericMatrix bin_data( Rcpp::NumericVector myFreqs,
   for(i=0; i<myFreqs.size(); i++){
     // myFreqs is a Rcpp::NumericVector and can potentially include missing values.
     // Here we are trying to bin the values, so we should be safe ignoring missing values.
-    if( myFreqs(i) != NA_REAL ){
+    if( !Rcpp::NumericVector::is_na(myFreqs(i)) ){
       int intQuery = myFreqs(i) * multiplier;
       j = 0;
       if( ( intQuery >= intBreaks(j,0) ) & ( intQuery <= intBreaks(j,2) ) ){
@@ -442,9 +443,6 @@ double find_one_peak( Rcpp::NumericMatrix binned_data,
   }
   return( myPeak );  
 }
-
-
-
 
 
 
@@ -668,17 +666,6 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
   pos_to_windows(pos, wins);
 //  Rcpp::Rcout << " Finding windows.\n";
 
-  
-    
-//  int win_num = 0;
-//  i = 0;
-
-  
-//  if( pos.size() > 0 ){
-    // First row.
-//  
-
-  
     //                //
     // Sanity checks. //
     //                //
@@ -702,7 +689,8 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
       );
       return( myList );
     }
-    
+
+    // bin_width greater than 0.001    
     if( bin_width < 0.001 ){
       Rcpp::Rcerr << "Please use a bin_width >= 0.001.\n";
       Rcpp::List myList = Rcpp::List::create(
@@ -713,24 +701,21 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
     }
     
     // No remainder to bin width.
-    //int nbins = 1 / bin_width;
-//    float nbins = 1.0 / bin_width;
-//    if( 1.0/bin_width - nbins > 0.0 ){
-//    if( 1.0 % bin_width != 0 ){
-//    float myTest = fmod(1, bin_width);
+
     int myTest = (bin_width * 1000) + 0.5;
     if( 1000 % myTest != 0 ){
       Rcpp::Rcerr << "bin_width: " << bin_width << "\n";
       Rcpp::Rcerr << "myTest: " << myTest << "\n";
-//      Rcpp::Rcerr << "nbins: " << nbins << "\n";
       Rcpp::Rcerr << "1/bin_width has a remainder, please try another bin_width.\n";
+      
       Rcpp::List myList = Rcpp::List::create(
         Rcpp::Named("wins") = wins,
         Rcpp::Named("peaks") = naMat
       );
+      
     return( myList );
     }
-//    }
+
 
     //                    //
     // Process by window. //
