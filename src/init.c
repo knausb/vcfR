@@ -24,7 +24,7 @@ extern SEXP vcfR_rank_variants(SEXP, SEXP, SEXP);
 extern SEXP vcfR_read_body_gz(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP vcfR_read_meta_gz(SEXP, SEXP, SEXP);
 extern SEXP vcfR_seq_to_rects(SEXP, SEXP);
-extern SEXP vcfR_vcf_stats_gz(SEXP);
+extern SEXP vcfR_vcf_stats_gz(SEXP, SEXP);
 extern SEXP vcfR_window_init(SEXP, SEXP);
 extern SEXP vcfR_windowize_annotations(SEXP, SEXP, SEXP, SEXP);
 extern SEXP vcfR_windowize_fasta(SEXP, SEXP);
@@ -50,7 +50,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"vcfR_read_body_gz",          (DL_FUNC) &vcfR_read_body_gz,          7},
     {"vcfR_read_meta_gz",          (DL_FUNC) &vcfR_read_meta_gz,          3},
     {"vcfR_seq_to_rects",          (DL_FUNC) &vcfR_seq_to_rects,          2},
-    {"vcfR_vcf_stats_gz",          (DL_FUNC) &vcfR_vcf_stats_gz,          1},
+    {"vcfR_vcf_stats_gz",          (DL_FUNC) &vcfR_vcf_stats_gz,          2},
     {"vcfR_window_init",           (DL_FUNC) &vcfR_window_init,           2},
     {"vcfR_windowize_annotations", (DL_FUNC) &vcfR_windowize_annotations, 4},
     {"vcfR_windowize_fasta",       (DL_FUNC) &vcfR_windowize_fasta,       2},

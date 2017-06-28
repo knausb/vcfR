@@ -18,7 +18,7 @@ Called by vcf_stats_gz.
 Processes lines from vcf files.
 Counts meta (^##), header (^#C), columns in the header and remaining lines.
 */
-void stat_line(Rcpp::NumericVector stats, std::string line){
+void stat_line(Rcpp::NumericVector stats, std::string line, int count_variants){
   if(line[0] == '#' && line[1] == '#'){
     // Meta
     stats(0)++;
@@ -31,7 +31,11 @@ void stat_line(Rcpp::NumericVector stats, std::string line){
     stats(3) = col_vec.size();
   } else {
     // Variant
-    stats(2)++;
+    if (count_variants) {
+      stats(2)++;
+    } else {
+      stats(2) = -1;
+    }
   }
 }
 
@@ -40,7 +44,8 @@ void stat_line(Rcpp::NumericVector stats, std::string line){
 /*  Single pass of vcf file to get statistics */
 
 // [[Rcpp::export]]
-Rcpp::NumericVector vcf_stats_gz(std::string x) {
+Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows = -1) {
+  
   Rcpp::NumericVector stats(4);  // 4 elements, all zero.  Zero is default.
   stats.names() = Rcpp::StringVector::create("meta", "header", "variants", "columns");
   
@@ -51,6 +56,13 @@ Rcpp::NumericVector vcf_stats_gz(std::string x) {
     return stats;
   }
 
+  int count_variants;
+  if (nrows == -1) {
+    count_variants = 1;
+  } else {
+    count_variants = 0;
+  }
+  
   // Scroll through buffers.
   std::string lastline = "";
   while (1) {
@@ -71,7 +83,13 @@ Rcpp::NumericVector vcf_stats_gz(std::string x) {
     // Scroll through lines derived from the buffer.
     unsigned int i = 0;
     for(i=0; i < svec.size() - 1; i++){
-      stat_line(stats, svec[i]);
+      stat_line(stats, svec[i], count_variants);
+      
+      // stats(2) == -1 is the signal from stat_line that a variant was read
+      if (stats(2) == -1) { 
+        //stats(2) = 0;
+        break; 
+      }
     }
     // Manage the last line.
     lastline = svec[svec.size() - 1];

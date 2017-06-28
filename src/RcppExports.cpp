@@ -253,13 +253,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // vcf_stats_gz
-Rcpp::NumericVector vcf_stats_gz(std::string x);
-RcppExport SEXP vcfR_vcf_stats_gz(SEXP xSEXP) {
+Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows);
+RcppExport SEXP vcfR_vcf_stats_gz(SEXP xSEXP, SEXP nrowsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(vcf_stats_gz(x));
+    Rcpp::traits::input_parameter< int >::type nrows(nrowsSEXP);
+    rcpp_result_gen = Rcpp::wrap(vcf_stats_gz(x, nrows));
     return rcpp_result_gen;
 END_RCPP
 }
