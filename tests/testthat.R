@@ -56,6 +56,7 @@ test_file("testthat/test_summary_tables.R")
 #
 test_file("testthat/test_heatmapbp.R")
 
+test_file("testthat/test_vcfR2migrate.R")
 
 # This test will write the plots to a file on the filesystem.
 # This should cause CRAN to complain.
