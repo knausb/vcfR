@@ -58,7 +58,7 @@ vcfR2migrate <- function(vcf, pop, in_pop, out_file = "MigrateN_infile.txt", met
   # Subset VCF data to populations.
 #  vcf_list <- lapply(levels(my_pop), function(x){ vcf[,c(TRUE, x == my_pop)] })
 #  names(vcf_list) <- levels(pop)
-  vcf_list <- lapply(in_pop, function(x){ vcf[,c(TRUE, x == in_pop)] })
+  vcf_list <- lapply(in_pop, function(x){ vcf[,c(TRUE, x == pop)] })
   names(vcf_list) <- in_pop
   
 #  for (i in (1:length(vcf_list))) {
