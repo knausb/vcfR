@@ -167,12 +167,15 @@ calc_nei <- function(x1, x2){
 #' This is calculated as in equation 13 from Jost (2008).
 #' Examples are available at Jost's website: \url{http://www.loujost.com}.
 #' 
+#' A nice review of Fst and some of its analogues can be found in Holsinger and Weir (2009).
 #' 
 #' @seealso poppr.amova in \href{https://cran.r-project.org/package=poppr}{poppr}, amova in \href{https://cran.r-project.org/package=ade4}{ade4}, amova in \href{https://cran.r-project.org/package=pegas}{pegas}, \href{https://cran.r-project.org/package=hierfstat}{hierfstat}, \href{https://cran.r-project.org/package=DEMEtics}{DEMEtics}, and, \href{https://cran.r-project.org/package=mmod}{mmod}.
 #' 
 #' 
 #' @references 
 #' Hedrick, Philip W. "A standardized genetic differentiation measure." Evolution 59.8 (2005): 1633-1638.
+#' 
+#' Holsinger, Kent E., and Bruce S. Weir. "Genetics in geographically structured populations: defining, estimating and interpreting FST." Nature Reviews Genetics 10.9 (2009): 639-650.
 #' 
 #' Jost, Lou. "GST and its relatives do not measure differentiation." Molecular ecology 17.18 (2008): 4015-4026.
 #' 
