@@ -42,7 +42,9 @@ colMeans(myDiff[,c(3:8,11)], na.rm = TRUE)
 \references{
 Hedrick, Philip W. "A standardized genetic differentiation measure." Evolution 59.8 (2005): 1633-1638.
 
-Jost, Lou. "GST and its relatives do not measure differentiation." Molecular ecology 17.18 (2008): 4015-4026.
+Jost, Lou. "GST and its relatives do not measure differentiation." Molecular Ecology 17.18 (2008): 4015-4026.
+
+Whitlock, Michael C. "G'ST and D do not replace FST." Molecular Ecology 20.6 (2011): 1083-1091.
 }
 \seealso{
 poppr.amova in \href{https://cran.r-project.org/package=poppr}{poppr}, amova in \href{https://cran.r-project.org/package=ade4}{ade4}, amova in \href{https://cran.r-project.org/package=pegas}{pegas}, \href{https://cran.r-project.org/package=hierfstat}{hierfstat}, \href{https://cran.r-project.org/package=DEMEtics}{DEMEtics}, and, \href{https://cran.r-project.org/package=mmod}{mmod}.
