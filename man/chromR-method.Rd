@@ -18,7 +18,7 @@
 
 \S4method{print}{chromR}(x, y, ...)
 
-\S4method{head}{chromR}(x)
+\S4method{head}{chromR}(x, n = 6)
 
 \S4method{names}{chromR,character}(x) <- value
 
@@ -29,9 +29,11 @@
 
 \item{x}{an object of class chromR}
 
-\item{y}{some sort of object???}
+\item{y}{not currently used}
 
 \item{...}{Arguments to be passed to methods}
+
+\item{n}{integer indicating the number of elements to be printed from an object}
 
 \item{value}{a character containing a name}
 }
