@@ -179,6 +179,7 @@ calc_nei <- function(x1, x2){
 #' 
 #' Jost, Lou. "GST and its relatives do not measure differentiation." Molecular ecology 17.18 (2008): 4015-4026.
 #' 
+#' Whitlock, Michael C. "G'ST and D do not replace FST." Molecular Ecology 20.6 (2011): 1083-1091.
 #' 
 #' 
 #' @examples

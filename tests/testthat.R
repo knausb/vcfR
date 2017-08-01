@@ -72,7 +72,9 @@ test_file("testthat/test_drplot.R")
 ##### ##### ##### ##### #####
 
 
-#test_file("testthat/test_rank_variants.R")
+#
+test_file("testthat/test_rank_variants.R")
+
 #test_file("testthat/test_var_window.R")
 
 

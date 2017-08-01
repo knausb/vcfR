@@ -8,9 +8,10 @@
 #'
 #'
 #' @param x an object of class chromR
-#' @param y some sort of object???
+#' @param y not currently used
 #' @param object an object of class chromR
 #' @param value a character containing a name
+#' @param n integer indicating the number of elements to be printed from an object
 #' @param ... Arguments to be passed to methods
 #'
 #'
@@ -156,7 +157,7 @@ setMethod( f="print",
 #'
 setMethod( f="head",
   signature = "chromR",
-  definition=function(x){
+  definition=function(x, n = 6){
             #1234567890123456789012345678901234567890
     cat("*****   Class chromR, method head   *****")
     cat("\n")
@@ -168,12 +169,24 @@ setMethod( f="head",
             #1234567890123456789012345678901234567890
     cat("*****     Sample names (chromR)     *****")
     cat("\n")
-    print(colnames(x@vcf@gt)[-1])
+    if(ncol(x@vcf@gt) <= 2 * n){
+      print(colnames(x@vcf@gt)[-1])
+    } else {
+      print(head(colnames(x@vcf@gt)[-1]))
+      print("...")
+      print(utils::tail(colnames(x@vcf@gt)[-1]))
+    }
     cat("\n")
             #1234567890123456789012345678901234567890
     cat("*****    VCF fixed data (chromR)    *****")
     cat("\n")
-    print(x@vcf@fix[1:6,1:7])
+    if(nrow(x@vcf@gt) <= 2 * n){
+      print(x@vcf@fix[,1:7])
+    } else {
+      print(head(x@vcf@fix[,1:7]))
+      print("...")
+      print(utils::tail(x@vcf@fix[,1:7]))
+    }
     cat("\n")
     cat("INFO column has been suppressed, first INFO record:")
     cat("\n")
@@ -186,7 +199,13 @@ setMethod( f="head",
               #1234567890123456789012345678901234567890
       cat("*****     First 6 columns      *********")
       cat("\n")
-      print(x@vcf@gt[1:6,1:6])
+      if(nrow(x@vcf@gt) <= 2 * n){
+        print(x@vcf@gt[,1:6])
+      } else {
+        print(head(x@vcf@gt[,1:6]))
+#        print("...")
+#        print(tail(x@vcf@gt[,1:6]))
+      }
     } else {
       print(x@vcf@gt[1:6,])
     }
@@ -198,9 +217,9 @@ setMethod( f="head",
               #1234567890123456789012345678901234567890
       cat("*****       First 6 columns        *****")
       cat("\n")
-      print(x@var.info[1:6,1:6])
+      print(x@var.info[1:n,1:6])
     } else {
-      print(x@var.info[1:6,])
+      print(x@var.info[1:n,])
     }
     cat("\n")
             #1234567890123456789012345678901234567890
