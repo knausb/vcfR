@@ -27,9 +27,15 @@ rank.variants.chromR <- function(x, scores){
 #  stopifnot(is.vector(x@win.info['end']))
 #  stopifnot(class(x@win.info['end']) == 'numeric')
   
-  
   stopifnot(is.vector(scores))
   stopifnot(class(scores) == 'numeric')
+  
+  if( nrow(x@vcf) != length(scores) ){
+    msg <- "The number of variants and scores do not match."
+    msg <- paste(msg, " nrow(x@vcf): ", nrow(x@vcf), sep = "")
+    msg <- paste(msg, ", length(scores): ", length(scores), sep = "")
+    stop(msg)
+  }
   
   x@var.info <- .Call('vcfR_rank_variants', PACKAGE = 'vcfR', x@var.info, x@win.info$end, scores)
   #  vars <- .Call('vcfR_rank_variants', PACKAGE = 'vcfR', pinf_mt@var.info, pinf_mt@win.info$end, testv)
