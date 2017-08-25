@@ -30,6 +30,8 @@ This may make this a good choice when there is a mixture of ploidies in the samp
 The method \strong{jost} return's Jost's D as a measure of differentiation.
 This is calculated as in equation 13 from Jost (2008).
 Examples are available at Jost's website: \url{http://www.loujost.com}.
+
+A nice review of Fst and some of its analogues can be found in Holsinger and Weir (2009).
 }
 \examples{
 data(vcfR_example)
@@ -42,7 +44,9 @@ colMeans(myDiff[,c(3:8,11)], na.rm = TRUE)
 \references{
 Hedrick, Philip W. "A standardized genetic differentiation measure." Evolution 59.8 (2005): 1633-1638.
 
-Jost, Lou. "GST and its relatives do not measure differentiation." Molecular Ecology 17.18 (2008): 4015-4026.
+Holsinger, Kent E., and Bruce S. Weir. "Genetics in geographically structured populations: defining, estimating and interpreting FST." Nature Reviews Genetics 10.9 (2009): 639-650.
+
+Jost, Lou. "GST and its relatives do not measure differentiation." Molecular ecology 17.18 (2008): 4015-4026.
 
 Whitlock, Michael C. "G'ST and D do not replace FST." Molecular Ecology 20.6 (2011): 1083-1091.
 }
