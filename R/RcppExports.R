@@ -45,27 +45,27 @@
 #' 
 #' @export
 AD_frequency <- function(ad, delim = ",", allele = 1L, sum_type = 0L, decreasing = 1L) {
-    .Call(vcfR_AD_frequency, ad, delim, allele, sum_type, decreasing)
+    .Call(`_vcfR_AD_frequency`, ad, delim, allele, sum_type, decreasing)
 }
 
 extract_GT_to_CM <- function(x, element = "DP") {
-    .Call(vcfR_extract_GT_to_CM, x, element)
+    .Call(`_vcfR_extract_GT_to_CM`, x, element)
 }
 
 extract_GT_to_CM2 <- function(fix, gt, element = "DP", alleles = 0L, extract = 1L, convertNA = 1L) {
-    .Call(vcfR_extract_GT_to_CM2, fix, gt, element, alleles, extract, convertNA)
+    .Call(`_vcfR_extract_GT_to_CM2`, fix, gt, element, alleles, extract, convertNA)
 }
 
 CM_to_NM <- function(x) {
-    .Call(vcfR_CM_to_NM, x)
+    .Call(`_vcfR_CM_to_NM`, x)
 }
 
 extract_haps <- function(ref, alt, gt, unphased_as_NA, verbose) {
-    .Call(vcfR_extract_haps, ref, alt, gt, unphased_as_NA, verbose)
+    .Call(`_vcfR_extract_haps`, ref, alt, gt, unphased_as_NA, verbose)
 }
 
 grepa <- function() {
-    invisible(.Call(vcfR_grepa))
+    invisible(.Call(`_vcfR_grepa`))
 }
 
 #' 
@@ -168,11 +168,11 @@ grepa <- function() {
 #' 
 #' @export
 freq_peak <- function(myMat, pos, winsize = 10000L, bin_width = 0.02, lhs = TRUE) {
-    .Call(vcfR_freq_peak, myMat, pos, winsize, bin_width, lhs)
+    .Call(`_vcfR_freq_peak`, myMat, pos, winsize, bin_width, lhs)
 }
 
 gt_to_popsum <- function(var_info, gt) {
-    .Call(vcfR_gt_to_popsum, var_info, gt)
+    .Call(`_vcfR_gt_to_popsum`, var_info, gt)
 }
 
 #' @rdname is_het
@@ -182,7 +182,7 @@ gt_to_popsum <- function(var_info, gt) {
 #' 
 #' @export
 is_het <- function(x, na_is_false = TRUE) {
-    .Call(vcfR_is_het, x, na_is_false)
+    .Call(`_vcfR_is_het`, x, na_is_false)
 }
 
 #' 
@@ -225,62 +225,62 @@ is_het <- function(x, na_is_false = TRUE) {
 #' 
 #' @export
 masplit <- function(myMat, delim = ",", count = 0L, record = 1L, sort = 1L, decreasing = 1L) {
-    .Call(vcfR_masplit, myMat, delim, count, record, sort, decreasing)
+    .Call(`_vcfR_masplit`, myMat, delim, count, record, sort, decreasing)
 }
 
 NM2winNM <- function(x, pos, maxbp, winsize = 100L) {
-    .Call(vcfR_NM2winNM, x, pos, maxbp, winsize)
+    .Call(`_vcfR_NM2winNM`, x, pos, maxbp, winsize)
 }
 
 windowize_NM <- function(x, pos, starts, ends, summary = "mean") {
-    .Call(vcfR_windowize_NM, x, pos, starts, ends, summary)
+    .Call(`_vcfR_windowize_NM`, x, pos, starts, ends, summary)
 }
 
 pair_sort <- function() {
-    .Call(vcfR_pair_sort)
+    .Call(`_vcfR_pair_sort`)
 }
 
 rank_variants <- function(variants, ends, score) {
-    .Call(vcfR_rank_variants, variants, ends, score)
+    .Call(`_vcfR_rank_variants`, variants, ends, score)
 }
 
 seq_to_rects <- function(seq, targets) {
-    .Call(vcfR_seq_to_rects, seq, targets)
+    .Call(`_vcfR_seq_to_rects`, seq, targets)
 }
 
 window_init <- function(window_size, max_bp) {
-    .Call(vcfR_window_init, window_size, max_bp)
+    .Call(`_vcfR_window_init`, window_size, max_bp)
 }
 
 windowize_fasta <- function(wins, seq) {
-    .Call(vcfR_windowize_fasta, wins, seq)
+    .Call(`_vcfR_windowize_fasta`, wins, seq)
 }
 
 windowize_variants <- function(windows, variants) {
-    .Call(vcfR_windowize_variants, windows, variants)
+    .Call(`_vcfR_windowize_variants`, windows, variants)
 }
 
 windowize_annotations <- function(wins, ann_starts, ann_ends, chrom_length) {
-    .Call(vcfR_windowize_annotations, wins, ann_starts, ann_ends, chrom_length)
+    .Call(`_vcfR_windowize_annotations`, wins, ann_starts, ann_ends, chrom_length)
 }
 
 vcf_stats_gz <- function(x) {
-    .Call(vcfR_vcf_stats_gz, x)
+    .Call(`_vcfR_vcf_stats_gz`, x)
 }
 
 read_meta_gz <- function(x, stats, verbose) {
-    .Call(vcfR_read_meta_gz, x, stats, verbose)
+    .Call(`_vcfR_read_meta_gz`, x, stats, verbose)
 }
 
 read_body_gz <- function(x, stats, nrows = -1L, skip = 0L, cols = 0L, convertNA = 1L, verbose = 1L) {
-    .Call(vcfR_read_body_gz, x, stats, nrows, skip, cols, convertNA, verbose)
+    .Call(`_vcfR_read_body_gz`, x, stats, nrows, skip, cols, convertNA, verbose)
 }
 
 write_vcf_body <- function(fix, gt, filename, mask = 0L) {
-    invisible(.Call(vcfR_write_vcf_body, fix, gt, filename, mask))
+    invisible(.Call(`_vcfR_write_vcf_body`, fix, gt, filename, mask))
 }
 
 write_fasta <- function(seq, seqname, filename, rowlength = 80L, verbose = 1L) {
-    invisible(.Call(vcfR_write_fasta, seq, seqname, filename, rowlength, verbose))
+    invisible(.Call(`_vcfR_write_fasta`, seq, seqname, filename, rowlength, verbose))
 }
 
