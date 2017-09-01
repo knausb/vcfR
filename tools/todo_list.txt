@@ -1,0 +1,13 @@
+
+
+To-do list, post re-build
+
+'vcfR.Rd':
+
+Uncomment
+# ' @useDynLib vcfR, .registration = TRUE
+
+Return links to functions
+  ‘read.vcfR’ ‘write.vcf’ ‘[vcfR:vcfR-method]{vcfR-method}’
+  ‘extract.gt’ ‘vcfR2genind’ ‘vcfR2loci’ ‘create.chromR’
+
