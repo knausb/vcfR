@@ -38,7 +38,7 @@ setMethod(
     cat( paste( nchrom, "CHROMs\n") )
     cat( paste( format(nvar, big.mark=","), "variants\n") )
     cat( "Object size: ")
-    print(object.size(object), units="MB")
+    print(utils::object.size(object), units="MB")
     cat( paste( format(pna * 100, digits = 4), "percent missing data\n") )
     cat("*****        *****         *****\n")
 #    message("*****        --*--         *****")
@@ -147,6 +147,7 @@ setMethod(
 #' 
 # @export
 # @aliases []
+#' @aliases [,vcfR-method
 #'
 #' @param i vector of rows (variants) to include
 #' @param j vector of columns (samples) to include
