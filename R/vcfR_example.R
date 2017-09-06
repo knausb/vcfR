@@ -17,10 +17,6 @@
 #' The coordinate systems of the vcf and gff file have been altered by subtracting 500,000.
 #' This results in a 100 kbp section of supercontig_1.50 that has positional data ranging from 1 to 100 kbp. 
 #' 
-#' Note that it is encouraged to keep package contents small to facilitate easy
-#' downloading and installation.  This is why a mitochondrion was chosen as an
-#' example.  In practice I've used this package on supercontigs.  This package
-#' was designed for much larger datasets in mind than in this example.
 #' 
 #' @examples
 #' data(vcfR_example)
