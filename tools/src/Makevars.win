@@ -1,0 +1,14 @@
+## We need the compression library
+PKG_LIBS = -lz
+
+## We want C++11 as it gets us 'long long' as well
+CXX_STD = CXX11
+
+## Notes on using goodies
+## http://cran.r-project.org/web/packages/h5/INSTALL
+#LOCAL_SOFT = C:\Rtools
+
+ZLIB_LIBRARY = C:/Rtools/local320/lib/i386/libz.a
+#ZLIB_LIBRARY: C:/Rtools/local320/lib/x64/libz.a
+#CMAKE_C_FLAGS: -m64
+#CMAKE_CXX_FLAGS: -m64
