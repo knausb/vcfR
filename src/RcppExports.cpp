@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // timesTwo
 NumericVector timesTwo(NumericVector x);
-RcppExport SEXP vcfR_timesTwo(SEXP xSEXP) {
+RcppExport SEXP _vcfR_timesTwo(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -18,7 +18,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"vcfR_timesTwo", (DL_FUNC) &vcfR_timesTwo, 1},
+    {"_vcfR_timesTwo", (DL_FUNC) &_vcfR_timesTwo, 1},
     {NULL, NULL, 0}
 };
 
