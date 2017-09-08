@@ -8,6 +8,14 @@ library(vcfR)
 #
 context("vcfR functions")
 
+##### ##### ##### ##### #####
+#
+# Tests for functions that work on vcfR objects.
+# Tests for reading and writing vcfR objects
+# occur elsewhere.
+#
+##### ##### ##### ##### #####
+
 
 ##### ##### ##### ##### #####
 #
@@ -47,3 +55,5 @@ test_that("vcfR subsetters works",{
 })
 
 
+##### ##### ##### ##### #####
+# EOF.
