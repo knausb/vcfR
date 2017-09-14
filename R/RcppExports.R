@@ -166,6 +166,10 @@ freq_peak <- function(myMat, pos, winsize = 10000L, bin_width = 0.02, lhs = TRUE
     .Call(`_vcfR_freq_peak`, myMat, pos, winsize, bin_width, lhs)
 }
 
+gt_to_popsum <- function(var_info, gt) {
+    .Call(`_vcfR_gt_to_popsum`, var_info, gt)
+}
+
 #' @rdname is_het
 #' @name is_het
 #' 
