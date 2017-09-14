@@ -24,7 +24,6 @@ test_that("compiled vcfR_vcf_stats_gz works",{
   data("vcfR_test")
   write.vcf(vcfR_test, file="myFile.vcf.gz")
   
-#  stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', ex_file)
   stats <- .vcf_stats_gz("myFile.vcf.gz")
   unlink("myFile.vcf.gz")
   
@@ -63,8 +62,7 @@ test_that("compiled vcfR_vcf_stats_gz works, Windows carriage return",{
   
   # Query file.
   stats <- .vcf_stats_gz(ex_file)
-  #stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', ex_file)
-  
+
   # Test.
   expect_equal( as.numeric(stats['meta']), length(vcfR_test@meta) )
   expect_equal( as.numeric(stats['variants']), nrow(vcfR_test@fix) )
@@ -78,7 +76,6 @@ test_that("compiled vcf_stats_gz nrows works",{
   data("vcfR_example")
   write.vcf(vcf, file="myFile.vcf.gz")
   
-#  stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', ex_file)
   stats <- .vcf_stats_gz("myFile.vcf.gz", nrows = 10)
   unlink("myFile.vcf.gz")
   
@@ -103,9 +100,6 @@ test_that("compiled vcfR_read_body works when file contains no variants",{
   write.vcf(vcf2, myFile)
   stats <- .vcf_stats_gz(myFile)
   
-#  meta <- .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', ex_file, stats, 0)
-##  body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', ex_file, stats, nrows = -1, skip = 0, cols=1:stats['columns'], 0)
-#
   body <- .read_body_gz(myFile, stats,
                 nrows = 0, skip = 0, cols=1:stats['columns'],
                 convertNA = 1, verbose = 0)
@@ -131,22 +125,18 @@ test_that("compiled input functions work",{
   write.vcf(vcf, file=ex_file)
 
   stats <- .vcf_stats_gz(ex_file)
-  #stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', ex_file)
-  
+
   expect_equal(length(stats), 4)
   expect_is(stats, "numeric")
   
   meta <- .read_meta_gz(ex_file, stats, 0)
-  #meta <- .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', ex_file, stats, 0)
   expect_equal(length(meta), as.numeric(stats["meta"]))
   expect_is(meta, "character")
   
   body <- .read_body_gz(ex_file, stats,
                         nrows = -1, skip = 0, cols=1:stats['columns'],
                         convertNA = 1, verbose = 0)
-#  body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', ex_file, stats,
-#                nrows = -1, skip = 0, cols=1:stats['columns'],
-#                convertNA = 1, verbose = 0)
+
   expect_is(body, "matrix")
   expect_equal(nrow(body), as.numeric(stats["variants"]))
   expect_equal(ncol(body), as.numeric(stats["columns"]))
@@ -227,10 +217,9 @@ test_that("VCF with no GT, compiled functions",{
   
   ex_file <- "test.vcf.gz"
   
-  test <- .Call("vcfR_write_vcf_body", PACKAGE = "vcfR", 
-            fix = vcf@fix, gt = vcf@gt, filename = ex_file, mask = 0)
-  stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', ex_file)
-  body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', ex_file, stats,
+  test <- .write_vcf_body(fix = vcf@fix, gt = vcf@gt, filename = ex_file, mask = 0)
+  stats <- .vcf_stats_gz(ex_file)
+  body <- .read_body_gz(ex_file, stats,
                 nrows = -1, skip = 0, cols=1:stats['columns'],
                 convertNA = 1, verbose = 0)
 

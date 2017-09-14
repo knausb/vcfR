@@ -18,9 +18,6 @@ setwd(myTmp)
 
 test_that("write_vcf_body works on objects of class vcfR",{
   data(vcfR_test)
-#  test <- .Call('vcfR_write_vcf_body', PACKAGE = 'vcfR', 
-#                fix = vcfR_test@fix, gt = vcfR_test@gt, 
-#                filename = 'myVars.vcf.gz', mask = 0)
   test <- .write_vcf_body(fix = vcfR_test@fix,
                           gt = vcfR_test@gt, 
                           filename = 'myVars.vcf.gz')
@@ -38,9 +35,6 @@ test_that("write_vcf_body works on objects of class vcfR with no variants",{
   vcfR_test@fix <- vcfR_test@fix[0,]
   vcfR_test@gt <- vcfR_test@gt[0,]
 
-#  test <- .Call('vcfR_write_vcf_body', PACKAGE = 'vcfR',
-#                fix = vcfR_test@fix, gt = vcfR_test@gt, 
-#                filename = 'myVars.vcf.gz', mask = 0)
   test <- .write_vcf_body(fix = vcfR_test@fix,
                           gt = vcfR_test@gt, 
                           filename = 'myVars.vcf.gz')
@@ -56,9 +50,6 @@ test_that("write_vcf_body works on objects of class vcfR with no GT region",{
   data(vcfR_test)
   vcfR_test@gt <- vcfR_test@gt[0,0]
   
-#  test <- .Call('vcfR_write_vcf_body', PACKAGE = 'vcfR',
-#                fix = vcfR_test@fix, gt = vcfR_test@gt, 
-#                filename = 'myVars.vcf.gz', mask = 0)
   test <- .write_vcf_body(fix = vcfR_test@fix,
                           gt = vcfR_test@gt, 
                           filename = 'myVars.vcf.gz')

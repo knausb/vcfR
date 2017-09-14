@@ -48,17 +48,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// timesTwo
-int timesTwo(int x);
-RcppExport SEXP _vcfR_timesTwo(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(timesTwo(x));
-    return rcpp_result_gen;
-END_RCPP
-}
 // write_vcf_body
 void write_vcf_body(Rcpp::CharacterMatrix fix, Rcpp::CharacterMatrix gt, std::string filename, int mask);
 RcppExport SEXP _vcfR_write_vcf_body(SEXP fixSEXP, SEXP gtSEXP, SEXP filenameSEXP, SEXP maskSEXP) {
@@ -77,7 +66,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_vcfR_vcf_stats_gz", (DL_FUNC) &_vcfR_vcf_stats_gz, 3},
     {"_vcfR_read_meta_gz", (DL_FUNC) &_vcfR_read_meta_gz, 3},
     {"_vcfR_read_body_gz", (DL_FUNC) &_vcfR_read_body_gz, 7},
-    {"_vcfR_timesTwo", (DL_FUNC) &_vcfR_timesTwo, 1},
     {"_vcfR_write_vcf_body", (DL_FUNC) &_vcfR_write_vcf_body, 4},
     {NULL, NULL, 0}
 };

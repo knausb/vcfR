@@ -16,14 +16,6 @@
     .Call(`_vcfR_read_body_gz`, x, stats, nrows, skip, cols, convertNA, verbose)
 }
 
-#' Multiply a number by two
-#'
-#' @param x A single integer.
-#' @export
-.timesTwo <- function(x) {
-    .Call(`_vcfR_timesTwo`, x)
-}
-
 #' @export
 .write_vcf_body <- function(fix, gt, filename = "myFile.vcf.gz", mask = 0L) {
     invisible(.Call(`_vcfR_write_vcf_body`, fix, gt, filename, mask))

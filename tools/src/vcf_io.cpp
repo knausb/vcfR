@@ -8,13 +8,6 @@
 
 
 
-
-
-
-
-
-
-
 Rcpp::StringMatrix DataFrame_to_StringMatrix( Rcpp::DataFrame df ){
   Rcpp::StringVector sv = df(0);
   Rcpp::StringMatrix sm(sv.size(), df.size());
