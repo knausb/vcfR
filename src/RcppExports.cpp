@@ -5,6 +5,21 @@
 
 using namespace Rcpp;
 
+// AD_frequency
+Rcpp::NumericMatrix AD_frequency(Rcpp::StringMatrix ad, std::string delim, unsigned int allele, int sum_type, int decreasing);
+RcppExport SEXP _vcfR_AD_frequency(SEXP adSEXP, SEXP delimSEXP, SEXP alleleSEXP, SEXP sum_typeSEXP, SEXP decreasingSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::StringMatrix >::type ad(adSEXP);
+    Rcpp::traits::input_parameter< std::string >::type delim(delimSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type allele(alleleSEXP);
+    Rcpp::traits::input_parameter< int >::type sum_type(sum_typeSEXP);
+    Rcpp::traits::input_parameter< int >::type decreasing(decreasingSEXP);
+    rcpp_result_gen = Rcpp::wrap(AD_frequency(ad, delim, allele, sum_type, decreasing));
+    return rcpp_result_gen;
+END_RCPP
+}
 // extract_GT_to_CM
 Rcpp::StringMatrix extract_GT_to_CM(Rcpp::StringMatrix fix, Rcpp::StringMatrix gt, std::string element, int alleles, int extract, int convertNA);
 RcppExport SEXP _vcfR_extract_GT_to_CM(SEXP fixSEXP, SEXP gtSEXP, SEXP elementSEXP, SEXP allelesSEXP, SEXP extractSEXP, SEXP convertNASEXP) {
@@ -117,6 +132,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_vcfR_AD_frequency", (DL_FUNC) &_vcfR_AD_frequency, 5},
     {"_vcfR_extract_GT_to_CM", (DL_FUNC) &_vcfR_extract_GT_to_CM, 6},
     {"_vcfR_CM_to_NM", (DL_FUNC) &_vcfR_CM_to_NM, 1},
     {"_vcfR_extract_haps", (DL_FUNC) &_vcfR_extract_haps, 5},
