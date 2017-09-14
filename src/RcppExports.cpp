@@ -62,6 +62,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// freq_peak
+Rcpp::List freq_peak(Rcpp::NumericMatrix myMat, Rcpp::NumericVector pos, int winsize, float bin_width, Rcpp::LogicalVector lhs);
+RcppExport SEXP _vcfR_freq_peak(SEXP myMatSEXP, SEXP posSEXP, SEXP winsizeSEXP, SEXP bin_widthSEXP, SEXP lhsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type myMat(myMatSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type pos(posSEXP);
+    Rcpp::traits::input_parameter< int >::type winsize(winsizeSEXP);
+    Rcpp::traits::input_parameter< float >::type bin_width(bin_widthSEXP);
+    Rcpp::traits::input_parameter< Rcpp::LogicalVector >::type lhs(lhsSEXP);
+    rcpp_result_gen = Rcpp::wrap(freq_peak(myMat, pos, winsize, bin_width, lhs));
+    return rcpp_result_gen;
+END_RCPP
+}
 // is_het
 Rcpp::LogicalMatrix is_het(Rcpp::StringMatrix x, Rcpp::LogicalVector na_is_false);
 RcppExport SEXP _vcfR_is_het(SEXP xSEXP, SEXP na_is_falseSEXP) {
@@ -71,6 +86,22 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::StringMatrix >::type x(xSEXP);
     Rcpp::traits::input_parameter< Rcpp::LogicalVector >::type na_is_false(na_is_falseSEXP);
     rcpp_result_gen = Rcpp::wrap(is_het(x, na_is_false));
+    return rcpp_result_gen;
+END_RCPP
+}
+// masplit
+Rcpp::NumericMatrix masplit(Rcpp::StringMatrix myMat, std::string delim, int count, int record, int sort, int decreasing);
+RcppExport SEXP _vcfR_masplit(SEXP myMatSEXP, SEXP delimSEXP, SEXP countSEXP, SEXP recordSEXP, SEXP sortSEXP, SEXP decreasingSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::StringMatrix >::type myMat(myMatSEXP);
+    Rcpp::traits::input_parameter< std::string >::type delim(delimSEXP);
+    Rcpp::traits::input_parameter< int >::type count(countSEXP);
+    Rcpp::traits::input_parameter< int >::type record(recordSEXP);
+    Rcpp::traits::input_parameter< int >::type sort(sortSEXP);
+    Rcpp::traits::input_parameter< int >::type decreasing(decreasingSEXP);
+    rcpp_result_gen = Rcpp::wrap(masplit(myMat, delim, count, record, sort, decreasing));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -136,7 +167,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_vcfR_extract_GT_to_CM", (DL_FUNC) &_vcfR_extract_GT_to_CM, 6},
     {"_vcfR_CM_to_NM", (DL_FUNC) &_vcfR_CM_to_NM, 1},
     {"_vcfR_extract_haps", (DL_FUNC) &_vcfR_extract_haps, 5},
+    {"_vcfR_freq_peak", (DL_FUNC) &_vcfR_freq_peak, 5},
     {"_vcfR_is_het", (DL_FUNC) &_vcfR_is_het, 2},
+    {"_vcfR_masplit", (DL_FUNC) &_vcfR_masplit, 6},
     {"_vcfR_vcf_stats_gz", (DL_FUNC) &_vcfR_vcf_stats_gz, 3},
     {"_vcfR_read_meta_gz", (DL_FUNC) &_vcfR_read_meta_gz, 3},
     {"_vcfR_read_body_gz", (DL_FUNC) &_vcfR_read_body_gz, 7},

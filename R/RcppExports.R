@@ -63,6 +63,109 @@ AD_frequency <- function(ad, delim = ",", allele = 1L, sum_type = 0L, decreasing
     .Call(`_vcfR_extract_haps`, ref, alt, gt, unphased_as_NA, verbose)
 }
 
+#' 
+#' @rdname freq_peak
+#' 
+#' @title freq_peak
+#' @description Find density peaks in frequency data.
+#' 
+#' @param myMat a matrix of frequencies [0-1].
+#' @param pos a numeric vector describing the position of variants in myMat.
+#' @param winsize sliding window size.
+#' @param bin_width Width of bins to summarize ferequencies in (0-1].
+#' @param lhs logical specifying whether the search for the bin of greatest density should favor values from the left hand side.
+#' 
+#' @details
+#' Noisy data, such as genomic data, lack a clear consensus.
+#' Summaries may be made in an attempt to 'clean it up.'
+#' Common summaries, such as the mean, rely on an assumption of normalicy.
+#' An assumption that frequently can be violated.
+#' This leaves a conundrum as to how to effectively summarize these data.
+#' 
+#' 
+#' Here we implement an attempt to summarize noisy data through binning the data and selecting the bin containing the greatest density of data.
+#' The data are first divided into parameter sized windows.
+#' Next the data are categorized by parameterizable bin widths.
+#' Finally, the bin with the greatest density, the greatest count of data, is used as a summary.
+#' Because this method is based on binning the data it does not rely on a distributional assumption.
+#' 
+#' 
+#' The parameter `lhs` specifyies whether the search for the bin of greatest density should be performed from the left hand side.
+#' The default value of TRUE starts at the left hand side, or zero, and selects a new bin as having the greatest density only if a new bin has a greater density.
+#' If the new bin has an equal density then no update is made.
+#' This causees the analysis to select lower frequencies.
+#' When this parameter is set to FALSE ties result in an update of the bin of greatest density.
+#' This causes the analysis to select higher frequencies.
+#' It is recommended that when testing the most abundant allele (typically [0.5-1]) to use the default of TURE so that a low value is preferred.
+#' Similarly, when testing the less abundant alleles it is recommended to set this value at FALSE to preferentially select high values.
+#' 
+#' 
+#' @return 
+#' A list containing:
+#' \itemize{
+#'   \item a matrix containing window coordinates
+#'   \item a matrix containing peak locations
+#'   \item a matrix containing the counts of variants for each sample in each window
+#' }
+#' 
+#' The window matrix contains start and end coordinates for each window, the rows of the original matrix that demarcate each window and the position of the variants that begin and end each window.
+#' 
+#' The matrix of peak locations contains the midpoint for the bin of greatest density for each sample and each window.
+#' Alternatively, if `count = TRUE` the number of non-missing values in each window is reported.
+#' The number of non-mising values in each window may be used to censor windows containing low quantities of data.
+#' 
+#' 
+#' @examples
+#' data(vcfR_example)
+#' gt <- extract.gt(vcf)
+#' hets <- is_het(gt)
+#' # Censor non-heterozygous positions.
+#' is.na(vcf@gt[,-1][!hets]) <- TRUE
+#' # Extract allele depths.
+#' ad <- extract.gt(vcf, element = "AD")
+#' ad1 <- masplit(ad, record = 1)
+#' ad2 <- masplit(ad, record = 2)
+#' freq1 <- ad1/(ad1+ad2)
+#' freq2 <- ad2/(ad1+ad2)
+#' myPeaks1 <- freq_peak(freq1, getPOS(vcf))
+#' is.na(myPeaks1$peaks[myPeaks1$counts < 20]) <- TRUE
+#' myPeaks2 <- freq_peak(freq2, getPOS(vcf), lhs = FALSE)
+#' is.na(myPeaks2$peaks[myPeaks2$counts < 20]) <- TRUE
+#' myPeaks1
+#' 
+#' # Visualize
+#' mySample <- "P17777us22"
+#' myWin <- 2
+#' hist(freq1[myPeaks1$wins[myWin,'START_row']:myPeaks1$wins[myWin,'END_row'], mySample], 
+#'      breaks=seq(0,1,by=0.02), col="#A6CEE3", main="", xlab="", xaxt="n")
+#' hist(freq2[myPeaks2$wins[myWin,'START_row']:myPeaks2$wins[myWin,'END_row'], mySample], 
+#'      breaks=seq(0,1,by=0.02), col="#1F78B4", main="", xlab="", xaxt="n", add = TRUE)
+#' axis(side=1, at=c(0,0.25,0.333,0.5,0.666,0.75,1), 
+#'      labels=c(0,'1/4','1/3','1/2','2/3','3/4',1), las=3)
+#' abline(v=myPeaks1$peaks[myWin,mySample], col=2, lwd=2)
+#' abline(v=myPeaks2$peaks[myWin,mySample], col=2, lwd=2)
+#' 
+#' # Visualize #2
+#' mySample <- "P17777us22"
+#' plot(getPOS(vcf), freq1[,mySample], ylim=c(0,1), type="n", yaxt='n', 
+#'      main = mySample, xlab = "POS", ylab = "Allele balance")
+#' axis(side=2, at=c(0,0.25,0.333,0.5,0.666,0.75,1), 
+#'      labels=c(0,'1/4','1/3','1/2','2/3','3/4',1), las=1)
+#' abline(h=c(0.25,0.333,0.5,0.666,0.75), col=8)
+#' points(getPOS(vcf), freq1[,mySample], pch = 20, col= "#A6CEE3")
+#' points(getPOS(vcf), freq2[,mySample], pch = 20, col= "#1F78B4")
+#' segments(x0=myPeaks1$wins[,'START_pos'], y0=myPeaks1$peaks[,mySample],
+#'          x1=myPeaks1$wins[,'END_pos'], lwd=3)
+#' segments(x0=myPeaks1$wins[,'START_pos'], y0=myPeaks2$peaks[,mySample],
+#'          x1=myPeaks1$wins[,'END_pos'], lwd=3)
+#' 
+#' 
+#' 
+#' @export
+freq_peak <- function(myMat, pos, winsize = 10000L, bin_width = 0.02, lhs = TRUE) {
+    .Call(`_vcfR_freq_peak`, myMat, pos, winsize, bin_width, lhs)
+}
+
 #' @rdname is_het
 #' @name is_het
 #' 
@@ -71,6 +174,49 @@ AD_frequency <- function(ad, delim = ",", allele = 1L, sum_type = 0L, decreasing
 #' @export
 is_het <- function(x, na_is_false = TRUE) {
     .Call(`_vcfR_is_het`, x, na_is_false)
+}
+
+#' 
+#' @rdname masplit
+#' 
+#' @title masplit
+#' @description Split a matrix of delimited strings.
+#' 
+#' @param myMat a matrix of delimited strings (e.g., "7,2").
+#' @param delim character that delimits values.
+#' @param count return the count of delimited records.
+#' @param record which (1-based) record to return.
+#' @param sort should the records be sorted prior to selecting the element?
+#' @param decreasing should the values be sorted decreasing (1) or increasing (0)?
+#' 
+#' 
+#' 
+#' @details Split a matrix of delimited strings.
+#' 
+#' @return A numeric matrix of numerics
+#' 
+#' 
+#' @examples
+#' set.seed(999)
+#' x1 <- round(rnorm(n=9, mean=10, sd=2))
+#' x2 <- round(rnorm(n=9, mean=20, sd=2))
+#' ad <- matrix(paste(x1, x2, sep=","), nrow=3, ncol=3)
+#' colnames(ad) <- paste('Sample', 1:3, sep="_")
+#' rownames(ad) <- paste('Variant', 1:3, sep="_")
+#' ad[1,1] <- "9,23,12"
+#' is.na(ad[3,1]) <- TRUE
+#' 
+#' ad
+#' masplit(ad, count = 1)
+#' masplit(ad, sort = 0)
+#' masplit(ad, sort = 0, record = 2)
+#' masplit(ad, sort = 0, record = 3)
+#' masplit(ad, sort = 1, decreasing = 0)
+#' 
+#' 
+#' @export
+masplit <- function(myMat, delim = ",", count = 0L, record = 1L, sort = 1L, decreasing = 1L) {
+    .Call(`_vcfR_masplit`, myMat, delim, count, record, sort, decreasing)
 }
 
 #' @export
