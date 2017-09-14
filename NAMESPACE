@@ -2,6 +2,7 @@
 
 export("%>%")
 export(.timesTwo)
+export(.write_vcf_body)
 export(getALT)
 export(getCHROM)
 export(getFILTER)

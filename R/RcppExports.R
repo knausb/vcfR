@@ -9,3 +9,8 @@
     .Call(`_vcfR_timesTwo`, x)
 }
 
+#' @export
+.write_vcf_body <- function(fix, gt, filename = "myFile.vcf.gz", mask = 0L) {
+    invisible(.Call(`_vcfR_write_vcf_body`, fix, gt, filename, mask))
+}
+
