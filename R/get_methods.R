@@ -13,7 +13,8 @@
 #' @examples 
 #' library("vcfR")
 #' data("vcfR_example")
-#' chrom <- create.chromR('sc50', seq=dna, vcf=vcf, ann=gff)
+#' data("chromR_example")
+# ' chrom <- create.chromR('sc50', seq=dna, vcf=vcf, ann=gff)
 #' getFIX(vcf) %>% head
 #' getFIX(chrom) %>% head
 #' 

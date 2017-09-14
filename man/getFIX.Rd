@@ -63,7 +63,7 @@ These accessors allow you to isolate these variables from these objects.
 \examples{
 library("vcfR")
 data("vcfR_example")
-chrom <- create.chromR('sc50', seq=dna, vcf=vcf, ann=gff)
+data("chromR_example")
 getFIX(vcf) \%>\% head
 getFIX(chrom) \%>\% head
 
