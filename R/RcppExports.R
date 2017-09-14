@@ -166,7 +166,8 @@ freq_peak <- function(myMat, pos, winsize = 10000L, bin_width = 0.02, lhs = TRUE
     .Call(`_vcfR_freq_peak`, myMat, pos, winsize, bin_width, lhs)
 }
 
-gt_to_popsum <- function(var_info, gt) {
+#' @export
+.gt_to_popsum <- function(var_info, gt) {
     .Call(`_vcfR_gt_to_popsum`, var_info, gt)
 }
 
@@ -223,6 +224,22 @@ masplit <- function(myMat, delim = ",", count = 0L, record = 1L, sort = 1L, decr
     .Call(`_vcfR_masplit`, myMat, delim, count, record, sort, decreasing)
 }
 
+NM2winNM <- function(x, pos, maxbp, winsize = 100L) {
+    .Call(`_vcfR_NM2winNM`, x, pos, maxbp, winsize)
+}
+
+windowize_NM <- function(x, pos, starts, ends, summary = "mean") {
+    .Call(`_vcfR_windowize_NM`, x, pos, starts, ends, summary)
+}
+
+pair_sort <- function() {
+    .Call(`_vcfR_pair_sort`)
+}
+
+rank_variants <- function(variants, ends, score) {
+    .Call(`_vcfR_rank_variants`, variants, ends, score)
+}
+
 #' @export
 .vcf_stats_gz <- function(x, nrows = -1L, skip = 0L) {
     .Call(`_vcfR_vcf_stats_gz`, x, nrows, skip)
@@ -236,6 +253,31 @@ masplit <- function(myMat, delim = ",", count = 0L, record = 1L, sort = 1L, decr
 #' @export
 .read_body_gz <- function(x, stats, nrows = -1L, skip = 0L, cols = 0L, convertNA = 1L, verbose = 1L) {
     .Call(`_vcfR_read_body_gz`, x, stats, nrows, skip, cols, convertNA, verbose)
+}
+
+#' @export
+.seq_to_rects <- function(seq, targets) {
+    .Call(`_vcfR_seq_to_rects`, seq, targets)
+}
+
+#' @export
+.window_init <- function(window_size, max_bp) {
+    .Call(`_vcfR_window_init`, window_size, max_bp)
+}
+
+#' @export
+.windowize_fasta <- function(wins, seq) {
+    .Call(`_vcfR_windowize_fasta`, wins, seq)
+}
+
+#' @export
+.windowize_variants <- function(windows, variants) {
+    .Call(`_vcfR_windowize_variants`, windows, variants)
+}
+
+#' @export
+.windowize_annotations <- function(wins, ann_starts, ann_ends, chrom_length) {
+    .Call(`_vcfR_windowize_annotations`, wins, ann_starts, ann_ends, chrom_length)
 }
 
 #' @export

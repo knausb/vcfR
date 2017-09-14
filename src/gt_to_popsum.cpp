@@ -36,8 +36,8 @@ std::vector < int > gtsplit(std::string line){
 }
 
 
-
-// [[Rcpp::export]]
+//' @export
+// [[Rcpp::export(name=".gt_to_popsum")]]
 Rcpp::DataFrame gt_to_popsum(Rcpp::DataFrame var_info, Rcpp::CharacterMatrix gt) {
   // Calculate popgen summaries for the sample.
   // var_info should contain columns named 'CHROM', 'POS', 'mask' and possibly others.

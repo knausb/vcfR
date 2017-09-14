@@ -117,6 +117,58 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// NM2winNM
+NumericMatrix NM2winNM(NumericMatrix x, std::vector<int> pos, int maxbp, int winsize);
+RcppExport SEXP _vcfR_NM2winNM(SEXP xSEXP, SEXP posSEXP, SEXP maxbpSEXP, SEXP winsizeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type pos(posSEXP);
+    Rcpp::traits::input_parameter< int >::type maxbp(maxbpSEXP);
+    Rcpp::traits::input_parameter< int >::type winsize(winsizeSEXP);
+    rcpp_result_gen = Rcpp::wrap(NM2winNM(x, pos, maxbp, winsize));
+    return rcpp_result_gen;
+END_RCPP
+}
+// windowize_NM
+NumericMatrix windowize_NM(Rcpp::NumericMatrix x, Rcpp::NumericVector pos, Rcpp::NumericVector starts, Rcpp::NumericVector ends, Rcpp::String summary);
+RcppExport SEXP _vcfR_windowize_NM(SEXP xSEXP, SEXP posSEXP, SEXP startsSEXP, SEXP endsSEXP, SEXP summarySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type pos(posSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type starts(startsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type ends(endsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::String >::type summary(summarySEXP);
+    rcpp_result_gen = Rcpp::wrap(windowize_NM(x, pos, starts, ends, summary));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pair_sort
+Rcpp::DataFrame pair_sort();
+RcppExport SEXP _vcfR_pair_sort() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(pair_sort());
+    return rcpp_result_gen;
+END_RCPP
+}
+// rank_variants
+Rcpp::DataFrame rank_variants(Rcpp::DataFrame variants, Rcpp::NumericVector ends, Rcpp::NumericVector score);
+RcppExport SEXP _vcfR_rank_variants(SEXP variantsSEXP, SEXP endsSEXP, SEXP scoreSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type variants(variantsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type ends(endsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type score(scoreSEXP);
+    rcpp_result_gen = Rcpp::wrap(rank_variants(variants, ends, score));
+    return rcpp_result_gen;
+END_RCPP
+}
 // vcf_stats_gz
 Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows, int skip);
 RcppExport SEXP _vcfR_vcf_stats_gz(SEXP xSEXP, SEXP nrowsSEXP, SEXP skipSEXP) {
@@ -160,6 +212,68 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// seq_to_rects
+Rcpp::IntegerMatrix seq_to_rects(Rcpp::CharacterVector seq, std::string targets);
+RcppExport SEXP _vcfR_seq_to_rects(SEXP seqSEXP, SEXP targetsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type seq(seqSEXP);
+    Rcpp::traits::input_parameter< std::string >::type targets(targetsSEXP);
+    rcpp_result_gen = Rcpp::wrap(seq_to_rects(seq, targets));
+    return rcpp_result_gen;
+END_RCPP
+}
+// window_init
+Rcpp::DataFrame window_init(int window_size, int max_bp);
+RcppExport SEXP _vcfR_window_init(SEXP window_sizeSEXP, SEXP max_bpSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type window_size(window_sizeSEXP);
+    Rcpp::traits::input_parameter< int >::type max_bp(max_bpSEXP);
+    rcpp_result_gen = Rcpp::wrap(window_init(window_size, max_bp));
+    return rcpp_result_gen;
+END_RCPP
+}
+// windowize_fasta
+Rcpp::DataFrame windowize_fasta(Rcpp::DataFrame wins, Rcpp::CharacterVector seq);
+RcppExport SEXP _vcfR_windowize_fasta(SEXP winsSEXP, SEXP seqSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type wins(winsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type seq(seqSEXP);
+    rcpp_result_gen = Rcpp::wrap(windowize_fasta(wins, seq));
+    return rcpp_result_gen;
+END_RCPP
+}
+// windowize_variants
+Rcpp::DataFrame windowize_variants(Rcpp::DataFrame windows, Rcpp::DataFrame variants);
+RcppExport SEXP _vcfR_windowize_variants(SEXP windowsSEXP, SEXP variantsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type windows(windowsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type variants(variantsSEXP);
+    rcpp_result_gen = Rcpp::wrap(windowize_variants(windows, variants));
+    return rcpp_result_gen;
+END_RCPP
+}
+// windowize_annotations
+Rcpp::DataFrame windowize_annotations(Rcpp::DataFrame wins, Rcpp::NumericVector ann_starts, Rcpp::NumericVector ann_ends, int chrom_length);
+RcppExport SEXP _vcfR_windowize_annotations(SEXP winsSEXP, SEXP ann_startsSEXP, SEXP ann_endsSEXP, SEXP chrom_lengthSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type wins(winsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type ann_starts(ann_startsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type ann_ends(ann_endsSEXP);
+    Rcpp::traits::input_parameter< int >::type chrom_length(chrom_lengthSEXP);
+    rcpp_result_gen = Rcpp::wrap(windowize_annotations(wins, ann_starts, ann_ends, chrom_length));
+    return rcpp_result_gen;
+END_RCPP
+}
 // write_vcf_body
 void write_vcf_body(Rcpp::CharacterMatrix fix, Rcpp::CharacterMatrix gt, std::string filename, int mask);
 RcppExport SEXP _vcfR_write_vcf_body(SEXP fixSEXP, SEXP gtSEXP, SEXP filenameSEXP, SEXP maskSEXP) {
@@ -183,9 +297,18 @@ static const R_CallMethodDef CallEntries[] = {
     {"_vcfR_gt_to_popsum", (DL_FUNC) &_vcfR_gt_to_popsum, 2},
     {"_vcfR_is_het", (DL_FUNC) &_vcfR_is_het, 2},
     {"_vcfR_masplit", (DL_FUNC) &_vcfR_masplit, 6},
+    {"_vcfR_NM2winNM", (DL_FUNC) &_vcfR_NM2winNM, 4},
+    {"_vcfR_windowize_NM", (DL_FUNC) &_vcfR_windowize_NM, 5},
+    {"_vcfR_pair_sort", (DL_FUNC) &_vcfR_pair_sort, 0},
+    {"_vcfR_rank_variants", (DL_FUNC) &_vcfR_rank_variants, 3},
     {"_vcfR_vcf_stats_gz", (DL_FUNC) &_vcfR_vcf_stats_gz, 3},
     {"_vcfR_read_meta_gz", (DL_FUNC) &_vcfR_read_meta_gz, 3},
     {"_vcfR_read_body_gz", (DL_FUNC) &_vcfR_read_body_gz, 7},
+    {"_vcfR_seq_to_rects", (DL_FUNC) &_vcfR_seq_to_rects, 2},
+    {"_vcfR_window_init", (DL_FUNC) &_vcfR_window_init, 2},
+    {"_vcfR_windowize_fasta", (DL_FUNC) &_vcfR_windowize_fasta, 2},
+    {"_vcfR_windowize_variants", (DL_FUNC) &_vcfR_windowize_variants, 2},
+    {"_vcfR_windowize_annotations", (DL_FUNC) &_vcfR_windowize_annotations, 4},
     {"_vcfR_write_vcf_body", (DL_FUNC) &_vcfR_write_vcf_body, 4},
     {NULL, NULL, 0}
 };
