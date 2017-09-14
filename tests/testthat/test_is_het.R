@@ -1,16 +1,16 @@
 
 
-#
-library(testthat)
+#library(testthat)
 #detach(package:vcfR, unload=TRUE)
 library(vcfR)
 context("is.het")
 
-data(vcfR_test)
-gt <- extract.gt(vcfR_test)
 
 test_that("is.hets, na_is_false=TRUE returns all logicals",{
+  data(vcfR_test)
+  gt <- extract.gt(vcfR_test)
   hets <- is.het(gt, na_is_false = TRUE)
+  
   expect_is(hets[,1], 'logical')
   expect_is(hets[,2], 'logical')
   expect_is(hets[,3], 'logical')
@@ -27,7 +27,6 @@ test_that("is.hets, na_is_false=FALSE returns NAs",{
   hets <- is.het(gt, na_is_false = FALSE)
   
   expect_equal( sum( is.na(hets[1,]) ), 3)
-
 })
 
 

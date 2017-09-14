@@ -16,6 +16,16 @@
     .Call(`_vcfR_extract_haps`, ref, alt, gt, unphased_as_NA, verbose)
 }
 
+#' @rdname is_het
+#' @name is_het
+#' 
+#' 
+#' 
+#' @export
+is_het <- function(x, na_is_false = TRUE) {
+    .Call(`_vcfR_is_het`, x, na_is_false)
+}
+
 #' @export
 .vcf_stats_gz <- function(x, nrows = -1L, skip = 0L) {
     .Call(`_vcfR_vcf_stats_gz`, x, nrows, skip)

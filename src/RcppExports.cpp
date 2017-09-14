@@ -47,6 +47,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// is_het
+Rcpp::LogicalMatrix is_het(Rcpp::StringMatrix x, Rcpp::LogicalVector na_is_false);
+RcppExport SEXP _vcfR_is_het(SEXP xSEXP, SEXP na_is_falseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::StringMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::LogicalVector >::type na_is_false(na_is_falseSEXP);
+    rcpp_result_gen = Rcpp::wrap(is_het(x, na_is_false));
+    return rcpp_result_gen;
+END_RCPP
+}
 // vcf_stats_gz
 Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows, int skip);
 RcppExport SEXP _vcfR_vcf_stats_gz(SEXP xSEXP, SEXP nrowsSEXP, SEXP skipSEXP) {
@@ -108,6 +120,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_vcfR_extract_GT_to_CM", (DL_FUNC) &_vcfR_extract_GT_to_CM, 6},
     {"_vcfR_CM_to_NM", (DL_FUNC) &_vcfR_CM_to_NM, 1},
     {"_vcfR_extract_haps", (DL_FUNC) &_vcfR_extract_haps, 5},
+    {"_vcfR_is_het", (DL_FUNC) &_vcfR_is_het, 2},
     {"_vcfR_vcf_stats_gz", (DL_FUNC) &_vcfR_vcf_stats_gz, 3},
     {"_vcfR_read_meta_gz", (DL_FUNC) &_vcfR_read_meta_gz, 3},
     {"_vcfR_read_body_gz", (DL_FUNC) &_vcfR_read_body_gz, 7},
