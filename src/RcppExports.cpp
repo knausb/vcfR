@@ -5,6 +5,48 @@
 
 using namespace Rcpp;
 
+// vcf_stats_gz
+Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows);
+RcppExport SEXP _vcfR_vcf_stats_gz(SEXP xSEXP, SEXP nrowsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type nrows(nrowsSEXP);
+    rcpp_result_gen = Rcpp::wrap(vcf_stats_gz(x, nrows));
+    return rcpp_result_gen;
+END_RCPP
+}
+// read_meta_gz
+Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats, int verbose);
+RcppExport SEXP _vcfR_read_meta_gz(SEXP xSEXP, SEXP statsSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type stats(statsSEXP);
+    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(read_meta_gz(x, stats, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
+// read_body_gz
+Rcpp::CharacterMatrix read_body_gz(std::string x, Rcpp::NumericVector stats, long int nrows, long int skip, Rcpp::IntegerVector cols, int convertNA, int verbose);
+RcppExport SEXP _vcfR_read_body_gz(SEXP xSEXP, SEXP statsSEXP, SEXP nrowsSEXP, SEXP skipSEXP, SEXP colsSEXP, SEXP convertNASEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type stats(statsSEXP);
+    Rcpp::traits::input_parameter< long int >::type nrows(nrowsSEXP);
+    Rcpp::traits::input_parameter< long int >::type skip(skipSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type cols(colsSEXP);
+    Rcpp::traits::input_parameter< int >::type convertNA(convertNASEXP);
+    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(read_body_gz(x, stats, nrows, skip, cols, convertNA, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
 // timesTwo
 int timesTwo(int x);
 RcppExport SEXP _vcfR_timesTwo(SEXP xSEXP) {
@@ -31,6 +73,9 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_vcfR_vcf_stats_gz", (DL_FUNC) &_vcfR_vcf_stats_gz, 2},
+    {"_vcfR_read_meta_gz", (DL_FUNC) &_vcfR_read_meta_gz, 3},
+    {"_vcfR_read_body_gz", (DL_FUNC) &_vcfR_read_body_gz, 7},
     {"_vcfR_timesTwo", (DL_FUNC) &_vcfR_timesTwo, 1},
     {"_vcfR_write_vcf_body", (DL_FUNC) &_vcfR_write_vcf_body, 4},
     {NULL, NULL, 0}
