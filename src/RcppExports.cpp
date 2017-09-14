@@ -16,9 +16,27 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// write_vcf_body
+void write_vcf_body(Rcpp::CharacterMatrix fix, Rcpp::CharacterMatrix gt, std::string filename, int mask, int verbose);
+RcppExport SEXP _vcfR_write_vcf_body(SEXP fixSEXP, SEXP gtSEXP, SEXP filenameSEXP, SEXP maskSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterMatrix >::type fix(fixSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterMatrix >::type gt(gtSEXP);
+    Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
+    Rcpp::traits::input_parameter< int >::type mask(maskSEXP);
+    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
+    write_vcf_body(fix, gt, filename, mask, verbose);
+    return R_NilValue;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_vcfR_timesTwo", (DL_FUNC) &_vcfR_timesTwo, 1},
+<<<<<<< HEAD
+=======
+    {"_vcfR_write_vcf_body", (DL_FUNC) &_vcfR_write_vcf_body, 5},
+>>>>>>> fdebba926ffe47212ce4268f90c44452c1b60c69
     {NULL, NULL, 0}
 };
 

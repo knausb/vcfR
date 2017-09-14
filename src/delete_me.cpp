@@ -11,6 +11,10 @@ using namespace Rcpp;
 //   http://gallery.rcpp.org/
 //
 
+//' Multiply a number by two
+//'
+//' @param x A single integer.
+//' @export
 // [[Rcpp::export]]
 NumericVector timesTwo(NumericVector x) {
   return x * 2;
