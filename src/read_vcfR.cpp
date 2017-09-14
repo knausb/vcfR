@@ -42,9 +42,18 @@ void stat_line(Rcpp::NumericVector stats, std::string line){
 
 //' @export
 // [[Rcpp::export(name=".vcf_stats_gz")]]
-Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows = -1) {
+Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows = -1, int skip = 0) {
   Rcpp::NumericVector stats(4);  // 4 elements, all zero.  Zero is default.
   stats.names() = Rcpp::StringVector::create("meta", "header", "variants", "columns");
+  
+  // Determine number of rows to read.
+  int max_rows = 0;
+  if( nrows > 0 ){
+    max_rows = max_rows + nrows;
+  }
+  if( skip > 0 ){
+    max_rows = max_rows + nrows;
+  }
   
   gzFile file;
   file = gzopen (x.c_str(), "r");
@@ -78,6 +87,12 @@ Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows = -1) {
     // Manage the last line.
     lastline = svec[svec.size() - 1];
 
+    if( max_rows > 0 & stats(2) > max_rows ){
+      gzclose (file);
+      stats(2) = max_rows;
+      return stats;
+    }
+    
     // Check for EOF or errors.
     if (bytes_read < LENGTH - 1) {
       if ( gzeof (file) ) {

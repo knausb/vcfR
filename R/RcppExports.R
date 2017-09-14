@@ -2,8 +2,8 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' @export
-.vcf_stats_gz <- function(x, nrows = -1L) {
-    .Call(`_vcfR_vcf_stats_gz`, x, nrows)
+.vcf_stats_gz <- function(x, nrows = -1L, skip = 0L) {
+    .Call(`_vcfR_vcf_stats_gz`, x, nrows, skip)
 }
 
 #' @export
