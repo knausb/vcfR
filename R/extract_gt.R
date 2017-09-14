@@ -1,4 +1,3 @@
-
 #' @title Extract elements from vcfR objects
 #' 
 #'  
@@ -39,7 +38,7 @@
 #' 
 #' 
 #' @seealso
-#' \code{\link{is.polymorphic}}
+#' \code{is.polymorphic}
 #' 
 #' 
 #' @examples 
@@ -100,18 +99,25 @@ extract.gt <- function(x, element="GT",
     }
 #    .Call('vcfR_extract_haps', PACKAGE = 'vcfR', ref, alt, gt, gt_split, verbose)
 #    outM <- .Call('vcfR_extract_GT_to_CM', PACKAGE = 'vcfR', x@gt, element)
-    outM <- .Call('vcfR_extract_GT_to_CM2', PACKAGE = 'vcfR',
-                  x@fix,
-                  x@gt,
-                  element,
-                  return.alleles, 
-                  as.integer(extract), 
-                  convertNA = as.numeric(convertNA) )
+    # outM <- .Call('vcfR_extract_GT_to_CM', PACKAGE = 'vcfR',
+    #               x@fix,
+    #               x@gt,
+    #               element,
+    #               return.alleles, 
+    #               as.integer(extract), 
+    #               convertNA = as.numeric(convertNA) )
+    outM <- .extract_GT_to_CM(x@fix,
+                              x@gt,
+                              element,
+                              return.alleles, 
+                              as.integer(extract), 
+                              convertNA = as.numeric(convertNA) )
   }
 
   # If as.numeric is true, convert to a numeric matrix.
   if(as.numeric == TRUE){
-    outM <- .Call('vcfR_CM_to_NM', PACKAGE = 'vcfR', outM)
+#    outM <- .Call('vcfR_CM_to_NM', PACKAGE = 'vcfR', outM)
+    outM <- .CM_to_NM(outM)
   }
   
   # 
@@ -190,9 +196,11 @@ extract.haps <- function(x,
 #    haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', 
 #                  x@fix[,'REF'], x@fix[,'ALT'], 
 #                  gt, gt.split, as.numeric(verbose))
-    haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', 
-                  x@fix[,'REF'], x@fix[,'ALT'],
-                  gt, as.numeric(unphased_as_NA), as.numeric(verbose))
+    # haps <- .Call('vcfR_extract_haps', PACKAGE = 'vcfR', 
+    #               x@fix[,'REF'], x@fix[,'ALT'],
+    #               gt, as.numeric(unphased_as_NA), as.numeric(verbose))
+    haps <- .extract_haps(x@fix[,'REF'], x@fix[,'ALT'],
+                          gt, as.numeric(unphased_as_NA), as.numeric(verbose))
   } else {
     stop('Oops, we should never arrive here!')
   }

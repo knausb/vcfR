@@ -2,6 +2,21 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' @export
+.extract_GT_to_CM <- function(fix, gt, element = "DP", alleles = 0L, extract = 1L, convertNA = 1L) {
+    .Call(`_vcfR_extract_GT_to_CM`, fix, gt, element, alleles, extract, convertNA)
+}
+
+#' @export
+.CM_to_NM <- function(x) {
+    .Call(`_vcfR_CM_to_NM`, x)
+}
+
+#' @export
+.extract_haps <- function(ref, alt, gt, unphased_as_NA, verbose) {
+    .Call(`_vcfR_extract_haps`, ref, alt, gt, unphased_as_NA, verbose)
+}
+
+#' @export
 .vcf_stats_gz <- function(x, nrows = -1L, skip = 0L) {
     .Call(`_vcfR_vcf_stats_gz`, x, nrows, skip)
 }

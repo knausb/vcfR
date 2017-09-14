@@ -5,6 +5,48 @@
 
 using namespace Rcpp;
 
+// extract_GT_to_CM
+Rcpp::StringMatrix extract_GT_to_CM(Rcpp::StringMatrix fix, Rcpp::StringMatrix gt, std::string element, int alleles, int extract, int convertNA);
+RcppExport SEXP _vcfR_extract_GT_to_CM(SEXP fixSEXP, SEXP gtSEXP, SEXP elementSEXP, SEXP allelesSEXP, SEXP extractSEXP, SEXP convertNASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::StringMatrix >::type fix(fixSEXP);
+    Rcpp::traits::input_parameter< Rcpp::StringMatrix >::type gt(gtSEXP);
+    Rcpp::traits::input_parameter< std::string >::type element(elementSEXP);
+    Rcpp::traits::input_parameter< int >::type alleles(allelesSEXP);
+    Rcpp::traits::input_parameter< int >::type extract(extractSEXP);
+    Rcpp::traits::input_parameter< int >::type convertNA(convertNASEXP);
+    rcpp_result_gen = Rcpp::wrap(extract_GT_to_CM(fix, gt, element, alleles, extract, convertNA));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CM_to_NM
+Rcpp::NumericMatrix CM_to_NM(Rcpp::CharacterMatrix x);
+RcppExport SEXP _vcfR_CM_to_NM(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterMatrix >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(CM_to_NM(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// extract_haps
+Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref, Rcpp::StringVector alt, Rcpp::StringMatrix gt, int unphased_as_NA, int verbose);
+RcppExport SEXP _vcfR_extract_haps(SEXP refSEXP, SEXP altSEXP, SEXP gtSEXP, SEXP unphased_as_NASEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::StringVector >::type ref(refSEXP);
+    Rcpp::traits::input_parameter< Rcpp::StringVector >::type alt(altSEXP);
+    Rcpp::traits::input_parameter< Rcpp::StringMatrix >::type gt(gtSEXP);
+    Rcpp::traits::input_parameter< int >::type unphased_as_NA(unphased_as_NASEXP);
+    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(extract_haps(ref, alt, gt, unphased_as_NA, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
 // vcf_stats_gz
 Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows, int skip);
 RcppExport SEXP _vcfR_vcf_stats_gz(SEXP xSEXP, SEXP nrowsSEXP, SEXP skipSEXP) {
@@ -63,6 +105,9 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_vcfR_extract_GT_to_CM", (DL_FUNC) &_vcfR_extract_GT_to_CM, 6},
+    {"_vcfR_CM_to_NM", (DL_FUNC) &_vcfR_CM_to_NM, 1},
+    {"_vcfR_extract_haps", (DL_FUNC) &_vcfR_extract_haps, 5},
     {"_vcfR_vcf_stats_gz", (DL_FUNC) &_vcfR_vcf_stats_gz, 3},
     {"_vcfR_read_meta_gz", (DL_FUNC) &_vcfR_read_meta_gz, 3},
     {"_vcfR_read_body_gz", (DL_FUNC) &_vcfR_read_body_gz, 7},
