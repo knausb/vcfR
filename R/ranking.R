@@ -37,8 +37,7 @@ rank.variants.chromR <- function(x, scores){
     stop(msg)
   }
   
-  x@var.info <- .Call('vcfR_rank_variants', PACKAGE = 'vcfR', x@var.info, x@win.info$end, scores)
-  #  vars <- .Call('vcfR_rank_variants', PACKAGE = 'vcfR', pinf_mt@var.info, pinf_mt@win.info$end, testv)
+  x@var.info <- .rank_variants(x@var.info, x@win.info$end, scores)
   
   return(x)
 }

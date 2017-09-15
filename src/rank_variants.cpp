@@ -18,8 +18,8 @@ bool minimize ( const mypair& l, const mypair& r)
    { return l.first < r.first; }
 
 
-
-// [[Rcpp::export]]
+//' @export
+// [[Rcpp::export(name=".rank_variants")]]
 Rcpp::DataFrame rank_variants(Rcpp::DataFrame variants,
                               Rcpp::NumericVector ends,
                               Rcpp::NumericVector score){

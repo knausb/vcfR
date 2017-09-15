@@ -48,6 +48,10 @@ AD_frequency <- function(ad, delim = ",", allele = 1L, sum_type = 0L, decreasing
     .Call(`_vcfR_AD_frequency`, ad, delim, allele, sum_type, decreasing)
 }
 
+write_fasta <- function(seq, seqname, filename, rowlength = 80L, verbose = 1L, depr = 1L) {
+    invisible(.Call(`_vcfR_write_fasta`, seq, seqname, filename, rowlength, verbose, depr))
+}
+
 #' @export
 .extract_GT_to_CM <- function(fix, gt, element = "DP", alleles = 0L, extract = 1L, convertNA = 1L) {
     .Call(`_vcfR_extract_GT_to_CM`, fix, gt, element, alleles, extract, convertNA)
@@ -241,7 +245,8 @@ pair_sort <- function() {
     .Call(`_vcfR_pair_sort`)
 }
 
-rank_variants <- function(variants, ends, score) {
+#' @export
+.rank_variants <- function(variants, ends, score) {
     .Call(`_vcfR_rank_variants`, variants, ends, score)
 }
 

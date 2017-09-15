@@ -20,6 +20,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// write_fasta
+void write_fasta(Rcpp::CharacterVector seq, std::string seqname, std::string filename, int rowlength, int verbose, int depr);
+RcppExport SEXP _vcfR_write_fasta(SEXP seqSEXP, SEXP seqnameSEXP, SEXP filenameSEXP, SEXP rowlengthSEXP, SEXP verboseSEXP, SEXP deprSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type seq(seqSEXP);
+    Rcpp::traits::input_parameter< std::string >::type seqname(seqnameSEXP);
+    Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
+    Rcpp::traits::input_parameter< int >::type rowlength(rowlengthSEXP);
+    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
+    Rcpp::traits::input_parameter< int >::type depr(deprSEXP);
+    write_fasta(seq, seqname, filename, rowlength, verbose, depr);
+    return R_NilValue;
+END_RCPP
+}
 // extract_GT_to_CM
 Rcpp::StringMatrix extract_GT_to_CM(Rcpp::StringMatrix fix, Rcpp::StringMatrix gt, std::string element, int alleles, int extract, int convertNA);
 RcppExport SEXP _vcfR_extract_GT_to_CM(SEXP fixSEXP, SEXP gtSEXP, SEXP elementSEXP, SEXP allelesSEXP, SEXP extractSEXP, SEXP convertNASEXP) {
@@ -299,6 +314,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_vcfR_AD_frequency", (DL_FUNC) &_vcfR_AD_frequency, 5},
+    {"_vcfR_write_fasta", (DL_FUNC) &_vcfR_write_fasta, 6},
     {"_vcfR_extract_GT_to_CM", (DL_FUNC) &_vcfR_extract_GT_to_CM, 6},
     {"_vcfR_CM_to_NM", (DL_FUNC) &_vcfR_CM_to_NM, 1},
     {"_vcfR_extract_haps", (DL_FUNC) &_vcfR_extract_haps, 5},

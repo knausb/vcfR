@@ -1,4 +1,4 @@
-# ---
+---
 title: "Converting vcfR objects to other forms"
 author: "Brian J. Knaus"
 date: "`r Sys.Date()`"
