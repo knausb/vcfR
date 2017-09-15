@@ -1,3 +1,4 @@
+
 library(vcfR)
 context("var_window functions")
 
@@ -5,7 +6,7 @@ data(vcfR_example)
 
 # Global code.
 #pinf_mt <- create.chromR('pinf_mt', seq=pinf_dna, vcf=pinf_vcf, ann=pinf_gff, verbose=FALSE)
-pinf <- create.chromR('pinf', seq=dna, vcf=vcf, ann=gff, verbose=FALSE)
+#pinf <- create.chromR('pinf', seq=dna, vcf=vcf, ann=gff, verbose=FALSE)
 
 
 win1 <- .Call('vcfR_window_init', PACKAGE = 'vcfR', window_size=1e3, max_bp=length(dna))

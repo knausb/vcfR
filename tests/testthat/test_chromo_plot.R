@@ -4,13 +4,14 @@
 context("chromo_plot  functions")
 
 library(vcfR)
-data("vcfR_example")
+
 
 
 ##### ##### ##### ##### #####
 # chromo, vcf only
 
 test_that("chromo works, variant data only",{
+  data("vcfR_example")
   chrom <- create.chromR(name="Supercontig", vcf=vcf, verbose=FALSE)
   chrom <- proc.chromR(chrom, verbose = FALSE)
 
@@ -25,7 +26,7 @@ test_that("chromo works, variant data only",{
 
 
 test_that("chromR plot when DP == NA",{
-  library(vcfR)
+#  library(vcfR)
 #  trace('plot', browser, exit=browser, signature='chromR')
   data(vcfR_test)
   is.na(vcfR_test@fix[,'INFO']) <- TRUE
@@ -36,7 +37,6 @@ test_that("chromR plot when DP == NA",{
 
 
 test_that("chromR plot when MQ == NA",{
-  library(vcfR)
 #  trace('plot', browser, exit=browser, signature='chromR')
   data(vcfR_test)
   is.na(vcfR_test@fix[,'INFO']) <- TRUE
@@ -52,6 +52,7 @@ test_that("chromR plot when MQ == NA",{
 
 
 test_that("chromo works, variant and seq data",{
+  data("vcfR_example")
   chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, verbose=FALSE)
 #  chromo( chrom ) # Should error!
   chrom <- proc.chromR(chrom, verbose = FALSE)
@@ -69,6 +70,7 @@ test_that("chromo works, variant and seq data",{
 # chromo, vcf and annotation
 
 test_that("chromo works, variant and annotation data",{
+  data("vcfR_example")
   chrom <- create.chromR(name="Supercontig", vcf=vcf, ann=gff, verbose=FALSE)
 #  chromo( chrom )
   chrom <- proc.chromR(chrom, verbose = FALSE)
@@ -87,6 +89,7 @@ test_that("chromo works, variant and annotation data",{
 # chromo, vcf, seq and annotation
 
 test_that("chromo works, variant and annotation data",{
+  data("vcfR_example")
   chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
 #  chromo( chrom )
   chrom <- proc.chromR(chrom, verbose = FALSE)
@@ -138,6 +141,7 @@ test_that("chromo works, vcf with no variants",{
 
 
 test_that("chromo works, custom tracks",{
+  data("vcfR_example")
   chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
   
   ##### ##### ##### ##### #####
