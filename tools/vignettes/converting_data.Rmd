@@ -1,0 +1,239 @@
+# ---
+title: "Converting vcfR objects to other forms"
+author: "Brian J. Knaus"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Converting data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+Once we have finished examining our data in vcfR, we'll want to format it so that other softwares can utilize it.
+A straightforward path is to create a *.vcf.gz format file.
+One downside to this path is that it creates an intermediate file.
+When working on large datasets this intermediate file may be rather large.
+If your path remains in R, it may be preferable to convert your vcfR objects to objects defined by other packages.
+Here we explore examples of these paths.
+
+
+## Data import
+
+We'll use two datasets to illustrate data conversion.
+The function vcfR2genind calls adegenet::df2genind, a function which predates high throughput sequencing.
+This path currently doesn't scale well to large datasets.
+So we'll begin with the vcfR example dataset.
+This dataset consists of 19 samples with 2,533 variants.
+Later we'll use the example dataset from the package pinfsc50 which includes the same samples, but with 22,0331 variants.
+
+
+```{r}
+library(vcfR)
+data(vcfR_example)
+```
+
+
+## Creating *.vcf.gz format files.
+
+
+The function **write.vcf()** can be used to create *.vcf.gz files (gzipped VCF files) from objects of class vcfR or chromR.
+These VCF files can be used for any downstream analysis which uses VCF files as input.
+
+
+```{r write.vcf, eval=FALSE}
+write.vcf(vcf, "test.vcf.gz")
+unlink("test.vcf.gz") # Clean up after our example is done.
+```
+
+
+## Creating genind objects
+
+The packages **adegenet** and **poppr** use objects of class **genind**.
+We can create genind objects with the function **vcfR2genind()**.
+
+
+```{r genind, eval=TRUE}
+my_genind <- vcfR2genind(vcf)
+class(my_genind)
+my_genind
+```
+
+
+The warning is because our example dataset has uninteresting locus names (they're all NULL).
+Adegenet replaces these names with slightly more interesting, unique names.
+
+The function vcfR2genind calls extract.gt to create a matrix of genotypes.
+This matrix is converted into a genind object with the adegenet function df2genind.
+
+
+Currently, this function does not scale well to large quantities of data.
+This appears to be due  a call to the function adegenet::df2genind (this function was produced prior to high throughput sequencing).
+
+
+
+## Creating genclone objects
+
+
+The package **poppr** uses objects of class genclone as well as genind.
+Once a genind object has been created, it is fairly straight forward to create a genclone object.
+
+
+```{r genclone, eval=TRUE}
+my_genclone <- poppr::as.genclone(my_genind)
+class(my_genclone)
+my_genclone
+```
+
+
+
+## Creating genlight objects
+
+The **genlight** object is used by **adegenet** and **poppr**.
+It was designed specifically to handle high-throughput genotype data.
+At present it appears to only support two alleles at a locus, but varying levels of ploidy.
+Variant callers such as FreeBayes and the GATK's haplotype caller currently support more than two alleles per locus.
+To address this incompatibility, vcfR2genelight omits loci that include more than two alleles.
+The benefit of the genlight object is that the genlight object is much more efficient to use than the genind object as it was designed with high throughput sequencing in mind.
+When verbose is set to TRUE the function vcfR2genlight will throw a warning and report how many loci it has omitted.
+When verbose is set to FALSE the loci will be omitted silently.
+
+
+
+```{r genlight, eval=TRUE}
+vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
+vcf <- read.vcfR(vcf_file, verbose = FALSE)
+x <- vcfR2genlight(vcf)
+x
+```
+
+
+## Creating snpclone objects
+
+The **genlight** object is extended by the **snpclone** object for analysis of clonal and partially clonal populations in **poppr**.
+The genlight object can be converted to a snpclone object with functions in the poppr package.
+
+
+```{r snpclone}
+library(poppr)
+x <- as.snpclone(x)
+x
+```
+
+
+Note that we now have a **mlg** slot to hold multilocus genotype indicators.
+
+
+
+## Creating DNAbin objects
+
+The package **ape** handles sequence data using objects of class **DNAbin**.
+The VCF file only contains information on variant positions.
+Omitting invariant data provides for a more efficient representation of the data than including the invariant sites.
+Converting VCF data to sequence data presents a challenge in that these invariant sites may need to be included.
+This means that these objects can easily occupy large amounts of memory, and may exceed the physical memory when long sequences with many samples are included.
+In order to accomodate these issues, we've taken an approach which attempts to create DNAbin objects from portions of a chomosome, such as a gene.
+This means we'll need a little more information than we've needed for other conversions.
+First, we'll need to locate and read in our VCF file, a reference sequence and a gff file that has the coordinates for a gene.
+
+
+```{r load vcf dna gff}
+# Find the files.
+vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
+dna_file <- system.file("extdata", "pinf_sc50.fasta", package = "pinfsc50")
+gff_file <- system.file("extdata", "pinf_sc50.gff", package = "pinfsc50")
+# Read in data.
+vcf <- read.vcfR(vcf_file, verbose = FALSE)
+dna <- ape::read.dna(dna_file, format="fasta")
+gff <- read.table(gff_file, sep="\t", quote = "")
+```
+
+
+
+We can use information from the annotation file (gff) to extract a gene.
+Here we have specifically chosen one which has variants.
+We can use IUPAC ambiguity codes to convert heterozygous sites into a one character encoding.
+This results in a single sequence per individual.
+Alternatively, we can create two haplotypes for each diploid sample, resulting in two sequences per individual.
+
+
+```{r vcfR2DNAbin, tidy=TRUE}
+record <- 130
+#my_dnabin1 <- vcfR2DNAbin(vcf, consensus = TRUE, extract.haps = FALSE, gt.split="|", ref.seq=dna[,gff[record,4]:gff[record,5]], start.pos=gff[record,4], verbose=FALSE)
+my_dnabin1 <- vcfR2DNAbin(vcf, consensus = TRUE, extract.haps = FALSE, ref.seq=dna[,gff[record,4]:gff[record,5]], start.pos=gff[record,4], verbose=FALSE)
+my_dnabin1
+```
+
+
+We can visualize the variable sites using tools from the package 'ape.'
+
+
+```{r image_DNAbin1, fig.align='center', fig.width=7, fig.height=7}
+par(mar=c(5,8,4,2))
+ape::image.DNAbin(my_dnabin1[,ape::seg.sites(my_dnabin1)])
+par(mar=c(5,4,4,2))
+```
+
+
+Here, the ambiguous sites are visualized as 'other.'
+While the DNAbin object can include the ambiguity codes, not all downstream software handle these codes well.
+So the user should excercise prudence when using this option.
+
+
+If we instead create two haplotypes for each diploid sample, it results in a DNAbin object which includes only unambiguous nucleotides(A, C,  G and T).
+This typically requires the data to be phased (I use [beagle4](https://faculty.washington.edu/browning/beagle/beagle.html)).
+In VCF files this is indicated by delimiting the alleles of the genotype with a pipe ('|') for phased data, while unphased data are delimited with a forward slash ('/').
+
+
+```{r vcfR2DNAbin_2, tidy=TRUE}
+#my_dnabin1 <- vcfR2DNAbin(vcf, consensus=FALSE, extract.haps=TRUE, gt.split="|", ref.seq=dna[,gff[record,4]:gff[record,5]], start.pos=gff[record,4], verbose=FALSE)
+my_dnabin1 <- vcfR2DNAbin(vcf, consensus=FALSE, extract.haps=TRUE, ref.seq=dna[,gff[record,4]:gff[record,5]], start.pos=gff[record,4], verbose=FALSE)
+```
+
+
+```{r image_DNAbin_2, fig.align='center', fig.width=7, fig.height=7}
+par(mar=c(5,8,4,2))
+ape::image.DNAbin(my_dnabin1[,ape::seg.sites(my_dnabin1)])
+par(mar=c(5,4,4,2))
+```
+
+
+Once we have a DNAbin object, it can be analysed in a number of R packages, such as ape and pegas.
+We can also output a fasta file for other softwares to use.
+
+```{r, eval=FALSE}
+write.dna( my_dnabin1, file = 'my_gene.fasta', format = 'fasta' )
+unlink('my_gene.fasta') # Clean up after we're done with the example.
+```
+
+
+Also see:
+
+- Heng Li's [seqtk](https://github.com/lh3/seqtk)
+- [GATK's](https://www.broadinstitute.org/gatk/) FastaAlternateReferenceMaker
+
+
+## Creating loci objects
+
+The package **pegas** uses objects of class **loci**.
+We can use the function vcfR2loci to convert our vcfR object to one of class loci.
+
+
+```{r vcfR2loci, eval=FALSE}
+system.time( my_loci <- vcfR2loci(vcf) )
+class(my_loci)
+```
+
+
+This takes a noticable amount of time to execute but is effective.
+We can now proceed to downstream analyses.
+
+
+## Conclusion
+
+The use of vcfR is an intermediary point in an analysis.
+Once VCF data are obtained, vcfR provides an interactive way to scrutinize and filter the data.
+A number of paths have been provided that take the results of VCF format data from exploration and filtering to downstream analyses by other software that uses VCF files as input or several R packages.
+
+
+

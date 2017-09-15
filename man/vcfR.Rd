@@ -10,15 +10,25 @@ vcfR provides a suite of tools for input and output of variant call format (VCF)
 }
 \details{
 \strong{File input and output} is facilitated with the functions \code{read.vcfR} and \code{write.vcf}.
+<<<<<<< HEAD
 Input of vcf format data results in an S4 \code{vcfR-class} object.
 Objects of class vcfR can be manipulated with \strong{vcfR-method} and \code{extract.gt}.
 Contents of the vcfR object can be visualized with the \code{plot} method.
+=======
+Input of vcf format data results in an S4 \code{\link{vcfR-class}} object.
+Objects of class vcfR can be manipulated with \link[vcfR:vcfR-method]{vcfR-method} and \code{extract.gt}.
+Contents of the vcfR object can be visualized with the \code{\link{plot}} method.
+>>>>>>> a96afbe0ab3d41d02116ca04bad65e60e93be37f
 More complex visualizations can be created using a series of functions.
 See \code{vignette(topic="sequence_coverage")} for an example.
 Once manipulations are complete the object may be written to a *.vcf.gz format file using \code{write.vcf} or exported to objects supported by other R packages with \code{vcfR2genind} or \code{vcfR2loci}.
 
 
+<<<<<<< HEAD
 More complex visualization can be accomplished by converting a vcfR object to a \code{chromR-class} object.
+=======
+More complex visualization can be accomplished by converting a vcfR object to a \code{\link{chromR-class}} object.
+>>>>>>> a96afbe0ab3d41d02116ca04bad65e60e93be37f
 An example exists on the \code{create.chromR} man page.
 
 

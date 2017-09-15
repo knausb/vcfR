@@ -1,8 +1,7 @@
 
 
 
-#
-library(testthat)
+#library(testthat)
 #detach(package:vcfR, unload=TRUE)
 library(vcfR)
 context("summary_tables functions")
@@ -10,8 +9,9 @@ context("summary_tables functions")
 ##### ##### ##### ##### #####
 
 test_that("write.var.info works",{
-  data(vcfR_test)
-  myChrom <- create.chromR(vcfR_test, verbose = FALSE)
+#  data(vcfR_test)
+  #myChrom <- create.chromR(vcfR_test, verbose = FALSE)
+  data("chromR_example")
   
   setwd(tempdir())
   
@@ -22,9 +22,10 @@ test_that("write.var.info works",{
 
 
 test_that("write.var.info works, mask == TRUE",{
-  data(vcfR_test)
-  myChrom <- create.chromR(vcfR_test, verbose = FALSE)
-  
+  #data(vcfR_test)
+  #myChrom <- create.chromR(vcfR_test, verbose = FALSE)
+  data("chromR_example")
+    
   setwd(tempdir())
   
   write.var.info(myChrom, file = "test_var_info.csv", mask = TRUE)
@@ -36,8 +37,9 @@ test_that("write.var.info works, mask == TRUE",{
 ##### ##### ##### ##### #####
 
 test_that("write.win.info works",{
-  data(vcfR_test)
-  myChrom <- create.chromR(vcfR_test, verbose = FALSE)
+#  data(vcfR_test)
+#  myChrom <- create.chromR(vcfR_test, verbose = FALSE)
+  data("chromR_example")
   myChrom <- proc.chromR(myChrom, verbose = FALSE)
   
   setwd(tempdir())

@@ -149,6 +149,8 @@ setMethod(
 # @aliases []
 #' @aliases [,vcfR-method
 #'
+#' @aliases [,vcfR-method
+#'
 #' @param i vector of rows (variants) to include
 #' @param j vector of columns (samples) to include
 #' @param samples vector (numeric, character or logical) specifying samples, see details
