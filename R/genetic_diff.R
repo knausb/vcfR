@@ -215,23 +215,15 @@ genetic_diff <- function(vcf, pops, method = "nei"){
   }
   
   # Get allele counts for total and subs.
-#  popTot <- .Call("vcfR_gt_to_popsum", PACKAGE = "vcfR", var_info = var_info, gt = gt)
-  
+
   for(i in 1:nPop){
-    subpop.l[[i]] <- .Call("vcfR_gt_to_popsum", 
-                           PACKAGE = "vcfR", 
-                           var_info = var_info, 
+    subpop.l[[i]] <- .gt_to_popsum(var_info = var_info, 
                            gt = gt[,pops == levels(pops)[i], drop = FALSE]
                            )
   }
   
-  
   if( method == "nei" ){
-    tot <- .Call("vcfR_gt_to_popsum", 
-                 PACKAGE = "vcfR", 
-                 var_info = var_info, 
-                 gt = gt
-    )
+    tot <- .gt_to_popsum(var_info = var_info, gt = gt)
     
     gdiff <- calc_nei(tot, subpop.l)
   } else if( method == "jost" ){
