@@ -147,5 +147,26 @@ test_that("VCF with no GT",{
 })
 
 
+test_that("read.vcfR works for files in other directories",{
+  data("vcfR_example")
+  test_dir <- tempdir()
+  setwd(test_dir)
+  
+  
+  if( !dir.exists('subdir') ){
+    dir.create('subdir')
+  }
+  
+  setwd('subdir')
+  write.vcf(vcf, "test.vcf.gz")
+  setwd(test_dir)
+  vcf1 <- read.vcfR("./subdir/test.vcf.gz", verbose = FALSE)
+  unlink("./subdir/test.vcf.gz")
+  
+  expect_equal(nrow(vcf@fix), nrow(vcf1@fix))
+})
+
+
+
 ##### ##### ##### ##### #####
 # EOF.
