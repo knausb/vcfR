@@ -2,7 +2,8 @@
 library("testthat")
 #library("vcfR")
 #
-#test_check("vcfR")
+#
+test_check("vcfR")
 
 
 #test_file("testthat/test_10_write_vcf.R")
