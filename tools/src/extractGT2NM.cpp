@@ -89,10 +89,4 @@ Rcpp::CharacterMatrix extract_GT_to_CM(Rcpp::DataFrame x, std::string element="D
 
 
 
-// [[Rcpp::export]]
-void grepa(){
-  Rcout << "Hola Javier!\n";
-  Rcout << "Eres un verdadero amigo!\n";
-  return;
-}
 

@@ -456,4 +456,13 @@ Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
 }
 
 
+//' @export
+// [[Rcpp::export(name=".grepa")]]
+void grepa(){
+  Rcpp::Rcout << "Hola Javier!\n";
+  Rcpp::Rcout << "Eres un verdadero amigo!\n";
+  return;
+}
+
+
 // EOF.

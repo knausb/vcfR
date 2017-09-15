@@ -62,6 +62,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// grepa
+void grepa();
+RcppExport SEXP _vcfR_grepa() {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    grepa();
+    return R_NilValue;
+END_RCPP
+}
 // freq_peak
 Rcpp::List freq_peak(Rcpp::NumericMatrix myMat, Rcpp::NumericVector pos, int winsize, float bin_width, Rcpp::LogicalVector lhs);
 RcppExport SEXP _vcfR_freq_peak(SEXP myMatSEXP, SEXP posSEXP, SEXP winsizeSEXP, SEXP bin_widthSEXP, SEXP lhsSEXP) {
@@ -293,6 +302,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_vcfR_extract_GT_to_CM", (DL_FUNC) &_vcfR_extract_GT_to_CM, 6},
     {"_vcfR_CM_to_NM", (DL_FUNC) &_vcfR_CM_to_NM, 1},
     {"_vcfR_extract_haps", (DL_FUNC) &_vcfR_extract_haps, 5},
+    {"_vcfR_grepa", (DL_FUNC) &_vcfR_grepa, 0},
     {"_vcfR_freq_peak", (DL_FUNC) &_vcfR_freq_peak, 5},
     {"_vcfR_gt_to_popsum", (DL_FUNC) &_vcfR_gt_to_popsum, 2},
     {"_vcfR_is_het", (DL_FUNC) &_vcfR_is_het, 2},

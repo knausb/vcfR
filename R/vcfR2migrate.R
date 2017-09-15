@@ -123,7 +123,7 @@ vcfR2migrate <- function(vcf, pop, in_pop, out_file = "MigrateN_infile.txt", met
       var_info <- as.data.frame(vcf_list[[i]]@fix[,1:2, drop = FALSE])
       var_info$mask <- TRUE
       gt <- extract.gt(vcf_list[[i]])
-      popSum <- .Call("vcfR_gt_to_popsum", PACKAGE = "vcfR", var_info = var_info, gt = gt)
+      popSum <- .gt_to_popsum(var_info = var_info, gt = gt)
 #      popSum <- matrix(unlist(strsplit(as.character(popSum$Allele_counts), split = ",", fixed = TRUE)), ncol = 2, byrow = TRUE)
       
       # Populate matrix

@@ -63,6 +63,11 @@ AD_frequency <- function(ad, delim = ",", allele = 1L, sum_type = 0L, decreasing
     .Call(`_vcfR_extract_haps`, ref, alt, gt, unphased_as_NA, verbose)
 }
 
+#' @export
+.grepa <- function() {
+    invisible(.Call(`_vcfR_grepa`))
+}
+
 #' 
 #' @rdname freq_peak
 #' 
