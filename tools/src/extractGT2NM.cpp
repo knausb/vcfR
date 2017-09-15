@@ -8,7 +8,8 @@
 using namespace Rcpp;
 
 
-
+/* 2017-09-15 This function does not appear to be used by anything. */
+/* Should be deleted. */
 
 // [[Rcpp::export]]
 Rcpp::CharacterMatrix extract_GT_to_CM_B(Rcpp::DataFrame x, std::string element="DP", int depr = 1) {
