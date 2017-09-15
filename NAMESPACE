@@ -2,6 +2,7 @@
 
 export("%>%")
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 export(.CM_to_NM)
 export(.extract_GT_to_CM)
@@ -33,6 +34,9 @@ export(extract.info)
 export(freq_peak)
 export(get.alleles)
 >>>>>>> a96afbe0ab3d41d02116ca04bad65e60e93be37f
+=======
+export(.write_vcf_body)
+>>>>>>> d14ca14a2707d349a9faad2450863e09bbea4e70
 export(getALT)
 export(getCHROM)
 export(getFILTER)
@@ -42,6 +46,7 @@ export(getINFO)
 export(getPOS)
 export(getQUAL)
 export(getREF)
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 export(gt.to.popsum)
@@ -70,6 +75,9 @@ export(write.var.info)
 export(write.vcf)
 export(write.win.info)
 >>>>>>> a96afbe0ab3d41d02116ca04bad65e60e93be37f
+=======
+export(timesTwo)
+>>>>>>> d14ca14a2707d349a9faad2450863e09bbea4e70
 exportClasses(chromR)
 exportClasses(vcfR)
 exportMethods(dim)

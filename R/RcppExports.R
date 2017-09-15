@@ -2,6 +2,7 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 timesTwo <- function(x) {
     .Call('_vcfR_timesTwo', PACKAGE = 'vcfR', x)
 =======
@@ -288,5 +289,21 @@ rank_variants <- function(variants, ends, score) {
 .write_vcf_body <- function(fix, gt, filename = "myFile.vcf.gz", mask = 0L) {
     invisible(.Call(`_vcfR_write_vcf_body`, fix, gt, filename, mask))
 >>>>>>> a96afbe0ab3d41d02116ca04bad65e60e93be37f
+=======
+#' Multiply a number by two
+#'
+#' @param x A single integer.
+#' @export
+timesTwo <- function(x) {
+    .Call('_vcfR_timesTwo', PACKAGE = 'vcfR', x)
+<<<<<<< HEAD
+=======
+}
+
+#' @export
+.write_vcf_body <- function(fix, gt, filename, mask = 0L, verbose = 0L) {
+    invisible(.Call('_vcfR_write_vcf_body', PACKAGE = 'vcfR', fix, gt, filename, mask, verbose))
+>>>>>>> fdebba926ffe47212ce4268f90c44452c1b60c69
+>>>>>>> d14ca14a2707d349a9faad2450863e09bbea4e70
 }
 

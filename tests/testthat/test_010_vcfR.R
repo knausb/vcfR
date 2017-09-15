@@ -5,9 +5,22 @@ library(testthat)
 #
 library(vcfR)
 
+<<<<<<< HEAD
 
 #
 context("vcf functions")
+=======
+#
+context("vcfR functions")
+
+##### ##### ##### ##### #####
+#
+# Tests for functions that work on vcfR objects.
+# Tests for reading and writing vcfR objects
+# occur elsewhere.
+#
+##### ##### ##### ##### #####
+>>>>>>> d14ca14a2707d349a9faad2450863e09bbea4e70
 
 
 ##### ##### ##### ##### #####
@@ -35,8 +48,12 @@ test_that("We can create an empty vcfR object",{
 
 
 test_that("vcfR subsetters works",{
+<<<<<<< HEAD
   data("vcfR_example")
   
+=======
+  data(vcfR_example)
+>>>>>>> d14ca14a2707d349a9faad2450863e09bbea4e70
   # Rows
   vcf2 <- vcf[1:10,]
   expect_equal(nrow(vcf2@fix), 10)
@@ -49,3 +66,8 @@ test_that("vcfR subsetters works",{
 })
 
 
+<<<<<<< HEAD
+=======
+##### ##### ##### ##### #####
+# EOF.
+>>>>>>> d14ca14a2707d349a9faad2450863e09bbea4e70
