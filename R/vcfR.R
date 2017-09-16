@@ -32,9 +32,9 @@
 #' \strong{vcfR_example} is a subset of the pinfsc50 dataset that includes VCF, GFF and FASTA data for moderate sized testing.
 #' The \href{https://cran.r-project.org/package=pinfsc50}{pinfsc50} dataset is available as a separate package and includes VCF, GFF and FASTA data for testing and benchmarking.
 #'
-# @references Brian J Knaus (2015). Variant call format files processed 
-# with vcfR. Journal TBA, NN(N),
-#   N-NN. \url{http://www.someurl.org/v40/i03/}.
+#' @seealso 
+#' More documentation for vcfR can be found at the \href{https://knausb.github.io/vcfR_documentation/}{vcfR documentation} website.
+#'
 #' 
 #' 
 #' @import pinfsc50

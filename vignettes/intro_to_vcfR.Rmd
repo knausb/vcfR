@@ -13,6 +13,9 @@ vignette: >
 vcfR is a package intended to help visualize, manipulate and quality filter data in VCF files.
 
 
+> More documentation for vcfR can be found at the [vcfR documentation](https://knausb.github.io/vcfR_documentation/) website.
+
+
 ## Preliminaries
 
 Input files frequently present challenges to analysis.
