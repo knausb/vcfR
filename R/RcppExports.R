@@ -48,7 +48,8 @@ AD_frequency <- function(ad, delim = ",", allele = 1L, sum_type = 0L, decreasing
     .Call(`_vcfR_AD_frequency`, ad, delim, allele, sum_type, decreasing)
 }
 
-write_fasta <- function(seq, seqname, filename, rowlength = 80L, verbose = 1L, depr = 1L) {
+#' @export
+.write_fasta <- function(seq, seqname, filename, rowlength = 80L, verbose = 1L, depr = 1L) {
     invisible(.Call(`_vcfR_write_fasta`, seq, seqname, filename, rowlength, verbose, depr))
 }
 
@@ -233,12 +234,14 @@ masplit <- function(myMat, delim = ",", count = 0L, record = 1L, sort = 1L, decr
     .Call(`_vcfR_masplit`, myMat, delim, count, record, sort, decreasing)
 }
 
-NM2winNM <- function(x, pos, maxbp, winsize = 100L) {
-    .Call(`_vcfR_NM2winNM`, x, pos, maxbp, winsize)
+#' @export
+.NM2winNM <- function(x, pos, maxbp, winsize = 100L, depr = 1L) {
+    .Call(`_vcfR_NM2winNM`, x, pos, maxbp, winsize, depr)
 }
 
-windowize_NM <- function(x, pos, starts, ends, summary = "mean") {
-    .Call(`_vcfR_windowize_NM`, x, pos, starts, ends, summary)
+#' @export
+.windowize_NM <- function(x, pos, starts, ends, summary = "mean", depr = 1L) {
+    .Call(`_vcfR_windowize_NM`, x, pos, starts, ends, summary, depr)
 }
 
 pair_sort <- function() {

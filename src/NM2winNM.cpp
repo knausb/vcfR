@@ -36,9 +36,9 @@ NumericVector win_mean(std::vector< std::vector<double> > win){
 
 
 
-
-// [[Rcpp::export]]
-NumericMatrix NM2winNM(NumericMatrix x, std::vector<int> pos, int maxbp, int winsize=100) {
+//' @export
+// [[Rcpp::export(name=".NM2winNM")]]
+NumericMatrix NM2winNM(NumericMatrix x, std::vector<int> pos, int maxbp, int winsize=100, int depr = 1) {
   int nwins;
   nwins = maxbp % winsize;
   if(maxbp % winsize == 0){
@@ -52,6 +52,14 @@ NumericMatrix NM2winNM(NumericMatrix x, std::vector<int> pos, int maxbp, int win
   // Output matrix.
   NumericMatrix outM(nwins, x.ncol());
 
+  if( depr == 1 ){
+    Rcpp::Rcerr << "The function .NM2winNM was deprecated in vcfR 1.6.0" << std::endl;
+    Rcpp::Rcerr << "If you use this function and you would like to advocate its persistence, please contact the maintainer." << std::endl;
+    Rcpp::Rcerr << "The maintainer of this package can be found with" << std::endl;
+    Rcpp::Rcerr << "maintainer('vcfR')" << std::endl;
+    return outM;
+  }
+  
   // Window boundaries and counter.
   int winmin = 1;
   winsize = winsize - 1;
@@ -162,10 +170,12 @@ double vector_median(std::vector<double> x){
 }
 
 
-// [[Rcpp::export]]
+//' @export
+// [[Rcpp::export(name=".windowize_NM")]]
 NumericMatrix windowize_NM(Rcpp::NumericMatrix x, Rcpp::NumericVector pos,
                            Rcpp::NumericVector starts, Rcpp::NumericVector ends,
-                           Rcpp::String summary="mean") {
+                           Rcpp::String summary="mean",
+                           int depr = 1) {
 
   // Declare a matrix for output.
   Rcpp::NumericMatrix outM(starts.size(), x.ncol());
@@ -173,6 +183,14 @@ NumericMatrix windowize_NM(Rcpp::NumericMatrix x, Rcpp::NumericVector pos,
   dimnames(0) = Rcpp::CharacterVector::create();
   outM.attr("dimnames") = dimnames;
 
+  if( depr == 1 ){
+    Rcpp::Rcerr << "The function .windowize_NM was deprecated in vcfR 1.6.0" << std::endl;
+    Rcpp::Rcerr << "If you use this function and you would like to advocate its persistence, please contact the maintainer." << std::endl;
+    Rcpp::Rcerr << "The maintainer of this package can be found with" << std::endl;
+    Rcpp::Rcerr << "maintainer('vcfR')" << std::endl;
+    return outM;
+  }
+  
   // Declare a vector of a vector of doubles to hold each
   // window prior to summarization.
   std::vector < std::vector < double > > window_tmp(x.ncol());

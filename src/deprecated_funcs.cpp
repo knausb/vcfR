@@ -15,7 +15,7 @@ Rcpp::StringMatrix DataFrame_to_StringMatrix( Rcpp::DataFrame df, int depr = 1 )
   sm.attr("row.names") = df.attr("row.names");
 
   if( depr == 1 ){
-    Rcpp::Rcerr << "The Rcpp function DataFrame_to_StringMatrix was deprecated in vcfR 1.6.0" << std::endl;
+    Rcpp::Rcerr << "The function DataFrame_to_StringMatrix was deprecated in vcfR 1.6.0" << std::endl;
     Rcpp::Rcerr << "If you use this function and you would like to advocate its persistence, please contact the maintainer." << std::endl;
     Rcpp::Rcerr << "The maintainer of this package can be found with" << std::endl;
     Rcpp::Rcerr << "maintainer('vcfR')" << std::endl;
@@ -35,7 +35,8 @@ Rcpp::StringMatrix DataFrame_to_StringMatrix( Rcpp::DataFrame df, int depr = 1 )
 
 /* Write data to fasta file */
 
-// [[Rcpp::export]]
+//' @export
+// [[Rcpp::export(name=".write_fasta")]]
 void write_fasta( Rcpp::CharacterVector seq,
                   std::string seqname, 
                   std::string filename, 

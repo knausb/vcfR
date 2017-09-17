@@ -13,6 +13,7 @@
 #' @param tolower convert all characters to lowercase (T/F)
 #' @param verbose should verbose output be generated (T/F)
 #' @param APPEND should data be appended to an existing file (T/F)
+#' @param depr logical (T/F), this function has been deprecated, set to FALSE to override.
 #' 
 #' 
 #' @details 
@@ -24,8 +25,14 @@
 #' 
 #' @export
 #' 
-write.fasta <- function(x, file = "", rowlength=80, tolower=TRUE, verbose=TRUE, APPEND = FALSE){
+write.fasta <- function(x, file = "", rowlength=80, tolower=TRUE, verbose=TRUE, APPEND = FALSE, depr = TRUE){
 #write.fasta <- function(x, file = "", gt_split = "|", rowlength=80, tolower=TRUE, verbose=TRUE, APPEND = FALSE){
+  
+  if( depr ){
+    myMsg <- "The function write.fasta was deprecated in vcfR version 1.6.0. If you use this function and would like to advocate for its persistence, please contact the maintainer of vcfR. The maintainer can be contacted at maintainer('vcfR')"
+    stop(myMsg)
+  }
+  
   if(class(x) != "chromR"){
     stop("Expected object of class chromR")
   }
@@ -35,7 +42,7 @@ write.fasta <- function(x, file = "", rowlength=80, tolower=TRUE, verbose=TRUE, 
     }
   }
 #  haps <- extract_haps(x, gt_split = gt_split)
-  haps <- extract_haps(x)
+  haps <- .extract_haps(x)
   if(tolower == TRUE){
     haps <- apply(haps, MARGIN=2, tolower)
   }
@@ -44,7 +51,8 @@ write.fasta <- function(x, file = "", rowlength=80, tolower=TRUE, verbose=TRUE, 
     seq <- as.character(x@seq)[1,]
 #    seq[x@vcf.fix$POS] <- haps[,i]
     seq[x@var.info$POS] <- haps[,i]
-    invisible(.Call('vcfR_write_fasta', PACKAGE = 'vcfR', seq, colnames(haps)[i], file, rowlength, as.integer(verbose)))
+#    invisible(.Call('vcfR_write_fasta', PACKAGE = 'vcfR', seq, colnames(haps)[i], file, rowlength, as.integer(verbose)))
+    invisible(.write_fasta(seq, colnames(haps)[i], file, rowlength, as.integer(verbose)))
   }
   
   #invisible(.Call('vcfR_write_fasta', PACKAGE = 'vcfR', seq, seqname, filename, rowlength, verbose))  

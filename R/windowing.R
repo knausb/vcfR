@@ -10,6 +10,7 @@
 #' @param pos A vector of chromosomal positions for each row of data (variants) 
 #' @param maxbp Length of chromosome
 #' @param winsize Size (in bp) for windows
+#' @param depr logical (T/F), this function has been deprecated, set to FALSE to override.
 #' 
 #' @details
 #' The numeric matrix where samples are in columns and variant data are in rows.
@@ -31,8 +32,14 @@
 #' 
 #' @export
 #' 
-NM2winNM <- function(x, pos, maxbp, winsize = 100L) {
-  .Call('vcfR_NM2winNM', PACKAGE = 'vcfR', x, pos, maxbp, winsize)
+NM2winNM <- function(x, pos, maxbp, winsize = 100L, depr = TRUE) {
+  
+  if( depr ){
+    myMsg <- "The function NM2winNM was deprecated in vcfR version 1.6.0. If you use this function and would like to advocate for its persistence, please contact the maintainer of vcfR. The maintainer can be contacted at maintainer('vcfR')"
+    stop(myMsg)
+  }
+  
+  .NM2winNM(x, pos, maxbp, winsize)
 }
 
 
@@ -54,7 +61,13 @@ z.score <- function(x){
 #' 
 #' @export
 #' 
-windowize.NM <- function(x, pos, starts, ends, summary="mean"){
-  .Call('vcfR_windowize_NM', PACKAGE = 'vcfR', x, pos, starts, ends, summary=summary)  
+windowize.NM <- function(x, pos, starts, ends, summary="mean", depr = TRUE){
+  
+  if( depr ){
+    myMsg <- "The function windowizeNM was deprecated in vcfR version 1.6.0. If you use this function and would like to advocate for its persistence, please contact the maintainer of vcfR. The maintainer can be contacted at maintainer('vcfR')"
+    stop(myMsg)
+  }
+  
+  .windowize_NM(x, pos, starts, ends, summary=summary)  
 }
 
