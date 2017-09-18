@@ -3,6 +3,7 @@
 export("%>%")
 export(.CM_to_NM)
 export(.NM2winNM)
+export(.elementNumber)
 export(.extract_GT_to_CM)
 export(.extract_haps)
 export(.grepa)

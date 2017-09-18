@@ -54,11 +54,6 @@ AD_frequency <- function(ad, delim = ",", allele = 1L, sum_type = 0L, decreasing
 }
 
 #' @export
-.extract_GT_to_CM_B <- function(x, element = "DP", depr = 1L) {
-    .Call(`_vcfR_extract_GT_to_CM_B`, x, element, depr)
-}
-
-#' @export
 .elementNumber <- function(x, element = "GT") {
     .Call(`_vcfR_elementNumber`, x, element)
 }
