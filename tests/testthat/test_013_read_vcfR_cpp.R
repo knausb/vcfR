@@ -83,6 +83,19 @@ test_that("compiled vcf_stats_gz nrows works",{
 })
 
 
+test_that("compiled vcf_stats_gz skip works",{
+#  data("vcfR_test")
+  data("vcfR_example")
+  write.vcf(vcf, file="myFile.vcf.gz")
+  
+  stats <- .vcf_stats_gz("myFile.vcf.gz", skip = 2000)
+  unlink("myFile.vcf.gz")
+  
+  expect_equal( as.numeric(stats['variants']), 2533 )
+  # Skip doesn't do anything in this context.
+  # It is added to nrows so it is needed.
+})
+
 
 
 ##### ##### ##### ##### #####
