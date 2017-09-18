@@ -6,6 +6,9 @@
 const int nreport = 1000;
 
 // Called by extract_GT_to_NM
+//
+//' @export
+// [[Rcpp::export(name=".elementNumber")]]
 int elementNumber(Rcpp::String x, std::string element = "GT"){
   //
   //  Determine the position of a query element

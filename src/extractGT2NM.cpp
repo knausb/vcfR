@@ -36,7 +36,7 @@ Rcpp::CharacterMatrix extract_GT_to_CM_B(Rcpp::DataFrame x, std::string element=
   // Determine the position where the query element is 
   // located in each row (variant)
   for(i=0; i<column.size(); i++){
-    positions[i] = elementNumber(column(i), element);
+    positions[i] = .elementNumber(column(i), element);
   }
   
   // Process the input DataFrame
