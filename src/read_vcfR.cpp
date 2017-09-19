@@ -282,13 +282,13 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
   Rcpp::StringMatrix na_matrix(1,1);
   na_matrix(0,0) = NA_STRING;
   
-  if(verbose == 1){
-    Rcpp::Rcout << "In function read_body_gz." << std::endl;
-    Rcpp::Rcout << "  stats(0): " << stats(0) << std::endl;
-    Rcpp::Rcout << "  stats(1): " << stats(1) << std::endl;
-    Rcpp::Rcout << "  stats(2): " << stats(2) << std::endl;
-    Rcpp::Rcout << "  stats(3): " << stats(3) << std::endl;
-  }
+  // if(verbose == 1){
+  //   Rcpp::Rcout << "In function read_body_gz." << std::endl;
+  //   Rcpp::Rcout << "  stats(0): " << stats(0) << std::endl;
+  //   Rcpp::Rcout << "  stats(1): " << stats(1) << std::endl;
+  //   Rcpp::Rcout << "  stats(2): " << stats(2) << std::endl;
+  //   Rcpp::Rcout << "  stats(3): " << stats(3) << std::endl;
+  // }
   
   /*
    * Manage cols vector.
@@ -326,11 +326,11 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
   }
   
 
-  if(verbose == 1){
-    Rcpp::Rcout << "Initializing gt matrix." << std::endl;
-    Rcpp::Rcout << "  nrows: " << nrows << std::endl;
-    Rcpp::Rcout << "  cols.size(): " << cols.size() << std::endl;
-  }
+  // if(verbose == 1){
+  //   Rcpp::Rcout << "Initializing gt matrix." << std::endl;
+  //   Rcpp::Rcout << "  nrows: " << nrows << std::endl;
+  //   Rcpp::Rcout << "  cols.size(): " << cols.size() << std::endl;
+  // }
   
   if( nrows > INT_MAX ){
     Rcpp::Rcerr << "Requested a matrix of " << nrows << " rows." << std::endl;
