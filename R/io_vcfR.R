@@ -108,7 +108,7 @@ read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, conver
   
   vcf <- new(Class="vcfR")
 
-  stats <- .vcf_stats_gz(file, nrows=nrows, skip = skip)
+  stats <- .vcf_stats_gz(file, nrows=nrows, skip = skip, verbose = as.integer(verbose) )
   # stats should be a named vector containing "meta", "header", "variants", "columns".
   # They should have been initialize to zero.
   if(verbose == TRUE){

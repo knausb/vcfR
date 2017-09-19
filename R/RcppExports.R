@@ -78,6 +78,11 @@ AD_frequency <- function(ad, delim = ",", allele = 1L, sum_type = 0L, decreasing
     invisible(.Call(`_vcfR_grepa`))
 }
 
+#' @export
+.shankaR <- function() {
+    invisible(.Call(`_vcfR_shankaR`))
+}
+
 #' 
 #' @rdname freq_peak
 #' 
@@ -259,8 +264,8 @@ pair_sort <- function() {
 }
 
 #' @export
-.vcf_stats_gz <- function(x, nrows = -1L, skip = 0L) {
-    .Call(`_vcfR_vcf_stats_gz`, x, nrows, skip)
+.vcf_stats_gz <- function(x, nrows = -1L, skip = 0L, verbose = 1L) {
+    .Call(`_vcfR_vcf_stats_gz`, x, nrows, skip, verbose)
 }
 
 #' @export

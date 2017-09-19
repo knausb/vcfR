@@ -10,6 +10,7 @@ This may have been addressed at 64a308ba50b9119108e8946737460de5997b805b by addi
 
 # vcfR 1.5.0.9000
 Released on CRAN 201X-XX-XX.
+* `.vcf_stats_gz` now has nrows and skip parameters.
 * removed `.Call()` statements to standardize style.
 * Created `vcfR2migrate()` to output MigrateN format data.
 * Addressed clang-UBSAN memory leak in `freq_peak()`.

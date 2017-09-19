@@ -42,9 +42,13 @@ void stat_line(Rcpp::NumericVector stats, std::string line){
 
 //' @export
 // [[Rcpp::export(name=".vcf_stats_gz")]]
-Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows = -1, int skip = 0) {
+Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows = -1, int skip = 0, int verbose = 1) {
   Rcpp::NumericVector stats(4);  // 4 elements, all zero.  Zero is default.
   stats.names() = Rcpp::StringVector::create("meta", "header", "variants", "columns");
+  
+  if(verbose == 1){
+    Rcpp::Rcout << "Scanning file to determine attributes." << std::endl;
+  }
   
   // Determine number of rows to read.
   int max_rows = 0;

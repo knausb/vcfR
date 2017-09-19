@@ -98,6 +98,15 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// shankaR
+void shankaR();
+RcppExport SEXP _vcfR_shankaR() {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    shankaR();
+    return R_NilValue;
+END_RCPP
+}
 // freq_peak
 Rcpp::List freq_peak(Rcpp::NumericMatrix myMat, Rcpp::NumericVector pos, int winsize, float bin_width, Rcpp::LogicalVector lhs);
 RcppExport SEXP _vcfR_freq_peak(SEXP myMatSEXP, SEXP posSEXP, SEXP winsizeSEXP, SEXP bin_widthSEXP, SEXP lhsSEXP) {
@@ -208,15 +217,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // vcf_stats_gz
-Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows, int skip);
-RcppExport SEXP _vcfR_vcf_stats_gz(SEXP xSEXP, SEXP nrowsSEXP, SEXP skipSEXP) {
+Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows, int skip, int verbose);
+RcppExport SEXP _vcfR_vcf_stats_gz(SEXP xSEXP, SEXP nrowsSEXP, SEXP skipSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
     Rcpp::traits::input_parameter< int >::type nrows(nrowsSEXP);
     Rcpp::traits::input_parameter< int >::type skip(skipSEXP);
-    rcpp_result_gen = Rcpp::wrap(vcf_stats_gz(x, nrows, skip));
+    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(vcf_stats_gz(x, nrows, skip, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -334,6 +344,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_vcfR_CM_to_NM", (DL_FUNC) &_vcfR_CM_to_NM, 1},
     {"_vcfR_extract_haps", (DL_FUNC) &_vcfR_extract_haps, 5},
     {"_vcfR_grepa", (DL_FUNC) &_vcfR_grepa, 0},
+    {"_vcfR_shankaR", (DL_FUNC) &_vcfR_shankaR, 0},
     {"_vcfR_freq_peak", (DL_FUNC) &_vcfR_freq_peak, 5},
     {"_vcfR_gt_to_popsum", (DL_FUNC) &_vcfR_gt_to_popsum, 2},
     {"_vcfR_is_het", (DL_FUNC) &_vcfR_is_het, 2},
@@ -342,7 +353,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_vcfR_windowize_NM", (DL_FUNC) &_vcfR_windowize_NM, 6},
     {"_vcfR_pair_sort", (DL_FUNC) &_vcfR_pair_sort, 0},
     {"_vcfR_rank_variants", (DL_FUNC) &_vcfR_rank_variants, 3},
-    {"_vcfR_vcf_stats_gz", (DL_FUNC) &_vcfR_vcf_stats_gz, 3},
+    {"_vcfR_vcf_stats_gz", (DL_FUNC) &_vcfR_vcf_stats_gz, 4},
     {"_vcfR_read_meta_gz", (DL_FUNC) &_vcfR_read_meta_gz, 3},
     {"_vcfR_read_body_gz", (DL_FUNC) &_vcfR_read_body_gz, 7},
     {"_vcfR_seq_to_rects", (DL_FUNC) &_vcfR_seq_to_rects, 2},

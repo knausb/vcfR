@@ -467,5 +467,12 @@ void grepa(){
   return;
 }
 
+//' @export
+// [[Rcpp::export(name=".shankaR")]]
+void shankaR(){
+  Rcpp::Rcout << "Dhan'yavāda Shankar!" << std::endl;
+  return;
+}
+
 
 // EOF.

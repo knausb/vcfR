@@ -115,11 +115,11 @@ test_that("read.vcfR verbose works",{
   testMessage <- capture.output(read.vcfR(test_file, verbose=TRUE))
   unlink(test_file)
 
-  expect_equal( grep("File attributes:", testMessage), 1)
-  expect_equal( grep("  meta lines:", testMessage), 2)
-  expect_equal( grep("  header line:", testMessage), 3)
-  expect_equal( grep("  variant count:", testMessage), 4)
-  expect_equal( grep("  column count:", testMessage), 5)
+  expect_equal( grep("File attributes:", testMessage), 2)
+  expect_equal( grep("  meta lines:", testMessage), 3)
+  expect_equal( grep("  header line:", testMessage), 4)
+  expect_equal( grep("  variant count:", testMessage), 5)
+  expect_equal( grep("  column count:", testMessage), 6)
 })
 
 
