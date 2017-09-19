@@ -359,7 +359,7 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
     Rcpp::Rcout << "\n";
     Rcpp::Rcout << "  row_num: ";  Rcpp::Rcout << row_num;
     Rcpp::Rcout << "\n";
-    Rcpp::Rcout << "\n";
+//    Rcpp::Rcout << "\n";
   }
 
   
