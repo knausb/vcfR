@@ -16,7 +16,7 @@ extract_info_tidy(x, info_fields = NULL, info_types = TRUE,
 
 extract_gt_tidy(x, format_fields = NULL, format_types = TRUE,
   dot_is_NA = TRUE, alleles = TRUE, allele.sep = "/",
-  gt_column_prepend = "gt_")
+  gt_column_prepend = "gt_", verbose = TRUE)
 
 vcf_field_names(x, tag = "INFO")
 }
@@ -77,7 +77,9 @@ has the genotype of the individual expressed as the alleles rather than as 0/1.}
 \code{\link{extract.gt}}. Here this is not used for a regex (as it is in other functions), but merely
 for output formatting.}
 
-\item{gt_column_prepend}{string to prepend to the names of the FORMAT columns
+\item{gt_column_prepend}{string to prepend to the names of the FORMAT columns}
+
+\item{verbose}{logical to specify if verbose output should be produced
 in the output so that they
 do not conflict with any INFO columns in the output.  Default is "gt_". Should be a 
 valid R name. (i.e. don't start with a number, have a space in it, etc.)}

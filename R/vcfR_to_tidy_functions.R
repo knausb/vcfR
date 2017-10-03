@@ -225,7 +225,7 @@ vcfR2tidy <- function(x,
   unk_parm <- setdiff(
     names(dotslist), 
     c("info_fields", "info_types", "info_sep", "format_fields", "format_types", "dot_is_NA",
-      "alleles", "allele.sep", "gt_column_prepend")
+      "alleles", "allele.sep", "gt_column_prepend", "verbose")
   )
   
   if(length(unk_parm) > 0){
@@ -238,7 +238,7 @@ vcfR2tidy <- function(x,
   info_dots <- dotslist[names(dotslist) %in% c("info_fields", "info_types", "info_sep")]
   info_dots$x = x
   format_dots <- dotslist[names(dotslist) %in% c("format_fields", "format_types", "dot_is_NA",
-                                                 "alleles", "allele.sep", "gt_column_prepend")]
+                                                 "alleles", "allele.sep", "gt_column_prepend", "verbose")]
   format_dots$x = x
   
   # klugie hack for dealing with the gt_column_prepend
@@ -433,6 +433,7 @@ extract_info_tidy <- function(x, info_fields = NULL, info_types = TRUE, info_sep
 #' \code{\link{extract.gt}}. Here this is not used for a regex (as it is in other functions), but merely
 #' for output formatting.
 #' @param gt_column_prepend string to prepend to the names of the FORMAT columns
+#' @param verbose logical to specify if verbose output should be produced
 #' in the output so that they
 #' do not conflict with any INFO columns in the output.  Default is "gt_". Should be a 
 #' valid R name. (i.e. don't start with a number, have a space in it, etc.)
@@ -443,7 +444,8 @@ extract_gt_tidy <- function(x,
                             dot_is_NA = TRUE,
                             alleles = TRUE,
                             allele.sep = "/",
-                            gt_column_prepend = "gt_") {
+                            gt_column_prepend = "gt_",
+                            verbose = TRUE) {
   
   if(!is.null(format_fields) && any(duplicated(format_fields))){
     stop("Requesting extraction of duplicate format_field names")
@@ -478,8 +480,10 @@ extract_gt_tidy <- function(x,
   ex <- 1:length(format_fields)
   names(ex) <- format_fields
   
-  get_gt <- function(i){
-    message("Extracting gt element ", names(ex)[i])
+  get_gt <- function(i, ...){
+    if(verbose == TRUE){
+      message("Extracting gt element ", names(ex)[i])
+    }
     ret <- extract.gt(x = vcf, element = format_fields[i], as.numeric = coerce_numeric[i])
     ret <- as.vector(ret)
 
