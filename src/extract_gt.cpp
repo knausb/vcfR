@@ -1,15 +1,15 @@
 #include <Rcpp.h>
 #include "vcfRCommon.h"
 #include <string>
-//#include <vector>
 
 // Number of records to report progress at.
 const int nreport = 1000;
 
-using namespace Rcpp;
-
-
-int elementNumber(String x, std::string element = "GT"){
+// Called by extract_GT_to_NM
+//
+//' @export
+// [[Rcpp::export(name=".elementNumber")]]
+int elementNumber(Rcpp::String x, std::string element = "GT"){
   //
   //  Determine the position of a query element
   //  in a colon delimited string.
@@ -46,6 +46,20 @@ int elementNumber(String x, std::string element = "GT"){
   }
   // If we get here then we did not observe our element.
   return 0;
+}
+
+
+std::vector < std::string > get_allele_vector( Rcpp::String ref,
+                                               Rcpp::String alt )
+{
+  std::string allele_string = alt;
+  std::vector < std::string > allele_vector;
+  char alleles_split = ','; // Must be single quotes!
+  vcfRCommon::strsplit(allele_string, allele_vector, alleles_split);
+  std::string ref2 = ref;
+  allele_vector.insert( allele_vector.begin(), ref2 );
+
+  return allele_vector;
 }
 
 
@@ -99,88 +113,6 @@ Rcpp::String extractElementS(Rcpp::String x, int position=0, int extract=1){
   }
   // If we get here we did not find the element.
   return NA_STRING;
-}
-
-
-double extractElementD(String x, int number=1){
-  //
-  // x is a string similar to:
-  // GT:GQ:DP:RO:QR:AO:QA:GL
-  //
-  // number is the position in the colon delimited 
-  // string which needs to be extracted.
-  //
-//  int count = 0;
-  int start = 0;
-  int pos = 1;
-  std::string istring = x;
-  std::string teststring;
-  unsigned int i = 0;
-  
-  for(i=1; i <= istring.size(); i++){
-    if(istring[i] == ':'){
-      if(pos == number){
-        teststring = istring.substr(start, i-start);
-        double teststring2 = atof(teststring.c_str());
-        return teststring2;
-//        return std::stod(teststring);
-      } else {
-        start = i+1;
-        pos++;
-        i++;
-      }
-    }
-  }
-  // If we get here we did not find the element.
-  return(0);
-}
-
-
-// [[Rcpp::export]]
-Rcpp::CharacterMatrix extract_GT_to_CM(Rcpp::DataFrame x, std::string element="DP") {
-  int i = 0;
-  int j = 0;
-  Rcpp::StringVector column = x(0);   // Vector to check out DataFrame columns to
-  std::vector<int> positions(column.size());  // Vector to hold position data
-  Rcpp::CharacterMatrix cm(column.size(), x.size() - 1);  // CharacterMatrix for output
-  
-  // Swap column names, minus the first, from x to cm
-  Rcpp::StringVector colnames = x.attr("names");
-  colnames.erase(0);
-  cm.attr("dimnames") = Rcpp::List::create(Rcpp::CharacterVector::create(), colnames);
-  
-  // Determine the position where the query element is 
-  // located in each row (variant)
-  for(i=0; i<column.size(); i++){
-    positions[i] = elementNumber(column(i), element);
-  }
-  
-  // Process the input DataFrame
-  for(i = 1; i < x.size(); i++){ // Sample (column) counter
-    column = x(i);
-    for(j=0; j<column.size(); j++){ // Variant (row) counter
-      Rcpp::checkUserInterrupt();
-//      Rcout << column(j) << "\tposition: " << positions[j] << "\n";
-      cm(j, i-1) = extractElementS(column(j), positions[j]);
-//      Rcout << "Returned value: " << cm(j, i-1) << "\n";
-    }
-  }
-
-  return cm;
-}
-
-
-std::vector < std::string > get_allele_vector( Rcpp::String ref,
-                                               Rcpp::String alt )
-{
-  std::string allele_string = alt;
-  std::vector < std::string > allele_vector;
-  char alleles_split = ','; // Must be single quotes!
-  vcfRCommon::strsplit(allele_string, allele_vector, alleles_split);
-  std::string ref2 = ref;
-  allele_vector.insert( allele_vector.begin(), ref2 );
-
-  return allele_vector;
 }
 
 
@@ -263,8 +195,6 @@ std::string gt2alleles( Rcpp::String gt,
         gt3.append( na_allele );
       } else {
 //        Rcpp::Rcout << "    Appending allele " << i; // << "\n";
-//        sep = gt2[ gt3.length() ];
-//        sep = "_";
         // Grab the current delimiter.
         sep = delim_vector[ i - 1 ];
 //        Rcpp::Rcout << ", sep: " << sep;
@@ -280,9 +210,9 @@ std::string gt2alleles( Rcpp::String gt,
 }
 
 
-
-// [[Rcpp::export]]
-Rcpp::StringMatrix extract_GT_to_CM2( Rcpp::StringMatrix fix,
+//' @export
+// [[Rcpp::export(name=".extract_GT_to_CM")]]
+Rcpp::StringMatrix extract_GT_to_CM( Rcpp::StringMatrix fix,
                                          Rcpp::StringMatrix gt,
                                          std::string element="DP",
                                          int alleles = 0,
@@ -374,8 +304,9 @@ Rcpp::StringMatrix extract_GT_to_CM2( Rcpp::StringMatrix fix,
 }
 
 
-// [[Rcpp::export]]
-NumericMatrix CM_to_NM(CharacterMatrix x) {
+//' @export
+// [[Rcpp::export(name=".CM_to_NM")]]
+Rcpp::NumericMatrix CM_to_NM(Rcpp::CharacterMatrix x) {
   int i = 0;
   int j = 0;
   Rcpp::NumericMatrix nm(x.nrow(), x.ncol());  // NumericMatrix for output
@@ -400,8 +331,8 @@ NumericMatrix CM_to_NM(CharacterMatrix x) {
 }
 
 
-
-// [[Rcpp::export]]
+//' @export
+// [[Rcpp::export(name=".extract_haps")]]
 Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
                                 Rcpp::StringVector alt,
                                 Rcpp::StringMatrix gt,
@@ -517,23 +448,31 @@ Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
       
     }
     if(i % nreport == 0 && verbose == 1){
-      Rcout << "\rVariant " << i << " processed";
+      Rcpp::Rcout << "\rVariant " << i << " processed";
     }
   }
   if(verbose == 1){
-    Rcout << "\rVariant " << i << " processed\n";
+    Rcpp::Rcout << "\rVariant " << i << " processed\n";
   }
 
-
-  
   return(haps);
 }
 
 
-// [[Rcpp::export]]
+//' @export
+// [[Rcpp::export(name=".grepa")]]
 void grepa(){
-  Rcout << "Hola Javier!\n";
-  Rcout << "Eres un verdadero amigo!\n";
+  Rcpp::Rcout << "Hola Javier!\n";
+  Rcpp::Rcout << "Eres un verdadero amigo!\n";
   return;
 }
 
+//' @export
+// [[Rcpp::export(name=".shankaR")]]
+void shankaR(){
+  Rcpp::Rcout << "Dhan'yavāda Shankar!" << std::endl;
+  return;
+}
+
+
+// EOF.

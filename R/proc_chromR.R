@@ -92,7 +92,7 @@ proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
   
   # Initialize windows.
   if( length(x@len) > 0 ){
-    ptime <- system.time(x@win.info <- .Call('vcfR_window_init', PACKAGE = 'vcfR', window_size=win.size, max_bp=x@len))
+    ptime <- system.time(x@win.info <- .window_init(window_size=win.size, max_bp=x@len))
 
     # Name of windows based on chromosome name.
     if( !is.na(x@var.info$CHROM[1]) ){
@@ -119,11 +119,9 @@ proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
 
   if(class(x@seq) == "DNAbin"){
 #    if( nrow( x@vcf@gt[x@var.info$mask, , drop = FALSE ] ) > 0 ){
-      ptime <- system.time(x@win.info <- .Call('vcfR_windowize_fasta', 
-                                               PACKAGE = 'vcfR',
-                                               wins=x@win.info,
-                                               seq=as.character(x@seq)[1,]
-                                               ))
+      ptime <- system.time(x@win.info <- .windowize_fasta(wins=x@win.info,
+                                                          seq=as.character(x@seq)[1,]
+                                                          ))
       if(verbose==TRUE){
 #        print("windowize_fasta complete.")
 #        print(paste("  elapsed time: ", round(ptime[3], digits=4)))
@@ -139,7 +137,7 @@ proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
 #  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
   if( nrow(x@ann) > 0 ){
     #if( nrow( x@vcf@gt[x@var.info$mask, , drop = FALSE] ) > 0 ){
-      ptime <- system.time(x@win.info <- .Call('vcfR_windowize_annotations', PACKAGE = 'vcfR', wins=x@win.info,
+      ptime <- system.time(x@win.info <- .windowize_annotations(wins=x@win.info,
                                                ann_starts=as.numeric(as.character(x@ann[,4])), 
                                                ann_ends=as.numeric(as.character(x@ann[,5])),
                                                chrom_length=x@len)
@@ -163,7 +161,7 @@ proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
   # Windowize variants.
 #  if(nrow(x@vcf.gt[x@var.info$mask,])>0){
   if( nrow( x@vcf@gt[x@var.info$mask, , drop = FALSE ] ) > 0 ){
-    ptime <- system.time(x@win.info <- .Call('vcfR_windowize_variants', PACKAGE = 'vcfR', windows=x@win.info, variants=x@var.info[c('POS','mask')]))
+    ptime <- system.time(x@win.info <- .windowize_variants(windows=x@win.info, variants=x@var.info[c('POS','mask')]))
     if(verbose==TRUE){
 #      print("windowize_variants complete.")
 #      print(paste("  elapsed time: ", round(ptime[3], digits=4)))
@@ -262,7 +260,7 @@ seq2rects <- function(x, chars="acgtwsmkrybdhv", lower=TRUE){
     chars <- tolower(chars)
   }
 
-  rects <- .Call('vcfR_seq_to_rects', PACKAGE = 'vcfR', seq, targets=chars)
+  rects <- .seq_to_rects(seq, targets=chars)
   return(rects)
 }
 
@@ -325,8 +323,19 @@ var.win <- function(x, win.size=1e3){
 }
 
 
-
-
+thetas <- function(x){
+  #  print(x)
+  rnum <- x[1]
+  anum <- x[2]
+  if(is.na(rnum)){return(c(NA,NA,NA))}
+  n <- rnum + anum
+  Si <- vector(mode="numeric", length=n)
+  Si[anum] <- 1
+  theta_w <- sum(1/1:(rnum+anum-1))^-1 * 1
+  theta_pi <- (2*anum*rnum)/(n*(n-1))
+  theta_h <- (2*1*anum^2)/(n*(n-1))
+  return(c(theta_pi, theta_w, theta_h))
+}
 
 
 #' @rdname proc_chromR
@@ -448,7 +457,7 @@ gt.to.popsum <- function(x){
   # If summaries already exist, we'll remove them.
   x@var.info <- x@var.info[,grep("^n$|^Allele_counts$|^He$|^Ne$", colnames(x@var.info), invert = TRUE)]
   
-  x@var.info <- .Call('vcfR_gt_to_popsum', PACKAGE = 'vcfR', var_info=x@var.info, gt=gt)
+  x@var.info <- .gt_to_popsum(var_info=x@var.info, gt=gt)
 
   return(x)
 }

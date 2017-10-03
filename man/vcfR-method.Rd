@@ -6,6 +6,7 @@
 \alias{head}
 \alias{head,vcfR-method}
 \alias{[,vcfR,ANY,ANY,ANY-method}
+\alias{[,vcfR-method}
 \alias{plot,vcfR-method}
 \alias{rbind2,vcfR,missing-method}
 \alias{rbind2.vcfR}

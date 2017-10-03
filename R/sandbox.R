@@ -18,19 +18,6 @@ linkage <- function(x){
 }
 
 
-thetas <- function(x){
-  #  print(x)
-  rnum <- x[1]
-  anum <- x[2]
-  if(is.na(rnum)){return(c(NA,NA,NA))}
-  n <- rnum + anum
-  Si <- vector(mode="numeric", length=n)
-  Si[anum] <- 1
-  theta_w <- sum(1/1:(rnum+anum-1))^-1 * 1
-  theta_pi <- (2*anum*rnum)/(n*(n-1))
-  theta_h <- (2*1*anum^2)/(n*(n-1))
-  return(c(theta_pi, theta_w, theta_h))
-}
 
 ##### ##### Set populations #####
 

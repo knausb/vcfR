@@ -1,8 +1,9 @@
+
 #include <Rcpp.h>
-#include <fstream>
 #include <zlib.h>
 #include "vcfRCommon.h"
 
+//using namespace Rcpp;
 
 // Number of records to report progress at.
 const int nreport = 1000;
@@ -39,10 +40,24 @@ void stat_line(Rcpp::NumericVector stats, std::string line){
 
 /*  Single pass of vcf file to get statistics */
 
-// [[Rcpp::export]]
-Rcpp::NumericVector vcf_stats_gz(std::string x) {
+//' @export
+// [[Rcpp::export(name=".vcf_stats_gz")]]
+Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows = -1, int skip = 0, int verbose = 1) {
   Rcpp::NumericVector stats(4);  // 4 elements, all zero.  Zero is default.
   stats.names() = Rcpp::StringVector::create("meta", "header", "variants", "columns");
+  
+  if(verbose == 1){
+    Rcpp::Rcout << "Scanning file to determine attributes." << std::endl;
+  }
+  
+  // Determine number of rows to read.
+  int max_rows = 0;
+  if( nrows > 0 ){
+    max_rows = max_rows + nrows;
+  }
+  if( skip > 0 ){
+    max_rows = max_rows + nrows;
+  }
   
   gzFile file;
   file = gzopen (x.c_str(), "r");
@@ -76,6 +91,12 @@ Rcpp::NumericVector vcf_stats_gz(std::string x) {
     // Manage the last line.
     lastline = svec[svec.size() - 1];
 
+    if( max_rows > 0 & stats(2) > max_rows ){
+      gzclose (file);
+      stats(2) = max_rows;
+      return stats;
+    }
+    
     // Check for EOF or errors.
     if (bytes_read < LENGTH - 1) {
       if ( gzeof (file) ) {
@@ -104,11 +125,10 @@ Rcpp::NumericVector vcf_stats_gz(std::string x) {
 }
 
 
-
-
 /*  Read vcf meta region  */
 
-// [[Rcpp::export]]
+//' @export
+// [[Rcpp::export(name=".read_meta_gz")]]
 Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats, int verbose) {
   // Read in the meta lines.
   // stats consists of elements ("meta", "header", "variants", "columns");
@@ -218,11 +238,8 @@ void proc_body_line(Rcpp::CharacterMatrix gt,
         std::vector < std::string > allele_vec;
         int unphased_as_na = 0; // 0 == FALSE
         std::string my_string;
-//        if( data_vec[ cols[i] ] == NA_STRING ){
-//          my_string = ".";
-//        } else {
-          my_string = data_vec[ cols[i] ];
-//        }
+        my_string = data_vec[ cols[i] ];
+
         
         vcfRCommon::gtsplit( my_string, allele_vec, unphased_as_na );
         int gtNA = 1;
@@ -237,23 +254,7 @@ void proc_body_line(Rcpp::CharacterMatrix gt,
           gt(var_num, i) = data_vec[ cols[i] ];
         }
       }
-//        int gtNA = 1;
-//        for(int j = 0; j < data_vec[ cols[i] ].size(); j++){
-//          if( data_vec[ cols[i] ][j] != '.' ){
-//            gtNA = 0;
-//          }
-//          j++; // Every other character should be a delimiter.
-//        }
-//        if( gtNA == 1 ){
-//          gt(var_num, i) = NA_STRING;
-//        } else {
-//          gt(var_num, i) = data_vec[ cols[i] ];
-//        }
-//      }
-//      } else if( data_vec[ cols[i] ][0] == '.' & data_vec[ cols[i] ][2] == '.' & 
-//               data_vec[ cols[i] ].size() == 3 & convertNA == 1 ){
-      // We can also convert diploid genotypes where both alleles are "." to NA.
-//      gt(var_num, i) = NA_STRING;
+
     } else {
       gt(var_num, i) = data_vec[ cols[i] ];
     }
@@ -270,7 +271,9 @@ void proc_body_line(Rcpp::CharacterMatrix gt,
  "meta", "header", "variants", "columns"
  
 */
-// [[Rcpp::export]]
+
+//' @export
+// [[Rcpp::export(name=".read_body_gz")]]
 Rcpp::CharacterMatrix read_body_gz(std::string x,
                                    Rcpp::NumericVector stats,
                                    long int nrows = -1,
@@ -283,13 +286,13 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
   Rcpp::StringMatrix na_matrix(1,1);
   na_matrix(0,0) = NA_STRING;
   
-  if(verbose == 1){
-    Rcpp::Rcout << "In function read_body_gz." << std::endl;
-    Rcpp::Rcout << "  stats(0): " << stats(0) << std::endl;
-    Rcpp::Rcout << "  stats(1): " << stats(1) << std::endl;
-    Rcpp::Rcout << "  stats(2): " << stats(2) << std::endl;
-    Rcpp::Rcout << "  stats(3): " << stats(3) << std::endl;
-  }
+  // if(verbose == 1){
+  //   Rcpp::Rcout << "In function read_body_gz." << std::endl;
+  //   Rcpp::Rcout << "  stats(0): " << stats(0) << std::endl;
+  //   Rcpp::Rcout << "  stats(1): " << stats(1) << std::endl;
+  //   Rcpp::Rcout << "  stats(2): " << stats(2) << std::endl;
+  //   Rcpp::Rcout << "  stats(3): " << stats(3) << std::endl;
+  // }
   
   /*
    * Manage cols vector.
@@ -297,7 +300,6 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
    * We can ensure they are there by adding them,
    * sorting and removing adjacent non-identical values.
    */
-//  for( int i=9; i >= 1; i-- ){
   for( int i=8; i >= 1; i-- ){
     cols.push_front(i);
   }
@@ -311,7 +313,6 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
 
   
   // Initialize matrix for body data.
-  // old: Rcpp::CharacterMatrix gt(stats[2], stats[3]);
   long int row_num = 0;
   
 
@@ -328,16 +329,12 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
     return na_matrix;
   }
   
-//  if( nrows > INT_MAX ){
-//    Rcpp::Rcerr << "failed to calculate return matrix geometry.";
-//    return na_matrix;
-//  }
 
-  if(verbose == 1){
-    Rcpp::Rcout << "Initializing gt matrix." << std::endl;
-    Rcpp::Rcout << "  nrows: " << nrows << std::endl;
-    Rcpp::Rcout << "  cols.size(): " << cols.size() << std::endl;
-  }
+  // if(verbose == 1){
+  //   Rcpp::Rcout << "Initializing gt matrix." << std::endl;
+  //   Rcpp::Rcout << "  nrows: " << nrows << std::endl;
+  //   Rcpp::Rcout << "  cols.size(): " << cols.size() << std::endl;
+  // }
   
   if( nrows > INT_MAX ){
     Rcpp::Rcerr << "Requested a matrix of " << nrows << " rows." << std::endl;
@@ -366,7 +363,7 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
     Rcpp::Rcout << "\n";
     Rcpp::Rcout << "  row_num: ";  Rcpp::Rcout << row_num;
     Rcpp::Rcout << "\n";
-    Rcpp::Rcout << "\n";
+//    Rcpp::Rcout << "\n";
   }
 
   
@@ -477,9 +474,7 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
      * 3) we actually have a line (when buffer ends at the end of a line).
      */
     if( ( row_num >= nrows ) & ( lastline[0] != '#' ) & ( lastline.size() > 0 ) ){
-//        Rcpp::Rcout << "\nBreaking!\n";
-//        Rcpp::Rcout << "lastline: " << lastline.substr(0,40) << "\n";
-        break;
+      break;
     }
 
 
@@ -503,10 +498,6 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
   
   // Close filehandle.
   gzclose (file);
-
-//  Rcpp::Rcout << "\n\n>>---<< Made it: file close! >>---<<\n\n";
-//  Rcpp::Rcout << "header_vec.size(): " << header_vec.size() << "\n";
-  
   
   if( stats[1] == 0 ){
     if( verbose == 1 ){
@@ -526,193 +517,11 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
 
 //  Rcpp::Rcout << "\n\n>>---<< Made it! >>---<<\n\n";
 
-    
   if(verbose == 1){
     Rcpp::Rcout << "\rProcessed variant: " << var_num;
     Rcpp::Rcout << "\nAll variants processed\n";
   }
 
-//  Rcpp::DataFrame df1 = Rcpp::DataFrame::create(gt);
-//  Rcpp::DataFrame df1(gt);
-//  df1.names() = header_vec;
-//  if(verbose == 1){
-//    Rcpp::Rcout << "Rcpp::DataFrame created.\n";
-//  }
-
   return gt;
 }
-
-
-
-
-
-Rcpp::StringMatrix DataFrame_to_StringMatrix( Rcpp::DataFrame df ){
-  Rcpp::StringVector sv = df(0);
-  Rcpp::StringMatrix sm(sv.size(), df.size());
-  
-  sm.attr("col.names") = df.attr("col.names");
-  sm.attr("row.names") = df.attr("row.names");
-
-  for(int i=0; i < df.size(); i++){
-    sv = df(i);
-    for(int j=0; j < sv.size(); j++){
-      sm(j, i) = sv(j);
-    }
-  }
-
-  return sm;
-}
-
-
-/*  Write vcf body  */
-
-// [[Rcpp::export]]
-void write_vcf_body( Rcpp::CharacterMatrix fix,
-                     Rcpp::CharacterMatrix gt,
-                     std::string filename,
-                     int mask=0 ) {
-  // http://stackoverflow.com/a/5649224
-  
-//  
-int verbose = 0;
-//  int verbose = 1;
-  
-  if( verbose == 1 ){
-    Rcpp::Rcout << "Made it into the function!\n";
-  }
-  
-  int i = 0; // Rows
-  int j = 0; // Columns
-  std::string tmpstring;  // Assemble each line before writing
-
-  // Initialize filehandle.
-  gzFile fi;
-  
-  // Initialize file.
-  // Note that gzfile does not tolerate initializing an empty file.
-  // Use ofstream instead.
-  if ( ! std::ifstream( filename ) ){
-    if( verbose == 1 ){
-      Rcpp::Rcout << "File does not exist." << std::endl;
-    }
-    
-    std::ofstream myfile;
-    myfile.open (filename, std::ios::out | std::ios::binary);
-    myfile.close();
-    
-    // This should make valgrind hang.
-    // Or not???
-//    fi = gzopen( filename.c_str(), "ab" );
-//    gzclose(fi);
-  }
-
-  // In order for APPEND=TRUE to work the header
-  // should not be printed here.
-
-  if( verbose == 1 ){
-    Rcpp::Rcout << "Matrix fix has " << fix.nrow() << " rows (variants).\n";
-  }
-  
-  // Manage body
-  if( fix.nrow() >= 1 ){
-    if( verbose == 1 ){
-      Rcpp::Rcout << "Processing the body (variants).\n";
-    }
-    // There is at least one variant.
-    fi = gzopen( filename.c_str(), "ab" );
-    if (! fi) {
-      Rcpp::Rcerr << "gzopen of " << filename << " failed: " << strerror (errno) << ".\n";
-    }
-
-    for(i = 0; i < fix.nrow(); i++){
-      Rcpp::checkUserInterrupt();
-
-      if(mask == 1 && fix(i,6) != "PASS" ){
-        // Don't print variant.
-      } else {
-        // Print variant.
-        j = 0;
-        tmpstring = fix(i,j);
-        for(j = 1; j < fix.ncol(); j++){
-          if(fix(i,j) == NA_STRING){
-            tmpstring = tmpstring + "\t" + ".";
-          } else {
-            tmpstring = tmpstring + "\t" + fix(i,j);
-          }
-        }
-
-        // gt portion
-        for(j = 0; j < gt.ncol(); j++){
-          if(gt(i, j) == NA_STRING){
-            tmpstring = tmpstring + "\t" + "./.";
-          } else {
-            tmpstring = tmpstring + "\t" + gt(i, j);
-          }
-        }
-
-        gzwrite(fi, tmpstring.c_str(), tmpstring.size());
-        gzwrite(fi,"\n",strlen("\n"));
-      }
-    }
-    if( verbose == 1 ){
-      Rcpp::Rcout << "Finished processing the body (variants).\n";
-    }
-    gzclose(fi);
-  } else {
-    if( verbose == 1 ){
-      Rcpp::Rcout << "No rows (variants).\n";
-    }
-  }
-  
-//  return void;
-}
-
-
-
-/* Write data to fasta file */
-
-// [[Rcpp::export]]
-void write_fasta( Rcpp::CharacterVector seq,
-                  std::string seqname, 
-                  std::string filename, 
-                  int rowlength=80,
-                  int verbose=1) {
-//  rowlength=rowlength-1;
-  FILE * pFile;
-//  pFile=fopen(filename.c_str(),"wt");
-  pFile=fopen(filename.c_str(),"at");
-  int i = 0;
-//  unsigned int i = 0;
-  
-  if(verbose == 1){
-    Rcpp::Rcout << "Processing sample: " << seqname << "\n";
-  }
-
-  putc ('>' , pFile);
-  for(i=0; (unsigned)i<seqname.size(); i++){
-    putc (seqname[i] , pFile);
-  }
-  putc ('\n' , pFile);
-
-  putc (Rcpp::as< char >(seq[0]) , pFile);
-  for(i=1; i<seq.size(); i++){
-    Rcpp::checkUserInterrupt();
-//    putc (seq[i][0] , pFile);
-    if( i % rowlength == 0){
-      putc('\n', pFile);
-    }
-    putc (Rcpp::as< char >(seq[i]) , pFile);
-    if(i % nreport == 0 && verbose == 1){
-      Rcpp::Rcout << "\rNucleotide " << i << " processed";
-    }
-  }
-  putc('\n', pFile);
-  fclose (pFile);
-  if(verbose == 1){
-    Rcpp::Rcout << "\rNucleotide " << i << " processed\n";
-  }
-//  return 0;
-}
-
-
 

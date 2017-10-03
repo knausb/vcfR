@@ -7,11 +7,11 @@
 \alias{windowize.NM}
 \title{Create window summaries of data}
 \usage{
-NM2winNM(x, pos, maxbp, winsize = 100L)
+NM2winNM(x, pos, maxbp, winsize = 100L, depr = TRUE)
 
 z.score(x)
 
-windowize.NM(x, pos, starts, ends, summary = "mean")
+windowize.NM(x, pos, starts, ends, summary = "mean", depr = TRUE)
 }
 \arguments{
 \item{x}{A NumericMatrix}
@@ -21,6 +21,8 @@ windowize.NM(x, pos, starts, ends, summary = "mean")
 \item{maxbp}{Length of chromosome}
 
 \item{winsize}{Size (in bp) for windows}
+
+\item{depr}{logical (T/F), this function has been deprecated, set to FALSE to override.}
 
 \item{starts}{integer vector of starting positions for windows}
 

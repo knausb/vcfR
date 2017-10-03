@@ -22,22 +22,22 @@
 #' 
 #' 
 #' The function vcfR2genlight calls the 'new' method for the genlight object.
-#' This method implements multi-threading through calls to the function \code{\link[parallel]{mclapply}}.
+#' This method implements multi-threading through calls to the function \code{parallel::mclapply}.
 #' Because 'forks' do not exist in the windows environment, this will only work for windows users when n.cores=1.
 #' In the Unix environment, users may increase this number to allow the use of multiple threads (i.e., cores).
 #' 
 #' 
 #' 
 #' @seealso
-#' \code{\link{extract.gt}},
-#' \code{\link{alleles2consensus}},
-#' \code{\link[adegenet]{df2genind}},
-#' \code{\link[adegenet]{genind}},
+#' \code{extract.gt},
+#' \code{alleles2consensus},
+#' \code{adegenet::df2genind},
+#' \code{adegenet::genind},
 #' \href{https://cran.r-project.org/package=pegas}{pegas},
 #' \href{https://cran.r-project.org/package=adegenet}{adegenet},
 #' and 
 #' \href{https://cran.r-project.org/package=poppr}{poppr}.
-#' To convert to objects of class \strong{DNAbin} see \code{\link{vcfR2DNAbin}}.
+#' To convert to objects of class \strong{DNAbin} see \code{vcfR2DNAbin}.
 #'
 
 

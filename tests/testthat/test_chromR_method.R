@@ -1,16 +1,13 @@
 
 
 # detach(package:vcfR, unload=T)
-#
-library(testthat)
+#library(testthat)
 library(vcfR)
 context("chromR methods")
 
-data("vcfR_example")
-
-chrom <- create.chromR(name="Supercontig_1.50", vcf=vcf, verbose=FALSE)
 
 test_that("chromR show",{
+  data("chromR_example")
   capture.output( tmp <- show(chrom) )
   expect_null(tmp)
 })
@@ -19,12 +16,8 @@ test_that("chromR show",{
 ##### ##### ##### ##### #####
 
 test_that("chromR length",{
-  data("vcfR_example")
-  chrom <- create.chromR(name="Supercontig_1.50", vcf=vcf, verbose=FALSE)
+  data("chromR_example")
   expect_equal(length(chrom), chrom@len)
-  
-#  tmp <- print(chrom)
-#  expect_true(is.null(tmp))
 })
 
 
@@ -36,6 +29,7 @@ test_that("chromR print",{
 })
 
 test_that("chromR head",{
+  data("chromR_example")
 #  tmp <- head(chrom)
 #  expect_null(tmp)
 #  expect_true(is.null(tmp))
@@ -43,9 +37,9 @@ test_that("chromR head",{
 
 
 test_that("chromR names<-",{
+  data("chromR_example")
   names(chrom) <- "bob"
   expect_identical(names(chrom), "bob")
-#  expect_true(is.null(tmp))
 })
 
 

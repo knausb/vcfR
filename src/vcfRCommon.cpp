@@ -13,10 +13,7 @@ void R_init_vcfR(DllInfo* info) {
 */
 
 
-//static 
-//static 
 void vcfRCommon::strsplit(std::string& mystring, std::vector<std::string>& vec_o_strings, char& split){
-//void strsplit(std::string& mystring, std::vector<std::string>& vec_o_strings, char& split){
   // mystring is a string to be split on the character 'split'.
   // vec_o_strings is empty and will be pushed on to.
 
@@ -101,8 +98,6 @@ void vcfRCommon::gtsplit(std::string& mystring,
 }
 
 
-
-
 void vcfRCommon::gtdelim(std::string& mystring,
                          std::vector<std::string>& vec_o_strings){
   // Collect a genotype's allelic delimitors.
@@ -126,4 +121,4 @@ void vcfRCommon::gtdelim(std::string& mystring,
 }
 
 
-
+// EOF.

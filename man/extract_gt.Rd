@@ -99,5 +99,5 @@ extract.haps(vcfR_test)
 
 }
 \seealso{
-\code{\link{is.polymorphic}}
+\code{is.polymorphic}
 }

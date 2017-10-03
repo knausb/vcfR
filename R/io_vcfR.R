@@ -107,7 +107,8 @@ read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, conver
   }
   
   vcf <- new(Class="vcfR")
-  stats <- .Call('vcfR_vcf_stats_gz', PACKAGE = 'vcfR', file)
+
+  stats <- .vcf_stats_gz(file, nrows=nrows, skip = skip, verbose = as.integer(verbose) )
   # stats should be a named vector containing "meta", "header", "variants", "columns".
   # They should have been initialize to zero.
   if(verbose == TRUE){
@@ -156,10 +157,10 @@ read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, conver
   }
   
   # Read meta
-  vcf@meta <- .Call('vcfR_read_meta_gz', PACKAGE = 'vcfR', file, stats, as.numeric(verbose))
-  
+  vcf@meta <- .read_meta_gz(file, stats, as.numeric(verbose))
+
   # Read body
-  body <- .Call('vcfR_read_body_gz', PACKAGE = 'vcfR', file = file, stats = stats, 
+  body <- .read_body_gz(file, stats = stats, 
                 nrows = nrows, skip = skip, cols = cols, 
                 convertNA = as.numeric(convertNA), verbose = as.numeric(verbose))
 
@@ -207,9 +208,9 @@ write.vcf <- function(x, file = "", mask = FALSE, APPEND = FALSE){
   }
   
   if(mask == FALSE){
-    test <- .Call('vcfR_write_vcf_body', PACKAGE = 'vcfR', fix = x@fix, gt = x@gt, filename = file, mask = 0)
+    test <- .write_vcf_body(fix = x@fix, gt = x@gt, filename = file, mask = 0)
   } else if (mask == TRUE){
-    test <- .Call('vcfR_write_vcf_body', PACKAGE = 'vcfR', fix = x@fix, gt = x@gt, filename = file, mask = 1)
+    test <- .write_vcf_body(fix = x@fix, gt = x@gt, filename = file, mask = 1)
   }
 }
 

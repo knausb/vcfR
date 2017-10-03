@@ -5,7 +5,7 @@
 \title{Create fasta format output}
 \usage{
 write.fasta(x, file = "", rowlength = 80, tolower = TRUE,
-  verbose = TRUE, APPEND = FALSE)
+  verbose = TRUE, APPEND = FALSE, depr = TRUE)
 }
 \arguments{
 \item{x}{object of class chromR}
@@ -19,6 +19,8 @@ write.fasta(x, file = "", rowlength = 80, tolower = TRUE,
 \item{verbose}{should verbose output be generated (T/F)}
 
 \item{APPEND}{should data be appended to an existing file (T/F)}
+
+\item{depr}{logical (T/F), this function has been deprecated, set to FALSE to override.}
 }
 \description{
 Generate fasta format output
