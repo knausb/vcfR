@@ -56,6 +56,8 @@ peak_to_ploid <- function(x){
 #  colnames(gmat) <- colnames(x$peaks)
 #  rownames(gmat) <- rownames(x$peaks)
   gmat <- x$peaks
+  # Allele balance expectation
+  abe <- matrix(ncol=ncol(gmat), nrow = nrow(gmat))
 
   # Bin to ploidy
   #  critical <- 1/4 - (1/3-1/4)/2
@@ -67,17 +69,45 @@ peak_to_ploid <- function(x){
 
   critical <- c( 9/40, 7/24, 5/12, 7/12, 17/24, 31/40)
   
+  abe[ gmat <= 1 & gmat > critical[6] ] <- 4/5
   gmat[ gmat <= 1 & gmat > critical[6] ] <- 5
+  abe[ gmat <= critical[6] & gmat > critical[5] ] <- 3/4
   gmat[ gmat <= critical[6] & gmat > critical[5] ] <- 4
+  abe[ gmat <= critical[5] & gmat > critical[4] ] <- 2/3
   gmat[ gmat <= critical[5] & gmat > critical[4] ] <- 3
+  abe[ gmat <= critical[4] & gmat >= critical[3] ] <- 1/2
   gmat[ gmat <= critical[4] & gmat >= critical[3] ] <- 2
+  abe[ gmat < critical[3] & gmat >= critical[2] ] <- 1/3
   gmat[ gmat < critical[3] & gmat >= critical[2] ] <- 3
+  abe[ gmat < critical[2] & gmat >= critical[1] ] <- 1/4
   gmat[ gmat < critical[2] & gmat >= critical[1] ] <- 4
+  abe[ gmat < critical[1] & gmat >= 0 ] <- 1/5
   gmat[ gmat < critical[1] & gmat >= 0 ] <- 5
   
-  is.na(gmat[x$peaks < 7/40 & !is.na(x$peaks)]) <- TRUE
+  is.na(gmat[x$peaks < 7/40  & !is.na(x$peaks)]) <- TRUE
   is.na(gmat[x$peaks > 33/40 & !is.na(x$peaks)]) <- TRUE
+  is.na(abe[x$peaks  < 7/40  & !is.na(x$peaks)]) <- TRUE
+  is.na(abe[x$peaks  > 33/40 & !is.na(x$peaks)]) <- TRUE
 
-  return(gmat)
+  # Distance from expectation
+  dfe <- x$peaks - abe
+  
+  # Scale dfe by bin width
+  dfe[ abe == 4/5 & !is.na(dfe) ] <- dfe[ abe == 4/5 & !is.na(abe) ] / (33/40 - 4/5)
+  dfe[ abe == 3/4 & !is.na(dfe) & dfe > 0 ] <- dfe[ abe == 3/4 & !is.na(dfe) & dfe > 0 ] / (31/40 - 3/4)
+  dfe[ abe == 3/4 & !is.na(dfe) & dfe < 0 ] <- dfe[ abe == 3/4 & !is.na(dfe) & dfe < 0 ] / (3/4 - 17/24)
+  dfe[ abe == 2/3 & !is.na(dfe) & dfe > 0 ] <- dfe[ abe == 2/3 & !is.na(dfe) & dfe > 0 ] / (17/24 - 2/3)
+  dfe[ abe == 2/3 & !is.na(dfe) & dfe < 0 ] <- dfe[ abe == 2/3 & !is.na(dfe) & dfe < 0 ] / (2/3 - 7/12)
+  dfe[ abe == 1/2 & !is.na(dfe) ] <- dfe[ abe == 1/2 & !is.na(dfe) ] / (7/12 - 1/2)
+  dfe[ abe == 1/3 & !is.na(dfe) & dfe > 0 ] <- dfe[ abe == 1/3 & !is.na(dfe) & dfe > 0 ] / (5/12 - 1/3)
+  dfe[ abe == 1/3 & !is.na(dfe) & dfe < 0 ] <- dfe[ abe == 1/3 & !is.na(dfe) & dfe < 0 ] / (1/3 - 7/24)
+  dfe[ abe == 1/4 & !is.na(dfe) & dfe > 0 ] <- dfe[ abe == 1/4 & !is.na(dfe) & dfe > 0 ] / (7/24 - 1/4)
+  dfe[ abe == 1/4 & !is.na(dfe) & dfe < 0 ] <- dfe[ abe == 1/4 & !is.na(dfe) & dfe < 0 ] / (1/4 - 9/40)
+  dfe[ abe == 1/5 & !is.na(dfe) ] <- dfe[ abe == 1/5 & !is.na(dfe) ] / (9/40 - 1/5)
+  
+  #return(gmat)
+  list( copies = gmat, 
+        #abe = abe,
+        dfe = dfe)
 }
 
