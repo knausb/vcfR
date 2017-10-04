@@ -64,13 +64,38 @@ freq_peak_plot <- function(pos,
                  labels=c(0,'1/4','1/3','1/2','2/3','3/4',1), las=1)
   graphics::abline(h=c(0.2,0.25,0.333,0.5,0.666,0.75,0.8), col=8)  
 
+  # Add dot plots
+  if( !is.null(ab1) ){
+    graphics::points(pos, fp1$peaks[,mySamp], pch = 20, col= col1)
+  }
+  if( !is.null(ab2) ){
+    graphics::points(pos, fp2$peaks[,mySamp], pch = 20, col= col2)
+  }
   
+  # Add window peak indicators
+  if( !is.null(fp1) ){
+    graphics::segments(x0=fp1$wins[,'START_pos'], y0=fp1$peaks[,mySamp],
+                       x1=fp1$wins[,'END_pos'], lwd=3)
+  }
+  if( !is.null(fp2) ){
+    graphics::segments(x0=fp2$wins[,'START_pos'], y0=fp2$peaks[,mySamp],
+                       x1=fp2$wins[,'END_pos'], lwd=3)
+  }
   
-  # Null marginal histogram
+  # Marginal histogram
   if( mhist == TRUE & is.null(ab1) & is.null(ab2) ){
+    # Null marginal histogram
     graphics::par(mar=c(5,1,4,2))
     graphics::barplot(height=0.01, width=0.02,  space = 0, horiz = T, add = FALSE, col="#000000", xlim = c(0,1.0))
-#    barplot(height=0.01, width=0.02,  space = 0, horiz = T, add = TRUE, col="#1F78B4")
+
+  } else {
+    par(mar=c(5,1,4,2))
+    
+    bp1 <- graphics::hist(fp1[,mySamp], breaks = seq(0,1,by=bin_width), plot = FALSE)
+    graphics::barplot(height=bp1$counts, width=0.02,  space = 0, horiz = T, add = FALSE, col="#A6CEE3")
+    
+    bp2 <- graphics::hist(fp2[,mySamp], breaks = seq(0,1,by=bin_width), plot = FALSE)
+    graphics::barplot(height=bp2$counts, width=0.02,  space = 0, horiz = T, add = TRUE, col="#1F78B4")
   }
   
   
