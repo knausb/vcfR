@@ -677,7 +677,8 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
         Rcpp::Named("wins") = wins,
         Rcpp::Named("peaks") = naMat
       );
-      myList.attr("class") = Rcpp::CharacterVector::create("list", "freq_peak");
+//      myList.attr("class") = Rcpp::CharacterVector::create("list", "freq_peak");
+      myList.attr("class") = Rcpp::CharacterVector::create("freq_peak", "list");
       return( myList );
     }
     
@@ -688,7 +689,8 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
         Rcpp::Named("wins") = wins,
         Rcpp::Named("peaks") = naMat
       );
-      myList.attr("class") = Rcpp::CharacterVector::create("list", "freq_peak");
+//      myList.attr("class") = Rcpp::CharacterVector::create("list", "freq_peak");
+      myList.attr("class") = Rcpp::CharacterVector::create("freq_peak", "list");
       return( myList );
     }
 
@@ -699,7 +701,8 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
         Rcpp::Named("wins") = wins,
         Rcpp::Named("peaks") = naMat
       );
-      myList.attr("class") = Rcpp::CharacterVector::create("list", "freq_peak");
+//      myList.attr("class") = Rcpp::CharacterVector::create("list", "freq_peak");
+      myList.attr("class") = Rcpp::CharacterVector::create("freq_peak", "list");
       return( myList );
     }
     
@@ -716,7 +719,8 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
         Rcpp::Named("peaks") = naMat
       );
     
-    myList.attr("class") = Rcpp::CharacterVector::create("list", "freq_peak");
+//    myList.attr("class") = Rcpp::CharacterVector::create("list", "freq_peak");
+    myList.attr("class") = Rcpp::CharacterVector::create("freq_peak", "list");
     return( myList );
     }
 
@@ -757,7 +761,7 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
     Rcpp::Named("counts") = cnts
   );
 
-  myList.attr("class") = Rcpp::CharacterVector::create("list", "freq_peak");
+  myList.attr("class") = Rcpp::CharacterVector::create("freq_peak", "list");
   return(myList);
 }
 

@@ -46,10 +46,14 @@
 peak_to_ploid <- function(x){
   
   # Validate our input
-  if( class(x) != "list" | sum(names(x) == c("wins", "peaks", "counts")) != 3 ){
-    msg <- "expecting a list with three elements named 'wins', 'peaks', and 'counts'"
-    stop(msg)
+#  if( class(x) != "list" | sum(names(x) == c("wins", "peaks", "counts")) != 3 ){
+#    msg <- "expecting a list with three elements named 'wins', 'peaks', and 'counts'"
+#    stop(msg)
+#  }
+  if( !inherits(x, "freq_peak") ){
+    msg <- "expecting a freq_peak object."
   }
+  
   
   # Initialize a result data structure.
 #  gmat <- matrix(nrow=nrow(x$peaks), ncol=ncol(x$peaks))
