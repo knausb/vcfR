@@ -89,7 +89,7 @@ freq_peak_plot <- function(pos,
     graphics::barplot(height=0.01, width=0.02,  space = 0, horiz = T, add = FALSE, col="#000000", xlim = c(0,1.0))
 
   } else {
-    par(mar=c(5,1,4,2))
+    graphics::par(mar=c(5,1,4,2))
     
     bp1 <- graphics::hist(fp1[,mySamp], breaks = seq(0,1,by=bin_width), plot = FALSE)
     graphics::barplot(height=bp1$counts, width=0.02,  space = 0, horiz = T, add = FALSE, col="#A6CEE3")
