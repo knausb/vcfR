@@ -99,7 +99,7 @@ test_that("read.vcfR works when file contains one variant, no meta",{
   vcfR_test@meta <- vector(mode='character', length=0)
 
   write.vcf(vcfR_test, ex_file)
-  vcfR_test2 <- read.vcfR(ex_file, verbose=FALSE)
+  vcfR_test2 <- read.vcfR(ex_file, checkFile = FALSE, verbose=FALSE)
   
   expect_equal( nrow(vcfR_test2@fix), 1)
   

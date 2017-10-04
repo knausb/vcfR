@@ -18,6 +18,7 @@
 #' @param mask logical vector indicating rows to use.
 #' @param APPEND logical indicating whether to append to existing vcf file or write a new file.
 #' @param convertNA logical specifying to convert VCF missing data to NA.
+#' @param checkFile test if teh first line follows the VCF specification.
 #' 
 #' @param verbose report verbose progress.
 #'
@@ -93,7 +94,14 @@
 #' @aliases read.vcfR
 #' @export
 #' 
-read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, convertNA = TRUE, verbose = TRUE){
+read.vcfR <- function(file, 
+                      limit=1e7, 
+                      nrows = -1, 
+                      skip = 0, 
+                      cols = NULL, 
+                      convertNA = TRUE,
+                      checkFile = TRUE,
+                      verbose = TRUE){
 #  require(memuse)
   
   # gzopen does not appear to deal well with tilde expansion.
@@ -105,6 +113,16 @@ read.vcfR <- function(file, limit=1e7, nrows = -1, skip = 0, cols = NULL, conver
   if(file.access(file, mode = 4) != 0){
     stop(paste("File:", file, "appears to exist but is not readable!"))
   }
+  
+  # Test that this is a VCF file.
+  if(checkFile == TRUE){
+    vcf <- scan(file=file, what = character(), nmax=1, sep="\n", quiet = TRUE, comment.char = "")
+    if(substr(vcf,start=1, stop=17) != "##fileformat=VCFv"){
+      msg <- paste("File:", file, "does not appear to be a VCF file.")
+      msg <- paste(msg, "First line of file:", file)
+      stop(msg)
+    }
+  }  
   
   vcf <- new(Class="vcfR")
 

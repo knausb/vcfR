@@ -7,7 +7,7 @@
 \title{Read and write vcf format files}
 \usage{
 read.vcfR(file, limit = 1e+07, nrows = -1, skip = 0, cols = NULL,
-  convertNA = TRUE, verbose = TRUE)
+  convertNA = TRUE, checkFile = TRUE, verbose = TRUE)
 
 write.vcf(x, file = "", mask = FALSE, APPEND = FALSE)
 }
@@ -23,6 +23,8 @@ write.vcf(x, file = "", mask = FALSE, APPEND = FALSE)
 \item{cols}{vector of column numbers to extract from file.}
 
 \item{convertNA}{logical specifying to convert VCF missing data to NA.}
+
+\item{checkFile}{test if teh first line follows the VCF specification.}
 
 \item{verbose}{report verbose progress.}
 

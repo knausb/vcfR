@@ -33,7 +33,7 @@ test_that("write.vcf APPEND=TRUE does not include header",{
   test_dir <- tempdir()
   setwd(test_dir)
   write.vcf(vcf, "test.vcf.gz", APPEND=TRUE)
-  test <- read.vcfR("test.vcf.gz", verbose = FALSE)
+  test <- read.vcfR("test.vcf.gz", checkFile = FALSE, verbose = FALSE)
   unlink("test.vcf.gz")
 #  setwd(original_dir)
 })
