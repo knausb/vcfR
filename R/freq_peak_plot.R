@@ -69,15 +69,15 @@ freq_peak_plot <- function(pos,
   }
   
   # Handle color
-  col1 <- col2rgb(col1, alpha = FALSE)
-  col2 <- col2rgb(col2, alpha = FALSE)
-  col1 <- rgb(col1[1,1], col1[2,1], col1[3,1], maxColorValue=255)
-  col2 <- rgb(col2[1,1], col2[2,1], col2[3,1], maxColorValue=255)
+  col1 <- grDevices::col2rgb(col1, alpha = FALSE)
+  col2 <- grDevices::col2rgb(col2, alpha = FALSE)
+  col1 <- grDevices::rgb(col1[1,1], col1[2,1], col1[3,1], maxColorValue=255)
+  col2 <- grDevices::rgb(col2[1,1], col2[2,1], col2[3,1], maxColorValue=255)
   col1d <- paste(col1, alpha, sep = "")
   col2d <- paste(col2, alpha, sep = "")
   
-  # Store original options.
-  orig_opts <- options()
+  # Store original par.
+  orig_par <- graphics::par(no.readonly = TRUE)
   
   # Determine plot geometry.
   if( mhist == TRUE ){
@@ -109,13 +109,25 @@ freq_peak_plot <- function(pos,
     graphics::segments(x0=fp2$wins[,'START_pos'], y0=fp2$peaks[,mySamp],
                        x1=fp2$wins[,'END_pos'], lwd=3)
   }
-  title(main = colnames(freq1[, mySamp, drop = F]))
-
+  
+  # Title
+  if( !is.null(ab1) ){
+    graphics::title(main = colnames(ab1[, mySamp, drop = F]))
+  } else if( !is.null(ab2) ){
+    graphics::title(main = colnames(ab2[, mySamp, drop = F]))
+  }
     
   # Marginal histogram
   if( mhist == TRUE){
     graphics::par(mar=c(5,1,4,2))
-    hsbrk <- seq(0,1,by=fp1$bin_width)
+    
+    if( !is.null(fp1$bin_width) ){
+      hsbrk <- seq(0,1,by=fp1$bin_width)
+    } else if( !is.null(fp2$bin_width) ){
+      hsbrk <- seq(0,1,by=fp2$bin_width)
+    } else {
+      hsbrk <- seq(0,1,by=0.02)
+    }
     # Ensure floating point comparisosn don't get us
     hsbrk[1] <- -0.001
     hsbrk[length(hsbrk)] <- 1.001
@@ -140,10 +152,10 @@ freq_peak_plot <- function(pos,
       graphics::barplot(height=bp2$counts, width=fp2$bin_width,  space = 0, horiz = T, add = TRUE, col=col2)
     }
     
-    title(xlab="Count")
+    graphics::title(xlab="Count")
   }
   
-  options(orig_opts)
+  graphics::par(orig_par)
   return( invisible(NULL) )
 }
 
