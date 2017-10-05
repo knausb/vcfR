@@ -558,8 +558,10 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat,
 //' 
 //' 
 //' @return 
-//' A list containing:
+//' A freq_peak object (a list) containing:
 //' \itemize{
+//'   \item The window size
+//'   \item The binwidth used for peak binning
 //'   \item a matrix containing window coordinates
 //'   \item a matrix containing peak locations
 //'   \item a matrix containing the counts of variants for each sample in each window
@@ -756,6 +758,8 @@ Rcpp::List freq_peak(Rcpp::NumericMatrix myMat,
   
   // Create the return List.
   Rcpp::List myList = Rcpp::List::create(
+    Rcpp::Named("winsize") = winsize,
+    Rcpp::Named("bin_width") = bin_width,
     Rcpp::Named("wins") = wins,
     Rcpp::Named("peaks") = freqs,
     Rcpp::Named("counts") = cnts

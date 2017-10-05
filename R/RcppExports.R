@@ -121,8 +121,10 @@ AD_frequency <- function(ad, delim = ",", allele = 1L, sum_type = 0L, decreasing
 #' 
 #' 
 #' @return 
-#' A list containing:
+#' A freq_peak object (a list) containing:
 #' \itemize{
+#'   \item The window size
+#'   \item The binwidth used for peak binning
 #'   \item a matrix containing window coordinates
 #'   \item a matrix containing peak locations
 #'   \item a matrix containing the counts of variants for each sample in each window

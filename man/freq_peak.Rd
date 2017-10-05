@@ -18,8 +18,10 @@ freq_peak(myMat, pos, winsize = 10000L, bin_width = 0.02, lhs = TRUE)
 \item{lhs}{logical specifying whether the search for the bin of greatest density should favor values from the left hand side.}
 }
 \value{
-A list containing:
+A freq_peak object (a list) containing:
 \itemize{
+  \item The window size
+  \item The binwidth used for peak binning
   \item a matrix containing window coordinates
   \item a matrix containing peak locations
   \item a matrix containing the counts of variants for each sample in each window

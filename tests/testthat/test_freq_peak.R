@@ -29,7 +29,7 @@ test_that("freq_peak works",{
   myPeaks1 <- freq_peak(freq1, getPOS(vcf))
   
   expect_is(myPeaks1, 'list')
-  expect_equal(length(myPeaks1), 3)
+  expect_equal(length(myPeaks1), 5)
   expect_equal( sum(myPeaks1$peaks >= 0), length(myPeaks1$peaks))
   expect_equal( sum(myPeaks1$peaks <= 1), length(myPeaks1$peaks))
   
