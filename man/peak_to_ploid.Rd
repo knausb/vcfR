@@ -9,6 +9,9 @@ peak_to_ploid(x)
 \arguments{
 \item{x}{an object produced by \code{freq_peak()}.}
 }
+\value{
+A list consisting of two matrices containing the calls and the distance from expectation (i.e., confidence).
+}
 \description{
 Converts allele balance data produced by \code{freq_peak()} to a copy number by assinging the allele balance data (frequencies) to its closest expected ratio.
 }
@@ -44,4 +47,8 @@ is.na(myPeaks1$peaks[myPeaks1$counts < 20]) <- TRUE
 peak_to_ploid(myPeaks1)
 
 
+}
+\seealso{
+freq_peak,
+freq_peak_plot
 }

@@ -31,8 +31,8 @@ test_that("compiled vcfR_vcf_stats_gz works",{
   expect_equal(length(myCalls), 2)
   expect_true(max(myCalls$dfe, na.rm = TRUE) < 1)
   expect_true(min(myCalls$dfe, na.rm = TRUE) > -1)
-  expect_equal(ncol(myCalls$copies), ncol(myPeaks1$peaks))
-  expect_equal(nrow(myCalls$copies), nrow(myPeaks1$peaks))
+  expect_equal(ncol(myCalls$calls), ncol(myPeaks1$peaks))
+  expect_equal(nrow(myCalls$calls), nrow(myPeaks1$peaks))
 })
 
 

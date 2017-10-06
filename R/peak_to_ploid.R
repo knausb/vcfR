@@ -22,6 +22,13 @@
 #' Allele balance values greater than 33/40 or less than 7/40 are set as NA.
 #' 
 #' 
+#' @return A list consisting of two matrices containing the calls and the distance from expectation (i.e., confidence).
+#' 
+#' 
+#' @seealso
+#' freq_peak,
+#' freq_peak_plot
+#' 
 #' 
 #' @examples
 #' data(vcfR_example)
@@ -110,7 +117,7 @@ peak_to_ploid <- function(x){
   dfe[ abe == 1/5 & !is.na(dfe) ] <- dfe[ abe == 1/5 & !is.na(dfe) ] / (9/40 - 1/5)
   
   #return(gmat)
-  list( copies = gmat, 
+  list( calls = gmat, 
         #abe = abe,
         dfe = dfe)
 }

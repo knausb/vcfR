@@ -23,6 +23,8 @@
 #' 
 #' @return an invisible NULL.
 #' 
+#' freq_peak,
+#' peak_to_ploid
 #' 
 #' @examples
 #' freq_peak_plot(pos=1:40)

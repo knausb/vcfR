@@ -33,6 +33,9 @@ freq_peak_plot(pos, ab1 = NULL, ab2 = NULL, fp1 = NULL, fp2 = NULL,
 }
 \value{
 an invisible NULL.
+
+freq_peak,
+peak_to_ploid
 }
 \description{
 Converts allele balance data produced by \code{freq_peak()} to a copy number by assinging the allele balance data (frequencies) to its closest expected ratio.

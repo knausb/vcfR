@@ -107,3 +107,7 @@ segments(x0=myPeaks1$wins[,'START_pos'], y0=myPeaks2$peaks[,mySample],
 
 
 }
+\seealso{
+peak_to_ploid,
+freq_peak_plot
+}

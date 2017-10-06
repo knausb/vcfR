@@ -136,6 +136,9 @@ AD_frequency <- function(ad, delim = ",", allele = 1L, sum_type = 0L, decreasing
 #' Alternatively, if `count = TRUE` the number of non-missing values in each window is reported.
 #' The number of non-mising values in each window may be used to censor windows containing low quantities of data.
 #' 
+#' @seealso
+#' peak_to_ploid,
+#' freq_peak_plot
 #' 
 #' @examples
 #' data(vcfR_example)
