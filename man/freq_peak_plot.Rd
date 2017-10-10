@@ -6,7 +6,7 @@
 \usage{
 freq_peak_plot(pos, ab1 = NULL, ab2 = NULL, fp1 = NULL, fp2 = NULL,
   mySamp = 1, col1 = "#A6CEE3", col2 = "#1F78B4", alpha = 44,
-  mhist = TRUE, ...)
+  mhist = TRUE, layout = TRUE, ...)
 }
 \arguments{
 \item{pos}{chromosomal position of variants}
@@ -28,6 +28,8 @@ freq_peak_plot(pos, ab1 = NULL, ab2 = NULL, fp1 = NULL, fp2 = NULL,
 \item{alpha}{sets the transparency for dot plot (0-255)}
 
 \item{mhist}{logical indicating to include a marginal histogram}
+
+\item{layout}{call layout}
 
 \item{...}{parameters passed on to other functions}
 }

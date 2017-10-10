@@ -16,6 +16,7 @@
 #' @param col2 color 2
 #' @param alpha sets the transparency for dot plot (0-255)
 #' @param mhist logical indicating to include a marginal histogram
+#' @param layout call layout
 #' @param ... parameters passed on to other functions
 #' 
 #' @details 
@@ -59,6 +60,7 @@ freq_peak_plot <- function(pos,
                            col2 = "#1F78B4",
                            alpha = 44,
                            mhist = TRUE,
+                           layout = TRUE,
                            ...){
   
   if( !inherits(fp1, "freq_peak") & !is.null(fp1) ){
@@ -82,10 +84,11 @@ freq_peak_plot <- function(pos,
   orig_par <- graphics::par(no.readonly = TRUE)
   
   # Determine plot geometry.
-  if( mhist == TRUE ){
+  if( mhist == TRUE & layout == TRUE){
     graphics::layout(matrix(1:2, nrow=1), widths = c(4,1))
-    graphics::par(mar=c(5,4,4,0))
+    
   }
+  graphics::par(mar=c(5,4,4,0))
   
   # Initialize plot
   plot( range(pos, na.rm = TRUE), c(0,1), ylim=c(0,1), type="n", yaxt='n', 
@@ -130,7 +133,7 @@ freq_peak_plot <- function(pos,
     } else {
       hsbrk <- seq(0,1,by=0.02)
     }
-    # Ensure floating point comparisosn don't get us
+    # Ensure floating point comparison don't get us
     hsbrk[1] <- -0.001
     hsbrk[length(hsbrk)] <- 1.001
     
@@ -153,11 +156,13 @@ freq_peak_plot <- function(pos,
       bp2 <- graphics::hist(ab2[,mySamp], breaks = hsbrk, plot = FALSE)
       graphics::barplot(height=bp2$counts, width=fp2$bin_width,  space = 0, horiz = T, add = TRUE, col=col2)
     }
-    
     graphics::title(xlab="Count")
+    graphics::par(mar=c(5,4,4,2))
   }
   
-  graphics::par(orig_par)
+  if(layout == TRUE){
+    graphics::par(orig_par)
+  }
   return( invisible(NULL) )
 }
 
