@@ -54,5 +54,13 @@ test_that("[samples = logical]",{
 })
 
 
+test_that("show no gt",{
+  data("vcfR_test")
+  vcfR_test@gt <- matrix(nrow=0, ncol=0)
+#  head(vcfR_test)
+})
+
+
+
 ##### ##### ##### ##### #####
 # EOF.

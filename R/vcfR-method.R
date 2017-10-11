@@ -116,8 +116,13 @@ setMethod(
     print("", quote=FALSE)
     
     print("Unique GT formats:")
-    print(unique(as.character(x@gt[,1])))
-    print("", quote=FALSE)
+    if( nrow(x@gt) == 0 ){
+      print("No gt slot present")
+      print("", quote=FALSE)      
+    } else {
+      print(unique(as.character(x@gt[,1])))
+      print("", quote=FALSE)      
+    }
   }
 )
 
