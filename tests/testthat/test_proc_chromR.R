@@ -10,6 +10,7 @@ context("proc_chromR")
 
 
 ##### ##### ##### ##### #####
+# vcfR_gt_to_popsum
 
 test_that("vcfR_gt_to_popsum",{
   data("vcfR_test")
@@ -122,6 +123,24 @@ test_that("vcfR_gt_to_popsum, triploid samples",{
   
   expect_is(myChrom, "chromR")
 })
+
+
+##### ##### ##### ##### #####
+# proc_chromR
+
+
+test_that("proc_chromR works, no gt",{
+  data("vcfR_example")
+  vcf@gt <- matrix(nrow=0, ncol=0)
+#  class(vcf)
+#  myChrom <- create.chromR(vcf, verbose = FALSE)
+  myChrom <- create.chromR(vcf=vcf, seq = dna, ann=gff, verbose = FALSE)
+  myChrom <- proc.chromR(myChrom, verbose = FALSE)
+  
+  expect_is(myChrom, "chromR")
+})
+
+
 
 
 ##### ##### ##### ##### #####
