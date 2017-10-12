@@ -43,7 +43,7 @@ peak_to_ploid
 Converts allele balance data produced by \code{freq_peak()} to a copy number by assinging the allele balance data (frequencies) to its closest expected ratio.
 }
 \details{
-Converts allele balance data produced by \code{freq_peak()} to a copy number.
+Creates a visualization of allele balance data consisting of a dot plot with position as the x-axis and frequency on the y-axis and an optional marginal histogram.
 }
 \examples{
 freq_peak_plot(pos=1:40)
