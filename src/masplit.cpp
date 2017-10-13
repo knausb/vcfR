@@ -72,14 +72,22 @@ Rcpp::NumericVector str_vec_to_NumericVector( std::vector<std::string> str_vec )
 //' @param delim character that delimits values.
 //' @param count return the count of delimited records.
 //' @param record which (1-based) record to return.
-//' @param sort should the records be sorted prior to selecting the element?
+//' @param sort should the records be sorted prior to selecting the element (0,1)?
 //' @param decreasing should the values be sorted decreasing (1) or increasing (0)?
 //' 
 //' 
+//' @details 
+//' Split a matrix of delimited strings that represent numerics into numerics.
+//' The parameter \strong{count} returns a matrix of integers indicating how many delimited records exist in each element.
+//' This is intended to help if you do not know how many records are in each element particularly if there is a mixture of numbers of records.
+//' The parameter \strong{record} indicates which record to return (first, second, third, ...).
+//' The parameter \strong{sort} indicates whether the records in each element should be sorted (1) or not (0) prior to selection.
+//' When sorting has been selected \strong{decreasing} indicates if the sorting should be performed in a decreasing (1) or increasing (0) manner prior to selection.
 //' 
-//' @details Split a matrix of delimited strings.
 //' 
-//' @return A numeric matrix of numerics
+//' 
+//' 
+//' @return A numeric matrix
 //' 
 //' 
 //' @examples

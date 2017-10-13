@@ -16,18 +16,23 @@ masplit(myMat, delim = ",", count = 0L, record = 1L, sort = 1L,
 
 \item{record}{which (1-based) record to return.}
 
-\item{sort}{should the records be sorted prior to selecting the element?}
+\item{sort}{should the records be sorted prior to selecting the element (0,1)?}
 
 \item{decreasing}{should the values be sorted decreasing (1) or increasing (0)?}
 }
 \value{
-A numeric matrix of numerics
+A numeric matrix
 }
 \description{
 Split a matrix of delimited strings.
 }
 \details{
-Split a matrix of delimited strings.
+Split a matrix of delimited strings that represent numerics into numerics.
+The parameter \strong{count} returns a matrix of integers indicating how many delimited records exist in each element.
+This is intended to help if you do not know how many records are in each element particularly if there is a mixture of numbers of records.
+The parameter \strong{record} indicates which record to return (first, second, third, ...).
+The parameter \strong{sort} indicates whether the records in each element should be sorted (1) or not (0) prior to selection.
+When sorting has been selected \strong{decreasing} indicates if the sorting should be performed in a decreasing (1) or increasing (0) manner prior to selection.
 }
 \examples{
 set.seed(999)
