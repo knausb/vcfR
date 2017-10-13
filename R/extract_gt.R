@@ -219,6 +219,11 @@ extract.haps <- function(x,
 #' getFIX(vcf)
 #' 
 #' data(vcfR_test)
+#' vcfR_test@fix[1,'ALT'] <- "<NON_REF>"
+#' vcf <- extract.indels(vcfR_test)
+#' getFIX(vcf)
+#' 
+#' data(vcfR_test)
 #' extract.haps(vcfR_test, unphased_as_NA = FALSE)
 #' extract.haps(vcfR_test)
 #' 
@@ -231,19 +236,33 @@ extract.indels <- function(x, return.indels=FALSE){
   if(class(x) != "vcfR"){
     stop("Unexpected class! Expecting an object of class vcfR or chromR.")
   }
+  
+  # Create an evaluation matrix
+  isIndel <- matrix(FALSE, nrow=nrow(x), ncol = 2)
+  colnames(isIndel) <- c('REF','ALT')
 
   # Check reference for indels
-  mask <- nchar(x@fix[,'REF']) > 1
+  isIndel[,'REF'] <- nchar(x@fix[,'REF']) > 1
   # Check reference for missing data.
 #  mask[ grep(".", x@fix[,'REF'], fixed = TRUE) ] <- TRUE
   
   # Check alternate for indels
-  mask[ unlist( lapply(
-          strsplit(x@fix[,'ALT'], split=","), 
-          function(x){ max(nchar(x)) > 1 }
-  ) ) ] <- TRUE
-  # Check alternate for missing data
+  checkALT <- function(x){
+    x <- x[ x != "<NON_REF>" ]
+    if( length(x) > 0 ){
+      max(nchar(x)) > 1 
+    } else {
+      FALSE
+    }
+  }
+  isIndel[,'ALT'] <- unlist( lapply( strsplit(x@fix[,'ALT'], split=","), checkALT) )
 
+  mask <- rowSums(isIndel)
+  mask <- mask > 0
+  
+  # GATK's g.vcf includes "<NON_REF>"
+#  isIndel <- x@fix[,'ALT'] == "<NON_REF>"
+  
 
   if(return.indels == FALSE){
     x <- x[ !mask, , drop = FALSE ]
