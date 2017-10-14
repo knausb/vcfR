@@ -248,6 +248,7 @@ extract.indels <- function(x, return.indels=FALSE){
   
   # Check alternate for indels
   checkALT <- function(x){
+    x <- stats::na.omit(x)
     x <- x[ x != "<NON_REF>" ]
     if( length(x) > 0 ){
       max(nchar(x)) > 1 

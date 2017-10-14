@@ -5,31 +5,6 @@
 library(vcfR)
 context("extract.gt functions")
 
-#data(vcfR_example)
-
-#vcf_file <- system.file("extdata", "pinf_sc1_100_sub.vcf.gz", package = "vcfR")
-#seq_file <- system.file("extdata", "pinf_sc100.fasta", package = "vcfR")
-#gff_file <- system.file("extdata", "pinf_sc100.gff", package = "vcfR")
-
-#vcf <- read.vcfR(vcf_file, verbose = FALSE)
-#dna <- ape::read.dna(seq_file, format = "fasta")
-#gff <- read.table(gff_file, sep="\t")
-
-#chrom <- create.chromR(name="Chrom", vcf=vcf, seq=dna, ann=gff, verbose=FALSE)
-#chrom <- masker(chrom, min_DP = 1e3, max_DP = 2e3)
-
-##### ##### ##### ##### #####
-
-
-#gt <- extract.gt(chrom, element="GT", as.numeric=FALSE)
-
-#gt3 <- extract.gt(chrom, element="GT", mask = c(TRUE, FALSE)) # Recycled vector
-
-
-#pl <- extract.gt(chrom, element="PL", as.numeric=FALSE)
-#gq <- extract.gt(chrom, element="GQ", as.numeric=TRUE)
-
-
 ##### ##### ##### ##### #####
 #
 # extract.gt tests
@@ -254,6 +229,22 @@ test_that("extract.indels works",{
   data(vcfR_example)
   indels <- extract.indels(vcf, return.indels=TRUE)
   expect_equal(nrow(indels@fix), 328)
+})
+
+test_that("extract.indels works, <NON_REF>",{
+  data(vcfR_test)
+  indels <- extract.indels(vcfR_test, return.indels=FALSE)
+  
+  data(vcfR_test)
+  vcfR_test@fix[1,'ALT'] <- "<NON_REF>"
+  indels2 <- extract.indels(vcfR_test, return.indels=FALSE)
+  expect_equal(nrow(indels), nrow(indels2))
+  expect_equal(sum(is.na(getPOS(indels2))), 0)
+  
+  data(vcfR_test)
+  vcfR_test@fix[1,'ALT'] <- "A,<NON_REF>"
+  indels2 <- extract.indels(vcfR_test, return.indels=FALSE)
+  expect_equal(nrow(indels), nrow(indels2))
 })
 
 
