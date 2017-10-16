@@ -60,6 +60,5 @@ peak_to_ploid(myPeaks1)
 
 }
 \seealso{
-freq_peak,
-freq_peak_plot
+\code{freq_peak}, \code{freq_peak_plot}
 }

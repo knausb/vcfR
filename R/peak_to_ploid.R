@@ -16,12 +16,10 @@
 #' This results in a dfe that is 0 when it is exactly at our expectation and at 1 when it is half way between two expectations.
 #' 
 #' 
+#' @seealso \code{freq_peak}, \code{freq_peak_plot}
+#' 
+#' 
 #' @return A list consisting of two matrices containing the calls and the distance from expectation (i.e., confidence).
-#' 
-#' 
-#' @seealso
-#' freq_peak,
-#' freq_peak_plot
 #' 
 #' 
 #' @examples
