@@ -17,18 +17,29 @@ Converts allele balance data produced by \code{freq_peak()} to a copy number by 
 }
 \details{
 Converts allele balance data produced by \code{freq_peak()} to a copy number.
-The expectation for five copies is that the allele balance data will be in fifths (1/5 or 4/5), four copies in quarters (1/4 or 3/4), three copies in thirds (1/3 or 2/3), and two copies in halves (1/2).
-Based on this expectation we can assign a copy number to allele balance based on critical values that are half way between these expectation.
-Allele balance values greater than or equal to 7/40 and less than 9/40 are called as five copies.
-Allele balance values greater than or equal to 9/40 and less than 7/24 are called as four copies.
-Allele balance values greater than or equal to 7/44 and less than 5/12 are called as three copies.
-Allele balance values greater than or equal to 5/12 and less or equal to 7/12 are called as two copies.
-Allele balance values greater than 7/12 and less than or equal to 17/24 are called as three copies.
-Allele balance values greater than 17/24 and less than or equal to 31/40 are called as four copies.
-Allele balance values greater than 31/40 and less than or equal to 33/40 are called as five copies.
-Allele balance values greater than 33/40 or less than 7/40 are set as NA.
+See the examples section for a graphical representation of the expectations and the bins around them.
+Once a copy number has called a distance from expectation (dfe) is calculated as a form of confidence.
+The bins around difference copy numbers are of different width, so the dfe is scaled by its respective bin width.
+This results in a dfe that is 0 when it is exactly at our expectation and at 1 when it is half way between two expectations.
 }
 \examples{
+# Thresholds.
+plot(c(0.0, 1), c(0,1), type = "n", xaxt = "n", xlab = "Expectation", ylab = "Allele balance")
+myCalls <-  c(1/5, 1/4, 1/3, 1/2, 2/3, 3/4, 4/5)
+axis(side = 1, at = myCalls, labels = c('1/5', '1/4', '1/3','1/2', '2/3', '3/4', '4/5'), las=2)
+abline(v=myCalls)
+abline(v=c(7/40, 9/40, 7/24, 5/12), lty=3, col ="#B22222")
+abline(v=c(7/12, 17/24, 31/40, 33/40), lty=3, col ="#B22222")
+text(x=7/40, y=0.1, labels = "7/40", srt = 90)
+text(x=9/40, y=0.1, labels = "9/40", srt = 90)
+text(x=7/24, y=0.1, labels = "7/24", srt = 90)
+text(x=5/12, y=0.1, labels = "5/12", srt = 90)
+text(x=7/12, y=0.1, labels = "7/12", srt = 90)
+text(x=17/24, y=0.1, labels = "17/24", srt = 90)
+text(x=31/40, y=0.1, labels = "31/40", srt = 90)
+text(x=33/40, y=0.1, labels = "33/40", srt = 90)
+
+# Prepare dta and visualize
 data(vcfR_example)
 gt <- extract.gt(vcf)
 # Censor non-heterozygous positions.
