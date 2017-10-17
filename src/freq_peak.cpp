@@ -547,13 +547,13 @@ Rcpp::NumericVector find_peaks( Rcpp::NumericMatrix myMat,
 //' Because this method is based on binning the data it does not rely on a distributional assumption.
 //' 
 //' 
-//' The parameter `lhs` specifyies whether the search for the bin of greatest density should be performed from the left hand side.
+//' The parameter \code{lhs} specifyies whether the search for the bin of greatest density should be performed from the left hand side.
 //' The default value of TRUE starts at the left hand side, or zero, and selects a new bin as having the greatest density only if a new bin has a greater density.
 //' If the new bin has an equal density then no update is made.
 //' This causees the analysis to select lower frequencies.
 //' When this parameter is set to FALSE ties result in an update of the bin of greatest density.
 //' This causes the analysis to select higher frequencies.
-//' It is recommended that when testing the most abundant allele (typically [0.5-1]) to use the default of TURE so that a low value is preferred.
+//' It is recommended that when testing the most abundant allele (typically [0.5-1]) to use the default of TRUE so that a low value is preferred.
 //' Similarly, when testing the less abundant alleles it is recommended to set this value at FALSE to preferentially select high values.
 //' 
 //' 

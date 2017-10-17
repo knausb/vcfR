@@ -15,6 +15,7 @@
 #' @param col1 color 1
 #' @param col2 color 2
 #' @param alpha sets the transparency for dot plot (0-255)
+#' @param main main plot title.
 #' @param mhist logical indicating to include a marginal histogram
 #' @param layout call layout
 #' @param ... parameters passed on to other functions
@@ -66,6 +67,7 @@ freq_peak_plot <- function(pos,
                            col1 = "#A6CEE3",
                            col2 = "#1F78B4",
                            alpha = 44,
+                           main = NULL,
                            mhist = TRUE,
                            layout = TRUE,
                            ...){
@@ -123,11 +125,14 @@ freq_peak_plot <- function(pos,
   }
   
   # Title
-  if( !is.null(ab1) ){
-    graphics::title(main = colnames(ab1[, mySamp, drop = F]))
-  } else if( !is.null(ab2) ){
-    graphics::title(main = colnames(ab2[, mySamp, drop = F]))
+  if( !is.null(main) ){
+    graphics::title(main = main)
   }
+#  if( !is.null(ab1) ){
+#    graphics::title(main = colnames(ab1[, mySamp, drop = F]))
+#  } else if( !is.null(ab2) ){
+#    graphics::title(main = colnames(ab2[, mySamp, drop = F]))
+#  }
     
   # Marginal histogram
   if( mhist == TRUE){
