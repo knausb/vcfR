@@ -72,10 +72,10 @@ Note that this really only makes sense if you have phased data.
 The options ref.seq and start.pos are used as in halpoid data.
 
 
-When a variant overlaps a deletion it may be encoded by an asterisk (*).
-The GATK site covers this in a post on [Spanning or overlapping deletions ](https://gatkforums.broadinstitute.org/gatk/discussion/6926/spanning-or-overlapping-deletions-allele).
-This is handled in vcfR by allowing the user to decide how it is handled with teh paramenter \code{asterisk_as_del}.
-When \code{asterisk_as_del} is TRUE this allele is converted into a deletio ('-').
+When a variant overlaps a deletion it may be encoded by an \strong{asterisk allele (*)}.
+The GATK site covers this in a post on \href{https://gatkforums.broadinstitute.org/gatk/discussion/6926/spanning-or-overlapping-deletions-allele}{Spanning or overlapping deletions} ].
+This is handled in vcfR by allowing the user to decide how it is handled with the paramenter \code{asterisk_as_del}.
+When \code{asterisk_as_del} is TRUE this allele is converted into a deletion ('-').
 When \code{asterisk_as_del} is FALSE the asterisk allele is converted to NA.
 If \code{extract.indels} is set to FALSE it should override this decision.
 
