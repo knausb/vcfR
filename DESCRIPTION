@@ -9,18 +9,20 @@ Description: Facilitates easy manipulation of variant call format (VCF) data.
     other popular R objects (e.g., genlight, DNAbin). VcfR provides a link between
     VCF data and familiar R software.
 Version: 1.5.0.9000
-Authors@R: c(person(c("Brian", "J."), "Knaus", role = c("cre", "aut"),
-    email = "briank.lists@gmail.com"),
+Authors@R: c(
+    person(c("Brian", "J."), "Knaus", role = c("cre", "aut"),
+    email = "briank.lists@gmail.com", comment = c(ORCID = "0000-0003-1665-4343")),
     person(c("Niklaus", "J."), "Grunwald", role = "aut",
-    email = "grunwaln@science.oregonstate.edu"),
+    email = "grunwaln@science.oregonstate.edu", comment = c(ORCID = "0000-0003-1656-7602")),
     person(c("Eric", "C."), "Anderson", role = "ctb",
     email = "eric.anderson@noaa.gov"),
     person(c("David", "J."), "Winter", role = "ctb",
     email = "david.winter@gmail.com"),
     person(c("Zhian", "N."), "Kamvar", role = "ctb",
-    email = "zkamvar@gmail.com"),
+    email = "zkamvar@gmail.com", comment = c(ORCID = "0000-0003-1458-7108")),
     person(c("Javier", "F."), "Tabima", role = "ctb",
-    email = "caifaz01@gmail.com"))
+    email = "caifaz01@gmail.com", comment = c(ORCID = "0000-0002-3603-2691"))
+    )
 Maintainer: Brian J. Knaus <briank.lists@gmail.com>
 URL: https://github.com/knausb/vcfR, https://knausb.github.io/vcfR_documentation/
 Depends:
