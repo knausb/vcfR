@@ -15,6 +15,7 @@
 #' @param extract.haps logical specifying whether to separate each genotype into alleles based on a delimiting character
 # @param gt.split character to delimit alleles within genotypes
 #' @param unphased_as_NA logical indicating how to handle alleles in unphased genotypes
+#' @param asterisk_as_del logical indicating that the asterisk allele should be converted to a deletion (TRUE) or NA (FALSE)
 #' @param ref.seq reference sequence (DNAbin) for the region being converted
 #' @param start.pos chromosomal position for the start of the ref.seq
 #' @param verbose logical specifying whether to produce verbose output
@@ -63,6 +64,13 @@
 #' Note that this really only makes sense if you have phased data.
 #' The options ref.seq and start.pos are used as in halpoid data.
 #' 
+#' 
+#' When a variant overlaps a deletion it may be encoded by an asterisk (*).
+#' The GATK site covers this in a post on [Spanning or overlapping deletions ](https://gatkforums.broadinstitute.org/gatk/discussion/6926/spanning-or-overlapping-deletions-allele).
+#' This is handled in vcfR by allowing the user to decide how it is handled with teh paramenter \code{asterisk_as_del}.
+#' When \code{asterisk_as_del} is TRUE this allele is converted into a deletio ('-').
+#' When \code{asterisk_as_del} is FALSE the asterisk allele is converted to NA.
+#' If \code{extract.indels} is set to FALSE it should override this decision.
 #' 
 #' 
 #' Conversion of \strong{polyploid data} is currently not supported.
@@ -123,6 +131,7 @@ vcfR2DNAbin <- function( x,
                          consensus = FALSE,
                          extract.haps = TRUE,
                          unphased_as_NA = TRUE,
+                         asterisk_as_del = FALSE,
                          ref.seq = NULL,
                          start.pos = NULL,
                          verbose = TRUE )
@@ -196,7 +205,12 @@ vcfR2DNAbin <- function( x,
     }
   }
 
-
+  if( asterisk_as_del == TRUE){
+    x[ x == "*" & !is.na(x) ] <- '-'
+  } else {
+    x[ x == "*" & !is.na(x) ] <- 'n'
+  }
+  
   # Data could be haploid, diploid or higher ploid.
 
   # x should be a matrix of variants by here.

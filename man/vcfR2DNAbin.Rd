@@ -5,8 +5,8 @@
 \title{Convert vcfR to DNAbin}
 \usage{
 vcfR2DNAbin(x, extract.indels = TRUE, consensus = FALSE,
-  extract.haps = TRUE, unphased_as_NA = TRUE, ref.seq = NULL,
-  start.pos = NULL, verbose = TRUE)
+  extract.haps = TRUE, unphased_as_NA = TRUE, asterisk_as_del = FALSE,
+  ref.seq = NULL, start.pos = NULL, verbose = TRUE)
 }
 \arguments{
 \item{x}{an object of class chromR or vcfR}
@@ -18,6 +18,8 @@ vcfR2DNAbin(x, extract.indels = TRUE, consensus = FALSE,
 \item{extract.haps}{logical specifying whether to separate each genotype into alleles based on a delimiting character}
 
 \item{unphased_as_NA}{logical indicating how to handle alleles in unphased genotypes}
+
+\item{asterisk_as_del}{logical indicating that the asterisk allele should be converted to a deletion (TRUE) or NA (FALSE)}
 
 \item{ref.seq}{reference sequence (DNAbin) for the region being converted}
 
@@ -69,6 +71,13 @@ This results in two sequences per diploid sample.
 Note that this really only makes sense if you have phased data.
 The options ref.seq and start.pos are used as in halpoid data.
 
+
+When a variant overlaps a deletion it may be encoded by an asterisk (*).
+The GATK site covers this in a post on [Spanning or overlapping deletions ](https://gatkforums.broadinstitute.org/gatk/discussion/6926/spanning-or-overlapping-deletions-allele).
+This is handled in vcfR by allowing the user to decide how it is handled with teh paramenter \code{asterisk_as_del}.
+When \code{asterisk_as_del} is TRUE this allele is converted into a deletio ('-').
+When \code{asterisk_as_del} is FALSE the asterisk allele is converted to NA.
+If \code{extract.indels} is set to FALSE it should override this decision.
 
 
 Conversion of \strong{polyploid data} is currently not supported.

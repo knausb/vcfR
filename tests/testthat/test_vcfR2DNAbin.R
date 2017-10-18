@@ -187,4 +187,26 @@ test_that("vcfR2DNAbin does not include variants at end.pos + 1",{
 
 
 ##### ##### ##### ##### #####
+#
+# Asterisk allele
+#
+##### ##### ##### ##### #####
+
+
+test_that("vcfR2DNAbin manages the asterisk allele",{
+  data(vcfR_test)
+  vcfR_test@fix[,'ALT'][3] <- "*,T"
+  myDNA <- vcfR2DNAbin(vcfR_test, asterisk_as_del = TRUE, verbose = FALSE)
+  myDNA <- as.character(myDNA)
+  expect_equal(sum(myDNA[c(1,4),3] == "-"), 2)
+  
+  data(vcfR_test)
+  vcfR_test@fix[,'ALT'][3] <- "*,T"
+  myDNA <- vcfR2DNAbin(vcfR_test, asterisk_as_del = FALSE, verbose = FALSE)
+  myDNA <- as.character(myDNA)
+  expect_equal(sum(myDNA[c(1,4),3] == "n"), 2)
+})
+
+
+##### ##### ##### ##### #####
 # EOF.
