@@ -8,6 +8,7 @@
 #'  
 #' @param x a vcfR object
 #' @param lens a data.frame describing the reference
+#' @param ret.lens logical specifying whether lens should be returned
 #' @param buff an integer indicating buffer length
 #' 
 #' @details
@@ -18,11 +19,15 @@
 #' The data.frame \strong{lens} should have a row for each chromosome and two columns.
 #' The first column is the name of each chromosome as it appears in the vcfR object.
 #' The second column is the length of each chromosome.
+#' 
 #' The parameter \strong{buff} indicates the length of a buffer to put in between each chromosome.
 #' This buffer may help distinguish chromosomes from one another.
 #' 
+#' In order to create the new coordinates the \code{lens} data.frame is updated with the new start positions.
+#' The parameter \strong{}
 #' 
-#' @return a vector of integers that represent the new coordinate system.
+#' 
+#' @return Either a vector of integers that represent the new coordinate system or a list containing the vector of integers and the lens data.frame.
 #' 
 #' 
 #' @examples
@@ -65,7 +70,7 @@
 #' 
 #' 
 #' @export
-rePOS <- function(x, lens, buff = 0){
+rePOS <- function(x, lens, ret.lens = FALSE, buff = 0){
   if( class(x) == 'chromR' ){
     x <- x@vcfR
   }
@@ -96,6 +101,10 @@ rePOS <- function(x, lens, buff = 0){
   myM <- as.matrix(table(oldCHROM))
   newPOS <- oldPOS + rep(lens$new_start, times=myM[,1]) - 1
   
-  return(newPOS)
+  if(ret.lens == TRUE){
+    return(list(newPOS=newPOS, lens=lens))
+  } else {
+    return(newPOS)
+  }
 }
 

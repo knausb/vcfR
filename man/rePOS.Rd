@@ -4,17 +4,19 @@
 \alias{rePOS}
 \title{Create non-overlapping positions (POS) for VCF data}
 \usage{
-rePOS(x, lens, buff = 0)
+rePOS(x, lens, ret.lens = FALSE, buff = 0)
 }
 \arguments{
 \item{x}{a vcfR object}
 
 \item{lens}{a data.frame describing the reference}
 
+\item{ret.lens}{logical specifying whether lens should be returned}
+
 \item{buff}{an integer indicating buffer length}
 }
 \value{
-a vector of integers that represent the new coordinate system.
+Either a vector of integers that represent the new coordinate system or a list containing the vector of integers and the lens data.frame.
 }
 \description{
 Converts allele balance data produced by \code{freq_peak()} to a copy number by assinging the allele balance data (frequencies) to its closest expected ratio.
@@ -27,8 +29,12 @@ This function uses the information in the data.frame \code{lens} to create a new
 The data.frame \strong{lens} should have a row for each chromosome and two columns.
 The first column is the name of each chromosome as it appears in the vcfR object.
 The second column is the length of each chromosome.
+
 The parameter \strong{buff} indicates the length of a buffer to put in between each chromosome.
 This buffer may help distinguish chromosomes from one another.
+
+In order to create the new coordinates the \code{lens} data.frame is updated with the new start positions.
+The parameter \strong{}
 }
 \examples{
 # Create some VCF data.
