@@ -36,7 +36,7 @@ freq_peak_plot(pos, ab1 = NULL, ab2 = NULL, fp1 = NULL, fp2 = NULL,
 \item{...}{parameters passed on to other functions}
 }
 \value{
-an invisible NULL.
+An invisible NULL.
 
 freq_peak,
 peak_to_ploid
@@ -46,7 +46,7 @@ Converts allele balance data produced by \code{freq_peak()} to a copy number by 
 }
 \details{
 Creates a visualization of allele balance data consisting of a dot plot with position as the x-axis and frequency on the y-axis and an optional marginal histogram.
-The only required information is a vector of chromosomal positions, howevr this is probably not going to create an interesting plot.
+The only required information is a vector of chromosomal positions, however this is probably not going to create an interesting plot.
 }
 \examples{
 freq_peak_plot(pos=1:40)

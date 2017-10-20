@@ -23,14 +23,14 @@
 #' @details 
 #' 
 #' Creates a visualization of allele balance data consisting of a dot plot with position as the x-axis and frequency on the y-axis and an optional marginal histogram.
-#' The only required information is a vector of chromosomal positions, howevr this is probably not going to create an interesting plot.
+#' The only required information is a vector of chromosomal positions, however this is probably not going to create an interesting plot.
 #' 
 #' 
 #' 
 #' 
 #' 
 #' 
-#' @return an invisible NULL.
+#' @return An invisible NULL.
 #' 
 #' freq_peak,
 #' peak_to_ploid
