@@ -48,9 +48,13 @@
 #' lens[2,2] <- 4700
 #' lens[3,2] <- 32089
 #' 
+#' # Illustrate the issue.
+#' plot(getPOS(vcf), dp, col=as.factor(getCHROM(vcf)))
+#' 
 #' newPOS <- rePOS(vcf, lens)
 #' dp <- extract.info(vcf, element="DP", as.numeric=TRUE)
-#' plot(newPOS, dp)
+#' plot(newPOS, dp, col=as.factor(getCHROM(vcf)))
+#' 
 #' 
 #' @export
 rePOS <- function(x, lens, buff = 0){
@@ -68,11 +72,16 @@ rePOS <- function(x, lens, buff = 0){
     stop(msg)
   }
   
+  # Update lens with new starts.
+  lens$new_start <- lens$X2
+  
+  
+  
   oldPOS <- getPOS(x)
   newPOS <- oldPOS
   oldCHROM <- getCHROM(x)
   
-  
+  # rep(rownames(myM), times=myM[,1])
   
   return(newPOS)
 }
