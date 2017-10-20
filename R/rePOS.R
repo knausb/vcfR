@@ -1,5 +1,5 @@
 
-#' @title create non-overlapping positions
+#' @title Create non-overlapping positions (POS) for VCF data
 #' @name rePOS
 #' @rdname rePOS
 #' 
@@ -19,6 +19,7 @@
 #' The first column is the name of each chromosome as it appears in the vcfR object.
 #' The second column is the length of each chromosome.
 #' The parameter \strong{buff} indicates the length of a buffer to put in between each chromosome.
+#' This buffer may help distinguish chromosomes from one another.
 #' 
 #' 
 #' @return a vector of integers that represent the new coordinate system.
@@ -44,14 +45,21 @@
 #' lens[1,1] <- 'chrom1'
 #' lens[2,1] <- 'chrom2'
 #' lens[3,1] <- 'chrom3'
-#' lens[1,2] <- 2200
-#' lens[2,2] <- 4700
+#' lens[1,2] <- 22000
+#' lens[2,2] <- 47000
 #' lens[3,2] <- 32089
 #' 
 #' # Illustrate the issue.
+#' dp <- extract.info(vcf, element="DP", as.numeric=TRUE)
 #' plot(getPOS(vcf), dp, col=as.factor(getCHROM(vcf)))
 #' 
+#' # Resolve the issue.
 #' newPOS <- rePOS(vcf, lens)
+#' dp <- extract.info(vcf, element="DP", as.numeric=TRUE)
+#' plot(newPOS, dp, col=as.factor(getCHROM(vcf)))
+#' 
+#' # Illustrate the buffer
+#' newPOS <- rePOS(vcf, lens, buff=10000)
 #' dp <- extract.info(vcf, element="DP", as.numeric=TRUE)
 #' plot(newPOS, dp, col=as.factor(getCHROM(vcf)))
 #' 
@@ -73,15 +81,20 @@ rePOS <- function(x, lens, buff = 0){
   }
   
   # Update lens with new starts.
-  lens$new_start <- lens$X2
+  colnames(lens)[1:2] <- c('chrom', 'length')
+  lens$new_start <- 0
+  lens$new_start[1] <- 1
+  for(i in 2:nrow(lens)){
+    lens$new_start[i] <- lens$new_start[i-1] + lens$length[i-1]
+    # Apply buffer
+    lens$new_start[i] <- lens$new_start[i] + buff
+  }
   
-  
-  
+  # Apply new start to POS.
   oldPOS <- getPOS(x)
-  newPOS <- oldPOS
   oldCHROM <- getCHROM(x)
-  
-  # rep(rownames(myM), times=myM[,1])
+  myM <- as.matrix(table(oldCHROM))
+  newPOS <- oldPOS + rep(lens$new_start, times=myM[,1]) - 1
   
   return(newPOS)
 }

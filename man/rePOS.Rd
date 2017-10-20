@@ -2,7 +2,7 @@
 % Please edit documentation in R/rePOS.R
 \name{rePOS}
 \alias{rePOS}
-\title{create non-overlapping positions}
+\title{Create non-overlapping positions (POS) for VCF data}
 \usage{
 rePOS(x, lens, buff = 0)
 }
@@ -28,6 +28,7 @@ The data.frame \strong{lens} should have a row for each chromosome and two colum
 The first column is the name of each chromosome as it appears in the vcfR object.
 The second column is the length of each chromosome.
 The parameter \strong{buff} indicates the length of a buffer to put in between each chromosome.
+This buffer may help distinguish chromosomes from one another.
 }
 \examples{
 # Create some VCF data.
@@ -49,12 +50,23 @@ lens <- data.frame(matrix(nrow=3, ncol=2))
 lens[1,1] <- 'chrom1'
 lens[2,1] <- 'chrom2'
 lens[3,1] <- 'chrom3'
-lens[1,2] <- 2200
-lens[2,2] <- 4700
+lens[1,2] <- 22000
+lens[2,2] <- 47000
 lens[3,2] <- 32089
 
+# Illustrate the issue.
+dp <- extract.info(vcf, element="DP", as.numeric=TRUE)
+plot(getPOS(vcf), dp, col=as.factor(getCHROM(vcf)))
+
+# Resolve the issue.
 newPOS <- rePOS(vcf, lens)
 dp <- extract.info(vcf, element="DP", as.numeric=TRUE)
-plot(newPOS, dp)
+plot(newPOS, dp, col=as.factor(getCHROM(vcf)))
+
+# Illustrate the buffer
+newPOS <- rePOS(vcf, lens, buff=10000)
+dp <- extract.info(vcf, element="DP", as.numeric=TRUE)
+plot(newPOS, dp, col=as.factor(getCHROM(vcf)))
+
 
 }
