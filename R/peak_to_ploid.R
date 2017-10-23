@@ -9,11 +9,11 @@
 #' @param x an object produced by \code{freq_peak()}.
 #' 
 #' @details 
-#' Converts allele balance data produced by \code{freq_peak()} to a copy number.
+#' Converts allele balance data produced by \code{freq_peak()} to copy number.
 #' See the examples section for a graphical representation of the expectations and the bins around them.
 #' Once a copy number has called a distance from expectation (dfe) is calculated as a form of confidence.
-#' The bins around difference copy numbers are of different width, so the dfe is scaled by its respective bin width.
-#' This results in a dfe that is 0 when it is exactly at our expectation and at 1 when it is half way between two expectations.
+#' The bins around different copy numbers are of different width, so the dfe is scaled by its respective bin width.
+#' This results in a dfe that is 0 when it is exactly at our expectation (high confidence) and at 1 when it is half way between two expectations (low confidence).
 #' 
 #' 
 #' @seealso \code{freq_peak}, \code{freq_peak_plot}
