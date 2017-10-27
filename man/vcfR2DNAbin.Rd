@@ -13,7 +13,7 @@ vcfR2DNAbin(x, extract.indels = TRUE, consensus = FALSE,
 
 \item{extract.indels}{logical, at present, the only option is TRUE}
 
-\item{consensus}{logical, at present, the only option is FALSE}
+\item{consensus}{logical, indicates whether an IUPAC ambiguity code should be used for diploid heterozygotes}
 
 \item{extract.haps}{logical specifying whether to separate each genotype into alleles based on a delimiting character}
 
@@ -61,7 +61,7 @@ Because the data in the vcfR object will be using a chromosomal coordinate syste
 
 
 Conversion of \strong{diploid data} presents a number of scenarios.
-When the option \code{consensus} is TRUE, each genotype is split into two alleles and the two alleles are converted into their IUPAC ambiguity code.
+When the option \code{consensus} is TRUE and \code{extract.haps} is FALSE, each genotype is split into two alleles and the two alleles are converted into their IUPAC ambiguity code.
 This results in one sequence for each diploid sample.
 This may be an appropriate path when you have unphased data.
 Note that functions called downstream of this choice may handle IUPAC ambiguity codes in unexpected manners.

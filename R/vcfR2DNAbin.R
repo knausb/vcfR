@@ -11,7 +11,7 @@
 #' 
 #' @param x an object of class chromR or vcfR
 #' @param extract.indels logical, at present, the only option is TRUE
-#' @param consensus logical, at present, the only option is FALSE
+#' @param consensus logical, indicates whether an IUPAC ambiguity code should be used for diploid heterozygotes 
 #' @param extract.haps logical specifying whether to separate each genotype into alleles based on a delimiting character
 # @param gt.split character to delimit alleles within genotypes
 #' @param unphased_as_NA logical indicating how to handle alleles in unphased genotypes
@@ -54,7 +54,7 @@
 #' 
 #' 
 #' Conversion of \strong{diploid data} presents a number of scenarios.
-#' When the option \code{consensus} is TRUE, each genotype is split into two alleles and the two alleles are converted into their IUPAC ambiguity code.
+#' When the option \code{consensus} is TRUE and \code{extract.haps} is FALSE, each genotype is split into two alleles and the two alleles are converted into their IUPAC ambiguity code.
 #' This results in one sequence for each diploid sample.
 #' This may be an appropriate path when you have unphased data.
 #' Note that functions called downstream of this choice may handle IUPAC ambiguity codes in unexpected manners.
