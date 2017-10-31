@@ -89,10 +89,14 @@ rePOS <- function(x, lens, ret.lens = FALSE, buff = 0){
   colnames(lens)[1:2] <- c('chrom', 'length')
   lens$new_start <- 0
   lens$new_start[1] <- 1
+  lens$mids <- 0
+  lens$mids[1] <- round(lens$length[1]/2)
   for(i in 2:nrow(lens)){
     lens$new_start[i] <- lens$new_start[i-1] + lens$length[i-1]
     # Apply buffer
     lens$new_start[i] <- lens$new_start[i] + buff
+    # Midpoint
+    lens$mids[i] <- lens$new_start[i] + lens$length[i]/2
   }
   
   # Apply new start to POS.
