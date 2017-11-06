@@ -102,6 +102,10 @@ rePOS <- function(x, lens, ret.lens = FALSE, buff = 0){
   # Apply new start to POS.
   oldPOS <- getPOS(x)
   oldCHROM <- getCHROM(x)
+  # table converts our character vector to a factor.
+  # This tends to sort things.
+  # We want to retain the order so let's recast this ourselves.
+  oldCHROM <- factor(oldCHROM, levels=unique(oldCHROM))
   myM <- as.matrix(table(oldCHROM))
   newPOS <- oldPOS + rep(lens$new_start, times=myM[,1]) - 1
   
