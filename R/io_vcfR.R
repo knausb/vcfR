@@ -211,6 +211,9 @@ write.vcf <- function(x, file = "", mask = FALSE, APPEND = FALSE){
     stop("Unexpected class! Expecting an object of class vcfR or chromR.")
   }
   
+  # gzopen does not appear to deal well with tilde expansion.
+  file <- path.expand(file)
+  
   if(APPEND == FALSE){
     gz <- gzfile(file, "w")
     
