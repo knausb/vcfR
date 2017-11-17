@@ -13,8 +13,11 @@ Depsy:
 RDocumentation:
  [![Rdoc](http://www.rdocumentation.org/badges/version/vcfR)](http://www.rdocumentation.org/packages/vcfR) 
 
-Travis-CI:
+Travis-CI (Ubuntu Linux):
 [![Travis-CI Build Status](https://travis-ci.org/knausb/vcfR.png?branch=master)](https://travis-ci.org/knausb/vcfR)
+
+Appveyor (Windows):
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/knausb/vcfR?branch=master&svg=true)](https://ci.appveyor.com/project/knausb/vcfR)
 
 Coveralls:
 [![Coverage Status](https://coveralls.io/repos/github/knausb/vcfR/badge.svg?branch=master)](https://coveralls.io/github/knausb/vcfR?branch=master)

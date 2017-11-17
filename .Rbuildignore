@@ -7,3 +7,4 @@
 ^\.dll$
 cran-comments.md
 NEWS.md
+^appveyor\.yml$
