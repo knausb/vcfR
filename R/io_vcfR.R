@@ -118,8 +118,11 @@ read.vcfR <- function(file,
   if(checkFile == TRUE){
     vcf <- scan(file=file, what = character(), nmax=1, sep="\n", quiet = TRUE, comment.char = "")
     if(substr(vcf,start=1, stop=17) != "##fileformat=VCFv"){
-      msg <- paste("File:", file, "does not appear to be a VCF file.")
-      msg <- paste(msg, "First line of file:", file)
+      msg <- paste("File:", file, "does not appear to be a VCF file.\n")
+      msg <- paste(msg, " First line of file:\n", file)
+      msg <- paste(msg, "\n")
+      msg <- paste(msg, " Should begin with:\n##fileformat=VCFv")
+      msg <- paste(msg, "\n")
       stop(msg)
     }
   }  
