@@ -4,8 +4,8 @@ library(testthat)
 library(vcfR)
 context("vcfR2DNAbin functions")
 
-data(vcfR_example)
-gene <- dna[1,gff[1,4]:gff[1,5]]
+#data(vcfR_example)
+#gene <- dna[1,gff[1,4]:gff[1,5]]
 
 ##### ##### ##### ##### #####
 #
@@ -15,20 +15,24 @@ gene <- dna[1,gff[1,4]:gff[1,5]]
 
 
 test_that("Works with no variants",{
+  data(vcfR_example)
   vcf <- vcf[0,]
-  my_DNAbin <- vcfR2DNAbin( vcf )
+  my_DNAbin <- vcfR2DNAbin( vcf, verbose = FALSE )
   expect_true( inherits(my_DNAbin, "DNAbin") )
   expect_equal(dim(my_DNAbin)[1], ncol(vcf@gt) - 1 )
 })
 
 test_that("Works with only indels, no SNPs",{
+  data(vcfR_example)
   vcf <- extract.indels( vcf, return.indels = TRUE)
-  my_DNAbin <- vcfR2DNAbin( vcf )
+  my_DNAbin <- vcfR2DNAbin( vcf, verbose = FALSE )
   expect_true( inherits(my_DNAbin, "DNAbin") )
   expect_equal(dim(my_DNAbin)[1], ncol(vcf@gt) - 1 )
 })
 
 test_that("Works with no variants, ref.seq is not NULL",{
+  data(vcfR_example)
+  gene <- dna[1,gff[1,4]:gff[1,5]]
   vcf <- vcf[0,]
   my_DNAbin <- vcfR2DNAbin( vcf, ref.seq = gene, start.pos = gff[1,4], verbose = FALSE )
   expect_true( inherits(my_DNAbin, "DNAbin") )
@@ -40,6 +44,8 @@ test_that("Works with no variants, ref.seq is not NULL",{
 
 
 test_that("Works with one variant, ref.seq is not NULL",{
+  data(vcfR_example)
+  gene <- dna[1,gff[1,4]:gff[1,5]]
   vcf <- vcf[1,]
   my_DNAbin <- vcfR2DNAbin( vcf, ref.seq = gene, start.pos = gff[1,4], verbose = FALSE )
   expect_true( inherits(my_DNAbin, "DNAbin") )
@@ -142,6 +148,8 @@ test_that("vcfR2DNAbin with consensus works",{
 
 test_that("vcfR2DNAbin works for diploid data, ref.seq is not NULL",{
 #  my_DNAbin <- vcfR2DNAbin( vcf, gt.split = "|", ref.seq = gene, start.pos = gff[1,4], verbose = FALSE )
+  data(vcfR_example)
+  gene <- dna[1,gff[1,4]:gff[1,5]]
   my_DNAbin <- vcfR2DNAbin( vcf, ref.seq = gene, start.pos = gff[1,4], verbose = FALSE )
   expect_true( inherits(my_DNAbin, "DNAbin") )
   expect_equal( dim(my_DNAbin)[1], 2 * (ncol(vcf@gt) - 1) )
@@ -176,6 +184,8 @@ test_that("vcfR2DNAbin works for triploid data, no ref.seq",{
 
 
 test_that("vcfR2DNAbin does not include variants at end.pos + 1",{
+  data(vcfR_example)
+  gene <- dna[1,gff[1,4]:gff[1,5]]
 #  vcf@fix[586,1:6]
 #  vcf@fix[586,2] <- "24527"
   vcf@fix[586,2] <- "24528"

@@ -170,7 +170,26 @@ vcfR2DNAbin <- function( x,
       message(paste("After extracting indels,", nrow(x), "variants remain."))
     }
   } else {
-    stop("extract.indels == FALSE is not currently implemented.")
+#    stop("extract.indels == FALSE is not currently implemented.")
+    
+    # Make alleles at each locus the same length
+    # https://stackoverflow.com/a/36136878
+    equal_allele_len <- function(x){
+      alleles <- c(myRef[x], unlist(strsplit(myAlt[x], split = ",")))
+      alleles[is.na(alleles)] <- 'n'
+      alleles <- format(alleles, width=max(nchar(alleles)))
+      alleles <- gsub("\\s", "-", alleles)
+      myRef[x] <<- alleles[1]
+      myAlt[x] <<- paste(alleles[2:length(alleles)], collapse=",")
+      invisible()
+    }
+    
+    myRef <- getREF(x)
+    myAlt <- getALT(x)
+    invisible(lapply(1:length(myRef), equal_allele_len))
+    
+    x@fix[,'REF'] <- myRef
+    x@fix[,'ALT'] <- myAlt
   }
   
   # Save POS in case we need it.

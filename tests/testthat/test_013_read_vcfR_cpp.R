@@ -24,7 +24,7 @@ test_that("compiled vcfR_vcf_stats_gz works",{
   data("vcfR_test")
   write.vcf(vcfR_test, file="myFile.vcf.gz")
   
-  stats <- .vcf_stats_gz("myFile.vcf.gz")
+  stats <- .vcf_stats_gz("myFile.vcf.gz", verbose = 0)
   unlink("myFile.vcf.gz")
   
   expect_equal( as.numeric(stats['meta']), length(vcfR_test@meta) )
@@ -61,7 +61,7 @@ test_that("compiled vcfR_vcf_stats_gz works, Windows carriage return",{
 #  cat('\n', file=ex_file, append = TRUE)
   
   # Query file.
-  stats <- .vcf_stats_gz(ex_file)
+  stats <- .vcf_stats_gz(ex_file, verbose = 0)
 
   # Test.
   expect_equal( as.numeric(stats['meta']), length(vcfR_test@meta) )
@@ -76,7 +76,7 @@ test_that("compiled vcf_stats_gz nrows works",{
   data("vcfR_example")
   write.vcf(vcf, file="myFile.vcf.gz")
   
-  stats <- .vcf_stats_gz("myFile.vcf.gz", nrows = 10)
+  stats <- .vcf_stats_gz("myFile.vcf.gz", nrows = 10, verbose = 0)
   unlink("myFile.vcf.gz")
   
   expect_equal( as.numeric(stats['variants']), 10 )
@@ -88,7 +88,7 @@ test_that("compiled vcf_stats_gz skip works",{
   data("vcfR_example")
   write.vcf(vcf, file="myFile.vcf.gz")
   
-  stats <- .vcf_stats_gz("myFile.vcf.gz", skip = 2000)
+  stats <- .vcf_stats_gz("myFile.vcf.gz", skip = 2000, verbose = 0)
   unlink("myFile.vcf.gz")
   
   expect_equal( as.numeric(stats['variants']), 2533 )
@@ -111,7 +111,7 @@ test_that("compiled vcfR_read_body works when file contains no variants",{
   
   myFile <- "myFile.vcf.gz"
   write.vcf(vcf2, myFile)
-  stats <- .vcf_stats_gz(myFile)
+  stats <- .vcf_stats_gz(myFile, verbose = 0)
   
   body <- .read_body_gz(myFile, stats,
                 nrows = 0, skip = 0, cols=1:stats['columns'],
@@ -137,7 +137,7 @@ test_that("compiled input functions work",{
   ex_file <- "test.vcf.gz"
   write.vcf(vcf, file=ex_file)
 
-  stats <- .vcf_stats_gz(ex_file)
+  stats <- .vcf_stats_gz(ex_file, verbose = 0)
 
   expect_equal(length(stats), 4)
   expect_is(stats, "numeric")
@@ -169,7 +169,7 @@ test_that("compiled vcfR_read_body converts VCF missing to NA",{
   myFile <- "myFile.vcf.gz"
   write.vcf(vcfR_test, myFile)
 
-  stats <- .vcf_stats_gz(myFile)
+  stats <- .vcf_stats_gz(myFile, verbose = 0)
   body <- .read_body_gz(myFile, stats,
                 nrows = stats['variants'], skip = 0, cols=1:stats['columns'],
                 convertNA = 1, verbose = 0)
@@ -180,7 +180,7 @@ test_that("compiled vcfR_read_body converts VCF missing to NA",{
   vcfR_test@gt[1,3] <- ".|."
   write.vcf(vcfR_test, myFile)
 
-  stats <- .vcf_stats_gz(myFile)
+  stats <- .vcf_stats_gz(myFile, verbose = 0)
   body <- .read_body_gz(myFile, stats,
                 nrows = stats['variants'], skip = 0, cols=1:stats['columns'],
                 convertNA = 1, verbose = 0)
@@ -192,7 +192,7 @@ test_that("compiled vcfR_read_body converts VCF missing to NA",{
   vcfR_test@gt[1,3] <- "./0"
   write.vcf(vcfR_test, myFile)
   
-  stats <- .vcf_stats_gz(myFile)
+  stats <- .vcf_stats_gz(myFile, verbose = 0)
   body <- .read_body_gz(myFile, stats,
                 nrows = stats['variants'], skip = 0, cols=1:stats['columns'],
                 convertNA = 1, verbose = 0)
@@ -211,7 +211,7 @@ test_that("compiled vcfR_read_body convertNA = FALSE works",{
   myFile <- "myFile.vcf.gz"
   write.vcf(vcfR_test, myFile)
 
-  stats <- .vcf_stats_gz(myFile)
+  stats <- .vcf_stats_gz(myFile, verbose = 0)
   body <- .read_body_gz(myFile, stats,
                 nrows = stats['variants'], skip = 0, cols=1:stats['columns'],
                 convertNA = 0, verbose = 0)
@@ -231,7 +231,7 @@ test_that("VCF with no GT, compiled functions",{
   ex_file <- "test.vcf.gz"
   
   test <- .write_vcf_body(fix = vcf@fix, gt = vcf@gt, filename = ex_file, mask = 0)
-  stats <- .vcf_stats_gz(ex_file)
+  stats <- .vcf_stats_gz(ex_file, verbose = 0)
   body <- .read_body_gz(ex_file, stats,
                 nrows = -1, skip = 0, cols=1:stats['columns'],
                 convertNA = 1, verbose = 0)
