@@ -219,4 +219,20 @@ test_that("vcfR2DNAbin manages the asterisk allele",{
 
 
 ##### ##### ##### ##### #####
+#
+# Indels
+#
+##### ##### ##### ##### #####
+
+test_that("vcfR2DNAbin manages indels, no reference",{
+  data(vcfR_test)
+  myDNA <- vcfR2DNAbin(vcfR_test, extract.indels = FALSE, unphased_as_NA = FALSE, verbose = FALSE)
+  expect_is(myDNA, 'DNAbin')
+  expect_equal(dim(as.character.DNAbin(myDNA)), c(6,8))
+})
+
+
+
+
+##### ##### ##### ##### #####
 # EOF.

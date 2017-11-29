@@ -145,6 +145,12 @@ vcfR2DNAbin <- function( x,
   if( !is.null(start.pos) & class(start.pos) == "character" ){
     start.pos <- as.integer(start.pos)
   }
+  if( extract.indels == FALSE & consensus == TRUE ){
+    msg <- "invalid selection: extract.indels set to FALSE and consensus set to TRUE."
+    msg <- c(msg, "There is no IUPAC ambiguity code for indels")
+    stop(msg)
+  }
+  
   
   # Check and sanitize ref.seq.
   if( class(ref.seq) != 'DNAbin' & !is.null(ref.seq) ){
@@ -275,6 +281,10 @@ vcfR2DNAbin <- function( x,
   }
   
   # Convert matrix to DNAbin
+  if( extract.indels == FALSE ){
+    # Indel strings need to be split into characters
+    x <- apply(x, MARGIN=2, function(x){ unlist(strsplit(x,"")) })
+  }
   x <- ape::as.DNAbin(t(x))
   
   return(x)
