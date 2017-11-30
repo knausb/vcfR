@@ -231,7 +231,11 @@ test_that("vcfR2DNAbin manages indels, no reference",{
   expect_equal(dim(as.character.DNAbin(myDNA)), c(6,8))
 })
 
-
+test_that("vcfR2DNAbin manages indels with reference",{
+  data(vcfR_test)
+  
+  
+})
 
 
 ##### ##### ##### ##### #####
