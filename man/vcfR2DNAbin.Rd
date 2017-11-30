@@ -11,7 +11,7 @@ vcfR2DNAbin(x, extract.indels = TRUE, consensus = FALSE,
 \arguments{
 \item{x}{an object of class chromR or vcfR}
 
-\item{extract.indels}{logical, at present, the only option is TRUE}
+\item{extract.indels}{logical indicating to remove indels (TRUE) or to include them while retaining alignment}
 
 \item{consensus}{logical, indicates whether an IUPAC ambiguity code should be used for diploid heterozygotes}
 

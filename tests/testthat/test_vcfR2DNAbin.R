@@ -228,13 +228,19 @@ test_that("vcfR2DNAbin manages indels, no reference",{
   data(vcfR_test)
   myDNA <- vcfR2DNAbin(vcfR_test, extract.indels = FALSE, unphased_as_NA = FALSE, verbose = FALSE)
   expect_is(myDNA, 'DNAbin')
-  expect_equal(dim(as.character.DNAbin(myDNA)), c(6,8))
+  expect_equal(dim(ape::as.character.DNAbin(myDNA)), c(6,8))
 })
 
 test_that("vcfR2DNAbin manages indels with reference",{
   data(vcfR_test)
-  
-  
+  data(vcfR_example)
+  dna <- dna[1:12]
+  vcfR_test@fix[,'POS'] <- c(2, 4, 6, 8, 10)
+  myDNA <- vcfR2DNAbin(vcfR_test, extract.indels = FALSE, 
+                       unphased_as_NA = FALSE, ref.seq = dna,
+                       start.pos=1, verbose = FALSE)
+  expect_is(myDNA, 'DNAbin')
+  expect_equal(dim(as.character.DNAbin(myDNA)), c(6,15))
 })
 
 

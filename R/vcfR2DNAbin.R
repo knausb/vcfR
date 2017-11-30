@@ -10,7 +10,7 @@
 #' Convert objects of class vcfR to objects of class ape::DNAbin
 #' 
 #' @param x an object of class chromR or vcfR
-#' @param extract.indels logical, at present, the only option is TRUE
+#' @param extract.indels logical indicating to remove indels (TRUE) or to include them while retaining alignment
 #' @param consensus logical, indicates whether an IUPAC ambiguity code should be used for diploid heterozygotes 
 #' @param extract.haps logical specifying whether to separate each genotype into alleles based on a delimiting character
 # @param gt.split character to delimit alleles within genotypes
@@ -159,6 +159,10 @@ vcfR2DNAbin <- function( x,
   if( is.list(ref.seq) ){
     ref.seq <- as.matrix(ref.seq)
   }
+
+# If vector  
+#  dna <- as.matrix(t(dna))
+  
   
   # Check start.pos
   if( is.null(start.pos) & !is.null(ref.seq) ){
@@ -262,8 +266,10 @@ vcfR2DNAbin <- function( x,
     # First we remove variants above the region.
     # Then we remove variants below this region.
     # Then we rescale the region to be one-based.
-    variants <- variants[ pos < start.pos + dim(ref.seq)[2], , drop = FALSE]
-    pos <- pos[ pos < start.pos + dim(ref.seq)[2] ]
+#    variants <- variants[ pos < start.pos + dim(ref.seq)[2], , drop = FALSE]
+#    pos <- pos[ pos < start.pos + dim(ref.seq)[2] ]
+    variants <- variants[ pos < start.pos + length(ref.seq), , drop = FALSE]
+    pos <- pos[ pos < start.pos + length(ref.seq) ]
     variants <- variants[ pos >= start.pos, , drop = FALSE]
     pos <- pos[ pos >= start.pos ]
     pos <- pos - start.pos + 1
