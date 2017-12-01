@@ -157,7 +157,12 @@ vcfR2DNAbin <- function( x,
     stop( paste("expecting ref.seq to be of class DNAbin but it is of class", class(ref.seq)) )
   }
   if( is.list(ref.seq) ){
-    ref.seq <- as.matrix(ref.seq)
+    #ref.seq <- as.matrix(ref.seq)
+    ref.seq <- ref.seq[[1]]
+  }
+  if( is.matrix(ref.seq) ){
+    ref.seq <- ref.seq[1,]
+    ref.seq <- ref.seq[1:ncol(ref.seq)]
   }
 
 # If vector  
