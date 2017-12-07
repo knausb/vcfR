@@ -1,18 +1,18 @@
 
 
 ## Test environments
-* local ubuntu 16.04 LTS, R 3.4.3
-* local OS X install, R 3.4.2 (binaries for OSX 3.4.3 do not appear available yet)
+* local: ubuntu 16.04 LTS, R 3.4.3
+* local: OS X install, R 3.4.2 (binaries for OSX 3.4.3 do not appear available yet)
 * ubuntu 14.04.5 LTS (on travis-ci), R 3.4.2
-* winbuilder 3.4.0
-* winbuilder devel (2017-05-16 r72684)
-* rhub::check( platform = "ubuntu-gcc-devel" )
+* Windows Server 2012 R2 x64 (build 9600; on AppVeyor), R version 3.4.3 Patched(2017-12-06 r73855)
+* winbuilder: R version 3.4.3 (2017-11-30)
+* winbuilder: R Under development (unstable) (2017-09-12 r73242)
 
 
 ## R CMD check results
 There were no ERRORs or WARNINGs. 
 
-There were 2 NOTEs:
+There was 1 NOTE:
 
 * checking CRAN incoming feasibility ... Note_to_CRAN_maintainers
 Maintainer: ‘Brian J. Knaus <briank.lists@gmail.com>’
@@ -56,11 +56,7 @@ All packages that I could install passed:
 ## Memory-access errors
 
 During the last submission Prof. Brian Ripley brought to my attention that vcfR contained memory access errors.
-I believe I have addressed this by running commands such as:
-
-R -d "valgrind --leak-check=full --vgdb-error=1" -f tests/testthat/test_conversion.R
-
-On various suspect functions.
+I believe I have addressed these issues in the present version (1.6.0).
 
 
 ## Thank you CRAN Core Team!
