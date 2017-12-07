@@ -1,9 +1,9 @@
 
 
 ## Test environments
-* local ubuntu 16.04 LTS, R 3.4.0
-* local OS X install, R 3.4.0
-* ubuntu 12.04.5 (on travis-ci), R 3.4.0
+* local ubuntu 16.04 LTS, R 3.4.3
+* local OS X install, R 3.4.2 (binaries for OSX 3.4.3 do not appear available yet)
+* ubuntu 14.04.5 LTS (on travis-ci), R 3.4.2
 * winbuilder 3.4.0
 * winbuilder devel (2017-05-16 r72684)
 * rhub::check( platform = "ubuntu-gcc-devel" )
