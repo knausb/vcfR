@@ -9,10 +9,10 @@ This may have been addressed at 64a308ba50b9119108e8946737460de5997b805b by addi
 
 
 # vcfR 1.6.0
-Released on CRAN 201X-XX-XX.
+Released on CRAN 2017-12-08.
 * `vcfR2DNAbin()` can include indels and maintains alignment.
 * `write.vcf()` now handles tilde expansion.
-* `rePOS()` attempts top create a non-overlapping coordinate system from POS and CHROM.
+* `rePOS()` attempts to create a non-overlapping coordinate system from POS and CHROM.
 * `vcfR2DNAbin()` manages the asterisk allele.
 * `extract.indels()` ignores GATK's <NON_REF>.
 * Added support for chromR objects with no gt slot to `proc.chromR()`.
