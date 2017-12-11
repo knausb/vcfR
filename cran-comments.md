@@ -65,6 +65,8 @@ I believe I have addressed these issues in the present version (1.6.0).
 However, I think its polite to thank those who have helped this project.
 So I've decided to start a list of thanks with the hope that these individuals may see this in the future.
 
+v1.6.0 Thank you Uwe Ligges for processing my submission!
+
 v1.5.0 Thank you Kurt Hornik for helping me!
 
 v1.4.0 Thank you Uwe Ligges and Kurt Hornik for helping me!
