@@ -8,6 +8,9 @@ At the present, this is simply a to-do list for ideas to include in the next maj
 This may have been addressed at 64a308ba50b9119108e8946737460de5997b805b by adding `samples` to vcfR method `[`.
 
 
+# vcfR 1.7.0
+Released on CRAN 201X-XX-XX.
+
 # vcfR 1.6.0
 Released on CRAN 2017-12-08.
 * `vcfR2DNAbin()` can include indels and maintains alignment.
