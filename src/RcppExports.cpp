@@ -5,6 +5,37 @@
 
 using namespace Rcpp;
 
+// NM2winNM
+NumericMatrix NM2winNM(NumericMatrix x, std::vector<int> pos, int maxbp, int winsize, int depr);
+RcppExport SEXP _vcfR_NM2winNM(SEXP xSEXP, SEXP posSEXP, SEXP maxbpSEXP, SEXP winsizeSEXP, SEXP deprSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type pos(posSEXP);
+    Rcpp::traits::input_parameter< int >::type maxbp(maxbpSEXP);
+    Rcpp::traits::input_parameter< int >::type winsize(winsizeSEXP);
+    Rcpp::traits::input_parameter< int >::type depr(deprSEXP);
+    rcpp_result_gen = Rcpp::wrap(NM2winNM(x, pos, maxbp, winsize, depr));
+    return rcpp_result_gen;
+END_RCPP
+}
+// windowize_NM
+NumericMatrix windowize_NM(Rcpp::NumericMatrix x, Rcpp::NumericVector pos, Rcpp::NumericVector starts, Rcpp::NumericVector ends, Rcpp::String summary, int depr);
+RcppExport SEXP _vcfR_windowize_NM(SEXP xSEXP, SEXP posSEXP, SEXP startsSEXP, SEXP endsSEXP, SEXP summarySEXP, SEXP deprSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type pos(posSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type starts(startsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type ends(endsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::String >::type summary(summarySEXP);
+    Rcpp::traits::input_parameter< int >::type depr(deprSEXP);
+    rcpp_result_gen = Rcpp::wrap(windowize_NM(x, pos, starts, ends, summary, depr));
+    return rcpp_result_gen;
+END_RCPP
+}
 // AD_frequency
 Rcpp::NumericMatrix AD_frequency(Rcpp::StringMatrix ad, std::string delim, unsigned int allele, int sum_type, int decreasing);
 RcppExport SEXP _vcfR_AD_frequency(SEXP adSEXP, SEXP delimSEXP, SEXP alleleSEXP, SEXP sum_typeSEXP, SEXP decreasingSEXP) {
@@ -162,37 +193,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// NM2winNM
-NumericMatrix NM2winNM(NumericMatrix x, std::vector<int> pos, int maxbp, int winsize, int depr);
-RcppExport SEXP _vcfR_NM2winNM(SEXP xSEXP, SEXP posSEXP, SEXP maxbpSEXP, SEXP winsizeSEXP, SEXP deprSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
-    Rcpp::traits::input_parameter< std::vector<int> >::type pos(posSEXP);
-    Rcpp::traits::input_parameter< int >::type maxbp(maxbpSEXP);
-    Rcpp::traits::input_parameter< int >::type winsize(winsizeSEXP);
-    Rcpp::traits::input_parameter< int >::type depr(deprSEXP);
-    rcpp_result_gen = Rcpp::wrap(NM2winNM(x, pos, maxbp, winsize, depr));
-    return rcpp_result_gen;
-END_RCPP
-}
-// windowize_NM
-NumericMatrix windowize_NM(Rcpp::NumericMatrix x, Rcpp::NumericVector pos, Rcpp::NumericVector starts, Rcpp::NumericVector ends, Rcpp::String summary, int depr);
-RcppExport SEXP _vcfR_windowize_NM(SEXP xSEXP, SEXP posSEXP, SEXP startsSEXP, SEXP endsSEXP, SEXP summarySEXP, SEXP deprSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type x(xSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type pos(posSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type starts(startsSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type ends(endsSEXP);
-    Rcpp::traits::input_parameter< Rcpp::String >::type summary(summarySEXP);
-    Rcpp::traits::input_parameter< int >::type depr(deprSEXP);
-    rcpp_result_gen = Rcpp::wrap(windowize_NM(x, pos, starts, ends, summary, depr));
-    return rcpp_result_gen;
-END_RCPP
-}
 // pair_sort
 Rcpp::DataFrame pair_sort();
 RcppExport SEXP _vcfR_pair_sort() {
@@ -337,6 +337,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_vcfR_NM2winNM", (DL_FUNC) &_vcfR_NM2winNM, 5},
+    {"_vcfR_windowize_NM", (DL_FUNC) &_vcfR_windowize_NM, 6},
     {"_vcfR_AD_frequency", (DL_FUNC) &_vcfR_AD_frequency, 5},
     {"_vcfR_write_fasta", (DL_FUNC) &_vcfR_write_fasta, 6},
     {"_vcfR_elementNumber", (DL_FUNC) &_vcfR_elementNumber, 2},
@@ -349,8 +351,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_vcfR_gt_to_popsum", (DL_FUNC) &_vcfR_gt_to_popsum, 2},
     {"_vcfR_is_het", (DL_FUNC) &_vcfR_is_het, 2},
     {"_vcfR_masplit", (DL_FUNC) &_vcfR_masplit, 6},
-    {"_vcfR_NM2winNM", (DL_FUNC) &_vcfR_NM2winNM, 5},
-    {"_vcfR_windowize_NM", (DL_FUNC) &_vcfR_windowize_NM, 6},
     {"_vcfR_pair_sort", (DL_FUNC) &_vcfR_pair_sort, 0},
     {"_vcfR_rank_variants", (DL_FUNC) &_vcfR_rank_variants, 3},
     {"_vcfR_vcf_stats_gz", (DL_FUNC) &_vcfR_vcf_stats_gz, 4},
