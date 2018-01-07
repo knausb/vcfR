@@ -20,12 +20,7 @@ This example data can be used to make unit tests to validate functionality.
 }
 \examples{
 data(vep)
-
-
-\dontrun{
-  # When I add data it can be saved with this command.
-  save(vcfR_test, file="data/vcfR_test.RData") 
-  }
+vcfR2tidy(vep, info_only = TRUE)$fix
 
 
 }
