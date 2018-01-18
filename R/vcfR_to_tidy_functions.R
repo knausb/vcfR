@@ -372,7 +372,7 @@ extract_info_tidy <- function(x, info_fields = NULL, info_types = TRUE, info_sep
   # pick them out in order using info_fields
   ret <- stringr::str_split(string = x$INFO, pattern = info_sep) %>%
     lapply(function(x) {
-      y <- stringr::str_split(x, pattern = "=")
+      y <- stringr::str_split(x, pattern = "=", n = 2)
       vals <- unlist(lapply(y, function(z) z[2]))
       names(vals) <- unlist(lapply(y, function(z) z[1]))
       unname(vals[info_fields])
