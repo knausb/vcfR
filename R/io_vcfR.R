@@ -46,6 +46,12 @@
 #' In contrast, ".|." should be converted to NA when \code{convertNA = TRUE}.
 #' 
 #' 
+#' If file begins with http://, https://, ftp://, or ftps:// it is interpreted as a link.
+#' When this happens, file is split on the delimiter '/' and the last element is used as the filename.
+#' A check is performed to determine if this file exists in the working directory.
+#' If a local file is found it is used.
+#' If a local file is not found the remote file is downloaded to the working directory and read in.
+#' 
 #' The function \strong{write.vcf} takes an object of either class vcfR or chromR and writes the vcf data to a vcf.gz file (gzipped text).
 #' If the parameter 'mask' is set to FALSE, the entire object is written to file.
 #' If the parameter 'mask' is set to TRUE and the object is of class chromR (which has a mask slot), this mask is used to subset the data.
@@ -104,8 +110,33 @@ read.vcfR <- function(file,
                       verbose = TRUE){
 #  require(memuse)
   
+  if( !is.character(file) ){
+    stop('The parameter file is expected to be a character.')
+  }
+  
+  if( grep('^http://|^https://|^ftp://|^ftps://', file ) ){
+    # We have a link instead os a file.
+    print('Yup')
+  
+    file_name <- unlist(strsplit(file, split = "/"))
+    file_name <- file_name[[length(file_name)]]
+  
+    if(file.exists(file_name)){
+      message(paste("Local file", file_name, "found."))
+      message('Using this local copy instead of retrieving a remote copy.')
+      file <- file_name
+    } else {
+      message(paste("Downloading remote file", file))
+      utils::download.file(url = file, destfile = file_name, quiet = FALSE)
+      message("File downloaded.")
+      message("It will probably be faster to use this local file in the future instead of re-downloading it.")
+    }
+  }
+  
   # gzopen does not appear to deal well with tilde expansion.
-  file <- path.expand(file)
+  if(grep("^~",file)){
+    file <- path.expand(file)
+  }
   
   if(file.access(file, mode = 0) != 0){
     stop(paste("File:", file, "does not appear to exist!"))
