@@ -114,7 +114,7 @@ read.vcfR <- function(file,
     stop('The parameter file is expected to be a character.')
   }
   
-  if( grep('^http://|^https://|^ftp://|^ftps://', file ) ){
+  if( length(grep('^http://|^https://|^ftp://|^ftps://', file )) == 1 ){
     # We have a link instead os a file.
     print('Yup')
   
@@ -134,7 +134,7 @@ read.vcfR <- function(file,
   }
   
   # gzopen does not appear to deal well with tilde expansion.
-  if(grep("^~",file)){
+  if( length(grep("^~",file)) == 1 ){
     file <- path.expand(file)
   }
   
