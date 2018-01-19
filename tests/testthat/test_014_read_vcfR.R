@@ -167,6 +167,9 @@ test_that("read.vcfR works for files in other directories",{
 })
 
 
+##### ##### ##### ##### #####
+
+
 
 ##### ##### ##### ##### #####
 # EOF.
