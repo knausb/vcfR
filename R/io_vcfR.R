@@ -114,7 +114,7 @@ read.vcfR <- function(file,
     stop('The parameter file is expected to be a character.')
   }
   
-  if( length(grep('^http://|^https://|^ftp://|^ftps://', file )) == 1 ){
+  if( grepl('^http://|^https://|^ftp://|^ftps://', file) ){
     # We have a link instead os a file.
     print('Yup')
   
@@ -124,17 +124,17 @@ read.vcfR <- function(file,
     if(file.exists(file_name)){
       message(paste("Local file", file_name, "found."))
       message('Using this local copy instead of retrieving a remote copy.')
-      file <- file_name
     } else {
       message(paste("Downloading remote file", file))
       utils::download.file(url = file, destfile = file_name, quiet = FALSE)
       message("File downloaded.")
       message("It will probably be faster to use this local file in the future instead of re-downloading it.")
     }
+    file <- file_name
   }
   
   # gzopen does not appear to deal well with tilde expansion.
-  if( length(grep("^~",file)) == 1 ){
+  if( grepl("^~", file) ){
     file <- path.expand(file)
   }
   
