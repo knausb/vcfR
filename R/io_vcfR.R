@@ -116,7 +116,6 @@ read.vcfR <- function(file,
   
   if( grepl('^http://|^https://|^ftp://|^ftps://', file) ){
     # We have a link instead os a file.
-    print('Yup')
   
     file_name <- unlist(strsplit(file, split = "/"))
     file_name <- file_name[[length(file_name)]]
