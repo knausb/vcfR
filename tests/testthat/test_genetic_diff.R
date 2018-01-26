@@ -1,12 +1,9 @@
 
-
-
 #
 library(testthat)
 #detach(package:vcfR, unload=TRUE)
 #
 library(vcfR)
-
 
 #
 context("genetic_diff")
@@ -58,6 +55,80 @@ test_that("Nei's method works",{
   expect_equal(10*tmp$Ht[1], 5)
   expect_equal(tmp$n_a[1], 6)
   expect_equal(tmp$Gprimest[1], 0)
+})
+
+
+test_that("Nei's method works, Hedrick Table 1",{
+  data(vcfR_example)
+  vcf <- vcf[1:6,1:11]
+  # a
+  vcf@gt[1, 2:6]  <- c("1/2", "2/2", "2/2", "2/2", "2/2")
+  vcf@gt[1, 7:11] <- c("3/3", "3/3", "3/3", "3/3", "4/4")
+  # b
+  vcf@gt[2, 2:6]  <- c("1/2", "2/2", "2/2", "2/2", "2/2")
+  vcf@gt[2, 7:11] <- c("2/2", "2/2", "2/2", "2/2", "3/3")
+  # c
+  vcf@gt[3, 2:6]  <- c("1/1", "1/1", "1/1", "1/1", "1/2")
+  vcf@gt[3, 7:11] <- c("2/2", "3/3", "3/3", "3/3", "3/3")
+  # d
+  vcf@gt[4, 2:6]  <- c("1/1", "1/1", "1/2", "2/2", "2/2")
+  vcf@gt[4, 7:11] <- c("3/3", "3/4", "4/4", "5/5", "5/5")
+  # e
+  vcf@gt[5, 2:6]  <- c("1/2", "2/2", "2/2", "2/3", "3/3")
+  vcf@gt[5, 7:11] <- c("2/2", "2/2", "2/3", "3/3", "4/4")
+  # f  
+  vcf@gt[6, 2:6]  <- c("1/1", "1/1", "1/1", "2/2", "2/3")
+  vcf@gt[6, 7:11] <- c("3/3", "4/4", "4/5", "5/5", "5/5")
+  
+  # Test.
+  myPops <- as.factor(rep(c('a','b'), each = 5))
+  myDiff <- genetic_diff(vcf, myPops, method = "nei")
+#  myDiff
+  
+  # Gstmax
+  expect_equal(myDiff$Gstmax[1], 0.6)
+  expect_equal(myDiff$Gstmax[2], 0.6)
+  expect_equal(myDiff$Gstmax[3], 0.6)
+  expect_equal(floor(1e6 * myDiff$Gstmax[4]), 265822)
+  expect_equal(floor(1e6 * myDiff$Gstmax[5]), 265822)
+  expect_equal(floor(1e6 * myDiff$Gstmax[6]), 265822)
+  
+  # Gst
+  expect_equal(floor(1e6 * myDiff$Gst[1]), 600000)
+  expect_equal(floor(1e6 * myDiff$Gst[2]), 056603)
+  expect_equal(floor(1e6 * myDiff$Gst[3]), 593495)
+  expect_equal(floor(1e6 * myDiff$Gst[4]), 265822)
+  expect_equal(floor(1e6 * myDiff$Gst[5]), 025210)
+  expect_equal(floor(1e6 * myDiff$Gst[6]), 256410)
+  
+  # Gprimest
+  expect_equal(floor(1e6 * myDiff$Gprimest[1]), 1000000)
+  expect_equal(floor(1e6 * myDiff$Gprimest[2]), 094339)
+  expect_equal(floor(1e6 * myDiff$Gprimest[3]), 989159)
+  expect_equal(floor(1e6 * myDiff$Gprimest[4]), 1000000)
+  expect_equal(floor(1e6 * myDiff$Gprimest[5]), 094837)
+  expect_equal(floor(1e6 * myDiff$Gprimest[6]), 964590)
+})
+
+
+
+test_that("Nei's method works, mixed copy",{
+  data(vcfR_example)
+  vcf <- vcf[1:4,]
+
+  vcf@gt[1,2:10] <- c("0", "0", "0", "0", "1/1", "1/1", "1/1", "1/1/1", "1/1/1")
+  vcf@gt[1,11:19] <- c("0", "0", "0", "0", "0/0", "0/0", "0/0", "0/0", "1/1/1/1")
+  vcf@gt[2,2:10] <- c("0", "0", "0", "0", "1/1", "1/1", "1/1", "1/1/1", "1/1/1")
+  vcf@gt[2,11:19] <- c("0/0", "0/0", "0/0", "0/0", "0/0", "0/0", "0/0", "0/1", "1/1/1/1")
+  vcf@gt[3,2:10] <- c("0", "0", "0", "0", "1/1", "1/1", "1/1", "1/1/1", "1/1/1")
+  vcf@gt[3,11:19] <- c("0/1", "0/1/1", "1/1/1", "0/1/1/1", "1/1/1/1", "1/1", "1/1", "0/1", "0/0")
+  vcf@gt[4,2:10] <- c("0", "0", "0", "0", "1/1", "1/1", "1/1", "1/1/1", "1/1/1")
+  vcf@gt[4,11:19] <- c("0/0", "0/0", "0/0/0", "1/1/1/1", "1/1/1/1", "1/1", "1/1/1/1", "1/1/1", "1/1/1/1")
+
+#vcf@gt
+  myPops <- as.factor(rep(c('a','b'), each = 9))
+  myDiff <- genetic_diff(vcf, myPops, method = "nei")
+  
 })
 
 
