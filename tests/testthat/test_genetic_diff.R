@@ -142,8 +142,8 @@ test_that("Nei's method works, mixed copy",{
   
   
 #vcf@gt
-  myPops <- as.factor(rep(c('a','b'), each = 9))
-  myDiff <- genetic_diff(vcf, myPops, method = "nei")
+#  myPops <- as.factor(rep(c('a','b'), each = 9))
+#  myDiff <- genetic_diff(vcf, myPops, method = "nei")
   
 })
 
