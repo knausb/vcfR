@@ -97,10 +97,11 @@ calc_nei <- function(x1, x2){
   nPop <- length(x2)
   
   ps <- strsplit(as.character(x1$Allele_counts), split = ",")
+  nAllele <- unlist(lapply(ps, function(x){ sum(as.numeric(x)) }))
   ps <- lapply(ps, function(x){as.numeric(x)/sum(as.numeric(x), na.rm = TRUE)})
   Ht <- unlist(lapply(ps , function(x){1- sum(x^2)}))
 
-  nAllele <- x1$n
+#  nAllele <- x1$n
   nAlleles <- matrix(nrow = length(nAllele), ncol = nPop)
   
   Hs <- matrix(nrow = nrow(x2[[1]]), ncol = nPop)
@@ -113,11 +114,12 @@ calc_nei <- function(x1, x2){
   for(i in 1:nPop){
     Htmax <- paste(Htmax, as.character(x2[[i]]$Allele_counts), sep = ",")
     ps <- strsplit(as.character(x2[[i]]$Allele_counts), split = ",")
+    nAlleles[,i] <- unlist(lapply(ps, function(x){ sum(as.numeric(x)) }))
     Hsize[,i] <- unlist(lapply(ps, function(x){sum(as.numeric(x), na.rm = TRUE)}))
     ps <- lapply(ps, function(x){as.numeric(x)/sum(as.numeric(x), na.rm = TRUE)})
     ps <- lapply(ps , function(x){1- sum(x^2)})
     Hs[,i] <- unlist(ps)
-    nAlleles[,i] <- x2[[i]]$n
+#    nAlleles[,i] <- x2[[i]]$n
   }
   
   Htmax <- substring(Htmax, 2)
