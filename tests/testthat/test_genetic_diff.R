@@ -128,6 +128,7 @@ test_that("Nei's method works, mixed copy, n=5",{
   myPops <- as.factor(rep(c('a','b'), each = 5))
   myDiff <- genetic_diff(vcf, myPops, method = "nei")
 #  myDiff
+#  myDiff$Gst - (myDiff$Ht - apply(myDiff[,3:4], MARGIN=1, mean))/myDiff$Ht
 
   # Gstmax
   expect_equal(floor(myDiff$Gstmax *1e6), c(1000000, 333333, 515151, 408450, 380327, 341176))
