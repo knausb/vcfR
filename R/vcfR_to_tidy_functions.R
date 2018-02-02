@@ -250,7 +250,7 @@ vcfR2tidy <- function(x,
   
 #### extract the INFO data. and return if that is all the is requested ####
   # get the base fix data as a data frame
-  base <- as.data.frame(x@fix, stringsAsFactors = FALSE) %>% dplyr::tbl_df()
+  base <- as.data.frame(x@fix, stringsAsFactors = FALSE) %>% tibble::as.tibble()
   base$POS <- as.integer(base$POS)
   base$QUAL <- as.numeric(base$QUAL)
   if(toss_INFO_column == TRUE) {
@@ -262,8 +262,9 @@ vcfR2tidy <- function(x,
   
   fix <- do.call(what = extract_info_tidy, args = info_dots)
   if(info_only == TRUE) {
-    ret <- cbind(base, fix) %>% 
-      dplyr::tbl_df() %>%
+#    ret <- cbind(base, fix) %>% 
+    ret <- dplyr::bind_cols(base, fix) %>% 
+      tibble::as.tibble() %>%
       dplyr::select_(~ -Key)
     
     # only retain meta info for the fields that we are returning
@@ -283,9 +284,10 @@ vcfR2tidy <- function(x,
   
   # if the user is asking for a single data frame we give it to them here:
   if(single_frame == TRUE) {
-    ret <- cbind(base, fix) %>%
+#    ret <- cbind(base, fix) %>%
+    ret <- dplyr::bind_col(base, fix) %>%
       dplyr::left_join(gt, by = "Key") %>%
-      dplyr::tbl_df() %>%
+      tibble::as.tibble() %>%
       dplyr::select_(~ -Key)  # no point in keeping Key around at this point
     
     info_meta <- info_meta_full %>%
@@ -300,8 +302,9 @@ vcfR2tidy <- function(x,
   # if the user is not asking for a single data frame then we return a list 
   # which has appropriate keys for getting the fix and the gt associated
   # appropriately.
-  retfix <- cbind(base, fix) %>%
-    dplyr::tbl_df() %>%
+#  retfix <- cbind(base, fix) %>%
+  retfix <- dplyr::bind_cols(base, fix) %>%
+    tibble::as.tibble() %>%
     dplyr::mutate_(ChromKey = ~as.integer(factor(CHROM), levels = unique(CHROM))) %>%
     dplyr::select_(~ChromKey, ~dplyr::everything())  # note that we will drop Key from this after we have used it
   
@@ -351,7 +354,7 @@ extract_info_tidy <- function(x, info_fields = NULL, info_types = TRUE, info_sep
   
   vcf <- x
   x <- as.data.frame(x@fix, stringsAsFactors = FALSE) %>% 
-    dplyr::tbl_df()
+    tibble::as.tibble()
   
   # if info_fields is NULL then we try to do all of them
   if(is.null(info_fields)) {
@@ -381,7 +384,7 @@ extract_info_tidy <- function(x, info_fields = NULL, info_types = TRUE, info_sep
     matrix(ncol = length(info_fields), byrow = TRUE) %>%
     as.data.frame(stringsAsFactors = FALSE) %>%
     setNames(info_fields) %>%
-    dplyr::tbl_df()
+    tibble::as.tibble()
   
   if(!is.null(info_types)) {
     ns <- info_types[!is.na(info_types) & info_types == "n"]
@@ -405,7 +408,7 @@ extract_info_tidy <- function(x, info_fields = NULL, info_types = TRUE, info_sep
     }
     
   }
-  cbind(Key = 1:nrow(ret), ret) %>% dplyr::tbl_df()
+  cbind(Key = 1:nrow(ret), ret) %>% tibble::as.tibble()
 }
 
 #### extract_gt_tidy ####
