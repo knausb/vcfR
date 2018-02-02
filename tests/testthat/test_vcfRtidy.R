@@ -8,6 +8,45 @@ context("vcfRtidy functions")
 data("vcfR_example")
 #data("vcfR_test")
 
+
+##### ##### ##### ##### #####
+# vcf_field_names
+
+
+test_that("vcf_field_names works",{
+  data("vcfR_example")
+  Z <- vcf_field_names(vcf, tag = "INFO")
+  
+  expect_is(Z, "tbl_df")
+  expect_is(Z, "tbl")
+  expect_is(Z, "data.frame")
+  
+  Z <- vcf_field_names(vcf, tag = "FORMAT")
+
+  expect_is(Z, "tbl_df")
+  expect_is(Z, "tbl")
+  expect_is(Z, "data.frame")
+})
+
+
+test_that("vcf_field_names works, comma in quotes not parsed",{
+   data("vcfR_test")
+   myMeta <- vcfR_test@meta
+   vcfR_test@meta <- c(myMeta[1:12], '##INFO=<ID=AF,Number=A,Type=Float,Description="Estimated allele frequency in the range (0,1]">', myMeta[13:18])
+
+   Z <- vcf_field_names(vcfR_test, tag = "INFO")
+   expect_is(Z, "tbl_df")
+   expect_is(Z, "tbl")
+   expect_is(Z, "data.frame")
+  
+   vcfR_test@meta[13] <- '##INFO=<ID=TYPE,Number=A,Type=String,Description="The type of allele, either snp, mnp, ins, del, or complex.">'
+   Z <- vcf_field_names(vcfR_test)
+   
+   expect_is(Z, "tbl_df")
+   expect_is(Z, "tbl")
+   expect_is(Z, "data.frame")
+})
+
 ##### ##### ##### ##### #####
 # extract_gt_tidy
 
@@ -73,22 +112,5 @@ test_that("extract_info_tidy works with Flags",{
 })
 
 
-##### ##### ##### ##### #####
-# vcf_field_names
-
-
-test_that("vcf_field_names works",{
-  Z <- vcf_field_names(vcf, tag = "INFO")
-  
-  expect_is(Z, "tbl_df")
-  expect_is(Z, "tbl")
-  expect_is(Z, "data.frame")
-  
-  Z <- vcf_field_names(vcf, tag = "FORMAT")
-
-  expect_is(Z, "tbl_df")
-  expect_is(Z, "tbl")
-  expect_is(Z, "data.frame")
-})
 
 

@@ -577,19 +577,25 @@ vcf_field_names <- function(x, tag = "INFO") {
     dplyr::filter_(~stringr::str_detect(x, left_regx)) %>%
     dplyr::mutate_(x = ~stringr::str_replace(x, left_regx, "")) %>%
     dplyr::mutate_(x = ~stringr::str_replace(x, ">$", "")) %>%
-    tidyr::separate_("x", 
-                    into=c("i", "n", "t", "d", "s", "v"), 
-                    sep = ",", 
+    tidyr::separate_("x",
+                    into=c("i", "n", "t", "d", "s", "v"),
+                    # sep = ",",
+                    sep = "ID=|,Number=|,Type=|,Description=|,Source=|,Version=", 
                     fill = "right",
                     remove = FALSE) %>%
     dplyr::mutate_(Tag = ~tag,
                   ID = ~i,
-                  Number = ~stringr::str_replace(n, "^Number=", ""),
-                  Type = ~stringr::str_replace(t, "^Type=", ""),
-                  Description = ~stringr::str_replace(d, "^Description=", "") %>% 
-                    stringr::str_replace_all("\"", ""),
-                  Source = ~stringr::str_replace(s, "^Source=", ""),
-                  Version = ~stringr::str_replace(v, "^Version=", "")) %>%
+                  # Number = ~stringr::str_replace(n, "^Number=", ""),
+                  # Type = ~stringr::str_replace(t, "^Type=", ""),
+                  # Description = ~stringr::str_replace(d, "^Description=", "") %>% 
+                  #   stringr::str_replace_all("\"", ""),
+                  # Source = ~stringr::str_replace(s, "^Source=", ""),
+                  # Version = ~stringr::str_replace(v, "^Version=", "")) %>%
+                  Number = ~n,
+                  Type = ~t,
+                  Description = ~d %>% stringr::str_replace_all("\"", ""),
+                  Source = ~s,
+                  Version = ~v) %>%
     dplyr::select_(~Tag, ~ID, ~Number, ~Type, ~Description, ~Source, ~Version)
 }
 
