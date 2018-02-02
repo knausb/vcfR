@@ -285,7 +285,7 @@ vcfR2tidy <- function(x,
   # if the user is asking for a single data frame we give it to them here:
   if(single_frame == TRUE) {
 #    ret <- cbind(base, fix) %>%
-    ret <- dplyr::bind_col(base, fix) %>%
+    ret <- dplyr::bind_cols(base, fix) %>%
       dplyr::left_join(gt, by = "Key") %>%
       tibble::as.tibble() %>%
       dplyr::select_(~ -Key)  # no point in keeping Key around at this point
