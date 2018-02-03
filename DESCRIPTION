@@ -40,6 +40,7 @@ Imports:
     Rcpp,
     stats,
     stringr,
+    tibble,
     tidyr,
     utils,
     vegan,
