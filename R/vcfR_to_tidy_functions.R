@@ -568,38 +568,43 @@ guess_types <- function(D) {
 #' 
 #' @export
 vcf_field_names <- function(x, tag = "INFO") {
-  
   if(class(x) != "vcfR") stop("Expecting x to be a vcfR object, not a ", class(x))
-  
+  if( tag != 'INFO' & tag != 'FORMAT') stop("Expecting tag to either be INFO or FORMAT")
+
+  # Subset to tag.
   x <- x@meta
-  y <- dplyr::data_frame(x = x)  # make a data frame of it for easy manipulation
+  left_regx <- paste("^##", tag, "=<", sep = "")  # regex to match and replace 
+  x <- x[grep(left_regx, x)]
+  # Clean up the string ends.
+  x <- sub(left_regx, "", x)
+  x <- sub(">$", "", x)
+
+  # Delimit on quote protected commas.
+  x <- lapply(x, function(x){scan(text=x, what="character", sep=",", quiet = TRUE)})
+
+  # Get unique keys.
+  myKeys <- unique(unlist(lapply(strsplit(unlist(x), split = "="), function(x){x[1]})))
+  # Omit default keys so we can make them first.
+  myKeys <- grep("^ID$|^Number$|^Type$|^Description$", myKeys, invert = TRUE, value = TRUE)
+  myKeys <- c("ID", "Number", "Type", "Description", myKeys)
+
+  myReturn <- data.frame(matrix(ncol=length(myKeys) + 1, nrow=length(x)))
+  colnames(myReturn) <- c("Tag", myKeys)
+  myReturn[,'Tag'] <- tag
+  getValue <- function(x){
+    myValue <- grep(paste("^", myKeys[i], "=", sep=""), x, value = TRUE)
+    if(length(myValue) == 0){
+      is.na(myValue) <- TRUE
+    } else {
+      myValue <- sub(".*=", "", myValue)
+    }
+    myValue
+  }
   
-  left_regx <- paste("^##", tag, "=<ID=", sep = "")  # regex to match and replace 
-  
-  y %>%
-    dplyr::filter_(~stringr::str_detect(x, left_regx)) %>%
-    dplyr::mutate_(x = ~stringr::str_replace(x, left_regx, "")) %>%
-    dplyr::mutate_(x = ~stringr::str_replace(x, ">$", "")) %>%
-    tidyr::separate_("x",
-                    into=c("i", "n", "t", "d", "s", "v"),
-                    # sep = ",",
-                    sep = "ID=|,Number=|,Type=|,Description=|,Source=|,Version=", 
-                    fill = "right",
-                    remove = FALSE) %>%
-    dplyr::mutate_(Tag = ~tag,
-                  ID = ~i,
-                  # Number = ~stringr::str_replace(n, "^Number=", ""),
-                  # Type = ~stringr::str_replace(t, "^Type=", ""),
-                  # Description = ~stringr::str_replace(d, "^Description=", "") %>% 
-                  #   stringr::str_replace_all("\"", ""),
-                  # Source = ~stringr::str_replace(s, "^Source=", ""),
-                  # Version = ~stringr::str_replace(v, "^Version=", "")) %>%
-                  Number = ~n,
-                  Type = ~t,
-                  Description = ~d %>% stringr::str_replace_all("\"", ""),
-                  Source = ~s,
-                  Version = ~v) %>%
-    dplyr::select_(~Tag, ~ID, ~Number, ~Type, ~Description, ~Source, ~Version)
+  for(i in 1:length(myKeys)){
+    myReturn[,i+1] <- unlist(lapply(x, function(x){ getValue(x) }))
+  }
+  tibble::as_tibble(myReturn)
 }
 
 
