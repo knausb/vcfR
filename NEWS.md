@@ -17,6 +17,7 @@ Released on CRAN 201X-XX-XX.
 
 # vcfR 1.6.0
 Released on CRAN 2017-12-08.
+* `vcf_field_names()` now handles keys that are out of order and multiple optional keys.
 * `vcfR2DNAbin()` can include indels and maintains alignment.
 * `write.vcf()` now handles tilde expansion.
 * `rePOS()` attempts to create a non-overlapping coordinate system from POS and CHROM.
