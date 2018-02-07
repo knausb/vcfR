@@ -9,7 +9,7 @@ This may have been addressed at 64a308ba50b9119108e8946737460de5997b805b by addi
 
 
 # vcfR 1.7.0
-Released on CRAN 201X-XX-XX.
+Released on CRAN 2018-02-XX.
 * `vcf_field_names()` now delimts on KEY= of key/value pairs, allows commas to be used within value.
 * `read.vcfR()` will download files when provided with a link.
 * Added example data from the Variant Effect Predictor (vep) `data(vep)`.

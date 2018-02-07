@@ -4,7 +4,7 @@
 * local: ubuntu 16.04 LTS, R 3.4.3
 * local: OS X install, R 3.4.2 (binaries for OSX 3.4.3 do not appear available yet)
 * ubuntu 14.04.5 LTS (on travis-ci), R 3.4.2
-* Windows Server 2012 R2 x64 (build 9600; on AppVeyor), R version 3.4.3 Patched(2017-12-06 r73855)
+* Windows Server 2012 R2 x64 (build 9600; on AppVeyor), R version 3.4.3 Patched (2018-02-03 r74215)
 * winbuilder: R version 3.4.3 (2017-11-30)
 * winbuilder: R Under development (unstable) (2017-09-12 r73242)
 
@@ -24,7 +24,7 @@ Maintainer: ‘Brian J. Knaus <briank.lists@gmail.com>’
     libs   5.7Mb
 
 
-There are 8 vignettes (HTML) which contribute to the 2.8Mb in doc.
+There are 4 vignettes (HTML) which contribute to the 2.8Mb in doc.
 These could be migrated to a separate documentation package.
 This could reduce this package's size.
 Because this is a NOTE and not an ERROR or WARNING I have left it as one package for now.
@@ -51,12 +51,6 @@ I have also run R CMD check on downstream dependencies of vcfR
 All packages that I could install passed:
 
 * pcadapt: no errors or warnings
-
-
-## Memory-access errors
-
-During the last submission Prof. Brian Ripley brought to my attention that vcfR contained memory access errors.
-I believe I have addressed these issues in the present version (1.6.0).
 
 
 ## Thank you CRAN Core Team!
