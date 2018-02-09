@@ -80,8 +80,10 @@ rePOS <- function(x, lens, ret.lens = FALSE, buff = 0){
   }
   
   # Check CHROM names.
-  if( sum(lens[,1] %in% getCHROM(x)) != nrow(lens) ){
-    msg <- "chromosome (CHROM) names in vcfR object and lens do not appear to match"
+#  if( sum(lens[,1] %in% getCHROM(x)) != nrow(lens) ){
+  if( sum(unique(getCHROM(x)) %in% lens[,1]) != length(unique(getCHROM(x))) ){
+#    msg <- "chromosome (CHROM) names in vcfR object and lens do not appear to match"
+    msg <- "chromosome (CHROM) names in vcfR object is not the same or a subset of those in lens"
     stop(msg)
   }
   
@@ -105,7 +107,8 @@ rePOS <- function(x, lens, ret.lens = FALSE, buff = 0){
   # table converts our character vector to a factor.
   # This tends to sort things.
   # We want to retain the order so let's recast this ourselves.
-  oldCHROM <- factor(oldCHROM, levels=unique(oldCHROM))
+#  oldCHROM <- factor(oldCHROM, levels=unique(oldCHROM))
+  oldCHROM <- factor(oldCHROM, levels=lens$chrom)
   myM <- as.matrix(table(oldCHROM))
   newPOS <- oldPOS + rep(lens$new_start, times=myM[,1]) - 1
   

@@ -16,7 +16,7 @@ test_that("rePOS works",{
   vcf3 <- vcf[1500:2533]
   vcf1@fix[,'CHROM'] <- 'chrom1'
   vcf2@fix[,'CHROM'] <- 'chrom2'
-  vcf3@fix[,'CHROM'] <- 'chrom3'
+  vcf3@fix[,'CHROM'] <- 'chrom4'
   vcf2@fix[,'POS'] <- as.character(getPOS(vcf2) - 21900)
   vcf3@fix[,'POS'] <- as.character(getPOS(vcf3) - 67900)
   vcf <- rbind2(vcf1, vcf2)
@@ -24,18 +24,21 @@ test_that("rePOS works",{
   rm(vcf1, vcf2, vcf3)
 
   # Create lens
-  lens <- data.frame(matrix(nrow=3, ncol=2))
+  lens <- data.frame(matrix(nrow=4, ncol=2))
   lens[1,1] <- 'chrom1'
   lens[2,1] <- 'chrom2'
   lens[3,1] <- 'chrom3'
+  lens[4,1] <- 'chrom4'
   lens[1,2] <- 22000
   lens[2,2] <- 47000
   lens[3,2] <- 32089
+  lens[4,2] <- 32089
   
   newPOS <- rePOS(vcf, lens)
   
   expect_equal(length(newPOS), nrow(vcf))
   expect_true(newPOS[length(newPOS)] > getPOS(vcf)[nrow(vcf)])
+#  plot(newPOS, getQUAL(vcf), pch=20, col=as.factor(getCHROM(vcf)))
 })
 
 
