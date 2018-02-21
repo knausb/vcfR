@@ -43,6 +43,11 @@ This method implements multi-threading through calls to the function \code{paral
 Because 'forks' do not exist in the windows environment, this will only work for windows users when n.cores=1.
 In the Unix environment, users may increase this number to allow the use of multiple threads (i.e., cores).
 }
+\examples{
+data(vcfR_test)
+gl <- vcfR2genlight(vcfR_test)
+
+}
 \seealso{
 \code{extract.gt},
 \code{alleles2consensus},
