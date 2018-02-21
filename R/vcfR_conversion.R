@@ -100,6 +100,10 @@ vcfR2loci <- function(x)
 #' 
 #' @param n.cores integer specifying the number of cores to use.
 #' 
+#' @examples 
+#' data(vcfR_test)
+#' gl <- vcfR2genlight(vcfR_test)
+#' 
 #' @export
 vcfR2genlight <- function(x, n.cores=1){
 
