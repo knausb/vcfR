@@ -33,7 +33,7 @@ The output file should contain Unix line endings (\n).
 Note that opening the output file in a Windows text editor (just to validate number of markers, individuals or populations) might change the end of line character (eol) to a Windows line ending (\r\n). 
 This may produce an error running migrate-n.
 Because these are typically non-printing characters, this may be a difficult problem to troubleshoot.
-The easiest way to circumvent the problem is to transfer output file to Unix machine and view it there.
+The easiest way to circumvent the problem is to transfer the output file to Unix machine and view it there.
 If you do introduce Windows line endings you can convert them back to Unix with a program such as `dos2unix` or `fromdos` to change the line endings.
 }
 \examples{
