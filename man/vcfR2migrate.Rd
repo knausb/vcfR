@@ -28,6 +28,13 @@ The function converts a vcfR object to a text format that can be used as an infi
 This function converts a vcfR object to a text file which can be used as input for MigrateN.
 The function will remove loci with missing data, indels, and loci that are not bialleleic (loci with more than two alleles). 
 Thus, only SNP data analysed where the length of each locus (inmutational steps) is 1 (as opposed to microsatellites or indels).
+
+The output file should contain Unix line endings (\n).
+Note that opening the output file in a Windows text editor (just to validate number of markers, individuals or populations) might change the end of line character (eol) to a Windows line ending (\r\n). 
+This may produce an error running migrate-n.
+Because these are typically non-printing characters, this may be a difficult problem to troubleshoot.
+The easiest way to circumvent the problem is to transfer the output file to Unix machine and view it there.
+If you do introduce Windows line endings you can convert them back to Unix with a program such as `dos2unix` or `fromdos` to change the line endings.
 }
 \examples{
 \dontrun{
