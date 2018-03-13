@@ -7,6 +7,7 @@
 #' Converts allele balance data produced by \code{freq_peak()} to a copy number by assinging the allele balance data (frequencies) to its closest expected ratio.
 #'  
 #' @param pos chromosomal position of variants
+#' @param posUnits units ('bp', 'Kbp', 'Mbp', 'Gbp') for `pos` to be converted to in the main plot
 #' @param ab1 matrix of allele balances for allele 1
 #' @param ab2 matrix of allele balances for allele 2
 #' @param fp1 feq_peak object for allele 1
@@ -26,16 +27,15 @@
 #' The only required information is a vector of chromosomal positions, however this is probably not going to create an interesting plot.
 #' 
 #' 
-#' 
-#' 
-#' 
-#' 
 #' @return An invisible NULL.
 #' 
+#' @seealso 
 #' freq_peak,
 #' peak_to_ploid
 #' 
 #' @examples
+#' 
+#' # An empty plot.
 #' freq_peak_plot(pos=1:40)
 #' 
 #' data(vcfR_example)
@@ -59,6 +59,7 @@
 #' 
 #' @export
 freq_peak_plot <- function(pos, 
+                           posUnits = 'bp',
                            ab1 = NULL, 
                            ab2 = NULL, 
                            fp1 = NULL, 
@@ -81,6 +82,30 @@ freq_peak_plot <- function(pos,
     stop(msg)
   }
   
+  # Handle x-axis units.
+  if( posUnits == 'bp'){
+    # Don't need to do anything.
+  } else if(posUnits == 'Kbp'){
+    pos <- pos/1e3
+    fp1$wins[,'START_pos'] <- fp1$wins[,'START_pos']/1e3
+    fp1$wins[,'END_pos']   <- fp1$wins[,'END_pos']/1e3
+    fp2$wins[,'START_pos'] <- fp2$wins[,'START_pos']/1e3
+    fp2$wins[,'END_pos']   <- fp2$wins[,'END_pos']/1e3
+  } else if(posUnits == 'Mbp'){
+    pos <- pos/1e6
+    fp1$wins[,'START_pos'] <- fp1$wins[,'START_pos']/1e6
+    fp1$wins[,'END_pos']   <- fp1$wins[,'END_pos']/1e6
+    fp2$wins[,'START_pos'] <- fp2$wins[,'START_pos']/1e6
+    fp2$wins[,'END_pos']   <- fp2$wins[,'END_pos']/1e6
+  } else if(posUnits == 'Gbp'){
+    pos <- pos/1e9
+    fp1$wins[,'START_pos'] <- fp1$wins[,'START_pos']/1e9
+    fp1$wins[,'END_pos'] <-   fp1$wins[,'END_pos']/1e9
+    fp2$wins[,'START_pos'] <- fp2$wins[,'START_pos']/1e9
+    fp2$wins[,'END_pos'] <-   fp2$wins[,'END_pos']/1e9
+  }
+  xlabel <- paste('Position (', posUnits, ')', sep = '')  
+  
   # Handle color
   col1 <- grDevices::col2rgb(col1, alpha = FALSE)
   col2 <- grDevices::col2rgb(col2, alpha = FALSE)
@@ -101,7 +126,7 @@ freq_peak_plot <- function(pos,
   
   # Initialize plot
   plot( range(pos, na.rm = TRUE), c(0,1), ylim=c(0,1), type="n", yaxt='n', 
-       main = "", xlab = "Position", ylab = "Allele balance")
+       main = "", xlab = xlabel, ylab = "Allele balance")
   graphics::axis(side=2, at=c(0,0.25,0.333,0.5,0.666,0.75,1), 
                  labels=c(0,'1/4','1/3','1/2','2/3','3/4',1), las=1)
   graphics::abline(h=c(0.2,0.25,0.333,0.5,0.666,0.75,0.8), col=8)  
