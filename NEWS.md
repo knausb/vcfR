@@ -6,7 +6,7 @@ At the present, this is simply a to-do list for ideas to include in the next maj
 
 * Move 'FORMAT' column to its own slot. We can then cbind FORMAT and gt when passing to compiled code.
 This may have been addressed at 64a308ba50b9119108e8946737460de5997b805b by adding `samples` to vcfR method `[`.
-* In issue #92 (vcfR2genlight big data #92), JimWhiting91 has documented that `extract.gt()` could be greatly improved with multithreading.While he used `mclapply()` I do not feel this is the best solution because it does not work on Windows. I think a better solution would be [RCppParallel](https://rcppcore.github.io/RcppParallel/) because this should work on all CRAN platforms.
+* In issue #92 (vcfR2genlight big data #92), JimWhiting91 has documented that `extract.gt()` could be greatly improved with multithreading. While he used `mclapply()` I do not feel this is the best solution because it does not work on Windows. I think a better solution would be [RCppParallel](https://rcppcore.github.io/RcppParallel/) because this should work on all CRAN platforms.
 
 
 # vcfR 1.8.0

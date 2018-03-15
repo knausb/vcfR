@@ -18,7 +18,7 @@
 #' @param mask logical vector indicating rows to use.
 #' @param APPEND logical indicating whether to append to existing vcf file or write a new file.
 #' @param convertNA logical specifying to convert VCF missing data to NA.
-#' @param checkFile test if teh first line follows the VCF specification.
+#' @param checkFile test if the first line follows the VCF specification.
 #' 
 #' @param verbose report verbose progress.
 #'
