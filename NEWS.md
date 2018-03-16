@@ -37,7 +37,7 @@ Released on CRAN 2017-12-08.
 * removed `.Call()` statements to standardize style.
 * Created `vcfR2migrate()` to output MigrateN format data.
 * Addressed clang-UBSAN memory leak in `freq_peak()`.
-* Created `pairwise_genetic_diff()` to calculate pairwise differentiation.
+* Created `pairwise_genetic_diff()` to calculate pairwise differentiation. Thanks Javier!
 
 # vcfR 1.5.0
 Released on CRAN 2017-05-18.
