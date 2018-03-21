@@ -11,6 +11,8 @@ This may have been addressed at 64a308ba50b9119108e8946737460de5997b805b by addi
 
 # vcfR 1.8.0
 Released on CRAN 2018-XX-XX
+* `.vcf_stats_gz()` reports number of elements in header as well as the files last line. This is used by `read.vcfR()` to check for poorly formed files.
+* `show` method for vcfR now queries @fix instead of @gt.
 * `check_keys()` checks key definitions in the meta section to make sure they are unique.
 * `freq_peak_plot()` has parameter `posUnits` to adjust units of scatterplot.
 * `vcfR2migrate()` manual discusses Unix and Windows line endings.

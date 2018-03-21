@@ -25,6 +25,7 @@ void stat_line(Rcpp::NumericVector stats, std::string line){
     stats(0)++;
   } else if (line[0] == '#' && line[1] == 'C'){
     // Header
+//    Rcpp::Rcout << "Found the header line.\n";
     stats(1) = stats(0) + 1;
     std::vector < std::string > col_vec;
     char col_split = '\t'; // Must be single quotes!
@@ -43,8 +44,10 @@ void stat_line(Rcpp::NumericVector stats, std::string line){
 //' @export
 // [[Rcpp::export(name=".vcf_stats_gz")]]
 Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows = -1, int skip = 0, int verbose = 1) {
-  Rcpp::NumericVector stats(4);  // 4 elements, all zero.  Zero is default.
-  stats.names() = Rcpp::StringVector::create("meta", "header", "variants", "columns");
+//  Rcpp::NumericVector stats(4);  // 4 elements, all zero.  Zero is default.
+//  stats.names() = Rcpp::StringVector::create("meta", "header", "variants", "columns");
+  Rcpp::NumericVector stats(5);  // 4 elements, all zero.  Zero is default.
+  stats.names() = Rcpp::StringVector::create("meta", "header_line", "variants", "columns", "last_line");
   
   if(verbose == 1){
     Rcpp::Rcout << "Scanning file to determine attributes." << std::endl;
@@ -86,6 +89,7 @@ Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows = -1, int skip = 0, in
     // Scroll through lines derived from the buffer.
     unsigned int i = 0;
     for(i=0; i < svec.size() - 1; i++){
+//      Rcpp::Rcout << svec[i] << "\n";
       stat_line(stats, svec[i]);
     }
     // Manage the last line.
@@ -97,16 +101,16 @@ Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows = -1, int skip = 0, in
       return stats;
     }
     
+
     // Check for EOF or errors.
     if (bytes_read < LENGTH - 1) {
       if ( gzeof (file) ) {
-        if( stats(3) == 0 ){
-          // Count columns from last line.
-          std::vector < std::string > col_vec;
-          char col_split = '\t'; // Must be single quotes!
-          vcfRCommon::strsplit(svec[0], col_vec, col_split);
-          stats(3) = col_vec.size();
-        }
+        lastline = svec[svec.size() - 2];
+//          Rcpp::Rcout << "svec.back: " << lastline << "\n";
+        std::vector < std::string > col_vec;
+        char col_split = '\t'; // Must be single quotes!
+        vcfRCommon::strsplit(lastline, col_vec, col_split);
+        stats(4) = col_vec.size();
         break;
       }
       else {

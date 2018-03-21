@@ -29,7 +29,7 @@ setMethod(
       nsamp <- 0
     }
     nchrom <- length( unique( getCHROM( object ) ) )
-    nvar <- nrow(object@gt)
+    nvar <- nrow(object@fix)
     nna <- sum( is.na(object@gt[,-1]) )
     pna <- nna / c( nsamp * nvar )
 

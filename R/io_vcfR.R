@@ -162,14 +162,24 @@ read.vcfR <- function(file,
   vcf <- new(Class="vcfR")
 
   stats <- .vcf_stats_gz(file, nrows=nrows, skip = skip, verbose = as.integer(verbose) )
-  # stats should be a named vector containing "meta", "header", "variants", "columns".
+  # stats should be a named vector containing "meta", "header_line", "variants", "columns", and "last_line".
   # They should have been initialize to zero.
+  if( stats['columns'] > 0 & stats['last_line'] > 0 & stats['columns'] != stats['last_line']){
+    msg <- paste("Your file appears to have", stats['columns'], "header elements")
+    msg <- paste(msg, "and", stats['last_line'], "columns in the body.")
+    msg <- paste(msg, "This should never happen!")
+    stop(msg)
+  }
+  if( stats['columns'] == 0 & stats['last_line'] > 0 ){
+    stats['columns'] <- stats['last_line']
+  }
+  
   if(verbose == TRUE){
     cat("File attributes:")
     cat("\n")
     cat( paste("  meta lines:", stats['meta']) )
     cat("\n")
-    cat( paste("  header line:", stats['header']) )
+    cat( paste("  header_line:", stats['header_line']) )
     cat("\n")
     cat( paste("  variant count:", stats['variants']) )
     cat("\n")
@@ -181,8 +191,8 @@ read.vcfR <- function(file,
   if( stats['meta'] < 0 ){
     stop( paste("stats['meta'] less than zero:", stats['meta'], ", this should never happen.") )
   }
-  if( stats['header'] < 0 ){
-    stop( paste("stats['header'] less than zero:", stats['header'], ", this should never happen.") )
+  if( stats['header_line'] < 0 ){
+    stop( paste("stats['header_line'] less than zero:", stats['header_line'], ", this should never happen.") )
   }
   if( stats['variants'] < 0 ){
     stop( paste("stats['variants'] less than zero:", stats['variants'], ", this should never happen.") )

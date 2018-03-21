@@ -118,11 +118,8 @@ test_that("compiled vcfR_read_body works when file contains no variants",{
                 convertNA = 1, verbose = 0)
   unlink(myFile)
   
-#  
   expect_equal( ncol(body), ncol(vcf2@fix) + ncol(vcf2@gt) )
-#
   expect_equal( nrow(body), nrow(vcf2@fix) )
-  
 })
 
 
@@ -139,7 +136,7 @@ test_that("compiled input functions work",{
 
   stats <- .vcf_stats_gz(ex_file, verbose = 0)
 
-  expect_equal(length(stats), 4)
+  expect_equal(length(stats), 5)
   expect_is(stats, "numeric")
   
   meta <- .read_meta_gz(ex_file, stats, 0)
@@ -225,6 +222,7 @@ test_that("compiled vcfR_read_body convertNA = FALSE works",{
 
 test_that("VCF with no GT, compiled functions",{
   data("vcfR_test")
+  vcf <- vcfR_test
 #  vcf@gt <- vcf@gt[-c(1:nrow(vcf@gt)),]
   vcf@gt <- matrix("a", nrow=0, ncol=0)
   
@@ -233,7 +231,7 @@ test_that("VCF with no GT, compiled functions",{
   test <- .write_vcf_body(fix = vcf@fix, gt = vcf@gt, filename = ex_file, mask = 0)
   stats <- .vcf_stats_gz(ex_file, verbose = 0)
   body <- .read_body_gz(ex_file, stats,
-                nrows = -1, skip = 0, cols=1:stats['columns'],
+                nrows = -1, skip = 0, cols=1:stats['last_line'],
                 convertNA = 1, verbose = 0)
 
   expect_equal(test, NULL)

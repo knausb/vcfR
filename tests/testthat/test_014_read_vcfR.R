@@ -117,7 +117,7 @@ test_that("read.vcfR verbose works",{
 
   expect_equal( grep("File attributes:", testMessage), 2)
   expect_equal( grep("  meta lines:", testMessage), 3)
-  expect_equal( grep("  header line:", testMessage), 4)
+  expect_equal( grep("  header_line:", testMessage), 4)
   expect_equal( grep("  variant count:", testMessage), 5)
   expect_equal( grep("  column count:", testMessage), 6)
 })
