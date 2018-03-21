@@ -7,7 +7,7 @@
 \title{Read and write vcf format files}
 \usage{
 read.vcfR(file, limit = 1e+07, nrows = -1, skip = 0, cols = NULL,
-  convertNA = TRUE, checkFile = TRUE, verbose = TRUE)
+  convertNA = TRUE, checkFile = TRUE, check_keys = TRUE, verbose = TRUE)
 
 write.vcf(x, file = "", mask = FALSE, APPEND = FALSE)
 }
@@ -24,7 +24,9 @@ write.vcf(x, file = "", mask = FALSE, APPEND = FALSE)
 
 \item{convertNA}{logical specifying to convert VCF missing data to NA.}
 
-\item{checkFile}{test if teh first line follows the VCF specification.}
+\item{checkFile}{test if the first line follows the VCF specification.}
+
+\item{check_keys}{logical determining if \code{check_keys()} is called to test if INFO and FORMAT keys are unique.}
 
 \item{verbose}{report verbose progress.}
 

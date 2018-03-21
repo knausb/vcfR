@@ -19,6 +19,7 @@
 #' @param APPEND logical indicating whether to append to existing vcf file or write a new file.
 #' @param convertNA logical specifying to convert VCF missing data to NA.
 #' @param checkFile test if the first line follows the VCF specification.
+#' @param check_keys logical determining if \code{check_keys()} is called to test if INFO and FORMAT keys are unique.
 #' 
 #' @param verbose report verbose progress.
 #'
@@ -107,6 +108,7 @@ read.vcfR <- function(file,
                       cols = NULL, 
                       convertNA = TRUE,
                       checkFile = TRUE,
+                      check_keys = TRUE,
                       verbose = TRUE){
 #  require(memuse)
   
@@ -220,6 +222,11 @@ read.vcfR <- function(file,
     vcf@gt <- body[ , -c(1:8), drop=FALSE ]
   } else {
     vcf@gt <- matrix("a", nrow=0, ncol=0)
+  }
+  
+  # Check if keys in meta section are unique.
+  if( check_keys == TRUE ){
+    check_keys(vcf)
   }
   
   return(vcf)
