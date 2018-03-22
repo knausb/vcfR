@@ -380,9 +380,16 @@ extract_info_tidy <- function(x, info_fields = NULL, info_types = TRUE, info_sep
       names(vals) <- unlist(lapply(y, function(z) z[1]))
       unname(vals[info_fields])
     }) %>% 
-    unlist %>%
-    matrix(ncol = length(info_fields), byrow = TRUE) %>%
-    as.data.frame(stringsAsFactors = FALSE) %>%
+    unlist
+  
+  # If there were no variants ret will be NULL.
+  if(is.null(ret)){
+    ret <- matrix(nrow = 0, ncol = length(info_fields), byrow = TRUE)
+  } else {
+    ret <- matrix(ret, ncol = length(info_fields), byrow = TRUE)
+  }
+  
+  ret <- as.data.frame(ret, stringsAsFactors = FALSE) %>%
     setNames(info_fields) %>%
     tibble::as.tibble()
   
@@ -408,7 +415,12 @@ extract_info_tidy <- function(x, info_fields = NULL, info_types = TRUE, info_sep
     }
     
   }
-  cbind(Key = 1:nrow(ret), ret) %>% tibble::as.tibble()
+  if(nrow(ret) > 0){
+    ret <- cbind(Key = 1:nrow(ret), ret) %>% tibble::as.tibble()
+  } else {
+    ret <- cbind(Key = vector(mode = 'integer', length = 0), ret) %>% tibble::as.tibble()
+  }
+  ret
 }
 
 #### extract_gt_tidy ####
