@@ -507,10 +507,17 @@ extract_gt_tidy <- function(x,
   geno_info <- lapply(ex, get_gt)
   
   geno_info <- dplyr::as_data_frame(geno_info)
-  geno_info <- dplyr::mutate_(Key = ~rep(1:nrow(vcf@fix), times = ncol(vcf@gt) - 1),
-                              Indiv = ~rep(colnames(vcf@gt)[-1], each = nrow(vcf@fix)),
-                              geno_info
-                              )
+  if( nrow(geno_info) > 0 ){
+    geno_info <- dplyr::mutate_(Key = ~rep(1:nrow(vcf@fix), times = ncol(vcf@gt) - 1),
+                                Indiv = ~rep(colnames(vcf@gt)[-1], each = nrow(vcf@fix)),
+                                geno_info
+                                )
+  } else {
+    geno_info <- dplyr::mutate_(Key = vector(mode = 'integer', length = 0),
+                                Indiv = vector(mode = 'integer', length = 0),
+                                geno_info
+                                )
+  }
   geno_info <- dplyr::select_(geno_info, ~Key, ~Indiv, ~dplyr::everything())
 #  geno_info <- dplyr::select_(geno_info, ~Key, ~Indiv, ~everything())
 #  geno_info <- dplyr::select_(geno_info, ~Key, ~Indiv, grep(c('Key|Indiv'), names(Z), invert=TRUE))
