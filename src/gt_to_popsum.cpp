@@ -70,7 +70,7 @@ Rcpp::DataFrame gt_to_popsum(Rcpp::DataFrame var_info, Rcpp::CharacterMatrix gt)
 //          Rcout << "gt_vector.size: " << gt_vector.size() << "\n";
 
           for(k=0; k<gt_vector.size(); k++){
-            int myAllele = std::stoi(gt_vector[k]);
+            unsigned int myAllele = std::stoi(gt_vector[k]);
 //            Rcout << "  " << myAllele;
 //            // If this genotype had an allele we did not previously observe
             // we'll have to grow the vector.
