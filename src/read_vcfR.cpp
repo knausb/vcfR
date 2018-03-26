@@ -95,7 +95,7 @@ Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows = -1, int skip = 0, in
     // Manage the last line.
     lastline = svec[svec.size() - 1];
 
-    if( max_rows > 0 & stats(2) > max_rows ){
+    if( max_rows > 0 && stats(2) > max_rows ){
       gzclose (file);
       stats(2) = max_rows;
       return stats;
