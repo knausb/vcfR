@@ -41,7 +41,6 @@ Imports:
     stats,
     stringr,
     tibble,
-    tidyr,
     utils,
     vegan,
     viridisLite
@@ -53,7 +52,8 @@ Suggests:
     reshape2,
     rmarkdown,
     scales,
-    testthat
+    testthat,
+    tidyr
 VignetteBuilder: knitr
 License: GPL
 RoxygenNote: 6.0.1

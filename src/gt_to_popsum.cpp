@@ -52,25 +52,30 @@ Rcpp::DataFrame gt_to_popsum(Rcpp::DataFrame var_info, Rcpp::CharacterMatrix gt)
 //  unsigned int j = 0;
   unsigned int k = 0;
   
-  for(i=0; i < gt.nrow(); i++){ // Iterate over variants (rows)
+  for(i=0; i < gt.nrow(); i++){
+    // Iterate over variants (rows)
     if(mask[i] == TRUE){
+      // Initialize a vector to count alleles
+      // for this variant (row).
       std::vector<int> myalleles (1,0);
-      for(j=0; j < gt.ncol(); j++){ // Iterate over samples (columns)
+      for(j=0; j < gt.ncol(); j++){
+        // Iterate over samples (columns)
         if(gt(i, j) != NA_STRING){
+          // Process a single genotype.
           nsample[i]++;  // Increment sample count.
-          
-//          Rcout << "gt: " << gt(i, j) << "\n";
-          // Count alleles per sample.
 
+//          Rcout << "gt: " << gt(i, j) << "\n";
+
+          // Count alleles per sample.
           int unphased_as_na = 0; // 0 == FALSE
           std::vector < std::string > gt_vector;
           std::string gt2 = as<std::string>(gt(i,j));
           vcfRCommon::gtsplit( gt2, gt_vector, unphased_as_na );
           
-//          Rcout << "gt_vector.size: " << gt_vector.size() << "\n";
+//          Rcout << "  gt_vector.size: " << gt_vector.size() << "\n";
 
           for(k=0; k<gt_vector.size(); k++){
-            int myAllele = std::stoi(gt_vector[k]);
+            unsigned int myAllele = std::stoi(gt_vector[k]);
 //            Rcout << "  " << myAllele;
 //            // If this genotype had an allele we did not previously observe
             // we'll have to grow the vector.
@@ -79,26 +84,35 @@ Rcpp::DataFrame gt_to_popsum(Rcpp::DataFrame var_info, Rcpp::CharacterMatrix gt)
             }
             myalleles[myAllele]++;
           }
-//          Rcout << "\n\n";
+//          Rcout << "\n";
         }
       }
 
+      // Report allele vector.
+//      Rcpp::Rcout << "Allele vector size: " << myalleles.size();
+//      Rcpp::Rcout << "; Allele vector: " << myalleles[0];
+//      for(k=1; k<myalleles.size(); k++){
+//        Rcpp::Rcout << ", " << myalleles[k];
+//      }
+//      Rcpp::Rcout << "\n";
+
       // Concatenate allele counts into a comma delimited string.
-      char buffer [50];
-//      int n;
-//      n=sprintf(buffer, "%d", myalleles[0]);
-      sprintf(buffer, "%d", myalleles[0]);
-      for(j=1; (unsigned)j < myalleles.size(); j++){
-//        n=sprintf (buffer, "%s,%d", buffer, myalleles[j]);
-        sprintf (buffer, "%s,%d", buffer, myalleles[j]);
+      std::string allele_string = std::to_string(myalleles[0]);
+      for(k=1; k<myalleles.size(); k++){
+        allele_string = allele_string + ",";
+        allele_string = allele_string + std::to_string(myalleles[k]);
       }
-      allele_counts[i] = buffer;
+//      Rcpp::Rcout << "allele_string: " << allele_string << "\n";
+      allele_counts[i] = allele_string;
+
 
       // Sum all alleles.
       int nalleles = myalleles[0];
       for(j=1; (unsigned)j < myalleles.size(); j++){
         nalleles = nalleles + myalleles[j];
       }
+//      Rcpp::Rcout << "nalleles: " << nalleles << "\n";
+//      Rcpp::Rcout << "\n";
 
       // Stats.
       double He = 1;

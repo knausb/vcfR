@@ -166,7 +166,7 @@ read.vcfR <- function(file,
   # They should have been initialize to zero.
   if( stats['columns'] > 0 & stats['last_line'] > 0 & stats['columns'] != stats['last_line']){
     msg <- paste("Your file appears to have", stats['columns'], "header elements")
-    msg <- paste(msg, "and", stats['last_line'], "columns in the body.")
+    msg <- paste(msg, "and", stats['last_line'], "columns in the body.\n")
     msg <- paste(msg, "This should never happen!")
     stop(msg)
   }

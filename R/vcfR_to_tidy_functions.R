@@ -380,9 +380,16 @@ extract_info_tidy <- function(x, info_fields = NULL, info_types = TRUE, info_sep
       names(vals) <- unlist(lapply(y, function(z) z[1]))
       unname(vals[info_fields])
     }) %>% 
-    unlist %>%
-    matrix(ncol = length(info_fields), byrow = TRUE) %>%
-    as.data.frame(stringsAsFactors = FALSE) %>%
+    unlist
+  
+  # If there were no variants ret will be NULL.
+  if(is.null(ret)){
+    ret <- matrix(nrow = 0, ncol = length(info_fields), byrow = TRUE)
+  } else {
+    ret <- matrix(ret, ncol = length(info_fields), byrow = TRUE)
+  }
+  
+  ret <- as.data.frame(ret, stringsAsFactors = FALSE) %>%
     setNames(info_fields) %>%
     tibble::as.tibble()
   
@@ -408,7 +415,12 @@ extract_info_tidy <- function(x, info_fields = NULL, info_types = TRUE, info_sep
     }
     
   }
-  cbind(Key = 1:nrow(ret), ret) %>% tibble::as.tibble()
+  if(nrow(ret) > 0){
+    ret <- cbind(Key = 1:nrow(ret), ret) %>% tibble::as.tibble()
+  } else {
+    ret <- cbind(Key = vector(mode = 'integer', length = 0), ret) %>% tibble::as.tibble()
+  }
+  ret
 }
 
 #### extract_gt_tidy ####
@@ -495,10 +507,17 @@ extract_gt_tidy <- function(x,
   geno_info <- lapply(ex, get_gt)
   
   geno_info <- dplyr::as_data_frame(geno_info)
-  geno_info <- dplyr::mutate_(Key = ~rep(1:nrow(vcf@fix), times = ncol(vcf@gt) - 1),
-                              Indiv = ~rep(colnames(vcf@gt)[-1], each = nrow(vcf@fix)),
-                              geno_info
-                              )
+  if( nrow(geno_info) > 0 ){
+    geno_info <- dplyr::mutate_(Key = ~rep(1:nrow(vcf@fix), times = ncol(vcf@gt) - 1),
+                                Indiv = ~rep(colnames(vcf@gt)[-1], each = nrow(vcf@fix)),
+                                geno_info
+                                )
+  } else {
+    geno_info <- dplyr::mutate_(Key = vector(mode = 'integer', length = 0),
+                                Indiv = vector(mode = 'integer', length = 0),
+                                geno_info
+                                )
+  }
   geno_info <- dplyr::select_(geno_info, ~Key, ~Indiv, ~dplyr::everything())
 #  geno_info <- dplyr::select_(geno_info, ~Key, ~Indiv, ~everything())
 #  geno_info <- dplyr::select_(geno_info, ~Key, ~Indiv, grep(c('Key|Indiv'), names(Z), invert=TRUE))

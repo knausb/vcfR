@@ -6,8 +6,6 @@
 \alias{regex.win}
 \alias{seq2rects}
 \alias{var.win}
-\alias{gt2popsum}
-\alias{gt.to.popsum}
 \title{Process chromR object}
 \usage{
 proc.chromR(x, win.size = 1000, verbose = TRUE)
@@ -17,10 +15,6 @@ regex.win(x, max.win = 1000, regex = "[acgtwsmkrybdhv]")
 seq2rects(x, chars = "acgtwsmkrybdhv", lower = TRUE)
 
 var.win(x, win.size = 1000)
-
-gt2popsum(x)
-
-gt.to.popsum(x)
 }
 \arguments{
 \item{x}{object of class chromR}
