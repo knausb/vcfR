@@ -36,6 +36,39 @@ I have reviewed these words and feel they are spelled correctly.
 'genlight' refers to an object of class adegenet::genlight.
 
 
+
+https://cran.r-project.org/web/checks/check_results_vcfR.html
+Additional issues
+valgrind
+
+Reports:
+
+==46== Conditional jump or move depends on uninitialised value(s)
+==46==    at 0x5B5778D: internal_utf8_loop (loop.c:298)
+==46==    by 0x5B5778D: __gconv_transform_internal_utf8 (skeleton.c:609)
+==46==    by 0x5BD3844: wcsrtombs (wcsrtombs.c:110)
+==46==    by 0x5B69210: wcstombs (wcstombs.c:34)
+==46==    by 0x509BA3C: wcstombs (stdlib.h:154)
+==46==    by 0x509BA3C: tre_parse_bracket_items (tre-parse.c:336)
+==46==    by 0x509BA3C: tre_parse_bracket (tre-parse.c:453)
+==46==    by 0x509BA3C: tre_parse (tre-parse.c:1380)
+==46==    by 0x5093438: tre_compile (tre-compile.c:1920)
+==46==    by 0x5090BA0: tre_regcompb (regcomp.c:150)
+==46==    by 0x4F94D42: do_gsub (grep.c:1828)
+==46==    by 0x4F66809: bcEval (eval.c:6771)
+==46==    by 0x4F74D0F: Rf_eval (eval.c:624)
+==46==    by 0x4F768AE: R_execClosure (eval.c:1764)
+==46==    by 0x4F74ED9: Rf_eval (eval.c:747)
+==46==    by 0x4F793A7: do_set (eval.c:2774)
+==46==  Uninitialised value was created by a stack allocation
+==46==    at 0x509A06D: tre_parse (tre-parse.c:943)
+
+I believe this is due to the software `tre`.
+https://github.com/laurikari/tre
+
+vcfR does not directly call this software.
+
+
 ## Downstream dependencies
 
 I have also run R CMD check on downstream dependencies of vcfR
