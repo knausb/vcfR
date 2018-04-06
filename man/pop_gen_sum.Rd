@@ -18,3 +18,25 @@ gt.to.popsum(x)
 \description{
 Functions that make population genetics summaries
 }
+\details{
+This function creates common population genetic summaries from either a chromR or vcfR object.
+The default is to return a matrix containing allele counts, He, and Ne.
+\strong{Allele_counts} is the a comma delimited string of counts.
+The first position is the count of reference alleles, the second positions is the count of the first alternate alleles, the third is the count of second alternate alleles, and so on.
+\strong{He} is the gene diversity, or heterozygosity, of the population.
+This is \eqn{1 - \sumx^{2}_{i}}, or the probability that two alleles sampled from the population are different, following Nei (1973).
+\strong{Ne} is the effective number of alleles in the population.
+This is \eqn{1/\sumx^{2}_{i}} or one minus the homozygosity, from Nei (1987) equation 8.17. 
+
+Nei, M., 1973. Analysis of gene diversity in subdivided populations. Proceedings of the National Academy of Sciences, 70(12), pp.3321-3323.
+
+Nei, M., 1987. Molecular evolutionary genetics. Columbia University Press.
+}
+\examples{
+data(vcfR_test)
+# Check the genotypes.
+extract.gt(vcfR_test)
+# Summarize the genotypes.
+gt.to.popsum(vcfR_test)
+
+}
