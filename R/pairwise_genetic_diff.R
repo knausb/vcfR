@@ -27,8 +27,15 @@ pairwise_genetic_diff <- function (vcf, pops, method="nei"){
   if (is.null(var_info$mask)) {
     var_info$mask <- TRUE
   }
+  # Create a list of pairwise comparisons.
   combination.df <- utils::combn(x = as.character(unique(pops)), m = 2, simplify = FALSE)
-  test <- lapply(combination.df, function (x) {
+  
+  # Function to make pairwise comparisons
+  pwDiff <- function (x) {
+    # x contains the names of two populations to be compared.
+    # pops is a factor of population designations for each sample.
+    # vcf is the vcfR object.
+    # method is the method to be used in the comparison.
     vcf.temp <- vcf
     pop.tem <- as.factor(as.character(pops[pops %in% x]))
     samples.temp <- colnames(vcf.temp@gt)[-1][pops %in% x]
@@ -42,7 +49,9 @@ pairwise_genetic_diff <- function (vcf, pops, method="nei"){
       colnames(temp.genind) <- paste0(colnames(temp.genind),"_", paste0(levels(pop.tem), collapse = "_"))
     }
     return(temp.genind)
-  })
+  }
+  
+  test <- lapply(combination.df, pwDiff)
   pop.diff <- as.data.frame(do.call(cbind,test))
   pop.diff <- cbind(var_info, pop.diff)
   return(pop.diff)
