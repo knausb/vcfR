@@ -18,6 +18,9 @@
 #' pops <- as.factor(rep(c('a','b'), each = 9))
 #' myDiff <- pairwise_genetic_diff(vcf, pops, method = "nei")
 #' colMeans(myDiff[,c(4:ncol(myDiff))], na.rm = TRUE)
+#' pops <- as.factor(rep(c('a','b','c'), each = 6))
+#' myDiff <- pairwise_genetic_diff(vcf, pops, method = "nei")
+#' colMeans(myDiff[,c(4:ncol(myDiff))], na.rm = TRUE)
 #' 
 #' @seealso  \code{\link{genetic_diff}} in  \code{\link{vcfR}}
 #' 
