@@ -88,14 +88,13 @@ test_that("vcfR2tidy works",{
   
 })
 
-test_that("vcfR2tidy works, ID=REF",{
-   data("vcfR_test")
-   myMeta <- vcfR_test@meta
-   vcfR_test@meta <- c(myMeta[1:12], '##INFO=<ID=REF,Number=0,Type=Flag,Description="Has reference A coding region variation where one allele in the set is identical to the reference sequence. FxnCode = 8">', myMeta[13:18])  
-   Z <- vcfR2tidy(vcf, info_only = FALSE, verbose = FALSE)
-#   Z$meta
-
-})
+# test_that("vcfR2tidy works, ID=REF",{
+#    data("vcfR_test")
+#    myMeta <- vcfR_test@meta
+#    vcfR_test@meta <- c(myMeta[1:12], '##INFO=<ID=REF,Number=0,Type=Flag,Description="Has reference A coding region variation where one allele in the set is identical to the reference sequence. FxnCode = 8">', myMeta[13:18])  
+#    Z <- vcfR2tidy(vcf, info_only = FALSE, verbose = FALSE)
+#    Z$meta$ID
+# })
 
 ##### ##### ##### ##### #####
 # extract_info_tidy

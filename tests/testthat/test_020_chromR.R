@@ -189,8 +189,7 @@ test_that("chromR2vcfR works",{
   
   test <- chromR2vcfR(chrom, use.mask = TRUE)
 
-  sum(chrom@var.info$mask)
-  nrow(test)
+  expect_equal(sum(chrom@var.info$mask), nrow(test))
 })
 
 ##### ##### ##### ##### #####

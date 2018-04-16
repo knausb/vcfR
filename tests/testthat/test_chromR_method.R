@@ -23,17 +23,17 @@ test_that("chromR length",{
 
 ##### ##### ##### ##### #####
 
-test_that("chromR print",{
+#test_that("chromR print",{
 #  tmp <- print(chrom)
 #  expect_true(is.null(tmp))
-})
+#})
 
-test_that("chromR head",{
-  data("chromR_example")
+#test_that("chromR head",{
+#  data("chromR_example")
 #  tmp <- head(chrom)
 #  expect_null(tmp)
 #  expect_true(is.null(tmp))
-})
+#})
 
 
 test_that("chromR names<-",{
