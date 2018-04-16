@@ -1,26 +1,25 @@
 
-
 ## Test environments
-* local: ubuntu 16.04 LTS, R 3.4.3
-* local: OS X install, R 3.4.3
-* ubuntu 14.04.5 LTS (on travis-ci), R 3.4.2
-* Windows Server 2012 R2 x64 (build 9600; on AppVeyor), R version 3.4.3 Patched (2018-02-03 r74215)
-* winbuilder: R version 3.4.3 (2017-11-30)
-* winbuilder: R Under development (unstable) (2018-02-01 r74194)
+* local: ubuntu 16.04 LTS, R 3.4.4
+* local: OS X install, R 3.4.4
+* ubuntu 14.04.5 LTS (on travis-ci), R 3.4.4
+* rocker/r-devel: R Under development (unstable) (2018-03-16 r74418) with valgrind
+* winbuilder: R version 3.4.4 (2018-03-15)
+* winbuilder: R version 3.5.0 RC (2018-04-15 r74605)
 
+* Windows Server 2012 R2 x64 (build 9600; on AppVeyor), R version 3.5.0 RC (2018-04-15 r74605)
+Error : package 'Rcpp' was installed by an R version with different internals; it needs to be reinstalled for use with this R version
+I do not believe that this ERROR is due to vcfR.
 
 ## R CMD check results
-There were no ERRORs or WARNINGs. 
+There were no ERRORs or WARNINGs.
 
 There was 1 NOTE:
 
-* checking CRAN incoming feasibility ... Note_to_CRAN_maintainers
-Maintainer: ‘Brian J. Knaus <briank.lists@gmail.com>’
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: 'Brian J. Knaus <briank.lists@gmail.com>'
 
-* checking installed package size ... NOTE
-  installed size is  9.5Mb
-  sub-directories of 1Mb or more:
-    libs   7.8Mb
+Version contains large components (1.7.0.9000)
 
 
 Possibly mis-spelled words in DESCRIPTION:
@@ -36,37 +35,10 @@ I have reviewed these words and feel they are spelled correctly.
 'genlight' refers to an object of class adegenet::genlight.
 
 
-
 https://cran.r-project.org/web/checks/check_results_vcfR.html
-Additional issues
-valgrind
+Additional issues:
 
-Reports:
-
-==46== Conditional jump or move depends on uninitialised value(s)
-==46==    at 0x5B5778D: internal_utf8_loop (loop.c:298)
-==46==    by 0x5B5778D: __gconv_transform_internal_utf8 (skeleton.c:609)
-==46==    by 0x5BD3844: wcsrtombs (wcsrtombs.c:110)
-==46==    by 0x5B69210: wcstombs (wcstombs.c:34)
-==46==    by 0x509BA3C: wcstombs (stdlib.h:154)
-==46==    by 0x509BA3C: tre_parse_bracket_items (tre-parse.c:336)
-==46==    by 0x509BA3C: tre_parse_bracket (tre-parse.c:453)
-==46==    by 0x509BA3C: tre_parse (tre-parse.c:1380)
-==46==    by 0x5093438: tre_compile (tre-compile.c:1920)
-==46==    by 0x5090BA0: tre_regcompb (regcomp.c:150)
-==46==    by 0x4F94D42: do_gsub (grep.c:1828)
-==46==    by 0x4F66809: bcEval (eval.c:6771)
-==46==    by 0x4F74D0F: Rf_eval (eval.c:624)
-==46==    by 0x4F768AE: R_execClosure (eval.c:1764)
-==46==    by 0x4F74ED9: Rf_eval (eval.c:747)
-==46==    by 0x4F793A7: do_set (eval.c:2774)
-==46==  Uninitialised value was created by a stack allocation
-==46==    at 0x509A06D: tre_parse (tre-parse.c:943)
-
-I believe this is due to the software `tre`.
-https://github.com/laurikari/tre
-
-vcfR does not directly call this software.
+I believe I have addressed the WARNings and valgrind issue detected at CRAN.
 
 
 ## Downstream dependencies
@@ -76,13 +48,14 @@ All packages that I could install passed:
 
 devtools::revdep_check()
 
+With one exception:
+annovar
+https://CRAN.R-project.org/package=annovarR 
+
 Checked annovarR: 1 error  | 0 warnings | 0 notes
-Checked pcadapt : 0 errors | 0 warnings | 3 notes
 
-The ERROR from annovarR is below, I do not feel this is related to vcfR.
+I feel that this is not due to vcfR.
 
-ERROR: dependencies ‘RMySQL’, ‘AnnotationDbi’ are not available for package ‘annovarR’
-* removing ‘/tmp/Rtmp4bz1PA/R-lib/annovarR’
 
 ## Thank you CRAN Core Team!
 

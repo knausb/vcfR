@@ -10,7 +10,7 @@ This may have been addressed at 64a308ba50b9119108e8946737460de5997b805b by addi
 
 
 # vcfR 1.8.0
-Released on CRAN 2018-XX-XX
+Released on CRAN 2018-04-XX
 * Attempted to address CRAN's 'Note: break used in wrong context: no loop is visible' issue.
 * `.vcf_stats_gz()` reports number of elements in header as well as the files last line. This is used by `read.vcfR()` to check for poorly formed files.
 * `show` method for vcfR now queries @fix instead of @gt.

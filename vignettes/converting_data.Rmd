@@ -210,7 +210,7 @@ unlink('my_gene.fasta') # Clean up after we're done with the example.
 Also see:
 
 - Heng Li's [seqtk](https://github.com/lh3/seqtk)
-- [GATK's](https://www.broadinstitute.org/gatk/) FastaAlternateReferenceMaker
+- [GATK's](https://software.broadinstitute.org/gatk/) FastaAlternateReferenceMaker
 
 
 ## Creating loci objects
