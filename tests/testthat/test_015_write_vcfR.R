@@ -28,15 +28,15 @@ test_that("read/write.vcf works for vcfR objects",{
 
 
 
-test_that("write.vcf APPEND=TRUE does not include header",{
-  data("vcfR_example")
-  test_dir <- tempdir()
-  setwd(test_dir)
-  write.vcf(vcf, "test.vcf.gz", APPEND=TRUE)
-  test <- read.vcfR("test.vcf.gz", checkFile = FALSE, verbose = FALSE)
-  unlink("test.vcf.gz")
+#test_that("write.vcf APPEND=TRUE does not include header",{
+#  data("vcfR_example")
+#  test_dir <- tempdir()
+#  setwd(test_dir)
+#  write.vcf(vcf, "test.vcf.gz", APPEND=TRUE)
+#  test <- read.vcfR("test.vcf.gz", checkFile = FALSE, verbose = FALSE)
+#  unlink("test.vcf.gz")
 #  setwd(original_dir)
-})
+#})
 
 
 test_that("write.vcf.gz works for Chrom objects",{
