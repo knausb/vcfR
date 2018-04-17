@@ -1,4 +1,29 @@
 
+## Resubmission
+This is a resubmission.
+CRAN reported the following after submission.
+
+Found the following (possibly) invalid URLs:
+  URL: https://software.broadinstitute.org/gatk/
+    From: inst/doc/converting_data.html
+    Status: 500
+    Message: Internal Server Error
+
+Also fails manually for me. A temporary issue?
+
+This link does work from my computer.
+I have also asked several lab mates to check it and they have all validated that it works.
+I have also rerun tests on winbuilder R version 3.4.4.
+https://win-builder.r-project.org/N5kC8mk7aG29/
+and winbuilder R version 3.5.0 RC (2018-04-16 r74611)
+https://win-builder.r-project.org/Jh34i9ic2m07/
+and have failed to reproduce the behaviour.
+I think this indicates that the reported behaviour was temporary.
+
+Incidentally, this is an updated link in this release (1.8.0) versus the previous (1.7.0).
+The reason for this update is that R CMD check --as-cran told me I had an old link and it even gave me the updated link that is in this current version.
+So I think its doing its job.
+
 ## Test environments
 * local: ubuntu 16.04 LTS, R 3.4.4
 * local: OS X install, R 3.4.4
