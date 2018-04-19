@@ -62,20 +62,12 @@ If you think you've found a bug, please see [reporting an issue](https://knausb.
 
 Knaus, Brian J., and Niklaus J. Grunwald. 2017. VCFR: a package to manipulate and visualize variant call format data in R. Molecular Ecology Resources 17(1):44-53. http://dx.doi.org/10.1111/1755-0998.12549.
 
-<kbd>
-<script type="text/javascript" src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>
-<div class="altmetric-embed" data-badge-type="donut" data-altmetric-id="9652974"></div>
-</kbd>
-
-
 Knaus, Brian J., and Niklaus J. Grunwald. 2016. VcfR: an R package to manipulate and visualize VCF format data. bioRxiv: 041277. http://dx.doi.org/10.1101/041277.
 
-<script type="text/javascript" src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script><div class="altmetric-embed" data-badge-type="donut" data-altmetric-id="6009315" />
+Copy number article.
 
+Knaus, Brian, and Niklaus J. Grünwald. 2018. Inferring variation in copy number using high throughput sequencing data in R. Frontiers in Genetics 9: 123. http://dx.doi.org/10.3389/fgene.2018.00123
 
-<script type='text/javascript' src='https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js'></script>
-
-<div class='altmetric-embed' data-badge-type='donut' data-doi="10.1038/nature.2012.9872"></div>
 
 ## Download
 
