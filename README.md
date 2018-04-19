@@ -73,6 +73,10 @@ Knaus, Brian J., and Niklaus J. Grunwald. 2016. VcfR: an R package to manipulate
 <script type="text/javascript" src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script><div class="altmetric-embed" data-badge-type="donut" data-altmetric-id="6009315" />
 
 
+<script type='text/javascript' src='https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js'></script>
+
+<div class='altmetric-embed' data-badge-type='donut' data-doi="10.1038/nature.2012.9872"></div>
+
 ## Download
 
 [vcfR](https://cran.r-project.org/package=vcfR) is available at CRAN.
