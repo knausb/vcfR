@@ -11,7 +11,7 @@ This may have been addressed at 64a308ba50b9119108e8946737460de5997b805b by addi
 
 # vcfR 1.9.0
 Released on CRAN 201X-XX-XX
-
+* gt.to.popsum now handles genotypes that include some, but not all, missing alleles.
 
 # vcfR 1.8.0
 Released on CRAN 2018-04-17
