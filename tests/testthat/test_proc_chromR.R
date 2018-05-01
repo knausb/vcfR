@@ -54,6 +54,19 @@ test_that("vcfR_gt_to_popsum, counts missing alleles",{
 })
 
 
+test_that("vcfR_gt_to_popsum, handles 0/.",{
+  data("vcfR_test")
+  gt <- extract.gt(vcfR_test)
+  gt[1,2] <- "0/."
+  gt[2,1] <- ".|0"
+  var_info <- as.data.frame(vcfR_test@fix[,1:2, drop = FALSE])
+  var_info$mask <- TRUE
+  tmp <- .gt_to_popsum(var_info = var_info, gt = gt)
+  
+  expect_identical(as.character(tmp$Allele_counts[1]), "3,2")
+  expect_equal(as.character(tmp$Allele_counts[2]), "4,1")
+})
+
 
 test_that("vcfR_gt_to_popsum, haploid loci",{
   data("vcfR_test")
