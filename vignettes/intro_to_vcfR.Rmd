@@ -6,7 +6,6 @@ output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Introduction to vcfR}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
 
 
