@@ -3,6 +3,7 @@
 \name{extract.gt}
 \alias{extract.gt}
 \alias{extract.haps}
+\alias{is.indel}
 \alias{extract.indels}
 \alias{extract.info}
 \title{Extract elements from vcfR objects}
@@ -12,6 +13,8 @@ extract.gt(x, element = "GT", mask = FALSE, as.numeric = FALSE,
   convertNA = TRUE)
 
 extract.haps(x, mask = FALSE, unphased_as_NA = TRUE, verbose = TRUE)
+
+is.indel(x)
 
 extract.indels(x, return.indels = FALSE)
 
@@ -72,6 +75,8 @@ When unphased_as_NA is set to TRUE the alleles will be returned in the order the
 This does not assign each allele to it's correct chromosome.
 It becomes the user's responsibility to make informed decisions at this point.
 
+The function \strong{is.indel} returns a logical vector indicating which variants are indels (variants where an allele is greater than one character).
+
 The function \strong{extract.indels} is used to remove indels from SNPs.
 The function queries the 'REF' and 'ALT' columns of the 'fix' slot to see if any alleles are greater than one character in length.
 When the parameter return_indels is FALSE only SNPs will be returned.
@@ -83,6 +88,10 @@ The function \strong{extract.info} is used to isolate elements from the INFO col
 data(vcfR_test)
 gt <- extract.gt(vcfR_test)
 gt <- extract.gt(vcfR_test, return.alleles = TRUE)
+
+data(vcfR_test)
+is.indel(vcfR_test)
+
 
 data(vcfR_test)
 getFIX(vcfR_test)
