@@ -46,9 +46,16 @@
 #' @aliases vcfR2genind
 #' 
 #' @param sep character (to be used in a regular expression) to delimit the alleles of genotypes
+#' @param ... pass other parameters to adegenet::df2genlight
+#' 
+#' @details 
+#' The parameter \strong{...} is used to pass parameters to other functions.
+#' In \code{vcfR2genind} it is used to pass parameters to \code{adegenet::df2genind}.
+#' For example, setting \code{check.ploidy=FALSE} may improve the performance of \code{adegenet::df2genind}, as long as you know the ploidy.
+#' See \code{??adegenet::df2genind} to see these options.
 #' 
 #' @export
-vcfR2genind <- function(x, sep="[|/]") {
+vcfR2genind <- function(x, sep="[|/]", ...) {
   locNames <- x@fix[,'ID']
   x <- extract.gt(x)
   x[grep('.', x, fixed = TRUE)] <- NA
@@ -60,7 +67,7 @@ vcfR2genind <- function(x, sep="[|/]") {
   rownames(x) <- sub(".", "_", rownames(x), fixed = TRUE)
 #  x <- adegenet::df2genind(t(x), sep=sep)
   if( requireNamespace('adegenet') ){
-    x <- adegenet::df2genind(t(x), sep=sep)
+    x <- adegenet::df2genind(t(x), sep=sep, ...)
 #    x <- df2genind(t(x), sep=sep)
   } else {
     warning("adegenet not installed")

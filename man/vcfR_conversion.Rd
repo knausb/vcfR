@@ -7,7 +7,7 @@
 \alias{vcfR2genlight}
 \title{Convert vcfR objects to other formats}
 \usage{
-vcfR2genind(x, sep = "[|/]")
+vcfR2genind(x, sep = "[|/]", ...)
 
 vcfR2loci(x)
 
@@ -17,6 +17,8 @@ vcfR2genlight(x, n.cores = 1)
 \item{x}{an object of class chromR or vcfR}
 
 \item{sep}{character (to be used in a regular expression) to delimit the alleles of genotypes}
+
+\item{...}{pass other parameters to adegenet::df2genlight}
 
 \item{n.cores}{integer specifying the number of cores to use.}
 }
@@ -42,6 +44,11 @@ The function vcfR2genlight calls the 'new' method for the genlight object.
 This method implements multi-threading through calls to the function \code{parallel::mclapply}.
 Because 'forks' do not exist in the windows environment, this will only work for windows users when n.cores=1.
 In the Unix environment, users may increase this number to allow the use of multiple threads (i.e., cores).
+
+The parameter \strong{...} is used to pass parameters to other functions.
+In \code{vcfR2genind} it is used to pass parameters to \code{adegenet::df2genind}.
+For example, setting \code{check.ploidy=FALSE} may improve the performance of \code{adegenet::df2genind}, as long as you know the ploidy.
+See \code{??adegenet::df2genind} to see these options.
 }
 \examples{
 data(vcfR_test)
