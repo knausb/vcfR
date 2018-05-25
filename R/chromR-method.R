@@ -70,7 +70,8 @@ setMethod( f="show",
 
 
 #' @rdname chromR-method
-#' @aliases plot
+# ' @aliases plot
+#' @aliases plot,chromR-method
 #' @export
 #'
 setMethod( f="plot",

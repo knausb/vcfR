@@ -52,7 +52,7 @@
 #' The parameter \strong{...} is used to pass parameters to other functions.
 #' In \code{vcfR2genind} it is used to pass parameters to \code{adegenet::df2genind}.
 #' For example, setting \code{check.ploidy=FALSE} may improve the performance of \code{adegenet::df2genind}, as long as you know the ploidy.
-#' See \code{??adegenet::df2genind} to see these options.
+#' See \code{?adegenet::df2genind} to see these options.
 #' 
 #' @export
 vcfR2genind <- function(x, sep="[|/]", ...) {

@@ -7,6 +7,7 @@
 \alias{head,vcfR-method}
 \alias{[,vcfR,ANY,ANY,ANY-method}
 \alias{[,vcfR-method}
+\alias{plot,vcfR,ANY-method}
 \alias{plot,vcfR-method}
 \alias{rbind2,vcfR,missing-method}
 \alias{rbind2.vcfR}
@@ -26,7 +27,7 @@
 
 \S4method{[}{vcfR,ANY,ANY,ANY}(x, i, j, samples = NULL, ..., drop)
 
-\S4method{plot}{vcfR}(x, y, ...)
+\S4method{plot}{vcfR,ANY}(x, y, ...)
 
 \S4method{rbind2}{vcfR,missing}(x, y, ...)
 

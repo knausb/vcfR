@@ -10,6 +10,7 @@
 #'
 #' @name vcfR-class
 #' @rdname vcfR-class
+#' @aliases vcfR-class
 #'
 #' @description
 #' An S4 class for storing VCF data.

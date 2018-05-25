@@ -29,6 +29,7 @@ Depends:
     R (>= 3.0.1)
 LinkingTo: Rcpp
 Imports:
+    adegenet,
     ape,
     dplyr,
     graphics,
@@ -45,7 +46,6 @@ Imports:
     vegan,
     viridisLite
 Suggests:
-    adegenet,
     ggplot2,
     knitr,
     poppr,

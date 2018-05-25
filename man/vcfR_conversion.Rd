@@ -48,7 +48,7 @@ In the Unix environment, users may increase this number to allow the use of mult
 The parameter \strong{...} is used to pass parameters to other functions.
 In \code{vcfR2genind} it is used to pass parameters to \code{adegenet::df2genind}.
 For example, setting \code{check.ploidy=FALSE} may improve the performance of \code{adegenet::df2genind}, as long as you know the ploidy.
-See \code{??adegenet::df2genind} to see these options.
+See \code{?adegenet::df2genind} to see these options.
 }
 \examples{
 data(vcfR_test)

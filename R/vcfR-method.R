@@ -4,7 +4,7 @@
 #' 
 #' @rdname vcfR-method
 # ' @aliases show.vcfR,show,vcfR-method
-# ' @aliases show,vcfR-method
+#' @aliases show,vcfR-method
 #' @title show
 #' 
 #' @description 
@@ -200,6 +200,8 @@ setGeneric("plot")
 #### Method plot ####
 #'
 #' @rdname vcfR-method
+#' @aliases plot,vcfR-method
+#' 
 #' @title plot.vcfR
 #' @description The \strong{plot} method visualizes objects of class vcfR
 # @export
