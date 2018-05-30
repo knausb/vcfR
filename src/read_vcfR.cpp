@@ -41,6 +41,11 @@ void stat_line(Rcpp::NumericVector stats, std::string line){
   } else {
     // Variant
     stats(2)++;
+    // Count columns
+    std::vector < std::string > col_vec;
+    char col_split = '\t'; // Must be single quotes!
+    vcfRCommon::strsplit(line, col_vec, col_split);
+    stats(4) = col_vec.size();
   }
 //  Rcpp::Rcout << "    Leaving stat_line." << std::endl;
 }
@@ -97,40 +102,35 @@ Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows = -1, int skip = 0, in
     
     char split = '\n'; // Must be single quotes!
     vcfRCommon::strsplit(mystring, svec, split);
-//    if(svec.size() == 1){
-//      Rcpp::Rcout << "\nWarning: svec.size() = 1, this means we may not have read in an entire line." << std::endl;
-//      Rcpp::Rcout << "  " << svec[0] << std::endl;
-//    }
-//    Rcpp::Rcout << "  Buffer split on \n, svec.size():" << svec.size() << std::endl;
 
     // Scroll through lines derived from the buffer.
     unsigned int i = 0;
     for(i=0; i < svec.size() - 1; i++){
-//      Rcpp::Rcout << svec[i] << "\n";
       stat_line(stats, svec[i]);
     }
-    // Manage the last line.
-    lastline = svec[svec.size() - 1];
-
+      
+    // If we've specified a maximum number of rows and we've hit it,
+    // we need o bail out.
     if( max_rows > 0 && stats(2) > max_rows ){
       gzclose (file);
       stats(2) = max_rows;
       return stats;
     }
     
-
+    // Manage the last line.
+    lastline = svec[svec.size() - 1];
+//    Rcpp::Rcout << "  Last line managed." << std::endl;
+    
     // Check for EOF or errors.
+//    Rcpp::Rcout << "  Check for errors." << std::endl;
     if (bytes_read < LENGTH - 1) {
       if ( gzeof (file) ) {
-        lastline = svec[svec.size() - 2];
-//          Rcpp::Rcout << "svec.back: " << lastline << "\n";
-        std::vector < std::string > col_vec;
-        char col_split = '\t'; // Must be single quotes!
-        vcfRCommon::strsplit(lastline, col_vec, col_split);
-        stats(4) = col_vec.size();
+//        Rcpp::Rcout << "    Found EOF." << std::endl;
+//        lastline = svec[svec.size() - 1];
         break;
       }
       else {
+//        Rcpp::Rcout << "    Found error_string." << std::endl;
         const char * error_string;
         error_string = gzerror (file, & err);
         if (err) {
@@ -139,9 +139,12 @@ Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows = -1, int skip = 0, in
         }
       }
     }
+//    Rcpp::Rcout << "  End check for errors." << std::endl;
   }
   gzclose (file);
 
+//  Rcpp::Rcout << "Made it to the end of vcf_stats_gz" << std::endl;
+//  stats(4) = stats(1) + stats(2);
   return stats;
 }
 

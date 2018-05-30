@@ -16,6 +16,7 @@ void R_init_vcfR(DllInfo* info) {
 void vcfRCommon::strsplit(std::string& mystring, std::vector<std::string>& vec_o_strings, char& split){
   // mystring is a string to be split on the character 'split'.
   // vec_o_strings is empty and will be pushed on to.
+//  Rcpp::Rcout << "In strsplit" << std::endl;
 
   int start = 0;
   unsigned int i=0;
