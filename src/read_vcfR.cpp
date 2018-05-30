@@ -9,8 +9,12 @@
 const int nreport = 1000;
 
 /* Size of the block of memory to use for reading. */
-#define LENGTH 0x1000 // hexadecimel for 4096.
+// #define LENGTH 0x1000 // hexadecimel for 4096.
+// #define LENGTH 0x2000 // hexadecimel for 8192.
+#define LENGTH 4000 // hexadecimel for 16384 or 16.384 KB.
 
+//#define LENGTH 2710 // hexadecimel for 10,000 or 10 KB.
+// #define LENGTH 4E20 // hexadecimel for 20,000 or 20 KB.
 
 /*  Helper functions */
 
@@ -20,6 +24,7 @@ Processes lines from vcf files.
 Counts meta (^##), header (^#C), columns in the header and remaining lines.
 */
 void stat_line(Rcpp::NumericVector stats, std::string line){
+//  Rcpp::Rcout << "    In stat_line." << std::endl;
   if(line[0] == '#' && line[1] == '#'){
     // Meta
     stats(0)++;
@@ -35,6 +40,7 @@ void stat_line(Rcpp::NumericVector stats, std::string line){
     // Variant
     stats(2)++;
   }
+//  Rcpp::Rcout << "    Leaving stat_line." << std::endl;
 }
 
 
@@ -64,20 +70,24 @@ Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows = -1, int skip = 0, in
   
   gzFile file;
   file = gzopen (x.c_str(), "r");
+
   if (! file) {
     Rcpp::Rcerr << "gzopen of " << x << " failed: " << strerror (errno) << ".\n";
     return stats;
   }
-
+//  Rcpp::Rcout << "Made it here." << std::endl;
+  
   // Scroll through buffers.
   std::string lastline = "";
   while (1) {
+//    Rcpp::Rcout << "Made it here." << std::endl;
     Rcpp::checkUserInterrupt();
     int err;
     int bytes_read;
     char buffer[LENGTH];
     bytes_read = gzread (file, buffer, LENGTH - 1);
     buffer[bytes_read] = '\0';
+//    Rcpp::Rcout << "Buffer read in." << std::endl;
 
     std::string mystring(reinterpret_cast<char*>(buffer));  // Recast buffer as a string.
     mystring = lastline + mystring;
@@ -85,7 +95,12 @@ Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows = -1, int skip = 0, in
     
     char split = '\n'; // Must be single quotes!
     vcfRCommon::strsplit(mystring, svec, split);
-        
+//    if(svec.size() == 1){
+//      Rcpp::Rcout << "\nWarning: svec.size() = 1, this means we may not have read in an entire line." << std::endl;
+//      Rcpp::Rcout << "  " << svec[0] << std::endl;
+//    }
+//    Rcpp::Rcout << "  Buffer split on \n, svec.size():" << svec.size() << std::endl;
+
     // Scroll through lines derived from the buffer.
     unsigned int i = 0;
     for(i=0; i < svec.size() - 1; i++){
