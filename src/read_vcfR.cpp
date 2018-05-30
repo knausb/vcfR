@@ -4,6 +4,8 @@
 #include "vcfRCommon.h"
 
 //using namespace Rcpp;
+// https://www.lemoda.net/c/gzfile-read/
+
 
 // Number of records to report progress at.
 const int nreport = 1000;
