@@ -4,7 +4,6 @@
 \name{show,chromR-method}
 \alias{show,chromR-method}
 \alias{chromR,chromR-method}
-\alias{plot,chromR,ANY-method}
 \alias{plot,chromR-method}
 \alias{print,chromR-method}
 \alias{head,chromR-method}
@@ -14,7 +13,7 @@
 \usage{
 \S4method{show}{chromR}(object)
 
-\S4method{plot}{chromR,ANY}(x, y, ...)
+\S4method{plot}{chromR}(x, y, ...)
 
 \S4method{print}{chromR}(x, y, ...)
 
