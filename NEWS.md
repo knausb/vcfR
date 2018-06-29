@@ -13,6 +13,7 @@ This may have been addressed at 64a308ba50b9119108e8946737460de5997b805b by addi
 
 # vcfR 1.9.0
 Released on CRAN 201X-XX-XX
+* `extract.haps()` did not include the parameter `return.alleles = TRUE` in it's call to `extract.gt()` in the haploid branch of the function. This parameter has now been added. This also affects `vcfR2DNAbin()` which calls this function.
 * `vcfR2genlight()` includes the parameter `...` to pass parameters to `adegenet::df2genind()`.
 * `is.indel()` returns logical vector to identify indels.
 * gt.to.popsum now handles genotypes that include some, but not all, missing alleles.

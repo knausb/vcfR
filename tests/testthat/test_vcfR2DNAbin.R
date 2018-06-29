@@ -124,8 +124,8 @@ test_that("vcfR2DNAbin works for haploid data, no ref.seq",{
   dim(my_non_gt) <- dim(vcfR_test@gt[,-1])
   vcfR_test@gt[,-1] <- my_non_gt
   
-  vcfR2DNAbin(vcfR_test)
-
+  my_dnabin <- vcfR2DNAbin(vcfR_test)
+  expect_equal(grep("[acgt]", as.character(my_dnabin), invert = TRUE), integer(0))
 })
 
 
