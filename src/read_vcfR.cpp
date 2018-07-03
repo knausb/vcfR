@@ -65,8 +65,7 @@ Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows = -1, int skip = 0, in
   gzFile file;
   file = gzopen (x.c_str(), "r");
   if (! file) {
-    Rcpp::Rcerr << "gzopen of " << x << " failed: " << strerror (errno) << ".\n";
-    return stats;
+    Rcpp::stop("gzopen of " + x + " failed: " + strerror (errno));
   }
 
   // Scroll through buffers.

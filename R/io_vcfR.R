@@ -139,13 +139,6 @@ read.vcfR <- function(file,
     file <- path.expand(file)
   }
   
-  if(file.access(file, mode = 0) != 0){
-    stop(paste("File:", file, "does not appear to exist!"))
-  }
-  if(file.access(file, mode = 4) != 0){
-    stop(paste("File:", file, "appears to exist but is not readable!"))
-  }
-  
   # Test that this is a VCF file.
   if(checkFile == TRUE){
     vcf <- scan(file=file, what = character(), nmax=1, sep="\n", quiet = TRUE, comment.char = "")
