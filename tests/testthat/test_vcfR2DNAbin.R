@@ -7,11 +7,11 @@ context("vcfR2DNAbin functions")
 #data(vcfR_example)
 #gene <- dna[1,gff[1,4]:gff[1,5]]
 
-##### ##### ##### ##### #####
 #
-# Missing data handling
 #
-##### ##### ##### ##### #####
+# Missing data handling ----
+#
+#
 
 
 test_that("Works with no variants",{
@@ -58,11 +58,11 @@ test_that("Works with one variant, ref.seq is not NULL",{
 
 
 
-##### ##### ##### ##### #####
 #
-# Fabricate data which varies in ploidy
 #
-##### ##### ##### ##### #####
+# Fabricate data which varies in ploidy ----
+#
+#
 
 data(vcfR_example)
 
@@ -100,11 +100,11 @@ rm(haps)
 rm(gt2)
 
 
-##### ##### ##### ##### #####
 #
-# Test haploid data
 #
-##### ##### ##### ##### #####
+# Test haploid data ----
+#
+#
 
 test_that("vcfR2DNAbin works for haploid data, no ref.seq",{
 #  my_DNAbin <- vcfR2DNAbin( vcf1, gt.split = "|" )
@@ -112,14 +112,28 @@ test_that("vcfR2DNAbin works for haploid data, no ref.seq",{
   expect_equal( dim(my_DNAbin)[2], nrow( extract.indels(vcf)@gt ) )
 })
 
+test_that("vcfR2DNAbin works for haploid data, no ref.seq",{
+  data(vcfR_test)
+  
+  # Haploidize
+  my_non_gt <- extract.gt(vcfR_test, extract = FALSE)
+  my_gt <- extract.gt(vcfR_test)
+  my_gt <- unlist(lapply(strsplit(my_gt, split = "[/|]"), function(x){x[1]}))
+  # https://stackoverflow.com/a/35589023
+  my_non_gt <- paste(my_gt, my_non_gt, sep = ":")
+  dim(my_non_gt) <- dim(vcfR_test@gt[,-1])
+  vcfR_test@gt[,-1] <- my_non_gt
+  
+  my_dnabin <- vcfR2DNAbin(vcfR_test)
+  expect_equal(grep("[acgt]", as.character(my_dnabin), invert = TRUE), integer(0))
+})
 
 
-
-##### ##### ##### ##### #####
 #
-# Test diploid data
 #
-##### ##### ##### ##### #####
+# Test diploid data ----
+#
+#
 
 
 test_that("vcfR2DNAbin works for diploid data, no ref.seq",{
@@ -159,11 +173,11 @@ test_that("vcfR2DNAbin works for diploid data, ref.seq is not NULL",{
 
 
 
-##### ##### ##### ##### #####
 #
-# Test triploid data
 #
-##### ##### ##### ##### #####
+# Test triploid data ----
+#
+#
 
 
 test_that("vcfR2DNAbin works for triploid data, no ref.seq",{
@@ -175,11 +189,11 @@ test_that("vcfR2DNAbin works for triploid data, no ref.seq",{
 })
 
 
-##### ##### ##### ##### #####
 #
-# Variant at end of locus
 #
-##### ##### ##### ##### #####
+# Variant at end of locus ----
+#
+#
 
 
 test_that("vcfR2DNAbin does not include variants at end.pos + 1",{
@@ -195,11 +209,11 @@ test_that("vcfR2DNAbin does not include variants at end.pos + 1",{
 })
 
 
-##### ##### ##### ##### #####
 #
-# Asterisk allele
 #
-##### ##### ##### ##### #####
+# Asterisk allele ----
+#
+#
 
 
 test_that("vcfR2DNAbin manages the asterisk allele",{
@@ -217,11 +231,11 @@ test_that("vcfR2DNAbin manages the asterisk allele",{
 })
 
 
-##### ##### ##### ##### #####
 #
-# Indels
 #
-##### ##### ##### ##### #####
+# Indels ----
+#
+#
 
 test_that("vcfR2DNAbin manages indels, no reference",{
   data(vcfR_test)
@@ -243,5 +257,5 @@ test_that("vcfR2DNAbin manages indels with reference",{
 })
 
 
-##### ##### ##### ##### #####
-# EOF.
+####
+# EOF. ----

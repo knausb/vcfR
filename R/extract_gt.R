@@ -181,7 +181,7 @@ extract.haps <- function(x,
     # No variants, return empty matrix.
     haps <- x@gt[ 0, -1 ]
   } else if ( ploidy == 1 ){
-    haps <- extract.gt( x )
+    haps <- extract.gt( x, return.alleles = TRUE )
   } else if ( ploidy > 1 ) {
     gt <- extract.gt( x )
     haps <- .extract_haps(x@fix[,'REF'], x@fix[,'ALT'],
