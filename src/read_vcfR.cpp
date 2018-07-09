@@ -2,6 +2,7 @@
 #include <Rcpp.h>
 #include <zlib.h>
 #include "vcfRCommon.h"
+#include <sstream>
 
 //using namespace Rcpp;
 
@@ -116,8 +117,7 @@ Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows = -1, int skip = 0, in
         const char * error_string;
         error_string = gzerror (file, & err);
         if (err) {
-          Rcpp::Rcerr << "Error: " << error_string << ".\n";
-          return stats;
+          Rcpp::stop(std::string("Error: ") + error_string + ".");
         }
       }
     }
@@ -143,8 +143,7 @@ Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats, int ve
   gzFile file;
   file = gzopen (x.c_str(), "r");
   if (! file) {
-    Rcpp::Rcerr << "gzopen of " << x << " failed: " << strerror (errno) << ".\n";
-    return Rcpp::StringVector(1);
+    Rcpp::stop("gzopen of " + x + " failed: " + strerror (errno) + ".");
   }
 
   // Scroll through buffers.
@@ -191,8 +190,7 @@ Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats, int ve
         const char * error_string;
         error_string = gzerror (file, & err);
         if (err) {
-          Rcpp::Rcerr << "Error: " << error_string << ".\n";
-          return Rcpp::StringVector(1);
+          Rcpp::stop(std::string("Error: ") + error_string + ".");
         }
       }
     }
@@ -328,8 +326,7 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
   } else if ( ( nrows != -1 ) & ( skip > 0) ){
     // nrows = nrows;
   } else {
-    Rcpp::Rcerr << "Failed to calculate return matrix geometry.";
-    return na_matrix;
+    Rcpp::stop("Failed to calculate return matrix geometry.");
   }
   
 
@@ -340,10 +337,11 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
   // }
   
   if( nrows > INT_MAX ){
-    Rcpp::Rcerr << "Requested a matrix of " << nrows << " rows." << std::endl;
-    Rcpp::Rcerr << "This exceeds INT_MAX, which is " << INT_MAX << "." << std::endl;
-    Rcpp::Rcerr << "I suggest you attempt to read in a portion of the file using the options 'nrows' and 'skip'." << std::endl;
-    return na_matrix;
+    std::stringstream ss;
+    ss << "Requested a matrix of " << nrows << " rows." << std::endl;
+    ss << "This exceeds INT_MAX, which is " << INT_MAX << "." << std::endl;
+    ss << "I suggest you attempt to read in a portion of the file using the options 'nrows' and 'skip'." << std::endl;
+    Rcpp::stop(ss.str());
   }
   
   Rcpp::CharacterMatrix gt( nrows, cols.size() );
@@ -374,7 +372,7 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
   gzFile file;
   file = gzopen (x.c_str(), "r");
   if (! file) {
-    Rcpp::Rcerr << "gzopen of " << x << " failed: " << strerror (errno) << ".\n";
+    Rcpp::stop("gzopen of " + x + " failed: " + strerror (errno) + ".");
     return na_matrix;
   }
 
@@ -490,8 +488,7 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
         const char * error_string;
         error_string = gzerror (file, & err);
         if (err) {
-          Rcpp::Rcerr << "Error: " << error_string << ".\n";
-          return na_matrix;
+          Rcpp::stop(std::string("Error: ") + error_string + ".");
         }
       }
     }
