@@ -7,9 +7,9 @@
 \alias{vcfR2genlight}
 \title{Convert vcfR objects to other formats}
 \usage{
-vcfR2genind(x, sep = "[|/]", ...)
+vcfR2genind(x, sep = "[|/]", return.alleles = FALSE, ...)
 
-vcfR2loci(x)
+vcfR2loci(x, return.alleles = FALSE)
 
 vcfR2genlight(x, n.cores = 1)
 }
@@ -17,6 +17,8 @@ vcfR2genlight(x, n.cores = 1)
 \item{x}{an object of class chromR or vcfR}
 
 \item{sep}{character (to be used in a regular expression) to delimit the alleles of genotypes}
+
+\item{return.alleles}{should the VCF encoding of the alleles be returned (FALSE) or the actual alleles (TRUE).}
 
 \item{...}{pass other parameters to adegenet::df2genlight}
 

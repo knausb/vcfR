@@ -6,8 +6,9 @@
 \alias{chromoqc}
 \title{Plot chromR object}
 \usage{
-chromo(chrom, boxp = TRUE, dp.alpha = TRUE, chrom.s = 1, chrom.e = NULL,
-  drlist1 = NULL, drlist2 = NULL, drlist3 = NULL, ...)
+chromo(chrom, boxp = TRUE, dp.alpha = TRUE, chrom.s = 1,
+  chrom.e = NULL, drlist1 = NULL, drlist2 = NULL, drlist3 = NULL,
+  ...)
 
 chromoqc(chrom, boxp = TRUE, dp.alpha = 255, ...)
 }

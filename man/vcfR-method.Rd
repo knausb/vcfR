@@ -11,9 +11,7 @@
 \alias{rbind2,vcfR,missing-method}
 \alias{rbind2.vcfR}
 \alias{rbind2,vcfR,ANY-method}
-\alias{rbind2.vcfR}
 \alias{rbind2,vcfR,vcfR-method}
-\alias{rbind2.vcfR}
 \alias{dim,vcfR-method}
 \alias{dim.vcfR}
 \alias{nrow,vcfR-method}

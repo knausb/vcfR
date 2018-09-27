@@ -7,7 +7,8 @@
 \title{Read and write vcf format files}
 \usage{
 read.vcfR(file, limit = 1e+07, nrows = -1, skip = 0, cols = NULL,
-  convertNA = TRUE, checkFile = TRUE, check_keys = TRUE, verbose = TRUE)
+  convertNA = TRUE, checkFile = TRUE, check_keys = TRUE,
+  verbose = TRUE)
 
 write.vcf(x, file = "", mask = FALSE, APPEND = FALSE)
 }

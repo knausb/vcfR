@@ -5,6 +5,7 @@
 #' Convert vcfR objects to objects supported by other R packages
 #'  
 #' @param x an object of class chromR or vcfR
+#' @param return.alleles should the VCF encoding of the alleles be returned (FALSE) or the actual alleles (TRUE).
 #' 
 #' @details 
 #' After processing vcf data in vcfR, one will likely proceed to an analysis step.
@@ -55,9 +56,9 @@
 #' See \code{?adegenet::df2genind} to see these options.
 #' 
 #' @export
-vcfR2genind <- function(x, sep="[|/]", ...) {
+vcfR2genind <- function(x, sep="[|/]", return.alleles = FALSE, ...) {
   locNames <- x@fix[,'ID']
-  x <- extract.gt(x)
+  x <- extract.gt(x, return.alleles = return.alleles)
   x[grep('.', x, fixed = TRUE)] <- NA
 #  x[grep('\\.', x)] <- NA
 #  x[x == "./."] <- NA
@@ -80,13 +81,13 @@ vcfR2genind <- function(x, sep="[|/]", ...) {
 #' @aliases vcfR2loci
 #' 
 #' @export
-vcfR2loci <- function(x)
+vcfR2loci <- function(x, return.alleles = FALSE)
 {
 #  if(class(x) == "chromR")
 #  {
 #    x <- x@vcf
 #  }
-  x <- extract.gt(x)
+  x <- extract.gt(x, return.alleles = return.alleles)
   # modified from pegas::as.loci.genind
   x <- as.data.frame(t(x))
   icol <- 1:ncol(x)
