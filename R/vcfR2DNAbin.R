@@ -178,7 +178,6 @@ vcfR2DNAbin <- function( x,
   }
   
   # Extract indels.
-  # Currently the only option is TRUE.
   if( extract.indels == TRUE ){
     x <- extract.indels(x)
     if( verbose == TRUE ){
