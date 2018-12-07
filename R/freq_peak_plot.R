@@ -10,8 +10,8 @@
 #' @param posUnits units ('bp', 'Kbp', 'Mbp', 'Gbp') for `pos` to be converted to in the main plot
 #' @param ab1 matrix of allele balances for allele 1
 #' @param ab2 matrix of allele balances for allele 2
-#' @param fp1 feq_peak object for allele 1
-#' @param fp2 feq_peak object for allele 2
+#' @param fp1 freq_peak object for allele 1
+#' @param fp2 freq_peak object for allele 2
 #' @param mySamp sample indicator
 #' @param col1 color 1
 #' @param col2 color 2
