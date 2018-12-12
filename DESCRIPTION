@@ -57,4 +57,4 @@ Suggests:
 VignetteBuilder: knitr
 License: GPL
 RoxygenNote: 6.1.1
-Encoding: UTF-8
+
