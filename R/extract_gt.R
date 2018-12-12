@@ -173,22 +173,8 @@ extract.haps <- function(x,
 
   # Determine ploidy, old way.
 #  first.gt <- unlist(strsplit(x@gt[,-1][!is.na(x@gt[,-1])][1], ":"))[1]
-#  ploidy <- length(unlist(strsplit(first.gt, split = "[\\|/]" )))
+  ploidy <- length(unlist(strsplit(first.gt, split = "[\\|/]" )))
 
-  # Determine ploidy
-  get.ploidy <- function(x){
-    myPloidy <- extract.gt(x[1,])
-    i <- 2
-    while(sum(is.na(myPloidy)) > 0){
-      cat("Found missing genotype ", i-1, "\n")
-      gt <- extract.gt(x[i,])
-      myPloidy[is.na(myPloidy)] <- gt[is.na(myPloidy)]
-      i <- i + 1
-    }
-    myPloidy <- unlist(lapply(strsplit(myPloidy, split = "[\\|/]"), length))
-    myPloidy
-  }
-  ploidy <- get.ploidy(x)
   
   # Stopping point, omit this from final.
   ploidy <- ploidy[1]

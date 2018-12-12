@@ -331,6 +331,8 @@ Rcpp::NumericMatrix CM_to_NM(Rcpp::CharacterMatrix x) {
 }
 
 
+
+
 //' @export
 // [[Rcpp::export(name=".extract_haps")]]
 Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
@@ -339,8 +341,11 @@ Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
                                 int unphased_as_NA,
                                 int verbose) {
   
-  // Rcpp::Rcout << "In extract_haps.\n";
+//  if(verbose  == 1){
+//    Rcpp::Rcout << "In extract_haps.\n";
+//  }
   
+  // Initialize variables.
   int ploidy = 1;
   unsigned int i = 0;
   int j = 0;
@@ -349,7 +354,7 @@ Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
   int hap_num = 0;
 
   // Determine ploidy.
-  // Vcf files are typically of one ploidy.
+  // VCF files are typically of one ploidy.
   while( gt(i,1) == NA_STRING ){
     i++;
   }
@@ -372,7 +377,7 @@ Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
   // Initialize return structure
   Rcpp::StringMatrix haps(gt.nrow(), gt.ncol() * ploidy);
   
-    Rcpp::List gt_names = gt.attr("dimnames");
+  Rcpp::List gt_names = gt.attr("dimnames");
   Rcpp::StringVector sample_names = gt_names(1);
 
   // Manage haplotype names with postfixed number.
