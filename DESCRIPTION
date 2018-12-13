@@ -56,4 +56,5 @@ Suggests:
     tidyr
 VignetteBuilder: knitr
 License: GPL
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
+Encoding: UTF-8
