@@ -210,13 +210,9 @@ test_that("vcfR2DNAbin works for mixed ploidy",{
 #  myPloidy <- get.ploidy(vcfR_test)
   
   # Convert.
-  myDna <- vcfR2DNAbin(vcfR_test, extract.indels = TRUE, unphased_as_NA = FALSE, 
-                       verbose = TRUE)
-  
-  nrow(myDna)
-  
-  debug(vcfR2DNAbin)
-  debug(extract.haps)
+#  myDna <- vcfR2DNAbin(vcfR_test, extract.indels = TRUE, unphased_as_NA = FALSE, 
+#                       verbose = TRUE)
+
 })
 
 

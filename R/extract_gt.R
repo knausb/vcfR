@@ -172,7 +172,7 @@ extract.haps <- function(x,
   }
 
   # Determine ploidy, old way.
-#  first.gt <- unlist(strsplit(x@gt[,-1][!is.na(x@gt[,-1])][1], ":"))[1]
+  first.gt <- unlist(strsplit(x@gt[,-1][!is.na(x@gt[,-1])][1], ":"))[1]
   ploidy <- length(unlist(strsplit(first.gt, split = "[\\|/]" )))
 
   

@@ -331,6 +331,20 @@ Rcpp::NumericMatrix CM_to_NM(Rcpp::CharacterMatrix x) {
 }
 
 
+//' @export
+// [[Rcpp::export(name=".extract_haps2")]]
+Rcpp::StringMatrix extract_haps2(Rcpp::StringVector ref,
+                                Rcpp::StringVector alt,
+                                Rcpp::StringMatrix gt,
+                                int unphased_as_NA,
+                                int verbose) {
+
+  
+  
+    Rcpp::StringMatrix haps(1, 1);
+    haps(0, 0) = NA_STRING;
+    return haps;
+}
 
 
 //' @export
