@@ -247,8 +247,10 @@ test_that("extract_haps works on mixed ploid data",{
    is.na(vcfR_test@gt[1,3]) <- TRUE
    gt <- extract.gt(vcfR_test)
    
-   .extract_haps(getREF(vcfR_test), getALT(vcfR_test), gt, 0, 1)
-
+#   myHaps <- .extract_haps(getREF(vcfR_test), getALT(vcfR_test), gt, 0, 1)
+#   myHaps <- 
+   .extract_haps2(getREF(vcfR_test), getALT(vcfR_test), gt, 0, 1)
+   
 })
 
 
