@@ -79,6 +79,11 @@ AD_frequency <- function(ad, delim = ",", allele = 1L, sum_type = 0L, decreasing
 }
 
 #' @export
+.extract_haps2 <- function(ref, alt, gt, unphased_as_NA, verbose) {
+    .Call(`_vcfR_extract_haps2`, ref, alt, gt, unphased_as_NA, verbose)
+}
+
+#' @export
 .extract_haps <- function(ref, alt, gt, unphased_as_NA, verbose) {
     .Call(`_vcfR_extract_haps`, ref, alt, gt, unphased_as_NA, verbose)
 }

@@ -189,6 +189,33 @@ test_that("vcfR2DNAbin works for triploid data, no ref.seq",{
 })
 
 
+# Test mixed ploidy ----
+
+test_that("vcfR2DNAbin works for mixed ploidy",{
+  # Fabricate data.
+  data("vcfR_test")
+  gt4 <- matrix(nrow=5, ncol=2)
+  colnames(gt4) <- c("NA00004", "NA00005")
+  gt4[1,] <- c("1|0|0|1:48:8:51,51,51,51", "1|0|0|1:48:8:51,51,51,51")
+  gt4[2,] <- c("1/0/0/1:48:8:51,51,51,51", "1/0/0/1:48:8:51,51,51,51")
+  gt4[3,] <- c("1/2/2/1:48:8:51,51,51,51", "1/2/2/1:48:8:51,51,51,51")
+  gt4[4,] <- c("0/0/1/2:48:8:51,51,51,51", "1/2/0/1:48:8:51,51,51,51")
+  gt4[5,] <- c("1/0/0/1:48:8", "1|0|0|1:48:8")
+  vcfR_test@gt <- cbind(vcfR_test@gt, gt4)
+  is.na(vcfR_test@gt[1,3]) <- TRUE
+  
+#  vcfR_test@gt <- vcfR_test@gt[,-c(2:4)]
+#  vcfR2DNAbin(vcfR_test)
+
+#  myPloidy <- get.ploidy(vcfR_test)
+  
+  # Convert.
+#  myDna <- vcfR2DNAbin(vcfR_test, extract.indels = TRUE, unphased_as_NA = FALSE, 
+#                       verbose = TRUE)
+
+})
+
+
 #
 #
 # Variant at end of locus ----

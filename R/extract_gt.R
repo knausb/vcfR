@@ -171,12 +171,14 @@ extract.haps <- function(x,
     x <- x[mask,]
   }
 
-  # Determine ploidy  
+  # Determine ploidy, old way.
   first.gt <- unlist(strsplit(x@gt[,-1][!is.na(x@gt[,-1])][1], ":"))[1]
-#  ploidy <- length(unlist(strsplit(first.gt, split = gt.split, fixed = TRUE )))
   ploidy <- length(unlist(strsplit(first.gt, split = "[\\|/]" )))
 
-
+  
+  # Stopping point, omit this from final.
+  ploidy <- ploidy[1]
+  
   if( nrow( x@fix ) == 0 ){
     # No variants, return empty matrix.
     haps <- x@gt[ 0, -1 ]
