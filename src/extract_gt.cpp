@@ -348,7 +348,7 @@ Rcpp::StringMatrix extract_haps2(Rcpp::StringVector ref,
   int hap_num = 0;
 
   if(verbose == 1){
-    Rcpp::Rcout << "In extract_haps2" << std::endl
+    Rcpp::Rcout << "In extract_haps2" << std::endl;
   }
 
   // Determine ploidy.
