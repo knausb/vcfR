@@ -339,6 +339,10 @@ Rcpp::StringMatrix extract_haps2(Rcpp::StringVector ref,
                                 int unphased_as_NA,
                                 int verbose) {
 
+  if(verbose == 1){
+    Rcpp::Rcout << "In extract_haps2" << std::endl;
+  }
+  
   // Initialize variables.
   unsigned int i = 0;
   int j = 0;
@@ -347,9 +351,6 @@ Rcpp::StringMatrix extract_haps2(Rcpp::StringVector ref,
   int hap_col = 0;
   int hap_num = 0;
 
-  if(verbose == 1){
-    Rcpp::Rcout << "In extract_haps2" << std::endl;
-  }
 
   // Determine ploidy.
   for(i = 0; i < ploidy.size(); i++){
@@ -381,7 +382,6 @@ Rcpp::StringMatrix extract_haps2(Rcpp::StringVector ref,
 //  Rcpp::StringMatrix haps(gt.nrow(), gt.ncol() * ploidy);
   int nHaps = Rcpp::sum(ploidy);
   Rcpp::StringMatrix haps(gt.nrow(), nHaps);
-  
   Rcpp::List gt_names = gt.attr("dimnames");
   Rcpp::StringVector sample_names = gt_names(1);
 
