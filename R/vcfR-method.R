@@ -183,14 +183,23 @@ setMethod(
         stop(paste("samples specified, expecting a numeric, character or logical but received", class(samples)))
       }
     }
-    
-    x@fix <- x@fix[ i, , drop = FALSE ]
-    x@gt <- x@gt[ i, j, drop = FALSE ]
-    
-    if( colnames(x@gt)[1] != 'FORMAT' ){
-      warning("You have chosen to omit the FORMAT column, this is typically undesireable.")
+
+    if(nrow(x@gt) == nrow(x@fix)){
+      x@gt <- x@gt[ i, j, drop = FALSE ]
+    } else if (nrow(x@gt) == 0){
+      # Do nothing.
+    } else {
+      msg <- paste("The fix slot has", nrow(x@fix), "rows while the gt slot has", nrow(x@gt), "rows, this should never happen.")
+      stop(msg)
     }
+    x@fix <- x@fix[ i, , drop = FALSE ]
     
+    if(nrow(x@gt) > 0){
+      if(colnames(x@gt)[1] != 'FORMAT'){
+        warning("You have chosen to omit the FORMAT column, this is typically undesireable.")        
+      }
+    }
+
     return(x)
   }
 )
