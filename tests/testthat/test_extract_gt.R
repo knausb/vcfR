@@ -144,6 +144,26 @@ test_that("extract.gt return.alleles works for multiallelic variants",{
 })
 
 
+# determine_ploidy tests ----
+
+test_that(".determine_ploidy works on mixed ploid data",{
+  # Fabricate data set.
+  data(vcfR_test)
+  gt4 <- matrix(nrow=5, ncol=2)
+  colnames(gt4) <- c("NA00004", "NA00005")
+  gt4[1,] <- c("1|0|0|1:48:8:51,51,51,51", "1|0|0|1:48:8:51,51,51,51")
+  gt4[2,] <- c("1/0/0/1:48:8:51,51,51,51", "1/0/0/1:48:8:51,51,51,51")
+  gt4[3,] <- c("1/2/2/1:48:8:51,51,51,51", "1/2/2/1:48:8:51,51,51,51")
+  gt4[4,] <- c("0/0/1/2:48:8:51,51,51,51", "1/2/0/1:48:8:51,51,51,51")
+  gt4[5,] <- c("1/0/0/1:48:8", "1|0|0|1:48:8")
+  vcfR_test@gt <- cbind(vcfR_test@gt, gt4)
+  is.na(vcfR_test@gt[1,3]) <- TRUE
+  gt <- extract.gt(vcfR_test)
+  
+  my_ploidies <- .determine_ploidy(gt)
+  expect_equal(my_ploidies, c(2, 2, 2, 4, 4))
+})
+
 
 #
 #
@@ -234,7 +254,7 @@ test_that("extract_haps works on haploid data",{
 })
 
 
-test_that("extract_haps works on mixed ploid data",{
+test_that(".extract_haps2 works on mixed ploid data",{
   data(vcfR_test)
   gt4 <- matrix(nrow=5, ncol=2)
   colnames(gt4) <- c("NA00004", "NA00005")
@@ -244,18 +264,39 @@ test_that("extract_haps works on mixed ploid data",{
   gt4[4,] <- c("0/0/1/2:48:8:51,51,51,51", "1/2/0/1:48:8:51,51,51,51")
   gt4[5,] <- c("1/0/0/1:48:8", "1|0|0|1:48:8")
   vcfR_test@gt <- cbind(vcfR_test@gt, gt4)
-#  is.na(vcfR_test@gt[1,3]) <- TRUE
-#  vcfR_test@fix[4,'ALT'] <- "A"
+  is.na(vcfR_test@gt[1,3]) <- TRUE
+  vcfR_test@gt[2,3] <- "./."
+  #  vcfR_test@fix[4,'ALT'] <- "A"
   gt <- extract.gt(vcfR_test)
-#    
-# #   myHaps <- .extract_haps(getREF(vcfR_test), getALT(vcfR_test), gt, 0, 1)
-# #   myHaps <- 
-#
+  #    
+  # #   myHaps <- .extract_haps(getREF(vcfR_test), getALT(vcfR_test), gt, 0, 1)
+  # #   myHaps <- 
+  #
   
-    myStart <- 1
-    myEnd <- 3
-#    .extract_haps2(getREF(vcfR_test)[myStart:myEnd], getALT(vcfR_test)[myStart:myEnd], gt[myStart:myEnd,], 0, 1)
-#    
+  myStart <- 1
+  myEnd <- 3
+#  
+  my_haps <- .extract_haps2(getREF(vcfR_test)[myStart:myEnd], 
+                            getALT(vcfR_test)[myStart:myEnd], 
+                            gt[myStart:myEnd, , drop = FALSE], 0, 0)
+  
+  expect_true(is.na(my_haps[1,3]))
+  expect_true(is.na(my_haps[1,4]))
+  
+#  first_variant <- c(NA00001_0 = "G", NA00001_1 = "G", NA00002_0 = NA, NA00002_1 = NA, 
+#                     NA00003_0 = "A", NA00003_1 = "A", NA00004_0 = "A", NA00004_1 = "G", 
+#                     NA00004_2 = "G", NA00004_3 = "A", NA00005_0 = "A", NA00005_1 = "G", 
+#                     NA00005_2 = "G", NA00005_3 = "A")
+
+  
+#  expect_equal(my_haps[1,], first_variant)
+  # Verbose output.
+  # 
+  myStart <- 1
+  myEnd <- 1
+#  .extract_haps2(getREF(vcfR_test)[myStart:myEnd], 
+#                 getALT(vcfR_test)[myStart:myEnd], 
+#                 gt[myStart:myEnd, , drop = FALSE], 0, 1)
 })
 
 

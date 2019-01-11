@@ -105,6 +105,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// determine_ploidy
+Rcpp::NumericVector determine_ploidy(Rcpp::StringMatrix gt);
+RcppExport SEXP _vcfR_determine_ploidy(SEXP gtSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::StringMatrix >::type gt(gtSEXP);
+    rcpp_result_gen = Rcpp::wrap(determine_ploidy(gt));
+    return rcpp_result_gen;
+END_RCPP
+}
 // extract_haps2
 Rcpp::StringMatrix extract_haps2(Rcpp::StringVector ref, Rcpp::StringVector alt, Rcpp::StringMatrix gt, int unphased_as_NA, int verbose);
 RcppExport SEXP _vcfR_extract_haps2(SEXP refSEXP, SEXP altSEXP, SEXP gtSEXP, SEXP unphased_as_NASEXP, SEXP verboseSEXP) {
@@ -359,6 +370,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_vcfR_elementNumber", (DL_FUNC) &_vcfR_elementNumber, 2},
     {"_vcfR_extract_GT_to_CM", (DL_FUNC) &_vcfR_extract_GT_to_CM, 6},
     {"_vcfR_CM_to_NM", (DL_FUNC) &_vcfR_CM_to_NM, 1},
+    {"_vcfR_determine_ploidy", (DL_FUNC) &_vcfR_determine_ploidy, 1},
     {"_vcfR_extract_haps2", (DL_FUNC) &_vcfR_extract_haps2, 5},
     {"_vcfR_extract_haps", (DL_FUNC) &_vcfR_extract_haps, 5},
     {"_vcfR_grepa", (DL_FUNC) &_vcfR_grepa, 0},

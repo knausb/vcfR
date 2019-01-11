@@ -79,6 +79,11 @@ AD_frequency <- function(ad, delim = ",", allele = 1L, sum_type = 0L, decreasing
 }
 
 #' @export
+.determine_ploidy <- function(gt) {
+    .Call(`_vcfR_determine_ploidy`, gt)
+}
+
+#' @export
 .extract_haps2 <- function(ref, alt, gt, unphased_as_NA, verbose) {
     .Call(`_vcfR_extract_haps2`, ref, alt, gt, unphased_as_NA, verbose)
 }
