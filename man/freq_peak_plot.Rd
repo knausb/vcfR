@@ -18,9 +18,9 @@ freq_peak_plot(pos, posUnits = "bp", ab1 = NULL, ab2 = NULL,
 
 \item{ab2}{matrix of allele balances for allele 2}
 
-\item{fp1}{feq_peak object for allele 1}
+\item{fp1}{freq_peak object for allele 1}
 
-\item{fp2}{feq_peak object for allele 2}
+\item{fp2}{freq_peak object for allele 2}
 
 \item{mySamp}{sample indicator}
 
