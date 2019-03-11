@@ -18,7 +18,7 @@ addons:
     packages:
       - gcc-4.9
       - g++-4.9
-      - libudunits2
+      - libudunits2-dev
 
 before_install: |
   mkdir ~/.R
