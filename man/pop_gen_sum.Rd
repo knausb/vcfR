@@ -19,6 +19,11 @@ gt.to.popsum(x)
 Functions that make population genetics summaries
 }
 \details{
+The function `gt2popsum` was deprecated in vcfR 1.8.0.
+This was because it was written entirely in R and did not perform well.
+Users should use `gt.to.popsum()` instead because it has similar 
+functionality but includes calls to C++ to increase its performance.
+
 This function creates common population genetic summaries from either a chromR or vcfR object.
 The default is to return a matrix containing allele counts, He, and Ne.
 \strong{Allele_counts} is the a comma delimited string of counts.

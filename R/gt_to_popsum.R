@@ -26,6 +26,12 @@ thetas <- function(x){
 #' 
 #' @param deprecated logical specifying whether to run the function (FALSE) or present deprecation message (TRUE).
 #' 
+#' @details 
+#' The function `gt2popsum` was deprecated in vcfR 1.8.0.
+#' This was because it was written entirely in R and did not perform well.
+#' Users should use `gt.to.popsum()` instead because it has similar 
+#' functionality but includes calls to C++ to increase its performance.
+#' 
 gt2popsum <- function(x, deprecated = TRUE){
   if(class(x) != "chromR"){stop("Object is not of class chromR")}
   #  stopifnot(class(x) == "chromR")
