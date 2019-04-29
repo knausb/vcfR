@@ -447,12 +447,12 @@ Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
       }
       
     }
-    if(i % nreport == 0 && verbose == 1){
-      Rcpp::Rcout << "\rVariant " << i << " processed";
+    if(k % nreport == 0 && verbose == 1){
+      Rcpp::Rcout << "\rVariant " << k << " processed";
     }
   }
   if(verbose == 1){
-    Rcpp::Rcout << "\rVariant " << i << " processed\n";
+    Rcpp::Rcout << "\rVariant " << k << " processed\n";
   }
 
   return(haps);

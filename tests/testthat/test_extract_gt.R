@@ -234,6 +234,11 @@ test_that("extract_haps works on haploid data",{
 })
 
 
+test_that("extract_haps works on haploid data",{
+  data(vcfR_test)
+  my_out <- capture.output(my_haps <- extract.haps(vcfR_test))
+  expect_identical(my_out, "\rVariant 0 processed\rVariant 5 processed")
+})
 
 #
 #
