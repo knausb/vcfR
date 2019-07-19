@@ -47,6 +47,11 @@ is.polymorphic <- function(x, na.omit=FALSE){
 #' Some analyses or downstream analyses only work with biallelic loci.
 #' This function can help manage this.
 #' 
+#' Note that \strong{is_bialleleic} queries the ALT column in the fix slot to count alleles.
+#' If you remove samples from the gt slot you may invalidate the information in the fix slot.
+#' For example, if you remove the samples with the alternate allele you will make the position invariant and this function will provide inaccurate information.
+#' So use caution if you've made many modifications to your data.
+#' 
 #' @export
 is.biallelic <- function(x){
   #  x <- as.character(x@fix$ALT)
