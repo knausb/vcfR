@@ -55,6 +55,6 @@ Suggests:
     testthat,
     tidyr
 VignetteBuilder: knitr
-License: GPL
+License: GPL-3
 RoxygenNote: 6.1.1
 Encoding: UTF-8
