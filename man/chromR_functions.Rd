@@ -7,8 +7,16 @@
 \alias{win.table}
 \title{chromR_functions}
 \usage{
-masker(x, min_QUAL = 1, min_DP = 1, max_DP = 10000, min_MQ = 20,
-  max_MQ = 100, preserve = FALSE, ...)
+masker(
+  x,
+  min_QUAL = 1,
+  min_DP = 1,
+  max_DP = 10000,
+  min_MQ = 20,
+  max_MQ = 100,
+  preserve = FALSE,
+  ...
+)
 
 variant.table(x)
 

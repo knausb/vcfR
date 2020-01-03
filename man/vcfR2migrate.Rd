@@ -4,8 +4,13 @@
 \alias{vcfR2migrate}
 \title{Convert a vcfR object to MigrateN input file}
 \usage{
-vcfR2migrate(vcf, pop, in_pop, out_file = "MigrateN_infile.txt",
-  method = c("N", "H"))
+vcfR2migrate(
+  vcf,
+  pop,
+  in_pop,
+  out_file = "MigrateN_infile.txt",
+  method = c("N", "H")
+)
 }
 \arguments{
 \item{vcf}{a vcfR object.}

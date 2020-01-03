@@ -14,6 +14,7 @@ A test file containing a diversity of examples intended to test functionality.
   \item vcfR_test vcfR object
 }
 
+
 This data set began as the example (section 1.1) from The Variant Call Format Specification \href{http://samtools.github.io/hts-specs/}{VCFv4.3} .
 This data consisted of 3 samples and 5 variants.
 As I encounter examples that challenge the code in vcfR they can be added to this data set.

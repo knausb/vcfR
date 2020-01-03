@@ -39,7 +39,7 @@ text(x=17/24, y=0.1, labels = "17/24", srt = 90)
 text(x=31/40, y=0.1, labels = "31/40", srt = 90)
 text(x=33/40, y=0.1, labels = "33/40", srt = 90)
 
-# Prepare dta and visualize
+# Prepare data and visualize
 data(vcfR_example)
 gt <- extract.gt(vcf)
 # Censor non-heterozygous positions.

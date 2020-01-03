@@ -4,8 +4,14 @@
 \alias{masplit}
 \title{masplit}
 \usage{
-masplit(myMat, delim = ",", count = 0L, record = 1L, sort = 1L,
-  decreasing = 1L)
+masplit(
+  myMat,
+  delim = ",",
+  count = 0L,
+  record = 1L,
+  sort = 1L,
+  decreasing = 1L
+)
 }
 \arguments{
 \item{myMat}{a matrix of delimited strings (e.g., "7,2").}

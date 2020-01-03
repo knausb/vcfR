@@ -8,9 +8,16 @@
 \alias{extract.info}
 \title{Extract elements from vcfR objects}
 \usage{
-extract.gt(x, element = "GT", mask = FALSE, as.numeric = FALSE,
-  return.alleles = FALSE, IDtoRowNames = TRUE, extract = TRUE,
-  convertNA = TRUE)
+extract.gt(
+  x,
+  element = "GT",
+  mask = FALSE,
+  as.numeric = FALSE,
+  return.alleles = FALSE,
+  IDtoRowNames = TRUE,
+  extract = TRUE,
+  convertNA = TRUE
+)
 
 extract.haps(x, mask = FALSE, unphased_as_NA = TRUE, verbose = TRUE)
 
