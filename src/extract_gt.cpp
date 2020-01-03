@@ -433,6 +433,7 @@ Rcpp::StringMatrix extract_haps2(Rcpp::StringVector ref,
     j++;
   }
   haps.attr("dimnames") = Rcpp::List::create(gt_names(0), haplo_names);
+  j = 0;
   
   // Iterate over variants (rows of gt)
   // Each variant has a REF and ALT, so this can't be by sample.
@@ -441,96 +442,96 @@ Rcpp::StringMatrix extract_haps2(Rcpp::StringVector ref,
   for(k = 0; k < gt.nrow(); k++){
     if(verbose == 1){
       Rcpp::Rcout << "Starting row (variant): " << k << std::endl;
-      Rcpp::Rcout << "  REF = " << ref(k) << ", ALT = " << alt(k) << std::endl;
+//      Rcpp::Rcout << "  REF = " << ref(k) << ", ALT = " << alt(k) << std::endl;
     }
 
-    
-    // Split the alternate alleles string into alleles.
-    std::vector < std::string > alleles_vec;
-    char alleles_split = ','; // Must be single quotes!
-    std::string line = Rcpp::as< std::string >(alt(k));
-//    Rcout << i << " line: " << line << "\n";
-    vcfRCommon::strsplit(line, alleles_vec, alleles_split);
+     // Split the alternate alleles string into alleles.
+     std::vector < std::string > alleles_vec;
+     char alleles_split = ','; // Must be single quotes!
+     std::string line = Rcpp::as< std::string >(alt(k));
+     vcfRCommon::strsplit(line, alleles_vec, alleles_split);
 
-    // Insert reference allele at begining of vector.
-    std::string ref_allele = Rcpp::as< std::string >(ref(k));
-    alleles_vec.insert(alleles_vec.begin(), ref_allele);
-    
-    // Report vector of alleles.
-    if(verbose == 1){
-      Rcpp::Rcout << "  alleles_vec: " << alleles_vec[0];
-      for(j=1; j < alleles_vec.size(); j++){
-        Rcpp::Rcout  << ", " << alleles_vec[j];
-      }
-      Rcpp::Rcout << std::endl;
-    }
+     // Insert reference allele at begining of vector.
+     std::string ref_allele = Rcpp::as< std::string >(ref(k));
+     alleles_vec.insert(alleles_vec.begin(), ref_allele);
 
-    // Process the genotypes (columns) into haplotypes.
-    // hap_num counts haplotypes per sample.
-    // hap_col counts columns in the return matrix
-    hap_col = 0;
-    for(j=0; j<gt.ncol(); j++){
-      // j is counting columns or samples.
-      Rcpp::checkUserInterrupt();
-      if(verbose == 1){
-        Rcpp::Rcout << "    Sample: " << j << ", ploidy: " << ploidy(j) << std::endl;
-      }
-      std::vector < std::string > al_vec;
-      
-      if( gt(k, j) == NA_STRING ){
-        hap_num = 0;
-        while(hap_num < ploidy(j)){
-          haps(k, hap_col) = NA_STRING;
-          hap_num++;
-          hap_col++;
-        }
-      } else {
-        std::string line = Rcpp::as< std::string >(gt(k, j));
-        if(verbose == 1){
-          Rcpp::Rcout << "    Genotype: " << line << "\n";
-        }
-        vcfRCommon::gtsplit(line, al_vec, unphased_as_NA);
-        hap_num = 0;
-        while(hap_num < ploidy(j)){
-          if(verbose == 1){
-            Rcpp::Rcout << "      hap_num: " << hap_num << "\n";
-            Rcpp::Rcout << "      allele: ";
-            Rcpp::Rcout << al_vec[hap_num];
-            Rcpp::Rcout << "\n";
-          }
-          // Manage missing alleles.
-          if( al_vec[hap_num] == "." ){
-//            Rcpp::Rcout << "  allele: " << al_vec[hap_num] << "\n";
-            haps(k, hap_col) = NA_STRING;
-          } else {
-            int al_num = atoi(al_vec[hap_num].c_str());
-            if(verbose == 1){
-              Rcpp::Rcout << "      Our allele number: " << al_num;
-              Rcpp::Rcout << ", nucleotide(s): " << alleles_vec[al_num];
-//              Rcpp::Rcout << ", actual: " << alleles_vec[al_num];
-              Rcpp::Rcout << std::endl;
-//              Rcpp::Rcout << "  Our allele:" << alleles_vec[al_num] << std::endl;
-            }
-            haps(k, hap_col) = alleles_vec[al_num];
-//              haps(k, hap_col) = al_vec[hap_num]; 
-          }
-          hap_num++;
-          hap_col++;
-        }
-      }
-      if(verbose == 1){
-        Rcpp::Rcout << "    Sample " << j << " complete." << std::endl;
-      }
-    }
-    if(verbose == 1){
-//      Rcpp::Rcout << "\rVariant " << i << " processed" << std::endl  << std::endl;
-      Rcpp::Rcout << "\rVariant " << k << " processed" << std::endl  << std::endl;
-    }
-    // if(i % nreport == 0 && verbose == 1){
-    //   Rcpp::Rcout << "\rVariant " << i << " processed";
-    // }
-  }
+     // Report vector of alleles.
+     if(verbose == 1){
+       Rcpp::Rcout << "  alleles_vec: " << alleles_vec[0];
+       for(j=1; j < alleles_vec.size(); j++){
+         Rcpp::Rcout  << ", " << alleles_vec[j];
+       }
+       Rcpp::Rcout << std::endl;
+     }
 
+     // Process the genotypes (columns) into haplotypes.
+     // hap_num counts haplotypes per sample.
+     // hap_col counts columns in the return matrix
+     hap_col = 0;
+     for(j=0; j<gt.ncol(); j++){
+       // j is counting columns or alleles.
+       Rcpp::checkUserInterrupt();
+       if(verbose == 1){
+         Rcpp::Rcout << "    Sample: " << j << ", ploidy: " << ploidy(j) << std::endl;
+       }
+       
+       // Initialize a vector for alleles.
+//       std::vector < std::string > al_vec;
+
+//       if( gt(k, j) == NA_STRING ){
+//         hap_num = 0;
+//         while(hap_num < ploidy(j)){
+//           // haps(k, hap_col) = NA_STRING;
+//           // hap_num++;
+//           // hap_col++;
+//         }
+//       } else {
+//         std::string line = Rcpp::as< std::string >(gt(k, j));
+//         if(verbose == 1){
+//           Rcpp::Rcout << "    Genotype: " << line << "\n";
+//         }
+// //        vcfRCommon::gtsplit(line, al_vec, unphased_as_NA);
+//         hap_num = 0;
+//         while(hap_num < ploidy(j)){
+//           if(verbose == 1){
+//             // Rcpp::Rcout << "      hap_num: " << hap_num << "\n";
+//             // Rcpp::Rcout << "      allele: ";
+//             // Rcpp::Rcout << al_vec[hap_num];
+//             // Rcpp::Rcout << "\n";
+//           }
+//           // Manage missing alleles.
+//           if( al_vec[hap_num] == "." ){
+// //            Rcpp::Rcout << "  allele: " << al_vec[hap_num] << "\n";
+// //            haps(k, hap_col) = NA_STRING;
+//           } else {
+// //            int al_num = atoi(al_vec[hap_num].c_str());
+//             if(verbose == 1){
+// //              Rcpp::Rcout << "      Our allele number: " << al_num;
+// //              Rcpp::Rcout << ", nucleotide(s): " << alleles_vec[al_num];
+// //              Rcpp::Rcout << ", actual: " << alleles_vec[al_num];
+//               Rcpp::Rcout << std::endl;
+// //              Rcpp::Rcout << "  Our allele:" << alleles_vec[al_num] << std::endl;
+//             }
+// //             haps(k, hap_col) = alleles_vec[al_num];
+// // //              haps(k, hap_col) = al_vec[hap_num]; 
+//           }
+// //          hap_num++;
+// //          hap_col++;
+//         }
+//       }
+//       if(verbose == 1){
+// //        Rcpp::Rcout << "    Sample " << j << " complete." << std::endl;
+//       }
+//     }
+//     if(verbose == 1){
+// //      Rcpp::Rcout << "\rVariant " << i << " processed" << std::endl  << std::endl;
+// //      Rcpp::Rcout << "\rVariant " << k << " processed" << std::endl  << std::endl;
+     }
+//     // if(i % nreport == 0 && verbose == 1){
+//     //   Rcpp::Rcout << "\rVariant " << i << " processed";
+//     // }
+   }
+ 
     
 //    Rcpp::StringMatrix haps(1, 1);
 //    haps(0, 0) = NA_STRING;

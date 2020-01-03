@@ -274,11 +274,11 @@ test_that(".extract_haps2 works on mixed ploid data",{
   #
   
   myStart <- 1
-  myEnd <- 3
-#  
+  myEnd <- 4
+#
   my_haps <- .extract_haps2(getREF(vcfR_test)[myStart:myEnd], 
                             getALT(vcfR_test)[myStart:myEnd], 
-                            gt[myStart:myEnd, , drop = FALSE], 0, 0)
+                            gt[myStart:myEnd, , drop = FALSE], 0, 1)
   
   expect_true(is.na(my_haps[1,3]))
   expect_true(is.na(my_haps[1,4]))
@@ -292,8 +292,8 @@ test_that(".extract_haps2 works on mixed ploid data",{
 #  expect_equal(my_haps[1,], first_variant)
   # Verbose output.
   # 
-  myStart <- 1
-  myEnd <- 1
+#  myStart <- 1
+#  myEnd <- 1
 #  .extract_haps2(getREF(vcfR_test)[myStart:myEnd], 
 #                 getALT(vcfR_test)[myStart:myEnd], 
 #                 gt[myStart:myEnd, , drop = FALSE], 0, 1)
