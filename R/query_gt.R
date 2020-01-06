@@ -24,7 +24,7 @@
 #' 
 #' @export
 is.polymorphic <- function(x, na.omit=FALSE){
-  if(class(x) != "vcfR"){
+  if( !inherits(x, "vcfR") ){
     stop("Expected an object of class vcfR")
   }
   x <- extract.gt(x)
