@@ -4,8 +4,15 @@
 \alias{ordisample}
 \title{Ordinate a sample's data}
 \usage{
-ordisample(x, sample, distance = "bray", plot = TRUE, alpha = 88,
-  verbose = TRUE, ...)
+ordisample(
+  x,
+  sample,
+  distance = "bray",
+  plot = TRUE,
+  alpha = 88,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{an object of class vcfR or chromR.}

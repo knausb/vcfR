@@ -8,15 +8,26 @@
 \alias{vcf_field_names}
 \title{Convert vcfR objects to tidy data frames}
 \usage{
-vcfR2tidy(x, info_only = FALSE, single_frame = FALSE,
-  toss_INFO_column = TRUE, ...)
+vcfR2tidy(
+  x,
+  info_only = FALSE,
+  single_frame = FALSE,
+  toss_INFO_column = TRUE,
+  ...
+)
 
-extract_info_tidy(x, info_fields = NULL, info_types = TRUE,
-  info_sep = ";")
+extract_info_tidy(x, info_fields = NULL, info_types = TRUE, info_sep = ";")
 
-extract_gt_tidy(x, format_fields = NULL, format_types = TRUE,
-  dot_is_NA = TRUE, alleles = TRUE, allele.sep = "/",
-  gt_column_prepend = "gt_", verbose = TRUE)
+extract_gt_tidy(
+  x,
+  format_fields = NULL,
+  format_types = TRUE,
+  dot_is_NA = TRUE,
+  alleles = TRUE,
+  allele.sep = "/",
+  gt_column_prepend = "gt_",
+  verbose = TRUE
+)
 
 vcf_field_names(x, tag = "INFO")
 }

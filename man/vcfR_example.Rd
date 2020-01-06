@@ -18,10 +18,11 @@ An example dataset containing parts of the *Phytophthora infestans* genome.
   \item vcf vcfR object
 }
 
+
 This data is a subset of the pinfsc50 dataset.
 It has been subset to positions between 500 and 600 kbp.
 The coordinate systems of the vcf and gff file have been altered by subtracting 500,000.
-This results in a 100 kbp section of supercontig_1.50 that has positional data ranging from 1 to 100 kbp.
+This results in a 100 kbp section of supercontig_1.50 that has positional data ranging from 1 to 100 kbp. 
 
 Note that it is encouraged to keep package contents small to facilitate easy
 downloading and installation.  This is why a mitochondrion was chosen as an

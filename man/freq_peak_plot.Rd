@@ -4,10 +4,22 @@
 \alias{freq_peak_plot}
 \title{Plot freq_peak object}
 \usage{
-freq_peak_plot(pos, posUnits = "bp", ab1 = NULL, ab2 = NULL,
-  fp1 = NULL, fp2 = NULL, mySamp = 1, col1 = "#A6CEE3",
-  col2 = "#1F78B4", alpha = 44, main = NULL, mhist = TRUE,
-  layout = TRUE, ...)
+freq_peak_plot(
+  pos,
+  posUnits = "bp",
+  ab1 = NULL,
+  ab2 = NULL,
+  fp1 = NULL,
+  fp2 = NULL,
+  mySamp = 1,
+  col1 = "#A6CEE3",
+  col2 = "#1F78B4",
+  alpha = 44,
+  main = NULL,
+  mhist = TRUE,
+  layout = TRUE,
+  ...
+)
 }
 \arguments{
 \item{pos}{chromosomal position of variants}

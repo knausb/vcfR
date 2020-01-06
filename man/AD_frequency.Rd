@@ -4,8 +4,7 @@
 \alias{AD_frequency}
 \title{AD_frequency}
 \usage{
-AD_frequency(ad, delim = ",", allele = 1L, sum_type = 0L,
-  decreasing = 1L)
+AD_frequency(ad, delim = ",", allele = 1L, sum_type = 0L, decreasing = 1L)
 }
 \arguments{
 \item{ad}{a matrix of allele depths (e.g., "7,2")}

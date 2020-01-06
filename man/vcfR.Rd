@@ -3,7 +3,6 @@
 \docType{package}
 \name{vcfR}
 \alias{vcfR}
-\alias{vcfR-package}
 \title{Variant call format files processed with vcfR.}
 \description{
 vcfR provides a suite of tools for input and output of variant call format (VCF) files, manipulation of their content and visualization.

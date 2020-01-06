@@ -13,6 +13,7 @@ Example data to use with unit tests.
   \item vep vcfR object
 }
 
+
 Output from the \href{https://uswest.ensembl.org/info/docs/tools/vep/index.html}{VEP} may include values with multiple equals signs.
 This does not appear to conform with the VCF specification (at the time of writing this \href{http://samtools.github.io/hts-specs/}{VCF v4.3}).
 But it appears fairly easy to accomodate.

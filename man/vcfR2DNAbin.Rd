@@ -4,10 +4,17 @@
 \alias{vcfR2DNAbin}
 \title{Convert vcfR to DNAbin}
 \usage{
-vcfR2DNAbin(x, extract.indels = TRUE, consensus = FALSE,
-  extract.haps = TRUE, unphased_as_NA = TRUE,
-  asterisk_as_del = FALSE, ref.seq = NULL, start.pos = NULL,
-  verbose = TRUE)
+vcfR2DNAbin(
+  x,
+  extract.indels = TRUE,
+  consensus = FALSE,
+  extract.haps = TRUE,
+  unphased_as_NA = TRUE,
+  asterisk_as_del = FALSE,
+  ref.seq = NULL,
+  start.pos = NULL,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{x}{an object of class chromR or vcfR}

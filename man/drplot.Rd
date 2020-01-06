@@ -6,9 +6,18 @@
 \alias{null.plot}
 \title{dr.plot elements}
 \usage{
-dr.plot(dmat = NULL, rlst = NULL, chrom.s = 1, chrom.e = NULL,
-  title = NULL, hline = NULL, dcol = NULL, rcol = NULL,
-  rbcol = NULL, ...)
+dr.plot(
+  dmat = NULL,
+  rlst = NULL,
+  chrom.s = 1,
+  chrom.e = NULL,
+  title = NULL,
+  hline = NULL,
+  dcol = NULL,
+  rcol = NULL,
+  rbcol = NULL,
+  ...
+)
 
 null.plot()
 }

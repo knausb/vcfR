@@ -4,10 +4,18 @@
 \alias{heatmap.bp}
 \title{Heatmap with barplots}
 \usage{
-heatmap.bp(x, cbarplot = TRUE, rbarplot = TRUE, legend = TRUE,
-  clabels = TRUE, rlabels = TRUE, na.rm = TRUE, scale = c("row",
-  "column", "none"), col.ramp = viridisLite::viridis(n = 100, alpha = 1),
-  ...)
+heatmap.bp(
+  x,
+  cbarplot = TRUE,
+  rbarplot = TRUE,
+  legend = TRUE,
+  clabels = TRUE,
+  rlabels = TRUE,
+  na.rm = TRUE,
+  scale = c("row", "column", "none"),
+  col.ramp = viridisLite::viridis(n = 100, alpha = 1),
+  ...
+)
 }
 \arguments{
 \item{x}{a numeric matrix.}
