@@ -84,7 +84,8 @@ extract.gt <- function(x, element="GT",
   }
   
   # Validate that the gt slot is a matrix
-  if( class(x@gt) != "matrix" ){
+#  if( class(x@gt) != "matrix" ){
+  if( !inherits(x@gt, "matrix") ){
     stop( paste("gt slot expected to be of class matrix. Instead found class", class(x@gt)) )
   }
 

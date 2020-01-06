@@ -69,7 +69,8 @@ heatmap.bp <- function(x, cbarplot = TRUE, rbarplot = TRUE,
                        ...){
 #  require(viridis)
 #  viridisLite::viridis(n=4)
-  stopifnot(class(x) == 'matrix')
+#  stopifnot(class(x) == 'matrix')
+  stopifnot(inherits(x, 'matrix'))
   scale <- if(missing(scale))
     "none"
   else match.arg(scale)

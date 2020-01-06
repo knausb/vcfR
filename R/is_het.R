@@ -30,7 +30,8 @@
 #' 
 #' @export
 is.het <- function(x, na_is_false = TRUE){
-  if( class(x) != 'matrix' ){
+#  if( class(x) != 'matrix' ){
+  if( !inherits(x, 'matrix') ){
     stop( paste( "Expecting a matrix, received a",  class(x) ) )
   }
   

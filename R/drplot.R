@@ -35,11 +35,14 @@ dr.plot <- function( dmat = NULL, rlst = NULL,
                      rcol = NULL, rbcol = NULL,
                      ... ){
   
-  # Attempt to handle rlst
-  if( class(rlst) != "list" & class(rlst) == "matrix" ){
+  # Attempt to handle rlst.
+  # Not a list but a matrix
+#  if( class(rlst) != "list" & class(rlst) == "matrix" ){
+  if( !inherits(rlst, "list") & inherits(rlst, "matrix") ){
     rlst <- list( rlst )
   }
-  if( class(rlst) != "list" & !is.null(rlst) ){
+#  if( class(rlst) != "list" & !is.null(rlst) ){
+  if( !inherits(rlst, "list") & !is.null(rlst) ){
     stop( paste("parameter rlst is of type", class(rlst), "instead of type list.") )
   }
   
