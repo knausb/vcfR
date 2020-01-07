@@ -133,7 +133,6 @@ If you know of a software that I have not included on this list, particularly if
 * [GATK MuTect2](https://www.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_cancer_m2_MuTect2.php)
 * [GATK GenotypeGVCFs](https://www.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_variantutils_GenotypeGVCFs.php)
 * [LoFreq](http://csb5.github.io/lofreq/)
-* [Platypus](http://www.well.ox.ac.uk/platypus)
 * [Samtools](http://www.htslib.org/)
 * [VarScan2](http://dkoboldt.github.io/varscan/)
 
