@@ -9,7 +9,16 @@
 
 
 ## R CMD check results
-There were no ERRORs or WARNINGs.
+There were no ERRORs.
+
+On Mac there was one WARNINGs.
+
+* checking top-level files ... WARNING
+Conversion of ‘README.md’ failed:
+pandoc: Could not fetch http://www.r-pkg.org/badges/version/vcfR
+TlsExceptionHostPort (HandshakeFailed (Error_Misc "user error (unexpected type received. expecting handshake and got: Alert [(AlertLevel_Fatal,HandshakeFailure)])")) "www.r-pkg.org" 80
+
+I copied and pasted the url into firefox and it worked for me.
 
 There was 1 NOTE:
 
@@ -60,7 +69,7 @@ devtools::revdep_check()
 
 With one exception:
 annovar
-https://CRAN.R-project.org/package=annovarR 
+https://CRAN.R-project.org/package=annovarR
 
 Checked annovarR: 1 error  | 0 warnings | 0 notes
 
