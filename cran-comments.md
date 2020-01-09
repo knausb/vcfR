@@ -1,7 +1,7 @@
 
 ## Test environments
 * local: ubuntu 16.04 LTS and R 3.6.2
-* local: OS X Catalina 10.15.2 and R 3.6.2
+* local: OS X Catalina 10.15.2 and R 3.6.2 and clang8
 * travis-ci: ubuntu 16.04 LTS, R 3.6.2 and R Under development (unstable) (2020-01-03 r77628)
 * AppVeyor: Windows Server 2012 R2 x64 (build 9600) R version 3.6.2 Patched (2020-01-03 r77629)
 * winbuilder: R version 3.6.2 (2019-12-12)
@@ -28,44 +28,45 @@ Found the following (possibly) invalid URLs:
 
 This link does appear to work.
 
-
-
-
-
-Possibly mis-spelled words in DESCRIPTION:
-  DNAbin (9:46)
-  VCF (2:33, 3:68, 4:62, 5:5, 8:30, 10:5)
-  VcfR (9:55)
-  genlight (9:36)
-
-I have reviewed these words and feel they are spelled correctly.
-'DNAbin' refers to an object of class ape::DNAbin.
-'VCF' refers to the variant call format specification, a format of file handled by this package.
-'VcfR' refers to this package.
-'genlight' refers to an object of class adegenet::genlight.
-
-
-https://cran.r-project.org/web/checks/check_results_vcfR.html
-Additional issues:
-
-I believe I have addressed the WARNings and valgrind issue detected at CRAN.
-
-
 ## Downstream dependencies
 
 I have also run R CMD check on downstream dependencies of vcfR
 All packages that I could install passed:
 
-devtools::revdep_check()
+devtools::revdep_check() is no longer a part of devtools and the package revdepcheck (on GitHub but not CRAN) threw an error because a dependent R package could not be installed.
 
-With one exception:
-annovar
-https://CRAN.R-project.org/package=annovarR 
+I used:
+R CMD check --as-cran
+on the tarballs from CRAN for the following packages.
 
-Checked annovarR: 1 error  | 0 warnings | 0 notes
+Reverse imports: 	binmapr, pcadapt, whoa
+Reverse suggests: 	LDheatmap, onemap, perfectphyloR, rehh, SimRVSequences
 
-I feel that this is not due to vcfR.
+I spent an entire afternoon trying to install dependencies of reversedependencies of vcfR but was not successful.
+It appears there are dependencies of these packages that are not available for R version 3.6.2.
 
+
+Results:
+
+WARNINGS were thrown because the version tested was the same as on CRAN.
+
+binmapr
+* checking Rd cross-references ... NOTE
+Package unavailable to check Rd xrefs: ‘qtl’
+
+pcadapt
+* checking package dependencies ... ERROR
+Packages required but not available:
+  'mmapcharr', 'plotly', 'robust', 'RSpectra', 'rmio'
+
+These do not appear to be available for R version 3.6.2.
+
+LDheatmap
+Warning message:
+package ‘snpStats’ is not available (for R version 3.6.2) 
+
+onemap
+package ‘MDSmap’ is not available (for R version 3.6.2)
 
 ## Thank you CRAN Core Team!
 
