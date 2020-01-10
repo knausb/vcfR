@@ -12,7 +12,7 @@ This may have been addressed at 64a308ba50b9119108e8946737460de5997b805b by addi
 
 
 # vcfR 1.9.0
-Released on CRAN 2020-01-XX
+Released on CRAN 2020-01-10
 * Changed class(x) == "matrix" to inherited(x, "matrix")
 * Changed license from `GPL` to `GPL-3` (#144).
 * `extract.haps()` reports the correct number of variants processed when verbose.
