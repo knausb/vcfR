@@ -77,7 +77,8 @@ test_that("extract_gt_tidy works for all elements",{
 # vcfR2tidy
 
 test_that("vcfR2tidy works",{
-  Z <- vcfR2tidy(vcf, info_only = FALSE)
+  data("vcfR_test")
+  Z <- vcfR2tidy(vcfR_test, info_only = FALSE)
   
   expect_is(Z, 'list')
   expect_equal( length(Z), 3 )

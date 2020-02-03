@@ -250,11 +250,13 @@ vcfR2tidy <- function(x,
   
 #### extract the INFO data. and return if that is all the is requested ####
   # get the base fix data as a data frame
-  base <- as.data.frame(x@fix, stringsAsFactors = FALSE) %>% tibble::as.tibble()
+#  base <- as.data.frame(x@fix, stringsAsFactors = FALSE) %>% tibble::as.tibble()
+  base <- as.data.frame(x@fix, stringsAsFactors = FALSE) %>% tibble::as_tibble()
   base$POS <- as.integer(base$POS)
   base$QUAL <- as.numeric(base$QUAL)
   if(toss_INFO_column == TRUE) {
-    base <- base %>% dplyr::select_(~ -INFO)
+    base <- base %>% dplyr::select(-INFO)
+#    base <- base %>% dplyr::select_(~ -INFO)
   }
   
   # also get the  full meta data for all the INFO fields
@@ -264,12 +266,16 @@ vcfR2tidy <- function(x,
   if(info_only == TRUE) {
 #    ret <- cbind(base, fix) %>% 
     ret <- dplyr::bind_cols(base, fix) %>% 
-      tibble::as.tibble() %>%
-      dplyr::select_(~ -Key)
-    
+      tibble::as_tibble() %>%
+#      tibble::as.tibble() %>%
+      dplyr::select( -Key)
+#      dplyr::select_(~ -Key)
+      
     # only retain meta info for the fields that we are returning
+#    info_meta <- info_meta_full %>%
+#      dplyr::filter_(~ID %in% names(ret))
     info_meta <- info_meta_full %>%
-      dplyr::filter_(~ID %in% names(ret))
+      dplyr::filter(info_meta_full$ID %in% names(ret))
     
     return(list(fix = ret, meta = info_meta))
   }
@@ -280,22 +286,29 @@ vcfR2tidy <- function(x,
   
   # get the full FORMAT meta data and add the gt_column_prepend to them
   gt_meta_full <- vcf_field_names(x, tag = "FORMAT") %>%
-    dplyr::mutate_(ID = ~paste(gt_prep, ID, sep = ""))
+    dplyr::mutate(ID = paste(gt_prep, ID, sep = ""))
+#    dplyr::mutate_(ID = ~paste(gt_prep, ID, sep = ""))
   
   # if the user is asking for a single data frame we give it to them here:
   if(single_frame == TRUE) {
 #    ret <- cbind(base, fix) %>%
     ret <- dplyr::bind_cols(base, fix) %>%
       dplyr::left_join(gt, by = "Key") %>%
-      tibble::as.tibble() %>%
-      dplyr::select_(~ -Key)  # no point in keeping Key around at this point
-    
+      tibble::as_tibble() %>%
+#      tibble::as.tibble() %>%
+      dplyr::select( -Key)  # no point in keeping Key around at this point
+#      dplyr::select_(~ -Key)  # no point in keeping Key around at this point
+
+#    info_meta <- info_meta_full %>%
+#      dplyr::filter_(~ID %in% names(ret))
     info_meta <- info_meta_full %>%
-      dplyr::filter_(~ID %in% names(ret))
-    
+      dplyr::filter(ID %in% names(ret))
+
+#    gt_meta <-  gt_meta_full %>%
+#      dplyr::filter_(~ID %in% names(ret))
     gt_meta <-  gt_meta_full %>%
-      dplyr::filter_(~ID %in% names(ret))
-    
+      dplyr::filter(ID %in% names(ret))
+
       return(list(dat = ret, meta = dplyr::bind_rows(info_meta, gt_meta)))
   }
   
@@ -304,26 +317,35 @@ vcfR2tidy <- function(x,
   # appropriately.
 #  retfix <- cbind(base, fix) %>%
   retfix <- dplyr::bind_cols(base, fix) %>%
-    tibble::as.tibble() %>%
-    dplyr::mutate_(ChromKey = ~as.integer(factor(CHROM), levels = unique(CHROM))) %>%
-    dplyr::select_(~ChromKey, ~dplyr::everything())  # note that we will drop Key from this after we have used it
-  
-  retgt <- gt %>%
-    dplyr::left_join(dplyr::select_(retfix, ~ChromKey, ~Key, ~POS), by = "Key") %>%
-    dplyr::select_(~ChromKey, ~POS, ~dplyr::everything()) %>%
-    dplyr::select_(~ -Key)
-  
-  info_meta <- info_meta_full %>%
-    dplyr::filter_(~ID %in% names(retfix))
-  
-  gt_meta <-  gt_meta_full %>%
-    dplyr::filter_(~ID %in% names(retgt))
+    tibble::as_tibble() %>%
+#    tibble::as.tibble() %>%
+    dplyr::mutate(ChromKey = as.integer(factor(CHROM), levels = unique(CHROM))) %>%
+    dplyr::select(ChromKey, dplyr::everything())  # note that we will drop Key from this after we have used it
+#    dplyr::select_(~ChromKey, ~dplyr::everything())  # note that we will drop Key from this after we have used it
     
+  retgt <- gt %>%
+#    dplyr::left_join(dplyr::select_(retfix, ~ChromKey, ~Key, ~POS), by = "Key") %>%
+    dplyr::left_join(dplyr::select(retfix, ChromKey, Key, POS), by = "Key") %>%
+#    dplyr::select_(~ChromKey, ~POS, ~dplyr::everything()) %>%
+    dplyr::select(ChromKey, POS, dplyr::everything()) %>%
+#    dplyr::select_(~ -Key)
+    dplyr::select( -Key)
+    
+#  info_meta <- info_meta_full %>%
+#    dplyr::filter_(~ID %in% names(retfix))
+  info_meta <- info_meta_full %>%
+    dplyr::filter(ID %in% names(retfix))
+  
+#  gt_meta <-  gt_meta_full %>%
+#    dplyr::filter_(~ID %in% names(retgt))
+  gt_meta <-  gt_meta_full %>%
+    dplyr::filter(ID %in% names(retgt))
   
   # return the list
   list(
     fix = retfix %>% 
-      dplyr::select_(~ -Key),
+      dplyr::select( -Key),
+#      dplyr::select_(~ -Key),
     gt = retgt,
     meta = dplyr::bind_rows(info_meta, gt_meta)
   )
@@ -354,7 +376,8 @@ extract_info_tidy <- function(x, info_fields = NULL, info_types = TRUE, info_sep
   
   vcf <- x
   x <- as.data.frame(x@fix, stringsAsFactors = FALSE) %>% 
-    tibble::as.tibble()
+    tibble::as_tibble()
+#    tibble::as.tibble()
   
   # if info_fields is NULL then we try to do all of them
   if(is.null(info_fields)) {
@@ -366,7 +389,8 @@ extract_info_tidy <- function(x, info_fields = NULL, info_types = TRUE, info_sep
   # numeric
   if(!is.null(info_types) && length(info_types) == 1 && info_types[1] == TRUE) {
     info_df <- vcfR::vcf_field_names(vcf, tag = "INFO") %>%
-      dplyr::filter_(~ID %in% info_fields)
+      dplyr::filter(ID %in% info_fields)
+#      dplyr::filter_(~ID %in% info_fields)
     info_types <- guess_types(info_df)
   }
   
@@ -391,7 +415,7 @@ extract_info_tidy <- function(x, info_fields = NULL, info_types = TRUE, info_sep
   
   ret <- as.data.frame(ret, stringsAsFactors = FALSE) %>%
     setNames(info_fields) %>%
-    tibble::as.tibble()
+    tibble::as_tibble()
   
   if(!is.null(info_types)) {
     ns <- info_types[!is.na(info_types) & info_types == "n"]
@@ -416,9 +440,9 @@ extract_info_tidy <- function(x, info_fields = NULL, info_types = TRUE, info_sep
     
   }
   if(nrow(ret) > 0){
-    ret <- cbind(Key = 1:nrow(ret), ret) %>% tibble::as.tibble()
+    ret <- cbind(Key = 1:nrow(ret), ret) %>% tibble::as_tibble()
   } else {
-    ret <- cbind(Key = vector(mode = 'integer', length = 0), ret) %>% tibble::as.tibble()
+    ret <- cbind(Key = vector(mode = 'integer', length = 0), ret) %>% tibble::as_tibble()
   }
   ret
 }
@@ -483,7 +507,8 @@ extract_gt_tidy <- function(x,
   # then we try to discern the fields amongst info_fields that should be coerced to integer and
   # numeric.
   if(!is.null(format_types) && length(format_types) == 1 && format_types[1] == TRUE) {
-    format_types <- guess_types(format_df %>% dplyr::filter_(~ID %in% format_fields))
+    format_types <- guess_types(format_df %>% dplyr::filter(ID %in% format_fields))
+#    format_types <- guess_types(format_df %>% dplyr::filter_(~ID %in% format_fields))
   }
   
   # Make a parallel vector that indicates which fields should be numeric or not
@@ -506,21 +531,21 @@ extract_gt_tidy <- function(x,
   }
   geno_info <- lapply(ex, get_gt)
   
-  geno_info <- dplyr::as_data_frame(geno_info)
+#  geno_info <- dplyr::as_data_frame(geno_info)
+  geno_info <- dplyr::as_tibble(geno_info)
   if( nrow(geno_info) > 0 ){
-    geno_info <- dplyr::mutate_(Key = ~rep(1:nrow(vcf@fix), times = ncol(vcf@gt) - 1),
-                                Indiv = ~rep(colnames(vcf@gt)[-1], each = nrow(vcf@fix)),
-                                geno_info
-                                )
+    geno_info <- dplyr::mutate(Key = rep(1:nrow(vcf@fix), times = ncol(vcf@gt) - 1),
+                               Indiv = rep(colnames(vcf@gt)[-1], each = nrow(vcf@fix)),
+                               geno_info
+                               )
   } else {
-    geno_info <- dplyr::mutate_(Key = vector(mode = 'integer', length = 0),
-                                Indiv = vector(mode = 'integer', length = 0),
-                                geno_info
-                                )
+    geno_info <- dplyr::mutate(Key = vector(mode = 'integer', length = 0),
+                               Indiv = vector(mode = 'integer', length = 0),
+                               geno_info
+                               )
   }
-  geno_info <- dplyr::select_(geno_info, ~Key, ~Indiv, ~dplyr::everything())
-#  geno_info <- dplyr::select_(geno_info, ~Key, ~Indiv, ~everything())
-#  geno_info <- dplyr::select_(geno_info, ~Key, ~Indiv, grep(c('Key|Indiv'), names(Z), invert=TRUE))
+  geno_info <- dplyr::select(geno_info, Key, Indiv, dplyr::everything())
+#  geno_info <- dplyr::select_(geno_info, ~Key, ~Indiv, ~dplyr::everything())
   
 #  geno_info <- lapply(ex, function(i) {
 #    message("Extracting gt element ", names(ex)[i])
@@ -562,15 +587,21 @@ extract_gt_tidy <- function(x,
 # this is not exported
 guess_types <- function(D) {
   tmp <- D %>%
-    dplyr::filter_(~Number == 1) %>%
-    dplyr::mutate_(tt = ~ifelse(Type == "Integer", "i", ifelse(Type == "Numeric" | Type == "Float", "n", ""))) %>%
-    dplyr::filter_(~tt %in% c("n", "i")) %>%
-    dplyr::select_(~ID, ~Number, ~Type, ~tt)
-  
-  tmp <- D %>%  dplyr::filter_(~Number == 0 & Type == 'Flag')  %>%
-    dplyr::mutate_(tt = ~ifelse(Type == "Flag", "f")) %>%
-    dplyr::filter_(~tt %in% c("f")) %>%
-    dplyr::select_(~ID, ~Number, ~Type, ~tt)  %>%
+#    dplyr::filter_(~Number == 1) %>%
+    dplyr::filter(Number == 1) %>%
+    dplyr::mutate(tt = ifelse(Type == "Integer", "i", ifelse(Type == "Numeric" | Type == "Float", "n", ""))) %>%
+    dplyr::filter(tt %in% c("n", "i")) %>%
+#    dplyr::filter_(~tt %in% c("n", "i")) %>%
+    dplyr::select(ID, Number, Type, tt)
+#    dplyr::select_(~ID, ~Number, ~Type, ~tt)
+
+#  tmp <- D %>%  dplyr::filter_(~Number == 0 & Type == 'Flag')  %>%
+  tmp <- D %>%  dplyr::filter(Number == 0 & Type == 'Flag')  %>%
+    dplyr::mutate(tt = ifelse(Type == "Flag", "f")) %>%
+    dplyr::filter(tt %in% c("f")) %>%
+#    dplyr::filter_(~tt %in% c("f")) %>%
+    dplyr::select(ID, Number, Type, tt)  %>%
+#    dplyr::select_(~ID, ~Number, ~Type, ~tt)  %>%
     dplyr::bind_rows(tmp)   
   
   ret <- tmp$tt
