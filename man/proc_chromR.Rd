@@ -30,8 +30,6 @@ var.win(x, win.size = 1000)
 \item{chars}{a vector of characters to be used as a database for inclusion in rectangles}
 
 \item{lower}{converts the sequence and database to lower case, making the search case insensitive}
-
-\item{...}{arguments to be passed to methods}
 }
 \description{
 Functions which process chromR objects
