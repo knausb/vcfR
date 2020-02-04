@@ -215,7 +215,9 @@ vcfR2tidy <- function(x,
                       single_frame = FALSE, 
                       toss_INFO_column = TRUE,
                       ...) {
-  
+
+  INFO <- Key <- ID <- CHROM <- ChromKey <- POS <- NULL
+    
 #### Some Error Checking and Preliminaries ####
   if(single_frame == TRUE && info_only == TRUE) 
     stop("You can pass both single_frame and info_only as TRUE")
@@ -373,7 +375,9 @@ extract_info_tidy <- function(x, info_fields = NULL, info_types = TRUE, info_sep
   
   if(!is.null(info_fields) && any(duplicated(info_fields))) stop("Requesting extraction of duplicate info_field names")
   if(class(x) != "vcfR") stop("Expecting x to be a vcfR object, not a ", class(x))
-  
+
+  ID <- NULL
+    
   vcf <- x
   x <- as.data.frame(x@fix, stringsAsFactors = FALSE) %>% 
     tibble::as_tibble()
@@ -492,6 +496,9 @@ extract_gt_tidy <- function(x,
   if(class(x) != "vcfR"){
     stop("Expecting x to be a vcfR object, not a ", class(x))
   }
+
+  # https://www.r-bloggers.com/no-visible-binding-for-global-variable/
+  ID <- Key <- Indiv <- NULL
   
   vcf <- x  # Rename it.
   
@@ -586,6 +593,7 @@ extract_gt_tidy <- function(x,
 # a named vector suitable for passing to, for example, info_types.
 # this is not exported
 guess_types <- function(D) {
+  Number <- Type <- tt <- ID <- NULL
   tmp <- D %>%
 #    dplyr::filter_(~Number == 1) %>%
     dplyr::filter(Number == 1) %>%
