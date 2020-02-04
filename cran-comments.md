@@ -1,12 +1,14 @@
 
+vcfR was last published on CRAN on 2020-01-10, so this may appear as an early resubmission.
+However, I was asked by CRAN to fix warnings occurring on R-devel by 2-17 so I'm submitting.
+
 ## Test environments
 * local: ubuntu 16.04 LTS and R 3.6.2
-* local: OS X Catalina 10.15.2 and R 3.6.2 and clang8
-* travis-ci: ubuntu 16.04 LTS, R 3.6.2 and R Under development (unstable) (2020-01-03 r77628)
-* AppVeyor: Windows Server 2012 R2 x64 (build 9600) R version 3.6.2 Patched (2020-01-03 r77629)
-* winbuilder: R version 3.6.2 (2019-12-12)
-* winbuilder: R Under development (unstable) (2020-01-03 r77630)
-
+* local: OS X Catalina 10.15.2 and R 3.6.2 and clang
+* travis-ci: ubuntu 16.04 LTS, R 3.6.2 and R Under development (unstable) (2020-02-04 r77771)
+* AppVeyor: Windows Server 2012 R2 x64 (build 9600) R version 3.6.2 Patched (2020-01-25 r77764)
+* winbuilder: R version 3.6.2 (2019-12-12) and R Under development (unstable) (2020-01-03 r77630)
+* rhub: debian-gcc-devel and fedora-gcc-devel
 
 ## R CMD check results
 There were no ERRORs.
@@ -82,6 +84,8 @@ package ‘MDSmap’ is not available (for R version 3.6.2)
 [CRAN Repository Policy](https://cran.r-project.org/web/packages/policies.html) states that all correspondence should be with CRAN and not members of the team.
 However, I think its polite to thank those who have helped this project.
 So I've decided to start a list of thanks with the hope that these individuals may see this in the future.
+
+v1.9.0 Thank you Uwe Ligges for processing my submission!
 
 v1.8.0 Thank you Uwe Ligges for processing my submission!
 
