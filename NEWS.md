@@ -12,8 +12,9 @@ This may have been addressed at 64a308ba50b9119108e8946737460de5997b805b by addi
 
 
 # vcfR 1.10.0
-Released on CRAN 202X-XX-XX
+Released on CRAN 2020-02-XX
 * Handled deprecated "dplyr::verb_" function in vcfR2tidy
+* Omitted unused elipses from proc.chromR()
 
 # vcfR 1.9.0
 Released on CRAN 2020-01-10
