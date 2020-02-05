@@ -12,31 +12,12 @@ However, I was asked by CRAN to fix warnings occurring on R-devel by 2-17 so I'm
 ## R CMD check results
 There were no ERRORs.
 
-On Mac there was one WARNINGs.
-
-* checking top-level files ... WARNING
-Conversion of ‘README.md’ failed:
-pandoc: Could not fetch http://www.r-pkg.org/badges/version/vcfR
-TlsExceptionHostPort (HandshakeFailed (Error_Misc "user error (unexpected type received. expecting handshake and got: Alert [(AlertLevel_Fatal,HandshakeFailure)])")) "www.r-pkg.org" 80
-
-I copied and pasted the url into firefox and it worked for me.
-
 There was 1 NOTE:
 
-* checking CRAN incoming feasibility ... NOTE
-Maintainer: 'Brian J. Knaus <briank.lists@gmail.com>'
-
-Version contains large components (1.9.0)
-
-Found the following (possibly) invalid URLs:
-  URL: http://www.1000genomes.org/node/101
-    From: inst/doc/intro_to_vcfR.html
-    Status: Error
-    Message: libcurl error code 60:
-      	SSL certificate problem: unable to get local issuer certificate
-      	(Status without verification: OK)
-
-This link does appear to work.
+> checking installed package size ... NOTE
+    installed size is  9.9Mb
+    sub-directories of 1Mb or more:
+      libs   8.0Mb
 
 ## Downstream dependencies
 
