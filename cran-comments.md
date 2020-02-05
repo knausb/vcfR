@@ -12,7 +12,17 @@ However, I was asked by CRAN to fix warnings occurring on R-devel by 2-17 so I'm
 ## R CMD check results
 There were no ERRORs.
 
-There was 1 NOTE:
+There were 2 NOTEs:
+
+Found the following (possibly) invalid URLs:
+  URL: http://www.1000genomes.org/node/101
+    From: inst/doc/intro_to_vcfR.html
+    Status: Error
+    Message: libcurl error code 60:
+      	SSL certificate problem: unable to get local issuer certificate
+      	(Status without verification: OK)
+
+This url works when I copy and paste it into firefox.
 
 > checking installed package size ... NOTE
     installed size is  9.9Mb
