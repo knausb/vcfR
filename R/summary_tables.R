@@ -31,7 +31,7 @@
 #
 
 
-#' @rdname Summary.tables
+# ' @rdname Summary.tables
 #' @aliases write.var.info
 #' 
 #' @export

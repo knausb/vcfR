@@ -33,7 +33,7 @@
 #' 
 
 
-#' @rdname proc_chromR
+# ' @rdname proc_chromR
 #' @export
 #' @aliases proc.chromR
 #'

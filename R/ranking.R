@@ -13,7 +13,7 @@
 #' 
 
 
-#' @rdname ranking
+# ' @rdname ranking
 #' @aliases rank.variants.chromR
 #' 
 #' @export

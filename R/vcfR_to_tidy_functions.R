@@ -192,7 +192,7 @@
 
 
 #### vcfR2tidy ####
-#' @rdname vcfR_to_tidy_conversion
+# ' @rdname vcfR_to_tidy_conversion
 #' @aliases vcfR2tidy
 #' 
 #' @param info_only if TRUE return a list with only a \code{fix} component
