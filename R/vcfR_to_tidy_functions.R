@@ -597,7 +597,7 @@ guess_types <- function(D) {
   tmp <- D %>%
 #    dplyr::filter_(~Number == 1) %>%
     dplyr::filter(Number == 1) %>%
-    dplyr::mutate(tt = ifelse(Type == "Integer", "i", ifelse(Type == "Numeric" | Type == "Float", "n", ""))) %>%
+    dplyr::mutate(tt = dplyr::if_else(Type == "Integer", "i", dplyr::if_else(Type == "Numeric" | Type == "Float", "n", ""))) %>%
     dplyr::filter(tt %in% c("n", "i")) %>%
 #    dplyr::filter_(~tt %in% c("n", "i")) %>%
     dplyr::select(ID, Number, Type, tt)
@@ -605,7 +605,7 @@ guess_types <- function(D) {
 
 #  tmp <- D %>%  dplyr::filter_(~Number == 0 & Type == 'Flag')  %>%
   tmp <- D %>%  dplyr::filter(Number == 0 & Type == 'Flag')  %>%
-    dplyr::mutate(tt = ifelse(Type == "Flag", "f")) %>%
+    dplyr::mutate(tt = dplyr::if_else(Type == "Flag", "f", "")) %>%
     dplyr::filter(tt %in% c("f")) %>%
 #    dplyr::filter_(~tt %in% c("f")) %>%
     dplyr::select(ID, Number, Type, tt)  %>%
