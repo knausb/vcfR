@@ -10,7 +10,7 @@
 
 ##### Set a mask #####
 
-#' @rdname chromR_functions
+# ' @rdname chromR_functions
 #' @export
 #' @aliases masker
 #' 

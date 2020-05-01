@@ -97,7 +97,7 @@
 #' setwd( orig_dir )
 #' 
 #' 
-#' @rdname io_vcfR
+# ' @rdname io_vcfR
 #' @aliases read.vcfR
 #' @export
 #' 

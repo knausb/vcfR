@@ -47,7 +47,7 @@
 
 
 
-#' @rdname vcfR_conversion
+# ' @rdname vcfR_conversion
 #' @aliases vcfR2genind
 #' 
 #' @param sep character (to be used in a regular expression) to delimit the alleles of genotypes

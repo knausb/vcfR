@@ -27,7 +27,7 @@
 #' 
 
 
-#' @rdname windowing
+# ' @rdname windowing
 # @aliases windowing alias NM2winNM
 #' 
 #' @export
