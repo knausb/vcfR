@@ -4,7 +4,7 @@ However, I was asked by CRAN to fix warnings occurring on R-devel by 2-17 so I'm
 
 ## Test environments
 * local: ubuntu 16.04 LTS and R 3.6.2
-* local: OS X Catalina 10.15.2 and R 3.6.2 and clang
+* local: OS X Catalina 10.15.4 and R 4.0.0 and clang
 * travis-ci: ubuntu 16.04 LTS, R 3.6.2 and R Under development (unstable) (2020-02-04 r77771)
 * AppVeyor: Windows Server 2012 R2 x64 (build 9600) R version 3.6.2 Patched (2020-01-25 r77764)
 * winbuilder: R version 3.6.2 (2019-12-12) and R Under development (unstable) (2020-01-28 r77738)
