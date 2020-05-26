@@ -5,7 +5,9 @@
 \alias{vcfR_test}
 \alias{vcf_test}
 \title{Test data for vcfR.}
-\format{A vcfR object}
+\format{
+A vcfR object
+}
 \description{
 A test file containing a diversity of examples intended to test functionality.
 }
