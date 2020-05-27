@@ -7,7 +7,9 @@
 \alias{gff}
 \alias{vcf}
 \title{Example data for vcfR.}
-\format{A DNAbin object, a data.frame and a vcfR object}
+\format{
+A DNAbin object, a data.frame and a vcfR object
+}
 \description{
 An example dataset containing parts of the *Phytophthora infestans* genome.
 }

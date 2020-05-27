@@ -4,7 +4,9 @@
 \name{vep}
 \alias{vep}
 \title{Example data from the Variant Effect Predictor (VEP).}
-\format{A vcfR object}
+\format{
+A vcfR object
+}
 \description{
 Example data to use with unit tests.
 }
