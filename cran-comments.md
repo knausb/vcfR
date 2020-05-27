@@ -1,6 +1,5 @@
 
-vcfR was last published on CRAN on 2020-01-10, so this may appear as an early resubmission.
-However, I was asked by CRAN to fix warnings occurring on R-devel by 2-17 so I'm submitting.
+This release includes updates to address the release of dplyr 1.0.0.
 
 ## Test environments
 * local: ubuntu 16.04 LTS and R 3.6.2
