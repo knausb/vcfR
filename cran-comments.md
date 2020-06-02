@@ -2,9 +2,9 @@
 This release includes updates to address the release of dplyr 1.0.0.
 
 ## Test environments
-* local: ubuntu 16.04 LTS and R 3.6.2
-* local: OS X Catalina 10.15.4 and R 4.0.0 and clang
-* travis-ci: ubuntu 16.04 LTS, R 3.6.2 and R Under development (unstable) (2020-02-04 r77771)
+* local: ubuntu 18.04 LTS and R 4.0.0
+* local: OS X Catalina 10.15.2 and R 4.0.0 and clang
+* travis-ci: ubuntu 16.04 LTS, R 4.0.0 and R Under development (unstable) (2020-05-26 r78576)
 * AppVeyor: Windows Server 2012 R2 x64 (build 9600) R version 3.6.2 Patched (2020-01-25 r77764)
 * winbuilder: R version 3.6.2 (2019-12-12) and R Under development (unstable) (2020-01-28 r77738)
 
@@ -20,13 +20,19 @@ Found the following (possibly) invalid URLs:
     Message: libcurl error code 60:
       	SSL certificate problem: unable to get local issuer certificate
       	(Status without verification: OK)
-
+  URL: https://uswest.ensembl.org/info/docs/tools/vep/index.html
+    From: man/vep.Rd
+    Status: Error
+    Message: libcurl error code 60:
+      	SSL certificate problem: unable to get local issuer certificate
+      	(Status without verification: OK)
+      	
 This url works when I copy and paste it into firefox.
 
-> checking installed package size ... NOTE
-    installed size is  9.9Mb
-    sub-directories of 1Mb or more:
-      libs   8.0Mb
+* checking installed package size ... NOTE
+  installed size is 10.4Mb
+  sub-directories of 1Mb or more:
+    libs   8.4Mb
 
 ## Downstream dependencies
 
