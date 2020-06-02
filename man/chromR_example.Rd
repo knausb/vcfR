@@ -5,7 +5,9 @@
 \alias{chromR_example}
 \alias{chrom}
 \title{Example chromR object.}
-\format{A chromR object}
+\format{
+A chromR object
+}
 \description{
 An example chromR object containing parts of the *Phytophthora infestans* genome.
 }
