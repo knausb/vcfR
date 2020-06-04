@@ -35,51 +35,14 @@ This url works when I copy and paste it into firefox.
   sub-directories of 1Mb or more:
     libs   8.4Mb
 
-## Downstream dependencies
-
-I have also run R CMD check on downstream dependencies of vcfR
-All packages that I could install passed:
-
-devtools::revdep_check() is no longer a part of devtools and the package revdepcheck (on GitHub but not CRAN) threw an error because a dependent R package could not be installed.
-
-I used:
-R CMD check --as-cran
-on the tarballs from CRAN for the following packages.
-
-Reverse imports: 	binmapr, pcadapt, whoa
-Reverse suggests: 	LDheatmap, onemap, perfectphyloR, rehh, SimRVSequences
-
-I spent an entire afternoon trying to install dependencies of reversedependencies of vcfR but was not successful.
-It appears there are dependencies of these packages that are not available for R version 3.6.2.
-
-
-Results:
-
-WARNINGS were thrown because the version tested was the same as on CRAN.
-
-binmapr
-* checking Rd cross-references ... NOTE
-Package unavailable to check Rd xrefs: ‘qtl’
-
-pcadapt
-* checking package dependencies ... ERROR
-Packages required but not available:
-  'mmapcharr', 'plotly', 'robust', 'RSpectra', 'rmio'
-
-These do not appear to be available for R version 3.6.2.
-
-LDheatmap
-Warning message:
-package ‘snpStats’ is not available (for R version 3.6.2) 
-
-onemap
-package ‘MDSmap’ is not available (for R version 3.6.2)
 
 ## Thank you CRAN Core Team!
 
 [CRAN Repository Policy](https://cran.r-project.org/web/packages/policies.html) states that all correspondence should be with CRAN and not members of the team.
 However, I think its polite to thank those who have helped this project.
 So I've decided to start a list of thanks with the hope that these individuals may see this in the future.
+
+v1.10.0 Thank you Uwe Ligges for processing my submission!
 
 v1.9.0 Thank you Uwe Ligges for processing my submission!
 
