@@ -42,6 +42,8 @@ This url works when I copy and paste it into firefox.
 However, I think its polite to thank those who have helped this project.
 So I've decided to start a list of thanks with the hope that these individuals may see this in the future.
 
+v1.11.0 Thank you Uwe Ligges for processing my submission!
+
 v1.10.0 Thank you Uwe Ligges for processing my submission!
 
 v1.9.0 Thank you Uwe Ligges for processing my submission!
