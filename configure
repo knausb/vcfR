@@ -1,6 +1,2 @@
 #!/bin/sh
-
-#
-checkbashisms --force
-
 # EOF.
