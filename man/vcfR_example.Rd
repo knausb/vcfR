@@ -6,8 +6,43 @@
 \alias{dna}
 \alias{gff}
 \alias{vcf}
+\alias{Extra}
+\alias{example}
+\alias{data}
+\alias{for}
+\alias{vcfR.}
+\alias{Example}
+\alias{Data}
+\alias{with}
+\alias{multiple}
+\alias{chromosomes,}
+\alias{human}
+\alias{VCFs}
+\alias{sections}
+\alias{pulled}
+\alias{from}
+\alias{1000}
+\alias{genomes.}
+\alias{see}
+\alias{data-raw/additional_test_data.R}
+\alias{details}
+\alias{of}
+\alias{object}
+\alias{generation}
+\alias{\itemize{}
+\alias{\item}
+\alias{seq_multi}
+\alias{DNAbin}
+\alias{tab_multi}
+\alias{format}
+\alias{data.frame}
+\alias{vcf_multi}
+\alias{vcfR}
+\alias{}}
 \title{Example data for vcfR.}
 \format{
+A DNAbin object, a data.frame and a vcfR object
+
 A DNAbin object, a data.frame and a vcfR object
 }
 \description{
@@ -37,5 +72,6 @@ data(vcfR_example)
 
 
 
+data(vcfR_example_extra)
 }
 \keyword{datasets}
