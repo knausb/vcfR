@@ -10,6 +10,7 @@
 #' Creates and populates an object of class chromR.
 #'
 #' @param vcf an object of class vcfR
+#' @param CHROM optionally specify which chromosome to subset.
 #' @param name a name for the chromosome (for plotting purposes)
 #' @param seq a sequence as a DNAbin object
 #' @param ann an annotation file (gff-like)
@@ -84,7 +85,7 @@
 # hist(tab$Ho - tab$He, col=5)
 # # Note that this example is a mitochondrion, so this is a bit silly.
 #' 
-create.chromR <- function(vcf, name="CHROM", seq=NULL, ann=NULL, verbose=TRUE){
+create.chromR <- function(vcf, name="CHROM", seq=NULL, ann=NULL, verbose=TRUE, CHROM = NULL){
   # Determine whether we received the expected classes.
   stopifnot(class(vcf) == "vcfR")
 
@@ -92,24 +93,53 @@ create.chromR <- function(vcf, name="CHROM", seq=NULL, ann=NULL, verbose=TRUE){
     myChroms <- unique( getCHROM(vcf) )
     message('vcfR object includes more than one chromosome (CHROM).')
     message( paste(myChroms, collapse = ", ") )
-    message("Subsetting to the first chromosome")
-    vcf <- vcf[ getCHROM(vcf) == myChroms[1],]
+    if (is.null(CHROM)) {
+      message("Subsetting to the first chromosome")
+      vcf <- vcf[ getCHROM(vcf) == myChroms[1],]
+    } else {
+      warning("
+        Subsetting to the specified chromosome
+        This may produce unexpected behaviours if chomosome names are not
+        the same for vcf, sequence and/or annotation
+      ")
+      vcf <- vcf[ getCHROM(vcf) == CHROM,]
+    }
   }
   
   if( length( names(seq) ) > 1 ){
+    # Note example object dna has no names but length of NULL is 0 so this
+    # does not become an issue.
     mySeqs <- names(seq)
     message('DNAbin object includes more than one chromosome.')
     message( paste(mySeqs, collapse = ", ") )
-    message("Subsetting to the first chromosome")
-    seq <- seq[ mySeqs[1] ]
+    if (is.null(CHROM)) {
+      message("Subsetting to the first chromosome")
+      seq <- seq[ mySeqs[1] ]
+    } else {
+      warning("
+        Subsetting to the specified chromosome
+        This may produce unexpected behaviours if chomosome names are not
+        the same for vcf, sequence and/or annotation
+      ")
+      seq <- seq[ mySeqs == CHROM ]
+    }
   }
   
   if( length( unique( ann[,1] ) ) > 1 ){
     myChroms <- unique( ann[,1] )
     message('Annotations include more than one chromosome.')
     message( paste(myChroms, collapse = ", ") )
-    message("Subsetting to the first chromosome")
-    ann <- ann[ann[,1] == myChroms[1], , drop = FALSE]
+    if (is.null(CHROM)) {
+      message("Subsetting to the first chromosome")
+      ann <- ann[ann[,1] == myChroms[1], , drop = FALSE]
+    } else {
+      warning("
+        Subsetting to the specified chromosome
+        This may produce unexpected behaviours if chomosome names are not
+        the same for vcf, sequence and/or annotation
+      ")
+      ann <- ann[ann[,1] == CHROM, , drop = FALSE]
+    }
   }
   
   
@@ -176,7 +206,9 @@ create.chromR <- function(vcf, name="CHROM", seq=NULL, ann=NULL, verbose=TRUE){
         warning("
         Names in variant data and sequence data do not match perfectly.
         If you choose to proceed, we'll do our best to match the data.
-        But prepare yourself for unexpected results.")
+        But prepare yourself for unexpected results.
+        NB Subsetting chromosomes using CHROM *only* works when the names match.
+        ")
 #        message("Names in variant file and sequence file do not match perfectly.")
 #        message("If you choose to proceed, we'll do our best to match data.")
 #        message("But prepare yourself for unexpected results.")

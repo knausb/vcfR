@@ -34,5 +34,24 @@
 #' @name vcfR_example
 # @aliases pinf_dna pinf_vcf pinf_gff
 #' @aliases dna gff vcf
-NULL
 
+#' Extra example data for vcfR.
+#' 
+#' Example Data with multiple chromosomes, human data VCFs sections pulled 
+#' from 1000 genomes. see data-raw/additional_test_data.R for details of object
+#' generation
+#' 
+#' \itemize{
+#'   \item seq_multi DNAbin object
+#'   \item tab_multi gff format data.frame
+#'   \item vcf_multi vcfR object
+#' }
+#' @examples
+#' data(vcfR_example_extra)
+#' @docType data
+#' @keywords datasets
+#' @format A DNAbin object, a data.frame and a vcfR object
+#' @name vcfR_example_extra
+#' @aliases seq_multi tab_multi vcf_multi
+
+NULL

@@ -8,7 +8,14 @@
 \alias{ann2chromR}
 \title{Create chromR object}
 \usage{
-create.chromR(vcf, name = "CHROM", seq = NULL, ann = NULL, verbose = TRUE)
+create.chromR(
+  vcf,
+  name = "CHROM",
+  seq = NULL,
+  ann = NULL,
+  verbose = TRUE,
+  CHROM = NULL
+)
 
 vcfR2chromR(x, vcf)
 
@@ -26,6 +33,8 @@ ann2chromR(x, gff)
 \item{ann}{an annotation file (gff-like)}
 
 \item{verbose}{should verbose output be printed to the console?}
+
+\item{CHROM}{optionally specify which chromosome to subset.}
 
 \item{x}{an object of class chromR}
 
