@@ -34,6 +34,7 @@
 #' @name vcfR_example
 # @aliases pinf_dna pinf_vcf pinf_gff
 #' @aliases dna gff vcf
+NULL
 
 #' Extra example data for vcfR.
 #' 
@@ -53,5 +54,4 @@
 #' @format A DNAbin object, a data.frame and a vcfR object
 #' @name vcfR_example_extra
 #' @aliases seq_multi tab_multi vcf_multi
-
 NULL
