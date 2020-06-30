@@ -35,7 +35,7 @@ The matrix form appears to be better behaved than the list form.
 Because of this behavior this slot should be the matrix form.
 When this slot is not populated it is of class "NULL" instead of "DNAbin".
 Note that characters need to be lower case when inserted into an object of class DNAbin.
-The function \code{\link[base]{tolower}} can facilitate this.
+The function \code{\link[base:chartr]{tolower}} can facilitate this.
 
 
 The \strong{vcf} slot is an object of class vcfR \code{\link{vcfR-class}}.
