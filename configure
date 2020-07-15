@@ -1,6 +1,10 @@
 #!/bin/sh
 
-#
-#checkbashisms --force
+# Thanks for help!
+# https://stackoverflow.com/a/62721142
+
+if [ -f /usr/bin/checkbashisms ]; then
+    checkbashisms --force
+fi
 
 # EOF.
