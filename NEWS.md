@@ -11,8 +11,8 @@ This may have been addressed at 64a308ba50b9119108e8946737460de5997b805b by addi
 * In issue #92 (vcfR2genlight big data #92), JimWhiting91 has documented that `extract.gt()` could be greatly improved with multithreading. While he used `mclapply()` I do not feel this is the best solution because it does not work on Windows. I think a better solution would be [RCppParallel](https://rcppcore.github.io/RcppParallel/) because this should work on all CRAN platforms.
 
 # vcfR 1.12.0
-Released on CRAN 2020-07-XX
-* Incorporated help from https://stackoverflow.com/a/62721142 to use checkbashisms
+Released on CRAN 2020-XX-XX
+* Incorporated help from https://stackoverflow.com/a/62721142 to use checkbashisms when checking on Debian flavors of Linux
 
 # vcfR 1.11.0
 Released on CRAN 2020-06-05

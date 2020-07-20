@@ -1,6 +1,11 @@
 #!/bin/sh
 
-# Thanks for help!
+# Thank you to the community for help!
+#
+# How to install checkbashisms.
+# https://github.com/simonwhitaker/linter-checkbashisms
+#
+# What to include in configure.
 # https://stackoverflow.com/a/62721142
 
 if [ -f /usr/bin/checkbashisms ]; then
