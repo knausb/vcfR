@@ -2,13 +2,20 @@
 This release includes updates to address requests from CRAN to incorporate checkbashisms on Debian flavors or Linux.
 
 ## Test environments
-* local: ubuntu 18.04 LTS and R 4.0.2
+* local:
+ubuntu 18.04 LTS and R 4.0.2
+
+win-builder:
+* using R version 4.0.2 (2020-06-22)
+* using R Under development (unstable) (2020-07-19 r78884)
+
+rhub:
 
 
 * local: OS X Catalina 10.15.4 and R 4.0.0 and clang
 * travis-ci: ubuntu 16.04 LTS, R 4.0.0 and R Under development (unstable) (2020-05-26 r78576)
 * AppVeyor: Windows Server 2012 R2 x64 (build 9600) R version 3.6.2 Patched (2020-01-25 r77764)
-* win-builder: R version release (4.0.0)
+
 * win-builder: R version devel (2020-05-29 r78617)
 
 ## R CMD check results
