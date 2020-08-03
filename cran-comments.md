@@ -28,6 +28,7 @@ rhub:
 ## R CMD check results
 There were no ERRORs.
 
+
 There were 2 NOTEs:
 
 Found the following (possibly) invalid URLs:
@@ -46,10 +47,13 @@ Found the following (possibly) invalid URLs:
       	
 This url works when I copy and paste it into firefox.
 
+
 * checking installed package size ... NOTE
   installed size is 10.4Mb
   sub-directories of 1Mb or more:
-    libs   8.4Mb
+    libs   8.5Mb
+
+
 
 
 ## Thank you CRAN Core Team!
