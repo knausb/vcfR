@@ -2,6 +2,7 @@
 This release includes updates to address requests from CRAN to incorporate checkbashisms on Debian flavors or Linux.
 
 ## Test environments
+
 * local:
 ubuntu 18.04 LTS and R 4.0.2
 
@@ -17,7 +18,6 @@ AppVeyor:
 * Windows Server 2012 R2 x64 (build 9600) R version 3.6.2 Patched (2020-01-25 r77764)
 
 rhub:
-
 
 * local: OS X Catalina 10.15.4 and R 4.0.0 and clang
 
