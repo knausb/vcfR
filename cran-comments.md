@@ -6,6 +6,9 @@ This release includes updates to address requests from CRAN to incorporate check
 * local:
 ubuntu 18.04 LTS and R 4.0.2
 
+* local:
+OS X Catalina 10.15.6 and R 4.0.2 and clang
+
 win-builder:
 * using R version 4.0.2 (2020-06-22)
 * using R Under development (unstable) (2020-07-19 r78884)
@@ -19,10 +22,26 @@ AppVeyor:
 
 rhub:
 
-* local: OS X Catalina 10.15.4 and R 4.0.0 and clang
 
 
+Issues:
 
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: ‘Brian J. Knaus <briank.lists@gmail.com>’
+
+New submission
+
+Package was archived on CRAN
+
+Found the following (possibly) invalid URLs:
+  URL: https://gatkforums.broadinstitute.org/gatk/discussion/6926/spanning-or-overlapping-deletions-allele
+    From: man/vcfR2DNAbin.Rd
+    Status: Error
+    Message: libcurl error code 6:
+      	Could not resolve host: gatkforums.broadinstitute.org
+        
+        
+        
 
 
 ## R CMD check results
