@@ -129,9 +129,9 @@ If you know of a software that I have not included on this list, particularly if
 
 * [Cortex](http://cortexassembler.sourceforge.net/)
 * [freebayes](https://github.com/ekg/freebayes)
-* [GATK haplotype caller](https://www.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_haplotypecaller_HaplotypeCaller.php)
-* [GATK MuTect2](https://www.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_cancer_m2_MuTect2.php)
-* [GATK GenotypeGVCFs](https://www.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_variantutils_GenotypeGVCFs.php)
+* [GATK haplotype caller](https://software.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_haplotypecaller_HaplotypeCaller.php)
+* [GATK MuTect2](https://software.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_cancer_m2_MuTect2.php)
+* [GATK GenotypeGVCFs](https://software.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_variantutils_GenotypeGVCFs.php)
 * [LoFreq](http://csb5.github.io/lofreq/)
 * [Samtools](http://www.htslib.org/)
 * [VarScan2](http://dkoboldt.github.io/varscan/)
@@ -140,7 +140,7 @@ If you know of a software that I have not included on this list, particularly if
 **Restriction site associated DNA markers (e.g., RADseq, GBS):**
 
 * [Stacks](http://catchenlab.life.illinois.edu/stacks/)
-* [Tassel](http://www.maizegenetics.net/#!tassel/c17q9)
+* [Tassel](https://www.maizegenetics.net)
 
 **Manipulation of VCF data:**
 

@@ -41,7 +41,7 @@ This is one situation where not having complete chromosomes actually can be an a
 ## Data input
 
 
-The vcfR package is designed to work with data from [VCF](http://www.1000genomes.org/node/101) files.
+The vcfR package is designed to work with data from [VCF](https://www.internationalgenome.org/node/101) files.
 The use of a sequence file ([FASTA format](https://en.wikipedia.org/wiki/FASTA_format)) and an annotation file ([GFF format](https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md)) can provide helpful context, but are not required.
 We'll begin our example by locating the data files from the package 'pinfsc50.'
 
