@@ -18,6 +18,7 @@ cache:
 environment:
   global:
     WARNINGS_ARE_ERRORS: 1
+    PKGTYPE: both
 
   matrix:
     - R_VERSION: devel
