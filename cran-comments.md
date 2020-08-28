@@ -1,8 +1,29 @@
 
+
+## Resubmission
+
+This is a resubmission.
+In my previous submission I asserted that
+
+https://gatkforums.broadinstitute.org/gatk/discussion/6926/spanning-or-overlapping-deletions-allele
+
+was a valid URL. However, CRAN correctly identified it as invalid. This has been updated to the following.
+
+https://gatk.broadinstitute.org/hc/en-us/articles/360035531912-Spanning-or-overlapping-deletions-allele-
+
+I have now also validated that
+
+http://www.1000genomes.org/node/101
+https://uswest.ensembl.org/info/docs/tools/vep/index.html
+
+are valid URLs by pasting them into firefox.
+
+
+## Submission
+
 This package, vcfR, was archived on CRAN on 2020-07-05 because CRAN asked me to address issues that I was unable to address before their deadline.
 This submission is in hope of being restored to CRAN.
 The issues I received via email are as follows.
-
 
 ```
 checkbashisms is not even in SystemRequirements and used
@@ -83,11 +104,6 @@ Found the following (possibly) invalid URLs:
     Message: libcurl error code 60:
       	SSL certificate problem: unable to get local issuer certificate
       	(Status without verification: OK)
-  URL: https://gatkforums.broadinstitute.org/gatk/discussion/6926/spanning-or-overlapping-deletions-allele
-    From: man/vcfR2DNAbin.Rd
-    Status: Error
-    Message: libcurl error code 6:
-      	Could not resolve host: gatkforums.broadinstitute.org
   URL: https://uswest.ensembl.org/info/docs/tools/vep/index.html
     From: man/vep.Rd
     Status: Error

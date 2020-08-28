@@ -66,7 +66,7 @@
 #' 
 #' 
 #' When a variant overlaps a deletion it may be encoded by an \strong{asterisk allele (*)}.
-#' The GATK site covers this in a post on \href{https://gatkforums.broadinstitute.org/gatk/discussion/6926/spanning-or-overlapping-deletions-allele}{Spanning or overlapping deletions} ].
+#' The GATK site covers this in a post on \href{https://gatk.broadinstitute.org/hc/en-us/articles/360035531912-Spanning-or-overlapping-deletions-allele-}{Spanning or overlapping deletions} ].
 #' This is handled in vcfR by allowing the user to decide how it is handled with the paramenter \code{asterisk_as_del}.
 #' When \code{asterisk_as_del} is TRUE this allele is converted into a deletion ('-').
 #' When \code{asterisk_as_del} is FALSE the asterisk allele is converted to NA.
