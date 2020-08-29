@@ -97,14 +97,14 @@ Possibly mis-spelled words in DESCRIPTION:
 These words and acronyms are esoteric to working with genomic data and are all correctly spelled.
 
 Found the following (possibly) invalid URLs:
-  URL: http://www.1000genomes.org/node/101
-    From: inst/doc/intro_to_vcfR.html
+  URL: https://uswest.ensembl.org/info/docs/tools/vep/index.html
+    From: man/vep.Rd
     Status: Error
     Message: libcurl error code 60:
       	SSL certificate problem: unable to get local issuer certificate
       	(Status without verification: OK)
-  URL: https://uswest.ensembl.org/info/docs/tools/vep/index.html
-    From: man/vep.Rd
+  URL: https://www.internationalgenome.org/node/101
+    From: inst/doc/intro_to_vcfR.html
     Status: Error
     Message: libcurl error code 60:
       	SSL certificate problem: unable to get local issuer certificate
