@@ -68,12 +68,16 @@ travis-ci:
 * Ubuntu 16.04.6 LTS, R version 4.0.0 (2020-04-24)
 * Ubuntu 16.04.6 LTS, R Under development (unstable) (2020-08-26 r79084)
 
+Currently failing:
+Error in dyn.load(file, DLLpath = DLLpath, ...) : 
+  unable to load shared object '/home/travis/R/Library/ape/libs/ape.so':
+  libRlapack.so: cannot open shared object file: No such file or directory
+
+My interpretation is that this is not due to vcfR.
+
 AppVeyor:
-* Windows Server 2012 R2 x64 (build 9600), R Under development (unstable) (2020-08-24 r79074)
-
-Error: (converted from warning) package 'utf8' is not available (as a binary package for R Under development
-
-I interpret this as not a vcfR issue.
+* Windows Server 2012 R2 x64 (build 9600), R Under development (unstable) (2020-08-24 r79088)
+* Windows Server 2012 R2 x64 (build 9600), R version 4.0.2 (2020-06-22)
 
 rhub:
 * None for this submission
