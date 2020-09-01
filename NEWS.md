@@ -10,9 +10,14 @@ I think I encountered a situation where 4-96 was not enough so I've bumped it to
 This may have been addressed at 64a308ba50b9119108e8946737460de5997b805b by adding `samples` to vcfR method `[`.
 * In issue #92 (vcfR2genlight big data #92), JimWhiting91 has documented that `extract.gt()` could be greatly improved with multithreading. While he used `mclapply()` I do not feel this is the best solution because it does not work on Windows. I think a better solution would be [RCppParallel](https://rcppcore.github.io/RcppParallel/) because this should work on all CRAN platforms.
 
+# vcfR 1.13.0
+Released on CRAN 202X-XX-XX
+
 # vcfR 1.12.0
-Released on CRAN 2020-XX-XX
-* Incorporated help from https://stackoverflow.com/a/62721142 to use checkbashisms when checking on Debian flavors of Linux
+Released on CRAN 2020-09-01
+* Added ```PKGTYPE: both``` to appveyor.yml so Windows packages can be built from source
+* Omitted ```configure``` file that unnecessarily tried to invoke checkbashisms
+* Incorporated help from https://stackoverflow.com/a/62721142 to use checkbashisms when checking on Debian flavors of Linux (ended up omitting this change but left this here to document it and the link)
 
 # vcfR 1.11.0
 Released on CRAN 2020-06-05
