@@ -10,16 +10,13 @@ vcfR2hapmap(vcf)
 \item{vcf}{a vcfR object.}
 }
 \value{
-a text file that can be used as an input for MigrateN software (SNP format).
+a data.frame that can be used as an input for GAPIT.
 }
 \description{
 The function converts a vcfR object to hapmap
 }
 \details{
-This function converts a vcfR object to a text file which can be used as input for MigrateN.
-}
-\seealso{
-\href{http://popgen.sc.fsu.edu/Migrate/Migrate-n.html}{Migrate-N} website.
+This function converts a vcfR object to a hapmat format.
 }
 \author{
 Brian J. Knaus
