@@ -13,10 +13,17 @@ vcfR2hapmap(vcf)
 a data.frame that can be used as an input for GAPIT.
 }
 \description{
-The function converts a vcfR object to hapmap
+Converts a vcfR object to hapmap
 }
 \details{
-This function converts a vcfR object to a hapmat format.
+Converts a vcfR object to a hapmap format.
+}
+\examples{
+data(vcfR_test)
+myHapMap <- vcfR2hapmap(vcfR_test)
+class(myHapMap)
+
+
 }
 \author{
 Brian J. Knaus

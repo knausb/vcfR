@@ -1,20 +1,25 @@
 #' 
 #' @title Convert a vcfR object to hapmap
-#' @description The function converts a vcfR object to hapmap
+#' 
+#' @description Converts a vcfR object to hapmap
 #'
 #' @param vcf a vcfR object.
 # ' @param out_file name of output file.
 # ' @param method should 'N' or 'H' format data be generated?
 #'
 #' @details
-#' This function converts a vcfR object to a hapmat format.
+#' Converts a vcfR object to a hapmap format.
 #' 
 #' @return a data.frame that can be used as an input for GAPIT.
 #' 
 #' @author Brian J. Knaus
 #' 
 # ' @seealso \href{http://popgen.sc.fsu.edu/Migrate/Migrate-n.html}{Migrate-N} website.
-# ' @examples
+#' @examples
+#' data(vcfR_test)
+#' myHapMap <- vcfR2hapmap(vcfR_test)
+#' class(myHapMap)
+#' 
 #' 
 #' @export
 vcfR2hapmap <- function(vcf) {
@@ -39,7 +44,7 @@ vcfR2hapmap <- function(vcf) {
   class(hapMap) <- c("hapMap", class(hapMap))
   
   # GAPIT compatibility
-  hapMap <- rbind(hapMap[1, ], hapMap)
+  hapMap <- rbind(colnames(hapMap), hapMap)
   
   return(hapMap)
 }
