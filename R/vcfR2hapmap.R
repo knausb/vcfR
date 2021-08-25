@@ -30,6 +30,7 @@ vcfR2hapmap <- function(vcf) {
   gt <- extract.gt(vcf, return.alleles = TRUE)
   gt <- sub("/|\\|", "", gt, fixed = FALSE)
   gt[ is.na(gt) ] <- "NN"
+  gt[ gt == "." ] <- "NN"
 
   hapMap <- matrix(data = NA, nrow = nrow(gt), ncol = ncol(gt) + 11)
   hapMap <- as.data.frame(hapMap)

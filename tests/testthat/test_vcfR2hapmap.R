@@ -24,3 +24,17 @@ test_that("vcfR2hapmap works",{
   
 })
 
+
+test_that("vcfR2hapmap works, missing data",{
+  data("vcfR_test")
+  
+  vcfR_test@gt[1, 3] <- "./.:48:4:51,51"
+  vcfR_test@gt[2, 3] <- ".|.:48:4:51,51"
+  
+  myHapMap <- vcfR2hapmap(vcfR_test)
+  expect_true(myHapMap[2, 13] == "NN")
+  expect_true(myHapMap[3, 13] == "NN")
+  
+})
+
+
