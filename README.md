@@ -10,9 +10,6 @@ On CRAN:
 Depsy:
 [![Research software impact](http://depsy.org/api/package/cran/vcfR/badge.svg)](http://depsy.org/package/r/vcfR)
 
-Travis-CI (Ubuntu Linux):
-[![Travis-CI Build Status](https://travis-ci.org/knausb/vcfR.png?branch=master)](https://travis-ci.org/knausb/vcfR)
-
 Appveyor (Windows):
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/knausb/vcfR?branch=master&svg=true)](https://ci.appveyor.com/project/knausb/vcfR)
 
