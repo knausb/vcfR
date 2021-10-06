@@ -19,7 +19,14 @@
 #' data(vcfR_test)
 #' myHapMap <- vcfR2hapmap(vcfR_test)
 #' class(myHapMap)
-#' 
+#' \dontrun{
+#' # Example of how to create a (GAPIT compliant) HapMap file.
+#' write.table(myHapMap, 
+#'             file = "myHapMap.hmp.txt",
+#'             sep = "\t", 
+#'             row.names = FALSE,
+#'             col.names = FALSE)
+#' }
 #' 
 #' @export
 vcfR2hapmap <- function(vcf) {
