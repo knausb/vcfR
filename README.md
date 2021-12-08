@@ -13,9 +13,9 @@ Appveyor (Windows):
 Coveralls:
 [![Coverage Status](https://coveralls.io/repos/github/knausb/vcfR/badge.svg?branch=master)](https://coveralls.io/github/knausb/vcfR?branch=master)
 
-  <!-- badges: start -->
-  [![R-CMD-check](https://github.com/knausb/vcfR/workflows/R-CMD-check/badge.svg)](https://github.com/knausb/vcfR/actions)
-  <!-- badges: end -->
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/knausb/vcfR/workflows/R-CMD-check/badge.svg)](https://github.com/knausb/vcfR/actions)
+<!-- badges: end -->
 
 
 *****
