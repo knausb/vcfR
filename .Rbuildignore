@@ -1,6 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^\.travis\.yml$
 ^\.appveyor\.yml$
 ^\.o$
 ^\.so$
@@ -8,3 +7,4 @@
 cran-comments.md
 NEWS.md
 ^appveyor\.yml$
+^\.github$

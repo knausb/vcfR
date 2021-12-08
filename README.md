@@ -7,14 +7,16 @@ On CRAN:
 [![](http://cranlogs.r-pkg.org/badges/grand-total/vcfR)](https://cran.r-project.org/package=vcfR)
 [![](http://cranlogs.r-pkg.org/badges/vcfR)](https://cran.r-project.org/package=vcfR)
 
-Depsy:
-[![Research software impact](http://depsy.org/api/package/cran/vcfR/badge.svg)](http://depsy.org/package/r/vcfR)
-
 Appveyor (Windows):
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/knausb/vcfR?branch=master&svg=true)](https://ci.appveyor.com/project/knausb/vcfR)
 
 Coveralls:
 [![Coverage Status](https://coveralls.io/repos/github/knausb/vcfR/badge.svg?branch=master)](https://coveralls.io/github/knausb/vcfR?branch=master)
+
+  <!-- badges: start -->
+  [![R-CMD-check](https://github.com/knausb/vcfR/workflows/R-CMD-check/badge.svg)](https://github.com/knausb/vcfR/actions)
+  <!-- badges: end -->
+
 
 *****
 
