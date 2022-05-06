@@ -2,25 +2,25 @@
 #' @title Process chromR object
 #' @name Process chromR objects
 #' @rdname proc_chromR
-#' @description Functions which process chromR objects 
-#' 
+#' @description Functions which process chromR objects
+#'
 #' @param x object of class chromR
 #' @param win.size integer indicating size for windowing processes
 #' @param verbose logical indicating whether verbose output should be reported
 # ' @param ... arguments to be passed to methods
 #' @param max.win maximum window size
 #' @param regex a regular expression to indicate nucleotides to be searched for
-#' 
+#'
 #' @details
 #' The function \strong{proc_chromR()} calls helper functions to process the data present in a chromR object into summaries statistics.
-#' 
+#'
 #' The function \strong{regex.win()} is used to generate coordinates to define rectangles to represent regions of the chromosome containing called nucleotides (acgtwsmkrybdhv).
 #' It is then called a second time to generate coordinates to define rectangles to represent regions called as uncalled nucleotides (n, but not gaps).
-#' 
+#'
 #' The function \strong{gt2popsum} is called to create summaries of the variant data.
-#' 
+#'
 #' The function \strong{var.win} is called to create windowized summaries of the chromR object.
-#' 
+#'
 #' Each \strong{window} receives a \strong{name} and its coordinates.
 #' Several attempts are made to name the windows appropriately.
 #' First, the CHROM column of vcfR@fix is queried for a name.
@@ -29,8 +29,8 @@
 #' If an appropriate name was not found in the above locations the chromR object's 'name' slot is used.
 #' Note that the 'name' slot has a default value.
 #' If this default value is not updated then all of your windows may receive the same name.
-#' 
-#' 
+#'
+#'
 
 
 # ' @rdname proc_chromR
@@ -38,7 +38,8 @@
 #' @aliases proc.chromR
 #'
 proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
-  stopifnot(class(x) == "chromR")
+  #stopifnot(class(x) == "chromR")
+  stopifnot( inherits(x, "chromR") )
   
   if( is.null( x@seq ) & verbose == TRUE ){
     warning( "seq slot is NULL." )
@@ -47,8 +48,9 @@ proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
     warning( "annotation slot has no rows." )
   }
   
-  if(class(x@seq) == "DNAbin"){
-    ptime <- system.time(x@seq.info$nuc.win <- seq2rects(x)) 
+  #if(class(x@seq) == "DNAbin"){
+  if( inherits(x@seq, "DNAbin") ){
+    ptime <- system.time(x@seq.info$nuc.win <- seq2rects(x))
     if(verbose==TRUE){
       message("Nucleotide regions complete.")
       message(paste("  elapsed time: ", round(ptime[3], digits=4)))
@@ -57,11 +59,12 @@ proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
     warning( "seq slot is NULL, chromosome representation not made (seq2rects)." )
   }
   
-  if(class(x@seq) == "DNAbin"){
-    ptime <- system.time(x@seq.info$N.win <- seq2rects(x, chars="n")) 
+  #if(class(x@seq) == "DNAbin"){
+  if( inherits(x@seq, "DNAbin") ){
+    ptime <- system.time(x@seq.info$N.win <- seq2rects(x, chars="n"))
     if(verbose==TRUE){
       message("N regions complete.")
-      message(paste("  elapsed time: ", round(ptime[3], digits=4)))      
+      message(paste("  elapsed time: ", round(ptime[3], digits=4)))
     }
   } else if ( is.null( x@seq ) & verbose == TRUE ){
     warning( "seq slot is NULL, chromosome representation not made (seq2rects, chars=n)." )
@@ -108,7 +111,8 @@ proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
   }
 #  }
 
-  if(class(x@seq) == "DNAbin"){
+  #if(class(x@seq) == "DNAbin"){
+  if( inherits(x@seq, "DNAbin") ){
 #    if( nrow( x@vcf@gt[x@var.info$mask, , drop = FALSE ] ) > 0 ){
       ptime <- system.time(x@win.info <- .windowize_fasta(wins=x@win.info,
                                                           seq=as.character(x@seq)[1,]
@@ -129,7 +133,7 @@ proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
   if( nrow(x@ann) > 0 ){
     #if( nrow( x@vcf@gt[x@var.info$mask, , drop = FALSE] ) > 0 ){
       ptime <- system.time(x@win.info <- .windowize_annotations(wins=x@win.info,
-                                               ann_starts=as.numeric(as.character(x@ann[,4])), 
+                                               ann_starts=as.numeric(as.character(x@ann[,4])),
                                                ann_ends=as.numeric(as.character(x@ann[,5])),
                                                chrom_length=x@len)
       )
@@ -175,14 +179,14 @@ proc.chromR <- function(x, win.size = 1e3, verbose=TRUE){
 #' @rdname proc_chromR
 #' @export
 #' @aliases regex.win
-#' 
+#'
 #acgt.win <- function(x, max.win=1000, regex="[acgtwsmkrybdhv]"){
 regex.win <- function(x, max.win=1000, regex="[acgtwsmkrybdhv]"){
   # A DNAbin will store in a list when the fasta contains
   # multiple sequences, but as a matrix when the fasta
   # only contains one sequence.
   if(is.matrix(as.character(x@seq))){
-    seq <- as.character(x@seq)[1:length(x@seq)]    
+    seq <- as.character(x@seq)[1:length(x@seq)]
   }
   if(is.list(as.character(x@seq))){
     seq <- as.character(x@seq)[[1]]
@@ -196,7 +200,7 @@ regex.win <- function(x, max.win=1000, regex="[acgtwsmkrybdhv]"){
   bp.windows <- matrix(NA, ncol=2, nrow=max.win)
   bp.windows[1,1] <- seq[1]
   i <- 1
-  # Scroll through the sequence looking for 
+  # Scroll through the sequence looking for
   # gaps (nucledotides not in the regex).
   # When you find them make a window.
   # Sequences with no gaps will have no
@@ -225,19 +229,19 @@ regex.win <- function(x, max.win=1000, regex="[acgtwsmkrybdhv]"){
 
 #' @rdname proc_chromR
 #' @aliases seq2rects
-#' 
+#'
 #' @description
 #' Create representation of a sequence.
 #' Begining and end points are determined for stretches of nucleotides.
 #' Stretches are determined by querying each nucleotides in a sequence to determine if it is represented in the database of characters (chars).
-#' 
-#' 
+#'
+#'
 #' @param chars a vector of characters to be used as a database for inclusion in rectangles
 #' @param lower converts the sequence and database to lower case, making the search case insensitive
-#' 
-#'   
+#'
+#'
 #' @export
-#' 
+#'
 seq2rects <- function(x, chars="acgtwsmkrybdhv", lower=TRUE){
 
   if(is.matrix(as.character(x@seq))){
@@ -258,7 +262,7 @@ seq2rects <- function(x, chars="acgtwsmkrybdhv", lower=TRUE){
 #' @rdname proc_chromR
 #' @export
 #' @aliases var.win
-#' 
+#'
 #var.win <- function(x, win.size=1e3){
 var.win <- function(x, win.size=1e3){
   # A DNAbin will store in a list when the fasta contains
@@ -266,9 +270,10 @@ var.win <- function(x, win.size=1e3){
   # only contains one sequence.
   
   # Convert DNAbin to string of chars.
-  if(class(x@seq) == "DNAbin"){
+  #if(class(x@seq) == "DNAbin"){
+  if( inherits(x@seq, "DNAbin") ){
     if(is.matrix(as.character(x@seq))){
-      seq <- as.character(x@seq)[1:length(x@seq)]    
+      seq <- as.character(x@seq)[1:length(x@seq)]
     } else if(is.list(as.character(x@seq))){
       seq <- as.character(x@seq)[[1]]
     }
@@ -303,7 +308,8 @@ var.win <- function(x, win.size=1e3){
   }
   
   # Implement function to count nucleotide classes.
-  if(class(x@seq) == "DNAbin"){
+  #if(class(x@seq) == "DNAbin"){
+  if( inherits(x@seq, "DNAbin") ){
     win.info <- cbind(win.info, t(apply(win.info, MARGIN=1, win.proc, seq=seq)))
     win.info <- as.data.frame(win.info)
     names(win.info) <- c('window','start','end','length','A','C','G','T','N','other','variants', 'genic')
