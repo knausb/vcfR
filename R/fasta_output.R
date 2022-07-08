@@ -33,7 +33,8 @@ write.fasta <- function(x, file = "", rowlength=80, tolower=TRUE, verbose=TRUE, 
     stop(myMsg)
   }
   
-  if(class(x) != "chromR"){
+#  if(class(x) != "chromR"){
+  if( !inherits(x, "chromR") ){
     stop("Expected object of class chromR")
   }
   if(APPEND == FALSE){

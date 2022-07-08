@@ -19,7 +19,8 @@
 #' 
 #'
 chromR2vcfR <- function(x, use.mask=FALSE){
-  if(class(x) != "chromR"){
+#  if(class(x) != "chromR"){
+  if( !inherits(x, "chromR") ){
     stop("Unexpected class! Expecting an object of class chromR.")
   }
   mask <- x@var.info$mask

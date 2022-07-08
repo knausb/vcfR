@@ -251,8 +251,8 @@ write.vcf <- function(x, file = "", mask = FALSE, APPEND = FALSE){
     }
     x <- x@vcf
   }
-  if(class(x) != "vcfR"){
-  #if( !inherits(x, "vcfR") ){
+  # if(class(x) != "vcfR"){
+  if( !inherits(x, "vcfR") ){
     stop("Unexpected class! Expecting an object of class vcfR or chromR.")
   }
   

@@ -44,10 +44,12 @@ vcfR2migrate <- function(vcf, pop, in_pop, out_file = "MigrateN_infile.txt", met
   method <- match.arg(method, c('N','H'), several.ok = FALSE)
   
   # Validate the input.
-  if( class(vcf) != "vcfR"){
+#  if( class(vcf) != "vcfR"){
+  if( !inherits(vcf, "vcfR") ){
     stop(paste("Expecting an object of class vcfR, received a", class(vcf), "instead")) 
   }
-  if( class(pop) != "factor"){
+#  if( class(pop) != "factor"){
+  if( !inherits(pop, "factor") ){
     stop(paste("Expecting population vector, received a", class(pop), "instead")) 
   }
 

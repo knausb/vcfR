@@ -18,7 +18,8 @@
 #' 
 #' @export
 rank.variants.chromR <- function(x, scores){
-  if( class(x) != "chromR" ){
+#  if( class(x) != "chromR" ){
+  if( !inherits(x, "chromR") ){
     stop("expecting object of class chromR or data.frame")
   }
   stopifnot(class(x@var.info) == 'data.frame')
