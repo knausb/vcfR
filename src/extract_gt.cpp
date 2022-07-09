@@ -359,7 +359,8 @@ Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
   // Count elements to determine ploidy.
   for(i=0; i<temp.length(); i++){
 //    if( temp[i] == gt_split ){ploidy++;}
-    if( ( temp[i] == '|' ) | ( temp[i] == '/' ) ){ploidy++;}
+    //if( ( temp[i] == '|' ) | ( temp[i] == '/' ) ){ploidy++;}
+    if( ( temp[i] == '|' ) || ( temp[i] == '/' ) ){ploidy++;}
   }
 
   if(ploidy == 1){

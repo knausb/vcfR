@@ -494,7 +494,8 @@ Rcpp::CharacterMatrix read_body_gz(std::string x,
      * (important when nrows is small)
      * 3) we actually have a line (when buffer ends at the end of a line).
      */
-    if( ( row_num >= nrows ) & ( lastline[0] != '#' ) & ( lastline.size() > 0 ) ){
+    //if( ( row_num >= nrows ) & ( lastline[0] != '#' ) & ( lastline.size() > 0 ) ){
+    if( ( row_num >= nrows ) && ( lastline[0] != '#' ) && ( lastline.size() > 0 ) ){
       break;
     }
 

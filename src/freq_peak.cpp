@@ -397,12 +397,14 @@ Rcpp::NumericMatrix bin_data( Rcpp::NumericVector myFreqs,
     if( !Rcpp::NumericVector::is_na(myFreqs(i)) ){
       int intQuery = myFreqs(i) * multiplier;
       j = 0;
-      if( ( intQuery >= intBreaks(j,0) ) & ( intQuery <= intBreaks(j,2) ) ){
+      //if( ( intQuery >= intBreaks(j,0) ) & ( intQuery <= intBreaks(j,2) ) ){
+      if( ( intQuery >= intBreaks(j,0) ) && ( intQuery <= intBreaks(j,2) ) ){
 //        Rcpp::Rcout << "Binned: " <<  myFreqs(i) << " is >= " << breaks(j,0) << " & <= " << breaks(j,2) << "\n";
 //        breaks(j,3) = breaks(j,3) + 1;
       }
       for(j=1; j<breaks.nrow(); j++){
-        if( ( intQuery > intBreaks(j,0) ) & ( intQuery <= intBreaks(j,2) ) ){
+        //if( ( intQuery > intBreaks(j,0) ) & ( intQuery <= intBreaks(j,2) ) ){
+        if( ( intQuery > intBreaks(j,0) ) && ( intQuery <= intBreaks(j,2) ) ){
 //          Rcpp::Rcout << "Binned: " <<  myFreqs(i) << " is > " << breaks(j,0) << " & <= " << breaks(j,2) << "\n";
           breaks(j,3) = breaks(j,3) + 1;
         }
