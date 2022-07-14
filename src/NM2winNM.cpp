@@ -142,7 +142,8 @@ double vector_mean(std::vector<double> x){
   double count = 0;
   unsigned int i = 0;
   for( i=0; i<x.size(); i++ ){
-    if( ( x[i] != NA_REAL ) | ( x[i] != NA_INTEGER ) ){
+//    if( ( x[i] != NA_REAL ) | ( x[i] != NA_INTEGER ) ){
+    if( ( x[i] != NA_REAL ) || ( x[i] != NA_INTEGER ) ){
       mean = mean + x[i];
       count++;
     }

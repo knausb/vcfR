@@ -109,7 +109,8 @@ void vcfRCommon::gtdelim(std::string& mystring,
   unsigned int i = 0;
   
   for(i = 0; i < mystring.size(); i++){
-    if( ( mystring[i] == split1 ) | ( mystring[i] == split2 ) ){
+    //if( ( mystring[i] == split1 ) | ( mystring[i] == split2 ) ){
+    if( ( mystring[i] == split1 ) || ( mystring[i] == split2 ) ){
       std::stringstream ss;
       ss << mystring[i];
 //      vec_o_strings.push_back( ss );

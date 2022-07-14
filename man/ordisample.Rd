@@ -113,7 +113,7 @@ hist(myOrdho$data1$PL, breaks = seq(0,9000, by=100), col="#8B4513")
 
 }
 \seealso{
-\code{\link[vegan]{metaMDS}}, 
+\code{\link[vegan]{metaMDS}},
 \code{\link[vegan]{vegdist}},
 \code{\link[vegan]{monoMDS}},
 \code{\link[MASS]{isoMDS}}

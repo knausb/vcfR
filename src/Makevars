@@ -3,7 +3,8 @@ PKG_LIBS = -lz
 
 
 ## Compiler flags
-CXX_STD = CXX11
+# CXX_STD = CXX11
+# CXXFLAGS=-Wall
 
 # For address sanitizer (ASAN).
 # Omit from actual builds.

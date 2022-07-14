@@ -1,6 +1,6 @@
 #' @title Create chromR object
-#' 
-#' 
+#'
+#'
 #' @name create.chromR
 #' @rdname create_chromR
 #' @export
@@ -21,29 +21,29 @@
 #' @details
 #' Creates and names a chromR object from a name, a chromosome (an ape::DNAbin object), variant data (a vcfR object) and annotation data (gff-like).
 #' The function \strong{create.chromR} is a wrapper which calls functions to populate the slots of the chromR object.
-#' 
+#'
 #' The function \strong{vcf2chromR} is called by create.chromR and transfers the data from the slots of a vcfR object to the slots of a chromR object.
 #' It also tries to extract the 'DP' and 'MQ' fileds (when present) from the fix slot's INFO column.
 #' It is not anticipated that a user would need to use this function directly, but its placed here in case they do.
-#' 
+#'
 #' The function \strong{seq2chromR} is currently defined as a generic function.
 #' This may change in the future.
 #' This function takes an object of class DNAbin and assigns it to the 'seq' slot of a chromR object.
-#' 
+#'
 #' The function \strong{ann2chromR} is called by create.chromR and transfers the information from a gff-like object to the 'ann' slot of a chromR object.
 #' It is not anticipated that a user would need to use this function directly, but its placed here in case they do.
-#' 
-#' 
-#' @seealso 
+#'
+#'
+#' @seealso
 # \code{\link{seq2chromR}},
 # \code{\link{vcf2chromR}},
 #' \code{\link{chromR-class}},
 #' \code{\link{vcfR-class}},
 #' \code{\link[ape]{DNAbin}},
-# \href{http://www.1000genomes.org/wiki/analysis/variant\%20call\%20format/vcf-variant-call-format-version-41}{vcf format}, 
+# \href{http://www.1000genomes.org/wiki/analysis/variant\%20call\%20format/vcf-variant-call-format-version-41}{vcf format},
 #' \href{https://github.com/samtools/hts-specs}{VCF specification}
 #' \href{https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md}{gff3 format}
-#' 
+#'
 #' @examples
 #' library(vcfR)
 #' data(vcfR_example)
@@ -52,28 +52,28 @@
 #' chrom
 # colnames(chrom)
 #' plot(chrom)
-#' 
+#'
 #' chrom <- masker(chrom, min_QUAL = 1, min_DP = 300, max_DP = 700, min_MQ = 59, max_MQ = 61)
 #' chrom <- proc.chromR(chrom, win.size=1000)
 #'
 #' plot(chrom)
-# 
+#
 #' chromoqc(chrom)
 # chromoqc(pinf_mt, xlim=c(25e+03, 3e+04), dot.alpha=99)
-# 
+#
 # set.seed(10)
 # x1 <- as.integer(runif(n=20, min=1, max=39000))
 # y1 <- runif(n=length(x1), min=1, max=100)
 # chromodot(pinf_mt, x1=x1, y1=y1)
-#' 
+#'
 #           1         2         3         4         5
 #  12345678901234567890123456789012345678901234567890
 # chromodot(pinf_mt, x1=x1, y1=y1, label1='My data',
 #           x2=x1, y2=y1, label2='More of my data',
 #           dot.alpha='ff')
-#' 
+#'
 # chromohwe(pinf_mt, dot.alpha='ff')
-#' 
+#'
 # chromopop(pinf_mt)
 # gt <- extract.gt(pinf_mt)
 # head(gt)
@@ -83,10 +83,11 @@
 # head(win)
 # hist(tab$Ho - tab$He, col=5)
 # # Note that this example is a mitochondrion, so this is a bit silly.
-#' 
+#'
 create.chromR <- function(vcf, name="CHROM", seq=NULL, ann=NULL, verbose=TRUE){
   # Determine whether we received the expected classes.
-  stopifnot(class(vcf) == "vcfR")
+  #stopifnot(class(vcf) == "vcfR")
+  stopifnot( inherits(vcf, "vcfR") )
 
   if( length( unique( getCHROM(vcf) ) ) > 1 ){
     myChroms <- unique( getCHROM(vcf) )
@@ -113,7 +114,7 @@ create.chromR <- function(vcf, name="CHROM", seq=NULL, ann=NULL, verbose=TRUE){
   }
   
   
-  # Initialize chromR object.  
+  # Initialize chromR object.
   x <- new(Class="chromR")
   names(x) <- name
 #  setName(x) <- name
@@ -132,21 +133,28 @@ create.chromR <- function(vcf, name="CHROM", seq=NULL, ann=NULL, verbose=TRUE){
     POS <- getPOS(x)
     x@len <- POS[length(POS)]
 #    x@len <- x@vcf.fix$POS[length(x@vcf.fix$POS)]
-  } else if (class(seq)=="DNAbin"){
+  #} else if (class(seq)=="DNAbin"){
+  } else if ( inherits(seq, "DNAbin") ){
     x <- seq2chromR(x, seq)
   } else {
-    stopifnot(class(seq)=="DNAbin")
+    #stopifnot( class(seq)=="DNAbin" )
+    stopifnot( inherits(seq, "DNAbin") )
   }
 
   # Annotations.
   if( !is.null(ann) ){
     if( nrow(ann) > 0 ){
 #  if(nrow(ann) > 0){
-      stopifnot(class(ann) == "data.frame")
-      if(class(ann[,4]) == "factor"){ann[,4] <- as.character(ann[,4])}
-      if(class(ann[,5]) == "factor"){ann[,5] <- as.character(ann[,5])}
-      if(class(ann[,4]) == "character"){ann[,4] <- as.numeric(ann[,4])}
-      if(class(ann[,5]) == "character"){ann[,5] <- as.numeric(ann[,5])}
+      #stopifnot(class(ann) == "data.frame")
+      stopifnot( inherits(ann, "data.frame") )
+      #if(class(ann[,4]) == "factor"){ann[,4] <- as.character(ann[,4])}
+      if( inherits(ann[,4], "factor") ){ann[,4] <- as.character(ann[,4])}
+      #if(class(ann[,5]) == "factor"){ann[,5] <- as.character(ann[,5])}
+      if( inherits(ann[,5], "factor") ){ann[,5] <- as.character(ann[,5])}
+      #if(class(ann[,4]) == "character"){ann[,4] <- as.numeric(ann[,4])}
+      if( inherits(ann[,4], "character") ){ann[,4] <- as.numeric(ann[,4])}
+      #if(class(ann[,5]) == "character"){ann[,5] <- as.numeric(ann[,5])}
+      if( inherits(ann[,5], "character") ){ann[,5] <- as.numeric(ann[,5])}
       x@ann <- ann
     
       # Manage length
@@ -167,7 +175,8 @@ create.chromR <- function(vcf, name="CHROM", seq=NULL, ann=NULL, verbose=TRUE){
     message(paste('  ', chr_names, sep=""))
 #    message(paste('  ', unique(as.character(x@vcf.fix$CHROM)), sep=""))
     
-    if(class(x@seq) == "DNAbin"){
+    #if(class(x@seq) == "DNAbin"){
+    if( inherits(x@seq, "DNAbin") ){
       message("Names of sequences:")
       message(paste('  ', unique(labels(x@seq)), sep=""))
 
@@ -245,7 +254,7 @@ create.chromR <- function(vcf, name="CHROM", seq=NULL, ann=NULL, verbose=TRUE){
 #' @export
 #' @aliases vcf2chromR
 # @aliases chromR-methods vcf2chromR
-#' 
+#'
 #'
 # @description
 # Methods to work with objects of the chromR class
@@ -294,7 +303,7 @@ vcfR2chromR <- function(x, vcf){
 #' @rdname create_chromR
 #' @export
 #' @aliases seq2chromR
-#' 
+#'
 seq2chromR <- function(x, seq=NULL){
   # A DNAbin will store in a list when the fasta contains
   # multiple sequences, but as a matrix when the fasta

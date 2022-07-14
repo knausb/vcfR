@@ -21,7 +21,7 @@ Functions that make population genetics summaries
 \details{
 The function `gt2popsum` was deprecated in vcfR 1.8.0.
 This was because it was written entirely in R and did not perform well.
-Users should use `gt.to.popsum()` instead because it has similar 
+Users should use `gt.to.popsum()` instead because it has similar
 functionality but includes calls to C++ to increase its performance.
 
 This function creates common population genetic summaries from either a chromR or vcfR object.
@@ -31,7 +31,7 @@ The first position is the count of reference alleles, the second positions is th
 \strong{He} is the gene diversity, or heterozygosity, of the population.
 This is \eqn{1 - \sum x^{2}_{i}}, or the probability that two alleles sampled from the population are different, following Nei (1973).
 \strong{Ne} is the effective number of alleles in the population.
-This is \eqn{1/\sum x^{2}_{i}} or one minus the homozygosity, from Nei (1987) equation 8.17. 
+This is \eqn{1/\sum x^{2}_{i}} or one minus the homozygosity, from Nei (1987) equation 8.17.
 
 Nei, M., 1973. Analysis of gene diversity in subdivided populations. Proceedings of the National Academy of Sciences, 70(12), pp.3321-3323.
 

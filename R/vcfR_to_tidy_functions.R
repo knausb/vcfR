@@ -17,7 +17,9 @@
 #' with very large data sets, they provide a good framework for handling and filtering
 #' large variant data sets.  For some background
 #' on the benefits of such "tidy" data frames, see 
-#' \href{https://www.jstatsoft.org/article/view/v059i10}{this article}.
+#' \doi{doi.org/10.18637/jss.v059.i10}{this article}.
+# ' \href{https://doi.org/10.18637/jss.v059.i10}{this article}.
+# ' \href{https://www.jstatsoft.org/article/view/v059i10}{this article}.
 #' 
 #' For some filtering operations, such as those where one wants to filter genotypes
 #' upon GT fields in combination with INFO fields, or more complex 
@@ -374,8 +376,9 @@ vcfR2tidy <- function(x,
 extract_info_tidy <- function(x, info_fields = NULL, info_types = TRUE, info_sep = ";") {
   
   if(!is.null(info_fields) && any(duplicated(info_fields))) stop("Requesting extraction of duplicate info_field names")
-  if(class(x) != "vcfR") stop("Expecting x to be a vcfR object, not a ", class(x))
-
+  #if(class(x) != "vcfR") stop("Expecting x to be a vcfR object, not a ", class(x))
+  if( !inherits(x, "vcfR") ) stop("Expecting x to be a vcfR object, not a ", class(x))
+  
   ID <- NULL
     
   vcf <- x
@@ -493,7 +496,8 @@ extract_gt_tidy <- function(x,
   if(!is.null(format_fields) && any(duplicated(format_fields))){
     stop("Requesting extraction of duplicate format_field names")
   }
-  if(class(x) != "vcfR"){
+#  if(class(x) != "vcfR"){
+  if( !inherits(x, "vcfR") ){
     stop("Expecting x to be a vcfR object, not a ", class(x))
   }
 
@@ -626,7 +630,8 @@ guess_types <- function(D) {
 #' 
 #' @export
 vcf_field_names <- function(x, tag = "INFO") {
-  if(class(x) != "vcfR") stop("Expecting x to be a vcfR object, not a ", class(x))
+#  if(class(x) != "vcfR") stop("Expecting x to be a vcfR object, not a ", class(x))
+  if( !inherits(x, "vcfR") ) stop("Expecting x to be a vcfR object, not a ", class(x))
   if( tag != 'INFO' & tag != 'FORMAT') stop("Expecting tag to either be INFO or FORMAT")
 
   # Subset to tag.

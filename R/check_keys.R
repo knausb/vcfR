@@ -14,7 +14,7 @@
 #' This function checks the keys defined in the meta section to make sure they are unique.
 #' Note that it does not actually check the INFO and FORMAT columns, just their definitions in the meta section.
 #' This is because each variant can have different information in their INFO and META cells.
-#' Checking these on large files will tehrefore come with a performance cost.
+#' Checking these on large files will therefore come with a performance cost.
 #' 
 #' @seealso queryMETA()
 #' 
@@ -28,7 +28,8 @@
 #' 
 #' @export
 check_keys <- function(x) {
-  if(class(x) != 'vcfR'){
+#  if(class(x) != 'vcfR'){
+   if( !inherits(x, 'vcfR') ){
     stop( paste('Expecting a vcfR object, instead received:', class(x)) )
   }
   

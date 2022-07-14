@@ -2,34 +2,34 @@
 #' @title Create non-overlapping positions (POS) for VCF data
 #' @name rePOS
 #' @rdname rePOS
-#' 
+#'
 #' @description
 #' Converts allele balance data produced by \code{freq_peak()} to a copy number by assinging the allele balance data (frequencies) to its closest expected ratio.
-#'  
+#'
 #' @param x a vcfR object
 #' @param lens a data.frame describing the reference
 #' @param ret.lens logical specifying whether lens should be returned
 #' @param buff an integer indicating buffer length
-#' 
+#'
 #' @details
 #' Each chromosome in a genome typically begins with position one.
 #' This creates a problem when plotting the data associated with each chromosome because the information will overlap.
 #' This function uses the information in the data.frame \code{lens} to create a new coordinate system where chromosomes do not overlap.
-#' 
+#'
 #' The data.frame \strong{lens} should have a row for each chromosome and two columns.
 #' The first column is the name of each chromosome as it appears in the vcfR object.
 #' The second column is the length of each chromosome.
-#' 
+#'
 #' The parameter \strong{buff} indicates the length of a buffer to put in between each chromosome.
 #' This buffer may help distinguish chromosomes from one another.
-#' 
+#'
 #' In order to create the new coordinates the \code{lens} data.frame is updated with the new start positions.
 #' The parameter \strong{}
-#' 
-#' 
+#'
+#'
 #' @return Either a vector of integers that represent the new coordinate system or a list containing the vector of integers and the lens data.frame.
-#' 
-#' 
+#'
+#'
 #' @examples
 #' # Create some VCF data.
 #' data(vcfR_example)
@@ -44,7 +44,7 @@
 #' vcf <- rbind2(vcf1, vcf2)
 #' vcf <- rbind2(vcf, vcf3)
 #' rm(vcf1, vcf2, vcf3)
-#' 
+#'
 #' # Create lens
 #' lens <- data.frame(matrix(nrow=3, ncol=2))
 #' lens[1,1] <- 'chrom1'
@@ -53,28 +53,30 @@
 #' lens[1,2] <- 22000
 #' lens[2,2] <- 47000
 #' lens[3,2] <- 32089
-#' 
+#'
 #' # Illustrate the issue.
 #' dp <- extract.info(vcf, element="DP", as.numeric=TRUE)
 #' plot(getPOS(vcf), dp, col=as.factor(getCHROM(vcf)))
-#' 
+#'
 #' # Resolve the issue.
 #' newPOS <- rePOS(vcf, lens)
 #' dp <- extract.info(vcf, element="DP", as.numeric=TRUE)
 #' plot(newPOS, dp, col=as.factor(getCHROM(vcf)))
-#' 
+#'
 #' # Illustrate the buffer
 #' newPOS <- rePOS(vcf, lens, buff=10000)
 #' dp <- extract.info(vcf, element="DP", as.numeric=TRUE)
 #' plot(newPOS, dp, col=as.factor(getCHROM(vcf)))
-#' 
-#' 
+#'
+#'
 #' @export
 rePOS <- function(x, lens, ret.lens = FALSE, buff = 0){
-  if( class(x) == 'chromR' ){
+  #if( class(x) == 'chromR' ){
+  if( inherits(x, 'chromR') ){
     x <- x@vcfR
   }
-  if( class(x) != 'vcfR' ){
+  #if( class(x) != 'vcfR' ){
+  if( !inherits(x, 'vcfR') ){
     msg <- paste('expecting a chromR or vcfR object, received instead a', class(x))
     stop(msg)
   }

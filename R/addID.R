@@ -25,11 +25,13 @@
 #' @export
 #' 
 addID <- function(x, sep="_"){
-  if( class(x) == 'chromR' ){
+#  if( class(x) == 'chromR' ){
+  if( inherits(x, "chromR") ){
     ID <- x@vcf@fix[,'ID']
     CHROM <- x@vcf@fix[,'CHROM']
     POS <- x@vcf@fix[,'POS']
-  } else if( class(x) == 'vcfR' ){
+#  } else if( class(x) == 'vcfR' ){
+  } else if( inherits(x,'vcfR') ){
     ID <- x@fix[,'ID']
     CHROM <- x@fix[,'CHROM']
     POS <- x@fix[,'POS']
@@ -44,9 +46,11 @@ addID <- function(x, sep="_"){
     }
   }
   
-  if( class(x) == 'chromR' ){
+#  if( class(x) == 'chromR' ){
+  if( inherits(x, 'chromR') ){
     x@vcf@fix[,'ID'] <- ID
-  } else if( class(x) == 'vcfR' ){
+#  } else if( class(x) == 'vcfR' ){
+  } else if( inherits(x, 'vcfR') ){
     x@fix[,'ID'] <- ID
   } else {
     stop("expecting an object of class vcfR or chromR.")

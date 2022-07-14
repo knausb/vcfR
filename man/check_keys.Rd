@@ -15,7 +15,7 @@ If for some reason a key is not unique it will create issues in retrieving this 
 This function checks the keys defined in the meta section to make sure they are unique.
 Note that it does not actually check the INFO and FORMAT columns, just their definitions in the meta section.
 This is because each variant can have different information in their INFO and META cells.
-Checking these on large files will tehrefore come with a performance cost.
+Checking these on large files will therefore come with a performance cost.
 }
 \examples{
 data(vcfR_test)

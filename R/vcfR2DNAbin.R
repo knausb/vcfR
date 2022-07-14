@@ -2,16 +2,16 @@
 
 #' @title Convert vcfR to DNAbin
 #' @name vcfR2DNAbin
-#' 
+#'
 #' @rdname vcfR2DNAbin
 #' @aliases vcfR2DNAbin
-#' 
-#' @description 
+#'
+#' @description
 #' Convert objects of class vcfR to objects of class ape::DNAbin
-#' 
+#'
 #' @param x an object of class chromR or vcfR
 #' @param extract.indels logical indicating to remove indels (TRUE) or to include them while retaining alignment
-#' @param consensus logical, indicates whether an IUPAC ambiguity code should be used for diploid heterozygotes 
+#' @param consensus logical, indicates whether an IUPAC ambiguity code should be used for diploid heterozygotes
 #' @param extract.haps logical specifying whether to separate each genotype into alleles based on a delimiting character
 # @param gt.split character to delimit alleles within genotypes
 #' @param unphased_as_NA logical indicating how to handle alleles in unphased genotypes
@@ -19,7 +19,7 @@
 #' @param ref.seq reference sequence (DNAbin) for the region being converted
 #' @param start.pos chromosomal position for the start of the ref.seq
 #' @param verbose logical specifying whether to produce verbose output
-#' 
+#'
 #' @details
 #' Objects of class \strong{DNAbin}, from the package ape, store nucleotide sequence information.
 #' Typically, nucleotide sequence information contains all the nucleotides within a region, for example, a gene.
@@ -29,21 +29,21 @@
 #' However, some applications require the invariant sites.
 #' For example, inference of phylogeny based on maximum likelihood or Bayesian methods requires invariant sites.
 #' The function vcfR2DNAbin therefore includes a number of options in attempt to accomodate various scenarios.
-#' 
-#' 
+#'
+#'
 #' The presence of indels (insertions or deletions)in a sequence typically presents a data analysis problem.
 #' Mutation models typically do not accomodate this data well.
 #' For now, the only option is for indels to be omitted from the conversion of vcfR to DNAbin objects.
 #' The option \strong{extract.indels} was included to remind us of this, and to provide a placeholder in case we wish to address this in the future.
-#' 
-#' 
+#'
+#'
 #' The \strong{ploidy} of the samples is inferred from the first non-missing genotype.
 # The option \code{gt.split} is used to split this genotype into alleles and these are counted.
 # Values for \code{gt.split} are typically '|' for phased data or '/' for unphased data.
 # Note that this option is an exact match and not used in a regular expression, as the 'sep' parameter in \code{\link{vcfR2genind}} is used.
 #' All samples and all variants within each sample are assumed to be of the same ploid.
-#' 
-#' 
+#'
+#'
 #' Conversion of \strong{haploid data} is fairly straight forward.
 #' The options \code{consensus} and \code{extract.haps} are not relevant here.
 #' When vcfR2DNAbin encounters missing data in the vcf data (NA) it is coded as an ambiguous nucleotide (n) in the DNAbin object.
@@ -51,8 +51,8 @@
 #' When a reference sequence and a starting position are provided the entire sequence, including invariant sites, is returned.
 #' The reference sequence is used as a starting point and variable sitees are added to this.
 #' Because the data in the vcfR object will be using a chromosomal coordinate system, we need to tell the function where on this chromosome the reference sequence begins.
-#' 
-#' 
+#'
+#'
 #' Conversion of \strong{diploid data} presents a number of scenarios.
 #' When the option \code{consensus} is TRUE and \code{extract.haps} is FALSE, each genotype is split into two alleles and the two alleles are converted into their IUPAC ambiguity code.
 #' This results in one sequence for each diploid sample.
@@ -63,68 +63,68 @@
 #' This results in two sequences per diploid sample.
 #' Note that this really only makes sense if you have phased data.
 #' The options ref.seq and start.pos are used as in halpoid data.
-#' 
-#' 
+#'
+#'
 #' When a variant overlaps a deletion it may be encoded by an \strong{asterisk allele (*)}.
 #' The GATK site covers this in a post on \href{https://gatk.broadinstitute.org/hc/en-us/articles/360035531912-Spanning-or-overlapping-deletions-allele-}{Spanning or overlapping deletions} ].
 #' This is handled in vcfR by allowing the user to decide how it is handled with the paramenter \code{asterisk_as_del}.
 #' When \code{asterisk_as_del} is TRUE this allele is converted into a deletion ('-').
 #' When \code{asterisk_as_del} is FALSE the asterisk allele is converted to NA.
 #' If \code{extract.indels} is set to FALSE it should override this decision.
-#' 
-#' 
+#'
+#'
 #' Conversion of \strong{polyploid data} is currently not supported.
 #' However, I have made some attempts at accomodating polyploid data.
 #' If you have polyploid data and are interested in giving this a try, feel free.
 #' But be prepared to scrutinize the output to make sure it appears reasonable.
-#' 
-#' 
+#'
+#'
 #' Creation of DNAbin objects from large chromosomal regions may result in objects which occupy large amounts of memory.
 #' If in doubt, begin by subsetting your data and the scale up to ensure you do not run out of memory.
-#' 
-#' 
-#' 
-#' 
-#' @seealso 
+#'
+#'
+#'
+#'
+#' @seealso
 #' \href{https://cran.r-project.org/package=ape}{ape}
-#' 
-#' 
-#' @examples 
+#'
+#'
+#' @examples
 #' library(ape)
 #' data(vcfR_test)
-#' 
+#'
 #' # Create an example reference sequence.
 #' nucs <- c('a','c','g','t')
 #' set.seed(9)
 #' myRef <- as.DNAbin(matrix(nucs[round(runif(n=20, min=0.5, max=4.5))], nrow=1))
-#' 
+#'
 #' # Recode the POS data for a smaller example.
 #' set.seed(99)
 #' vcfR_test@fix[,'POS'] <- sort(sample(10:20, size=length(getPOS(vcfR_test))))
-#' 
+#'
 #' # Just vcfR
 #' myDNA <- vcfR2DNAbin(vcfR_test)
 #' seg.sites(myDNA)
 #' image(myDNA)
-#' 
+#'
 #' # ref.seq, no start.pos
 #' myDNA <- vcfR2DNAbin(vcfR_test, ref.seq = myRef)
 #' seg.sites(myDNA)
 #' image(myDNA)
-#' 
+#'
 #' # ref.seq, start.pos = 4.
 #' # Note that this is the same as the previous example but the variants are shifted.
 #' myDNA <- vcfR2DNAbin(vcfR_test, ref.seq = myRef, start.pos = 4)
 #' seg.sites(myDNA)
 #' image(myDNA)
-#' 
+#'
 #' # ref.seq, no start.pos, unphased_as_NA = FALSE
 #' myDNA <- vcfR2DNAbin(vcfR_test, unphased_as_NA = FALSE, ref.seq = myRef)
 #' seg.sites(myDNA)
 #' image(myDNA)
-#' 
-#' 
-#' 
+#'
+#'
+#'
 #' @export
 vcfR2DNAbin <- function( x,
                          extract.indels = TRUE,
@@ -137,12 +137,20 @@ vcfR2DNAbin <- function( x,
                          verbose = TRUE )
 {
   # Sanitize input.
-  if( class(x) == 'chromR' ){ x <- x@vcf }
-  if( class(x) != 'vcfR' ){ stop( "Expecting an object of class chromR or vcfR" ) }
+  #if( class(x) == 'chromR' ){ x <- x@vcf }
+  if( inherits(x, 'chromR') ){
+    x <- x@vcf
+  }
+  #if( class(x) != 'vcfR' ){
+  if( !inherits(x, 'vcfR') ){
+    stop( "Expecting an object of class chromR or vcfR" )
+  }
+  
   if( consensus == TRUE & extract.haps == TRUE){
     stop("consensus and extract_haps both set to TRUE. These options are incompatible. A haplotype should not be ambiguous.")
   }
-  if( !is.null(start.pos) & class(start.pos) == "character" ){
+  #if( !is.null(start.pos) & class(start.pos) == "character" ){
+  if( !is.null(start.pos) & inherits(start.pos, "character") ){
     start.pos <- as.integer(start.pos)
   }
   if( extract.indels == FALSE & consensus == TRUE ){
@@ -153,7 +161,8 @@ vcfR2DNAbin <- function( x,
   
   
   # Check and sanitize ref.seq.
-  if( class(ref.seq) != 'DNAbin' & !is.null(ref.seq) ){
+  #if( class(ref.seq) != 'DNAbin' & !is.null(ref.seq) ){
+  if( !inherits(ref.seq, 'DNAbin') & !is.null(ref.seq) ){
     stop( paste("expecting ref.seq to be of class DNAbin but it is of class", class(ref.seq)) )
   }
   if( is.list(ref.seq) ){
@@ -165,7 +174,7 @@ vcfR2DNAbin <- function( x,
     ref.seq <- ref.seq[1:ncol(ref.seq)]
   }
 
-# If vector  
+# If vector
 #  dna <- as.matrix(t(dna))
   
   
@@ -223,7 +232,7 @@ vcfR2DNAbin <- function( x,
     # Check for all NA.
     # Case of zero rows will sum to zero here.
     # Create an empty matrix.
-    x <- x@gt[ 0, -1 ]    
+    x <- x@gt[ 0, -1 ]
   } else {
     # If x is still of class vcfR, we should process it.
 #  if( class(x) == "vcfR" ){
@@ -256,7 +265,7 @@ vcfR2DNAbin <- function( x,
     # of columns in x (i.e., number of haplotypes).
     # The number of rows should match the reference
     # sequence length.
-    # The matrix will be initialized with the 
+    # The matrix will be initialized with the
     # reference and will have no variants.
     variants <- x
     x <- matrix( as.character(ref.seq),

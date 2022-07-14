@@ -12,6 +12,7 @@ This may have been addressed at 64a308ba50b9119108e8946737460de5997b805b by addi
 
 # vcfR 1.13.0
 Released on CRAN 202X-XX-XX
+* Added ```vcfR2hapmap()``` to convert data for use in GAPIT
 
 # vcfR 1.12.0
 Released on CRAN 2020-09-01

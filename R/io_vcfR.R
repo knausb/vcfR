@@ -1,13 +1,13 @@
 #' @title Read and write vcf format files
 #' @rdname io_vcfR
 #' @name VCF input and output
-#' 
+#'
 #' @export
 #'
 #' @description
 #' Read and files in the *.vcf structured text format, as well as the compressed *.vcf.gz format.
 #' Write objects of class vcfR to *.vcf.gz.
-#' 
+#'
 #' @param file A filename for a variant call format (vcf) file.
 #' @param limit amount of memory (in bytes) not to exceed when reading in a file.
 #' @param nrows integer specifying the maximum number of rows (variants) to read in.
@@ -20,7 +20,7 @@
 #' @param convertNA logical specifying to convert VCF missing data to NA.
 #' @param checkFile test if the first line follows the VCF specification.
 #' @param check_keys logical determining if \code{check_keys()} is called to test if INFO and FORMAT keys are unique.
-#' 
+#'
 #' @param verbose report verbose progress.
 #'
 #' @details
@@ -29,39 +29,39 @@
 #' Based on the dimensions of the data matrix, an estimate of how much memory needed is made.
 #' If this estimate exceeds the value of 'limit' an error is thrown and execution stops.
 #' The user may increase this limit to any value, but is encourages to compare that value to the amout of available physical memory.
-#' 
-#' 
+#'
+#'
 #' It is possible to input part of a VCF file by using the parameters nrows, skip and cols.
 #' The first eight columns (the fix region) are part of the definition and will always be included.
 #' Any columns beyond eight are optional (the gt region).
 #' You can specify which of these columns you would like to input by setting the cols parameter.
 #' If you want a usable vcfR object you will want to always include nine (the FORMAT column).
 #' If you do not include column nine you may experience reduced functionality.
-#' 
-#' 
+#'
+#'
 #' According to the VCF specification \strong{missing data} are encoded by a period (".").
 #' Within the R language, missing data can be encoded as NA.
 #' The parameter `convertNA` allows the user to either retain the VCF representation or the R representation of missing data.
 #' Note that the conversion only takes place when the entire value can be determined to be missing.
 #' For example, ".|.:48:8:51,51" would be retained because the missing genotype is accompanied by other delimited information.
 #' In contrast, ".|." should be converted to NA when \code{convertNA = TRUE}.
-#' 
-#' 
+#'
+#'
 #' If file begins with http://, https://, ftp://, or ftps:// it is interpreted as a link.
 #' When this happens, file is split on the delimiter '/' and the last element is used as the filename.
 #' A check is performed to determine if this file exists in the working directory.
 #' If a local file is found it is used.
 #' If a local file is not found the remote file is downloaded to the working directory and read in.
-#' 
+#'
 #' The function \strong{write.vcf} takes an object of either class vcfR or chromR and writes the vcf data to a vcf.gz file (gzipped text).
 #' If the parameter 'mask' is set to FALSE, the entire object is written to file.
 #' If the parameter 'mask' is set to TRUE and the object is of class chromR (which has a mask slot), this mask is used to subset the data.
 #' If an index is supplied as 'mask', then this index is used, and recycled as necessary, to subset the data.
-#' 
+#'
 #' Because vcfR provides the opportunity to manipulate VCF data, it also provides the opportunity for the user to create invalid VCF files.
 #' If there is a question regarding the validity of a file you have created one option is the \href{https://vcftools.github.io/perl_module.html#vcf-validator}{VCF validator} from VCF tools.
-#' 
-#' 
+#'
+#'
 #' @return read.vcfR returns an object of class \code{\link{vcfR-class}}.
 #' See the \strong{vignette:} \code{vignette('vcf_data')}.
 #' The function write.vcf creates a gzipped VCF file.
@@ -75,14 +75,14 @@
 #' \href{https://cran.r-project.org/package=pegas}{pegas}::read.vcf,
 #' \href{https://cran.r-project.org/package=PopGenome}{PopGenome}::readVCF,
 #' \href{https://cran.r-project.org/package=data.table}{data.table}::fread
-#' 
+#'
 #' Bioconductor:
 #' \href{http://www.bioconductor.org/packages/release/bioc/html/VariantAnnotation.html}{VariantAnnotation}::readVcf
 #'
 #' Use: browseVignettes('vcfR') to find examples.
 #'
 #'
-#' @examples 
+#' @examples
 #' data(vcfR_test)
 #' vcfR_test
 #' head(vcfR_test)
@@ -95,17 +95,17 @@
 #' vcf <- read.vcfR( file = "vcfR_test.vcf.gz", verbose = FALSE )
 #' vcf
 #' setwd( orig_dir )
-#' 
-#' 
+#'
+#'
 # ' @rdname io_vcfR
 #' @aliases read.vcfR
 #' @export
-#' 
-read.vcfR <- function(file, 
-                      limit=1e7, 
-                      nrows = -1, 
-                      skip = 0, 
-                      cols = NULL, 
+#'
+read.vcfR <- function(file,
+                      limit=1e7,
+                      nrows = -1,
+                      skip = 0,
+                      cols = NULL,
                       convertNA = TRUE,
                       checkFile = TRUE,
                       check_keys = TRUE,
@@ -150,7 +150,7 @@ read.vcfR <- function(file,
       msg <- paste(msg, "\n")
       stop(msg)
     }
-  }  
+  }
   
   vcf <- new(Class="vcfR")
 
@@ -216,8 +216,8 @@ read.vcfR <- function(file,
   vcf@meta <- .read_meta_gz(file, stats, as.numeric(verbose))
 
   # Read body
-  body <- .read_body_gz(file, stats = stats, 
-                nrows = nrows, skip = skip, cols = cols, 
+  body <- .read_body_gz(file, stats = stats,
+                nrows = nrows, skip = skip, cols = cols,
                 convertNA = as.numeric(convertNA), verbose = as.numeric(verbose))
 
   vcf@fix <- body[ ,1:8, drop=FALSE ]
@@ -241,16 +241,18 @@ read.vcfR <- function(file,
 #' @rdname io_vcfR
 #' @export
 #' @aliases write.vcf
-#' 
+#'
 write.vcf <- function(x, file = "", mask = FALSE, APPEND = FALSE){
-  if(class(x) == "chromR"){
+  #if(class(x) == "chromR"){
+  if( inherits(x, "chromR") ){
     if( mask == TRUE ){
       is.na( x@vcf@fix[,'FILTER'] ) <- TRUE
       x@vcf@fix[,'FILTER'][ x@var.info[,'mask'] ] <- 'PASS'
     }
     x <- x@vcf
   }
-  if(class(x) != "vcfR"){
+  # if(class(x) != "vcfR"){
+  if( !inherits(x, "vcfR") ){
     stop("Unexpected class! Expecting an object of class vcfR or chromR.")
   }
   

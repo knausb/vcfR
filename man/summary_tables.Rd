@@ -22,7 +22,7 @@ write.win.info(x, file = "", APPEND = FALSE)
 Write summary tables from chromR objects.
 }
 \details{
-The function \strong{write.var.info} takes the variant information table from a chromR object and writes it as a comma delimited file. 
+The function \strong{write.var.info} takes the variant information table from a chromR object and writes it as a comma delimited file.
 
 The function \strong{write.win.info} takes the window information table from a chromR object and writes it as a comma delimited file.
 }

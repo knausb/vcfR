@@ -47,7 +47,8 @@ chromo <- function( chrom,
 #                   nsum=TRUE,
                    ...){
   
-  if( class(chrom) != "chromR" ){
+#  if( class(chrom) != "chromR" ){
+  if( !inherits(chrom, "chromR") ){
     stop("Expecting object of class chromR")
   }
   
@@ -444,7 +445,8 @@ chromoqc <- function( chrom,
                       dp.alpha = 255,
                       ...){
   
-  if( class(chrom) != "chromR" ){
+#  if( class(chrom) != "chromR" ){
+  if( !inherits(chrom, "chromR") ){
     stop( paste("expecting an object of class chromR, got", class(chrom), "instead.") )
   }
   

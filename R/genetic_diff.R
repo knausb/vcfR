@@ -195,11 +195,13 @@ calc_nei <- function(x1, x2){
 #'
 genetic_diff <- function(vcf, pops, method = "nei"){
   
-  if( class(vcf) != "vcfR" ){
+#  if( class(vcf) != "vcfR" ){
+  if( !inherits(vcf, "vcfR") ){
     stop( paste("Expecting an object of class vcfR, instead received:", class(vcf)) )
   }
   
-  if( class(pops) != "factor" ){
+#  if( class(pops) != "factor" ){
+  if( !inherits(pops, "factor") ){
     stop( paste("Expecting a factor, instead received:", class(pops)) )
   }
   

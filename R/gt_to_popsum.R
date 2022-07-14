@@ -23,17 +23,20 @@ thetas <- function(x){
 #' @rdname pop_gen_sum
 #' @export
 #' @aliases gt2popsum
-#' 
+#'
 #' @param deprecated logical specifying whether to run the function (FALSE) or present deprecation message (TRUE).
-#' 
-#' @details 
+#'
+#' @details
 #' The function `gt2popsum` was deprecated in vcfR 1.8.0.
 #' This was because it was written entirely in R and did not perform well.
-#' Users should use `gt.to.popsum()` instead because it has similar 
+#' Users should use `gt.to.popsum()` instead because it has similar
 #' functionality but includes calls to C++ to increase its performance.
-#' 
+#'
 gt2popsum <- function(x, deprecated = TRUE){
-  if(class(x) != "chromR"){stop("Object is not of class chromR")}
+  #if(class(x) != "chromR"){
+  if( !inherits(x, "chromR") ){
+    stop("Object is not of class chromR")
+  }
   #  stopifnot(class(x) == "chromR")
   #  gt <- extract.gt(x, element = "GT", mask = x@var.info$mask)
   #  stopifnot(length(grep("(1/1|0/0|0/1)", unique(as.vector(gt)))) == 3)
@@ -87,7 +90,7 @@ gt2popsum <- function(x, deprecated = TRUE){
   rm(tmp)
   #
   mask <- x@var.info$mask
-  summ <- matrix(ncol=19, nrow=nrow(gt), 
+  summ <- matrix(ncol=19, nrow=nrow(gt),
                  dimnames=list(c(),
                                c('n', 'RR','RA','AA','nAllele','nREF','nALT','Ho','He',
                                  'hwe.prob', 'hwe.Da', 'hwe.chisq', 'hwe.p',
@@ -146,12 +149,12 @@ gt2popsum <- function(x, deprecated = TRUE){
 #' @name Population genetics summaries
 #' @rdname pop_gen_sum
 #' @aliases gt.to.popsum
-#' 
-#' @description Functions that make population genetics summaries 
-#' 
+#'
+#' @description Functions that make population genetics summaries
+#'
 #' @param x object of class chromR or vcfR
-#' 
-#' @details 
+#'
+#' @details
 #' This function creates common population genetic summaries from either a chromR or vcfR object.
 #' The default is to return a matrix containing allele counts, He, and Ne.
 #' \strong{Allele_counts} is the a comma delimited string of counts.
@@ -159,19 +162,19 @@ gt2popsum <- function(x, deprecated = TRUE){
 #' \strong{He} is the gene diversity, or heterozygosity, of the population.
 #' This is \eqn{1 - \sum x^{2}_{i}}, or the probability that two alleles sampled from the population are different, following Nei (1973).
 #' \strong{Ne} is the effective number of alleles in the population.
-#' This is \eqn{1/\sum x^{2}_{i}} or one minus the homozygosity, from Nei (1987) equation 8.17. 
-#' 
+#' This is \eqn{1/\sum x^{2}_{i}} or one minus the homozygosity, from Nei (1987) equation 8.17.
+#'
 #' Nei, M., 1973. Analysis of gene diversity in subdivided populations. Proceedings of the National Academy of Sciences, 70(12), pp.3321-3323.
-#' 
+#'
 #' Nei, M., 1987. Molecular evolutionary genetics. Columbia University Press.
-#' 
+#'
 #' @examples
 #' data(vcfR_test)
 #' # Check the genotypes.
 #' extract.gt(vcfR_test)
 #' # Summarize the genotypes.
 #' gt.to.popsum(vcfR_test)
-#' 
+#'
 #' @export
 gt.to.popsum <- function(x){
 #  if(class(x) != "chromR" | class(x) != "vcfR"){stop("Object is not of class chromR or vcfR")}
@@ -179,12 +182,14 @@ gt.to.popsum <- function(x){
     stop("Object is not of class chromR or vcfR")
   }
   
-  if(class(x) == "chromR"){
+  #if(class(x) == "chromR"){
+  if( inherits(x, "chromR") ){
     var.info <- x@var.info
     # If summaries already exist, we'll remove them.
     x@var.info <- x@var.info[,grep("^n$|^Allele_counts$|^He$|^Ne$", colnames(x@var.info), invert = TRUE)]
   }
-  if(class(x) == "vcfR"){
+  #if(class(x) == "vcfR"){
+  if( inherits(x, "vcfR") ){
     # var.info <- matrix(nrow = nrow(x@fix), ncol = 5)
     # colnames(var.info) <- c('mask', "n", "Allele_counts", "He", "Ne")
     # var.info <- matrix(nrow = nrow(x@fix), ncol = 1)
@@ -198,7 +203,8 @@ gt.to.popsum <- function(x){
   
   var.info <- .gt_to_popsum(var_info=var.info, gt=gt)
 
-  if(class(x) == 'chromR'){
+  #if(class(x) == 'chromR'){
+  if( inherits(x, 'chromR') ){
     x@var.info <- var.info
     return(x)
   } else {
