@@ -8,7 +8,7 @@ Description: Facilitates easy manipulation of variant call format (VCF) data.
     data may be written to a VCF file (*.vcf.gz). It also may be converted into
     other popular R objects (e.g., genlight, DNAbin). VcfR provides a link between
     VCF data and familiar R software.
-Version: 1.12.0.9999
+Version: 1.13.0
 Authors@R: c(
     person(c("Brian", "J."), "Knaus", role = c("cre", "aut"),
     email = "briank.lists@gmail.com", comment = c(ORCID = "0000-0003-1665-4343")),
