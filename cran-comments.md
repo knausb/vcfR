@@ -38,20 +38,10 @@ rhub:
 ## R CMD check results
 
 
-* checking CRAN incoming feasibility ... NOTE
-Maintainer: ‘Brian J. Knaus <briank.lists@gmail.com>’
-
-Version contains large components (1.12.0.9999)
-
-Found the following (possibly) invalid URLs:
-  URL: http://grunwaldlab.github.io/Population_Genetics_in_R/index.html (moved to https://grunwaldlab.github.io/Population_Genetics_in_R/index.html)
-    From: README.md
-    Status: 200
-    Message: OK
-  URL: https://github.com/ekg/freebayes (moved to https://github.com/freebayes/freebayes)
-    From: README.md
-    Status: 200
-    Message: OK
+* checking installed package size ... NOTE
+  installed size is  6.5Mb
+  sub-directories of 1Mb or more:
+    libs   4.1Mb
 
 
 
@@ -60,6 +50,7 @@ Found the following (possibly) invalid URLs:
 
 
 
+# Delete checks below.
 
 
 Package was archived on CRAN
