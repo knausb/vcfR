@@ -6,33 +6,28 @@ This package, vcfR, is generating WARNings on debian/fedora with clang. I believ
 ## Test environments
 
 * local:
-ubuntu 22.04 LTS and R 4.2.1
-ubuntu 22.04 LTS and R Under development (unstable) (2022-07-07 r82559)
+ubuntu 22.04 LTS and R 4.2.1 clang++-14
+ubuntu 22.04 LTS and R Under development (unstable) (2022-07-07 r82559) clang++-14 -Wall
 
 * local:
-OS X Catalina 10.15.6 and R 4.0.2 and clang
+OS X Monterey version 12.4 and R 4.2.1 and clang 13.1.6
 
-win-builder:
-* using R version 4.0.2 (2020-06-22)
-* using R Under development (unstable) (2020-08-23 r79071)
+* GitHub Actions
+MacOS-latest (release) - macOS 11.6.7 20G630 (R-4.2.1)
+Ubuntu-latest (devel) - Ubuntu 20.04.4 LTS (unstable 2022-07-13 r82587)
+Ubuntu-latest (oldrel-1) - Ubuntu 20.04.4 LTS (r-4.1.3)
+Ubuntu-latest (release) - Ubuntu 20.04.4 LTS (R-4.2.1)
+Windows-latest (release) -  Microsoft Windows Server 2022 10.0.20348 (R-4.2.1)
 
-travis-ci:
-* Ubuntu 16.04.6 LTS, R version 4.0.0 (2020-04-24)
-* Ubuntu 16.04.6 LTS, R Under development (unstable) (2020-08-26 r79084)
+* AppVeyor:
+Windows Server 2012 R2 x64 (build 9600), R Under development (unstable) (2020-08-24 r79088)
+Windows Server 2012 R2 x64 (build 9600), R version 4.0.2 (2020-06-22)
 
-Currently failing:
-Error in dyn.load(file, DLLpath = DLLpath, ...) : 
-  unable to load shared object '/home/travis/R/Library/ape/libs/ape.so':
-  libRlapack.so: cannot open shared object file: No such file or directory
+* win-builder:
+None for this submission
 
-My interpretation is that this is not due to vcfR.
-
-AppVeyor:
-* Windows Server 2012 R2 x64 (build 9600), R Under development (unstable) (2020-08-24 r79088)
-* Windows Server 2012 R2 x64 (build 9600), R version 4.0.2 (2020-06-22)
-
-rhub:
-* None for this submission
+* rhub:
+None for this submission
 
 
 ## R CMD check results
@@ -44,54 +39,6 @@ rhub:
     libs   4.1Mb
 
 
-
-
-
-
-
-
-# Delete checks below.
-
-
-Package was archived on CRAN
-
-Possibly mis-spelled words in DESCRIPTION:
-  DNAbin (9:46)
-  VCF (2:33, 3:68, 4:62, 5:5, 8:30, 10:5)
-  VcfR (9:55)
-  genlight (9:36)
-
-These words and acronyms are esoteric to working with genomic data and are all correctly spelled.
-
-Found the following (possibly) invalid URLs:
-  URL: https://uswest.ensembl.org/info/docs/tools/vep/index.html
-    From: man/vep.Rd
-    Status: Error
-    Message: libcurl error code 60:
-      	SSL certificate problem: unable to get local issuer certificate
-      	(Status without verification: OK)
-  URL: https://www.internationalgenome.org/node/101
-    From: inst/doc/intro_to_vcfR.html
-    Status: Error
-    Message: libcurl error code 60:
-      	SSL certificate problem: unable to get local issuer certificate
-      	(Status without verification: OK)
-
-These URLs all work when pasted into firefox.
-
-
-* checking installed package size ... NOTE
-  installed size is 10.4Mb
-  sub-directories of 1Mb or more:
-    libs   8.5Mb
-
-This has not been an issue in the past.
-
-
-* checking for future file timestamps ... NOTE
-unable to verify current time
-
-I interpret this as not an issue with vcfR.
 
 
 ## Thank you CRAN Core Team!
