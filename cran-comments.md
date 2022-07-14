@@ -1,61 +1,13 @@
 
-
-## Resubmission
-
-This is a resubmission.
-In my previous submission I asserted that
-
-https://gatkforums.broadinstitute.org/gatk/discussion/6926/spanning-or-overlapping-deletions-allele
-
-was a valid URL. However, CRAN correctly identified it as invalid. This has been updated to the following.
-
-https://gatk.broadinstitute.org/hc/en-us/articles/360035531912-Spanning-or-overlapping-deletions-allele-
-
-I have now also validated that
-
-http://www.1000genomes.org/node/101
-https://uswest.ensembl.org/info/docs/tools/vep/index.html
-
-are valid URLs by pasting them into firefox.
-
-
 ## Submission
 
-This package, vcfR, was archived on CRAN on 2020-07-05 because CRAN asked me to address issues that I was unable to address before their deadline.
-This submission is in hope of being restored to CRAN.
-The issues I received via email are as follows.
-
-```
-checkbashisms is not even in SystemRequirements and used
-unconditionally.  See 'Writing R Extensions', which called that 'annoying'.
-
-It is a Debian script and not widely installed.
-
-Your moniker "briank.lists" is not appropriate for a CRAN maintainer --
-see the CRAN policy.
-```
-
-It appears that I misunderstood how to handle "checkbashisms."
-I posted on R-pkg-devel and was advised that I should assume that CRAN machines that require this script should have it.
-I have removed my "configure" script which attempted to handle this on my side.
-
-I do not understand the criticism of my email or "moniker" of "briank.lists@gmail.com."
-I feel this is a misunderstanding.
-I have consulted the CRAN Repository Policy at the below link.
-
-https://cran.r-project.org/web/packages/policies.html
-
-It states that the maintainer must be "a person, not a mailing list" which I feel may be the source of the confusion.
-The address "briank.lists@gmail.com" is my personal address where I receive email from the various lists I subscribe to (and have been using since vcfR 1.0.0).
-It is not a mailing list.
-If I am mistaken please provide clarification.
-Thank you!
-
+This package, vcfR, is generating WARNings on debian/fedora with clang. I believe these are addressed here. This submission also includes updates to teh package.
 
 ## Test environments
 
 * local:
-ubuntu 18.04 LTS and R 4.0.2
+ubuntu 22.04 LTS and R 4.2.1
+ubuntu 22.04 LTS and R Under development (unstable) (2022-07-07 r82559)
 
 * local:
 OS X Catalina 10.15.6 and R 4.0.2 and clang
