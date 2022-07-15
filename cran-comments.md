@@ -46,7 +46,6 @@ We checked 18 reverse dependencies (4 from CRAN + 14 from Bioconductor), compari
  * We failed to check 0 packages
 
 
-
 ## Thank you CRAN Core Team!
 
 [CRAN Repository Policy](https://cran.r-project.org/web/packages/policies.html) states that all correspondence should be with CRAN and not members of the team.
