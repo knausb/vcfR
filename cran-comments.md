@@ -20,8 +20,8 @@ Ubuntu-latest (release) - Ubuntu 20.04.4 LTS (R-4.2.1)
 Windows-latest (release) -  Microsoft Windows Server 2022 10.0.20348 (R-4.2.1)
 
 * AppVeyor:
-Windows Server 2012 R2 x64 (build 9600), R Under development (unstable) (2020-08-24 r79088)
-Windows Server 2012 R2 x64 (build 9600), R version 4.0.2 (2020-06-22)
+Windows Server 2012 R2 x64 (build 9600), R Under development (unstable) (2022-07-13 r82587 ucrt)
+Windows Server 2012 R2 x64 (build 9600), R version 4.2.1 (2022-06-23 ucrt)
 
 * win-builder:
 None for this submission
@@ -32,13 +32,18 @@ None for this submission
 
 ## R CMD check results
 
-
 * checking installed package size ... NOTE
   installed size is  6.5Mb
   sub-directories of 1Mb or more:
     libs   4.1Mb
 
 
+## revdepcheck results
+
+We checked 18 reverse dependencies (4 from CRAN + 14 from Bioconductor), comparing R CMD check results across CRAN and dev versions of this package.
+
+ * We saw 0 new problems
+ * We failed to check 0 packages
 
 
 ## Thank you CRAN Core Team!
