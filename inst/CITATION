@@ -7,7 +7,7 @@ bibentry("Article",
    volume = "17",
    number = "1",
    issn = {1755-0998},   
-   url    = "http://dx.doi.org/10.1111/1755-0998.12549",
+   url    = "https://dx.doi.org/10.1111/1755-0998.12549",
 
    mheader = "To cite vcfR in publications use:",
    pages = "44--53",
@@ -23,7 +23,7 @@ bibentry("Article",
                        as.person('Niklaus J. Gr{\\"u}nwald')),
    journal = 'BioRxiv',
    year   = 2016,
-   url    = "http://dx.doi.org/10.1101/041277",
+   url    = "https://dx.doi.org/10.1101/041277",
 
    mheader = "To cite vcfR in publications use:",
 
