@@ -52,6 +52,8 @@ We checked 18 reverse dependencies (4 from CRAN + 14 from Bioconductor), compari
 However, I think its polite to thank those who have helped this project.
 So I've decided to start a list of thanks with the hope that these individuals may see this in the future.
 
+v1.13.0 Thank you Uwe Ligges for processing my submission!
+
 v1.12.0 Thank you Uwe Ligges for processing my submission!
 
 v1.11.0 Thank you Uwe Ligges for processing my submission!
