@@ -267,6 +267,15 @@ vcfR2tidy <- function(x,
   info_meta_full <- vcf_field_names(x, tag = "INFO") 
   
   fix <- do.call(what = extract_info_tidy, args = info_dots)
+  # Handle zero INFO records
+  if( nrow(fix) == 0 ){
+    fix <- data.frame( 
+      Key = 1:nrow(base)
+      #INFO = rep(NA, times = nrow(base)) 
+      )
+  }
+
+    
   if(info_only == TRUE) {
 #    ret <- cbind(base, fix) %>% 
     ret <- dplyr::bind_cols(base, fix) %>% 
@@ -638,6 +647,16 @@ vcf_field_names <- function(x, tag = "INFO") {
   x <- x@meta
   left_regx <- paste("^##", tag, "=<", sep = "")  # regex to match and replace 
   x <- x[grep(left_regx, x)]
+  # Handle zero tags.
+  if( length(x) == 0 ){
+    nullReturn <- structure(
+        list(Tag = character(0), ID = character(0), Number = character(0), 
+             Type = character(0), Description = character(0)),
+        row.names = integer(0),
+        class = c("tbl_df", "tbl", "data.frame"))
+
+    return( nullReturn )
+  }
   # Clean up the string ends.
   x <- sub(left_regx, "", x)
   x <- sub(">$", "", x)

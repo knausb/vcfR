@@ -47,6 +47,28 @@ test_that("vcf_field_names works, comma in quotes not parsed",{
    expect_is(Z, "data.frame")
 })
 
+
+test_that("vcf_field_names works, zero INFO records in meta",{
+  data("vcfR_test")
+  ## cause error ##
+  # remove all INFO lines in @meta object
+  INFO.meta.lines <- grepl("^##INFO", vcfR_test@meta);
+  vcfR_test@meta <- vcfR_test@meta[!INFO.meta.lines];
+  
+  #debug(vcfR2tidy)
+  #debug(vcf_field_names)
+  tidyVCF <- vcfR2tidy(vcfR_test)
+  
+  expect_is(tidyVCF, "list")
+  expect_identical(names(tidyVCF), c("fix", "gt", "meta"))
+  expect_identical(
+    names(tidyVCF$fix),
+    c("ChromKey", "CHROM", "POS", "ID", "REF", "ALT", "QUAL", "FILTER")
+  )
+})
+
+
+
 ##### ##### ##### ##### #####
 # extract_gt_tidy
 
