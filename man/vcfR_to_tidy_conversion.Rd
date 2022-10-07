@@ -35,7 +35,7 @@ vcf_field_names(x, tag = "INFO")
 \item{x}{an object of class vcfR}
 
 \item{info_only}{if TRUE return a list with only a \code{fix} component
-(a single data frame that has the parsed INFO information) and 
+(a single data frame that has the parsed INFO information) and
 a \code{meta} component. Don't extract any of the FORMAT fields.}
 
 \item{single_frame}{return a single tidy data frame in list component
@@ -45,7 +45,7 @@ a \code{meta} component. Don't extract any of the FORMAT fields.}
 \item{toss_INFO_column}{if TRUE (the default) the INFO column will be removed from output as
 its consituent parts will have been parsed into separate columns.}
 
-\item{...}{more options to pass to \code{\link{extract_info_tidy}} and 
+\item{...}{more options to pass to \code{\link{extract_info_tidy}} and
 \code{\link{extract_gt_tidy}}.  See parameters listed below.}
 
 \item{info_fields}{names of the fields to be extracted from the INFO column
@@ -53,31 +53,31 @@ into a long format data frame.  If this is left as NULL (the default) then
 the function returns a column for every INFO field listed in the metadata.}
 
 \item{info_types}{named vector of "i" or "n" if you want the fields extracted from the INFO column to be converted to integer or numeric types, respectively.
-When set to NULL they will be characters.  
-The names have to be the exact names of the fields.  
+When set to NULL they will be characters.
+The names have to be the exact names of the fields.
 For example \code{info_types = c(AF = "n", DP = "i")} will convert column AF to numeric and DP to integer.
-If you would like the function to try to figure out the conversion from the metadata information, then set \code{info_types = TRUE}.  
+If you would like the function to try to figure out the conversion from the metadata information, then set \code{info_types = TRUE}.
 Anything with Number == 1 and (Type == Integer or Type == Numeric) will then be converted accordingly.}
 
-\item{info_sep}{the delimiter used in the data portion of the INFO fields to 
+\item{info_sep}{the delimiter used in the data portion of the INFO fields to
 separate different entries.  By default it is ";", but earlier versions of the VCF
 standard apparently used ":" as a delimiter.}
 
-\item{format_fields}{names of the fields in the FORMAT column to be extracted from 
-each individual in the vcfR object into 
+\item{format_fields}{names of the fields in the FORMAT column to be extracted from
+each individual in the vcfR object into
 a long format data frame.  If left as NULL, the function will extract all the FORMAT
 columns that were documented in the meta section of the VCF file.}
 
 \item{format_types}{named vector of "i" or "n" if you want the fields extracted according to the FORMAT column to be converted to integer or numeric types, respectively.
 When set to TRUE an attempt to determine their type will be made from the meta information.
-When set to NULL they will be characters.  
-The names have to be the exact names of the format_fields.  
-Works equivalently to the \code{info_types} argument in 
+When set to NULL they will be characters.
+The names have to be the exact names of the format_fields.
+Works equivalently to the \code{info_types} argument in
 \code{\link{extract_info_tidy}}, i.e., if you set it to TRUE then it uses the information in the
 meta section of the VCF to coerce to types as indicated.}
 
 \item{dot_is_NA}{if TRUE then a single "." in a character field will be set to NA.  If FALSE
-no conversion is done.  Note that "." in a numeric or integer field 
+no conversion is done.  Note that "." in a numeric or integer field
 (according to format_types) with Number == 1 is always
 going to be set to NA.}
 
@@ -92,7 +92,7 @@ for output formatting.}
 
 \item{verbose}{logical to specify if verbose output should be produced
 in the output so that they
-do not conflict with any INFO columns in the output.  Default is "gt_". Should be a 
+do not conflict with any INFO columns in the output.  Default is "gt_". Should be a
 valid R name. (i.e. don't start with a number, have a space in it, etc.)}
 
 \item{tag}{name of the lines in the metadata section of the VCF file to parse out.
@@ -103,7 +103,7 @@ An object of class tidy::data_frame or a list where every element is of class ti
 }
 \description{
 Convert the information in a vcfR object to a long-format data frame
-suitable for analysis or use with Hadley Wickham's packages, 
+suitable for analysis or use with Hadley Wickham's packages,
 \href{https://cran.r-project.org/package=dplyr}{dplyr},
 \href{https://cran.r-project.org/package=tidyr}{tidyr}, and
 \href{https://cran.r-project.org/package=ggplot2}{ggplot2}.
@@ -111,37 +111,41 @@ These packages have been
 optimized for operation on large data frames, and, though they can bog down
 with very large data sets, they provide a good framework for handling and filtering
 large variant data sets.  For some background
-on the benefits of such "tidy" data frames, see 
+on the benefits of such "tidy" data frames, see
 \doi{doi.org/10.18637/jss.v059.i10}{this article}.
 
 For some filtering operations, such as those where one wants to filter genotypes
-upon GT fields in combination with INFO fields, or more complex 
+upon GT fields in combination with INFO fields, or more complex
 operations in which one wants to filter
 loci based upon the number of individuals having greater than a certain quality score,
-it will be advantageous to put all the information into a long format data frame 
+it will be advantageous to put all the information into a long format data frame
 and use \code{dplyr} to perform the operations.  Additionally, a long data format is
 required for using \code{ggplot2}.  These functions convert vcfR objects to long format
 data frames.
+
+A long, tidy dataframe based on a VCF annotated by \href{http://pcingola.github.io/SnpEff/}{snpEff} or
+\href{https://www.ensembl.org/info/docs/tools/vep/index.html}{VEP} tools will still contain non-tidy annotation
+columns. Those can be tidied by additional functions - see \link{vcfR_to_tidy_separation}
 }
 \details{
 The function \strong{vcfR2tidy} is the main function in this series.  It takes a vcfR
 object and converts the information to a list of long-format data frames.  The user can
 specify whether only the INFO or both the INFO and the FORMAT columns should be extracted, and also
 which INFO and FORMAT fields to extract.  If no specific INFO or FORMAT fields are asked
-for, then they will all be returned.  If \code{single_frame == FALSE} and 
-\code{info_only == FALSE} (the default), 
+for, then they will all be returned.  If \code{single_frame == FALSE} and
+\code{info_only == FALSE} (the default),
 the function returns a list with three components: \code{fix}, \code{gt}, and \code{meta} as follows:
 \enumerate{
-\item \code{fix} A data frame of the fixed information columns and the parsed INFO columns, and 
+\item \code{fix} A data frame of the fixed information columns and the parsed INFO columns, and
 an additional column, \code{ChromKey}---an integer identifier
 for each locus, ordered by their appearance in the original data frame---that serves
-together with POS as a key back to rows in \code{gt}.  
-\item \code{gt} A data frame of the genotype-related fields. Column names are the names of the 
+together with POS as a key back to rows in \code{gt}.
+\item \code{gt} A data frame of the genotype-related fields. Column names are the names of the
 FORMAT fields with \code{gt_column_prepend} (by default, "gt_") prepended to them.  Additionally
 there are columns \code{ChromKey}, and \code{POS} that can be used to associate
 each row in \code{gt} with a row in \code{fix}.
 \item\code{meta} The meta-data associated with the columns that were extracted from the INFO and FORMAT
-columns in a tbl_df-ed data frame.  
+columns in a tbl_df-ed data frame.
 }
 This is the default return object because it might be space-inefficient to
 return a single tidy data frame if there are many individuals and the CHROM names are
@@ -151,7 +155,7 @@ as before, but rather than having \code{fix} and \code{gt} as before, both those
 have been joined into component \code{dat} and a ChromKey column is not returned, because
 the CHROM column is available.
 
-If \code{info_only == FALSE}, then just the fixed columns and the parsed INFO columns are 
+If \code{info_only == FALSE}, then just the fixed columns and the parsed INFO columns are
 returned, and the FORMAT fields are not parsed at all.  The return value is a list with
 components \code{fix} and \code{meta}.  No column ChromKey appears.
 
@@ -159,25 +163,25 @@ The following functions are called by \strong{vcfR2tidy} but are documented belo
 they may be useful individually.
 
 The function \strong{extract_info_tidy} let's you pass in a vector of the INFO fields that
-you want extracted to a long format data frame. If you don't tell it which fields to 
+you want extracted to a long format data frame. If you don't tell it which fields to
 extract it will extract all the INFO columns detailed in the VCF meta section.
 The function returns a tbl_df data frame of the INFO fields along with with an additional
 integer column \code{Key} that associates
-each row in the output data frame with each row (i.e. each CHROM-POS combination) 
-in the original vcfR object \code{x}.  
+each row in the output data frame with each row (i.e. each CHROM-POS combination)
+in the original vcfR object \code{x}.
 
 The function \strong{extract_gt_tidy} let's you pass in a vector of the FORMAT fields that
-you want extracted to a long format data frame. If you don't tell it which fields to 
+you want extracted to a long format data frame. If you don't tell it which fields to
 extract it will extract all the FORMAT columns detailed in the VCF meta section.
 The function returns a tbl_df data frame of the FORMAT fields with an additional
 integer column \code{Key} that associates
 each row in the output data frame with each row (i.e. each CHROM-POS combination),
 in the original vcfR object \code{x}, and an additional column \code{Indiv} that gives
-the name of the individual.  
+the name of the individual.
 
 The function \strong{vcf_field_names} is a helper function that
 parses information from the metadata section of the
-VCF file to return a data frame with the \emph{metadata} information about either the INFO 
+VCF file to return a data frame with the \emph{metadata} information about either the INFO
 or FORMAT tags.  It
 returns a \code{tbl_df}-ed data frame with column names: "Tag", "ID", "Number","Type",
 "Description", "Source", and "Version".
@@ -220,11 +224,11 @@ Z$gt
 
 
 # here we put the data into a single, joined data frame (list component
-# dat in the returned list) and the meta data.  Let's just pick out a 
+# dat in the returned list) and the meta data.  Let's just pick out a
 # few fields:
-vcfR2tidy(vcf, 
-          single_frame = TRUE, 
-          info_fields = c("AC", "AN", "MQ"), 
+vcfR2tidy(vcf,
+          single_frame = TRUE,
+          info_fields = c("AC", "AN", "MQ"),
           format_fields = c("GT", "PL"))
 
 
@@ -257,11 +261,11 @@ vcfR2tidy(vcf, single_frame = TRUE)
 # values into numerics.
 extract_info_tidy(vcf, info_fields = c("AC", "AN", "MQ"), info_types = c(AN = "i", MQ = "n"))
 
-# extract all fields from the INFO column but leave 
+# extract all fields from the INFO column but leave
 # them as character vectors
 extract_info_tidy(vcf)
 
-# extract all fields from the INFO column and coerce 
+# extract all fields from the INFO column and coerce
 # types according to metadata info
 extract_info_tidy(vcf, info_types = TRUE)
 
