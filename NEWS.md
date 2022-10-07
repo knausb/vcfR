@@ -1,4 +1,3 @@
-
 # vcfR 2.0.0.
 There is currently no plan to release vcfR 2.0.0.
 If and when this 'major' release occurs it will include changes that will break backward compatibility.
