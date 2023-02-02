@@ -119,7 +119,8 @@ Rcpp::NumericMatrix AD_frequency(Rcpp::StringMatrix ad,
         vcfRCommon::strsplit(my_string, col_vec, my_split);
 
         // Recast vector of string to vector of floats.
-        std::vector < float > float_vec;( col_vec.size(), 0);
+//        std::vector < float > float_vec;( col_vec.size(), 0);
+        std::vector < float > float_vec ( sizeof(col_vec) );
         float_vec = str_vec_to_float_vec2(col_vec);
 
         // Sort the vector.

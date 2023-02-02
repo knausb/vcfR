@@ -149,7 +149,8 @@ Rcpp::NumericMatrix masplit(Rcpp::StringMatrix myMat,
         vcfRCommon::strsplit(my_string, col_vec, my_split);
 
         // Recast vector of string to vector of floats.
-        std::vector < float > float_vec;( col_vec.size(), 0);
+//        std::vector < float > float_vec;( col_vec.size(), 0);
+        std::vector < float > float_vec ( sizeof(col_vec) );
         float_vec = str_vec_to_float_vec(col_vec);
 //        Rcpp::NumericVector col_vec2( col_vec.size(), 0);
 //        col_vec2 = str_vec_to_NumericVector(col_vec);
