@@ -126,7 +126,7 @@ If you know of a software that I have not included on this list, particularly if
 
 **Genomic variant callers:**
 
-* [Cortex](http://cortexassembler.sourceforge.net/)
+* [Cortex](https://cortexassembler.sourceforge.net/)
 * [freebayes](https://github.com/freebayes/freebayes)
 * [GATK haplotype caller](https://software.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_haplotypecaller_HaplotypeCaller.php)
 * [GATK MuTect2](https://software.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_cancer_m2_MuTect2.php)
@@ -146,7 +146,7 @@ If you know of a software that I have not included on this list, particularly if
 * [Beagle v4.1](https://faculty.washington.edu/browning/beagle/beagle.html) Inputs VCF genotypes and outputs phased genotypes to VCF format
 * [pegas::read.vcf](https://cran.r-project.org/package=pegas) Population and Evolutionary Genetics Analysis System
 * [PyVCF](https://pyvcf.readthedocs.io/en/latest/)
-* [SnpEff](http://snpeff.sourceforge.net/) Genetic variant annotation and effect prediction toolbox
+* [SnpEff](https://snpeff.sourceforge.net/) Genetic variant annotation and effect prediction toolbox
 * [Picard](http://broadinstitute.github.io/picard/index.html) A set of command line tools (in Java) for manipulating high-throughput sequencing (HTS) data and formats such as SAM/BAM/CRAM and VCF
 * [VCF-kit](https://github.com/AndersenLab/VCF-kit) VCF-kit is a command-line based collection of utilities for performing analysis on Variant Call Format (VCF) files.
 * [VCFtools](https://vcftools.github.io/) General manipulation and analysis

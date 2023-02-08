@@ -5,6 +5,9 @@ This package, vcfR, is generating WARNings on debian/fedora with clang. I believ
 
 ## Test environments
 
+* rocker/r-devel
+NAME="Debian GNU/Linux"; VERSION_CODENAME=bookworm; R Under development (unstable) (2023-01-29 r83721) -- "Unsuffered Consequences"
+
 * local:
 R 4.2.2; Ubuntu 22.04.1 LTS; gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
 ubuntu 22.04.1 LTS and R Under development (unstable) (2022-07-07 r82559) clang++-14 -Wall
@@ -33,9 +36,9 @@ None for this submission
 ## R CMD check results
 
 * checking installed package size ... NOTE
-  installed size is  6.5Mb
+  installed size is 10.8Mb
   sub-directories of 1Mb or more:
-    libs   4.1Mb
+    libs   8.8Mb
 
 
 ## revdepcheck results
