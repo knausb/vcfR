@@ -12,7 +12,7 @@ This may have been addressed at 64a308ba50b9119108e8946737460de5997b805b by addi
 
 # vcfR 1.14.0
 Released on CRAN 202X-XX-XX
-* Compile time 'nodiscard' attribute
+* Compile time 'nodiscard' attribute: changed 'col_vec.size()' to 'sizeof(col_vec)' in ad_frequency.cpp and masplit.cpp
 * vcfR_to_tidy handles no INFO in meta
 
 # vcfR 1.13.0

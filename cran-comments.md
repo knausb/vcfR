@@ -1,27 +1,27 @@
 
 ## Submission
 
-This package, vcfR, is generating WARNings on debian/fedora with clang. I believe these are addressed here. This submission also includes updates to teh package.
+This package, vcfR, is generating WARNings on debian/fedora with clang. I believe these are addressed here. This submission also includes updates to the package.
 
 ## Test environments
 
 * local:
-ubuntu 22.04 LTS and R 4.2.1 clang++-14
-ubuntu 22.04 LTS and R Under development (unstable) (2022-07-07 r82559) clang++-14 -Wall
+R 4.2.2; Ubuntu 22.04.1 LTS; gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
+ubuntu 22.04.1 LTS and R Under development (unstable) (2022-07-07 r82559) clang++-14 -Wall
 
 * local:
 OS X Monterey version 12.4 and R 4.2.1 and clang 13.1.6
 
 * GitHub Actions
-MacOS-latest (release) - macOS 11.6.7 20G630 (R-4.2.1)
-Ubuntu-latest (devel) - Ubuntu 20.04.4 LTS (unstable 2022-07-13 r82587)
-Ubuntu-latest (oldrel-1) - Ubuntu 20.04.4 LTS (r-4.1.3)
-Ubuntu-latest (release) - Ubuntu 20.04.4 LTS (R-4.2.1)
-Windows-latest (release) -  Microsoft Windows Server 2022 10.0.20348 (R-4.2.1)
+MacOS-latest (release) - macOS 12.6.2 21G320; R-4.2.2
+Ubuntu-latest (devel) - Ubuntu 22.04.1 LTS; R Under development (unstable) (2023-02-01 r83747)
+Ubuntu-latest (oldrel-1) - Ubuntu 22.04.1 LTS; R version 4.1.3 (2022-03-10)
+Ubuntu-latest (release) - Ubuntu 22.04.1 LTS; R version 4.2.2 (2022-10-31)
+Windows-latest (release) - Microsoft Windows Server 2022 10.0.20348 Datacenter; R version 4.2.2 (2022-10-31 ucrt)
 
 * AppVeyor:
-Windows Server 2012 R2 x64 (build 9600), R Under development (unstable) (2022-07-13 r82587 ucrt)
-Windows Server 2012 R2 x64 (build 9600), R version 4.2.1 (2022-06-23 ucrt)
+Windows Server 2012 R2 x64 (build 9600); R Under development (unstable) (2023-02-01 r83747 ucrt)
+Windows Server 2012 R2 x64 (build 9600); R version 4.2.2 (2022-10-31 ucrt)
 
 * win-builder:
 None for this submission
