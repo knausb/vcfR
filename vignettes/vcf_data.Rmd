@@ -81,7 +81,7 @@ The example which comes with vcfR is shown below.
 (Only the first 10 lines are shown for brevity.)
 
 
-```{r, echo=TRUE, tidy=TRUE}
+```{r, echo=TRUE}
 strwrap(vcf@meta[1:7])
 ```
 
@@ -174,7 +174,7 @@ Every variant does not necessarily have the same information (e.g., SNPs and ind
 Different variant callers may include different information in this region.
 
 
-```{r, echo=TRUE, tidy=TRUE}
+```{r, echo=TRUE}
 vcf@gt[1:6, 1:4]
 ```
 

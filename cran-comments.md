@@ -1,7 +1,7 @@
 
 ## Submission
 
-This package, vcfR, is generating WARNings on debian/fedora with clang. I believe these are addressed here. This submission also includes updates to the package.
+This package, vcfR, is generating WARNings on r-devel. I believe these are addressed here. This submission also includes updates to the package.
 
 ## Test environments
 

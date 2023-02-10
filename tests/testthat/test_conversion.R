@@ -28,8 +28,8 @@ test_that("vcfR2genind works, return.alleles = TRUE",{
 ##### ##### ##### ##### #####
 
 test_that("vcfR2genlight works",{
-  suppressMessages(library(adegenet))
-  library(parallel)
+#  suppressMessages(library(adegenet))
+#  library(parallel)
 
   data(vcfR_test)
   vcfR_test <- vcfR_test[is.biallelic(vcfR_test),]
