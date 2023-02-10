@@ -2,7 +2,7 @@
 PKG_LIBS = -lz
 
 ## We want C++11 as it gets us 'long long' as well
-CXX_STD = CXX11
+#CXX_STD = CXX11
 
 ## Notes on using goodies
 ## http://cran.r-project.org/web/packages/h5/INSTALL
