@@ -8,6 +8,14 @@ This package, vcfR, is generating WARNings on r-devel. I believe these are addre
 * rocker/r-devel
 NAME="Debian GNU/Linux"; VERSION_CODENAME=bookworm; R Under development (unstable) (2023-01-29 r83721) -- "Unsuffered Consequences"
 
+* win-builder:
+ using R Under development (unstable) (2023-02-09 r83797 ucrt)
+ using platform: x86_64-w64-mingw32 (64-bit)
+ R was compiled by
+    gcc.exe (GCC) 12.2.0
+    GNU Fortran (GCC) 12.2.0
+ running under: Windows Server 2022 x64 (build 20348)
+
 * local:
 R 4.2.2; Ubuntu 22.04.1 LTS; gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
 ubuntu 22.04.1 LTS and R Under development (unstable) (2022-07-07 r82559) clang++-14 -Wall
@@ -25,9 +33,6 @@ Windows-latest (release) - Microsoft Windows Server 2022 10.0.20348 Datacenter; 
 * AppVeyor:
 Windows Server 2012 R2 x64 (build 9600); R Under development (unstable) (2023-02-01 r83747 ucrt)
 Windows Server 2012 R2 x64 (build 9600); R version 4.2.2 (2022-10-31 ucrt)
-
-* win-builder:
-None for this submission
 
 * rhub:
 None for this submission
