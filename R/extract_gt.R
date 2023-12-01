@@ -1,6 +1,5 @@
 #' @title Extract elements from vcfR objects
 #'
-#'
 #' @rdname extract_gt
 #'
 #' @description

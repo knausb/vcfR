@@ -1,6 +1,5 @@
 #' @title Create chromR object
 #'
-#'
 #' @name create.chromR
 #' @rdname create_chromR
 #' @export

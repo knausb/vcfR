@@ -115,7 +115,7 @@ CRAN:
 \href{https://cran.r-project.org/package=data.table}{data.table}::fread
 
 Bioconductor:
-\href{http://www.bioconductor.org/packages/release/bioc/html/VariantAnnotation.html}{VariantAnnotation}::readVcf
+\href{https://www.bioconductor.org/packages/release/bioc/html/VariantAnnotation.html}{VariantAnnotation}::readVcf
 
 Use: browseVignettes('vcfR') to find examples.
 }
