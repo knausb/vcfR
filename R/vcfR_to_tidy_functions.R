@@ -17,7 +17,8 @@
 #' with very large data sets, they provide a good framework for handling and filtering
 #' large variant data sets.  For some background
 #' on the benefits of such "tidy" data frames, see 
-#' \doi{doi.org/10.18637/jss.v059.i10}{this article}.
+#' \doi{doi.org/10.18637/jss.v059.i10}.
+# ' \doi{doi.org/10.18637/jss.v059.i10}{this article}.
 # ' \href{https://doi.org/10.18637/jss.v059.i10}{this article}.
 # ' \href{https://www.jstatsoft.org/article/view/v059i10}{this article}.
 #' 

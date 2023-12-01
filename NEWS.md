@@ -10,8 +10,12 @@ I think I encountered a situation where 4-96 was not enough so I've bumped it to
 This may have been addressed at 64a308ba50b9119108e8946737460de5997b805b by adding `samples` to vcfR method `[`.
 * In issue #92 (vcfR2genlight big data #92), JimWhiting91 has documented that `extract.gt()` could be greatly improved with multithreading. While he used `mclapply()` I do not feel this is the best solution because it does not work on Windows. I think a better solution would be [RCppParallel](https://rcppcore.github.io/RcppParallel/) because this should work on all CRAN platforms.
 
+# vcfR 1.15.0
+Released on CRAN 2023-XX-XX
+* Ran usethis::use_package_doc()
+
 # vcfR 1.14.0
-Released on CRAN 202X-XX-XX
+Released on CRAN 2023-02-10
 * Compile time 'nodiscard' attribute: changed 'col_vec.size()' to 'sizeof(col_vec)' in ad_frequency.cpp and masplit.cpp
 * vcfR_to_tidy handles no INFO in meta
 
