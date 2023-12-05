@@ -60,36 +60,24 @@ We checked 18 reverse dependencies (4 from CRAN + 14 from Bioconductor), compari
 However, I think its polite to thank those who have helped this project.
 So I've decided to start a list of thanks with the hope that these individuals may see this in the future.
 
+v1.14.0 Thank you Uwe Ligges for processing my submission!
 v1.13.0 Thank you Uwe Ligges for processing my submission!
-
 v1.12.0 Thank you Uwe Ligges for processing my submission!
-
 v1.11.0 Thank you Uwe Ligges for processing my submission!
-
 v1.10.0 Thank you Uwe Ligges for processing my submission!
-
 v1.9.0 Thank you Uwe Ligges for processing my submission!
-
 v1.8.0 Thank you Uwe Ligges for processing my submission!
-
 v1.7.0 Thank you Uwe Ligges for processing my submission!
-
 v1.6.0 Thank you Uwe Ligges for processing my submission!
-
 v1.5.0 Thank you Kurt Hornik for helping me!
-
 v1.4.0 Thank you Uwe Ligges and Kurt Hornik for helping me!
-
 v1.3.0 Thank you Uwe Ligges and Kurt Hornik for helping me!
 Prof Brian Ripley brought to my attention that I had new memory access issues.
 Thank you again for bringing these to my attention!
-
 v1.2.0 Thank you Uwe Ligges for helping me!
 This version was accepted on the first try.
 See Uwe, I'm learning!
-
 Prof. Brian Ripley also brought to my attention that I had overlooked memory-access errors and that valgrind was reporting use of uninitialized memory and many small memory leaks.
 Thank you for bringing this to my attention, its a big help for those of us who are still learning valgrind!
-
 v1.1.0 Thank you Uwe Ligges for helping me get my title in title case, my Description in order and handling my submission!
 
