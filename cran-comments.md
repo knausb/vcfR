@@ -1,12 +1,17 @@
 
 ## Submission
-
-This package, vcfR, is generating WARNings on r-devel. I believe these are addressed here. This submission also includes updates to the package.
+This submission includes updates to the package vcfR.
 
 ## Test environments
 
-* rocker/r-devel
-NAME="Debian GNU/Linux"; VERSION_CODENAME=bookworm; R Under development (unstable) (2023-01-29 r83721) -- "Unsuffered Consequences"
+* local:
+R 4.3.2; Ubuntu 22.04.3 LTS
+* checking installed package size ... NOTE
+  installed size is 15.0Mb
+  sub-directories of 1Mb or more:
+    R      4.4Mb
+    libs   9.1Mb
+
 
 * win-builder:
  using R Under development (unstable) (2023-02-09 r83797 ucrt)
@@ -16,34 +21,20 @@ NAME="Debian GNU/Linux"; VERSION_CODENAME=bookworm; R Under development (unstabl
     GNU Fortran (GCC) 12.2.0
  running under: Windows Server 2022 x64 (build 20348)
 
-* local:
-R 4.2.2; Ubuntu 22.04.1 LTS; gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
-ubuntu 22.04.1 LTS and R Under development (unstable) (2022-07-07 r82559) clang++-14 -Wall
-
-* local:
-OS X Monterey version 12.4 and R 4.2.1 and clang 13.1.6
 
 * GitHub Actions
-MacOS-latest (release) - macOS 12.6.2 21G320; R-4.2.2
-Ubuntu-latest (devel) - Ubuntu 22.04.1 LTS; R Under development (unstable) (2023-02-01 r83747)
-Ubuntu-latest (oldrel-1) - Ubuntu 22.04.1 LTS; R version 4.1.3 (2022-03-10)
-Ubuntu-latest (release) - Ubuntu 22.04.1 LTS; R version 4.2.2 (2022-10-31)
-Windows-latest (release) - Microsoft Windows Server 2022 10.0.20348 Datacenter; R version 4.2.2 (2022-10-31 ucrt)
+MacOS-latest (release) - macOS Monterey 12.7.1-R version 4.3.2 (2023-10-31)
+Windows-latest (release) - Windows Server 2022 x64 (build 20348)-R version 4.3.2 (2023-10-31 ucrt)
+Ubuntu-latest (devel) - Ubuntu 22.04.3 LTS-R version 4.4.0 (ge:16; iid:2fdf6c18-697a-4ba7-b8ef-11c0d92f1327); R Under development (unstable) (2023-12-02 r85657)
+Ubuntu-latest (release) - Ubuntu 22.04.3 LTS-R version 4.3.2 (2023-10-31)
+Ubuntu-latest (oldrel-1) - Ubuntu 22.04.3 LTS-R version 4.2.3 (2023-03-15)
 
 * AppVeyor:
-Windows Server 2012 R2 x64 (build 9600); R Under development (unstable) (2023-02-01 r83747 ucrt)
-Windows Server 2012 R2 x64 (build 9600); R version 4.2.2 (2022-10-31 ucrt)
+Windows Server 2012 R2 x64 (build 9600); R version 4.3.2 (2023-10-31 ucrt)
+Windows Server 2012 R2 x64 (build 9600); R Under development (unstable) (2023-12-02 r85657 ucrt)
 
 * rhub:
 None for this submission
-
-
-## R CMD check results
-
-* checking installed package size ... NOTE
-  installed size is 10.8Mb
-  sub-directories of 1Mb or more:
-    libs   8.8Mb
 
 
 ## revdepcheck results

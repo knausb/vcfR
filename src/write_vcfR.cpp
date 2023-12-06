@@ -6,7 +6,7 @@
 
 /*  Write vcf body  */
 
-//' @export
+// ' @export
 // [[Rcpp::export(name=".write_vcf_body")]]
 void write_vcf_body( Rcpp::CharacterMatrix fix,
                      Rcpp::CharacterMatrix gt,

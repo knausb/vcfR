@@ -55,7 +55,7 @@ void stat_line(Rcpp::NumericVector stats, std::string line){
 
 /*  Single pass of vcf file to get statistics */
 
-//' @export
+// ' @export
 // [[Rcpp::export(name=".vcf_stats_gz")]]
 Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows = -1, int skip = 0, int verbose = 1) {
 //  Rcpp::NumericVector stats(4);  // 4 elements, all zero.  Zero is default.
@@ -150,7 +150,7 @@ Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows = -1, int skip = 0, in
 
 /*  Read vcf meta region  */
 
-//' @export
+// ' @export
 // [[Rcpp::export(name=".read_meta_gz")]]
 Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats, int verbose) {
   // Read in the meta lines.
@@ -293,7 +293,7 @@ void proc_body_line(Rcpp::CharacterMatrix gt,
  
 */
 
-//' @export
+// ' @export
 // [[Rcpp::export(name=".read_body_gz")]]
 Rcpp::CharacterMatrix read_body_gz(std::string x,
                                    Rcpp::NumericVector stats,

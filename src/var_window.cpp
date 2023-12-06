@@ -2,7 +2,7 @@
 
 using namespace Rcpp;
 
-//' @export
+// ' @export
 // [[Rcpp::export(name=".window_init")]]
 Rcpp::DataFrame window_init(int window_size, int max_bp) {
   // Initialize windows.
@@ -29,7 +29,7 @@ Rcpp::DataFrame window_init(int window_size, int max_bp) {
 }
 
 
-//' @export
+// ' @export
 // [[Rcpp::export(name=".windowize_fasta")]]
 Rcpp::DataFrame windowize_fasta(Rcpp::DataFrame wins, Rcpp::CharacterVector seq) {
   // Windowizes the nucleotide information from a DNA sequence.
@@ -94,7 +94,7 @@ Rcpp::DataFrame windowize_fasta(Rcpp::DataFrame wins, Rcpp::CharacterVector seq)
 
 // Windowize variants
 //
-//' @export
+// ' @export
 // [[Rcpp::export(name=".windowize_variants")]]
 Rcpp::DataFrame windowize_variants(Rcpp::DataFrame windows, Rcpp::DataFrame variants) {
   Rcpp::NumericVector ends = windows["end"];
@@ -124,7 +124,7 @@ Rcpp::DataFrame windowize_variants(Rcpp::DataFrame windows, Rcpp::DataFrame vari
 
 // Windowize annotated nucleotides
 //
-//' @export
+// ' @export
 // [[Rcpp::export(name=".windowize_annotations")]]
 Rcpp::DataFrame windowize_annotations(Rcpp::DataFrame wins,
                                       Rcpp::NumericVector ann_starts,

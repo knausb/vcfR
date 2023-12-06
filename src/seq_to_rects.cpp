@@ -20,7 +20,7 @@ int minimal_regex(char query, std::string db){
 }
 
 
-//' @export
+// ' @export
 // [[Rcpp::export(name=".seq_to_rects")]]
 Rcpp::IntegerMatrix seq_to_rects(Rcpp::CharacterVector seq, std::string targets) {
   std::vector < int > starts;

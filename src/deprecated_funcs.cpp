@@ -35,7 +35,7 @@ Rcpp::StringMatrix DataFrame_to_StringMatrix( Rcpp::DataFrame df, int depr = 1 )
 
 /* Write data to fasta file */
 
-//' @export
+// ' @export
 // [[Rcpp::export(name=".write_fasta")]]
 void write_fasta( Rcpp::CharacterVector seq,
                   std::string seqname, 

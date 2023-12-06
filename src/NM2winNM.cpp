@@ -36,7 +36,7 @@ NumericVector win_mean(std::vector< std::vector<double> > win){
 
 
 
-//' @export
+// ' @export
 // [[Rcpp::export(name=".NM2winNM")]]
 NumericMatrix NM2winNM(NumericMatrix x, std::vector<int> pos, int maxbp, int winsize=100, int depr = 1) {
   int nwins;
@@ -171,7 +171,7 @@ double vector_median(std::vector<double> x){
 }
 
 
-//' @export
+// ' @export
 // [[Rcpp::export(name=".windowize_NM")]]
 NumericMatrix windowize_NM(Rcpp::NumericMatrix x, Rcpp::NumericVector pos,
                            Rcpp::NumericVector starts, Rcpp::NumericVector ends,

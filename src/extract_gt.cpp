@@ -7,7 +7,7 @@ const int nreport = 1000;
 
 // Called by extract_GT_to_NM
 //
-//' @export
+// ' @export
 // [[Rcpp::export(name=".elementNumber")]]
 int elementNumber(Rcpp::String x, std::string element = "GT"){
   //
@@ -210,7 +210,7 @@ std::string gt2alleles( Rcpp::String gt,
 }
 
 
-//' @export
+// ' @export
 // [[Rcpp::export(name=".extract_GT_to_CM")]]
 Rcpp::StringMatrix extract_GT_to_CM( Rcpp::StringMatrix fix,
                                          Rcpp::StringMatrix gt,
@@ -304,7 +304,7 @@ Rcpp::StringMatrix extract_GT_to_CM( Rcpp::StringMatrix fix,
 }
 
 
-//' @export
+// ' @export
 // [[Rcpp::export(name=".CM_to_NM")]]
 Rcpp::NumericMatrix CM_to_NM(Rcpp::CharacterMatrix x) {
   int i = 0;
@@ -331,7 +331,7 @@ Rcpp::NumericMatrix CM_to_NM(Rcpp::CharacterMatrix x) {
 }
 
 
-//' @export
+// ' @export
 // [[Rcpp::export(name=".extract_haps")]]
 Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
                                 Rcpp::StringVector alt,
@@ -460,7 +460,7 @@ Rcpp::StringMatrix extract_haps(Rcpp::StringVector ref,
 }
 
 
-//' @export
+// ' @export
 // [[Rcpp::export(name=".grepa")]]
 void grepa(){
   Rcpp::Rcout << "Hola Javier!\n";
@@ -468,7 +468,7 @@ void grepa(){
   return;
 }
 
-//' @export
+// ' @export
 // [[Rcpp::export(name=".shankaR")]]
 void shankaR(){
   Rcpp::Rcout << "Dhan'yavāda Shankar!" << std::endl;
