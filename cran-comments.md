@@ -15,6 +15,7 @@ i.e. without the "doi.org/" prefix
 This issue was reproduced on WinBuilder, the suggested fix was applied, and the fix was validated by resubmitting to WinBuilder which no longer reported the issue.
 
 
+
 ## Test environments
 
 * local:
