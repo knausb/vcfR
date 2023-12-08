@@ -112,7 +112,7 @@ optimized for operation on large data frames, and, though they can bog down
 with very large data sets, they provide a good framework for handling and filtering
 large variant data sets.  For some background
 on the benefits of such "tidy" data frames, see 
-\doi{doi.org/10.18637/jss.v059.i10}.
+\doi{10.18637/jss.v059.i10}.
 
 For some filtering operations, such as those where one wants to filter genotypes
 upon GT fields in combination with INFO fields, or more complex 

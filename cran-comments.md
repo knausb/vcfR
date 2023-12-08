@@ -1,6 +1,19 @@
 
-## Submission
-This submission includes updates to the package vcfR.
+## Resubmission
+The previous submission was returned from CRAN with the following comment.
+
+Found the following (possibly) invalid DOIs:
+   DOI: doi.org/10.18637/jss.v059.i10
+     From: man/vcfR_to_tidy_conversion.Rd
+     Status: 404
+     Message: Not Found
+
+Please write the doi as
+\doi{10.18637/jss.v059.i10}
+i.e. without the "doi.org/" prefix
+
+This issue was reproduced on WinBuilder, the suggested fix was applied, and the fix was validated by resubmitting to WinBuilder which no longer reported the issue.
+
 
 ## Test environments
 
@@ -12,15 +25,13 @@ R 4.3.2; Ubuntu 22.04.3 LTS
     R      4.4Mb
     libs   9.1Mb
 
-
 * win-builder:
- using R Under development (unstable) (2023-02-09 r83797 ucrt)
- using platform: x86_64-w64-mingw32 (64-bit)
- R was compiled by
-    gcc.exe (GCC) 12.2.0
-    GNU Fortran (GCC) 12.2.0
- running under: Windows Server 2022 x64 (build 20348)
-
+* using R Under development (unstable) (2023-12-04 r85659 ucrt)
+* using platform: x86_64-w64-mingw32
+* R was compiled by
+    gcc.exe (GCC) 12.3.0
+    GNU Fortran (GCC) 12.3.0
+* running under: Windows Server 2022 x64 (build 20348)
 
 * GitHub Actions
 MacOS-latest (release) - macOS Monterey 12.7.1-R version 4.3.2 (2023-10-31)
@@ -36,13 +47,8 @@ Windows Server 2012 R2 x64 (build 9600); R Under development (unstable) (2023-12
 * rhub:
 None for this submission
 
-
 ## revdepcheck results
-
-We checked 18 reverse dependencies (4 from CRAN + 14 from Bioconductor), comparing R CMD check results across CRAN and dev versions of this package.
-
- * We saw 0 new problems
- * We failed to check 0 packages
+None for this submission
 
 
 ## Thank you CRAN Core Team!
