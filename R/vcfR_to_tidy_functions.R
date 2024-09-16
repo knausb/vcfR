@@ -248,9 +248,11 @@ vcfR2tidy <- function(x,
   
   info_dots <- dotslist[names(dotslist) %in% c("info_fields", "info_types", "info_sep")]
   info_dots$x = x
+  info_dots$VariantKey <- VariantKey
   format_dots <- dotslist[names(dotslist) %in% c("format_fields", "format_types", "dot_is_NA",
                                                  "alleles", "allele.sep", "gt_column_prepend", "verbose")]
   format_dots$x = x
+  format_dots$VariantKey <- VariantKey
   
   # klugie hack for dealing with the gt_column_prepend
   if(!is.null(format_dots[["gt_column_prepend"]])) {
@@ -287,11 +289,10 @@ vcfR2tidy <- function(x,
   if(info_only == TRUE) {
 #    ret <- cbind(base, fix) %>% 
     ret <- dplyr::bind_cols(base, fix) %>% 
-      tibble::as_tibble() %>%
+      tibble::as_tibble() #%>%
 #      tibble::as.tibble() %>%
 #      dplyr::select( -Key)
 #      dplyr::select_(~ -Key)
-      
     # only retain meta info for the fields that we are returning
 #    info_meta <- info_meta_full %>%
 #      dplyr::filter_(~ID %in% names(ret))
@@ -316,7 +317,7 @@ vcfR2tidy <- function(x,
     ret <- dplyr::bind_cols(base, fix) %>%
 #      dplyr::left_join(gt, by = "Key") %>%
       dplyr::left_join(gt, by = "VariantKey") %>%
-      tibble::as_tibble() %>%
+      tibble::as_tibble() #%>%
 #      tibble::as.tibble() %>%
 #      dplyr::select( -Key)  # no point in keeping Key around at this point
 #      dplyr::select_(~ -Key)  # no point in keeping Key around at this point
@@ -331,7 +332,7 @@ vcfR2tidy <- function(x,
     gt_meta <-  gt_meta_full %>%
       dplyr::filter(ID %in% names(ret))
 
-      return(list(dat = ret, meta = dplyr::bind_rows(info_meta, gt_meta)))
+    return(list(dat = ret, meta = dplyr::bind_rows(info_meta, gt_meta)))
   }
   
   # if the user is not asking for a single data frame then we return a list 
