@@ -13,10 +13,17 @@ vcfR2tidy(
   info_only = FALSE,
   single_frame = FALSE,
   toss_INFO_column = TRUE,
+  VariantKey = NULL,
   ...
 )
 
-extract_info_tidy(x, info_fields = NULL, info_types = TRUE, info_sep = ";")
+extract_info_tidy(
+  x,
+  info_fields = NULL,
+  info_types = TRUE,
+  info_sep = ";",
+  VariantKey = NULL
+)
 
 extract_gt_tidy(
   x,
@@ -26,6 +33,7 @@ extract_gt_tidy(
   alleles = TRUE,
   allele.sep = "/",
   gt_column_prepend = "gt_",
+  VariantKey = NULL,
   verbose = TRUE
 )
 
@@ -44,6 +52,8 @@ a \code{meta} component. Don't extract any of the FORMAT fields.}
 
 \item{toss_INFO_column}{if TRUE (the default) the INFO column will be removed from output as
 its consituent parts will have been parsed into separate columns.}
+
+\item{VariantKey}{A vector of unique identifiers for each variant (NULL).}
 
 \item{...}{more options to pass to \code{\link{extract_info_tidy}} and 
 \code{\link{extract_gt_tidy}}.  See parameters listed below.}

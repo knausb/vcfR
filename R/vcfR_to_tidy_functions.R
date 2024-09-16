@@ -209,6 +209,7 @@
 #' its consituent parts will have been parsed into separate columns.
 #' @param ... more options to pass to \code{\link{extract_info_tidy}} and 
 #' \code{\link{extract_gt_tidy}}.  See parameters listed below.
+#' @param VariantKey A vector of unique identifiers for each variant (NULL).
 #' 
 # @importFrom dplyr everything
 # @import dplyr
@@ -218,10 +219,14 @@ vcfR2tidy <- function(x,
                       info_only = FALSE, 
                       single_frame = FALSE, 
                       toss_INFO_column = TRUE,
+                      VariantKey = NULL,
                       ...) {
 
-  INFO <- Key <- ID <- CHROM <- ChromKey <- POS <- NULL
-    
+  #INFO <- Key <- ID <- CHROM <- ChromKey <- POS <- NULL
+  INFO <- ID <- CHROM <- ChromKey <- POS <- NULL
+  #VariantKey <- check_VariantKey(VariantKey)
+  VariantKey <- check_VariantKey(VariantKey, vcf = x)
+  
 #### Some Error Checking and Preliminaries ####
   if(single_frame == TRUE && info_only == TRUE) 
     stop("You can pass both single_frame and info_only as TRUE")
@@ -272,7 +277,8 @@ vcfR2tidy <- function(x,
   # Handle zero INFO records
   if( nrow(fix) == 0 ){
     fix <- data.frame( 
-      Key = 1:nrow(base)
+      #Key = 1:nrow(base)
+      VariantKey = VariantKey#,
       #INFO = rep(NA, times = nrow(base)) 
       )
   }
@@ -283,7 +289,7 @@ vcfR2tidy <- function(x,
     ret <- dplyr::bind_cols(base, fix) %>% 
       tibble::as_tibble() %>%
 #      tibble::as.tibble() %>%
-      dplyr::select( -Key)
+#      dplyr::select( -Key)
 #      dplyr::select_(~ -Key)
       
     # only retain meta info for the fields that we are returning
@@ -308,10 +314,11 @@ vcfR2tidy <- function(x,
   if(single_frame == TRUE) {
 #    ret <- cbind(base, fix) %>%
     ret <- dplyr::bind_cols(base, fix) %>%
-      dplyr::left_join(gt, by = "Key") %>%
+#      dplyr::left_join(gt, by = "Key") %>%
+      dplyr::left_join(gt, by = "VariantKey") %>%
       tibble::as_tibble() %>%
 #      tibble::as.tibble() %>%
-      dplyr::select( -Key)  # no point in keeping Key around at this point
+#      dplyr::select( -Key)  # no point in keeping Key around at this point
 #      dplyr::select_(~ -Key)  # no point in keeping Key around at this point
 
 #    info_meta <- info_meta_full %>%
@@ -340,11 +347,12 @@ vcfR2tidy <- function(x,
     
   retgt <- gt %>%
 #    dplyr::left_join(dplyr::select_(retfix, ~ChromKey, ~Key, ~POS), by = "Key") %>%
-    dplyr::left_join(dplyr::select(retfix, ChromKey, Key, POS), by = "Key") %>%
+#    dplyr::left_join(dplyr::select(retfix, ChromKey, Key, POS), by = "Key") %>%
+    dplyr::left_join(dplyr::select(retfix, ChromKey, VariantKey, POS), by = "VariantKey") %>%
 #    dplyr::select_(~ChromKey, ~POS, ~dplyr::everything()) %>%
-    dplyr::select(ChromKey, POS, dplyr::everything()) %>%
+    dplyr::select(ChromKey, POS, dplyr::everything()) #%>%
 #    dplyr::select_(~ -Key)
-    dplyr::select( -Key)
+#    dplyr::select( -Key)
     
 #  info_meta <- info_meta_full %>%
 #    dplyr::filter_(~ID %in% names(retfix))
@@ -358,8 +366,8 @@ vcfR2tidy <- function(x,
   
   # return the list
   list(
-    fix = retfix %>% 
-      dplyr::select( -Key),
+    fix = retfix, #%>% 
+#      dplyr::select( -Key),
 #      dplyr::select_(~ -Key),
     gt = retgt,
     meta = dplyr::bind_rows(info_meta, gt_meta)
@@ -384,14 +392,20 @@ vcfR2tidy <- function(x,
 #' separate different entries.  By default it is ";", but earlier versions of the VCF
 #' standard apparently used ":" as a delimiter.
 #' @export
-extract_info_tidy <- function(x, info_fields = NULL, info_types = TRUE, info_sep = ";") {
+extract_info_tidy <- function(x, 
+                              info_fields = NULL, 
+                              info_types = TRUE, 
+                              info_sep = ";", 
+                              VariantKey = NULL) {
   
   if(!is.null(info_fields) && any(duplicated(info_fields))) stop("Requesting extraction of duplicate info_field names")
   #if(class(x) != "vcfR") stop("Expecting x to be a vcfR object, not a ", class(x))
   if( !inherits(x, "vcfR") ) stop("Expecting x to be a vcfR object, not a ", class(x))
   
   ID <- NULL
-    
+  
+  VariantKey <- check_VariantKey(VariantKey, vcf = x)
+  
   vcf <- x
   x <- as.data.frame(x@fix, stringsAsFactors = FALSE) %>% 
     tibble::as_tibble()
@@ -458,9 +472,11 @@ extract_info_tidy <- function(x, info_fields = NULL, info_types = TRUE, info_sep
     
   }
   if(nrow(ret) > 0){
-    ret <- cbind(Key = 1:nrow(ret), ret) %>% tibble::as_tibble()
+    #ret <- cbind(Key = 1:nrow(ret), ret) %>% tibble::as_tibble()
+    ret <- cbind(VariantKey = VariantKey, ret) %>% tibble::as_tibble()
   } else {
-    ret <- cbind(Key = vector(mode = 'integer', length = 0), ret) %>% tibble::as_tibble()
+    #ret <- cbind(Key = vector(mode = 'integer', length = 0), ret) %>% tibble::as_tibble()
+    ret <- cbind(VariantKey = vector(mode = 'integer', length = 0), ret) %>% tibble::as_tibble()
   }
   ret
 }
@@ -502,6 +518,7 @@ extract_gt_tidy <- function(x,
                             alleles = TRUE,
                             allele.sep = "/",
                             gt_column_prepend = "gt_",
+                            VariantKey = NULL,
                             verbose = TRUE) {
   
   if(!is.null(format_fields) && any(duplicated(format_fields))){
@@ -511,9 +528,13 @@ extract_gt_tidy <- function(x,
   if( !inherits(x, "vcfR") ){
     stop("Expecting x to be a vcfR object, not a ", class(x))
   }
+  
+  #VariantKey <- check_VariantKey(VariantKey)
+  VariantKey <- check_VariantKey(VariantKey, vcf = x)
 
   # https://www.r-bloggers.com/no-visible-binding-for-global-variable/
-  ID <- Key <- Indiv <- NULL
+  ID <- Indiv <- NULL
+#  ID <- Key <- Indiv <- NULL
   
   vcf <- x  # Rename it.
   
@@ -556,17 +577,20 @@ extract_gt_tidy <- function(x,
 #  geno_info <- dplyr::as_data_frame(geno_info)
   geno_info <- dplyr::as_tibble(geno_info)
   if( nrow(geno_info) > 0 ){
-    geno_info <- dplyr::mutate(Key = rep(1:nrow(vcf@fix), times = ncol(vcf@gt) - 1),
+    #geno_info <- dplyr::mutate(Key = rep(1:nrow(vcf@fix), times = ncol(vcf@gt) - 1),
+    geno_info <- dplyr::mutate(VariantKey = rep(VariantKey, times = ncol(vcf@gt)-1),
                                Indiv = rep(colnames(vcf@gt)[-1], each = nrow(vcf@fix)),
                                geno_info
                                )
   } else {
-    geno_info <- dplyr::mutate(Key = vector(mode = 'integer', length = 0),
+    #geno_info <- dplyr::mutate(Key = vector(mode = 'integer', length = 0),
+    geno_info <- dplyr::mutate(VariantKey = vector(mode = 'integer', length = 0),
                                Indiv = vector(mode = 'integer', length = 0),
                                geno_info
                                )
   }
-  geno_info <- dplyr::select(geno_info, Key, Indiv, dplyr::everything())
+  geno_info <- dplyr::select(geno_info, VariantKey, Indiv, dplyr::everything())
+#  geno_info <- dplyr::select(geno_info, Key, Indiv, dplyr::everything())
 #  geno_info <- dplyr::select_(geno_info, ~Key, ~Indiv, ~dplyr::everything())
   
 #  geno_info <- lapply(ex, function(i) {
@@ -691,4 +715,17 @@ vcf_field_names <- function(x, tag = "INFO") {
   tibble::as_tibble(myReturn)
 }
 
+
+check_VariantKey <- function(VariantKey, vcf){
+  if( is.null(VariantKey) ){
+    VariantKey <- 1:nrow(vcf@fix)
+  }
+  if( length(VariantKey) != nrow(vcf@fix) ){
+    stop("VariantKey is not the same length as the number of variants.")
+  }
+  if( length(unique(VariantKey)) != nrow(vcf@fix) ){
+    stop("The unique values in VariantKey are not the same length as the number of variants.")
+  }
+  return(VariantKey)
+}
 

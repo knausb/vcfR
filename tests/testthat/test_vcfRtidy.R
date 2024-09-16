@@ -63,7 +63,8 @@ test_that("vcf_field_names works, zero INFO records in meta",{
   expect_identical(names(tidyVCF), c("fix", "gt", "meta"))
   expect_identical(
     names(tidyVCF$fix),
-    c("ChromKey", "CHROM", "POS", "ID", "REF", "ALT", "QUAL", "FILTER")
+    c("ChromKey", "CHROM", "POS", "ID", "REF", "ALT", "QUAL", "FILTER", "VariantKey")
+    #c("ChromKey", "CHROM", "POS", "ID", "REF", "ALT", "QUAL", "FILTER")
   )
 })
 
@@ -81,7 +82,8 @@ test_that("extract_gt_tidy works for GT element",{
 #    Z <- extract_gt_tidy( vcf, format_fields = c('GT'), format_types = character(0) )
   )
   expect_is(Z, 'tbl_df')
-  expect_equal(names(Z)[1], 'Key')
+  #expect_equal(names(Z)[1], 'Key')
+  expect_equal(names(Z)[1], 'VariantKey')
   expect_equal(names(Z)[2], 'Indiv')
   expect_equal(names(Z)[3], 'gt_GT')
   expect_equal(names(Z)[4], 'gt_GT_alleles')
