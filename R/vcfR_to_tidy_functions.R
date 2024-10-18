@@ -66,6 +66,13 @@
 #' returned, and the FORMAT fields are not parsed at all.  The return value is a list with
 #' components \code{fix} and \code{meta}.  No column ChromKey appears.
 #' 
+#' If \code{is.null(VariantKey) == TRUE}, then a vector of integers ranging from
+#' one to the number of variants is created and used. Otherwise, a vector of 
+#' variant unique identifiers should be provided. The vector will be checked to 
+#' ensure that it is the same length as the number of variants in the VCF data 
+#' and that the vector contains only unique values.
+#' 
+#' 
 #' The following functions are called by \strong{vcfR2tidy} but are documented below because
 #' they may be useful individually.
 #' 
