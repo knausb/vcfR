@@ -14,6 +14,7 @@ This may have been addressed at 64a308ba50b9119108e8946737460de5997b805b by addi
 
 Released on CRAN 202X-XX-XX
 * Added parameter 'VariantKey' to tidy functions to provide a unique identifier for each variant.
+* vcfR::vcf_field_names() now uses `sub("^[^=]+=", "", myValue)` to remove key from meta key-pairs.
 
 
 # vcfR 1.15.0

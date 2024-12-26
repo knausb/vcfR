@@ -712,7 +712,8 @@ vcf_field_names <- function(x, tag = "INFO") {
     if(length(myValue) == 0){
       is.na(myValue) <- TRUE
     } else {
-      myValue <- sub(".*=", "", myValue)
+      #myValue <- sub(".*=", "", myValue)
+      myValue <- sub("^[^=]+=", "", myValue)
     }
     myValue
   }

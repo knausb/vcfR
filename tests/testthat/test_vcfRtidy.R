@@ -69,6 +69,18 @@ test_that("vcf_field_names works, zero INFO records in meta",{
 })
 
 
+test_that("vcf_field_names works, equal sign (=) in key.",{
+  library(vcfR)
+  data("vcfR_test")
+  vcfR_test@meta[ grep("##FORMAT=<ID=DP", vcfR_test@meta) ] <- '##FORMAT=<ID=DP,Number=1,Type=Integer,Description="Approximate read depth (reads with MQ=255 or with bad mates are filtered)">'  
+  my_fnames <- vcf_field_names(vcfR_test, tag = "FORMAT")
+  my_fnames
+  expect_identical(
+    my_fnames$Description[3],
+    "Approximate read depth (reads with MQ=255 or with bad mates are filtered)"
+  )
+})
+
 
 ##### ##### ##### ##### #####
 # extract_gt_tidy
