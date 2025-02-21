@@ -13,10 +13,17 @@ vcfR2tidy(
   info_only = FALSE,
   single_frame = FALSE,
   toss_INFO_column = TRUE,
+  VariantKey = NULL,
   ...
 )
 
-extract_info_tidy(x, info_fields = NULL, info_types = TRUE, info_sep = ";")
+extract_info_tidy(
+  x,
+  info_fields = NULL,
+  info_types = TRUE,
+  info_sep = ";",
+  VariantKey = NULL
+)
 
 extract_gt_tidy(
   x,
@@ -26,6 +33,7 @@ extract_gt_tidy(
   alleles = TRUE,
   allele.sep = "/",
   gt_column_prepend = "gt_",
+  VariantKey = NULL,
   verbose = TRUE
 )
 
@@ -44,6 +52,8 @@ a \code{meta} component. Don't extract any of the FORMAT fields.}
 
 \item{toss_INFO_column}{if TRUE (the default) the INFO column will be removed from output as
 its consituent parts will have been parsed into separate columns.}
+
+\item{VariantKey}{A vector of unique identifiers for each variant (NULL).}
 
 \item{...}{more options to pass to \code{\link{extract_info_tidy}} and 
 \code{\link{extract_gt_tidy}}.  See parameters listed below.}
@@ -154,6 +164,13 @@ the CHROM column is available.
 If \code{info_only == FALSE}, then just the fixed columns and the parsed INFO columns are 
 returned, and the FORMAT fields are not parsed at all.  The return value is a list with
 components \code{fix} and \code{meta}.  No column ChromKey appears.
+
+If \code{is.null(VariantKey) == TRUE}, then a vector of integers ranging from
+one to the number of variants is created and used. Otherwise, a vector of 
+variant unique identifiers should be provided. The vector will be checked to 
+ensure that it is the same length as the number of variants in the VCF data 
+and that the vector contains only unique values.
+
 
 The following functions are called by \strong{vcfR2tidy} but are documented below because
 they may be useful individually.

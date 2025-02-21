@@ -30,7 +30,7 @@ colMeans(myDiff[,c(4:ncol(myDiff))], na.rm = TRUE)
 
 }
 \seealso{
-\code{\link{genetic_diff}} in  \code{\link{vcfR}}
+\code{\link{genetic_diff}}
 }
 \author{
 Javier F. Tabima

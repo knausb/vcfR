@@ -22,7 +22,8 @@
 #' myDiff <- pairwise_genetic_diff(vcf, pops, method = "nei")
 #' colMeans(myDiff[,c(4:ncol(myDiff))], na.rm = TRUE)
 #' 
-#' @seealso  \code{\link{genetic_diff}} in  \code{\link{vcfR}}
+#' @seealso  \code{\link{genetic_diff}}
+# ' @seealso  \code{\link{genetic_diff}} in  \code{\link{vcfR}}
 #' 
 #' @export
 pairwise_genetic_diff <- function (vcf, pops, method="nei"){
