@@ -2,7 +2,6 @@
 % Please edit documentation in R/vcfR-package.R, R/vcfR.R
 \docType{package}
 \name{vcfR-package}
-\alias{vcfR}
 \alias{vcfR-package}
 \title{vcfR: Manipulate and Visualize VCF Data}
 \description{
