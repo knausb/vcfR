@@ -128,9 +128,9 @@ If you know of a software that I have not included on this list, particularly if
 
 * [Cortex](https://cortexassembler.sourceforge.net/)
 * [freebayes](https://github.com/freebayes/freebayes)
-* [GATK haplotype caller](https://gatk.broadinstitute.org)
-* [GATK MuTect2](https://gatk.broadinstitute.org)
-* [GATK GenotypeGVCFs](https://gatk.broadinstitute.org)
+* [GATK haplotype caller](gatk.broadinstitute.org/hc/)
+* [GATK MuTect2](gatk.broadinstitute.org)
+* [GATK GenotypeGVCFs](gatk.broadinstitute.org)
 * [LoFreq](http://csb5.github.io/lofreq/)
 * [Samtools](http://www.htslib.org/)
 * [VarScan2](http://dkoboldt.github.io/varscan/)
