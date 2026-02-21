@@ -1,25 +1,9 @@
 
-## Resubmission
-The previous submission was returned from CRAN with the following comment.
-
-Found the following (possibly) invalid DOIs:
-   DOI: doi.org/10.18637/jss.v059.i10
-     From: man/vcfR_to_tidy_conversion.Rd
-     Status: 404
-     Message: Not Found
-
-Please write the doi as
-\doi{10.18637/jss.v059.i10}
-i.e. without the "doi.org/" prefix
-
-This issue was reproduced on WinBuilder, the suggested fix was applied, and the fix was validated by resubmitting to WinBuilder which no longer reported the issue.
-
-
 
 ## Test environments
 
 * local:
-R 4.3.2; Ubuntu 22.04.3 LTS
+R 4.5.1; Ubuntu 24.04.2 LTS
 * checking installed package size ... NOTE
   installed size is 15.0Mb
   sub-directories of 1Mb or more:
@@ -58,6 +42,7 @@ None for this submission
 However, I think its polite to thank those who have helped this project.
 So I've decided to start a list of thanks with the hope that these individuals may see this in the future.
 
+v1.15.0 Thank you Uwe Ligges for processing my submission!
 v1.14.0 Thank you Uwe Ligges for processing my submission!
 v1.13.0 Thank you Uwe Ligges for processing my submission!
 v1.12.0 Thank you Uwe Ligges for processing my submission!
