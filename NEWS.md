@@ -11,8 +11,7 @@ This may have been addressed at 64a308ba50b9119108e8946737460de5997b805b by addi
 * In issue #92 (vcfR2genlight big data #92), JimWhiting91 has documented that `extract.gt()` could be greatly improved with multithreading. While he used `mclapply()` I do not feel this is the best solution because it does not work on Windows. I think a better solution would be [RCppParallel](https://rcppcore.github.io/RcppParallel/) because this should work on all CRAN platforms.
 
 # vcfR 1.16.0
-
-Released on CRAN 202X-XX-XX
+Released on CRAN 2026-02-XX
 * Added parameter 'VariantKey' to tidy functions to provide a unique identifier for each variant.
 * vcfR::vcf_field_names() now uses `sub("^[^=]+=", "", myValue)` to remove key from meta key-pairs.
 

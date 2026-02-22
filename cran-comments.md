@@ -3,31 +3,23 @@
 ## Test environments
 
 * local:
-R 4.5.1; Ubuntu 24.04.2 LTS
-* checking installed package size ... NOTE
-  installed size is 15.0Mb
-  sub-directories of 1Mb or more:
-    R      4.4Mb
-    libs   9.1Mb
-
-* win-builder:
-* using R Under development (unstable) (2023-12-04 r85659 ucrt)
-* using platform: x86_64-w64-mingw32
-* R was compiled by
-    gcc.exe (GCC) 12.3.0
-    GNU Fortran (GCC) 12.3.0
-* running under: Windows Server 2022 x64 (build 20348)
+R 4.5.2; Ubuntu 24.04.3 LTS
+* checking compilation flags used ... NOTE
+Compilation used the following non-portable flag(s):
+  ‘-mno-omit-leaf-frame-pointer’
 
 * GitHub Actions
-MacOS-latest (release) - macOS Monterey 12.7.1-R version 4.3.2 (2023-10-31)
-Windows-latest (release) - Windows Server 2022 x64 (build 20348)-R version 4.3.2 (2023-10-31 ucrt)
-Ubuntu-latest (devel) - Ubuntu 22.04.3 LTS-R version 4.4.0 (ge:16; iid:2fdf6c18-697a-4ba7-b8ef-11c0d92f1327); R Under development (unstable) (2023-12-02 r85657)
-Ubuntu-latest (release) - Ubuntu 22.04.3 LTS-R version 4.3.2 (2023-10-31)
-Ubuntu-latest (oldrel-1) - Ubuntu 22.04.3 LTS-R version 4.2.3 (2023-03-15)
+MacOS-latest (release) - macOS Sequoia 15.7.4 - R version 4.5.2 (2025-10-31)
+Windows-latest (release) - Windows Server 2022 x64 (build 26100) - R version 4.5.2 (2025-10-31 ucrt)
+Ubuntu-latest (devel) - Ubuntu 24.04.3 LTS - R Under development (unstable) (2026-02-20 r89444)
+Ubuntu-latest (release) - Ubuntu 24.04.3 LTS - R version 4.5.2 (2025-10-31)
+Ubuntu-latest (oldrel-1) - Ubuntu 24.04.3 LTS - R version 4.4.3 (2025-02-28)
+
+* win-builder:
+None for this submission
 
 * AppVeyor:
-Windows Server 2012 R2 x64 (build 9600); R version 4.3.2 (2023-10-31 ucrt)
-Windows Server 2012 R2 x64 (build 9600); R Under development (unstable) (2023-12-02 r85657 ucrt)
+None for this submission
 
 * rhub:
 None for this submission
