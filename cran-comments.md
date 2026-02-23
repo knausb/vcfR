@@ -1,5 +1,18 @@
 
 
+## First CRAN submission returned with the following.
+
+
+Found the following (possibly) invalid file URIs:
+  URI: gatk.broadinstitute.org/hc/en-us/articles/360035531912-Spanning-or-overlapping-deletions-allele-
+    From: man/vcfR2DNAbin.Rd
+  URI: gatk.broadinstitute.org/hc/
+    From: inst/doc/converting_data.html
+  URI: gatk.broadinstitute.org/hc/
+    From: README.md
+  URI: gatk.broadinstitute.org
+    From: README.md
+
 ## Test environments
 
 * local:
